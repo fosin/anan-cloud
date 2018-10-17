@@ -18,12 +18,17 @@
         <module>cdp-sleuthserver</module>
         <module>cdp-platform</module>
     </modules>
+    <properties>
+        <spring-cloud.version>Edgware.SR4</spring-cloud.version>
+    </properties>
     <profiles>
         <profile>
             <id>local</id>
             <properties>
                 <profileActive>local</profileActive>
-                <eureka.client.service-url.defaultZone>http://${security.user.name}:${security.user.password}@localhost:1000/eureka/</eureka.client.service-url.defaultZone>
+                <eureka.client.service-url.defaultZone>
+                    http://${security.user.name}:${security.user.password}@localhost:1000/eureka/
+                </eureka.client.service-url.defaultZone>
                 <spring.cloud.config.username>cdp</spring.cloud.config.username>
                 <spring.cloud.config.password>local</spring.cloud.config.password>
                 <spring.cloud.config.profileActive>native</spring.cloud.config.profileActive>
@@ -43,7 +48,9 @@
             <id>dev</id>
             <properties>
                 <profileActive>dev</profileActive>
-                <eureka.client.service-url.defaultZone>http://${security.user.name}:${security.user.password}${at}192.168.2.243:1000/eureka/,http://${security.user.name}:${security.user.password}${at}192.168.2.244:1000/eureka/</eureka.client.service-url.defaultZone>
+                <eureka.client.service-url.defaultZone>
+                    http://${security.user.name}:${security.user.password}${at}192.168.2.243:1000/eureka/,http://${security.user.name}:${security.user.password}${at}192.168.2.244:1000/eureka/
+                </eureka.client.service-url.defaultZone>
                 <spring.cloud.config.username>cdp</spring.cloud.config.username>
                 <spring.cloud.config.password>dev</spring.cloud.config.password>
                 <spring.cloud.config.profileActive>dev</spring.cloud.config.profileActive>
@@ -63,7 +70,9 @@
             <id>test</id>
             <properties>
                 <profileActive>test</profileActive>
-                <eureka.client.service-url.defaultZone>http://${security.user.name}:${security.user.password}@localhost:1000/eureka/</eureka.client.service-url.defaultZone>
+                <eureka.client.service-url.defaultZone>
+                    http://${security.user.name}:${security.user.password}@localhost:1000/eureka/
+                </eureka.client.service-url.defaultZone>
                 <spring.cloud.config.username>cdp</spring.cloud.config.username>
                 <spring.cloud.config.password>test</spring.cloud.config.password>
                 <spring.cloud.config.profileActive>test</spring.cloud.config.profileActive>
@@ -83,7 +92,9 @@
             <id>prod</id>
             <properties>
                 <profileActive>prod</profileActive>
-                <eureka.client.service-url.defaultZone>http://${security.user.name}:${security.user.password}@localhost:1000/eureka/</eureka.client.service-url.defaultZone>
+                <eureka.client.service-url.defaultZone>
+                    http://${security.user.name}:${security.user.password}@localhost:1000/eureka/
+                </eureka.client.service-url.defaultZone>
                 <spring.cloud.config.username>cdp</spring.cloud.config.username>
                 <spring.cloud.config.password>prod</spring.cloud.config.password>
                 <spring.cloud.config.profileActive>prod</spring.cloud.config.profileActive>
