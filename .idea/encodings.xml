@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding" defaultCharsetForPropertiesFiles="UTF-8">
+    <file url="file://$PROJECT_DIR$" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/cdp-adminserver" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/cdp-configserver" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/cdp-eurekaserver" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/cdp-platform" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/cdp-platform/cdp-authserver" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/cdp-platform/cdp-platformapi" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/cdp-platform/cdp-platformserver" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/cdp-sleuthserver" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/cdp-zuulgateway" charset="UTF-8" />
+    <file url="PROJECT" charset="UTF-8" />
+  </component>
+</project>

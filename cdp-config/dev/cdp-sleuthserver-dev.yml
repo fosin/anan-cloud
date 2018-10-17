@@ -1,0 +1,49 @@
+security:
+  user:
+    name: cdp
+    password: dev
+  oauth2:
+    resource:
+      filter-order: 3
+      loadBalanced: true #这个参数在OAuth2LoadBalancerClientAutoConfiguration可以找到，设置这个才可以使用eureka的服务名，配合loadBalancerInterceptor bean。
+      user-info-uri: http://cdp-authserver/oauth/principal
+      prefer-token-info: false
+      service-id: cdp-sleuthserver
+management:
+  security:
+    enabled: false
+spring:
+  datasource:
+    schema: classpath:/mysql.sql
+    url: jdbc:mysql://192.168.2.241:3306/cdp_zipkin
+    username: cdp
+    password: dev
+    continueOnError: true
+    initialize: true
+zipkin:
+  storage:
+    type: mysql
+  collector:
+    rabbitmq:
+      addresses: ${spring.rabbitmq.host}:${spring.rabbitmq.port}
+      username: ${spring.rabbitmq.username}
+      password: ${spring.rabbitmq.password}
+      queue: zipkin
+  query:
+    allowed-origins: '*'
+cdp:
+  oauth2:
+    disablecsrf: true
+    disableHttpBasic: true
+    cors:
+      allowedOrigins: '*'
+      allowedMethods: '*'
+      allowedHeaders: '*'
+      allowCredentials: true
+    blackWhiteList:
+    - path: /**/*.html
+    - path: /**/*.css
+    - path: /img/**
+    - path: /**/*.js
+    - path: /zipkin/**
+    - method: OPTIONS

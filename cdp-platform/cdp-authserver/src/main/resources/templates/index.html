@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <title th:text="#{login.title.text}">CDP统一认证中心</title>
+    <script type="text/javascript" src="webjars/jquery/jquery.min.js"></script>
+
+</head>
+<body>
+<h1 th:text="#{login.title.text}">欢迎使用CDP统一认证中心</h1>
+
+<form action="logout" role="form" method="post">
+    <input type="hidden" name="${_csrf.parameterName}"
+           value="${_csrf.token}" />
+    <button class="btn btn-primary" type="submit">注销</button>
+</form>
+</body>
+</html>

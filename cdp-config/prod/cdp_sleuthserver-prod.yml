@@ -1,0 +1,32 @@
+server:
+  port: 1300
+security:
+  user:
+    name: cdp
+    password: prod
+    role: USER
+  basic:
+      enabled: true
+management:
+  security:
+    enabled: false
+spring:
+  datasource:
+    schema: classpath:/mysql.sql
+    url: jdbc:mysql://192.168.137.155:3306/cdp_zipkin
+    username: cdp
+    password: dev
+    continueOnError: true
+    initialize: true
+zipkin:
+  storage:
+    type: mysql
+  collector:
+    rabbitmq:
+      addresses: ${spring.rabbitmq.host}:${spring.rabbitmq.port}
+      username: ${spring.rabbitmq.username}
+      password: ${spring.rabbitmq.password}
+      queue: zipkin
+info: #定义各种额外的详情给服务端显示
+  description: "@project.description@"
+  version: "@project.version@"

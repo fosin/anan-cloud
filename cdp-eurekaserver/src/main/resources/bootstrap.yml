@@ -1,0 +1,34 @@
+spring:
+  profiles:
+    active: @profileActive@
+  application:
+    name: cdp-eurekaserver
+  cloud:
+    inetutils:
+      preferred-networks: @spring.cloud.inetutils.preferred-networks@
+server:
+  port: 1000
+eureka:
+  client:
+    fetch-registry: false
+    service-url:
+      defaultZone: @eureka.client.service-url.defaultZone@
+    #      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
+    register-with-eureka: true
+  instance:
+    prefer-ip-address: true #可以实现ip地址作为主机地址
+    hostname: localhost
+    #    instance-id: http://${spring.cloud.client.ipAddress}:${server.port} #启用就报错The request was rejected because the URL was not normalized.
+    metadata-map: #用于SBA认证
+      user.name: ${security.user.name}
+      user.password: ${security.user.password}
+management:
+  security:
+    enabled: false
+security:
+  user:
+    name: @security.user.name@
+    password: @security.user.password@
+info: #定义各种额外的详情给服务端显示
+  description: "@project.description@"
+  version: "@project.version@"

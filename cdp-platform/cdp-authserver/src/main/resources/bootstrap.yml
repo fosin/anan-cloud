@@ -1,0 +1,45 @@
+server:
+  port: 1400
+eureka:
+  client:
+    service-url:
+      defaultZone: @eureka.client.service-url.defaultZone@
+  instance:
+    metadata-map:
+      gated-launch: false #灰度发布标志，默认为false，设置为true表示灰度发布的点
+    prefer-ip-address: true
+#    instance-id: http://${spring.cloud.client.ipAddress}:${server.port}
+spring:
+  profiles:
+    active: @profileActive@
+  application:
+    name: cdp-authserver
+  cloud:
+    inetutils:
+      preferred-networks: @spring.cloud.inetutils.preferred-networks@
+    config:
+      username: @spring.cloud.config.username@
+      password: @spring.cloud.config.password@
+      discovery:
+        enabled: true
+        service-id: cdp-configserver
+      fail-fast: true
+      retry:
+        initial-interval: 2000
+        max-attempts: 6
+        max-interval: 2000
+        multiplier: 1.1
+      profile: @profileActive@
+      label: master
+      enabled: true #开发环境关闭配置管理
+  rabbitmq:
+    host: @spring.rabbitmq.host@
+    port: @spring.rabbitmq.port@
+    username: @spring.rabbitmq.username@
+    password: @spring.rabbitmq.password@
+  jackson: #该参数一定要放bootstrap中，而放application.yml或者后面的配置文件都不能生效
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+info: #定义各种额外的详情给服务端显示
+  description: "@project.description@"
+  version: "@project.version@"

@@ -1,0 +1,65 @@
+package com.starlight.cdp.platform.controller;
+
+import com.starlight.cdp.core.exception.CdpControllerException;
+import com.starlight.cdp.core.exception.CdpServiceException;
+import com.starlight.cdp.mvc.constant.MvcConstant;
+import com.starlight.cdp.mvc.controller.ISimpleController;
+import com.starlight.cdp.mvc.module.PageModule;
+import com.starlight.cdp.mvc.result.ResultUtils;
+import com.starlight.cdp.mvc.service.ISimpleService;
+import com.starlight.cdp.platformapi.entity.CdpSysDictionaryDetailEntity;
+import com.starlight.cdp.platformapi.service.inter.IDictionaryDetailService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+/**
+ * Description 字典明细控制器
+ *
+ * @author fosin
+ */
+@RestController
+@RequestMapping("v1/dictionaryDetail")
+@Api(value = "v1/dictionaryDetail",tags = "通用字典明细管理",description = "通用字典明细管理(增删改查)")
+public class DictionaryDetailController implements ISimpleController<CdpSysDictionaryDetailEntity, Integer> {
+    @Autowired
+    private IDictionaryDetailService dictionaryDetailService;
+
+    @Override
+    public ISimpleService<CdpSysDictionaryDetailEntity, Integer> getService() {
+        return dictionaryDetailService;
+    }
+
+    @ApiOperation("根据字典代码获取对应的字典明细并分页排序")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "pageModule", value = "分页排序实体类"),
+            @ApiImplicitParam(name = "code", value = "字典代码,取值于CdpSysDictionaryEntity.code"),
+    })
+    @RequestMapping(value = MvcConstant.PATH_PAGE_LIST + "/{code}", method = {RequestMethod.POST, RequestMethod.GET})
+    public ResponseEntity<Object> pageList(@RequestBody PageModule pageModule, @PathVariable Integer code) throws CdpServiceException {
+        PageRequest pageRequest = new PageRequest(pageModule.getPageNumber() - 1, pageModule.getPageSize(), Sort.Direction.fromString(pageModule.getSortOrder()), pageModule.getSortName());
+        //分页查找
+        Page<CdpSysDictionaryDetailEntity> page;
+        page = dictionaryDetailService.findAll(pageModule.getSearchText(), pageRequest, code);
+
+        return ResponseEntity.ok(ResultUtils.success(page.getTotalElements(), page.getContent()));
+    }
+
+    @ApiOperation("根据字典代码获取对应的字典明细")
+    @RequestMapping(value = "/byCode/{code}", method = {RequestMethod.GET, RequestMethod.POST})
+    @ApiImplicitParam(name = "code", value = "字典代码,取值于CdpSysDictionaryEntity.code")
+    public ResponseEntity<Object> getdictionariesByCode(@PathVariable Integer code) throws CdpControllerException {
+        List<CdpSysDictionaryDetailEntity> entities = dictionaryDetailService.findByCode(code);
+        return ResponseEntity.ok(entities);
+    }
+
+}

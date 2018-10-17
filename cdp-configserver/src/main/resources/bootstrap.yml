@@ -1,0 +1,62 @@
+server:
+  port: 1100
+spring:
+  profiles:
+    active: @spring.cloud.config.profileActive@ #native属性表示config使用本地文件配置，系统将从classpath目录下查找配置文件
+  application:
+    name: cdp-configserver
+  zipkin:
+    rabbitmq:
+      queue: zipkin
+  cloud:
+    inetutils:
+      preferred-networks: @spring.cloud.inetutils.preferred-networks@
+    config:
+      server:
+        encrypt:
+          enabled: true
+        native:
+#          search-locations: file:@project.parent.parent.basedir@\\cdp-config\\local 相对路径方案尚未找到解决方法
+          search-locations: file:D:\source\MyProject\cdp\01-Source\cdp-cloud\cdp-config\local
+        git:
+          uri: https://github.com/186A8/cdp
+          search-paths: cdp-config/@profileActive@
+          deleteUntrackedBranches: true
+  rabbitmq:
+    host: @spring.rabbitmq.host@
+    port: @spring.rabbitmq.port@
+    username: @spring.rabbitmq.username@
+    password: @spring.rabbitmq.password@
+eureka:
+  client:
+    service-url:
+      defaultZone: @eureka.client.service-url.defaultZone@
+  instance:
+    prefer-ip-address: true
+    metadata-map: #用于SBA认证
+      user.name: ${security.user.name}
+      user.password: ${security.user.password}
+#    instance-id: http://${spring.cloud.client.ipAddress}:${server.port}
+security:
+  user:
+    name: @spring.cloud.config.username@
+    password: @spring.cloud.config.password@
+management:
+  security:
+    enabled: false
+#endpoints:
+#  health:
+#    sensitive: false
+encrypt:
+  key-store:
+    location: classpath:cdp.keystore
+    password: 123456
+    alias: cdp
+    secret: 123456
+  rsa:
+    algorithm: default
+    strong: false
+    salt: deadbeaf
+info: #定义各种额外的详情给服务端显示
+  description: "@project.description@"
+  version: "@project.version@"

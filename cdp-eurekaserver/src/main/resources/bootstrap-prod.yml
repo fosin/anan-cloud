@@ -1,0 +1,3 @@
+eureka:
+  server:
+    enable-self-preservation: true #关闭自我保护机制

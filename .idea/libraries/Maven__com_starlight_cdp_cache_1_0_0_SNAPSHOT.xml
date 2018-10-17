@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: com.starlight:cdp-cache:1.0.0-SNAPSHOT">
+    <CLASSES>
+      <root url="jar://E:/tools/Apache/Maven/repository/com/starlight/cdp-cache/1.0.0-SNAPSHOT/cdp-cache-1.0.0-SNAPSHOT.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://E:/tools/Apache/Maven/repository/com/starlight/cdp-cache/1.0.0-SNAPSHOT/cdp-cache-1.0.0-SNAPSHOT-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://E:/tools/Apache/Maven/repository/com/starlight/cdp-cache/1.0.0-SNAPSHOT/cdp-cache-1.0.0-SNAPSHOT-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

@@ -1,0 +1,147 @@
+management:
+  security:
+    enabled: false
+zuul:
+  add-host-header: true
+  add-proxy-headers: true
+  sensitiveHeaders:   #Cookie,Set-Cookie,Authorization   blacklist，如果不过滤，则须显式设为空。
+  retryable: true #默认启用重试
+  ignored-services: '*'
+#  strip-prefix: true #是否移除代理前缀
+#  prefix: /zuul #为所有http请求前增加/zuul前缀
+  routes:
+#    cdp-eurekaserver:
+#      path: /eurekaServer/**
+#      serviceId: cdp-eurekaserver
+#      retryable: true
+#      custom-sensitive-headers: true
+#      sensitive-headers:
+    cdp-platformserver:
+      path: /platform/**
+      serviceId: cdp-platformserver
+      retryable: true
+    cdp-authserver:
+      path: /auth/**
+      serviceId: cdp-authserver
+      retryable: true
+#    cdp-adminserver:
+#      path: /admin/**
+#      serviceId: cdp-adminserver
+#      retryable: true
+#    cdp-sleuthserver:
+#      path: /sleuth/**
+#      serviceId: cdp-sleuthserver
+#      retryable: true
+#  semaphore:
+#    max-semaphores: 100
+#  ribbon-isolation-strategy: THREAD
+#  thread-pool:
+#    use-separate-thread-pools: true
+#    thread-pool-key-prefix: zuulgw
+  ratelimit:
+    key-prefix: zuulgateway #对应用来标识请求的key的前缀
+    enabled: true
+#    repository: IN_MEMORY #对应存储类型（用来存储统计信息）,可选值REDIS、IN_MEMORY、JPA、CONSUL,默认IN_MEMORY
+    behind-proxy: true #代理之后
+    default-policy: #可选 - 针对所有的路由配置的策略，除非特别配置了policies
+      limit: 60 #可选 - 每个刷新时间窗口对应的请求数量限制
+      quota: 60 #可选-  每个刷新时间窗口对应的请求时间限制（秒）
+      refresh-interval: 3 # 刷新时间窗口的时间，默认值 (秒)
+      type: #可选 限流方式
+#        - user #用户粒度
+#        - origin #ORIGIN粒度 (用户请求的origin作为粒度控制)
+        - url #接口粒度 (请求接口的地址作为粒度控制)
+    policies:
+      cdp-adminserver: #特定的路由
+        limit: 10 #可选- 每个刷新时间窗口对应的请求数量限制
+        quota: 10 #可选-  每个刷新时间窗口对应的请求时间限制（秒）
+        refresh-interval: 6 # 刷新时间窗口的时间，默认值 (秒)
+        type: #可选 限流方式
+#          - user
+#          - origin
+          - url
+#spring:
+#  redis:
+#    host: 192.168.137.155
+#    port: 6379
+#    password: local
+#    timeout: 10000
+#    pool:
+#      max-active: -1
+#      max-wait: -1
+#      max-idle: 8
+#      min-idle: 0
+ribbon:
+  connectTimeout: 30000
+  readTimeout: 60000
+hystrix:
+#  threadpool:
+#    default:
+#      coreSize: 50
+#      maximumSize: 10000
+#      allowMaximumSizeToDivergeFromCoreSize: true
+#      maxQueueSize: -1
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 60000
+
+##禁用自定义过滤器ThrowExceptionFilter
+#zuul.ThrowExceptionFilter.pre.disable=true
+security:
+  basic:
+    enabled: false
+  user:
+    password: local
+    name: cdp
+  sessions: stateless
+  oauth2:
+#    client:
+#      client-id: cdp
+#      client-secret: local
+##      access-token-uri: http://localhost:9000/auth/oauth/token
+##      user-authorization-uri: http://localhost:9000/auth/oauth/authorize
+#      access-token-uri: http://localhost:1400/oauth/token
+#      user-authorization-uri: http://localhost:1400/oauth/authorize
+##      auto-approve-scopes:
+##      pre-established-redirect-uri: http://${security.user.name}:${security.user.password}@${eureka.instance.hostname}:${server.port}/
+##      token-name:
+##      refresh-token-validity-seconds:
+##      access-token-validity-seconds:
+##      scope:
+#      authorized-grant-types: authorization_code
+##      use-current-uri: false
+##      registered-redirect-uri: http://localhost:9000/platform/login
+##      client-authentication-scheme: form
+    resource:
+      filter-order: 3
+      loadBalanced: true #这个参数在OAuth2LoadBalancerClientAutoConfiguration可以找到，设置这个才可以使用eureka的服务名，配合loadBalancerInterceptor bean。
+      user-info-uri: http://cdp-authserver/oauth/principal
+      prefer-token-info: false
+      service-id: cdp-zuulgateway
+cdp:
+  oauth2:
+    disablecsrf: true
+    disableHttpBasic: true
+    cors:
+      allowedOrigins: '*'
+      allowedMethods: '*'
+      allowedHeaders: '*'
+      allowCredentials: true
+    blackWhiteList:
+    - path: /**/oauth/**
+    - path: /**/*.js
+    - path: /**/*.html
+    - path: /**/*.css
+    - path: /hystrix
+    - path: /hystrix.stream
+    - path: /hystrix/**
+    - path: /**/webjars/**
+#    - path: /**/springfox-swagger-ui/**
+    - path: /**/swagger-resources/**
+    - path: /**/v2/api-docs
+    - path: /**/third-party/**
+    - path: /**/api/**
+    - path: /**/images/**

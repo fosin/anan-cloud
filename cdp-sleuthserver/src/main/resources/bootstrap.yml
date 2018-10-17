@@ -1,0 +1,44 @@
+server:
+  port: 2100
+eureka:
+  client:
+    service-url:
+      defaultZone: @eureka.client.service-url.defaultZone@
+  instance:
+    prefer-ip-address: true
+    #    instance-id: http://${spring.cloud.client.ipAddress}:${server.port}
+    metadata-map:
+      gated-launch: false #灰度发布标志，默认为false，设置为true表示灰度发布的点
+#      user.name: ${security.user.name} #用于SBA认证
+#      user.password: ${security.user.password}
+spring:
+  profiles:
+    active: @profileActive@
+  application:
+    name: cdp-sleuthserver
+  cloud:
+    inetutils:
+      preferred-networks: @spring.cloud.inetutils.preferred-networks@
+    config:
+      username: @spring.cloud.config.username@
+      password: @spring.cloud.config.password@
+      discovery:
+        enabled: true
+        service-id: cdp-configserver
+      fail-fast: true
+      retry:
+        initial-interval: 2000
+        max-attempts: 6
+        max-interval: 2000
+        multiplier: 1.1
+      profile: @profileActive@
+      label: master
+      enabled: true
+  rabbitmq:
+    host: @spring.rabbitmq.host@
+    port: @spring.rabbitmq.port@
+    username: @spring.rabbitmq.username@
+    password: @spring.rabbitmq.password@
+info: #定义各种额外的详情给服务端显示
+  description: "@project.description@"
+  version: "@project.version@"

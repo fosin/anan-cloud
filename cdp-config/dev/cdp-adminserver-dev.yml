@@ -1,0 +1,43 @@
+management:
+  security:
+    enabled: false
+spring:
+  zipkin:
+    rabbitmq:
+      queue: zipkin
+turbine:
+  cluster-name-expression: new String('default')
+  app-config: cdp-zuulgateway
+cdp:
+  oauth2:
+    disablecsrf: true
+    disableHttpBasic: true
+    cors:
+      allowedOrigins: '*'
+      allowedMethods: '*'
+      allowedHeaders: '*'
+      allowCredentials: true
+    blackWhiteList:
+      - path: /**/*.html
+      - path: /**/*.css
+      - path: /img/**
+      - path: /**/*.js
+      - path: /third-party/**
+      - path: /api/**
+      - method: OPTIONS
+security:
+  user:
+    name: cdp
+    password: dev
+  oauth2:
+    client:
+      client-id: appServer
+      client-secret: $2a$10$JlQ0ryJ/x5YMvR/LO/h4dumxZZXPbXHXkODtC0Ge0bM8pGbYuHp5S
+      access-token-uri: http://192.168.2.243:1400/oauth/token
+      grant-type: client_credentials
+    resource:
+      loadBalanced: true #这个参数在OAuth2LoadBalancerClientAutoConfiguration可以找到，设置这个才可以使用eureka的服务名，配合loadBalancerInterceptor bean。
+      user-info-uri: http://cdp-authserver/oauth/principal
+      prefer-token-info: false
+      service-id: cdp-adminserver
+      filter-order: 3

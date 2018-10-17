@@ -1,0 +1,14 @@
+server:
+  port: 1200
+security:
+  user:
+    name: cdp
+    password: test
+    role: USER
+management:
+  security:
+    enabled: false
+spring:
+  zipkin:
+    rabbitmq:
+      queue: zipkin
