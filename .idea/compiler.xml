@@ -20,6 +20,7 @@
       <module name="cdp-adminserver" target="8" />
       <module name="cdp-authserver" target="8" />
       <module name="cdp-cloud" target="8" />
+      <module name="cdp-cloudadviced" target="8" />
       <module name="cdp-configserver" target="8" />
       <module name="cdp-eurekaserver" target="8" />
       <module name="cdp-platform" target="8" />

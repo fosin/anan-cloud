@@ -2,16 +2,17 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/cdp-adminserver/cdp-adminserver.iml" filepath="$PROJECT_DIR$/cdp-adminserver/cdp-adminserver.iml" />
-      <module fileurl="file://$PROJECT_DIR$/cdp-platform/cdp-authserver/cdp-authserver.iml" filepath="$PROJECT_DIR$/cdp-platform/cdp-authserver/cdp-authserver.iml" />
+      <module fileurl="file://$PROJECT_DIR$/cdp-cloudadviced/cdp-adminserver/cdp-adminserver.iml" filepath="$PROJECT_DIR$/cdp-cloudadviced/cdp-adminserver/cdp-adminserver.iml" />
+      <module fileurl="file://$PROJECT_DIR$/cdp-cloudadviced/cdp-platform/cdp-authserver/cdp-authserver.iml" filepath="$PROJECT_DIR$/cdp-cloudadviced/cdp-platform/cdp-authserver/cdp-authserver.iml" />
       <module fileurl="file://$PROJECT_DIR$/cdp-cloud.iml" filepath="$PROJECT_DIR$/cdp-cloud.iml" />
+      <module fileurl="file://$PROJECT_DIR$/cdp-cloudadviced/cdp-cloudadviced.iml" filepath="$PROJECT_DIR$/cdp-cloudadviced/cdp-cloudadviced.iml" />
       <module fileurl="file://$PROJECT_DIR$/cdp-configserver/cdp-configserver.iml" filepath="$PROJECT_DIR$/cdp-configserver/cdp-configserver.iml" />
       <module fileurl="file://$PROJECT_DIR$/cdp-eurekaserver/cdp-eurekaserver.iml" filepath="$PROJECT_DIR$/cdp-eurekaserver/cdp-eurekaserver.iml" />
-      <module fileurl="file://$PROJECT_DIR$/cdp-platform/cdp-platform.iml" filepath="$PROJECT_DIR$/cdp-platform/cdp-platform.iml" />
-      <module fileurl="file://$PROJECT_DIR$/cdp-platform/cdp-platformapi/cdp-platformapi.iml" filepath="$PROJECT_DIR$/cdp-platform/cdp-platformapi/cdp-platformapi.iml" />
-      <module fileurl="file://$PROJECT_DIR$/cdp-platform/cdp-platformserver/cdp-platformserver.iml" filepath="$PROJECT_DIR$/cdp-platform/cdp-platformserver/cdp-platformserver.iml" />
-      <module fileurl="file://$PROJECT_DIR$/cdp-sleuthserver/cdp-sleuthserver.iml" filepath="$PROJECT_DIR$/cdp-sleuthserver/cdp-sleuthserver.iml" />
-      <module fileurl="file://$PROJECT_DIR$/cdp-zuulgateway/cdp-zuulgateway.iml" filepath="$PROJECT_DIR$/cdp-zuulgateway/cdp-zuulgateway.iml" />
+      <module fileurl="file://$PROJECT_DIR$/cdp-cloudadviced/cdp-platform/cdp-platform.iml" filepath="$PROJECT_DIR$/cdp-cloudadviced/cdp-platform/cdp-platform.iml" />
+      <module fileurl="file://$PROJECT_DIR$/cdp-cloudadviced/cdp-platform/cdp-platformapi/cdp-platformapi.iml" filepath="$PROJECT_DIR$/cdp-cloudadviced/cdp-platform/cdp-platformapi/cdp-platformapi.iml" />
+      <module fileurl="file://$PROJECT_DIR$/cdp-cloudadviced/cdp-platform/cdp-platformserver/cdp-platformserver.iml" filepath="$PROJECT_DIR$/cdp-cloudadviced/cdp-platform/cdp-platformserver/cdp-platformserver.iml" />
+      <module fileurl="file://$PROJECT_DIR$/cdp-cloudadviced/cdp-sleuthserver/cdp-sleuthserver.iml" filepath="$PROJECT_DIR$/cdp-cloudadviced/cdp-sleuthserver/cdp-sleuthserver.iml" />
+      <module fileurl="file://$PROJECT_DIR$/cdp-cloudadviced/cdp-zuulgateway/cdp-zuulgateway.iml" filepath="$PROJECT_DIR$/cdp-cloudadviced/cdp-zuulgateway/cdp-zuulgateway.iml" />
     </modules>
   </component>
 </project>

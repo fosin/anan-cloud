@@ -12,11 +12,8 @@
     <artifactId>cdp-cloud</artifactId>
     <modules>
         <module>cdp-eurekaserver</module>
-        <module>cdp-zuulgateway</module>
         <module>cdp-configserver</module>
-        <module>cdp-adminserver</module>
-        <module>cdp-sleuthserver</module>
-        <module>cdp-platform</module>
+        <module>cdp-cloudconfig</module>
     </modules>
     <properties>
         <cdp-spring-cloud.version>Edgware.SR4</cdp-spring-cloud.version>
@@ -133,21 +130,6 @@
             <artifactId>disruptor</artifactId>
             <version>3.3.7</version>
         </dependency>
-        <!--排除与oauth2.0的中的冲突jar-->
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-oauth2</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-config</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.bouncycastle</groupId>
-                    <artifactId>bcpkix-jdk15on</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
@@ -160,6 +142,10 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

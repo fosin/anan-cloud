@@ -6,6 +6,9 @@ spring:
   cloud:
     inetutils:
       preferred-networks: @spring.cloud.inetutils.preferred-networks@
+  zipkin:
+    rabbitmq:
+      queue: zipkin
 server:
   port: 1000
 eureka:

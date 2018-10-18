@@ -8,22 +8,37 @@
         <version>1.0.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <packaging>jar</packaging>
-    <artifactId>cdp-configserver</artifactId>
-    <description>CDP Config Server</description>
+    <packaging>pom</packaging>
+    <artifactId>cdp-cloudconfig</artifactId>
+    <modules>
+        <module>cdp-zuulgateway</module>
+        <module>cdp-adminserver</module>
+        <module>cdp-sleuthserver</module>
+        <module>cdp-platform</module>
+    </modules>
     <dependencies>
+        <!--排除与oauth2.0的中的冲突jar-->
         <dependency>
-            <groupId>com.starlight</groupId>
-            <artifactId>cdp-core</artifactId>
-            <version>${cdp.version}</version>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-oauth2</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-config-server</artifactId>
+            <artifactId>spring-cloud-starter-config</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.bouncycastle</groupId>
+                    <artifactId>bcpkix-jdk15on</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.retry</groupId>
+            <artifactId>spring-retry</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-security</artifactId>
+            <artifactId>spring-boot-starter-aop</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
@@ -36,10 +51,6 @@
         <dependency>
             <groupId>org.springframework.amqp</groupId>
             <artifactId>spring-rabbit</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.tmatesoft.svnkit</groupId>
-            <artifactId>svnkit</artifactId>
         </dependency>
     </dependencies>
 </project>
