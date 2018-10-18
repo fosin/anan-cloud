@@ -17,11 +17,16 @@ spring:
           enabled: true
         native:
 #          search-locations: file:@project.parent.parent.basedir@\\cdp-config\\local 相对路径方案尚未找到解决方法
-          search-locations: file:D:\source\MyProject\cdp\01-Source\cdp-cloud\cdp-config\local
+          search-locations: file:D:\source\MyProject\cdp\01-Source\cdp-cloud\cdp-config\@profileActive@
         git:
           uri: https://github.com/186A8/cdp-cloud
           search-paths: cdp-config/@profileActive@
           deleteUntrackedBranches: true
+        svn:
+          uri: https://192.168.2.237/svn/xingyj/01-Development/01-Platform/v1/01-Souce/cdp-cloud/cdp-config/
+          username: configServer
+          password: xingyj
+        default-label: @profileActive@
   rabbitmq:
     host: @spring.rabbitmq.host@
     port: @spring.rabbitmq.port@

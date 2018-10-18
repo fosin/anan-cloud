@@ -31,7 +31,6 @@ spring:
         max-interval: 2000
         multiplier: 1.1
       profile:  @profileActive@
-      label: master
       enabled: true
   rabbitmq:
     host: @spring.rabbitmq.host@

@@ -30,7 +30,6 @@ spring:
         max-interval: 2000
         multiplier: 1.1
       profile: @profileActive@
-      label: master
       enabled: true #开发环境关闭配置管理
   rabbitmq:
     host: @spring.rabbitmq.host@
