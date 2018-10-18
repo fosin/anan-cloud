@@ -10,12 +10,6 @@ zuul:
 #  strip-prefix: true #是否移除代理前缀
 #  prefix: /zuul #为所有http请求前增加/zuul前缀
   routes:
-#    cdp-eurekaserver:
-#      path: /eurekaServer/**
-#      serviceId: cdp-eurekaserver
-#      retryable: true
-#      custom-sensitive-headers: true
-#      sensitive-headers:
     cdp-platformserver:
       path: /platform/**
       serviceId: cdp-platformserver
@@ -24,14 +18,6 @@ zuul:
       path: /auth/**
       serviceId: cdp-authserver
       retryable: true
-#    cdp-adminserver:
-#      path: /admin/**
-#      serviceId: cdp-adminserver
-#      retryable: true
-#    cdp-sleuthserver:
-#      path: /sleuth/**
-#      serviceId: cdp-sleuthserver
-#      retryable: true
 #  semaphore:
 #    max-semaphores: 100
 #  ribbon-isolation-strategy: THREAD

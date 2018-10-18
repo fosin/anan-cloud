@@ -62,10 +62,5 @@ cdp:
   oauth2:
     disablecsrf: true
     disableHttpBasic: true
-    cors:
-      allowedOrigins: '*'
-      allowedMethods: '*'
-      allowedHeaders: '*'
-      allowCredentials: true
     blackWhiteList:
     - path: /**/v2/api-docs

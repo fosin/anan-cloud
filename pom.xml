@@ -21,6 +21,7 @@
     <properties>
         <cdp-spring-cloud.version>Edgware.SR4</cdp-spring-cloud.version>
         <cdp-spring-boot-admin.version>1.5.7</cdp-spring-boot-admin.version>
+        <cdp-druid.version>1.1.9</cdp-druid.version>
     </properties>
     <profiles>
         <profile>
@@ -130,6 +131,7 @@
         <dependency>
             <groupId>com.lmax</groupId>
             <artifactId>disruptor</artifactId>
+            <version>3.3.7</version>
         </dependency>
         <!--排除与oauth2.0的中的冲突jar-->
         <dependency>
@@ -173,6 +175,11 @@
                 <version>${cdp-spring-cloud.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>druid-spring-boot-starter</artifactId>
+                <version>${cdp-druid.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
