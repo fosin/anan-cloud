@@ -1,6 +1,6 @@
 package com.starlight.cdp;
 
-import com.starlight.cdp.core.banner.CDPBanner;
+import com.starlight.cdp.core.banner.CdpBanner;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -17,7 +17,7 @@ import org.springframework.context.annotation.Bean;
 public class ConfigServerApplication {
     public static void main(String[] args) {
         new SpringApplicationBuilder(ConfigServerApplication.class)
-                .banner(new CDPBanner("CDP Config Server"))
+                .banner(new CdpBanner("CDP Config Server"))
                 .logStartupInfo(true)
                 .run(args);
     }

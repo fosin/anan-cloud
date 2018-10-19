@@ -16,7 +16,7 @@
         <module>cdp-cloudadviced</module>
     </modules>
     <properties>
-        <cdp-spring-cloud.version>Edgware.SR4</cdp-spring-cloud.version>
+        <cdp-spring-cloud.version>Edgware.SR5</cdp-spring-cloud.version>
         <cdp-spring-boot-admin.version>1.5.7</cdp-spring-boot-admin.version>
         <cdp-druid.version>1.1.9</cdp-druid.version>
     </properties>

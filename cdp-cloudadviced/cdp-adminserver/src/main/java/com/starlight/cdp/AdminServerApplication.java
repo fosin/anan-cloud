@@ -1,6 +1,6 @@
 package com.starlight.cdp;
 
-import com.starlight.cdp.core.banner.CDPBanner;
+import com.starlight.cdp.core.banner.CdpBanner;
 import com.starlight.cdp.oauth2.annotation.EnableCdpOauth2;
 import de.codecentric.boot.admin.config.EnableAdminServer;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -27,7 +27,7 @@ import org.springframework.web.filter.CorsFilter;
 public class AdminServerApplication {
     public static void main(String[] args) {
         new SpringApplicationBuilder(AdminServerApplication.class)
-                .banner(new CDPBanner("CDP Admin Server"))
+                .banner(new CdpBanner("CDP Admin Server"))
                 .logStartupInfo(true)
                 .run(args);
     }

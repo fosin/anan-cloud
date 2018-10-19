@@ -1,6 +1,6 @@
 package com.starlight.cdp;
 
-import com.starlight.cdp.core.banner.CDPBanner;
+import com.starlight.cdp.core.banner.CdpBanner;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -19,7 +19,7 @@ import org.springframework.web.filter.CorsFilter;
 public class EurekaServerApplication {
     public static void main(String[] args) {
         new SpringApplicationBuilder(EurekaServerApplication.class)
-                .banner(new CDPBanner("CDP Eureka Server"))
+                .banner(new CdpBanner("CDP Eureka Server"))
                 .logStartupInfo(true)
                 .run(args);
     }

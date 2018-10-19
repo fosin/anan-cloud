@@ -1,7 +1,7 @@
 package com.starlight.cdp;
 
 import com.netflix.loadbalancer.IRule;
-import com.starlight.cdp.core.banner.CDPBanner;
+import com.starlight.cdp.core.banner.CdpBanner;
 import com.starlight.cdp.oauth2.annotation.EnableCdpOauth2;
 import com.starlight.cdp.swagger.config.CdpSwaggerResourcesProvider;
 import com.starlight.cdp.swagger.annotation.EnableCdpSwagger2;
@@ -43,7 +43,7 @@ import java.util.List;
 public class ZuulGatewayApplication {
     public static void main(String[] args) {
         new SpringApplicationBuilder(ZuulGatewayApplication.class)
-                .banner(new CDPBanner("CDP Zuul Gateway"))
+                .banner(new CdpBanner("CDP Zuul Gateway"))
                 .logStartupInfo(true)
                 .run(args);
     }

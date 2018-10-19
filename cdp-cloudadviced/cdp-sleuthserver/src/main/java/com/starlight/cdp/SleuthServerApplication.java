@@ -1,6 +1,6 @@
 package com.starlight.cdp;
 
-import com.starlight.cdp.core.banner.CDPBanner;
+import com.starlight.cdp.core.banner.CdpBanner;
 import com.starlight.cdp.oauth2.annotation.EnableCdpOauth2;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -23,7 +23,7 @@ import zipkin.server.internal.EnableZipkinServer;
 public class SleuthServerApplication {
     public static void main(String[] args) {
         new SpringApplicationBuilder(SleuthServerApplication.class)
-                .banner(new CDPBanner("CDP Sleuth Server"))
+                .banner(new CdpBanner("CDP Sleuth Server"))
                 .logStartupInfo(true)
                 .run(args);
     }

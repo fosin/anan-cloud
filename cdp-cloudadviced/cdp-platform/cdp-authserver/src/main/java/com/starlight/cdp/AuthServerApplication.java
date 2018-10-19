@@ -1,6 +1,6 @@
 package com.starlight.cdp;
 
-import com.starlight.cdp.core.banner.CDPBanner;
+import com.starlight.cdp.core.banner.CdpBanner;
 import com.starlight.cdp.oauth2.annotation.EnableCdpOauth2;
 import com.starlight.cdp.swagger.annotation.EnableCdpSwagger2;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -21,7 +21,7 @@ import org.springframework.session.data.redis.config.annotation.web.http.EnableR
 public class AuthServerApplication {
     public static void main(String[] args) {
         new SpringApplicationBuilder(AuthServerApplication.class)
-                .banner(new CDPBanner("CDP Auth Server"))
+                .banner(new CdpBanner("CDP Auth Server"))
                 .logStartupInfo(true)
                 .run(args);
     }
