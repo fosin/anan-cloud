@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <packaging>pom</packaging>
-    <artifactId>cdp-cloudconfig</artifactId>
+    <artifactId>cdp-cloudadviced</artifactId>
     <modules>
         <module>cdp-zuulgateway</module>
         <module>cdp-adminserver</module>

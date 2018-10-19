@@ -13,7 +13,7 @@
     <modules>
         <module>cdp-eurekaserver</module>
         <module>cdp-configserver</module>
-        <module>cdp-cloudconfig</module>
+        <module>cdp-cloudadviced</module>
     </modules>
     <properties>
         <cdp-spring-cloud.version>Edgware.SR4</cdp-spring-cloud.version>

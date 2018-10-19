@@ -5,6 +5,8 @@
       <module fileurl="file://$PROJECT_DIR$/cdp-cloudadviced/cdp-adminserver/cdp-adminserver.iml" filepath="$PROJECT_DIR$/cdp-cloudadviced/cdp-adminserver/cdp-adminserver.iml" />
       <module fileurl="file://$PROJECT_DIR$/cdp-cloudadviced/cdp-platform/cdp-authserver/cdp-authserver.iml" filepath="$PROJECT_DIR$/cdp-cloudadviced/cdp-platform/cdp-authserver/cdp-authserver.iml" />
       <module fileurl="file://$PROJECT_DIR$/cdp-cloud.iml" filepath="$PROJECT_DIR$/cdp-cloud.iml" />
+      <module fileurl="file://$PROJECT_DIR$/cdp-cloud.iml" filepath="$PROJECT_DIR$/cdp-cloud.iml" />
+      <module fileurl="file://$PROJECT_DIR$/cdp-cloudadviced/cdp-cloudadviced.iml" filepath="$PROJECT_DIR$/cdp-cloudadviced/cdp-cloudadviced.iml" />
       <module fileurl="file://$PROJECT_DIR$/cdp-cloudadviced/cdp-cloudadviced.iml" filepath="$PROJECT_DIR$/cdp-cloudadviced/cdp-cloudadviced.iml" />
       <module fileurl="file://$PROJECT_DIR$/cdp-configserver/cdp-configserver.iml" filepath="$PROJECT_DIR$/cdp-configserver/cdp-configserver.iml" />
       <module fileurl="file://$PROJECT_DIR$/cdp-eurekaserver/cdp-eurekaserver.iml" filepath="$PROJECT_DIR$/cdp-eurekaserver/cdp-eurekaserver.iml" />
