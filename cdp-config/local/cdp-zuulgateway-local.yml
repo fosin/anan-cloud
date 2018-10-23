@@ -38,7 +38,7 @@ zuul:
 #        - origin #ORIGIN粒度 (用户请求的origin作为粒度控制)
         - url #接口粒度 (请求接口的地址作为粒度控制)
     policies:
-      cdp-adminserver: #特定的路由
+      cdp-platformserver: #特定的路由
         limit: 10 #可选- 每个刷新时间窗口对应的请求数量限制
         quota: 10 #可选-  每个刷新时间窗口对应的请求时间限制（秒）
         refresh-interval: 6 # 刷新时间窗口的时间，默认值 (秒)

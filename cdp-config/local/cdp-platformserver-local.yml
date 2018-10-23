@@ -46,7 +46,7 @@ cdp:
     title: ${spring.application.name}
     description: ${info.description}
     version: ${info.version}
-    base-package: com.starlight.cdp.platform
+    base-package: com.github.fosin.cdp.platform
     authorization:
       name: Oauth2.0 Authorization
       keyName: Authorization

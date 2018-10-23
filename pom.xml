@@ -3,8 +3,8 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
+        <groupId>com.github.fosin</groupId>
         <artifactId>cdp</artifactId>
-        <groupId>com.starlight</groupId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -19,6 +19,15 @@
         <cdp-spring-cloud.version>Edgware.SR5</cdp-spring-cloud.version>
         <cdp-spring-boot-admin.version>1.5.7</cdp-spring-boot-admin.version>
         <cdp-druid.version>1.1.9</cdp-druid.version>
+        <cdp-platformapi.version>1.0.0-SNAPSHOT</cdp-platformapi.version>
+        <cdp-platform.version>1.0.0-SNAPSHOT</cdp-platform.version>
+        <cdp-platformserver.version>1.0.0-SNAPSHOT</cdp-platformserver.version>
+        <cdp-authserver.version>1.0.0-SNAPSHOT</cdp-authserver.version>
+        <cdp-adminserver.version>1.0.0-SNAPSHOT</cdp-adminserver.version>
+        <cdp-sleuthserver.version>1.0.0-SNAPSHOT</cdp-sleuthserver.version>
+        <cdp-eurekaserver.version>1.0.0-SNAPSHOT</cdp-eurekaserver.version>
+        <cdp-configserver.version>1.0.0-SNAPSHOT</cdp-configserver.version>
+        <cdp-zuulgateway.version>1.0.0-SNAPSHOT</cdp-zuulgateway.version>
     </properties>
     <profiles>
         <profile>
@@ -192,12 +201,10 @@
         </resources>
         <finalName>${project.artifactId}-${project.version}-${profileActive}</finalName>
         <plugins>
+            <!--SpringBoot插件-->
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <configuration>
-                    <skipSource>true</skipSource>
-                </configuration>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
         </plugins>
     </build>

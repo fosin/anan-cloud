@@ -3,8 +3,8 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
+        <groupId>com.github.fosin</groupId>
         <artifactId>cdp</artifactId>
-        <groupId>com.starlight</groupId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -12,30 +12,20 @@
     <artifactId>cdp-platformapi</artifactId>
     <dependencies>
         <dependency>
-            <groupId>com.starlight</groupId>
+            <groupId>${cdp.groupId}</groupId>
             <artifactId>cdp-core</artifactId>
-            <version>${cdp.version}</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>spring-data-commons</artifactId>
-                    <groupId>org.springframework.data</groupId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
-            <groupId>com.starlight</groupId>
+            <groupId>${cdp.groupId}</groupId>
             <artifactId>cdp-mvc</artifactId>
-            <version>${cdp.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.starlight</groupId>
+            <groupId>${cdp.groupId}</groupId>
             <artifactId>cdp-cache</artifactId>
-            <version>${cdp.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.starlight</groupId>
+            <groupId>${cdp.groupId}</groupId>
             <artifactId>cdp-oauth2</artifactId>
-            <version>${cdp.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

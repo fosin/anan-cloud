@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: com.github.fosin:cdp-mvc:1.0.0-SNAPSHOT">
+    <CLASSES>
+      <root url="jar://E:/tools/Apache/Maven/repository/com/github/fosin/cdp-mvc/1.0.0-SNAPSHOT/cdp-mvc-1.0.0-20181023.094136-3.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://E:/tools/Apache/Maven/repository/com/github/fosin/cdp-mvc/1.0.0-SNAPSHOT/cdp-mvc-1.0.0-20181023.094136-3-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://E:/tools/Apache/Maven/repository/com/github/fosin/cdp-mvc/1.0.0-SNAPSHOT/cdp-mvc-1.0.0-20181023.094136-3-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
