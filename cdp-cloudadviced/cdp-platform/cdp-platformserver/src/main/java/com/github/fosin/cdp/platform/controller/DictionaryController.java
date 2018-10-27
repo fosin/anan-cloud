@@ -17,12 +17,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("v1/dictionary")
 @Api(value = "v1/dictionary",tags = "通用字典管理",description = "通用字典管理(增删改查)")
-public class DictionaryController implements ISimpleController<CdpSysDictionaryEntity, Integer> {
+public class DictionaryController implements ISimpleController<CdpSysDictionaryEntity, Long> {
     @Autowired
     private IDictionaryService dictionaryService;
 
     @Override
-    public ISimpleService<CdpSysDictionaryEntity, Integer> getService() {
+    public ISimpleService<CdpSysDictionaryEntity, Long> getService() {
         return dictionaryService;
     }
 }

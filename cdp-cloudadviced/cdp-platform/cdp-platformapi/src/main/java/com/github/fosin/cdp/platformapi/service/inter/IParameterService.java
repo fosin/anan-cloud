@@ -9,10 +9,10 @@ import com.github.fosin.cdp.mvc.service.ISimpleService;
  * Time:12:30
  * @author fosin
  */
-public interface IParameterService extends ISimpleService<CdpSysParameterEntity,Integer> {
+public interface IParameterService extends ISimpleService<CdpSysParameterEntity,Long> {
     CdpSysParameterEntity findByTypeAndScopeAndName(Integer type, String scope, String name);
 
-    boolean applyChange(Integer id) throws CdpServiceException;
+    boolean applyChange(Long id) throws CdpServiceException;
 
     boolean applyChanges() throws CdpServiceException;
 }

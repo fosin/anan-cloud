@@ -12,8 +12,8 @@ import java.util.List;
  * @author fosin
  */
 @Repository
-public interface RolePermissionRepository extends JpaRepository<CdpSysRolePermissionEntity,Integer> {
-    List<CdpSysRolePermissionEntity> findByRoleId(Integer roleId);
-    long countByPermissionId(Integer permissionId);
-    void deleteByRoleId(Integer roleId);
+public interface RolePermissionRepository extends JpaRepository<CdpSysRolePermissionEntity,Long> {
+    List<CdpSysRolePermissionEntity> findByRoleId(Long roleId);
+    long countByPermissionId(Long permissionId);
+    void deleteByRoleId(Long roleId);
 }

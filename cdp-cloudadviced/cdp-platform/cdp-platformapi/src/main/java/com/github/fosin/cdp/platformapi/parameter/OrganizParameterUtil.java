@@ -72,12 +72,12 @@ public class OrganizParameterUtil extends AbstractParameterUtil {
         }
         //parameter为空表示没有参数记录，则依次向上找父机构的参数
         if (parameter.getId() == null || parameter.getId() < 1) {
-            Integer id = Integer.parseInt(scope);
+            Long id = Long.parseLong(scope);
             CdpSysOrganizationEntity entity = organizationService.findOne(id);
             if (entity == null || entity.getLevel() == 0) {
                 value = getNearestParameter("", name);
             } else {
-                value = getNearestParameter(entity.getpId() + "", name);
+                value = getNearestParameter(entity.getPId() + "", name);
             }
         }
         return value;

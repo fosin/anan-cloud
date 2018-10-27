@@ -31,12 +31,12 @@ public class RolePermissionServiceImpl implements IRolePermissionService {
 
     @Override
     @Cacheable(value = TableNameConstant.CDP_SYS_ROLE_PERMISSION, key = "#roleId")
-    public List<CdpSysRolePermissionEntity> findByRoleId(Integer roleId) {
+    public List<CdpSysRolePermissionEntity> findByRoleId(Long roleId) {
         return rolePermissionRepository.findByRoleId(roleId);
     }
 
     @Override
-    public long countByPermissionId(Integer permissionId) {
+    public long countByPermissionId(Long permissionId) {
         return rolePermissionRepository.countByPermissionId(permissionId);
     }
 
@@ -55,12 +55,12 @@ public class RolePermissionServiceImpl implements IRolePermissionService {
     @Override
     public void deleteInBatch(Collection<CdpSysRolePermissionEntity> entities) {
         Assert.notEmpty(entities, "要删除的集合不能为空!");
-        Set<Integer> needDelRoles = new HashSet<>();
+        Set<Long> needDelRoles = new HashSet<>();
         for (CdpSysRolePermissionEntity entity : entities) {
             needDelRoles.add(entity.getRoleId());
         }
         Assert.notEmpty(needDelRoles, "没有找到需要删除数据!");
-        for (Integer roleId : needDelRoles) {
+        for (Long roleId : needDelRoles) {
             CacheUtil.evict(TableNameConstant.CDP_SYS_ROLE_PERMISSION, roleId + "");
         }
         rolePermissionRepository.deleteInBatch(entities);
@@ -69,7 +69,7 @@ public class RolePermissionServiceImpl implements IRolePermissionService {
         } catch (InterruptedException e) {
             throw new CdpServiceException(e);
         }
-        for (Integer roleId : needDelRoles) {
+        for (Long roleId : needDelRoles) {
             CacheUtil.evict(TableNameConstant.CDP_SYS_ROLE_PERMISSION, roleId + "");
         }
     }
@@ -86,7 +86,7 @@ public class RolePermissionServiceImpl implements IRolePermissionService {
             }
     )
     @Transactional
-    public List<CdpSysRolePermissionEntity> updateInBatch(Integer roleId, Collection<CdpSysRolePermissionEntity> entities) {
+    public List<CdpSysRolePermissionEntity> updateInBatch(Long roleId, Collection<CdpSysRolePermissionEntity> entities) {
         Assert.notNull(roleId, "传入的角色ID不能为空!");
 
         for (CdpSysRolePermissionEntity entity : entities) {

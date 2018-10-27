@@ -1,140 +1,73 @@
 package com.github.fosin.cdp.platformapi.entity;
 
+import java.util.Date;
+
 import com.github.fosin.cdp.util.DateTimeUtil;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import org.hibernate.validator.constraints.Range;
-import org.springframework.format.annotation.DateTimeFormat;
-
+import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.NotEmpty;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.Date;
-import java.util.Objects;
+import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 /**
- * Description
+ * 用于增减用户的单项权限，通常实在角色的基础上增减单项权限(CdpSysUserPermission)实体类
  *
  * @author fosin
+ * @date 2018-10-27 09:38:39
+ * @since 1.0.0
  */
+@Data
 @Entity
+@DynamicUpdate
 @Table(name = "cdp_sys_user_permission")
-@ApiModel(value = "用户权限表实体类", description = "表cdp_sys_user_permission的对应的实体类")
+@ApiModel(value = "用于增减用户的单项权限，通常实在角色的基础上增减单项权限实体类", description = "表(cdp_sys_user_permission)的对应的实体类")
 public class CdpSysUserPermissionEntity implements Serializable {
-    private Integer id;
-    private Integer organizId;
-    private Integer userId;
-    private Integer permissionId;
-    private Date createTime;
-    private Integer createBy;
-    private Integer addMode;
-
-
-    @Id
+    private static final long serialVersionUID = 200006140276012754L;
+    
     @Column(name = "id")
+    @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @ApiModelProperty(value = "主键ID", notes = "系统自动生成")
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    @Basic
+    @ApiModelProperty(value = "用户权限ID", notes = "主键，系统自动生成,用户权限ID")
+    private Long id;
+    
     @Column(name = "organiz_id")
-    @NotNull
-    @ApiModelProperty(value = "机构ID", notes = "取值于机构表CdpSysOrganizationEntity.id")
-    public Integer getOrganizId() {
-        return organizId;
-    }
-
-    public void setOrganizId(Integer organizId) {
-        this.organizId = organizId;
-    }
-
     @Basic
+    @NotNull
+    @ApiModelProperty(value = "机构ID", notes = "机构ID")
+    private Long organizId;
+    
     @Column(name = "user_id")
-    @NotNull
-    @ApiModelProperty(value = "用户ID", notes = "取值于用户表cdp_sys_user.id")
-    public Integer getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Integer userId) {
-        this.userId = userId;
-    }
-
     @Basic
+    @NotNull
+    @ApiModelProperty(value = "用户ID", notes = "用户ID")
+    private Long userId;
+    
     @Column(name = "permission_id")
-    @NotNull
-    @ApiModelProperty(value = "权限ID", notes = "取值于权限表cdp_sys_permission.id")
-    public Integer getPermissionId() {
-        return permissionId;
-    }
-
-    public void setPermissionId(Integer permissionId) {
-        this.permissionId = permissionId;
-    }
-
     @Basic
+    @NotNull
+    @ApiModelProperty(value = "权限ID", notes = "权限ID")
+    private Long permissionId;
+    
     @Column(name = "create_time")
+    @Basic
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
-    @ApiModelProperty(value = "创建时间", notes = "该值由后台维护，更改数据时前端不需要关心")
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    @Basic
+    @ApiModelProperty(value = "创建日期", notes = "创建日期")
+    private Date createTime;
+    
     @Column(name = "create_by")
-    @ApiModelProperty(value = "创建人", notes = "该值由后台维护，更改数据时前端不需要关心，取值于CdpSysUserEntity.id")
-    public Integer getCreateBy() {
-        return createBy;
-    }
-
-    public void setCreateBy(Integer createBy) {
-        this.createBy = createBy;
-    }
-
     @Basic
+    @ApiModelProperty(value = "该值由后台维护，更改数据时前端不需要关心，取值于cdp_sys_user.id", notes = "该值由后台维护，更改数据时前端不需要关心，取值于cdp_sys_user.id")
+    private Long createBy;
+    
     @Column(name = "add_mode")
+    @Basic
     @NotNull
-    @Range(max = 1)
-    @ApiModelProperty(value = "附加模式", notes = "1：增权限 2：减权限")
-    public Integer getAddMode() {
-        return addMode;
-    }
-
-    public void setAddMode(Integer addMode) {
-        this.addMode = addMode;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        CdpSysUserPermissionEntity that = (CdpSysUserPermissionEntity) o;
-        return Objects.equals(id, that.id) &&
-                Objects.equals(organizId, that.organizId) &&
-                Objects.equals(userId, that.userId) &&
-                Objects.equals(permissionId, that.permissionId) &&
-                Objects.equals(createTime, that.createTime) &&
-                Objects.equals(createBy, that.createBy) &&
-                Objects.equals(addMode, that.addMode);
-    }
-
-    @Override
-    public int hashCode() {
-
-        return Objects.hash(id, organizId, userId, permissionId, createTime, createBy, addMode);
-    }
+    @ApiModelProperty(value = "补充方式：0=增加权限、1=删除权限", notes = "补充方式：0=增加权限、1=删除权限")
+    private Integer addMode;
+    
 }

@@ -14,11 +14,11 @@ import java.util.List;
  * @author fosin
  */
 @Repository
-public interface RoleRepository extends JpaRepository<CdpSysRoleEntity,Integer>,JpaSpecificationExecutor<CdpSysRoleEntity> {
+public interface RoleRepository extends JpaRepository<CdpSysRoleEntity,Long>,JpaSpecificationExecutor<CdpSysRoleEntity> {
 
     @Query(value = "select * from cdp_sys_role where id not in (select role_id from cdp_sys_user_role where user_id =?1)",nativeQuery = true)
-    List<CdpSysRoleEntity> findOtherRolesByUserId(Integer userId);
+    List<CdpSysRoleEntity> findOtherRolesByUserId(Long userId);
 
     @Query(value = "select * from cdp_sys_role where id in (select role_id from cdp_sys_user_role where user_id =?1)",nativeQuery = true)
-    List<CdpSysRoleEntity> findUserRolesByUserId(Integer userId);
+    List<CdpSysRoleEntity> findUserRolesByUserId(Long userId);
 }

@@ -1,8 +1,8 @@
 package com.github.fosin.cdp.platformapi.service.inter;
 
 
-import com.github.fosin.cdp.platformapi.entity.CdpSysRolePermissionEntity;
 import com.github.fosin.cdp.mvc.service.ICrudBatchService;
+import com.github.fosin.cdp.platformapi.entity.CdpSysRolePermissionEntity;
 
 import java.util.Collection;
 import java.util.List;
@@ -12,10 +12,10 @@ import java.util.List;
  * Time:12:37
  * @author fosin
  */
-public interface IRolePermissionService extends ICrudBatchService<CdpSysRolePermissionEntity,Integer> {
-    List<CdpSysRolePermissionEntity> findByRoleId(Integer roleId);
+public interface IRolePermissionService extends ICrudBatchService<CdpSysRolePermissionEntity,Long> {
+    List<CdpSysRolePermissionEntity> findByRoleId(Long roleId);
 
-    long countByPermissionId(Integer permissionId);
+    long countByPermissionId(Long permissionId);
 
-    List<CdpSysRolePermissionEntity> updateInBatch(Integer roleId, Collection<CdpSysRolePermissionEntity> entities);
+    List<CdpSysRolePermissionEntity> updateInBatch(Long roleId, Collection<CdpSysRolePermissionEntity> entities);
 }

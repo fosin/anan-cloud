@@ -10,12 +10,6 @@
     <modelVersion>4.0.0</modelVersion>
     <packaging>pom</packaging>
     <artifactId>cdp-cloudadviced</artifactId>
-    <modules>
-        <module>cdp-zuulgateway</module>
-        <module>cdp-adminserver</module>
-        <module>cdp-sleuthserver</module>
-        <module>cdp-platform</module>
-    </modules>
     <dependencies>
         <!--排除与oauth2.0的中的冲突jar-->
         <dependency>

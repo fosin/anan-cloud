@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("v1/parameter")
 @Api(value = "v1/parameter",tags = "通用参数管理", description = "通用参数管理相关操作(参数获取、自动创建)")
-public class ParameterController implements ISimpleController<CdpSysParameterEntity, Integer> {
+public class ParameterController implements ISimpleController<CdpSysParameterEntity, Long> {
     @Autowired
     private IParameterService parameterService;
 
@@ -126,7 +126,7 @@ public class ParameterController implements ISimpleController<CdpSysParameterEnt
     @ApiOperation(value = "根据参数ID刷新参数缓存信息", notes = "该方法是幂等性的，可以重复调用")
     @ApiImplicitParam(name = "id", value = "参数ID,取值于CdpSysParameterEntity.id")
     @RequestMapping(value = "/apply/{id}", method = {RequestMethod.POST, RequestMethod.GET})
-    public ResponseEntity<Object> apply(@PathVariable("id") Integer id) throws CdpServiceException {
+    public ResponseEntity<Object> apply(@PathVariable("id") Long id) throws CdpServiceException {
         return ResponseEntity.ok(parameterService.applyChange(id));
     }
 
@@ -137,7 +137,7 @@ public class ParameterController implements ISimpleController<CdpSysParameterEnt
     }
 
     @Override
-    public ISimpleService<CdpSysParameterEntity, Integer> getService() {
+    public ISimpleService<CdpSysParameterEntity, Long> getService() {
         return parameterService;
     }
 }

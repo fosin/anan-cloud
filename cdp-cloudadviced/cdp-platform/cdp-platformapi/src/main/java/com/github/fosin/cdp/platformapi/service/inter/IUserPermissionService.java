@@ -12,11 +12,11 @@ import java.util.List;
  * @author fosin
  */
 public interface IUserPermissionService extends ICrudBatchService<CdpSysUserPermissionEntity,Integer> {
-    List<CdpSysUserPermissionEntity> findByUserIdAndOrganizId(Integer userId, Integer organizId);
+    List<CdpSysUserPermissionEntity> findByUserIdAndOrganizId(Long userId, Long organizId);
 
-    List<CdpSysUserPermissionEntity> findByUserId(Integer userId);
+    List<CdpSysUserPermissionEntity> findByUserId(Long userId);
 
-    long countByPermissionId(Integer permissionId);
+    long countByPermissionId(Long permissionId);
 
-    List<CdpSysUserPermissionEntity> updateInBatch(Integer userId, Iterable<CdpSysUserPermissionEntity> entities);
+    List<CdpSysUserPermissionEntity> updateInBatch(Long userId, Iterable<CdpSysUserPermissionEntity> entities);
 }

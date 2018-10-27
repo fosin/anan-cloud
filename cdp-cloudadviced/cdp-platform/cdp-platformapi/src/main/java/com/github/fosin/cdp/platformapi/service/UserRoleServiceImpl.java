@@ -1,15 +1,15 @@
 package com.github.fosin.cdp.platformapi.service;
 
 
-import com.github.fosin.cdp.platformapi.repository.UserRoleRepository;
+import com.github.fosin.cdp.cache.util.CacheUtil;
 import com.github.fosin.cdp.core.exception.CdpServiceException;
 import com.github.fosin.cdp.core.exception.CdpUserOrPassInvalidException;
 import com.github.fosin.cdp.platformapi.constant.TableNameConstant;
 import com.github.fosin.cdp.platformapi.entity.CdpSysUserEntity;
 import com.github.fosin.cdp.platformapi.entity.CdpSysUserRoleEntity;
+import com.github.fosin.cdp.platformapi.repository.UserRoleRepository;
 import com.github.fosin.cdp.platformapi.service.inter.IUserRoleService;
 import com.github.fosin.cdp.platformapi.service.inter.IUserService;
-import com.github.fosin.cdp.cache.util.CacheUtil;
 import com.github.fosin.cdp.platformapi.util.LoginUserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -17,7 +17,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
 
 /**
  * 2017/12/29.
@@ -33,12 +35,12 @@ public class UserRoleServiceImpl implements IUserRoleService {
     private IUserService userService;
 
     @Override
-    public List<CdpSysUserRoleEntity> findByUserId(Integer userId) {
+    public List<CdpSysUserRoleEntity> findByUserId(Long userId) {
         return userRoleRepository.findByUserId(userId);
     }
 
     @Override
-    public List<CdpSysUserRoleEntity> findByRoleId(Integer roleId) {
+    public List<CdpSysUserRoleEntity> findByRoleId(Long roleId) {
         return userRoleRepository.findByRoleId(roleId);
     }
 
@@ -76,7 +78,7 @@ public class UserRoleServiceImpl implements IUserRoleService {
 
     @Override
     @Transactional
-    public List<CdpSysUserRoleEntity> updateInBatchByUserId(Integer userId, Iterable<CdpSysUserRoleEntity> entities) {
+    public List<CdpSysUserRoleEntity> updateInBatchByUserId(Long userId, Iterable<CdpSysUserRoleEntity> entities) {
         Assert.notNull(userId, "传入的用户ID不能为空!");
         Assert.notNull(entities, "传入的实体集合不能为空!");
 
@@ -107,7 +109,7 @@ public class UserRoleServiceImpl implements IUserRoleService {
 
     @Override
     @Transactional
-    public List<CdpSysUserRoleEntity> updateInBatchByRoleId(Integer roleId, Iterable<CdpSysUserRoleEntity> entities)
+    public List<CdpSysUserRoleEntity> updateInBatchByRoleId(Long roleId, Iterable<CdpSysUserRoleEntity> entities)
             throws CdpServiceException {
         Assert.notNull(roleId, "传入的角色ID不能为空!");
         Assert.notNull(entities, "传入的实体集合不能为空!");
@@ -118,7 +120,7 @@ public class UserRoleServiceImpl implements IUserRoleService {
         userRoleRepository.deleteByRoleId(roleId);
         //如果是角色用户，则需要删除所有角色相关用户的缓存
         for (CdpSysUserRoleEntity entity : entities) {
-            Integer userId = entity.getUserId();
+            Long userId = entity.getUserId();
             CacheUtil.evict(TableNameConstant.CDP_SYS_USER, userId + "");
             CacheUtil.evict(TableNameConstant.CDP_SYS_USER, userService.findOne(userId).getUsercode());
         }
@@ -148,7 +150,7 @@ public class UserRoleServiceImpl implements IUserRoleService {
 
     }
 
-    public String getCacheKey(Integer type, Integer id) {
+    public String getCacheKey(Integer type, Long id) {
         if (type == 1) {
             return "RoleId" + id;
         } else {

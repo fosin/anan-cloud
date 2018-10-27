@@ -13,9 +13,9 @@ import java.util.List;
  * @author fosin
  */
 @Repository
-public interface UserRoleRepository extends JpaRepository<CdpSysUserRoleEntity, Integer> {
-    List<CdpSysUserRoleEntity> findByUserId(Integer userId);
-    List<CdpSysUserRoleEntity> findByRoleId(Integer roleId);
-    void deleteByUserId(Integer userId);
-    void deleteByRoleId(Integer roleId);
+public interface UserRoleRepository extends JpaRepository<CdpSysUserRoleEntity, Long> {
+    List<CdpSysUserRoleEntity> findByUserId(Long userId);
+    List<CdpSysUserRoleEntity> findByRoleId(Long roleId);
+    void deleteByUserId(Long userId);
+    void deleteByRoleId(Long roleId);
 }

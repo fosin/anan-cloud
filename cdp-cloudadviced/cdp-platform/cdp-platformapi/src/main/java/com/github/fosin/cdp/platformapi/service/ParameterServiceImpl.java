@@ -61,7 +61,7 @@ public class ParameterServiceImpl implements IParameterService {
     @Override
     public CdpSysParameterEntity update(CdpSysParameterEntity entity) throws CdpServiceException {
         Assert.notNull(entity, "传入了空对象!");
-        Integer id = entity.getId();
+        Long id = entity.getId();
         Assert.notNull(id, "ID不能为空!");
         CdpSysParameterEntity cEntity = parameterRepository.findOne(id);
         CdpSysUserEntity loginUser = LoginUserUtil.getUser();
@@ -87,12 +87,12 @@ public class ParameterServiceImpl implements IParameterService {
     }
 
     @Override
-    public CdpSysParameterEntity findOne(Integer id) {
+    public CdpSysParameterEntity findOne(Long id) {
         return parameterRepository.findOne(id);
     }
 
     @Override
-    public CdpSysParameterEntity delete(Integer id) throws CdpServiceException {
+    public CdpSysParameterEntity delete(Long id) throws CdpServiceException {
         CdpSysParameterEntity entity = parameterRepository.findOne(id);
         Assert.notNull(entity, "通过ID没有能找到参数数据,删除被取消!");
         String cacheKey = getCacheKey(entity);
@@ -165,7 +165,7 @@ public class ParameterServiceImpl implements IParameterService {
 
     @Override
     @Transactional(rollbackFor = CdpServiceException.class)
-    public boolean applyChange(Integer id) throws CdpServiceException {
+    public boolean applyChange(Long id) throws CdpServiceException {
         CdpSysParameterEntity entity = parameterRepository.findOne(id);
         Assert.notNull(entity, "该参数已经不存在!");
         String cacheKey = getCacheKey(entity);

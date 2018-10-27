@@ -1,233 +1,113 @@
 package com.github.fosin.cdp.platformapi.entity;
 
+import java.util.Date;
+
 import com.github.fosin.cdp.util.DateTimeUtil;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.validator.constraints.NotBlank;
-import org.hibernate.validator.constraints.Range;
-import org.springframework.format.annotation.DateTimeFormat;
-
+import org.hibernate.validator.constraints.NotEmpty;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.Date;
-import java.util.Objects;
+import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 /**
- * Description:
+ * 用于存放各种分类分组的个性化参数(CdpSysParameter)实体类
  *
  * @author fosin
- * @date 2018.7.29
+ * @date 2018-10-27 09:38:39
+ * @since 1.0.0
  */
+@Data
 @Entity
 @DynamicUpdate
 @Table(name = "cdp_sys_parameter")
-@ApiModel(value = "通用参数实体类", description = "表cdp_sys_parameter的对应的实体类")
+@ApiModel(value = "用于存放各种分类分组的个性化参数实体类", description = "表(cdp_sys_parameter)的对应的实体类")
 public class CdpSysParameterEntity implements Serializable {
-    private Integer id;
-    private String name;
-    private String value;
-    private Integer type;
-    private String scope;
-    private String defaultValue;
-    private String description;
-    private Date createTime;
-    private Integer createBy;
-    private Date updateTime;
-    private Integer updateBy;
-    private Date applyTime;
-    private Integer applyBy;
-    private Integer status;
-
-    @Id
+    private static final long serialVersionUID = -98889841142479554L;
+    
     @Column(name = "id")
-    @ApiModelProperty(value = "主键ID", notes = "系统自动生成")
+    @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    @Basic
+    @ApiModelProperty(value = "参数ID", notes = "主键，系统自动生成,参数ID")
+    private Long id;
+    
     @Column(name = "name")
+    @Basic
     @NotBlank
-    @ApiModelProperty(value = "参数名称")
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    @Basic
+    @ApiModelProperty(value = "参数键", notes = "参数键")
+    private String name;
+    
     @Column(name = "value")
-    @ApiModelProperty(value = "参数值")
-    public String getValue() {
-        return value;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
-    }
-
     @Basic
+    @ApiModelProperty(value = "参数值", notes = "参数值")
+    private String value;
+    
     @Column(name = "type")
-    @NotNull
-    @ApiModelProperty(value = "参数类型", notes = "取值于cdp_sys_dictionary_detail.code = 10")
-    public Integer getType() {
-        return type;
-    }
-
-    public void setType(Integer type) {
-        this.type = type;
-    }
-
     @Basic
+    @NotNull
+    @ApiModelProperty(value = "参数分类：具体取值于字典表cdp_sys_dictionary.code=10", notes = "参数分类：具体取值于字典表cdp_sys_dictionary.code=10")
+    private Integer type;
+    
     @Column(name = "scope")
-    @ApiModelProperty(value = "作用域")
-    public String getScope() {
-        return scope;
-    }
-
-    public void setScope(String scope) {
-        this.scope = scope;
-    }
-
     @Basic
+    @ApiModelProperty(value = "参数作用域", notes = "参数作用域")
+    private String scope;
+    
     @Column(name = "default_value")
-    @ApiModelProperty(value = "默认值")
-    public String getDefaultValue() {
-        return defaultValue;
-    }
-
-    public void setDefaultValue(String defaultValue) {
-        this.defaultValue = defaultValue;
-    }
-
     @Basic
+    @ApiModelProperty(value = "默认值", notes = "默认值")
+    private String defaultValue;
+    
     @Column(name = "description")
-    @ApiModelProperty(value = "参数详细描述")
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     @Basic
+    @ApiModelProperty(value = "参数描述", notes = "参数描述")
+    private String description;
+    
     @Column(name = "create_time")
-    @ApiModelProperty(value = "创建时间", notes = "该值由后台维护，更改数据时前端不需要关心")
-    @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
     @Basic
-    @Column(name = "create_by")
-    @ApiModelProperty(value = "创建人", notes = "该值由后台维护，更改数据时前端不需要关心，取值于CdpSysUserEntity.id")
-    public Integer getCreateBy() {
-        return createBy;
-    }
-
-    public void setCreateBy(Integer createBy) {
-        this.createBy = createBy;
-    }
-
-    @Basic
-    @Column(name = "update_time")
-    @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
-    @ApiModelProperty(value = "更新时间",notes = "该值由后台维护，更改数据时前端不需要关心")
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
-
-    @Basic
-    @Column(name = "update_by")
-    @ApiModelProperty(value = "更新人",notes = "该值由后台维护，更改数据时前端不需要关心，取值于CdpSysUserEntity.id")
-    public Integer getUpdateBy() {
-        return updateBy;
-    }
-
-    public void setUpdateBy(Integer updateBy) {
-        this.updateBy = updateBy;
-    }
-
-    @Basic
-    @Column(name = "apply_time")
-    @ApiModelProperty(value = "发布时间", notes = "该值由后台维护，更改数据时前端不需要关心")
-    @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
-    public Date getApplyTime() {
-        return applyTime;
-    }
-
-    public void setApplyTime(Date applyTime) {
-        this.applyTime = applyTime;
-    }
-
-    @Basic
-    @Column(name = "apply_by")
-    @ApiModelProperty(value = "发包人", notes = "该该值由后台维护，更改数据时前端不需要关心，取值于CdpSysUserEntity.id")
-    public Integer getApplyBy() {
-        return applyBy;
-    }
-
-    public void setApplyBy(Integer applyBy) {
-        this.applyBy = applyBy;
-    }
-
-    @Basic
-    @Column(name = "status")
-    @Range(max = 2)
     @NotNull
-    @ApiModelProperty(value = "状态", notes = "0：正常状态 1：修改状态 2：删除状态")
-    public Integer getStatus() {
-        return status;
-    }
-
-    public void setStatus(Integer status) {
-        this.status = status;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        CdpSysParameterEntity that = (CdpSysParameterEntity) o;
-        return Objects.equals(id, that.id) &&
-                Objects.equals(name, that.name) &&
-                Objects.equals(value, that.value) &&
-                Objects.equals(type, that.type) &&
-                Objects.equals(scope, that.scope) &&
-                Objects.equals(defaultValue, that.defaultValue) &&
-                Objects.equals(createTime, that.createTime) &&
-                Objects.equals(createBy, that.createBy) &&
-                Objects.equals(updateTime, that.updateTime) &&
-                Objects.equals(updateBy, that.updateBy) &&
-                Objects.equals(applyTime, that.applyTime) &&
-                Objects.equals(applyBy, that.applyBy) &&
-                Objects.equals(status, that.status);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name, value, type, scope, defaultValue, createTime, createBy, updateTime, updateBy, applyTime, applyBy, status);
-    }
+    @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
+    @ApiModelProperty(value = "创建日期，该值由后台维护，更改数据时前端不需要关心", notes = "创建日期，该值由后台维护，更改数据时前端不需要关心")
+    private Date createTime;
+    
+    @Column(name = "create_by")
+    @Basic
+    @NotNull
+    @ApiModelProperty(value = "该值由后台维护，更改数据时前端不需要关心，取值于cdp_sys_user.id", notes = "该值由后台维护，更改数据时前端不需要关心，取值于cdp_sys_user.id")
+    private Long createBy;
+    
+    @Column(name = "update_time")
+    @Basic
+    @NotNull
+    @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
+    @ApiModelProperty(value = "更新日期，该值由后台维护，更改数据时前端不需要关心", notes = "更新日期，该值由后台维护，更改数据时前端不需要关心")
+    private Date updateTime;
+    
+    @Column(name = "update_by")
+    @Basic
+    @NotNull
+    @ApiModelProperty(value = "该值由后台维护，更改数据时前端不需要关心，取值于cdp_sys_user.id", notes = "该值由后台维护，更改数据时前端不需要关心，取值于cdp_sys_user.id")
+    private Long updateBy;
+    
+    @Column(name = "apply_time")
+    @Basic
+    @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
+    @ApiModelProperty(value = "生效日期，该值由后台维护，更改数据时前端不需要关心", notes = "生效日期，该值由后台维护，更改数据时前端不需要关心")
+    private Date applyTime;
+    
+    @Column(name = "apply_by")
+    @Basic
+    @ApiModelProperty(value = "该值由后台维护，更改数据时前端不需要关心，取值于cdp_sys_user.id", notes = "该值由后台维护，更改数据时前端不需要关心，取值于cdp_sys_user.id")
+    private Long applyBy;
+    
+    @Column(name = "status")
+    @Basic
+    @NotNull
+    @ApiModelProperty(value = "参数状态：0=正常状态、1=修改状态、2=删除状态", notes = "参数状态：0=正常状态、1=修改状态、2=删除状态")
+    private Integer status;
+    
 }

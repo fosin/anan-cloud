@@ -13,8 +13,8 @@ import java.util.List;
  * @author fosin
  */
 @Repository
-public interface DictionaryDetailRepository extends JpaRepository<CdpSysDictionaryDetailEntity,Integer>,
+public interface DictionaryDetailRepository extends JpaRepository<CdpSysDictionaryDetailEntity,Long>,
                                     JpaSpecificationExecutor<CdpSysDictionaryDetailEntity> {
-    List<CdpSysDictionaryDetailEntity> findByCode(Integer code);
-    void deleteAllByCode(Integer code);
+    List<CdpSysDictionaryDetailEntity> findByCode(Long code);
+    void deleteAllByCode(Long code);
 }

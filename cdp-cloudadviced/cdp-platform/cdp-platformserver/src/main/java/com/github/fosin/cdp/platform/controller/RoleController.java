@@ -29,7 +29,7 @@ import java.util.List;
 @RestController
 @RequestMapping("v1/role")
 @Api(value = "v1/role", tags = "角色管理", description = "角色管理相关操作")
-public class RoleController implements ISimpleController<CdpSysRoleEntity, Integer> {
+public class RoleController implements ISimpleController<CdpSysRoleEntity, Long> {
     @Autowired
     private IRoleService roleService;
     @Autowired
@@ -42,7 +42,7 @@ public class RoleController implements ISimpleController<CdpSysRoleEntity, Integ
     @ApiOperation("根据角色ID获取角色权限")
     @ApiImplicitParam(name = "roleId", value = "角色ID,取值于CdpSysRoleEntity.id")
     @RequestMapping(value = "/permissions/{roleId}", method = {RequestMethod.GET, RequestMethod.POST})
-    public ResponseEntity<List<CdpSysRolePermissionEntity>> permissions(@PathVariable Integer roleId) {
+    public ResponseEntity<List<CdpSysRolePermissionEntity>> permissions(@PathVariable Long roleId) {
         return ResponseEntity.ok(rolePermissionService.findByRoleId(roleId));
     }
 
@@ -53,14 +53,14 @@ public class RoleController implements ISimpleController<CdpSysRoleEntity, Integ
     })
     @PutMapping(value = "/permissions/{roleId}")
     public ResponseEntity<List<CdpSysRolePermissionEntity>> permissions(@RequestBody List<CdpSysRolePermissionEntity> entities,
-                                                                        @PathVariable("roleId") Integer roleId) {
+                                                                        @PathVariable("roleId") Long roleId) {
         return ResponseEntity.ok(rolePermissionService.updateInBatch(roleId, entities));
     }
 
     @ApiOperation("根据角色唯一id查找该角色所有用户信息")
     @ApiImplicitParam(name = "roleId", value = "角色ID,取值于CdpSysRoleEntity.id")
     @RequestMapping(value = "/users/{roleId}", method = {RequestMethod.GET, RequestMethod.POST})
-    public ResponseEntity<List<CdpSysUserEntity>> getRoleUsers(@PathVariable("roleId") Integer roleId) throws CdpControllerException {
+    public ResponseEntity<List<CdpSysUserEntity>> getRoleUsers(@PathVariable("roleId") Long roleId) throws CdpControllerException {
         return ResponseEntity.ok(userService.findRoleUsersByRoleId(roleId));
     }
 
@@ -72,19 +72,19 @@ public class RoleController implements ISimpleController<CdpSysRoleEntity, Integ
     })
     @PutMapping(value = "/users/{roleId}")
     public ResponseEntity<List<CdpSysUserRoleEntity>> putUsers(@RequestBody List<CdpSysUserRoleEntity> entities,
-                                                               @PathVariable("roleId") Integer roleId) {
+                                                               @PathVariable("roleId") Long roleId) {
         return ResponseEntity.ok(userRoleService.updateInBatchByRoleId(roleId, entities));
     }
 
     @ApiOperation("根据用户唯一id查找用户目前不拥有的所有角色信息")
     @ApiImplicitParam(name = "roleId", value = "角色ID,取值于CdpSysRoleEntity.id")
     @RequestMapping(value = "/otherUsers/{roleId}", method = {RequestMethod.POST})
-    public ResponseEntity<List<CdpSysUserEntity>> getOtherUsers(@PathVariable("roleId") Integer roleId) throws CdpControllerException {
+    public ResponseEntity<List<CdpSysUserEntity>> getOtherUsers(@PathVariable("roleId") Long roleId) throws CdpControllerException {
         return ResponseEntity.ok(userService.findOtherUsersByRoleId(roleId));
     }
 
     @Override
-    public ISimpleService<CdpSysRoleEntity, Integer> getService() {
+    public ISimpleService<CdpSysRoleEntity, Long> getService() {
         return roleService;
     }
 }

@@ -30,12 +30,12 @@ import java.util.List;
 @RestController
 @RequestMapping("v1/dictionaryDetail")
 @Api(value = "v1/dictionaryDetail",tags = "通用字典明细管理",description = "通用字典明细管理(增删改查)")
-public class DictionaryDetailController implements ISimpleController<CdpSysDictionaryDetailEntity, Integer> {
+public class DictionaryDetailController implements ISimpleController<CdpSysDictionaryDetailEntity, Long> {
     @Autowired
     private IDictionaryDetailService dictionaryDetailService;
 
     @Override
-    public ISimpleService<CdpSysDictionaryDetailEntity, Integer> getService() {
+    public ISimpleService<CdpSysDictionaryDetailEntity, Long> getService() {
         return dictionaryDetailService;
     }
 
@@ -45,7 +45,7 @@ public class DictionaryDetailController implements ISimpleController<CdpSysDicti
             @ApiImplicitParam(name = "code", value = "字典代码,取值于CdpSysDictionaryEntity.code"),
     })
     @RequestMapping(value = MvcConstant.PATH_PAGE_LIST + "/{code}", method = {RequestMethod.POST, RequestMethod.GET})
-    public ResponseEntity<Object> pageList(@RequestBody PageModule pageModule, @PathVariable Integer code) throws CdpServiceException {
+    public ResponseEntity<Object> pageList(@RequestBody PageModule pageModule, @PathVariable Long code) throws CdpServiceException {
         PageRequest pageRequest = new PageRequest(pageModule.getPageNumber() - 1, pageModule.getPageSize(), Sort.Direction.fromString(pageModule.getSortOrder()), pageModule.getSortName());
         //分页查找
         Page<CdpSysDictionaryDetailEntity> page;
@@ -57,7 +57,7 @@ public class DictionaryDetailController implements ISimpleController<CdpSysDicti
     @ApiOperation("根据字典代码获取对应的字典明细")
     @RequestMapping(value = "/byCode/{code}", method = {RequestMethod.GET, RequestMethod.POST})
     @ApiImplicitParam(name = "code", value = "字典代码,取值于CdpSysDictionaryEntity.code")
-    public ResponseEntity<Object> getdictionariesByCode(@PathVariable Integer code) throws CdpControllerException {
+    public ResponseEntity<Object> getdictionariesByCode(@PathVariable Long code) throws CdpControllerException {
         List<CdpSysDictionaryDetailEntity> entities = dictionaryDetailService.findByCode(code);
         return ResponseEntity.ok(entities);
     }

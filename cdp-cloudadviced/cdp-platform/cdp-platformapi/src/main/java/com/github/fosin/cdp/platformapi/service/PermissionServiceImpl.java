@@ -54,7 +54,7 @@ public class PermissionServiceImpl implements IPermissionService {
         Date now = new Date();
         entity.setCreateTime(now);
         entity.setUpdateTime(now);
-        Integer id = loginUser.getId();
+        Long id = loginUser.getId();
         if (entity.getCreateBy() == null) {
             entity.setCreateBy(id);
         }
@@ -66,7 +66,7 @@ public class PermissionServiceImpl implements IPermissionService {
 
     @Override
     @CacheEvict(value = TableNameConstant.CDP_SYS_PERMISSION, key = "#id")
-    public CdpSysPermissionEntity delete(Integer id) throws CdpServiceException {
+    public CdpSysPermissionEntity delete(Long id) throws CdpServiceException {
         Assert.notNull(id, "传入了空ID!");
         long countByPermissionId = rolePermissionService.countByPermissionId(id);
         Assert.isTrue(countByPermissionId == 0, "还有角色在使用该权限，不能直接删除!");
@@ -82,7 +82,7 @@ public class PermissionServiceImpl implements IPermissionService {
     @CacheEvict(value = TableNameConstant.CDP_SYS_PERMISSION, key = "#entity.id")
     public Collection<CdpSysPermissionEntity> delete(CdpSysPermissionEntity entity) throws CdpServiceException {
         Assert.notNull(entity, "传入了空对象!");
-        Integer id = entity.getId();
+        Long id = entity.getId();
         Assert.notNull(id, "传入了空ID!");
         long countByPermissionId = rolePermissionService.countByPermissionId(id);
         Assert.isTrue(countByPermissionId == 0, "还有角色在使用该权限，不能直接删除!");
@@ -120,7 +120,7 @@ public class PermissionServiceImpl implements IPermissionService {
 
     @Override
     @Cacheable(value = TableNameConstant.CDP_SYS_PERMISSION, key = "#id")
-    public CdpSysPermissionEntity findOne(Integer id) {
+    public CdpSysPermissionEntity findOne(Long id) {
         return permissionRepository.findOne(id);
     }
 
@@ -141,7 +141,7 @@ public class PermissionServiceImpl implements IPermissionService {
     }
 
     @Override
-    public List<CdpSysPermissionEntity> findByPId(Integer pId) {
+    public List<CdpSysPermissionEntity> findByPId(Long pId) {
         Sort sort = new Sort(Sort.Direction.fromString("ASC"), "sort");
         return permissionRepository.findByPId(pId, sort);
     }

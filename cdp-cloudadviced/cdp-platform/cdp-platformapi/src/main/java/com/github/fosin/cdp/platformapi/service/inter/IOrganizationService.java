@@ -12,8 +12,8 @@ import java.util.List;
  * Time:12:37
  * @author fosin
  */
-public interface IOrganizationService extends ISimpleService<CdpSysOrganizationEntity,Integer> {
-    List<CdpSysOrganizationEntity> findByPid(Integer pid) throws CdpServiceException;
+public interface IOrganizationService extends ISimpleService<CdpSysOrganizationEntity,Long> {
+    List<CdpSysOrganizationEntity> findByPid(Long pid) throws CdpServiceException;
 
     List<CdpSysOrganizationEntity> findByCodeStartingWith(String code) throws CdpServiceException;
 }

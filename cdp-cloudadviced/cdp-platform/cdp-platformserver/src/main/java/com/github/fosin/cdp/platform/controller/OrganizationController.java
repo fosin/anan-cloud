@@ -30,21 +30,21 @@ import java.util.List;
 @RequestMapping("v1/organiz")
 @Api(value = "v1/organiz",tags = "机构管理",description = "机构管理相关操作(增删改查)")
 public class OrganizationController extends AbstractBaseController
-        implements ISimpleController<CdpSysOrganizationEntity, Integer> {
+        implements ISimpleController<CdpSysOrganizationEntity, Long> {
     @Autowired
     private IOrganizationService organizationService;
 
     @ApiOperation("根据父机构ID获取其孩子节点数据")
     @ApiImplicitParam(name = "pId", value = "父节点ID,CdpSysOrganizationEntity.pid")
     @PostMapping("/listChild/{pId}")
-    public ResponseEntity<Object> listChild(@PathVariable("pId") Integer pId) throws CdpServiceException {
+    public ResponseEntity<Object> listChild(@PathVariable("pId") Long pId) throws CdpServiceException {
         return ResponseEntity.ok(organizationService.findByPid(pId));
     }
 
     @ApiOperation("根据父机构ID获取其所有后代节点数据")
     @ApiImplicitParam(name = "pId", value = "父节点ID,CdpSysOrganizationEntity.pid")
     @PostMapping("/listAllChild/{pId}")
-    public ResponseEntity<Object> listAllChild(@PathVariable("pId") Integer pId) throws CdpServiceException {
+    public ResponseEntity<Object> listAllChild(@PathVariable("pId") Long pId) throws CdpServiceException {
         String code;
         if (pId == 0) {
             List<CdpSysOrganizationEntity> list = organizationService.findByPid(pId);
@@ -63,7 +63,7 @@ public class OrganizationController extends AbstractBaseController
 
         CdpSysOrganizationEntity root = null;
         for (CdpSysOrganizationEntity entity : list) {
-            if (0 == entity.getpId()) {
+            if (0 == entity.getPId()) {
                 root = entity;
                 break;
             }
@@ -82,7 +82,7 @@ public class OrganizationController extends AbstractBaseController
     }
 
     @Override
-    public ISimpleService<CdpSysOrganizationEntity, Integer> getService() {
+    public ISimpleService<CdpSysOrganizationEntity, Long> getService() {
         return organizationService;
     }
 }

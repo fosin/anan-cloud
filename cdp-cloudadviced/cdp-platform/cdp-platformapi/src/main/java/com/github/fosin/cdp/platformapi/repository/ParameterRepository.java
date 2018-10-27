@@ -14,7 +14,7 @@ import java.util.List;
  * @author fosin
  */
 @Repository
-public interface ParameterRepository extends JpaRepository<CdpSysParameterEntity, Integer>,
+public interface ParameterRepository extends JpaRepository<CdpSysParameterEntity, Long>,
         JpaSpecificationExecutor<CdpSysParameterEntity> {
     CdpSysParameterEntity findByTypeAndScopeAndName(Integer type, String scope, String name);
 

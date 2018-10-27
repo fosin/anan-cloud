@@ -11,6 +11,6 @@ import org.springframework.stereotype.Repository;
  * @author fosin
  */
 @Repository
-public interface DictionaryRepository extends JpaRepository<CdpSysDictionaryEntity,Integer>,
+public interface DictionaryRepository extends JpaRepository<CdpSysDictionaryEntity,Long>,
                                     JpaSpecificationExecutor<CdpSysDictionaryEntity> {
 }

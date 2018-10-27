@@ -13,14 +13,14 @@ import java.util.List;
  * Time:12:30
  * @author fosin
  */
-public interface IUserRoleService extends ICrudBatchService<CdpSysUserRoleEntity,Integer>{
-    List<CdpSysUserRoleEntity> findByUserId(Integer userId);
+public interface IUserRoleService extends ICrudBatchService<CdpSysUserRoleEntity,Long>{
+    List<CdpSysUserRoleEntity> findByUserId(Long userId);
 
-    List<CdpSysUserRoleEntity> findByRoleId(Integer roleId);
+    List<CdpSysUserRoleEntity> findByRoleId(Long roleId);
 
     List<CdpSysUserRoleEntity> findByUsercodeAndPassword(String usercode, String password) throws CdpUserOrPassInvalidException;
 
-    List<CdpSysUserRoleEntity> updateInBatchByUserId(Integer userId, Iterable<CdpSysUserRoleEntity> entitis) throws CdpServiceException;
+    List<CdpSysUserRoleEntity> updateInBatchByUserId(Long userId, Iterable<CdpSysUserRoleEntity> entitis) throws CdpServiceException;
 
-    List<CdpSysUserRoleEntity> updateInBatchByRoleId(Integer roleId, Iterable<CdpSysUserRoleEntity> entitis) throws CdpServiceException;
+    List<CdpSysUserRoleEntity> updateInBatchByRoleId(Long roleId, Iterable<CdpSysUserRoleEntity> entitis) throws CdpServiceException;
 }

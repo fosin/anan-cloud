@@ -1,285 +1,138 @@
 package com.github.fosin.cdp.platformapi.entity;
 
+import java.util.Date;
+
 import com.github.fosin.cdp.util.DateTimeUtil;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.validator.constraints.Email;
-import org.hibernate.validator.constraints.Range;
-import org.springframework.format.annotation.DateTimeFormat;
-
+import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.NotEmpty;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 import java.io.Serializable;
-import java.util.Date;
 import java.util.List;
-import java.util.Objects;
+
+import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 /**
- * Description
+ * 系统用户表(CdpSysUser)实体类
  *
  * @author fosin
+ * @date 2018-10-27 09:38:39
+ * @since 1.0.0
  */
+@Data
 @Entity
 @DynamicUpdate
 @Table(name = "cdp_sys_user")
-@ApiModel(value = "用户表实体类", description = "表cdp_sys_user的对应的实体类")
+@ApiModel(value = "系统用户表实体类", description = "表(cdp_sys_user)的对应的实体类")
 public class CdpSysUserEntity implements Serializable {
-    private Integer id;
-    private String usercode;
-    private String username;
-    private String password;
-    private Date birthday;
-    private Integer sex;
-    private String email;
-    private String phone;
-    private Integer status;
-    private Date createTime;
-    private Integer createBy;
-    private Date updateTime;
-    private Integer updateBy;
-    private Integer organizId;
-    private String avatar;
-    private Date expireTime;
-
-    private List<CdpSysUserRoleEntity> userRoles;
+    private static final long serialVersionUID = 897030139778409164L;
 
     /**
      * orphanRemoval=true配置表明删除无关联的数据。级联更新子结果集时此配置最关键
      */
     @OneToMany(orphanRemoval = true, cascade = {CascadeType.REFRESH, CascadeType.REMOVE})
     @JoinColumn(name = "user_id")
-    public List<CdpSysUserRoleEntity> getUserRoles() {
-        return userRoles;
-    }
+    private List<CdpSysUserRoleEntity> userRoles;
 
-    public void setUserRoles(List<CdpSysUserRoleEntity> userRoles) {
-        this.userRoles = userRoles;
-    }
-
-    @Id
     @Column(name = "id")
+    @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @ApiModelProperty(value = "主键ID", notes = "系统自动生成")
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
+    @ApiModelProperty(value = "用户ID", notes = "主键，系统自动生成,用户ID")
+    private Long id;
+    
+    @Column(name = "organiz_id")
     @Basic
-    @Column(name = "usercode")
     @NotNull
-    @Size(min = 1, max = 45)
-    @Pattern(regexp = "[A-Za-z0-9_]{1,45}")
-    @ApiModelProperty(value = "用户帐号", notes = "登录系统时使用的帐号",example = "admin")
-    public String getUsercode() {
-        return usercode;
-    }
-
-    public void setUsercode(String usercode) {
-        this.usercode = usercode;
-    }
-
+    @ApiModelProperty(value = "机构ID", notes = "机构ID")
+    private Long organizId;
+    
+    @Column(name = "usercode")
     @Basic
+    @NotBlank
+    @ApiModelProperty(value = "用户工号", notes = "用户工号")
+    private String usercode;
+    
     @Column(name = "username")
-    @Size(min = 1, max = 45)
-    @ApiModelProperty(value = "用户名称",example = "管理员")
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
     @Basic
+    @NotBlank
+    @ApiModelProperty(value = "用户姓名", notes = "用户姓名")
+    private String username;
+    
     @Column(name = "password")
-    @ApiModelProperty(value = "用户密码", notes = "传入原始密码，后台会对原始密码进行加密后再存储")
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     @Basic
+    @NotBlank
+    @ApiModelProperty(value = "传入原始密码，后台会对原始密码进行加密后再存储", notes = "传入原始密码，后台会对原始密码进行加密后再存储")
+    private String password;
+    
     @Column(name = "birthday")
+    @Basic
     @Past
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
-    @ApiModelProperty(value = "出生年月", notes = "格式：" + DateTimeUtil.DATETIME_PATTERN)
-    public Date getBirthday() {
-        return birthday;
-    }
-
-    public void setBirthday(Date birthday) {
-        this.birthday = birthday;
-    }
-
-    @Basic
+    @ApiModelProperty(value = "生日", notes = "生日")
+    private Date birthday;
+    
     @Column(name = "sex")
-    @ApiModelProperty(value = "性别", notes = "取值于字典明细表CdpSysDictionaryDetailEntity.code = 15")
-    public Integer getSex() {
-        return sex;
-    }
-
-    public void setSex(Integer sex) {
-        this.sex = sex;
-    }
-
     @Basic
+    @ApiModelProperty(value = "使用状态：具体取值于字典表cdp_sys_dictionary.code=15", notes = "使用状态：具体取值于字典表cdp_sys_dictionary.code=15")
+    private Integer sex;
+    
     @Column(name = "email")
-    @Email
-    @ApiModelProperty(value = "电子邮箱地址")
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     @Basic
+    @ApiModelProperty(value = "电子邮箱", notes = "电子邮箱")
+    private String email;
+    
     @Column(name = "phone")
-    @ApiModelProperty(value = "手机号码")
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
     @Basic
+    @ApiModelProperty(value = "手机号码", notes = "手机号码")
+    private String phone;
+    
     @Column(name = "status")
+    @Basic
     @NotNull
-    @Range(max = 10)
-    @ApiModelProperty(value = "状态", notes = "0：正常 1：禁用 2：锁定")
-    public Integer getStatus() {
-        return status;
-    }
-
-    public void setStatus(Integer status) {
-        this.status = status;
-    }
-
-    @Basic
-    @Column(name = "create_time")
-    @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
-    @ApiModelProperty(value = "创建时间", notes = "该值由后台维护，更改数据时前端不需要关心")
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    @Basic
-    @Column(name = "update_time")
-    @ApiModelProperty(value = "更新时间", notes = "该值由后台维护，更改数据时前端不需要关心")
-    @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
-
-    @Basic
-    @Column(name = "create_by")
-    @ApiModelProperty(value = "创建人", notes = "该值由后台维护，更改数据时前端不需要关心，取值于CdpSysUserEntity.id")
-    public Integer getCreateBy() {
-        return createBy;
-    }
-
-    public void setCreateBy(Integer createBy) {
-        this.createBy = createBy;
-    }
-
-    @Basic
-    @Column(name = "update_by")
-    @ApiModelProperty(value = "更新人", notes = "该值由后台维护，更改数据时前端不需要关心，取值于CdpSysUserEntity.id")
-    public Integer getUpdateBy() {
-        return updateBy;
-    }
-
-    public void setUpdateBy(Integer updateBy) {
-        this.updateBy = updateBy;
-    }
-
-    @Basic
-    @Column(name = "organiz_id")
-    @NotNull
-    @ApiModelProperty(value = "机构ID", notes = "取值于机构表CdpSysOrganizationEntity.id")
-    public Integer getOrganizId() {
-        return organizId;
-    }
-
-    public void setOrganizId(Integer organizId) {
-        this.organizId = organizId;
-    }
-
-    @Basic
+    @ApiModelProperty(value = "使用状态：0=启用，1=禁用，具体取值于字典表cdp_sys_dictionary.code=11", notes = "使用状态：0=启用，1=禁用，具体取值于字典表cdp_sys_dictionary.code=11")
+    private Integer status;
+    
     @Column(name = "avatar")
-    @ApiModelProperty(value = "头像地址")
-    public String getAvatar() {
-        return avatar;
-    }
-
-    public void setAvatar(String avatar) {
-        this.avatar = avatar;
-    }
-
     @Basic
-    @Column(name = "expire_time")
+    @ApiModelProperty(value = "头像", notes = "头像")
+    private String avatar;
+    
+    @Column(name = "create_time")
+    @Basic
     @NotNull
-    @ApiModelProperty(value = "帐号过期时间")
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
-    public Date getExpireTime() {
-        return expireTime;
-    }
-
-    public void setExpireTime(Date exprireTime) {
-        this.expireTime = exprireTime;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        CdpSysUserEntity that = (CdpSysUserEntity) o;
-        return Objects.equals(id, that.id) &&
-                Objects.equals(createBy, that.createBy) &&
-                Objects.equals(updateBy, that.updateBy) &&
-                Objects.equals(usercode, that.usercode) &&
-                Objects.equals(username, that.username) &&
-                Objects.equals(password, that.password) &&
-                Objects.equals(birthday, that.birthday) &&
-                Objects.equals(sex, that.sex) &&
-                Objects.equals(email, that.email) &&
-                Objects.equals(phone, that.phone) &&
-                Objects.equals(status, that.status) &&
-                Objects.equals(createTime, that.createTime) &&
-                Objects.equals(updateTime, that.updateTime) &&
-                Objects.equals(expireTime, that.expireTime) &&
-                Objects.equals(avatar, that.avatar) &&
-                Objects.equals(organizId, that.organizId);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, createBy, updateBy, usercode, username, password, birthday, sex, email, phone, status, avatar, createTime, expireTime, updateTime, organizId);
-    }
+    @ApiModelProperty(value = "创建日期，该值由后台维护，更改数据时前端不需要关心", notes = "创建日期，该值由后台维护，更改数据时前端不需要关心")
+    private Date createTime;
+    
+    @Column(name = "create_by")
+    @Basic
+    @NotNull
+    @ApiModelProperty(value = "创建人，该值由后台维护，更改数据时前端不需要关心，取值于cdp_sys_user.id", notes = "创建人，该值由后台维护，更改数据时前端不需要关心，取值于cdp_sys_user.id")
+    private Long createBy;
+    
+    @Column(name = "update_time")
+    @Basic
+    @NotNull
+    @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
+    @ApiModelProperty(value = "更新日期，该值由后台维护，更改数据时前端不需要关心", notes = "更新日期，该值由后台维护，更改数据时前端不需要关心")
+    private Date updateTime;
+    
+    @Column(name = "update_by")
+    @Basic
+    @NotNull
+    @ApiModelProperty(value = "更新人，该值由后台维护，更改数据时前端不需要关心，取值于cdp_sys_user.id", notes = "更新人，该值由后台维护，更改数据时前端不需要关心，取值于cdp_sys_user.id")
+    private Long updateBy;
+    
+    @Column(name = "expire_time")
+    @Basic
+    @NotNull
+    @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
+    @ApiModelProperty(value = "过期时间，账户过期后用户被锁定切不能登录系统", notes = "过期时间，账户过期后用户被锁定切不能登录系统")
+    private Date expireTime;
+    
 }

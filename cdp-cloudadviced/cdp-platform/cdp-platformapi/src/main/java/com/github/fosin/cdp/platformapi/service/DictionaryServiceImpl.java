@@ -55,7 +55,7 @@ public class DictionaryServiceImpl implements IDictionaryService {
     @Override
     public CdpSysDictionaryEntity update(CdpSysDictionaryEntity entity) throws CdpServiceException {
         Assert.notNull(entity, "无效的更新数据");
-        Integer code = entity.getCode();
+        Long code = entity.getCode();
         Assert.notNull(code, "无效的字典代码code");
         //系统字典
         if (entity.getType().equals(SystemConstant.SYSTEM_DICTIONARY_TYPE)) {
@@ -72,13 +72,13 @@ public class DictionaryServiceImpl implements IDictionaryService {
     }
 
     @Override
-    public CdpSysDictionaryEntity findOne(Integer code) {
+    public CdpSysDictionaryEntity findOne(Long code) {
         return dictionaryRepository.findOne(code);
     }
 
     @Override
     @Transactional(rollbackFor = CdpServiceException.class)
-    public CdpSysDictionaryEntity delete(Integer code) throws CdpServiceException {
+    public CdpSysDictionaryEntity delete(Long code) throws CdpServiceException {
         if (code == null) {
             throw new CdpServiceException("传入的code无效!");
         }

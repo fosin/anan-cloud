@@ -14,9 +14,9 @@ import java.util.List;
  * @author fosin
  */
 @Repository
-public interface OrganizationRepository extends JpaRepository<CdpSysOrganizationEntity, Integer>,
+public interface OrganizationRepository extends JpaRepository<CdpSysOrganizationEntity, Long>,
         JpaSpecificationExecutor<CdpSysOrganizationEntity> {
-    List<CdpSysOrganizationEntity> findByPIdOrderByCodeAsc(Integer pId);
+    List<CdpSysOrganizationEntity> findByPIdOrderByCodeAsc(Long pId);
 
     List<CdpSysOrganizationEntity> findByCodeStartingWithOrderByCodeAsc(String code);
 }

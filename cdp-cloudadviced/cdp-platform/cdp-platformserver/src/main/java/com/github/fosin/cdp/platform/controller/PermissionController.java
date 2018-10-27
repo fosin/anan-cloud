@@ -31,7 +31,7 @@ import java.util.List;
 @RestController
 @RequestMapping("v1/permission")
 @Api(value = "v1/permission",tags = "权限管理", description = "权限管理相关操作")
-public class PermissionController extends AbstractBaseController implements ISimpleController<CdpSysPermissionEntity, Integer> {
+public class PermissionController extends AbstractBaseController implements ISimpleController<CdpSysPermissionEntity, Long> {
     @Autowired
     private IPermissionService permissionService;
 
@@ -55,7 +55,7 @@ public class PermissionController extends AbstractBaseController implements ISim
 
         CdpSysPermissionEntity root = null;
         for (CdpSysPermissionEntity entity : list) {
-            if (SystemConstant.ROOT_PERMISSION_PID.equals(entity.getpId())) {
+            if (SystemConstant.ROOT_PERMISSION_PID.equals(entity.getPId())) {
                 root = entity;
                 break;
             }
@@ -72,17 +72,17 @@ public class PermissionController extends AbstractBaseController implements ISim
     @ApiOperation(value = "根据父权限ID获取其孩子数据列表")
     @ApiImplicitParam(name = "pId", value = "父权限ID,CdpSysPermissionEntity.pId")
     @RequestMapping(value = "/listChild/{pId}", method = {RequestMethod.POST})
-    public ResponseEntity<Object> getListChild(@PathVariable Integer pId) {
+    public ResponseEntity<Object> getListChild(@PathVariable Long pId) {
         List<CdpSysPermissionEntity> list = permissionService.findByPId(pId);
         return ResponseEntity.ok(list);
     }
 
 //    @RequestMapping("/userPermissionsTree/{userId}/{type}")
-//    public ResponseEntity<CdpSysPermissionEntity> getUserPermissionsTree(@PathVariable("userId") Integer id, @PathVariable("type") Integer type) throws CdpControllerException {
+//    public ResponseEntity<CdpSysPermissionEntity> getUserPermissionsTree(@PathVariable("userId") Long id, @PathVariable("type") Integer type) throws CdpControllerException {
 //        List<CdpSysUserRoleEntity> userRoles = userRoleService.findByUserId(id);
 //        List<CdpSysPermissionEntity> userPermissions = new ArrayList<>();
 //        for (CdpSysUserRoleEntity role : userRoles) {
-//            Integer roleId = role.getRole().getId();
+//            Long roleId = role.getRole().getId();
 //
 //            //获取角色权限
 //            List<CdpSysRolePermissionEntity> rolePrivilegeList = rolePermissionService.findByRoleId(roleId);
@@ -119,7 +119,7 @@ public class PermissionController extends AbstractBaseController implements ISim
 //    }
 
     @Override
-    public ISimpleService<CdpSysPermissionEntity, Integer> getService() {
+    public ISimpleService<CdpSysPermissionEntity, Long> getService() {
         return permissionService;
     }
 }

@@ -55,7 +55,7 @@ public class RoleServiceImpl implements IRoleService {
     @Override
     public CdpSysRoleEntity update(CdpSysRoleEntity entity) throws CdpServiceException {
         Assert.notNull(entity, "传入了空对象!");
-        Integer id = entity.getId();
+        Long id = entity.getId();
         Assert.notNull(id, "传入了空ID!");
 
         CdpSysRoleEntity oldEntity = roleRepository.findOne(id);
@@ -90,12 +90,12 @@ public class RoleServiceImpl implements IRoleService {
     }
 
     @Override
-    public CdpSysRoleEntity findOne(Integer id) {
+    public CdpSysRoleEntity findOne(Long id) {
         return roleRepository.findOne(id);
     }
 
     @Override
-    public CdpSysRoleEntity delete(Integer id) throws CdpServiceException {
+    public CdpSysRoleEntity delete(Long id) throws CdpServiceException {
         CdpSysRoleEntity entity = roleRepository.findOne(id);
         Assert.isTrue(!SystemConstant.SUPER_ROLE_NAME.equals(entity.getValue())
                         && !SystemConstant.ADMIN_ROLE_NAME.equals(entity.getValue()),
@@ -155,12 +155,12 @@ public class RoleServiceImpl implements IRoleService {
     }
 
     @Override
-    public List<CdpSysRoleEntity> findOtherUsersByRoleId(Integer userId) {
+    public List<CdpSysRoleEntity> findOtherUsersByRoleId(Long userId) {
         return roleRepository.findOtherRolesByUserId(userId);
     }
 
     @Override
-    public List<CdpSysRoleEntity> findRoleUsersByRoleId(Integer userId) {
+    public List<CdpSysRoleEntity> findRoleUsersByRoleId(Long userId) {
         return roleRepository.findUserRolesByUserId(userId);
     }
 }

@@ -12,12 +12,12 @@ import java.util.List;
  * @author fosin
  */
 @Repository
-public interface UserPermissionRepository extends JpaRepository<CdpSysUserPermissionEntity,Integer> {
-    List<CdpSysUserPermissionEntity> findByUserIdAndOrganizId(Integer userId, Integer organizId);
+public interface UserPermissionRepository extends JpaRepository<CdpSysUserPermissionEntity,Long> {
+    List<CdpSysUserPermissionEntity> findByUserIdAndOrganizId(Long userId, Long organizId);
 
-    List<CdpSysUserPermissionEntity> findByUserId(Integer userId);
+    List<CdpSysUserPermissionEntity> findByUserId(Long userId);
 
-    void deleteByUserId(Integer userId);
+    void deleteByUserId(Long userId);
 
-    long countByPermissionId(Integer permissionId);
+    long countByPermissionId(Long permissionId);
 }

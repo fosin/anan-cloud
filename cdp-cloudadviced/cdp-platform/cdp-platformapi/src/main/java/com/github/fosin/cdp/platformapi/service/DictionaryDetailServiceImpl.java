@@ -1,7 +1,7 @@
 package com.github.fosin.cdp.platformapi.service;
 
 
-import com.github.fosin.cdp.platformapi.repository.DictionaryDetailRepository;
+import com.github.fosin.cdp.cache.util.CacheUtil;
 import com.github.fosin.cdp.core.exception.CdpServiceException;
 import com.github.fosin.cdp.mvc.module.PageModule;
 import com.github.fosin.cdp.mvc.result.Result;
@@ -10,9 +10,9 @@ import com.github.fosin.cdp.platformapi.constant.SystemConstant;
 import com.github.fosin.cdp.platformapi.constant.TableNameConstant;
 import com.github.fosin.cdp.platformapi.entity.CdpSysDictionaryDetailEntity;
 import com.github.fosin.cdp.platformapi.entity.CdpSysUserEntity;
+import com.github.fosin.cdp.platformapi.repository.DictionaryDetailRepository;
 import com.github.fosin.cdp.platformapi.service.inter.IDictionaryDetailService;
 import com.github.fosin.cdp.platformapi.service.inter.IUserService;
-import com.github.fosin.cdp.cache.util.CacheUtil;
 import com.github.fosin.cdp.platformapi.util.LoginUserUtil;
 import com.github.fosin.cdp.util.NumberUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -63,7 +63,7 @@ public class DictionaryDetailServiceImpl implements IDictionaryDetailService {
     @CacheEvict(value = TableNameConstant.CDP_SYS_DICTIONARY_DETAIL, key = "#entity.code")
     public CdpSysDictionaryDetailEntity update(CdpSysDictionaryDetailEntity entity) {
         Assert.notNull(entity, "传入了空的对象!");
-        Integer key = entity.getCode();
+        Long key = entity.getCode();
         Assert.notNull(key, "无效的更新数据!");
         CdpSysUserEntity loginUser = LoginUserUtil.getUser();
         //不是超级管理员
@@ -85,12 +85,12 @@ public class DictionaryDetailServiceImpl implements IDictionaryDetailService {
     }
 
     @Override
-    public CdpSysDictionaryDetailEntity findOne(Integer id) {
+    public CdpSysDictionaryDetailEntity findOne(Long id) {
         return dictionaryDetailRepository.findOne(id);
     }
 
     @Override
-    public CdpSysDictionaryDetailEntity delete(Integer id) {
+    public CdpSysDictionaryDetailEntity delete(Long id) {
         Assert.notNull(id, "传入了空的ID!");
         CdpSysDictionaryDetailEntity entity = dictionaryDetailRepository.findOne(id);
         Assert.notNull(entity, "传入的ID找不到数据!");
@@ -157,7 +157,7 @@ public class DictionaryDetailServiceImpl implements IDictionaryDetailService {
     }
 
     @Override
-    public Page<CdpSysDictionaryDetailEntity> findAll(String searchCondition, Pageable pageable, Integer code) throws CdpServiceException {
+    public Page<CdpSysDictionaryDetailEntity> findAll(String searchCondition, Pageable pageable, Long code) throws CdpServiceException {
         Specification<CdpSysDictionaryDetailEntity> condition = new Specification<CdpSysDictionaryDetailEntity>() {
             @Override
             public Predicate toPredicate(Root<CdpSysDictionaryDetailEntity> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
@@ -181,7 +181,7 @@ public class DictionaryDetailServiceImpl implements IDictionaryDetailService {
 
     @Override
     @Cacheable(value = TableNameConstant.CDP_SYS_DICTIONARY_DETAIL, key = "#code")
-    public List<CdpSysDictionaryDetailEntity> findByCode(Integer code) {
+    public List<CdpSysDictionaryDetailEntity> findByCode(Long code) {
         return dictionaryDetailRepository.findByCode(code);
     }
 

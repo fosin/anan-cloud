@@ -42,7 +42,7 @@ public class OrganizationServiceImpl implements IOrganizationService {
     @CacheEvict(value = TableNameConstant.CDP_SYS_ORGANIZATION, key = "#entity.id")
     public CdpSysOrganizationEntity create(CdpSysOrganizationEntity entity) throws CdpServiceException {
         Assert.notNull(entity, "传入了空对象!");
-        Assert.isTrue(entity.getpId() != null, "无效的父机构编码!");
+        Assert.isTrue(entity.getPId() != null, "无效的父机构编码!");
         CdpSysUserEntity loginUser = LoginUserUtil.getUser();
         entity.setCreateBy(loginUser.getId());
         entity.setUpdateBy(loginUser.getId());
@@ -66,13 +66,13 @@ public class OrganizationServiceImpl implements IOrganizationService {
 
     @Override
     @Cacheable(value = TableNameConstant.CDP_SYS_ORGANIZATION, key = "#id")
-    public CdpSysOrganizationEntity findOne(Integer id) {
+    public CdpSysOrganizationEntity findOne(Long id) {
         return organizationRepository.findOne(id);
     }
 
     @Override
     @CacheEvict(value = TableNameConstant.CDP_SYS_ORGANIZATION, key = "#id")
-    public CdpSysOrganizationEntity delete(Integer id) throws CdpServiceException {
+    public CdpSysOrganizationEntity delete(Long id) throws CdpServiceException {
         Assert.notNull(id, "传入了空ID!");
         List<CdpSysOrganizationEntity> entities = findByPid(id);
         Assert.isTrue(entities == null || entities.size() == 0, "该节点还存在子节点不能直接删除!");
@@ -126,7 +126,7 @@ public class OrganizationServiceImpl implements IOrganizationService {
     }
 
     @Override
-    public List<CdpSysOrganizationEntity> findByPid(Integer pid) throws CdpServiceException {
+    public List<CdpSysOrganizationEntity> findByPid(Long pid) throws CdpServiceException {
         return organizationRepository.findByPIdOrderByCodeAsc(pid);
     }
 

@@ -1,8 +1,8 @@
 package com.github.fosin.cdp.platformapi.config;
 
 import com.github.fosin.cdp.platformapi.entity.CdpSysPermissionEntity;
-import com.github.fosin.cdp.oauth2.config.AuthorityConfig;
-import com.github.fosin.cdp.oauth2.dto.AuthorityDto;
+import com.github.fosin.cdp.oauth2.config.CdpAuthorityConfig;
+import com.github.fosin.cdp.oauth2.dto.CdpAuthorityDto;
 import com.github.fosin.cdp.platformapi.service.inter.IPermissionService;
 import com.github.fosin.cdp.util.StringUtil;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,8 +29,8 @@ public class AppAuthorityConfig {
     @Bean
     @ConditionalOnBean(IPermissionService.class)
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
-    public AuthorityConfig authorityConfiggs(IPermissionService permissionService) {
-        List<AuthorityDto> authorityDtos = new ArrayList<>();
+    public CdpAuthorityConfig authorityConfiggs(IPermissionService permissionService) {
+        List<CdpAuthorityDto> authorityDtos = new ArrayList<>();
         List<CdpSysPermissionEntity> entities;
         if (StringUtil.hasText(appName)) {
             entities = permissionService.findByAppName(appName);
@@ -48,7 +48,7 @@ public class AppAuthorityConfig {
                         httpMethods[i] = HttpMethod.resolve(strings[i]);
                     }
                 }
-                AuthorityDto authorityDto = new AuthorityDto();
+                CdpAuthorityDto authorityDto = new CdpAuthorityDto();
                 authorityDto.setPath(entity.getPath());
                 authorityDto.setMethod(httpMethods);
                 authorityDto.setAuthority(entity.getId() + "");
@@ -56,6 +56,6 @@ public class AppAuthorityConfig {
             }
 
         });
-        return new AuthorityConfig(authorityDtos);
+        return new CdpAuthorityConfig(authorityDtos);
     }
 }

@@ -1,5 +1,6 @@
 package com.github.fosin.cdp.auth.security;
 
+import com.github.fosin.cdp.platformapi.constant.SystemConstant;
 import com.github.fosin.cdp.platformapi.dto.CdpUserDetail;
 import com.github.fosin.cdp.platformapi.entity.*;
 import com.github.fosin.cdp.platformapi.service.inter.IPermissionService;
@@ -47,13 +48,13 @@ public class CdpUserDetailsServiceImpl implements UserDetailsService {
         Set<GrantedAuthority> grantedAuthoritySet = new HashSet<>();
 
         List<CdpSysUserRoleEntity> userRoles = userEntity.getUserRoles();
-        Integer userId = userEntity.getId();
+        Long userId = userEntity.getId();
         Set<CdpSysPermissionEntity> userPermissions = new TreeSet<>(new Comparator<CdpSysPermissionEntity>() {
             @Override
             public int compare(CdpSysPermissionEntity o1, CdpSysPermissionEntity o2) {
-                int subId = o1.getId() - o2.getId();
+                long subId = o1.getId() - o2.getId();
                 if (subId == 0) {
-                    return subId;
+                    return 0;
                 }
                 int subLevel = o1.getLevel() - o2.getLevel();
                 if (subLevel != 0) {
@@ -72,17 +73,17 @@ public class CdpUserDetailsServiceImpl implements UserDetailsService {
             if (role.getStatus() != 0) {
                 continue;
             }
-            Integer roleId = role.getId();
+            Long roleId = role.getId();
 
             //获取角色权限
             List<CdpSysRolePermissionEntity> rolePermissionList = rolePermissionService.findByRoleId(roleId);
             for (CdpSysRolePermissionEntity rolePermissionEntity : rolePermissionList) {
-                Integer permissionId = rolePermissionEntity.getPermissionId();
+                Long permissionId = rolePermissionEntity.getPermissionId();
                 CdpSysPermissionEntity entity = permissionService.findOne(permissionId);
                 // 只添加状态为启用的权限
                 if (entity.getStatus() == 0) {
                     userPermissions.add(entity);
-                    grantedAuthoritySet.add(new SimpleGrantedAuthority(permissionId+""));
+                    grantedAuthoritySet.add(new SimpleGrantedAuthority(permissionId + ""));
                 }
             }
         }
@@ -90,24 +91,24 @@ public class CdpUserDetailsServiceImpl implements UserDetailsService {
         List<CdpSysUserPermissionEntity> userPermissionList = userPermissionService.findByUserId(userId);
         for (CdpSysUserPermissionEntity userPermissionEntity : userPermissionList) {
             int addmode = userPermissionEntity.getAddMode();
-            Integer permissionId = userPermissionEntity.getPermissionId();
+            Long permissionId = userPermissionEntity.getPermissionId();
             CdpSysPermissionEntity entity = permissionService.findOne(permissionId);
             // 只操作状态为启用的权限
             if (entity.getStatus() == 0) {
                 //获取用户增权限
                 if (addmode == 0) {
                     userPermissions.add(entity);
-                    grantedAuthoritySet.add(new SimpleGrantedAuthority(permissionId +""));
+                    grantedAuthoritySet.add(new SimpleGrantedAuthority(permissionId + ""));
                 } else { //移除用户减权限
                     userPermissions.remove(entity);
-                    grantedAuthoritySet.remove(new SimpleGrantedAuthority(permissionId +""));
+                    grantedAuthoritySet.remove(new SimpleGrantedAuthority(permissionId + ""));
                 }
             }
         }
         //转成ArrayList保证有序
 //        List<GrantedAuthority> grantedAuthorityList = new ArrayList<>(grantedAuthoritySet);
 
-        CdpSysPermissionEntity permissionTree = TreeUtil.createTree(userPermissions, 1, "id", "pId", "children");
+        CdpSysPermissionEntity permissionTree = TreeUtil.createTree(userPermissions, SystemConstant.ROOT_PERMISSION_ID, "id", "pId", "children");
 
         CdpUserDetail user = new CdpUserDetail(userEntity, permissionTree, grantedAuthoritySet);
         log.debug("UserDetailsServiceImpl User:" + user.toString());
