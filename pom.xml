@@ -30,7 +30,7 @@
             <properties>
                 <profileActive>local</profileActive>
                 <eureka.client.service-url.defaultZone>
-                    http://${security.user.name}:${security.user.password}@localhost:1000/eureka/
+                    http://${eureka.username}:${eureka.password}@localhost:1000/eureka/
                 </eureka.client.service-url.defaultZone>
                 <spring.cloud.config.username>cdp</spring.cloud.config.username>
                 <spring.cloud.config.password>local</spring.cloud.config.password>
@@ -40,8 +40,8 @@
                 <spring.rabbitmq.port>5672</spring.rabbitmq.port>
                 <spring.rabbitmq.username>cdp</spring.rabbitmq.username>
                 <spring.rabbitmq.password>local</spring.rabbitmq.password>
-                <security.user.name>cdp</security.user.name>
-                <security.user.password>local</security.user.password>
+                <eureka.username>cdp</eureka.username>
+                <eureka.password>local</eureka.password>
             </properties>
             <activation>
                 <activeByDefault>false</activeByDefault>
@@ -52,7 +52,7 @@
             <properties>
                 <profileActive>dev</profileActive>
                 <eureka.client.service-url.defaultZone>
-                    http://${security.user.name}:${security.user.password}${cdp-at}192.168.2.243:1000/eureka/,http://${security.user.name}:${security.user.password}${cdp-at}192.168.2.244:1000/eureka/
+                    http://${eureka.username}:${eureka.password}${cdp-at}192.168.2.243:1000/eureka/,http://${eureka.username}:${eureka.password}${cdp-at}192.168.2.244:1000/eureka/
                 </eureka.client.service-url.defaultZone>
                 <spring.cloud.config.username>cdp</spring.cloud.config.username>
                 <spring.cloud.config.password>dev</spring.cloud.config.password>
@@ -62,8 +62,8 @@
                 <spring.rabbitmq.port>5672</spring.rabbitmq.port>
                 <spring.rabbitmq.username>cdp</spring.rabbitmq.username>
                 <spring.rabbitmq.password>dev</spring.rabbitmq.password>
-                <security.user.name>cdp</security.user.name>
-                <security.user.password>dev</security.user.password>
+                <eureka.username>cdp</eureka.username>
+                <eureka.password>dev</eureka.password>
             </properties>
             <activation>
                 <activeByDefault>true</activeByDefault>
@@ -74,7 +74,7 @@
             <properties>
                 <profileActive>test</profileActive>
                 <eureka.client.service-url.defaultZone>
-                    http://${security.user.name}:${security.user.password}@localhost:1000/eureka/
+                    http://${eureka.username}:${eureka.password}@localhost:1000/eureka/
                 </eureka.client.service-url.defaultZone>
                 <spring.cloud.config.username>cdp</spring.cloud.config.username>
                 <spring.cloud.config.password>test</spring.cloud.config.password>
@@ -84,8 +84,8 @@
                 <spring.rabbitmq.port>5672</spring.rabbitmq.port>
                 <spring.rabbitmq.username>cdp</spring.rabbitmq.username>
                 <spring.rabbitmq.password>test</spring.rabbitmq.password>
-                <security.user.name>cdp</security.user.name>
-                <security.user.password>test</security.user.password>
+                <eureka.username>cdp</eureka.username>
+                <eureka.password>test</eureka.password>
             </properties>
             <activation>
                 <activeByDefault>false</activeByDefault>
@@ -96,7 +96,7 @@
             <properties>
                 <profileActive>prod</profileActive>
                 <eureka.client.service-url.defaultZone>
-                    http://${security.user.name}:${security.user.password}@localhost:1000/eureka/
+                    http://${eureka.username}:${eureka.password}@localhost:1000/eureka/
                 </eureka.client.service-url.defaultZone>
                 <spring.cloud.config.username>cdp</spring.cloud.config.username>
                 <spring.cloud.config.password>prod</spring.cloud.config.password>
@@ -106,8 +106,8 @@
                 <spring.rabbitmq.port>5672</spring.rabbitmq.port>
                 <spring.rabbitmq.username>cdp</spring.rabbitmq.username>
                 <spring.rabbitmq.password>prod</spring.rabbitmq.password>
-                <security.user.name>cdp</security.user.name>
-                <security.user.password>prod</security.user.password>
+                <eureka.username>cdp</eureka.username>
+                <eureka.password>prod</eureka.password>
             </properties>
             <activation>
                 <activeByDefault>false</activeByDefault>

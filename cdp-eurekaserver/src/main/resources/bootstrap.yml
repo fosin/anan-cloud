@@ -30,8 +30,8 @@ management:
     enabled: false
 security:
   user:
-    name: @security.user.name@
-    password: @security.user.password@
+    name: @eureka.username@
+    password: @eureka.password@
 info: #定义各种额外的详情给服务端显示
   description: "@project.description@"
   version: "@project.version@"

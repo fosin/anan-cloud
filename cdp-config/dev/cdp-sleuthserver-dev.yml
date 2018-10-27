@@ -1,7 +1,4 @@
 security:
-  user:
-    name: cdp
-    password: dev
   oauth2:
     resource:
       filter-order: 3
@@ -16,8 +13,8 @@ spring:
   datasource:
     schema: classpath:/mysql.sql
     url: jdbc:mysql://192.168.2.241:3306/cdp_zipkin
-    username: cdp
-    password: dev
+    username: '{cipher}AQBmphzkCLxk9OmJtZ4IUmbueDwos79U5y0URmC1zlH3fO+V7GtqBxKAxnSarOjPewUK55njl+NBrdOtBkElTrqwmcCT0Np4V9IOot/B85JARWbB3QJhJIHnwSOEYKWW0VCutaRfxphBfOa2dvS52kwi+qWI8KF/rghLeM8nHqKA6sOFeWwr0gyRK7gcMILyrjMEnX3UqZkw0C6+yoHN2ssnCcEpYIhZRo8yzSqh/dBWfraUV867lMKUMMVxNZBLuKvW0HBWRTGjpZwP6AoMAJtHtyUueRk+8WZ3YytL/Y95Ou2ckbJF7LD273eS06YdKsktqIicexrRV4/HAKF96JE71CiHY6U43sgylp5ziEFCbMkqPn7ZMkvQdRw+SQBJfpM='
+    password: '{cipher}AQA0IIpb8cuWF9PppP2sK0c5t1Wp5n/J57IM095CU4Dm1ndfA3+GrJPOVFrAah1TeryGUhuPJpyS9Ai6xn3gb23uhvMgVm4axGyLt7u25gzzQB5JYrYNDwCRpbrjpAnqFl4uzYRglaDY2ALCf6/K7GXZsOdxP3oP37pt2l7+hmRaSHN0LFPzioT/zqU4XHIGYFEp/fr7ID5JMKcdCuU68oi+UojkmBXmRcXiGaOWH9ZCMKI4WLfmRZERWVxrzOTV4/cfA1uXo1u8ObMOPgxLaq0q3kAigVW3kU+h3Ix56H1FiGuuq8RUIs/v0Kkhf3Eccra8ooWJ+jQtETuuLrYLuBQXfIeXr1sBXbZykqDQp7k3DowM0Kxh2sWKj19WaUHXcMI='
     continueOnError: true
     initialize: true
 zipkin:

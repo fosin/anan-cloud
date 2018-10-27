@@ -77,11 +77,6 @@ hystrix:
 ##禁用自定义过滤器ThrowExceptionFilter
 #zuul.ThrowExceptionFilter.pre.disable=true
 security:
-  basic:
-    enabled: false
-  user:
-    password: dev
-    name: cdp
   sessions: stateless
   oauth2:
 #    client:

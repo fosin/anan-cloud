@@ -26,14 +26,14 @@ security:
       loadBalanced: true #这个参数在OAuth2LoadBalancerClientAutoConfiguration可以找到，设置这个才可以使用eureka的服务名，配合loadBalancerInterceptor bean。
       user-info-uri: http://cdp-authserver/oauth/principal
       prefer-token-info: false
-      service-id: cdp-platformserver
+      service-id: mpi
 cdp:
   swagger:
     enabled: true
     title: ${spring.application.name}
     description: ${info.description}
     version: ${info.version}
-    base-package: com.github.fosin.cdp.platform
+    base-package: com.xingyj
     authorization:
       name: Oauth2.0 Authorization
       keyName: Authorization

@@ -26,9 +26,6 @@ cdp:
       - path: /api/**
       - method: OPTIONS
 security:
-  user:
-    name: cdp
-    password: local
   oauth2:
     client:
       client-id: appServer
