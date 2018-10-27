@@ -69,27 +69,23 @@ public class CdpSysParameterEntity implements Serializable {
     
     @Column(name = "create_time")
     @Basic
-    @NotNull
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
     @ApiModelProperty(value = "创建日期，该值由后台维护，更改数据时前端不需要关心", notes = "创建日期，该值由后台维护，更改数据时前端不需要关心")
     private Date createTime;
     
     @Column(name = "create_by")
     @Basic
-    @NotNull
     @ApiModelProperty(value = "该值由后台维护，更改数据时前端不需要关心，取值于cdp_sys_user.id", notes = "该值由后台维护，更改数据时前端不需要关心，取值于cdp_sys_user.id")
     private Long createBy;
     
     @Column(name = "update_time")
     @Basic
-    @NotNull
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
     @ApiModelProperty(value = "更新日期，该值由后台维护，更改数据时前端不需要关心", notes = "更新日期，该值由后台维护，更改数据时前端不需要关心")
     private Date updateTime;
     
     @Column(name = "update_by")
     @Basic
-    @NotNull
     @ApiModelProperty(value = "该值由后台维护，更改数据时前端不需要关心，取值于cdp_sys_user.id", notes = "该值由后台维护，更改数据时前端不需要关心，取值于cdp_sys_user.id")
     private Long updateBy;
     

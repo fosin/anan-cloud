@@ -55,12 +55,8 @@ public class PermissionServiceImpl implements IPermissionService {
         entity.setCreateTime(now);
         entity.setUpdateTime(now);
         Long id = loginUser.getId();
-        if (entity.getCreateBy() == null) {
-            entity.setCreateBy(id);
-        }
-        if (entity.getUpdateBy() == null) {
-            entity.setUpdateBy(id);
-        }
+        entity.setCreateBy(id);
+        entity.setUpdateBy(id);
         return permissionRepository.save(entity);
     }
 
