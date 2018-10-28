@@ -38,6 +38,20 @@ spring:
     port: @spring.rabbitmq.port@
     username: @spring.rabbitmq.username@
     password: @spring.rabbitmq.password@
+security:
+  user:
+    name: @eureka.username@
+    password: @eureka.password@
+encrypt:
+  key-store:
+    location: @encrypt.key-store.location@
+    password: @encrypt.key-store.password@
+    alias: @encrypt.key-store.alias@
+    secret: @encrypt.key-store.secret@
+  rsa:
+    algorithm: default
+    strong: false
+    salt: deadbeaf
 info: #定义各种额外的详情给服务端显示
   description: "@project.description@"
   version: "@project.version@"

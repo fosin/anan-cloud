@@ -40,6 +40,20 @@ spring:
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
+security:
+  user:
+    name: @eureka.username@
+    password: @eureka.password@
+encrypt:
+  key-store:
+    location: @encrypt.key-store.location@
+    password: @encrypt.key-store.password@
+    alias: @encrypt.key-store.alias@
+    secret: @encrypt.key-store.secret@
+  rsa:
+    algorithm: default
+    strong: false
+    salt: deadbeaf
 info: #定义各种额外的详情给服务端显示
   description: "@project.description@"
   version: "@project.version@"

@@ -54,10 +54,10 @@ management:
 #    sensitive: false
 encrypt:
   key-store:
-    location: classpath:cdp.keystore
-    password: 123456
-    alias: cdp
-    secret: 123456
+    location: @encrypt.key-store.location@
+    password: @encrypt.key-store.password@
+    alias: @encrypt.key-store.alias@
+    secret: @encrypt.key-store.secret@
   rsa:
     algorithm: default
     strong: false

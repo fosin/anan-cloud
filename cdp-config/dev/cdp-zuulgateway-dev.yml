@@ -18,6 +18,10 @@ zuul:
       path: /auth/**
       serviceId: cdp-authserver
       retryable: true
+    mpi:
+      path: /mpi/**
+      serviceId: mpi
+      retryable: true
 #  semaphore:
 #    max-semaphores: 100
 #  ribbon-isolation-strategy: THREAD
@@ -41,11 +45,17 @@ zuul:
       cdp-platformserver: #特定的路由
         limit: 10 #可选- 每个刷新时间窗口对应的请求数量限制
         quota: 10 #可选-  每个刷新时间窗口对应的请求时间限制（秒）
-        refresh-interval: 6 # 刷新时间窗口的时间，默认值 (秒)
+        refresh-interval: 1 # 刷新时间窗口的时间，默认值 (秒)
         type: #可选 限流方式
 #          - user
 #          - origin
           - url
+      mpi: #特定的路由
+        limit: 15 #可选- 每个刷新时间窗口对应的请求数量限制
+        quota: 15 #可选-  每个刷新时间窗口对应的请求时间限制（秒）
+        refresh-interval: 1 # 刷新时间窗口的时间，默认值 (秒)
+        type: #可选 限流方式
+        - url
 #spring:
 #  redis:
 #    host: 192.168.137.155

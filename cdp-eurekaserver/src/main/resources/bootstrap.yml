@@ -16,7 +16,6 @@ eureka:
     fetch-registry: false
     service-url:
       defaultZone: @eureka.client.service-url.defaultZone@
-    #      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
     register-with-eureka: true
   instance:
     prefer-ip-address: true #可以实现ip地址作为主机地址
@@ -32,6 +31,16 @@ security:
   user:
     name: @eureka.username@
     password: @eureka.password@
+encrypt:
+  key-store:
+    location: @encrypt.key-store.location@
+    password: @encrypt.key-store.password@
+    alias: @encrypt.key-store.alias@
+    secret: @encrypt.key-store.secret@
+  rsa:
+    algorithm: default
+    strong: false
+    salt: deadbeaf
 info: #定义各种额外的详情给服务端显示
   description: "@project.description@"
   version: "@project.version@"
