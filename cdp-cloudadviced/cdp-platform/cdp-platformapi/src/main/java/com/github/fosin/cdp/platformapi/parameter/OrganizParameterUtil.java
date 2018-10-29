@@ -6,6 +6,7 @@ import com.github.fosin.cdp.platformapi.entity.CdpSysUserEntity;
 import com.github.fosin.cdp.platformapi.service.inter.IOrganizationService;
 import com.github.fosin.cdp.platformapi.util.LoginUserUtil;
 import com.github.fosin.cdp.util.StringUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
@@ -17,6 +18,7 @@ import org.springframework.util.Assert;
  * @date 2018.8.6
  */
 @Component
+@Slf4j
 public class OrganizParameterUtil extends AbstractParameterUtil {
     public static final Integer TYPE = 1;
     private static IOrganizationService organizationService;
@@ -41,9 +43,11 @@ public class OrganizParameterUtil extends AbstractParameterUtil {
 
 
     public static String getParameter(String scope, String name) {
-        CdpSysParameterEntity parameterEntity = ParameterUtil.getParameter(TYPE, scope, name);
-        Assert.notNull(parameterEntity, "没有从参数[" + "type:" + TYPE + " scope:" + scope + " name:" + name + "]中查询到参数");
-        return getValue(parameterEntity);
+        CdpSysParameterEntity parameter = ParameterUtil.getParameter(TYPE, scope, name);
+        String info = "没有从参数[" + "type:" + TYPE + " scope:" + scope + " name:" + name + "]中查询到参数";
+        log.debug(info);
+        Assert.isTrue(parameter != null && parameter.getId() != null, info);
+        return getValue(parameter);
     }
 
     /**
@@ -67,7 +71,12 @@ public class OrganizParameterUtil extends AbstractParameterUtil {
         CdpSysParameterEntity parameter = ParameterUtil.getParameter(TYPE, scope, name);
         String value = getValue(parameter);
         if (StringUtil.isEmpty(scope)) {
-            Assert.notNull(parameter, "没有从参数[" + "type:" + TYPE + " scope:" + scope + " name:" + name + "]中查询到参数");
+            String info = "没有从参数[" + "type:" + TYPE + " scope:" + scope + " name:" + name + "]中查询到参数";
+            log.debug(info);
+            if (name.equals("DefaultDictionaryDetailNameAndSort")) {
+                System.out.println("DefaultDictionaryDetailNameAndSort");
+            }
+            Assert.isTrue(parameter != null && parameter.getId() != null, info);
             return value;
         }
         //parameter为空表示没有参数记录，则依次向上找父机构的参数
@@ -101,6 +110,7 @@ public class OrganizParameterUtil extends AbstractParameterUtil {
         try {
             value = getNearestParameter(scope, name);
         } catch (Exception e) {// 报异常说明没有找到任何相关参数，则需要创建一个无域参数，这样默认所有机构共享这一个参数，如果需要设置机构个性化参数则需要在前端手动创建
+            log.debug("报异常说明没有找到任何相关参数，则需要创建一个无域参数，这样默认所有机构共享这一个参数，如果需要设置机构个性化参数则需要在前端手动创建");
             value = getValue(ParameterUtil.setParameter(TYPE, "", name, defaultValue, description));
         }
         return value;

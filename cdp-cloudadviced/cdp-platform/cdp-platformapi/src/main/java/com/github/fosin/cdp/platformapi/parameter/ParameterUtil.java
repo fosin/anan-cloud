@@ -26,7 +26,7 @@ public class ParameterUtil {
 
     public static CdpSysParameterEntity getOrCreateParameter(Integer type, String scope, String name, String defaultValue, String description) throws RuntimeException {
         CdpSysParameterEntity parameterEntity = parameterService.findByTypeAndScopeAndName(type, scope, name);
-        if (parameterEntity.getId() == null || parameterEntity.getId() < 1) {
+        if (parameterEntity == null || parameterEntity.getId() == null) {
             parameterEntity = setParameter(type, scope, name, defaultValue, description);
         }
         return parameterEntity;
@@ -41,7 +41,7 @@ public class ParameterUtil {
         if (value == null) {
             value = "";
         }
-        if (entity == null) {
+        if (entity == null || entity.getId() == null) {
             entity = new CdpSysParameterEntity();
             entity.setScope(scope);
             entity.setType(type);

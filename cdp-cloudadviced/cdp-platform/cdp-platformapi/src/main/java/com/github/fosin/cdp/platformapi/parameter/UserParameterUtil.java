@@ -4,6 +4,7 @@ import com.github.fosin.cdp.platformapi.entity.CdpSysParameterEntity;
 import com.github.fosin.cdp.platformapi.entity.CdpSysUserEntity;
 import com.github.fosin.cdp.platformapi.util.LoginUserUtil;
 import com.github.fosin.cdp.util.StringUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.Assert;
 
 /**
@@ -12,6 +13,7 @@ import org.springframework.util.Assert;
  * @author fosin
  * @date 2018.8.6
  */
+@Slf4j
 public class UserParameterUtil extends AbstractParameterUtil {
     public static final Integer TYPE = 2;
 
@@ -29,9 +31,11 @@ public class UserParameterUtil extends AbstractParameterUtil {
     }
 
     public static String getParameter(String scope, String name) {
-        CdpSysParameterEntity parameterEntity = ParameterUtil.getParameter(TYPE, scope, name);
-        Assert.notNull(parameterEntity, "没有从参数[" + "type:" + TYPE + " scope:" + scope + " name:" + name + "]中查询到参数");
-        return getValue(parameterEntity);
+        CdpSysParameterEntity parameter = ParameterUtil.getParameter(TYPE, scope, name);
+        String info = "没有从参数[" + "type:" + TYPE + " scope:" + scope + " name:" + name + "]中查询到参数";
+        log.debug(info);
+        Assert.isTrue(parameter != null && parameter.getId() != null, info);
+        return getValue(parameter);
     }
 
     /**
@@ -55,13 +59,17 @@ public class UserParameterUtil extends AbstractParameterUtil {
         CdpSysParameterEntity parameter = ParameterUtil.getParameter(TYPE, scope, name);
         String value = getValue(parameter);
         if (StringUtil.isEmpty(scope)) {
-            Assert.notNull(parameter, "没有从参数[" + "type:" + TYPE + " scope:" + scope + " name:" + name + "]中查询到参数");
+            String info = "没有从参数[" + "type:" + TYPE + " scope:" + scope + " name:" + name + "]中查询到参数";
+            log.debug(info);
+            Assert.isTrue(parameter != null && parameter.getId() != null, info);
             return value;
         }
         //parameter为空表示没有参数记录，则空域的参数
         if (parameter == null) {
             parameter = ParameterUtil.getParameter(TYPE, "", name);
-            Assert.notNull(parameter, "没有从参数[" + "type:" + TYPE + " scope:" + "" + " name:" + name + "]中查询到参数");
+            String info = "没有从参数[" + "type:" + TYPE + " scope:" + scope + " name:" + name + "]中查询到参数";
+            log.debug(info);
+            Assert.isTrue(parameter != null && parameter.getId() != null, info);
             value = parameter.getValue();
         }
         return value;
