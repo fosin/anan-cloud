@@ -117,7 +117,7 @@ public class DictionaryDetailServiceImpl implements IDictionaryDetailService {
 
     @Override
     @CacheEvict(value = TableNameConstant.CDP_SYS_DICTIONARY_DETAIL, key = "#entity.code")
-    public Collection<CdpSysDictionaryDetailEntity> delete(CdpSysDictionaryDetailEntity entity) throws CdpServiceException {
+    public CdpSysDictionaryDetailEntity delete(CdpSysDictionaryDetailEntity entity) throws CdpServiceException {
         Assert.notNull(entity, "传入了空的对象!");
         CdpSysUserEntity loginUser = LoginUserUtil.getUser();
         //不是超级管理员

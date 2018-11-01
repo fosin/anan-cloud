@@ -101,7 +101,7 @@ public class DictionaryServiceImpl implements IDictionaryService {
 
     @Override
     @Transactional(rollbackFor = CdpServiceException.class)
-    public Collection<CdpSysDictionaryEntity> delete(CdpSysDictionaryEntity entity) throws CdpServiceException {
+    public CdpSysDictionaryEntity delete(CdpSysDictionaryEntity entity) throws CdpServiceException {
         Assert.notNull(entity, "传入了空的对象!");
         //系统字典
         if (entity.getType().equals(SystemConstant.SYSTEM_DICTIONARY_TYPE)) {
@@ -111,7 +111,7 @@ public class DictionaryServiceImpl implements IDictionaryService {
         }
         dictionaryDetailRepository.deleteAllByCode(entity.getCode());
         dictionaryRepository.delete(entity);
-        return null;
+        return entity;
     }
 
     @Override

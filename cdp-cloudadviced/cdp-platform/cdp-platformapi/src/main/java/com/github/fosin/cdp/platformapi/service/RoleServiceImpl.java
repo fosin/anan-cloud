@@ -109,7 +109,7 @@ public class RoleServiceImpl implements IRoleService {
     }
 
     @Override
-    public Collection<CdpSysRoleEntity> delete(CdpSysRoleEntity entity) throws CdpServiceException {
+    public CdpSysRoleEntity delete(CdpSysRoleEntity entity) throws CdpServiceException {
         Assert.notNull(entity, "传入了空对象!");
         Assert.isTrue(!SystemConstant.SUPER_ROLE_NAME.equals(entity.getValue())
                         && !SystemConstant.ADMIN_ROLE_NAME.equals(entity.getValue()),
@@ -118,7 +118,7 @@ public class RoleServiceImpl implements IRoleService {
         Assert.isTrue(roleUsers.size() == 0,
                 "该角色下还存在用户,不能直接删除角色!");
         roleRepository.delete(entity);
-        return null;
+        return entity;
     }
 
     @Override

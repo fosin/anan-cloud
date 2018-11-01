@@ -74,10 +74,10 @@ public class OauthClientServiceImpl implements IOauthClientService {
     }
 
     @Override
-    public Collection<OauthClientDetailsEntity> delete(OauthClientDetailsEntity entity) throws CdpServiceException {
+    public OauthClientDetailsEntity delete(OauthClientDetailsEntity entity) throws CdpServiceException {
         Assert.notNull(entity, "传入了空对象!");
         oauthClientRepository.delete(entity);
-        return null;
+        return entity;
     }
 
     @Override

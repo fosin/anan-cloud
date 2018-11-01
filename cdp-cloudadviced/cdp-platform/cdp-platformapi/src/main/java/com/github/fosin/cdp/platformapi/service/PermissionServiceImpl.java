@@ -76,7 +76,7 @@ public class PermissionServiceImpl implements IPermissionService {
 
     @Override
     @CacheEvict(value = TableNameConstant.CDP_SYS_PERMISSION, key = "#entity.id")
-    public Collection<CdpSysPermissionEntity> delete(CdpSysPermissionEntity entity) throws CdpServiceException {
+    public CdpSysPermissionEntity delete(CdpSysPermissionEntity entity) throws CdpServiceException {
         Assert.notNull(entity, "传入了空对象!");
         Long id = entity.getId();
         Assert.notNull(id, "传入了空ID!");
@@ -87,7 +87,7 @@ public class PermissionServiceImpl implements IPermissionService {
         List<CdpSysPermissionEntity> entities = findByPId(id);
         Assert.isTrue(entities == null || entities.size() == 0, "该节点还存在子节点不能直接删除!");
         permissionRepository.delete(entity);
-        return null;
+        return entity;
     }
 
     @Override

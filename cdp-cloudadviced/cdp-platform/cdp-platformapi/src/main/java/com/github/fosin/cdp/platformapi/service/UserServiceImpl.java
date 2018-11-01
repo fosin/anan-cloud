@@ -191,7 +191,7 @@ public class UserServiceImpl implements IUserService {
 //        List<CdpSysUserRoleEntity> userRoles = userRoleRepository.findByUserId(id);
 //        Assert.isTrue(userRoles.size() == 0, "该用户下还存在角色信息,不能直接删除用户!");
         userRepository.delete(id);
-        return null;
+        return entity;
     }
 
     @Override
@@ -213,14 +213,14 @@ public class UserServiceImpl implements IUserService {
                     @CacheEvict(value = TableNameConstant.CDP_SYS_USER_PERMISSION, key = "#entity.id")
             }
     )
-    public Collection<CdpSysUserEntity> delete(CdpSysUserEntity entity) throws CdpServiceException {
+    public CdpSysUserEntity delete(CdpSysUserEntity entity) throws CdpServiceException {
         Assert.notNull(entity, "不能删除空的用户对象!");
         Assert.isTrue(!SystemConstant.SUPER_USER_CODE.equals(entity.getUsercode())
                 && !SystemConstant.ADMIN_USER_CODE.equals(entity.getUsercode()), "不能删除管理员帐号!");
         List<CdpSysUserRoleEntity> userRoles = userRoleRepository.findByUserId(entity.getId());
         Assert.isTrue(userRoles.size() == 0, "该用户下还存在角色信息,不能直接删除用户!");
         userRepository.delete(entity);
-        return null;
+        return entity;
     }
 
     @Override

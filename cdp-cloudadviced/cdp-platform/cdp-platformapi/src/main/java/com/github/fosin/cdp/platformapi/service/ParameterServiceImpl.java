@@ -109,10 +109,10 @@ public class ParameterServiceImpl implements IParameterService {
 
     @Override
     @CacheEvict(value = TableNameConstant.CDP_SYS_PARAMETER, key = "#root.target.getCacheKey(#entity)")
-    public Collection<CdpSysParameterEntity> delete(CdpSysParameterEntity entity) throws CdpServiceException {
+    public CdpSysParameterEntity delete(CdpSysParameterEntity entity) throws CdpServiceException {
         Assert.notNull(entity, "传入了空对象!");
         parameterRepository.delete(entity);
-        return null;
+        return entity;
     }
 
     @Override

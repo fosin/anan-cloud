@@ -82,13 +82,13 @@ public class OrganizationServiceImpl implements IOrganizationService {
 
     @Override
     @CacheEvict(value = TableNameConstant.CDP_SYS_ORGANIZATION, key = "#entity.id")
-    public Collection<CdpSysOrganizationEntity> delete(CdpSysOrganizationEntity entity) throws CdpServiceException {
+    public CdpSysOrganizationEntity delete(CdpSysOrganizationEntity entity) throws CdpServiceException {
         Assert.notNull(entity, "传入了空对象!");
         Assert.notNull(entity.getId(), "传入了空ID!");
         List<CdpSysOrganizationEntity> entities = findByPid(entity.getId());
         Assert.isTrue(entities == null || entities.size() == 0, "该节点还存在子节点不能直接删除!");
         organizationRepository.delete(entity);
-        return null;
+        return entity;
     }
 
     @Override

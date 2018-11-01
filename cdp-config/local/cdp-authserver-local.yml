@@ -9,25 +9,25 @@ spring:
     url: jdbc:mysql://192.168.137.155:3306/cdp_platform?useUnicode=true&characterEncoding=utf-8
     username: '{cipher}AQBmphzkCLxk9OmJtZ4IUmbueDwos79U5y0URmC1zlH3fO+V7GtqBxKAxnSarOjPewUK55njl+NBrdOtBkElTrqwmcCT0Np4V9IOot/B85JARWbB3QJhJIHnwSOEYKWW0VCutaRfxphBfOa2dvS52kwi+qWI8KF/rghLeM8nHqKA6sOFeWwr0gyRK7gcMILyrjMEnX3UqZkw0C6+yoHN2ssnCcEpYIhZRo8yzSqh/dBWfraUV867lMKUMMVxNZBLuKvW0HBWRTGjpZwP6AoMAJtHtyUueRk+8WZ3YytL/Y95Ou2ckbJF7LD273eS06YdKsktqIicexrRV4/HAKF96JE71CiHY6U43sgylp5ziEFCbMkqPn7ZMkvQdRw+SQBJfpM='
     password: '{cipher}AQBKDi1e2O8RxX1JkwCpYZ8gdF8uFahNH3oUvFrEM8UXfmJGWthztlBOxvDFNB4Cqu6FZKibXkZZEWStiLvATSl6+EiWMEhQqBv1Kt8u65Qquzxt5Ab/IdTP1EGUA2i0KN0Mi+TArbRjoXwxvh5DjqQ4Td22QhgnhRCn8USpmNF9vcma0if/DIPyjweOYaayF5ynJO3gTibPLDjOj194DbeXnmR1nVlO/hcfjM5a65Hr+rRoisgSUbOCcsAuxluEhDT35+rjEPumxaRo58DOckq0XkJhoyQ69g/Do3NBEx0ewEcEVg2t/DJyPp9BbSRGYV67HUqup39c//RuhP2AHTN94qZgrxEBtBsGu+E1E/xtBjNjqSeQPdeJb200dTF99rQ='
-#    platform: mysql
-#    continue-on-error: true
 #    type: com.alibaba.druid.pool.DruidDataSource
     druid:
       initial-size: 5 #初始化大小
       min-idle: 5 #最小
-      maxActive: 20 # 最大
+      maxActive: 10 # 最大
       maxWait: 60000 #配置获取连接等待超时的时间
       timeBetweenEvictionRunsMillis: 60000 # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
       minEvictableIdleTimeMillis: 300000 # 配置一个连接在池中最小生存的时间，单位是毫秒
-#      validationQuery: SELECT 1 FROM DUAL
+      #      validationQuery: SELECT 1 FROM DUAL
       testWhileIdle: true
       testOnBorrow: false
       testOnReturn: false
-#      poolPreparedStatements: true # 打开PSCache，并且指定每个连接上PSCache的大小
-#      maxPoolPreparedStatementPerConnectionSize: 20
-#      filters: stat,wall,log4j # 配置监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙
-#      connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000 # 通过connectProperties属性来打开mergeSql功能；慢SQL记录
-#      useGlobalDataSourceStat: true # 合并多个DruidDataSource的监控数据
+  #      poolPreparedStatements: true # 打开PSCache，并且指定每个连接上PSCache的大小
+  #      maxPoolPreparedStatementPerConnectionSize: 20
+  #      filters: stat,wall,log4j # 配置监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙
+  #      connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000 # 通过connectProperties属性来打开mergeSql功能；慢SQL记录
+  #      useGlobalDataSourceStat: true # 合并多个DruidDataSource的监控数据
+  #    platform: mysql
+  #    continue-on-error: true
   redis:
     host: 192.168.137.155
     port: 6379
