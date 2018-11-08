@@ -173,6 +173,8 @@
                 <directory>src/main/resources</directory>
                 <excludes>
                     <exclude>application*.properties</exclude>
+                    <exclude>application*.yml</exclude>
+                    <exclude>bootstrap*.properties</exclude>
                     <exclude>bootstrap*.yml</exclude>
                 </excludes>
             </resource>
@@ -184,6 +186,10 @@
                     <include>application.yml</include>
                     <include>bootstrap-${profileActive}*.yml</include>
                     <include>bootstrap.yml</include>
+                    <include>application-${profileActive}*.properties</include>
+                    <include>application.properties</include>
+                    <include>bootstrap-${profileActive}*.properties</include>
+                    <include>bootstrap.properties</include>
                 </includes>
             </resource>
         </resources>
