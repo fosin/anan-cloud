@@ -49,24 +49,21 @@ public class CdpUserDetailsServiceImpl implements UserDetailsService {
 
         List<CdpSysUserRoleEntity> userRoles = userEntity.getUserRoles();
         Long userId = userEntity.getId();
-        Set<CdpSysPermissionEntity> userPermissions = new TreeSet<>(new Comparator<CdpSysPermissionEntity>() {
-            @Override
-            public int compare(CdpSysPermissionEntity o1, CdpSysPermissionEntity o2) {
-                long subId = o1.getId() - o2.getId();
-                if (subId == 0) {
-                    return 0;
-                }
-                int subLevel = o1.getLevel() - o2.getLevel();
-                if (subLevel != 0) {
-                    return subLevel;
-                }
-                int subSort = o1.getSort() - o2.getSort();
-                if (subSort != 0) {
-                    return subSort;
-                }
-
-                return o1.getCode().compareToIgnoreCase(o2.getCode());
+        Set<CdpSysPermissionEntity> userPermissions = new TreeSet<>((o1, o2) -> {
+            long subId = o1.getId() - o2.getId();
+            if (subId == 0) {
+                return 0;
             }
+            int subLevel = o1.getLevel() - o2.getLevel();
+            if (subLevel != 0) {
+                return subLevel;
+            }
+            int subSort = o1.getSort() - o2.getSort();
+            if (subSort != 0) {
+                return subSort;
+            }
+
+            return o1.getCode().compareToIgnoreCase(o2.getCode());
         });
         for (CdpSysUserRoleEntity userRole : userRoles) {
             CdpSysRoleEntity role = userRole.getRole();
@@ -105,8 +102,6 @@ public class CdpUserDetailsServiceImpl implements UserDetailsService {
                 }
             }
         }
-        //转成ArrayList保证有序
-//        List<GrantedAuthority> grantedAuthorityList = new ArrayList<>(grantedAuthoritySet);
 
         CdpSysPermissionEntity permissionTree = TreeUtil.createTree(userPermissions, SystemConstant.ROOT_PERMISSION_ID, "id", "pId", "children");
 

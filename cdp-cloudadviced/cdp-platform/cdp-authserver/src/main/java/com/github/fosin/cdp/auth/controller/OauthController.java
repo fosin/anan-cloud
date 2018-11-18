@@ -40,7 +40,7 @@ public class OauthController {
     @Autowired
     TokenEndpoint tokenEndpoint;
 
-    @RequestMapping(value = "/token", method = {RequestMethod.POST, RequestMethod.GET})
+    @RequestMapping(value = "/token", method = {RequestMethod.POST})
     @ApiOperation(value = "获取Oauth2.0令牌", notes = "获取Oauth2.0令牌，通常用于前端的认证、登录操作")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "Authorization", value = "Basic认证信息,格式例如：Basic ouZTJoQk5BQVFLUjVVemlJSw==", required = true, dataType = "string", paramType = "header"),
