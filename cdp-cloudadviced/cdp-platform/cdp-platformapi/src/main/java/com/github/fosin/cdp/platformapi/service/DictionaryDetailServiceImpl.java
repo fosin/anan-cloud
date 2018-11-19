@@ -25,6 +25,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.util.Assert;
 
 import javax.persistence.criteria.*;
@@ -39,6 +40,7 @@ import java.util.List;
  * @date 2018-7-29
  */
 @Service
+@Lazy
 public class DictionaryDetailServiceImpl implements IDictionaryDetailService {
 
     @Autowired

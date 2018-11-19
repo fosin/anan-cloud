@@ -20,6 +20,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
@@ -34,6 +35,7 @@ import java.util.List;
  * @date 2018-7-29
  */
 @Service
+@Lazy
 public class DictionaryServiceImpl implements IDictionaryService {
     @Autowired
     private DictionaryRepository dictionaryRepository;

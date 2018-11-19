@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.context.annotation.Lazy;
 
 import java.util.List;
 
@@ -14,6 +15,7 @@ import java.util.List;
  * @author fosin
  */
 @Repository
+@Lazy
 public interface UserRepository extends JpaRepository<CdpSysUserEntity,Long>,JpaSpecificationExecutor<CdpSysUserEntity> {
     CdpSysUserEntity findByUsercode(String usercode);
 

@@ -40,7 +40,13 @@ public class CdpSysOrganizationEntity implements Serializable {
     @NotNull
     @ApiModelProperty(value = "父机构编码，取值于id，表示当前数据所属的父类机构", notes = "父机构编码，取值于id，表示当前数据所属的父类机构")
     private Long pId;
-    
+
+    @Column(name = "top_id")
+    @Basic
+    @NotNull
+    @ApiModelProperty(value = "顶级机构编码，取值于id，表示当前机构所属机构的注册机构")
+    private Long topId;
+
     @Column(name = "code")
     @Basic
     @NotBlank

@@ -41,7 +41,14 @@ public class CdpSysRoleEntity implements Serializable {
     @NotBlank
     @ApiModelProperty(value = "角色名称", notes = "角色名称")
     private String name;
-    
+
+    @Column(name = "organiz_id")
+    @Basic
+    @NotNull
+    @ApiModelProperty(value = "机构ID", notes = "机构ID")
+    private Long organizId;
+
+
     @Column(name = "value")
     @Basic
     @ApiModelProperty(value = "角色标识", notes = "角色标识")

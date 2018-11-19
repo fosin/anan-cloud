@@ -13,6 +13,8 @@ import java.util.List;
  * @author fosin
  */
 public interface IOrganizationService extends ISimpleService<CdpSysOrganizationEntity,Long> {
+    List<CdpSysOrganizationEntity> findAllByTopId(Long topId);
+
     List<CdpSysOrganizationEntity> findByPid(Long pid) throws CdpServiceException;
 
     List<CdpSysOrganizationEntity> findByCodeStartingWith(String code) throws CdpServiceException;

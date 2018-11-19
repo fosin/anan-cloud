@@ -14,6 +14,7 @@ import com.github.fosin.cdp.platformapi.util.LoginUserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
@@ -28,6 +29,7 @@ import java.util.List;
  * @author fosin
  */
 @Service
+@Lazy
 public class UserRoleServiceImpl implements IUserRoleService {
     @Autowired
     private UserRoleRepository userRoleRepository;

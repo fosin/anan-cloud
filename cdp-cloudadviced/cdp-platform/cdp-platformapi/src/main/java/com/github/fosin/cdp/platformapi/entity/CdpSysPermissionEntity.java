@@ -1,25 +1,22 @@
 package com.github.fosin.cdp.platformapi.entity;
 
-import java.util.Date;
-
 import com.github.fosin.cdp.util.DateTimeUtil;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.validator.constraints.NotBlank;
-import org.hibernate.validator.constraints.NotEmpty;
+import org.hibernate.validator.constraints.Range;
+import org.springframework.format.annotation.DateTimeFormat;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
-
-import lombok.Data;
-import org.hibernate.validator.constraints.Range;
-import org.springframework.format.annotation.DateTimeFormat;
-import springfox.documentation.annotations.ApiIgnore;
 
 /**
  * 包含菜单、按钮两种权限(CdpSysPermission)实体类
@@ -32,6 +29,7 @@ import springfox.documentation.annotations.ApiIgnore;
 @DynamicUpdate
 @Table(name = "cdp_sys_permission")
 @ApiModel(value = "包含菜单、按钮两种权限实体类", description = "表(cdp_sys_permission)的对应的实体类")
+@EqualsAndHashCode
 public class CdpSysPermissionEntity implements Serializable {
     private static final long serialVersionUID = -77218975959330473L;
 

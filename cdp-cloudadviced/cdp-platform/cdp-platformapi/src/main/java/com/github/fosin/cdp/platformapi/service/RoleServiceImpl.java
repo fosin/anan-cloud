@@ -1,6 +1,8 @@
 package com.github.fosin.cdp.platformapi.service;
 
 
+import com.github.fosin.cdp.platformapi.entity.*;
+import com.github.fosin.cdp.platformapi.repository.OrganizationRepository;
 import com.github.fosin.cdp.platformapi.repository.RoleRepository;
 import com.github.fosin.cdp.platformapi.repository.UserRoleRepository;
 import com.github.fosin.cdp.core.exception.CdpServiceException;
@@ -8,9 +10,6 @@ import com.github.fosin.cdp.mvc.module.PageModule;
 import com.github.fosin.cdp.mvc.result.Result;
 import com.github.fosin.cdp.mvc.result.ResultUtils;
 import com.github.fosin.cdp.platformapi.constant.SystemConstant;
-import com.github.fosin.cdp.platformapi.entity.CdpSysRoleEntity;
-import com.github.fosin.cdp.platformapi.entity.CdpSysUserEntity;
-import com.github.fosin.cdp.platformapi.entity.CdpSysUserRoleEntity;
 import com.github.fosin.cdp.platformapi.service.inter.IRoleService;
 import com.github.fosin.cdp.platformapi.util.LoginUserUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -20,9 +19,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.util.Assert;
 
 import javax.persistence.criteria.*;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -34,12 +35,17 @@ import java.util.List;
  * @author fosin
  */
 @Service
+@Lazy
 public class RoleServiceImpl implements IRoleService {
 
     @Autowired
     private RoleRepository roleRepository;
+
     @Autowired
     private UserRoleRepository userRoleRepository;
+
+    @Autowired
+    private OrganizationRepository organizationRepository;
 
     @Override
     public CdpSysRoleEntity create(CdpSysRoleEntity entity) {
@@ -91,12 +97,15 @@ public class RoleServiceImpl implements IRoleService {
 
     @Override
     public CdpSysRoleEntity findOne(Long id) {
+        Assert.isTrue(id != null && id > 0,"传入的角色ID无效！");
         return roleRepository.findOne(id);
     }
 
     @Override
     public CdpSysRoleEntity delete(Long id) throws CdpServiceException {
+        Assert.isTrue(id != null && id > 0,"传入的角色ID无效！");
         CdpSysRoleEntity entity = roleRepository.findOne(id);
+        Assert.notNull(entity,"根据角色ID未能找到角色数据!");
         Assert.isTrue(!SystemConstant.SUPER_ROLE_NAME.equals(entity.getValue())
                         && !SystemConstant.ADMIN_ROLE_NAME.equals(entity.getValue()),
                 "不能删除(超级)管理员角色帐号信息!");
@@ -162,5 +171,54 @@ public class RoleServiceImpl implements IRoleService {
     @Override
     public List<CdpSysRoleEntity> findRoleUsersByRoleId(Long userId) {
         return roleRepository.findUserRolesByUserId(userId);
+    }
+
+    @Override
+    public Result findAllByOrganizId(Long organizId, PageModule pageModule) {
+        Assert.notNull(pageModule, "传入的分页信息不能为空!");
+        Assert.notNull(organizId, "机构ID不能为空!");
+        String searchCondition = pageModule.getSearchText();
+        CdpSysUserEntity loginUser = LoginUserUtil.getUser();
+        PageRequest pageable = new PageRequest(pageModule.getPageNumber() - 1, pageModule.getPageSize(), Sort.Direction.fromString(pageModule.getSortOrder()), pageModule.getSortName());
+
+        Page<CdpSysRoleEntity> page;
+        if (loginUser.getUsercode().equals(SystemConstant.SUPER_USER_CODE)) {
+            Specification<CdpSysRoleEntity> condition = (root, query, cb) -> {
+                Path<String> roleName = root.get("name");
+                Path<String> roleValue = root.get("value");
+                if (StringUtils.isBlank(searchCondition)) {
+                    return query.getRestriction();
+                }
+                return cb.or(cb.like(roleName, "%" + searchCondition + "%"), cb.like(roleValue, "%" + searchCondition + "%"));
+            };
+            page = roleRepository.findAll(condition, pageable);
+        } else {
+            CdpSysOrganizationEntity organiz = organizationRepository.findOne(organizId);
+            Assert.notNull(organiz, "根据传入的机构编码没有找到任何数据!");
+            List<CdpSysOrganizationEntity> organizs = organizationRepository.findByCodeStartingWithOrderByCodeAsc(organiz.getCode());
+
+            Specification<CdpSysRoleEntity> condition = (root, query, cb) -> {
+                Path<Long> organizIdPath = root.get("organizId");
+                Path<String> roleName = root.get("name");
+                Path<String> roleValue = root.get("value");
+
+                CriteriaBuilder.In<Long> in = cb.in(organizIdPath);
+                for (CdpSysOrganizationEntity entity : organizs) {
+                    in.value(entity.getId());
+                }
+
+                Predicate predicate = cb.and(in, cb.notEqual(roleValue, SystemConstant.SUPER_ROLE_NAME));
+                if (StringUtils.isBlank(searchCondition)) {
+                    return predicate;
+                }
+                predicate = cb.or(cb.like(roleName, "%" + searchCondition + "%"), cb.like(roleValue, "%" + searchCondition + "%"));
+                return predicate;
+            };
+            //分页查找
+            page = roleRepository.findAll(condition, pageable);
+        }
+
+
+        return ResultUtils.success(page.getTotalElements(), page.getContent());
     }
 }

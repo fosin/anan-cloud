@@ -30,6 +30,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
@@ -43,6 +44,7 @@ import java.util.*;
  * @author fosin
  */
 @Service
+@Lazy
 @Slf4j
 public class UserServiceImpl implements IUserService {
     @Autowired
@@ -180,12 +182,12 @@ public class UserServiceImpl implements IUserService {
             }
     )
     public CdpSysUserEntity delete(Long id) throws CdpServiceException {
-        Assert.notNull(id, "传入了空ID!");
+        Assert.isTrue(id != null && id > 0,"传入的用户ID无效！");
         CdpSysUserEntity entity = CacheUtil.get(TableNameConstant.CDP_SYS_USER, id + "", CdpSysUserEntity.class);
         if (entity == null) {
             entity = userRepository.findOne(id);
         }
-        Assert.notNull(entity, "通过该ID没有找到相应的数据!");
+        Assert.notNull(entity, "通过该ID没有找到相应的用户数据!");
         Assert.isTrue(!SystemConstant.SUPER_USER_CODE.equals(entity.getUsercode())
                 && !SystemConstant.ADMIN_USER_CODE.equals(entity.getUsercode()), "不能删除管理员帐号!");
 //        List<CdpSysUserRoleEntity> userRoles = userRoleRepository.findByUserId(id);
@@ -198,6 +200,7 @@ public class UserServiceImpl implements IUserService {
     @Cacheable(value = TableNameConstant.CDP_SYS_USER, key = "#id")
     @Transactional(readOnly = true)
     public CdpSysUserEntity findOne(Long id) {
+        Assert.isTrue(id != null && id > 0,"传入的用户ID无效！");
         //该代码看似无用，其实是为了解决懒加载和缓存先后问题
         CdpSysUserEntity userEntity = userRepository.findOne(id);
         List<CdpSysUserRoleEntity> userRoles = userEntity.getUserRoles();

@@ -2,6 +2,8 @@ package com.github.fosin.cdp.platform.controller;
 
 import com.github.fosin.cdp.core.exception.CdpControllerException;
 import com.github.fosin.cdp.mvc.controller.ISimpleController;
+import com.github.fosin.cdp.mvc.module.PageModule;
+import com.github.fosin.cdp.mvc.result.Result;
 import com.github.fosin.cdp.mvc.service.ISimpleService;
 import com.github.fosin.cdp.platformapi.entity.CdpSysRoleEntity;
 import com.github.fosin.cdp.platformapi.entity.CdpSysRolePermissionEntity;
@@ -81,6 +83,13 @@ public class RoleController implements ISimpleController<CdpSysRoleEntity, Long>
     @RequestMapping(value = "/otherUsers/{roleId}", method = {RequestMethod.POST})
     public ResponseEntity<List<CdpSysUserEntity>> getOtherUsers(@PathVariable("roleId") Long roleId) throws CdpControllerException {
         return ResponseEntity.ok(userService.findOtherUsersByRoleId(roleId));
+    }
+
+    @ApiOperation("根据机构ID获取该机构及下级机构的角色分页列表")
+    @ApiImplicitParam(name = "organizId", value = "机构ID")
+    @RequestMapping(value = "/pageList/organizId/{organizId}", method = {RequestMethod.POST})
+    public ResponseEntity<Result> findAllByOrganizId(@PathVariable("organizId") Long organizId, @RequestBody PageModule pageModule) throws CdpControllerException {
+        return ResponseEntity.ok(roleService.findAllByOrganizId(organizId, pageModule));
     }
 
     @Override

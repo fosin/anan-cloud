@@ -72,12 +72,14 @@ public class CdpSysUserEntity implements Serializable {
     @Column(name = "birthday")
     @Basic
     @Past
+    @NotNull
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
     @ApiModelProperty(value = "生日", notes = "生日")
     private Date birthday;
     
     @Column(name = "sex")
     @Basic
+    @NotNull
     @ApiModelProperty(value = "使用状态：具体取值于字典表cdp_sys_dictionary.code=15", notes = "使用状态：具体取值于字典表cdp_sys_dictionary.code=15")
     private Integer sex;
     

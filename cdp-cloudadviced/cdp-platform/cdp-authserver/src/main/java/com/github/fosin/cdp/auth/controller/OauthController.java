@@ -44,7 +44,9 @@ public class OauthController {
     @ApiOperation(value = "获取Oauth2.0令牌", notes = "获取Oauth2.0令牌，通常用于前端的认证、登录操作")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "Authorization", value = "Basic认证信息,格式例如：Basic ouZTJoQk5BQVFLUjVVemlJSw==", required = true, dataType = "string", paramType = "header"),
-            @ApiImplicitParam(name = "parameters", value = "请求参数", required = true,paramType = "body",dataType = "string")
+            @ApiImplicitParam(name = "parameters", value = "请求参数", required = true, paramType = "body", dataType = "string", example = "{\"grant_type\":\"password\"\n" +
+                    "\"username\":\"user\"\n" +
+                    "\"password\":\"123\"}")
     })
     public ResponseEntity<OAuth2AccessToken> accessToken(Principal principal, HttpServletRequest request, @RequestParam Map<String, String> parameters) throws HttpRequestMethodNotSupportedException {
         if (request.getMethod().equals(RequestMethod.POST.toString())) {
@@ -60,7 +62,6 @@ public class OauthController {
     @RequestMapping(value = "/removeToken", method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
     @ApiOperation(value = "移除指定令牌信息", notes = "移除指定令牌信息，通常用于前端的退出登录操作")
-//    @ApiImplicitParam(name = "Authorization", value = "Oauth2.0令牌信息,格式例如：Bearer 902c6607-dbbe-4e18-9ed2-0740d5146797", required = true, dataType = "String", paramType = "header")
     public ResponseEntity<Boolean> removeToken(Principal principal) {
         Assert.notNull(principal, "principal不能为空，可能是认证失败!");
         Assert.isTrue(principal instanceof OAuth2Authentication, "principal必须是OAuth2Authentication类型!");

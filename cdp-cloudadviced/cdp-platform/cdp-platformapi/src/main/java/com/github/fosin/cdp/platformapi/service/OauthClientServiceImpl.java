@@ -15,6 +15,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
@@ -29,6 +30,7 @@ import java.util.List;
  * @author fosin
  */
 @Service
+@Lazy
 public class OauthClientServiceImpl implements IOauthClientService {
 
     @Autowired

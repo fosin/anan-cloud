@@ -28,7 +28,7 @@ import java.util.List;
 @RestController
 @Slf4j
 @RequestMapping("v1/organiz")
-@Api(value = "v1/organiz",tags = "机构管理",description = "机构管理相关操作(增删改查)")
+@Api(value = "v1/organiz", tags = "机构管理", description = "机构管理相关操作(增删改查)")
 public class OrganizationController extends AbstractBaseController
         implements ISimpleController<CdpSysOrganizationEntity, Long> {
     @Autowired
@@ -57,9 +57,9 @@ public class OrganizationController extends AbstractBaseController
     }
 
     @ApiOperation("生成机构树")
-    @RequestMapping(value = "/tree",method = {RequestMethod.POST})
-    public ResponseEntity<Object> tree() throws CdpControllerException {
-        Collection<CdpSysOrganizationEntity> list = organizationService.findAll();
+    @RequestMapping(value = "/tree/{topId}", method = {RequestMethod.POST})
+    public ResponseEntity<Object> tree(@PathVariable Long topId) throws CdpControllerException {
+        Collection<CdpSysOrganizationEntity> list = organizationService.findAllByTopId(topId);
 
         CdpSysOrganizationEntity root = null;
         for (CdpSysOrganizationEntity entity : list) {

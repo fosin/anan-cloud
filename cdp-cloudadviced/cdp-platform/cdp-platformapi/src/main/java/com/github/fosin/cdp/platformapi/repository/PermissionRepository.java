@@ -5,6 +5,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
+import org.springframework.context.annotation.Lazy;
 
 import java.util.List;
 
@@ -15,6 +16,7 @@ import java.util.List;
  * @author fosin
  */
 @Repository
+@Lazy
 public interface PermissionRepository extends JpaRepository<CdpSysPermissionEntity, Long>, JpaSpecificationExecutor<CdpSysPermissionEntity> {
     //    @Query(value = "select menu.* from cdp_sys_menu menu,cdp_sys_role_privilege p where menu.id=p.menu_id and p.role_id=?1",nativeQuery = true)
 //    List<CdpSysPermissionEntity> findRoleMenuByRoleId(Integer roleId);
