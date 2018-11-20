@@ -1,0 +1,17 @@
+eureka:
+  client:
+    healthcheck:
+      enabled: true
+  instance:
+    lease-expiration-duration-in-seconds: 10 # 续约到期时间（默认90秒）
+    lease-renewal-interval-in-seconds: 5 # 续约更新时间间隔（默认30秒）
+security:
+  oauth2:
+    resource:
+      loadBalanced: true #这个参数在OAuth2LoadBalancerClientAutoConfiguration可以找到，设置这个才可以使用eureka的服务名，配合loadBalancerInterceptor bean。
+      user-info-uri: http://cdp-authserver/oauth/principal
+      prefer-token-info: false
+      filter-order: 3
+management:
+  security:
+    enabled: false

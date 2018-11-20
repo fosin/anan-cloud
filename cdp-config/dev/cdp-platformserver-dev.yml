@@ -28,6 +28,7 @@ spring:
 #    platform: mysql
 #    continue-on-error: true
   redis:
+    database: 10
     host: 192.168.2.242
     port: 6379
     password: '{cipher}AQA0IIpb8cuWF9PppP2sK0c5t1Wp5n/J57IM095CU4Dm1ndfA3+GrJPOVFrAah1TeryGUhuPJpyS9Ai6xn3gb23uhvMgVm4axGyLt7u25gzzQB5JYrYNDwCRpbrjpAnqFl4uzYRglaDY2ALCf6/K7GXZsOdxP3oP37pt2l7+hmRaSHN0LFPzioT/zqU4XHIGYFEp/fr7ID5JMKcdCuU68oi+UojkmBXmRcXiGaOWH9ZCMKI4WLfmRZERWVxrzOTV4/cfA1uXo1u8ObMOPgxLaq0q3kAigVW3kU+h3Ix56H1FiGuuq8RUIs/v0Kkhf3Eccra8ooWJ+jQtETuuLrYLuBQXfIeXr1sBXbZykqDQp7k3DowM0Kxh2sWKj19WaUHXcMI='
@@ -35,17 +36,6 @@ spring:
 #  health:
 #    sensitive: false
 #    enabled: true
-management:
-  security:
-    enabled: false
-security:
-  oauth2:
-    resource:
-      filter-order: 3
-      loadBalanced: true #这个参数在OAuth2LoadBalancerClientAutoConfiguration可以找到，设置这个才可以使用eureka的服务名，配合loadBalancerInterceptor bean。
-      user-info-uri: http://cdp-authserver/oauth/principal
-      prefer-token-info: false
-      service-id: cdp-platformserver
 #logging:
 #  level:
 #    org:

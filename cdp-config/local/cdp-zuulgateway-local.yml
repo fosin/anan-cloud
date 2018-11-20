@@ -1,6 +1,3 @@
-management:
-  security:
-    enabled: false
 zuul:
   add-host-header: true
   add-proxy-headers: true
@@ -18,6 +15,20 @@ zuul:
       path: /auth/**
       serviceId: cdp-authserver
       retryable: true
+    cdp-zuulgateway:
+      path: /gateway/**
+      serviceId: cdp-zuulgateway
+      retryable: true
+#    cdp-eurekaserver:
+#      path: /discovery/**
+#      serviceId: cdp-eurekaserver
+#      retryable: true
+#      add-host-header: false
+#      add-proxy-headers: false
+#    cdp-adminserver:
+#      path: /admin/**
+#      serviceId: cdp-adminserver
+#      retryable: true
     mpi:
       path: /mpi/**
       serviceId: mpi
@@ -86,9 +97,9 @@ hystrix:
 
 ##禁用自定义过滤器ThrowExceptionFilter
 #zuul.ThrowExceptionFilter.pre.disable=true
-security:
-  sessions: stateless
-  oauth2:
+#security:
+#  sessions: stateless
+#  oauth2:
 #    client:
 #      client-id: cdp
 #      client-secret: local
@@ -106,13 +117,20 @@ security:
 ##      use-current-uri: false
 ##      registered-redirect-uri: http://localhost:9000/platform/login
 ##      client-authentication-scheme: form
-    resource:
-      filter-order: 3
-      loadBalanced: true #这个参数在OAuth2LoadBalancerClientAutoConfiguration可以找到，设置这个才可以使用eureka的服务名，配合loadBalancerInterceptor bean。
-      user-info-uri: http://cdp-authserver/oauth/principal
-      prefer-token-info: false
-      service-id: cdp-zuulgateway
 cdp:
+  swagger:
+    enabled: true
+    title: ${spring.application.name}
+    description: ${info.description}
+    version: ${info.version}
+    base-package: com.github.fosin.cdp.zuulgateway
+    authorization:
+      name: Oauth2.0 Authorization
+      keyName: Authorization
+    #      authRegex: ^[^/oauth/token]$
+    contact:
+      name: fosin
+      email: 28860823@qq.com
   oauth2:
     disablecsrf: true
     disableHttpBasic: true

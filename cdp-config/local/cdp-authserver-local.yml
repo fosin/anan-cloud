@@ -29,6 +29,7 @@ spring:
   #    platform: mysql
   #    continue-on-error: true
   redis:
+    database: 10
     host: 192.168.137.155
     port: 6379
     password: '{cipher}AQBKDi1e2O8RxX1JkwCpYZ8gdF8uFahNH3oUvFrEM8UXfmJGWthztlBOxvDFNB4Cqu6FZKibXkZZEWStiLvATSl6+EiWMEhQqBv1Kt8u65Qquzxt5Ab/IdTP1EGUA2i0KN0Mi+TArbRjoXwxvh5DjqQ4Td22QhgnhRCn8USpmNF9vcma0if/DIPyjweOYaayF5ynJO3gTibPLDjOj194DbeXnmR1nVlO/hcfjM5a65Hr+rRoisgSUbOCcsAuxluEhDT35+rjEPumxaRo58DOckq0XkJhoyQ69g/Do3NBEx0ewEcEVg2t/DJyPp9BbSRGYV67HUqup39c//RuhP2AHTN94qZgrxEBtBsGu+E1E/xtBjNjqSeQPdeJb200dTF99rQ='
@@ -38,13 +39,6 @@ spring:
 #  health:
 #    sensitive: false
 #    enabled: true
-management:
-  security:
-    enabled: false
-security:
-  oauth2:
-    resource:
-      filter-order: 3
 #logging:
 #  level:
 #    org:
