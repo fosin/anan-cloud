@@ -18,4 +18,6 @@ public interface IPermissionService extends ISimpleService<CdpSysPermissionEntit
     List<CdpSysPermissionEntity> findByType(Integer type);
 
     List<CdpSysPermissionEntity> findByAppName(String appName);
+
+    List<CdpSysPermissionEntity> findByPId(Long pId, Long versionId);
 }

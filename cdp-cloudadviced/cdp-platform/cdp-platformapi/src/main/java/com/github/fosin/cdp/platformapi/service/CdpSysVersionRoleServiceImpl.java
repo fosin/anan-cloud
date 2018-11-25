@@ -1,8 +1,12 @@
 package com.github.fosin.cdp.platformapi.service;
 
+import com.github.fosin.cdp.platformapi.constant.SystemConstant;
+import com.github.fosin.cdp.platformapi.entity.CdpSysUserEntity;
 import com.github.fosin.cdp.platformapi.entity.CdpSysVersionRoleEntity;
 import com.github.fosin.cdp.platformapi.repository.CdpSysVersionRoleRepository;
 import com.github.fosin.cdp.platformapi.service.inter.ICdpSysVersionRoleService;
+import com.github.fosin.cdp.platformapi.util.LoginUserUtil;
+import com.github.fosin.cdp.util.StringUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -16,6 +20,7 @@ import com.github.fosin.cdp.mvc.module.PageModule;
 import com.github.fosin.cdp.mvc.result.Result;
 import com.github.fosin.cdp.mvc.result.ResultUtils;
 import javax.persistence.criteria.*;
+import java.util.Date;
 import java.util.List;
 import com.github.fosin.cdp.core.exception.CdpServiceException;
 
@@ -46,6 +51,13 @@ public class CdpSysVersionRoleServiceImpl implements ICdpSysVersionRoleService {
     @Override
     public CdpSysVersionRoleEntity create(CdpSysVersionRoleEntity entity) {
         Assert.notNull(entity,"创建数据的实体对象不能为空!");
+        Assert.isTrue(!entity.getValue().equals(SystemConstant.SUPER_USER_CODE),"角色标识不能为:" +SystemConstant.SUPER_USER_CODE);
+        CdpSysUserEntity loginUser = LoginUserUtil.getUser();
+        Date now = new Date();
+        entity.setCreateTime(now);
+        entity.setCreateBy(loginUser.getId());
+        entity.setUpdateTime(now);
+        entity.setUpdateBy(loginUser.getId());
         return getRepository().save(entity);
     }
 
@@ -58,6 +70,10 @@ public class CdpSysVersionRoleServiceImpl implements ICdpSysVersionRoleService {
     @Override
     public CdpSysVersionRoleEntity update(CdpSysVersionRoleEntity entity) {
         Assert.notNull(entity,"更新数据的实体对象不能为空!");
+        Assert.isTrue(!entity.getValue().equals(SystemConstant.SUPER_USER_CODE),"角色标识不能为:" +SystemConstant.SUPER_USER_CODE);
+        CdpSysUserEntity loginUser = LoginUserUtil.getUser();
+        entity.setUpdateBy(loginUser.getId());
+        entity.setUpdateTime(new Date());
         return getRepository().save(entity);
     }
     
@@ -112,13 +128,12 @@ public class CdpSysVersionRoleServiceImpl implements ICdpSysVersionRoleService {
         PageRequest pageable = new PageRequest(pageModule.getPageNumber() - 1, pageModule.getPageSize(), Sort.Direction.fromString(pageModule.getSortOrder()), pageModule.getSortName());
         String searchCondition = pageModule.getSearchText();
         Specification<CdpSysVersionRoleEntity> condition = (root, query, cb) -> {
-            Path<Long> id = root.get("id");
-  
+            Path<String> roleName = root.get("name");
+            Path<String> roleValue = root.get("value");
             if (StringUtils.isBlank(searchCondition)) {
                 return query.getRestriction();
             }
-            Predicate predicate = cb.equal(id, searchCondition);
-            return predicate;
+            return cb.or(cb.like(roleName, "%" + searchCondition + "%"), cb.like(roleValue, "%" + searchCondition + "%"));
         };
    
         //分页查找

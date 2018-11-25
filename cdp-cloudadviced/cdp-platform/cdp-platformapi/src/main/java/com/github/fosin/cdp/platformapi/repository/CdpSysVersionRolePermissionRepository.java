@@ -5,6 +5,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 import org.springframework.context.annotation.Lazy;
+
+import java.util.List;
+
 /**
  * 系统版本角色权限表(cdp_sys_version_role_permission)表数据库访问层
  *
@@ -14,4 +17,9 @@ import org.springframework.context.annotation.Lazy;
 @Repository
 @Lazy
 public interface CdpSysVersionRolePermissionRepository extends JpaRepository<CdpSysVersionRolePermissionEntity, Long>,JpaSpecificationExecutor<CdpSysVersionRolePermissionEntity>{
+    List<CdpSysVersionRolePermissionEntity> findByRoleId(Long roleId);
+
+    long countByPermissionId(Long permissionId);
+
+    void deleteByRoleId(Long roleId);
 }

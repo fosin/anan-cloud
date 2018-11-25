@@ -64,7 +64,13 @@ public class CdpSysVersionEntity implements Serializable {
     @Column(name = "end_time")
     @ApiModelProperty(value = "结束日期")
     private Date endTime;
-    
+
+    @Basic
+    @NotNull
+    @Column(name = "type")
+    @ApiModelProperty(value = "版本类型：0=收费版 1=免费版 2=开发版")
+    private Integer type;
+
     @Basic
     @NotNull
     @Column(name = "validity")

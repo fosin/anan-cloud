@@ -1,10 +1,13 @@
 package com.github.fosin.cdp.platformapi.repository;
 
 import com.github.fosin.cdp.platformapi.entity.CdpSysVersionPermissionEntity;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
-import org.springframework.context.annotation.Lazy;
+
+import java.util.List;
+
 /**
  * 系统版本权限表(cdp_sys_version_permission)表数据库访问层
  *
@@ -13,5 +16,10 @@ import org.springframework.context.annotation.Lazy;
  */
 @Repository
 @Lazy
-public interface CdpSysVersionPermissionRepository extends JpaRepository<CdpSysVersionPermissionEntity, Long>,JpaSpecificationExecutor<CdpSysVersionPermissionEntity>{
+public interface CdpSysVersionPermissionRepository extends JpaRepository<CdpSysVersionPermissionEntity, Long>, JpaSpecificationExecutor<CdpSysVersionPermissionEntity> {
+    List<CdpSysVersionPermissionEntity> findByVersionId(Long versionId);
+
+    long countByPermissionId(Long permissionId);
+
+    void deleteByVersionId(Long versionId);
 }

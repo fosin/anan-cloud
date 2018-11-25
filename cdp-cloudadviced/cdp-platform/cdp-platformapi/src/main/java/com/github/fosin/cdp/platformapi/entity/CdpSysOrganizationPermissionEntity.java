@@ -37,9 +37,9 @@ public class CdpSysOrganizationPermissionEntity implements Serializable {
     
     @Basic
     @NotNull
-    @Column(name = "organ_id")
+    @Column(name = "organiz_id")
     @ApiModelProperty(value = "机构ID")
-    private Long organId;
+    private Long organizId;
     
     @Basic
     @NotNull

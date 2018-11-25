@@ -126,4 +126,9 @@ public class CdpSysOrganizationAuthServiceImpl implements ICdpSysOrganizationAut
 
         return ResultUtils.success(page.getTotalElements(), page.getContent());
     }
+
+    @Override
+    public List<CdpSysOrganizationAuthEntity> findAllByVersionId(Long versionId) {
+        return getRepository().findAllByVersionId(versionId);
+    }
 }

@@ -145,6 +145,11 @@ public class PermissionServiceImpl implements IPermissionService {
     }
 
     @Override
+    public List<CdpSysPermissionEntity> findByPId(Long pId, Long versionId) {
+        return permissionRepository.findByPId(pId,versionId);
+    }
+
+    @Override
     public List<CdpSysPermissionEntity> findByType(Integer type) {
         return permissionRepository.findByType(type);
     }

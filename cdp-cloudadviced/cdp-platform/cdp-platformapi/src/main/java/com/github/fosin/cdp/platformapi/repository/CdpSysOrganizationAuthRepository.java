@@ -5,6 +5,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 import org.springframework.context.annotation.Lazy;
+
+import java.util.List;
+
 /**
  * 系统机构授权表(cdp_sys_organization_auth)表数据库访问层
  *
@@ -14,4 +17,5 @@ import org.springframework.context.annotation.Lazy;
 @Repository
 @Lazy
 public interface CdpSysOrganizationAuthRepository extends JpaRepository<CdpSysOrganizationAuthEntity, Long>,JpaSpecificationExecutor<CdpSysOrganizationAuthEntity>{
+    List<CdpSysOrganizationAuthEntity> findAllByVersionId(Long versionId);
 }

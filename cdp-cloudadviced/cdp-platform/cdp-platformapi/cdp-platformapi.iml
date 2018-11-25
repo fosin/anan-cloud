@@ -15,7 +15,7 @@
         <setting name="provider-name" value="" />
         <datasource-mapping>
           <factory-entry name="Entities" />
-          <factory-entry name="entityManagerFactory" value="46b5663f-7f88-4f3d-b202-e07c30f27605" />
+          <factory-entry name="entityManagerFactory" value="b54d9d4a-a055-4ad9-ae05-4964368d4ed5" />
         </datasource-mapping>
         <deploymentDescriptor name="persistence.xml" url="file://$MODULE_DIR$/META-INF/persistence.xml" />
       </configuration>
