@@ -66,14 +66,20 @@ public class PermissionServiceImpl implements IPermissionService {
     @CacheEvict(value = TableNameConstant.CDP_SYS_PERMISSION, key = "#id")
     public CdpSysPermissionEntity delete(Long id) throws CdpServiceException {
         Assert.notNull(id, "传入了空ID!");
+        CdpSysPermissionEntity entity = permissionRepository.findOne(id);
+        Assert.notNull(entity, "传入了空对象!");
+        delete(id, entity);
+        return null;
+    }
+
+    private void delete(Long id, CdpSysPermissionEntity entity) {
         long countByPermissionId = rolePermissionService.countByPermissionId(id);
         Assert.isTrue(countByPermissionId == 0, "还有角色在使用该权限，不能直接删除!");
         countByPermissionId = userPermissionService.countByPermissionId(id);
         Assert.isTrue(countByPermissionId == 0, "还有用户在使用该权限，不能直接删除!");
         List<CdpSysPermissionEntity> entities = findByPId(id);
         Assert.isTrue(entities == null || entities.size() == 0, "该节点还存在子节点不能直接删除!");
-        permissionRepository.delete(id);
-        return null;
+        permissionRepository.delete(entity);
     }
 
     @Override
@@ -82,13 +88,7 @@ public class PermissionServiceImpl implements IPermissionService {
         Assert.notNull(entity, "传入了空对象!");
         Long id = entity.getId();
         Assert.notNull(id, "传入了空ID!");
-        long countByPermissionId = rolePermissionService.countByPermissionId(id);
-        Assert.isTrue(countByPermissionId == 0, "还有角色在使用该权限，不能直接删除!");
-        countByPermissionId = userPermissionService.countByPermissionId(id);
-        Assert.isTrue(countByPermissionId == 0, "还有用户在使用该权限，不能直接删除!");
-        List<CdpSysPermissionEntity> entities = findByPId(id);
-        Assert.isTrue(entities == null || entities.size() == 0, "该节点还存在子节点不能直接删除!");
-        permissionRepository.delete(entity);
+        delete(id, entity);
         return entity;
     }
 
