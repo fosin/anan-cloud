@@ -75,7 +75,7 @@ public class LoginFilter extends ZuulFilter {
         if (StringUtil.isEmpty(passphrase)) {
             return null;
         }
-        Integer keysize = Integer.parseInt(Objects.requireNonNull(getRequestParam(params, "f")));
+        int keysize = Integer.parseInt(Objects.requireNonNull(getRequestParam(params, "f")));
         if (keysize < 1) {
             return null;
         }
@@ -83,7 +83,7 @@ public class LoginFilter extends ZuulFilter {
         if (StringUtil.isEmpty(iv)) {
             return null;
         }
-        Integer iterationcount = Integer.parseInt(Objects.requireNonNull(getRequestParam(params, "g")));
+        int iterationcount = Integer.parseInt(Objects.requireNonNull(getRequestParam(params, "g")));
         if (iterationcount < 1) {
             return null;
         }
