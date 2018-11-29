@@ -82,5 +82,9 @@ public class CdpSysVersionEntity implements Serializable {
     @Column(name = "status")
     @ApiModelProperty(value = "启用状态：0=启用，1=禁用")
     private Integer status;
-    
+
+    @Basic
+    @Column(name = "description")
+    @ApiModelProperty(value = "版本说明")
+    private String description;
 }
