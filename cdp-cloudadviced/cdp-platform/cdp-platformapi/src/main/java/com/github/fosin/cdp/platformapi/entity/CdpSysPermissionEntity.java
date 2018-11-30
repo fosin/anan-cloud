@@ -1,5 +1,6 @@
 package com.github.fosin.cdp.platformapi.entity;
 
+import com.github.fosin.cdp.mvc.constant.RegExpConstant;
 import com.github.fosin.cdp.util.DateTimeUtil;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -13,7 +14,9 @@ import org.springframework.format.annotation.DateTimeFormat;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -69,6 +72,7 @@ public class CdpSysPermissionEntity implements Serializable {
     @Column(name = "code")
     @Basic
     @NotBlank
+    @Pattern(regexp = "[a-zA-Z0-9_]{1,64}", message = "权限编码只能大小写字母、数字、下杠(_)组合而成,长度不超过64位")
     @ApiModelProperty(value = "权限编码，不能重复 不能为空", notes = "权限编码，不能重复 不能为空")
     private String code;
 
@@ -86,12 +90,14 @@ public class CdpSysPermissionEntity implements Serializable {
     @Basic
     @NotBlank
     @ApiModelProperty(value = "权限名称", notes = "权限名称")
+    @Pattern(regexp = RegExpConstant.SPECIAL, message = "名称不能包含特殊字符")
     private String name;
 
     @Getter
     @Setter
     @Column(name = "url")
     @Basic
+    @Pattern(regexp = "[A-Za-z0-9/:.@?=& \\\\-]+", message = "资源路径只支持大小写字母 数字 & / : . @ - ? =")
     @ApiModelProperty(value = "该字段必须和type字段共同使用，详情请看type字段", notes = "该字段必须和type字段共同使用，详情请看type字段")
     private String url;
 
@@ -132,6 +138,7 @@ public class CdpSysPermissionEntity implements Serializable {
     @Column(name = "app_name")
     @Basic
     @NotBlank
+    @Pattern(regexp = RegExpConstant.USERCODE + "{1,64}", message = "权限编码只能大小写字母、数字、下杠(_)、中杠(-)组合而成,长度不超过64位")
     @ApiModelProperty(value = "所属应用名称,等同于配置文件中的spring.application.name", notes = "所属应用名称,等同于配置文件中的spring.application.name")
     private String appName;
 
@@ -139,6 +146,7 @@ public class CdpSysPermissionEntity implements Serializable {
     @Setter
     @Column(name = "path")
     @Basic
+    @Pattern(regexp = "[A-Za-z0-9/?*. -]+", message = "匹配路径只支持大小写字母 数字 / . * - ?")
     @ApiModelProperty(value = "后台请求权限地址，权限路径ant风格表达式，用于动态验证HTTP后台请求的权限标识", notes = "后台请求权限地址，权限路径ant风格表达式，用于动态验证HTTP后台请求的权限标识")
     private String path;
 
@@ -146,6 +154,7 @@ public class CdpSysPermissionEntity implements Serializable {
     @Setter
     @Column(name = "method")
     @Basic
+    @Pattern(regexp = "[A-Z]{1,20}", message = "权限编码只能大写字母组合而成,长度不超过20位")
     @ApiModelProperty(value = "http请求方法：GET、POST、DELETE、OPTIONS、PUT、PATCH，具体取值于字典表cdp_sys_dictionary.code=12 ", notes = "http请求方法：GET、POST、DELETE、OPTIONS、PUT、PATCH，具体取值于字典表cdp_sys_dictionary.code=12")
     private String method;
 

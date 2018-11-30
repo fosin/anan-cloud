@@ -1,6 +1,8 @@
 package com.github.fosin.cdp.platformapi.entity;
 
 import java.util.Date;
+
+import com.github.fosin.cdp.mvc.constant.RegExpConstant;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.annotations.DynamicUpdate;
@@ -8,6 +10,7 @@ import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -45,12 +48,14 @@ public class CdpSysVersionRoleEntity implements Serializable {
     @NotBlank
     @Column(name = "name")
     @ApiModelProperty(value = "角色名称")
+    @Pattern(regexp = RegExpConstant.SPECIAL, message = "名称不能包含特殊字符")
     private String name;
     
     @Basic
     @NotBlank
     @Column(name = "value")
     @ApiModelProperty(value = "角色标识")
+    @Pattern(regexp = RegExpConstant.USERCODE + "{1,40}", message = "角色标识只能大小写字母、数字、下杠(_)、中杠(-)组合而成,长度不超过40位")
     private String value;
     
     @Basic

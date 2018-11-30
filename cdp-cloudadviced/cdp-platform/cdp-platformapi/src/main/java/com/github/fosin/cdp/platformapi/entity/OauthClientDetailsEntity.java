@@ -1,168 +1,89 @@
 package com.github.fosin.cdp.platformapi.entity;
 
+import com.github.fosin.cdp.mvc.constant.RegExpConstant;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.annotations.DynamicUpdate;
-
+import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.NotEmpty;
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.io.Serializable;
-import java.util.*;
-
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
+import com.github.fosin.cdp.util.DateTimeUtil;
 /**
- * Description:
+ * (OauthClientDetails)实体类
  *
  * @author fosin
- * @date 2018.7.28
+ * @date 2018-11-29 18:07:27
+ * @since 1.0.0
  */
+@Data
 @Entity
 @DynamicUpdate
 @Table(name = "oauth_client_details")
+@ApiModel(value = "$tableInfo.comment实体类", description = "表(oauth_client_details)的对应的实体类")
 public class OauthClientDetailsEntity implements Serializable {
-    private String clientId;
-    private String resourceIds;
-    private String clientSecret;
-    private String scope;
-    private String authorizedGrantTypes;
-    private String webServerRedirectUri;
-    private String authorities;
-    private Integer accessTokenValidity;
-    private Integer refreshTokenValidity;
-    private String additionalInformation;
-    private String autoapprove;
-
+    private static final long serialVersionUID = -51110701713375430L;
+    
     @Id
     @Column(name = "client_id")
-    public String getClientId() {
-        return clientId;
-    }
-
-    public void setClientId(String clientId) {
-        this.clientId = clientId;
-    }
-
+    @ApiModelProperty(value = "主键")
+    @Pattern(regexp = RegExpConstant.USERCODE + "{1,64}", message = "客户端ID只能大小写字母、数字、下杠(_)、中杠(-)组合而成,长度不超过64位")
+    private String clientId;
+    
     @Basic
     @Column(name = "resource_ids")
-    public String getResourceIds() {
-        return resourceIds;
-    }
-
-    public void setResourceIds(String resourceIds) {
-        this.resourceIds = resourceIds;
-    }
-
+    @ApiModelProperty(value = "${column.comment}")
+    private String resourceIds;
+    
     @Basic
     @Column(name = "client_secret")
-    public String getClientSecret() {
-        return clientSecret;
-    }
-
-    public void setClientSecret(String clientSecret) {
-        this.clientSecret = clientSecret;
-    }
-
+    @ApiModelProperty(value = "${column.comment}")
+    private String clientSecret;
+    
     @Basic
     @Column(name = "scope")
-    public String getScope() {
-        return scope;
-    }
-
-    public void setScope(String scope) {
-        this.scope = scope;
-    }
-
+    @ApiModelProperty(value = "${column.comment}")
+    private String scope;
+    
     @Basic
     @Column(name = "authorized_grant_types")
-    public String getAuthorizedGrantTypes() {
-        return authorizedGrantTypes;
-    }
-
-    public void setAuthorizedGrantTypes(String authorizedGrantTypes) {
-        this.authorizedGrantTypes = authorizedGrantTypes;
-    }
-
+    @ApiModelProperty(value = "${column.comment}")
+    private String authorizedGrantTypes;
+    
     @Basic
     @Column(name = "web_server_redirect_uri")
-    public String getWebServerRedirectUri() {
-        return webServerRedirectUri;
-    }
-
-    public void setWebServerRedirectUri(String webServerRedirectUri) {
-        this.webServerRedirectUri = webServerRedirectUri;
-    }
-
+    @ApiModelProperty(value = "${column.comment}")
+    private String webServerRedirectUri;
+    
     @Basic
     @Column(name = "authorities")
-    public String getAuthorities() {
-        return authorities;
-    }
-
-    public void setAuthorities(String authorities) {
-        this.authorities = authorities;
-    }
-
+    @ApiModelProperty(value = "${column.comment}")
+    private String authorities;
+    
     @Basic
     @Column(name = "access_token_validity")
-    public Integer getAccessTokenValidity() {
-        return accessTokenValidity;
-    }
-
-    public void setAccessTokenValidity(Integer accessTokenValidity) {
-        this.accessTokenValidity = accessTokenValidity;
-    }
-
+    @ApiModelProperty(value = "${column.comment}")
+    private Integer accessTokenValidity;
+    
     @Basic
     @Column(name = "refresh_token_validity")
-    public Integer getRefreshTokenValidity() {
-        return refreshTokenValidity;
-    }
-
-    public void setRefreshTokenValidity(Integer refreshTokenValidity) {
-        this.refreshTokenValidity = refreshTokenValidity;
-    }
-
+    @ApiModelProperty(value = "${column.comment}")
+    private Integer refreshTokenValidity;
+    
     @Basic
     @Column(name = "additional_information")
-    public String getAdditionalInformation() {
-        return additionalInformation;
-    }
-
-    public void setAdditionalInformation(String additionalInformation) {
-        this.additionalInformation = additionalInformation;
-    }
-
+    @ApiModelProperty(value = "${column.comment}")
+    private String additionalInformation;
+    
     @Basic
     @Column(name = "autoapprove")
-    public String getAutoapprove() {
-        return autoapprove;
-    }
-
-    public void setAutoapprove(String autoapprove) {
-        this.autoapprove = autoapprove;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        OauthClientDetailsEntity that = (OauthClientDetailsEntity) o;
-        return Objects.equals(clientId, that.clientId) &&
-                Objects.equals(resourceIds, that.resourceIds) &&
-                Objects.equals(clientSecret, that.clientSecret) &&
-                Objects.equals(scope, that.scope) &&
-                Objects.equals(authorizedGrantTypes, that.authorizedGrantTypes) &&
-                Objects.equals(webServerRedirectUri, that.webServerRedirectUri) &&
-                Objects.equals(authorities, that.authorities) &&
-                Objects.equals(accessTokenValidity, that.accessTokenValidity) &&
-                Objects.equals(refreshTokenValidity, that.refreshTokenValidity) &&
-                Objects.equals(additionalInformation, that.additionalInformation) &&
-                Objects.equals(autoapprove, that.autoapprove);
-    }
-
-    @Override
-    public int hashCode() {
-
-        return Objects.hash(clientId, resourceIds, clientSecret, scope, authorizedGrantTypes, webServerRedirectUri, authorities, accessTokenValidity, refreshTokenValidity, additionalInformation, autoapprove);
-    }
+    @ApiModelProperty(value = "${column.comment}")
+    private String autoapprove;
+    
 }
