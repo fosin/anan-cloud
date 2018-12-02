@@ -72,10 +72,6 @@ public class OrganizParameterUtil extends AbstractParameterUtil {
         String value = getValue(parameter);
         if (StringUtil.isEmpty(scope)) {
             String info = "没有从参数[" + "type:" + TYPE + " scope:" + scope + " name:" + name + "]中查询到参数";
-            log.debug(info);
-            if (name.equals("DefaultDictionaryDetailNameAndSort")) {
-                System.out.println("DefaultDictionaryDetailNameAndSort");
-            }
             Assert.isTrue(parameter != null && parameter.getId() != null, info);
             return value;
         }

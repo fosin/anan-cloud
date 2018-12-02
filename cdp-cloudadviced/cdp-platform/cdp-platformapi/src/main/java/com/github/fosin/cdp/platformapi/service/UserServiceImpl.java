@@ -16,6 +16,7 @@ import com.github.fosin.cdp.platformapi.repository.UserRepository;
 import com.github.fosin.cdp.platformapi.repository.UserRoleRepository;
 import com.github.fosin.cdp.platformapi.service.inter.IUserService;
 import com.github.fosin.cdp.platformapi.util.LoginUserUtil;
+import com.github.fosin.cdp.util.RegexUtil;
 import com.github.fosin.cdp.util.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -24,18 +25,21 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import javax.persistence.criteria.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Random;
 
 /**
  * 2017/12/27.
@@ -97,6 +101,8 @@ public class UserServiceImpl implements IUserService {
             userRole.setCreateBy(loginUser.getId());
             userRole.setCreateTime(now);
         }
+        String passwordStrength = OrganizParameterUtil.getOrCreateParameter("DefaultPasswordStrength", RegexUtil.PASSWORD_STRONG, "用户密码强度正则表达式,默认为强度：密码最少6位，包括至少1个大写字母，1个小写字母，1个数字，1个特殊字符");
+        Assert.isTrue(RegexUtil.matcher(entity.getPassword(), passwordStrength), "密码强度不符合强度要求!");
         String password = encryptBeforeSave(entity);
         CdpSysUserEntity savedEntity = userRepository.save(entity);
         savedEntity.setPassword(password);
@@ -182,7 +188,7 @@ public class UserServiceImpl implements IUserService {
             }
     )
     public CdpSysUserEntity delete(Long id) throws CdpServiceException {
-        Assert.isTrue(id != null && id > 0,"传入的用户ID无效！");
+        Assert.isTrue(id != null && id > 0, "传入的用户ID无效！");
         CdpSysUserEntity entity = CacheUtil.get(TableNameConstant.CDP_SYS_USER, id + "", CdpSysUserEntity.class);
         if (entity == null) {
             entity = userRepository.findOne(id);
@@ -200,7 +206,7 @@ public class UserServiceImpl implements IUserService {
     @Cacheable(value = TableNameConstant.CDP_SYS_USER, key = "#id")
     @Transactional(readOnly = true)
     public CdpSysUserEntity findOne(Long id) {
-        Assert.isTrue(id != null && id > 0,"传入的用户ID无效！");
+        Assert.isTrue(id != null && id > 0, "传入的用户ID无效！");
         //该代码看似无用，其实是为了解决懒加载和缓存先后问题
         CdpSysUserEntity userEntity = userRepository.findOne(id);
         List<CdpSysUserRoleEntity> userRoles = userEntity.getUserRoles();
@@ -294,7 +300,11 @@ public class UserServiceImpl implements IUserService {
     public CdpSysUserEntity changePassword(Long id, String password, String confirmPassword1, String confirmPassword2) {
         Assert.notNull(id, "用户ID不能为空!");
         Assert.isTrue(!StringUtil.isEmpty(confirmPassword1) &&
-                !StringUtil.isEmpty(confirmPassword1) && confirmPassword1.equals(confirmPassword2), "新密码和确认新密码不能为空且一致!");
+                !StringUtil.isEmpty(confirmPassword1) && confirmPassword1.equals(confirmPassword2), "新密码和确认新密码不能为空且必须一致!");
+        Assert.isTrue(confirmPassword1.equals(password), "新密码和原密码不能相同!");
+        String passwordStrength = OrganizParameterUtil.getOrCreateParameter("DefaultPasswordStrength", RegexUtil.PASSWORD_STRONG, "用户密码强度正则表达式,默认为强度：密码最少6位，包括至少1个大写字母，1个小写字母，1个数字，1个特殊字符");
+        Assert.isTrue(RegexUtil.matcher(confirmPassword1, passwordStrength), "新密码强度不符合强度要求!");
+
         CdpSysUserEntity user = userRepository.findOne(id);
         Assert.isTrue(user != null && user.getId() != null, "通过ID未找到对应的用户信息!");
         Assert.isTrue(new BCryptPasswordEncoder().matches(password, user.getPassword()), "原密码不正确!");

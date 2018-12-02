@@ -1,22 +1,19 @@
 package com.github.fosin.cdp.platformapi.entity;
 
-import java.util.Date;
-
-import com.github.fosin.cdp.mvc.constant.RegExpConstant;
 import com.github.fosin.cdp.util.DateTimeUtil;
+import com.github.fosin.cdp.util.RegexUtil;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.validator.constraints.NotBlank;
-import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.io.Serializable;
-
-import lombok.Data;
-import org.springframework.format.annotation.DateTimeFormat;
+import java.util.Date;
 
 /**
  * 系统机构表(CdpSysOrganization)实体类
@@ -54,7 +51,7 @@ public class CdpSysOrganizationEntity implements Serializable {
     @Column(name = "code")
     @Basic
     @NotBlank
-    @Pattern(regexp = RegExpConstant.USERCODE + "{1,64}", message = "机构编码只能大小写字母、数字、下杠(_)、中杠(-)组合而成,长度不超过64位")
+    @Pattern(regexp =RegexUtil.USERCODE + "{1,64}", message = "机构编码只能大小写字母、数字、下杠(_)组合而成,长度不超过64位")
     @ApiModelProperty(value = "机构编码，自定义机构编码，下级机构必须以上级机构编码为前缀", notes = "机构编码，自定义机构编码，下级机构必须以上级机构编码为前缀")
     private String code;
 
@@ -62,7 +59,7 @@ public class CdpSysOrganizationEntity implements Serializable {
     @Basic
     @NotBlank
     @ApiModelProperty(value = "机构名称", notes = "机构名称")
-    @Pattern(regexp = RegExpConstant.SPECIAL, message = "名称不能包含特殊字符")
+    @Pattern(regexp = RegexUtil.SPECIAL, message = "名称不能包含特殊字符")
     private String name;
 
     @Column(name = "level")
@@ -74,7 +71,7 @@ public class CdpSysOrganizationEntity implements Serializable {
     @Column(name = "fullname")
     @Basic
     @ApiModelProperty(value = "机构全名", notes = "机构全名")
-    @Pattern(regexp = RegExpConstant.SPECIAL, message = "名称不能包含特殊字符")
+    @Pattern(regexp =RegexUtil.SPECIAL, message = "名称不能包含特殊字符")
     private String fullname;
 
     @Column(name = "address")

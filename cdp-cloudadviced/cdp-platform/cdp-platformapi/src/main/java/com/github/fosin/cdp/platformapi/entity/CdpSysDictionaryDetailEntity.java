@@ -1,20 +1,18 @@
 package com.github.fosin.cdp.platformapi.entity;
 
-import java.util.Date;
-
-import com.github.fosin.cdp.mvc.constant.RegExpConstant;
 import com.github.fosin.cdp.util.DateTimeUtil;
+import com.github.fosin.cdp.util.RegexUtil;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.validator.constraints.NotBlank;
-import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.io.Serializable;
-import lombok.Data;
-import org.springframework.format.annotation.DateTimeFormat;
+import java.util.Date;
 
 /**
  * 通用系统字典明细表(CdpSysDictionaryDetail)实体类
@@ -40,14 +38,14 @@ public class CdpSysDictionaryDetailEntity implements Serializable {
     @Column(name = "name")
     @Basic
     @NotNull
-    @Pattern(regexp = RegExpConstant.SPECIAL, message = "名称不能包含特殊字符")
+    @Pattern(regexp =RegexUtil.SPECIAL, message = "名称不能包含特殊字符")
     @ApiModelProperty(value = "字典明细键，不能重复，字典内明细项唯一代码", notes = "字典明细键，不能重复，字典内明细项唯一代码")
     private Long name;
     
     @Column(name = "value")
     @Basic
     @ApiModelProperty(value = "字典明细值表示字面意义", notes = "字典明细值表示字面意义")
-    @Pattern(regexp = RegExpConstant.SPECIAL, message = "字典明细值不能包含特殊字符")
+    @Pattern(regexp =RegexUtil.SPECIAL, message = "字典明细值不能包含特殊字符")
     private String value;
 
     @Column(name = "code")
@@ -71,13 +69,13 @@ public class CdpSysDictionaryDetailEntity implements Serializable {
     @Column(name = "scode")
     @Basic
     @ApiModelProperty(value = "标准代码，该字段通常用于对接标准字典", notes = "标准代码，该字段通常用于对接标准字典")
-    @Pattern(regexp = RegExpConstant.SPECIAL, message = "标准代码不能包含特殊字符")
+    @Pattern(regexp = RegexUtil.SPECIAL, message = "标准代码不能包含特殊字符")
     private String scode;
     
     @Column(name = "scope")
     @Basic
     @ApiModelProperty(value = "作用域，用于字典明细项的作用域", notes = "作用域，用于字典明细项的作用域")
-    @Pattern(regexp = RegExpConstant.SPECIAL, message = "作用域不能包含特殊字符")
+    @Pattern(regexp =RegexUtil.SPECIAL, message = "作用域不能包含特殊字符")
     private String scope;
     
     @Column(name = "create_by")

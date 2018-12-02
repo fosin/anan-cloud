@@ -1,20 +1,19 @@
 package com.github.fosin.cdp.platformapi.entity;
 
-import java.util.Date;
-
-import com.github.fosin.cdp.mvc.constant.RegExpConstant;
 import com.github.fosin.cdp.util.DateTimeUtil;
+import com.github.fosin.cdp.util.RegexUtil;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.validator.constraints.NotBlank;
-import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.io.Serializable;
-import lombok.Data;
-import org.springframework.format.annotation.DateTimeFormat;
+import java.util.Date;
 
 /**
  * 用于存放各种分类分组的个性化参数(CdpSysParameter)实体类
@@ -41,7 +40,7 @@ public class CdpSysParameterEntity implements Serializable {
     @Basic
     @NotBlank
     @ApiModelProperty(value = "参数键", notes = "参数键")
-    @Pattern(regexp = RegExpConstant.USERCODE + "{1,64}", message = "参数键只能大小写字母、数字、下杠(_)、中杠(-)组合而成,长度不超过64位")
+    @Pattern(regexp = RegexUtil.USERCODE + "{1,64}", message = "参数键只能大小写字母、数字、下杠(_)组合而成,长度不超过64位")
     private String name;
     
     @Column(name = "value")
@@ -58,7 +57,7 @@ public class CdpSysParameterEntity implements Serializable {
     @Column(name = "scope")
     @Basic
     @ApiModelProperty(value = "参数作用域", notes = "参数作用域")
-    @Pattern(regexp = RegExpConstant.SPECIAL, message = "作用域不能包含特殊字符")
+    @Pattern(regexp =RegexUtil.SPECIAL, message = "作用域不能包含特殊字符")
     private String scope;
     
     @Column(name = "default_value")

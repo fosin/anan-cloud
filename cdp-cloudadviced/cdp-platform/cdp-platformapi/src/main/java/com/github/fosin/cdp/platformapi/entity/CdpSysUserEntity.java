@@ -1,25 +1,22 @@
 package com.github.fosin.cdp.platformapi.entity;
 
-import java.util.Date;
-
-import com.github.fosin.cdp.mvc.constant.RegExpConstant;
 import com.github.fosin.cdp.util.DateTimeUtil;
+import com.github.fosin.cdp.util.RegexUtil;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
-import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Pattern;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
-
-import lombok.Data;
-import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  * 系统用户表(CdpSysUser)实体类
@@ -59,20 +56,20 @@ public class CdpSysUserEntity implements Serializable {
     @Basic
     @NotBlank
     @ApiModelProperty(value = "用户工号", notes = "用户工号")
-    @Pattern(regexp = RegExpConstant.USERCODE + "{1,30}", message = "用户工号只能大小写字母、数字、下杠(_)、中杠(-)组合而成,长度不超过30位")
+    @Pattern(regexp = RegexUtil.USERCODE + "{1,30}", message = "用户工号只能大小写字母、数字、下杠(_)组合而成,长度不超过30位")
     private String usercode;
 
     @Column(name = "username")
     @Basic
     @NotBlank
     @ApiModelProperty(value = "用户姓名", notes = "用户姓名")
-    @Pattern(regexp = RegExpConstant.SPECIAL, message = "用户姓名不能包含特殊字符")
+    @Pattern(regexp =RegexUtil.SPECIAL, message = "用户姓名不能包含特殊字符")
     private String username;
 
     @Column(name = "password")
     @Basic
     @NotBlank
-    @Pattern(regexp = RegExpConstant.PASSWORD_STRONG, message = "密码最少6位，包括至少1个大写字母，1个小写字母，1个数字，1个特殊字符")
+//    @Pattern(regexp =RegexUtil.PASSWORD_STRONG, message = "密码最少6位，包括至少1个大写字母，1个小写字母，1个数字，1个特殊字符")
     @ApiModelProperty(value = "传入原始密码，后台会对原始密码进行加密后再存储", notes = "传入原始密码，后台会对原始密码进行加密后再存储")
     private String password;
 
@@ -81,7 +78,7 @@ public class CdpSysUserEntity implements Serializable {
     @Past(message = "生日必须是一个过去的日期")
     @NotNull
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
-//    @Pattern(regexp = RegExpConstant.BIRTHDAY_DATETIME, message = "生日格式："+DateTimeUtil.DATETIME_PATTERN+",且在1900-01-01到2099-12-31之间")
+//    @Pattern(regexp =RegexUtil.BIRTHDAY_DATETIME, message = "生日格式："+DateTimeUtil.DATETIME_PATTERN+",且在1900-01-01到2099-12-31之间")
     @ApiModelProperty(value = "生日", notes = "生日")
     private Date birthday;
 
@@ -99,7 +96,7 @@ public class CdpSysUserEntity implements Serializable {
 
     @Column(name = "phone")
     @Basic
-    @Pattern(regexp = RegExpConstant.PHONE_ZH_CN, message = "手机号码格式不正确")
+    @Pattern(regexp =RegexUtil.PHONE_ZH_CN, message = "手机号码格式不正确")
     @ApiModelProperty(value = "手机号码", notes = "手机号码")
     private String phone;
 

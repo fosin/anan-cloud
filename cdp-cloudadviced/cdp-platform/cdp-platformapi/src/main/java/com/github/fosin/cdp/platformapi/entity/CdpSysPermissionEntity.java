@@ -1,7 +1,7 @@
 package com.github.fosin.cdp.platformapi.entity;
 
-import com.github.fosin.cdp.mvc.constant.RegExpConstant;
 import com.github.fosin.cdp.util.DateTimeUtil;
+import com.github.fosin.cdp.util.RegexUtil;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.EqualsAndHashCode;
@@ -14,7 +14,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.persistence.*;
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.io.Serializable;
@@ -90,7 +89,7 @@ public class CdpSysPermissionEntity implements Serializable {
     @Basic
     @NotBlank
     @ApiModelProperty(value = "权限名称", notes = "权限名称")
-    @Pattern(regexp = RegExpConstant.SPECIAL, message = "名称不能包含特殊字符")
+    @Pattern(regexp =RegexUtil.SPECIAL, message = "名称不能包含特殊字符")
     private String name;
 
     @Getter
@@ -138,7 +137,7 @@ public class CdpSysPermissionEntity implements Serializable {
     @Column(name = "app_name")
     @Basic
     @NotBlank
-    @Pattern(regexp = RegExpConstant.USERCODE + "{1,64}", message = "权限编码只能大小写字母、数字、下杠(_)、中杠(-)组合而成,长度不超过64位")
+    @Pattern(regexp = RegexUtil.USERCODE + "{1,64}", message = "权限编码只能大小写字母、数字、下杠(_)组合而成,长度不超过64位")
     @ApiModelProperty(value = "所属应用名称,等同于配置文件中的spring.application.name", notes = "所属应用名称,等同于配置文件中的spring.application.name")
     private String appName;
 

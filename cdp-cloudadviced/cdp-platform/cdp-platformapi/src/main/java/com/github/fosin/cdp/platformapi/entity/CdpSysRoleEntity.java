@@ -1,21 +1,20 @@
 package com.github.fosin.cdp.platformapi.entity;
 
-import java.util.Date;
-
-import com.github.fosin.cdp.mvc.constant.RegExpConstant;
 import com.github.fosin.cdp.util.DateTimeUtil;
+import com.github.fosin.cdp.util.RegexUtil;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.validator.constraints.NotBlank;
-import org.hibernate.validator.constraints.NotEmpty;
+import org.hibernate.validator.constraints.Range;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.io.Serializable;
-import lombok.Data;
-import org.hibernate.validator.constraints.Range;
-import org.springframework.format.annotation.DateTimeFormat;
+import java.util.Date;
 
 /**
  * 系统角色表(CdpSysRole)实体类
@@ -42,7 +41,7 @@ public class CdpSysRoleEntity implements Serializable {
     @Basic
     @NotBlank
     @ApiModelProperty(value = "角色名称", notes = "角色名称")
-    @Pattern(regexp = RegExpConstant.SPECIAL, message = "名称不能包含特殊字符")
+    @Pattern(regexp = RegexUtil.SPECIAL, message = "名称不能包含特殊字符")
     private String name;
 
     @Column(name = "organiz_id")
@@ -54,7 +53,7 @@ public class CdpSysRoleEntity implements Serializable {
 
     @Column(name = "value")
     @Basic
-    @Pattern(regexp = RegExpConstant.USERCODE + "{1,40}", message = "角色标识只能大小写字母、数字、下杠(_)、中杠(-)组合而成,长度不超过40位")
+    @Pattern(regexp =RegexUtil.USERCODE + "{1,40}", message = "角色标识只能大小写字母、数字、下杠(_)组合而成,长度不超过40位")
     @ApiModelProperty(value = "角色标识", notes = "角色标识")
 
     private String value;

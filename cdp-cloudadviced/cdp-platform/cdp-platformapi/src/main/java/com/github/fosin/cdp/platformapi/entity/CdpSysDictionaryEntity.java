@@ -1,16 +1,16 @@
 package com.github.fosin.cdp.platformapi.entity;
 
-import com.github.fosin.cdp.mvc.constant.RegExpConstant;
+import com.github.fosin.cdp.util.RegexUtil;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.validator.constraints.NotBlank;
-import org.hibernate.validator.constraints.NotEmpty;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.io.Serializable;
-import lombok.Data;
 
 /**
  * 通用系统字典表(CdpSysDictionary)实体类
@@ -37,7 +37,7 @@ public class CdpSysDictionaryEntity implements Serializable {
     @Basic
     @NotBlank
     @ApiModelProperty(value = "字典名称", notes = "字典名称")
-    @Pattern(regexp = RegExpConstant.SPECIAL, message = "名称不能包含特殊字符")
+    @Pattern(regexp = RegexUtil.SPECIAL, message = "名称不能包含特殊字符")
     private String name;
     
     @Column(name = "type")
@@ -48,7 +48,7 @@ public class CdpSysDictionaryEntity implements Serializable {
     
     @Column(name = "scope")
     @Basic
-    @Pattern(regexp = RegExpConstant.SPECIAL, message = "作用域不能包含特殊字符")
+    @Pattern(regexp =RegexUtil.SPECIAL, message = "作用域不能包含特殊字符")
     @ApiModelProperty(value = "字典作用域，以字典类别为前提，在字典类别基础上再次细化分类字典", notes = "字典作用域，以字典类别为前提，在字典类别基础上再次细化分类字典")
     private String scope;
     

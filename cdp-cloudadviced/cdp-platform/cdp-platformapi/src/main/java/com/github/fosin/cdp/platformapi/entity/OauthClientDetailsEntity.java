@@ -1,20 +1,14 @@
 package com.github.fosin.cdp.platformapi.entity;
 
-import com.github.fosin.cdp.mvc.constant.RegExpConstant;
+import com.github.fosin.cdp.util.RegexUtil;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.validator.constraints.NotBlank;
-import org.hibernate.validator.constraints.NotEmpty;
+
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.io.Serializable;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import lombok.Data;
-import org.springframework.format.annotation.DateTimeFormat;
-import com.github.fosin.cdp.util.DateTimeUtil;
 /**
  * (OauthClientDetails)实体类
  *
@@ -33,7 +27,7 @@ public class OauthClientDetailsEntity implements Serializable {
     @Id
     @Column(name = "client_id")
     @ApiModelProperty(value = "主键")
-    @Pattern(regexp = RegExpConstant.USERCODE + "{1,64}", message = "客户端ID只能大小写字母、数字、下杠(_)、中杠(-)组合而成,长度不超过64位")
+    @Pattern(regexp = RegexUtil.USERCODE + "{1,64}", message = "客户端ID只能大小写字母、数字、下杠(_)组合而成,长度不超过64位")
     private String clientId;
     
     @Basic

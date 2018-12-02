@@ -1,22 +1,19 @@
 package com.github.fosin.cdp.platformapi.entity;
 
-import java.util.Date;
-
-import com.github.fosin.cdp.mvc.constant.RegExpConstant;
+import com.github.fosin.cdp.util.DateTimeUtil;
+import com.github.fosin.cdp.util.RegexUtil;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.validator.constraints.NotBlank;
-import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.io.Serializable;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import lombok.Data;
-import org.springframework.format.annotation.DateTimeFormat;
-import com.github.fosin.cdp.util.DateTimeUtil;
+import java.util.Date;
 /**
  * 系统版本表(CdpSysVersion)实体类
  *
@@ -42,7 +39,7 @@ public class CdpSysVersionEntity implements Serializable {
     @NotBlank
     @Column(name = "name")
     @ApiModelProperty(value = "版本名称")
-    @Pattern(regexp = RegExpConstant.SPECIAL, message = "版本名称不能包含特殊字符")
+    @Pattern(regexp = RegexUtil.SPECIAL, message = "版本名称不能包含特殊字符")
     private String name;
     
     @Basic
