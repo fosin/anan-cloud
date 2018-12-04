@@ -109,6 +109,15 @@ public class CdpSysOrganizationController extends AbstractBaseController
         return ResponseEntity.ok(result);
     }
 
+    @ApiOperation(value = "机构注册", notes = "用户自助注册机构")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "entities", value = "版本权限集合(List<CdpSysOrganizationPermissionEntity>)"),
+    })
+    @PutMapping(value = "/register")
+    public ResponseEntity<Boolean> register(@RequestBody List<CdpSysOrganizationPermissionEntity> entities) {
+        return ResponseEntity.ok(false);
+    }
+
     @Override
     public ISimpleService<CdpSysOrganizationEntity, Long> getService() {
         return organizationService;

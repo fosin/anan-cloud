@@ -101,7 +101,7 @@ public class UserServiceImpl implements IUserService {
             userRole.setCreateBy(loginUser.getId());
             userRole.setCreateTime(now);
         }
-        String passwordStrength = OrganizParameterUtil.getOrCreateParameter("DefaultPasswordStrength", RegexUtil.PASSWORD_STRONG, "用户密码强度正则表达式,默认为强度：密码最少6位，包括至少1个大写字母，1个小写字母，1个数字，1个特殊字符");
+        String passwordStrength = OrganizParameterUtil.getOrCreateParameter("DefaultPasswordStrength", RegexUtil.PASSWORD_STRONG, "用户密码强度正则表达式,密码最少6位，包括至少1个大写字母，1个小写字母，1个数字，1个特殊字符");
         Assert.isTrue(RegexUtil.matcher(entity.getPassword(), passwordStrength), "密码强度不符合强度要求!");
         String password = encryptBeforeSave(entity);
         CdpSysUserEntity savedEntity = userRepository.save(entity);
@@ -302,7 +302,7 @@ public class UserServiceImpl implements IUserService {
         Assert.isTrue(!StringUtil.isEmpty(confirmPassword1) &&
                 !StringUtil.isEmpty(confirmPassword1) && confirmPassword1.equals(confirmPassword2), "新密码和确认新密码不能为空且必须一致!");
         Assert.isTrue(confirmPassword1.equals(password), "新密码和原密码不能相同!");
-        String passwordStrength = OrganizParameterUtil.getOrCreateParameter("DefaultPasswordStrength", RegexUtil.PASSWORD_STRONG, "用户密码强度正则表达式,默认为强度：密码最少6位，包括至少1个大写字母，1个小写字母，1个数字，1个特殊字符");
+        String passwordStrength = OrganizParameterUtil.getOrCreateParameter("DefaultPasswordStrength", RegexUtil.PASSWORD_STRONG, "用户密码强度正则表达式,密码最少6位，包括至少1个大写字母，1个小写字母，1个数字，1个特殊字符");
         Assert.isTrue(RegexUtil.matcher(confirmPassword1, passwordStrength), "新密码强度不符合强度要求!");
 
         CdpSysUserEntity user = userRepository.findOne(id);

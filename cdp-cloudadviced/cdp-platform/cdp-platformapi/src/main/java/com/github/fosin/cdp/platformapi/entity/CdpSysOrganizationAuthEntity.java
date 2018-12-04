@@ -70,5 +70,42 @@ public class CdpSysOrganizationAuthEntity implements Serializable {
     @Column(name = "create_by")
     @ApiModelProperty(value = "该值由后台维护，更改数据时前端不需要关心，取值于cdp_sys_user.id")
     private Long createBy;
-    
+
+    @Basic
+    @NotNull
+    @Column(name = "validity")
+    @ApiModelProperty(value = "有效期：一般按天计算")
+    private Integer validity;
+
+    @Basic
+    @NotNull
+    @Column(name = "protect_days")
+    @ApiModelProperty(value = "到期后保护期")
+    private Integer protectDays;
+
+    @Basic
+    @NotNull
+    @Column(name = "max_organizs")
+    @ApiModelProperty(value = "最大机构数：0=无限制 n=限制数")
+    private Integer maxOrganizs;
+
+    @Basic
+    @NotNull
+    @Column(name = "max_users")
+    @ApiModelProperty(value = "最大机构数：0=无限制 n=限制数")
+    private Integer maxUsers;
+
+    @Basic
+    @NotNull
+    @Column(name = "tryout")
+    @ApiModelProperty(value = "是否试用：0=不试用 1=试用")
+    private Integer tryout;
+
+    @Basic
+    @NotNull
+    @Column(name = "tryout_days")
+    @ApiModelProperty(value = "试用天数")
+    private Integer tryoutDays;
+
+
 }
