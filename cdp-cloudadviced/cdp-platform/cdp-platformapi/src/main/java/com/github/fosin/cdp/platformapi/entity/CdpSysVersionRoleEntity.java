@@ -52,7 +52,7 @@ public class CdpSysVersionRoleEntity implements Serializable {
     @NotBlank
     @Column(name = "value")
     @ApiModelProperty(value = "角色标识")
-    @Pattern(regexp =RegexUtil.USERCODE + "{1,40}", message = "角色标识只能大小写字母、数字、下杠(_)组合而成,长度不超过40位")
+    @Pattern(regexp = "[\\w]{1,40}", message = "角色标识只能大小写字母、数字、下杠(_)组合而成,长度不超过40位")
     private String value;
     
     @Basic

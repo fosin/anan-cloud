@@ -131,4 +131,9 @@ public class CdpSysOrganizationAuthServiceImpl implements ICdpSysOrganizationAut
     public List<CdpSysOrganizationAuthEntity> findAllByVersionId(Long versionId) {
         return getRepository().findAllByVersionId(versionId);
     }
+
+    @Override
+    public List<CdpSysOrganizationAuthEntity> findAllByOrganizId(Long organizId) {
+        return getRepository().findAllByOrganizId(organizId);
+    }
 }

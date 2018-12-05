@@ -5,9 +5,10 @@ import com.github.fosin.cdp.core.exception.CdpServiceException;
 import com.github.fosin.cdp.mvc.controller.AbstractBaseController;
 import com.github.fosin.cdp.mvc.controller.ISimpleController;
 import com.github.fosin.cdp.mvc.service.ISimpleService;
+import com.github.fosin.cdp.platformapi.entity.CdpSysOrganizationAuthEntity;
 import com.github.fosin.cdp.platformapi.entity.CdpSysOrganizationEntity;
 import com.github.fosin.cdp.platformapi.entity.CdpSysOrganizationPermissionEntity;
-import com.github.fosin.cdp.platformapi.entity.CdpSysVersionPermissionEntity;
+import com.github.fosin.cdp.platformapi.service.inter.ICdpSysOrganizationAuthService;
 import com.github.fosin.cdp.platformapi.service.inter.ICdpSysOrganizationPermissionService;
 import com.github.fosin.cdp.platformapi.service.inter.IOrganizationService;
 import com.github.fosin.cdp.util.TreeUtil;
@@ -37,14 +38,17 @@ public class CdpSysOrganizationController extends AbstractBaseController
         implements ISimpleController<CdpSysOrganizationEntity, Long> {
     @Autowired
     private IOrganizationService organizationService;
+
+    @Autowired
+    private ICdpSysOrganizationAuthService organizationAuthService;
     /**
      * 服务对象
      */
     @Autowired
     private ICdpSysOrganizationPermissionService organizationPermissionService;
 
-    @ApiOperation("根据版本ID获取版本权限")
-    @ApiImplicitParam(name = "organizId", value = "版本ID,取值于CdpSysRoleEntity.id")
+    @ApiOperation("根据机构ID获取机构权限")
+    @ApiImplicitParam(name = "organizId", value = "机构ID,取值于CdpSysOrganizationEntity.id")
     @RequestMapping(value = "/permissions/{organizId}", method = {RequestMethod.GET, RequestMethod.POST})
     public ResponseEntity<List<CdpSysOrganizationPermissionEntity>> permissions(@PathVariable Long organizId) {
         return ResponseEntity.ok(organizationPermissionService.findByOrganizId(organizId));
@@ -116,6 +120,15 @@ public class CdpSysOrganizationController extends AbstractBaseController
     @PutMapping(value = "/register")
     public ResponseEntity<Boolean> register(@RequestBody List<CdpSysOrganizationPermissionEntity> entities) {
         return ResponseEntity.ok(false);
+    }
+
+
+    @ApiOperation("根据父机构ID获取其孩子节点数据")
+    @ApiImplicitParam(name = "organizId", value = "机构ID,取值于CdpSysOrganizationEntity.id")
+    @PostMapping("/auth/{organizId}")
+    public ResponseEntity<CdpSysOrganizationAuthEntity> getOrganizAuth(@PathVariable("organizId") Long organizId) throws CdpServiceException {
+        List<CdpSysOrganizationAuthEntity> organizationAuthEntities = organizationAuthService.findAllByOrganizId(organizId);
+        return ResponseEntity.ok(organizationAuthEntities.get(0));
     }
 
     @Override

@@ -18,4 +18,6 @@ import java.util.List;
 @Lazy
 public interface CdpSysOrganizationAuthRepository extends JpaRepository<CdpSysOrganizationAuthEntity, Long>,JpaSpecificationExecutor<CdpSysOrganizationAuthEntity>{
     List<CdpSysOrganizationAuthEntity> findAllByVersionId(Long versionId);
+
+    List<CdpSysOrganizationAuthEntity> findAllByOrganizId(Long organizId);
 }

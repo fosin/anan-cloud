@@ -13,4 +13,6 @@ import java.util.List;
  */
 public interface ICdpSysOrganizationAuthService extends ISimpleService<CdpSysOrganizationAuthEntity, Long> {
     List<CdpSysOrganizationAuthEntity> findAllByVersionId(Long versionId);
+
+    List<CdpSysOrganizationAuthEntity> findAllByOrganizId(Long organizId);
 }

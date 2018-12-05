@@ -40,7 +40,7 @@ public class CdpSysParameterEntity implements Serializable {
     @Basic
     @NotBlank
     @ApiModelProperty(value = "参数键", notes = "参数键")
-    @Pattern(regexp = RegexUtil.USERCODE + "{1,64}", message = "参数键只能大小写字母、数字、下杠(_)组合而成,长度不超过64位")
+    @Pattern(regexp = "[\\w]{1,64}", message = "参数键只能大小写字母、数字、下杠(_)组合而成,长度不超过64位")
     private String name;
     
     @Column(name = "value")

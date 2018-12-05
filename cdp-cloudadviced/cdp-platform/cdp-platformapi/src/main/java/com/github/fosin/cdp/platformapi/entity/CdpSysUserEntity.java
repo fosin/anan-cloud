@@ -56,7 +56,7 @@ public class CdpSysUserEntity implements Serializable {
     @Basic
     @NotBlank
     @ApiModelProperty(value = "用户工号", notes = "用户工号")
-    @Pattern(regexp = RegexUtil.USERCODE + "{1,30}", message = "用户工号只能大小写字母、数字、下杠(_)组合而成,长度不超过30位")
+    @Pattern(regexp = "[\\w]{1,30}", message = "用户工号只能大小写字母、数字、下杠(_)组合而成,长度不超过30位")
     private String usercode;
 
     @Column(name = "username")
