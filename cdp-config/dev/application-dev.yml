@@ -15,3 +15,18 @@ security:
 management:
   security:
     enabled: false
+spring:
+  zipkin:
+    rabbitmq:
+      queue: zipkin
+zipkin:
+  storage:
+    type: mysql
+  collector:
+    rabbitmq:
+      addresses: ${spring.rabbitmq.host}:${spring.rabbitmq.port}
+      username: ${spring.rabbitmq.username}
+      password: ${spring.rabbitmq.password}
+      queue: zipkin
+  query:
+    allowed-origins: '*'

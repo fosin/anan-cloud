@@ -19,19 +19,13 @@ zuul:
       path: /gateway/**
       serviceId: cdp-zuulgateway
       retryable: true
-#    cdp-eurekaserver:
-#      path: /discovery/**
-#      serviceId: cdp-eurekaserver
-#      retryable: true
-#      add-host-header: false
-#      add-proxy-headers: false
-#    cdp-adminserver:
-#      path: /admin/**
-#      serviceId: cdp-adminserver
-#      retryable: true
     mpi:
       path: /mpi/**
       serviceId: mpi
+      retryable: true
+    ehospital:
+      path: /ehospital/**
+      serviceId: ehospital
       retryable: true
 #  semaphore:
 #    max-semaphores: 100

@@ -5,7 +5,7 @@
     <parent>
         <groupId>com.github.fosin</groupId>
         <artifactId>cdp-cloudadviced</artifactId>
-       <version>1.0.0-SNAPSHOT</version>
+        <version>1.0.0-SNAPSHOT</version>
     </parent>
     <packaging>jar</packaging>
     <modelVersion>4.0.0</modelVersion>
@@ -26,6 +26,7 @@
             <artifactId>zipkin-autoconfigure-collector-rabbitmq</artifactId>
             <version>2.7.5</version>
         </dependency>
+
         <dependency>
             <groupId>io.zipkin.java</groupId>
             <artifactId>zipkin-autoconfigure-storage-mysql</artifactId>
@@ -35,6 +36,24 @@
             <groupId>io.zipkin.java</groupId>
             <artifactId>zipkin-server</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-zipkin</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!-- <dependency>
+             <groupId>io.zipkin.brave</groupId>
+             <artifactId>brave</artifactId>
+         </dependency>
+         <dependency>
+             <groupId>org.springframework.cloud</groupId>
+             <artifactId>spring-cloud-starter-stream-rabbit</artifactId>
+         </dependency>-->
         <dependency>
             <groupId>io.zipkin.java</groupId>
             <artifactId>zipkin-autoconfigure-ui</artifactId>
@@ -52,41 +71,5 @@
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-zipkin</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>*</groupId>
-                    <artifactId>*</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <!-- <dependency>
-             <groupId>org.springframework.amqp</groupId>
-             <artifactId>spring-rabbit</artifactId>
-             <exclusions>
-                 <exclusion>
-                     <groupId>*</groupId>
-                     <artifactId>*</artifactId>
-                 </exclusion>
-             </exclusions>
-         </dependency>-->
-        <!-- <dependency>
-            <groupId>io.zipkin.java</groupId>
-            <artifactId>zipkin-storage-mysql</artifactId>
-            <version>1.28.0</version>
-        </dependency>
-         <dependency>
-             <groupId>org.jooq</groupId>
-             <artifactId>jooq</artifactId>
-             <version>3.8.0</version>
-         </dependency>
-         <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-sleuth-zipkin-stream</artifactId>
-            <version>1.2.4.RELEASE</version>
-        </dependency>-->
-
     </dependencies>
 </project>

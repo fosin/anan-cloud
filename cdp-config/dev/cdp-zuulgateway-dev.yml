@@ -1,6 +1,3 @@
-management:
-  security:
-    enabled: false
 zuul:
   add-host-header: true
   add-proxy-headers: true
@@ -25,6 +22,10 @@ zuul:
     mpi:
       path: /mpi/**
       serviceId: mpi
+      retryable: true
+    ehospital:
+      path: /ehospital/**
+      serviceId: ehospital
       retryable: true
 #  semaphore:
 #    max-semaphores: 100

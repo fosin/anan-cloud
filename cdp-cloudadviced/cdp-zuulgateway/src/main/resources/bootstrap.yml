@@ -37,9 +37,6 @@ spring:
     port: @spring.rabbitmq.port@
     username: @spring.rabbitmq.username@
     password: @spring.rabbitmq.password@
-  zipkin:
-    rabbitmq:
-      queue: zipkin
 security:
   user:
     name: @eureka.username@

@@ -21,7 +21,7 @@ import org.springframework.session.data.redis.config.annotation.web.http.EnableR
  */
 @SpringBootApplication
 @EnableCaching
-@EnableRedisHttpSession(maxInactiveIntervalInSeconds = 60)
+@EnableRedisHttpSession(maxInactiveIntervalInSeconds = 3600)
 @EnableCdpSwagger2
 @EnableCdpOauth2
 @EnableWebSecurity

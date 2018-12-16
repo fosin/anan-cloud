@@ -6,17 +6,24 @@ spring:
     password: '{cipher}AQBKDi1e2O8RxX1JkwCpYZ8gdF8uFahNH3oUvFrEM8UXfmJGWthztlBOxvDFNB4Cqu6FZKibXkZZEWStiLvATSl6+EiWMEhQqBv1Kt8u65Qquzxt5Ab/IdTP1EGUA2i0KN0Mi+TArbRjoXwxvh5DjqQ4Td22QhgnhRCn8USpmNF9vcma0if/DIPyjweOYaayF5ynJO3gTibPLDjOj194DbeXnmR1nVlO/hcfjM5a65Hr+rRoisgSUbOCcsAuxluEhDT35+rjEPumxaRo58DOckq0XkJhoyQ69g/Do3NBEx0ewEcEVg2t/DJyPp9BbSRGYV67HUqup39c//RuhP2AHTN94qZgrxEBtBsGu+E1E/xtBjNjqSeQPdeJb200dTF99rQ='
     continueOnError: true
     initialize: true
-zipkin:
-  storage:
-    type: mysql
-  collector:
-    rabbitmq:
-      addresses: ${spring.rabbitmq.host}:${spring.rabbitmq.port}
-      username: ${spring.rabbitmq.username}
-      password: ${spring.rabbitmq.password}
-      queue: zipkin
-  query:
-    allowed-origins: '*'
+  druid:
+    initial-size: 20 #初始化大小
+    min-idle: 20 #最小
+    maxActive: 50 # 最大
+    maxWait: 60000 #配置获取连接等待超时的时间
+    timeBetweenEvictionRunsMillis: 60000 # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+    minEvictableIdleTimeMillis: 300000 # 配置一个连接在池中最小生存的时间，单位是毫秒
+    #      validationQuery: SELECT 1 FROM DUAL
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+  #      poolPreparedStatements: true # 打开PSCache，并且指定每个连接上PSCache的大小
+  #      maxPoolPreparedStatementPerConnectionSize: 20
+  #      filters: stat,wall,log4j # 配置监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙
+  #      connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000 # 通过connectProperties属性来打开mergeSql功能；慢SQL记录
+  #      useGlobalDataSourceStat: true # 合并多个DruidDataSource的监控数据
+  #    platform: mysql
+  #    continue-on-error: true
 cdp:
   oauth2:
     disablecsrf: true
@@ -27,8 +34,9 @@ cdp:
       allowedHeaders: '*'
       allowCredentials: true
     blackWhiteList:
-    - path: /**/*.html
-    - path: /**/*.css
-    - path: /**/*.js
-    - path: /zipkin/**
-    - method: OPTIONS
+      - path: /**/*.html
+      - path: /**/*.css
+      - path: /img/**
+      - path: /**/*.js
+      - path: /zipkin/**
+      - method: OPTIONS

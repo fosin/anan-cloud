@@ -11,11 +11,12 @@ import org.springframework.session.data.redis.config.annotation.web.http.EnableR
 
 /**
  * Description
+ *
  * @author fosin
  */
 @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
 @EnableCaching
-@EnableRedisHttpSession(maxInactiveIntervalInSeconds=60)
+@EnableRedisHttpSession(maxInactiveIntervalInSeconds = 3600)
 @EnableCdpSwagger2
 @EnableCdpOauth2
 public class AuthServerApplication {

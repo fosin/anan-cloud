@@ -1,7 +1,3 @@
-spring:
-  zipkin:
-    rabbitmq:
-      queue: zipkin
 turbine:
   cluster-name-expression: new String('default')
   app-config: cdp-zuulgateway

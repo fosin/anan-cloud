@@ -25,17 +25,6 @@ spring:
 #      useGlobalDataSourceStat: true # 合并多个DruidDataSource的监控数据
 #    platform: mysql
 #    continue-on-error: true
-zipkin:
-  storage:
-    type: mysql
-  collector:
-    rabbitmq:
-      addresses: ${spring.rabbitmq.host}:${spring.rabbitmq.port}
-      username: ${spring.rabbitmq.username}
-      password: ${spring.rabbitmq.password}
-      queue: zipkin
-  query:
-    allowed-origins: '*'
 cdp:
   oauth2:
     disablecsrf: true

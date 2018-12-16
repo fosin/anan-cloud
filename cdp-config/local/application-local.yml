@@ -1,7 +1,7 @@
 eureka:
   client:
     healthcheck:
-      enabled: true
+      enabled: true # 开启健康检查（需要spring-boot-starter-actuator依赖）
   instance:
     lease-expiration-duration-in-seconds: 10 # 续约到期时间（默认90秒）
     lease-renewal-interval-in-seconds: 5 # 续约更新时间间隔（默认30秒）
@@ -15,3 +15,18 @@ security:
 management:
   security:
     enabled: false
+spring:
+  zipkin:
+    rabbitmq:
+      queue: zipkin
+zipkin:
+  storage:
+    type: mysql
+  collector:
+    rabbitmq:
+      addresses: ${spring.rabbitmq.host}:${spring.rabbitmq.port}
+      username: ${spring.rabbitmq.username}
+      password: ${spring.rabbitmq.password}
+      queue: zipkin
+  query:
+    allowed-origins: '*'

@@ -36,7 +36,7 @@ import java.util.List;
 @EnableCdpOauth2
 @EnableWebSecurity
 //@EnableTurbineStream
-//@EnableRedisHttpSession(maxInactiveIntervalInSeconds=60)
+//@EnableRedisHttpSession(maxInactiveIntervalInSeconds = 3600)
 public class ZuulGatewayApplication {
     public static void main(String[] args) {
         new SpringApplicationBuilder(ZuulGatewayApplication.class)
