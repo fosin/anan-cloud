@@ -125,6 +125,8 @@ cdp:
     contact:
       name: fosin
       email: 28860823@qq.com
+    ignoreResourceNames:
+      - cdp-zuulgateway
   oauth2:
     disablecsrf: true
     disableHttpBasic: true
