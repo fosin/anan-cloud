@@ -18,8 +18,8 @@ spring:
     inetutils:
       preferred-networks: @spring.cloud.inetutils.preferred-networks@
     config:
-      username: @spring.cloud.config.username@
-      password: @spring.cloud.config.password@
+      username: ${security.user.name}
+      password: ${security.user.password}
       #      headers: {Authorization: Basic Y2RwOmRldg==}
       discovery:
         enabled: true

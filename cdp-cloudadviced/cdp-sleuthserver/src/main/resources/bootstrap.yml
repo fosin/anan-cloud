@@ -20,8 +20,8 @@ spring:
     inetutils:
       preferred-networks: @spring.cloud.inetutils.preferred-networks@
     config:
-      username: @spring.cloud.config.username@
-      password: @spring.cloud.config.password@
+      username: ${security.user.name}
+      password: ${security.user.password}
       discovery:
         enabled: true
         service-id: cdp-configserver
