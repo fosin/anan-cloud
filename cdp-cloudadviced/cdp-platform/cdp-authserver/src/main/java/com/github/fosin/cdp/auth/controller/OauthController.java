@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -30,25 +31,34 @@ import java.util.Map;
 @RequestMapping("/oauth")
 @Api(value = "/oauth", tags = "OAuth认证相关", description = "获取令牌、刷新令牌、注销令牌")
 public class OauthController {
+    @Autowired
+    TokenEndpoint tokenEndpoint;
 
-    @RequestMapping(value = "/principal", method = {RequestMethod.POST})
+    @Autowired
+    private ConsumerTokenServices consumerTokenServices;
+
+    @RequestMapping(value = "/principal", method = {RequestMethod.GET, RequestMethod.POST})
     @ApiOperation(value = "根据令牌获取当前认证用户信息", notes = "根据令牌获取当前认证用户信息，包括用户信息、客户端信息、Oauth2.0相关信息")
+    @ApiImplicitParam(name = "Authorization", value = "Basic认证信息,格式例如：Basic ouZTJoQk5BQVFLUjVVemlJSw==", required = true, dataType = "string", paramType = "header")
     public ResponseEntity<Object> principal(Principal principal) {
         return ResponseEntity.ok(principal);
     }
-
-    @Autowired
-    TokenEndpoint tokenEndpoint;
 
     @RequestMapping(value = "/token", method = {RequestMethod.POST})
     @ApiOperation(value = "获取Oauth2.0令牌", notes = "获取Oauth2.0令牌，通常用于前端的认证、登录操作")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "Authorization", value = "Basic认证信息,格式例如：Basic ouZTJoQk5BQVFLUjVVemlJSw==", required = true, dataType = "string", paramType = "header"),
-            @ApiImplicitParam(name = "parameters", value = "请求参数", required = true, paramType = "body", dataType = "string", example = "{\"grant_type\":\"password\"\n" +
-                    "\"username\":\"user\"\n" +
-                    "\"password\":\"123\"}")
+            @ApiImplicitParam(name = "grant_type", value = "授权类型", required = true),
+            @ApiImplicitParam(name = "username", value = "用户名", dataType = "string", paramType = "query"),
+            @ApiImplicitParam(name = "password", value = "密码", dataType = "string", paramType = "query"),
+            @ApiImplicitParam(name = "scope", value = "作用域", dataType = "string", paramType = "query")
     })
-    public ResponseEntity<OAuth2AccessToken> accessToken(Principal principal, HttpServletRequest request, @RequestParam Map<String, String> parameters) throws HttpRequestMethodNotSupportedException {
+    public ResponseEntity<OAuth2AccessToken> accessToken(Principal principal, HttpServletRequest request, @RequestParam String grant_type, @RequestParam(required = false) String username, @RequestParam(required = false) String password, @RequestParam(required = false) String scope) throws HttpRequestMethodNotSupportedException {
+        Map<String, String> parameters = new HashMap<>(8);
+        parameters.put("grant_type", grant_type);
+        parameters.put("username", username);
+        parameters.put("password", password);
+        parameters.put("scope", scope);
         if (request.getMethod().equals(RequestMethod.POST.toString())) {
             return tokenEndpoint.postAccessToken(principal, parameters);
         } else {
@@ -56,12 +66,10 @@ public class OauthController {
         }
     }
 
-    @Autowired
-    private ConsumerTokenServices consumerTokenServices;
-
     @RequestMapping(value = "/removeToken", method = {RequestMethod.POST})
     @ResponseBody
     @ApiOperation(value = "移除指定令牌信息", notes = "移除指定令牌信息，通常用于前端的退出登录操作")
+    @ApiImplicitParam(name = "Authorization", value = "Basic认证信息,格式例如：Basic ouZTJoQk5BQVFLUjVVemlJSw==", required = true, dataType = "string", paramType = "header")
     public ResponseEntity<Boolean> removeToken(Principal principal) {
         Assert.notNull(principal, "principal不能为空，可能是认证失败!");
         Assert.isTrue(principal instanceof OAuth2Authentication, "principal必须是OAuth2Authentication类型!");
