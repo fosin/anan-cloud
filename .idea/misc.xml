@@ -7,6 +7,16 @@
     <option name="originalFiles">
       <list>
         <option value="$PROJECT_DIR$/pom.xml" />
+        <option value="$PROJECT_DIR$/cdp-cloudadviced/cdp-platform/cdp-platformapi/pom.xml" />
+        <option value="$PROJECT_DIR$/cdp-cloudadviced/cdp-platform/cdp-authserver/pom.xml" />
+        <option value="$PROJECT_DIR$/cdp-cloudadviced/cdp-platform/cdp-platformserver/pom.xml" />
+        <option value="$PROJECT_DIR$/cdp-eurekaserver/pom.xml" />
+        <option value="$PROJECT_DIR$/cdp-configserver/pom.xml" />
+        <option value="$PROJECT_DIR$/cdp-cloudadviced/pom.xml" />
+        <option value="$PROJECT_DIR$/cdp-cloudadviced/cdp-zuulgateway/pom.xml" />
+        <option value="$PROJECT_DIR$/cdp-cloudadviced/cdp-sleuthserver/pom.xml" />
+        <option value="$PROJECT_DIR$/cdp-cloudadviced/cdp-platform/pom.xml" />
+        <option value="$PROJECT_DIR$/cdp-cloudadviced/cdp-adminserver/pom.xml" />
       </list>
     </option>
   </component>

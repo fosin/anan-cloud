@@ -1,13 +1,13 @@
 <component name="libraryTable">
   <library name="Maven: com.github.fosin:cdp-cache:1.0.0-SNAPSHOT">
     <CLASSES>
-      <root url="jar://E:/tools/Apache/Maven/repository/com/github/fosin/cdp-cache/1.0.0-SNAPSHOT/cdp-cache-1.0.0-20181023.094036-3.jar!/" />
+      <root url="jar://E:/tools/Apache/Maven/repository/com/github/fosin/cdp-cache/1.0.0-SNAPSHOT/cdp-cache-1.0.0-20181024.144043-4.jar!/" />
     </CLASSES>
     <JAVADOC>
-      <root url="jar://E:/tools/Apache/Maven/repository/com/github/fosin/cdp-cache/1.0.0-SNAPSHOT/cdp-cache-1.0.0-20181023.094036-3-javadoc.jar!/" />
+      <root url="jar://E:/tools/Apache/Maven/repository/com/github/fosin/cdp-cache/1.0.0-SNAPSHOT/cdp-cache-1.0.0-20181024.144043-4-javadoc.jar!/" />
     </JAVADOC>
     <SOURCES>
-      <root url="jar://E:/tools/Apache/Maven/repository/com/github/fosin/cdp-cache/1.0.0-SNAPSHOT/cdp-cache-1.0.0-20181023.094036-3-sources.jar!/" />
+      <root url="jar://E:/tools/Apache/Maven/repository/com/github/fosin/cdp-cache/1.0.0-SNAPSHOT/cdp-cache-1.0.0-20181024.144043-4-sources.jar!/" />
     </SOURCES>
   </library>
 </component>
