@@ -31,7 +31,7 @@ import java.util.Map;
 @Api(value = "/oauth", tags = "OAuth认证相关", description = "获取令牌、刷新令牌、注销令牌")
 public class OauthController {
 
-    @RequestMapping(value = "/principal", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "/principal", method = {RequestMethod.POST})
     @ApiOperation(value = "根据令牌获取当前认证用户信息", notes = "根据令牌获取当前认证用户信息，包括用户信息、客户端信息、Oauth2.0相关信息")
     public ResponseEntity<Object> principal(Principal principal) {
         return ResponseEntity.ok(principal);
@@ -59,7 +59,7 @@ public class OauthController {
     @Autowired
     private ConsumerTokenServices consumerTokenServices;
 
-    @RequestMapping(value = "/removeToken", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "/removeToken", method = {RequestMethod.POST})
     @ResponseBody
     @ApiOperation(value = "移除指定令牌信息", notes = "移除指定令牌信息，通常用于前端的退出登录操作")
     public ResponseEntity<Boolean> removeToken(Principal principal) {
