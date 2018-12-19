@@ -15,10 +15,10 @@ import org.springframework.security.oauth2.provider.token.ConsumerTokenServices;
 import org.springframework.util.Assert;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -37,33 +37,32 @@ public class OauthController {
     @Autowired
     private ConsumerTokenServices consumerTokenServices;
 
-    @RequestMapping(value = "/principal", method = {RequestMethod.GET, RequestMethod.POST})
-    @ApiOperation(value = "根据令牌获取当前认证用户信息", notes = "根据令牌获取当前认证用户信息，包括用户信息、客户端信息、Oauth2.0相关信息")
-    @ApiImplicitParam(name = "Authorization", value = "Basic认证信息,格式例如：Basic ouZTJoQk5BQVFLUjVVemlJSw==", required = true, dataType = "string", paramType = "header")
-    public ResponseEntity<Object> principal(Principal principal) {
-        return ResponseEntity.ok(principal);
-    }
-
     @RequestMapping(value = "/token", method = {RequestMethod.POST})
-    @ApiOperation(value = "获取Oauth2.0令牌", notes = "获取Oauth2.0令牌，通常用于前端的认证、登录操作")
+    @ApiOperation(value = "获取令牌", notes = "获取Oauth2.0令牌，通常用于前端的认证、登录操作")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "Authorization", value = "Basic认证信息,格式例如：Basic ouZTJoQk5BQVFLUjVVemlJSw==", required = true, dataType = "string", paramType = "header"),
-            @ApiImplicitParam(name = "grant_type", value = "授权类型", required = true),
-            @ApiImplicitParam(name = "username", value = "用户名", dataType = "string", paramType = "query"),
-            @ApiImplicitParam(name = "password", value = "密码", dataType = "string", paramType = "query"),
-            @ApiImplicitParam(name = "scope", value = "作用域", dataType = "string", paramType = "query")
+            @ApiImplicitParam(name = "grant_type", value = "授权类型,可选值(password、refresh_token、client_credentials、authorization_code)", required = true, dataType = "string", paramType = "query"),
+            @ApiImplicitParam(name = "username", value = "用户名，当grant_type=password时必选项", dataType = "string", paramType = "query"),
+            @ApiImplicitParam(name = "password", value = "用户密码，当grant_type=password时必选项", dataType = "string", paramType = "query"),
+            @ApiImplicitParam(name = "refresh_token", value = "早前收到的更新令牌，当grant_type=refresh_token时必选项。", dataType = "string", paramType = "query"),
+            @ApiImplicitParam(name = "scope", value = "作用域,表示申请的授权范围", dataType = "string", paramType = "query"),
+            @ApiImplicitParam(name = "redirect_uri", value = "重定向URI，当grant_type=authorization_code时才需要填写", dataType = "string", paramType = "query"),
+            @ApiImplicitParam(name = "client_id", value = "客户端的ID，当grant_type=authorization_code时必选项", dataType = "string", paramType = "query"),
+            @ApiImplicitParam(name = "state", value = "客户端的当前状态，可以指定任意值，认证服务器会原封不动地返回这个值，当grant_type=authorization_code时才需要填写", dataType = "string", paramType = "query")
     })
-    public ResponseEntity<OAuth2AccessToken> accessToken(Principal principal, HttpServletRequest request, @RequestParam String grant_type, @RequestParam(required = false) String username, @RequestParam(required = false) String password, @RequestParam(required = false) String scope) throws HttpRequestMethodNotSupportedException {
-        Map<String, String> parameters = new HashMap<>(8);
-        parameters.put("grant_type", grant_type);
-        parameters.put("username", username);
-        parameters.put("password", password);
-        parameters.put("scope", scope);
+    public ResponseEntity<OAuth2AccessToken> accessToken(Principal principal, HttpServletRequest request, @ApiIgnore @RequestParam Map<String, String> parameters) throws HttpRequestMethodNotSupportedException {
         if (request.getMethod().equals(RequestMethod.POST.toString())) {
             return tokenEndpoint.postAccessToken(principal, parameters);
         } else {
             return tokenEndpoint.getAccessToken(principal, parameters);
         }
+    }
+
+    @RequestMapping(value = "/principal", method = {RequestMethod.GET, RequestMethod.POST})
+    @ApiOperation(value = "根据令牌获取当前认证用户信息", notes = "根据令牌获取当前认证用户信息，包括用户信息、客户端信息、Oauth2.0相关信息")
+    @ApiImplicitParam(name = "Authorization", value = "Basic认证信息,格式例如：Basic ouZTJoQk5BQVFLUjVVemlJSw==", required = true, dataType = "string", paramType = "header")
+    public ResponseEntity<Object> principal(Principal principal) {
+        return ResponseEntity.ok(principal);
     }
 
     @RequestMapping(value = "/removeToken", method = {RequestMethod.POST})
