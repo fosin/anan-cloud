@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -90,6 +91,13 @@ public class RoleController implements ISimpleController<CdpSysRoleEntity, Long>
     @RequestMapping(value = "/pageList/organizId/{organizId}", method = {RequestMethod.POST})
     public ResponseEntity<Result> findAllByOrganizId(@PathVariable("organizId") Long organizId, @RequestBody PageModule pageModule) throws CdpControllerException {
         return ResponseEntity.ok(roleService.findAllByOrganizId(organizId, pageModule));
+    }
+
+    @PostMapping({"/childList/organizId/{organizId}"})
+    @ApiOperation("根据机构ID查询该机构及子机构的所有角色")
+    @ApiImplicitParam(name = "organizId", value = "机构ID")
+    public ResponseEntity<List<CdpSysRoleEntity>> findAllByOrganizId(@PathVariable("organizId") Long organizId) {
+        return ResponseEntity.ok(roleService.findAllByOrganizId(organizId));
     }
 
     @Override

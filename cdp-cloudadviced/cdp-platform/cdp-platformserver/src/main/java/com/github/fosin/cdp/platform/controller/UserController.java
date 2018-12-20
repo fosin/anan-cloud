@@ -122,7 +122,7 @@ public class UserController extends AbstractBaseController implements ISimpleCon
             @ApiImplicitParam(name = "userId", value = "用户ID,取值于CdpSysUserEntity.id")
     })
     @PutMapping(value = "/roles/{userId}")
-    public ResponseEntity<List<CdpSysUserRoleEntity>> putRoles
+    public ResponseEntity<List<CdpSysUserRoleEntity>> putUserRoles
             (@RequestBody List<CdpSysUserRoleEntity> entities, @PathVariable Long userId) throws
             CdpServiceException {
         return ResponseEntity.ok(userRoleService.updateInBatchByUserId(userId, entities));
@@ -133,6 +133,13 @@ public class UserController extends AbstractBaseController implements ISimpleCon
     @RequestMapping(value = "/otherRoles/{userId}", method = {RequestMethod.GET, RequestMethod.POST})
     public ResponseEntity<List<CdpSysRoleEntity>> getOtherRoles(@PathVariable("userId") Long userId) {
         return ResponseEntity.ok(roleService.findOtherUsersByRoleId(userId));
+    }
+
+    @PostMapping({"/childList/organizId/{organizId}"})
+    @ApiOperation("根据机构ID查询该机构及子机构的所有用户")
+    @ApiImplicitParam(name = "organizId", value = "机构ID")
+    public ResponseEntity<List<CdpSysUserEntity>> findAllByOrganizId(@PathVariable("organizId") Long organizId) {
+        return ResponseEntity.ok(userService.findAllByOrganizId(organizId));
     }
 
     @Override

@@ -8,6 +8,7 @@ import com.github.fosin.cdp.mvc.result.ResultUtils;
 import com.github.fosin.cdp.platformapi.constant.SystemConstant;
 import com.github.fosin.cdp.platformapi.constant.TableNameConstant;
 import com.github.fosin.cdp.platformapi.entity.CdpSysOrganizationEntity;
+import com.github.fosin.cdp.platformapi.entity.CdpSysRoleEntity;
 import com.github.fosin.cdp.platformapi.entity.CdpSysUserEntity;
 import com.github.fosin.cdp.platformapi.entity.CdpSysUserRoleEntity;
 import com.github.fosin.cdp.platformapi.parameter.OrganizParameterUtil;
@@ -360,4 +361,29 @@ public class UserServiceImpl implements IUserService {
         return userRepository.findRoleUsersByRoleId(roleId);
     }
 
+    @Override
+    public List<CdpSysUserEntity> findAllByOrganizId(Long organizId) {
+        Assert.notNull(organizId, "机构ID不能为空!");
+        CdpSysUserEntity loginUser = LoginUserUtil.getUser();
+        if (loginUser.getUsercode().equals(SystemConstant.SUPER_USER_CODE)) {
+            return userRepository.findAll();
+        } else {
+            CdpSysOrganizationEntity organiz = organizationRepository.findOne(organizId);
+            Assert.notNull(organiz, "根据传入的机构编码没有找到任何数据!");
+            CdpSysOrganizationEntity topOrganiz = organizationRepository.findOne(organiz.getTopId());
+            List<CdpSysOrganizationEntity> organizs = organizationRepository.findByCodeStartingWithOrderByCodeAsc(topOrganiz.getCode());
+
+            Specification<CdpSysUserEntity> condition = (root, query, cb) -> {
+                Path<Long> organizIdPath = root.get("organizId");
+                Path<String> usercodePath = root.get("usercode");
+
+                CriteriaBuilder.In<Long> in = cb.in(organizIdPath);
+                for (CdpSysOrganizationEntity entity : organizs) {
+                    in.value(entity.getId());
+                }
+                return cb.and(in, cb.notEqual(usercodePath, SystemConstant.SUPER_USER_CODE));
+            };
+            return userRepository.findAll(condition);
+        }
+    }
 }

@@ -97,15 +97,15 @@ public class RoleServiceImpl implements IRoleService {
 
     @Override
     public CdpSysRoleEntity findOne(Long id) {
-        Assert.isTrue(id != null && id > 0,"传入的角色ID无效！");
+        Assert.isTrue(id != null && id > 0, "传入的角色ID无效！");
         return roleRepository.findOne(id);
     }
 
     @Override
     public CdpSysRoleEntity delete(Long id) throws CdpServiceException {
-        Assert.isTrue(id != null && id > 0,"传入的角色ID无效！");
+        Assert.isTrue(id != null && id > 0, "传入的角色ID无效！");
         CdpSysRoleEntity entity = roleRepository.findOne(id);
-        Assert.notNull(entity,"根据角色ID未能找到角色数据!");
+        Assert.notNull(entity, "根据角色ID未能找到角色数据!");
         Assert.isTrue(!SystemConstant.SUPER_ROLE_NAME.equals(entity.getValue())
                         && !SystemConstant.ADMIN_ROLE_NAME.equals(entity.getValue()),
                 "不能删除(超级)管理员角色帐号信息!");
@@ -220,5 +220,31 @@ public class RoleServiceImpl implements IRoleService {
 
 
         return ResultUtils.success(page.getTotalElements(), page.getContent());
+    }
+
+    @Override
+    public List<CdpSysRoleEntity> findAllByOrganizId(Long organizId) {
+        Assert.notNull(organizId, "机构ID不能为空!");
+        CdpSysUserEntity loginUser = LoginUserUtil.getUser();
+        if (loginUser.getUsercode().equals(SystemConstant.SUPER_USER_CODE)) {
+            return roleRepository.findAll();
+        } else {
+            CdpSysOrganizationEntity organiz = organizationRepository.findOne(organizId);
+            Assert.notNull(organiz, "根据传入的机构编码没有找到任何数据!");
+            CdpSysOrganizationEntity topOrganiz = organizationRepository.findOne(organiz.getTopId());
+            List<CdpSysOrganizationEntity> organizs = organizationRepository.findByCodeStartingWithOrderByCodeAsc(topOrganiz.getCode());
+
+            Specification<CdpSysRoleEntity> condition = (root, query, cb) -> {
+                Path<Long> organizIdPath = root.get("organizId");
+                Path<String> roleValue = root.get("value");
+
+                CriteriaBuilder.In<Long> in = cb.in(organizIdPath);
+                for (CdpSysOrganizationEntity entity : organizs) {
+                    in.value(entity.getId());
+                }
+                return cb.and(in, cb.notEqual(roleValue, SystemConstant.SUPER_ROLE_NAME));
+            };
+            return roleRepository.findAll(condition);
+        }
     }
 }

@@ -6,12 +6,17 @@ import com.github.fosin.cdp.mvc.module.PageModule;
 import com.github.fosin.cdp.mvc.result.Result;
 import com.github.fosin.cdp.mvc.result.ResultUtils;
 import com.github.fosin.cdp.platformapi.constant.TableNameConstant;
-import com.github.fosin.cdp.platformapi.entity.CdpSysOrganizationEntity;
-import com.github.fosin.cdp.platformapi.entity.CdpSysUserEntity;
+import com.github.fosin.cdp.platformapi.dto.RegisterDto;
+import com.github.fosin.cdp.platformapi.dto.UserRegisterDto;
+import com.github.fosin.cdp.platformapi.entity.*;
+import com.github.fosin.cdp.platformapi.repository.CdpSysOrganizationAuthRepository;
+import com.github.fosin.cdp.platformapi.repository.CdpSysPayOrderRepository;
 import com.github.fosin.cdp.platformapi.repository.OrganizationRepository;
-import com.github.fosin.cdp.platformapi.service.inter.IOrganizationService;
+import com.github.fosin.cdp.platformapi.repository.UserRepository;
+import com.github.fosin.cdp.platformapi.service.inter.*;
 import com.github.fosin.cdp.platformapi.util.LoginUserUtil;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -19,8 +24,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import javax.persistence.criteria.*;
@@ -141,5 +148,81 @@ public class OrganizationServiceImpl implements IOrganizationService {
     @Override
     public List<CdpSysOrganizationEntity> findByCodeStartingWith(String code) throws CdpServiceException {
         return organizationRepository.findByCodeStartingWithOrderByCodeAsc(code);
+    }
+
+    @Autowired
+    private ICdpSysOrganizationAuthService organizationAuthService;
+
+    @Autowired
+    private IUserService userService;
+
+    @Autowired
+    private ICdpSysPayOrderService payOrderService;
+
+    @Autowired
+    private ICdpSysVersionService versionService;
+
+    @Override
+    @Transactional
+    public Boolean register(RegisterDto registerDto) {
+        Date now = new Date();
+
+        //创建用户
+        CdpSysUserEntity user = new CdpSysUserEntity();
+        UserRegisterDto registerDtoUser = registerDto.getUser();
+        Assert.isTrue(registerDtoUser.getPassword().equals(registerDtoUser.getConfirmPassword()), "密码和确认密码必须一致!");
+        BeanUtils.copyProperties(registerDtoUser, user);
+        user = userService.create(user);
+
+        //创建机构
+        CdpSysOrganizationEntity organization = new CdpSysOrganizationEntity();
+        BeanUtils.copyProperties(registerDto.getOrganization(), organization);
+        organization.setPId(0L);
+        organization.setTopId(0L);
+        organization.setLevel(1);
+        organization.setStatus(0);
+        CdpSysOrganizationEntity organizationEntity = this.create(organization);
+        organizationEntity.setTopId(organizationEntity.getId());
+        this.update(organizationEntity);
+
+        Long versionId = registerDto.getVersionId();
+        CdpSysVersionEntity versionEntity = versionService.findOne(versionId);
+
+        //创建订单
+        CdpSysPayOrderEntity orderEntity = new CdpSysPayOrderEntity();
+        orderEntity.setMoney(versionEntity.getPrice());
+        orderEntity.setOrderTime(now);
+        orderEntity.setVersionId(versionId);
+        orderEntity.setOrganizId(organizationEntity.getId());
+        orderEntity.setUserId(user.getId());
+        if (versionEntity.getPrice() == 0) {
+            orderEntity.setStatus(1);
+            orderEntity.setPayTime(now);
+        } else {
+            orderEntity.setStatus(0);
+        }
+        orderEntity = payOrderService.create(orderEntity);
+
+
+        //创建机构认证信息
+        CdpSysOrganizationAuthEntity auth = new CdpSysOrganizationAuthEntity();
+        auth.setVersionId(versionId);
+        auth.setOrderId(orderEntity.getOrderId());
+        auth.setMaxOrganizs(versionEntity.getMaxOrganizs());
+        auth.setMaxUsers(versionEntity.getMaxUsers());
+        auth.setOrganizId(organizationEntity.getId());
+        auth.setProtectDays(versionEntity.getProtectDays());
+        auth.setTryout(versionEntity.getTryout());
+        auth.setTryoutDays(versionEntity.getTryoutDays());
+        auth.setValidity(versionEntity.getValidity());
+        auth.setAuthorizationCode(getAuthCode(auth));
+        organizationAuthService.create(auth);
+
+        return true;
+    }
+
+    private String getAuthCode(CdpSysOrganizationAuthEntity auth) {
+        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+        return bCryptPasswordEncoder.encode(auth.toString());
     }
 }

@@ -16,6 +16,7 @@ import com.github.fosin.cdp.mvc.module.PageModule;
 import com.github.fosin.cdp.mvc.result.Result;
 import com.github.fosin.cdp.mvc.result.ResultUtils;
 import javax.persistence.criteria.*;
+import java.util.Date;
 import java.util.List;
 import com.github.fosin.cdp.core.exception.CdpServiceException;
 
@@ -46,6 +47,8 @@ public class CdpSysOrganizationAuthServiceImpl implements ICdpSysOrganizationAut
     @Override
     public CdpSysOrganizationAuthEntity create(CdpSysOrganizationAuthEntity entity) {
         Assert.notNull(entity,"创建数据的实体对象不能为空!");
+        entity.setCreateBy(1L);
+        entity.setCreateTime(new Date());
         return getRepository().save(entity);
     }
 

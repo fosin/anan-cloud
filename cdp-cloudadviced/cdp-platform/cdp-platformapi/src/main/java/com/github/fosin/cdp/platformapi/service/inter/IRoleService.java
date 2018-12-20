@@ -19,4 +19,6 @@ public interface IRoleService extends ISimpleService<CdpSysRoleEntity,Long> {
     List<CdpSysRoleEntity> findRoleUsersByRoleId(Long userId);
 
     Result findAllByOrganizId(Long organizId, PageModule pageModule);
+
+    List<CdpSysRoleEntity> findAllByOrganizId(Long organizId);
 }

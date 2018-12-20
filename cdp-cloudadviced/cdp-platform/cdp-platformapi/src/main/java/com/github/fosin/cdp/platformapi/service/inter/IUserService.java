@@ -21,4 +21,6 @@ public interface IUserService extends ISimpleService<CdpSysUserEntity,Long> {
     List<CdpSysUserEntity> findOtherUsersByRoleId(Long roleId);
 
     List<CdpSysUserEntity> findRoleUsersByRoleId(Long roleId);
+
+    List<CdpSysUserEntity> findAllByOrganizId(Long organizId);
 }

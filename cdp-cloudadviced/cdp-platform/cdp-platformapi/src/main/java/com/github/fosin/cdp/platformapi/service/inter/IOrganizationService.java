@@ -1,6 +1,7 @@
 package com.github.fosin.cdp.platformapi.service.inter;
 
 
+import com.github.fosin.cdp.platformapi.dto.RegisterDto;
 import com.github.fosin.cdp.platformapi.entity.CdpSysOrganizationEntity;
 import com.github.fosin.cdp.core.exception.CdpServiceException;
 import com.github.fosin.cdp.mvc.service.ISimpleService;
@@ -18,5 +19,7 @@ public interface IOrganizationService extends ISimpleService<CdpSysOrganizationE
     List<CdpSysOrganizationEntity> findByPid(Long pid) throws CdpServiceException;
 
     List<CdpSysOrganizationEntity> findByCodeStartingWith(String code) throws CdpServiceException;
+
+    Boolean register(RegisterDto registerDto);
 }
 
