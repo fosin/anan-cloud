@@ -32,7 +32,7 @@ import java.util.List;
 @RestController
 @RequestMapping("v1/role")
 @Api(value = "v1/role", tags = "角色管理", description = "角色管理相关操作")
-public class RoleController implements ISimpleController<CdpSysRoleEntity, Long> {
+public class RoleController implements ISimpleController<CdpSysRoleEntity, Long, CdpSysRoleEntity, CdpSysRoleEntity> {
     @Autowired
     private IRoleService roleService;
     @Autowired
@@ -101,7 +101,7 @@ public class RoleController implements ISimpleController<CdpSysRoleEntity, Long>
     }
 
     @Override
-    public ISimpleService<CdpSysRoleEntity, Long> getService() {
+    public ISimpleService<CdpSysRoleEntity, Long, CdpSysRoleEntity, CdpSysRoleEntity> getService() {
         return roleService;
     }
 }

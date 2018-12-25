@@ -12,7 +12,7 @@ import java.util.List;
  *
  * @author fosin
  */
-public interface IPermissionService extends ISimpleService<CdpSysPermissionEntity, Long> {
+public interface IPermissionService extends ISimpleService<CdpSysPermissionEntity, Long, CdpSysPermissionEntity, CdpSysPermissionEntity> {
     List<CdpSysPermissionEntity> findByPId(Long pId);
 
     List<CdpSysPermissionEntity> findByType(Integer type);

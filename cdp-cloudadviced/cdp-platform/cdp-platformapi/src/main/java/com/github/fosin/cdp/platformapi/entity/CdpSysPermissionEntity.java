@@ -71,7 +71,7 @@ public class CdpSysPermissionEntity implements Serializable {
     @Column(name = "code")
     @Basic
     @NotBlank
-    @Pattern(regexp = "[a-zA-Z0-9_]{1,64}", message = "权限编码只能大小写字母、数字、下杠(_)组合而成,长度不超过64位")
+    @Pattern(regexp = "[A-Z][a-zA-Z0-9]{1,64}", message = "权限编码只能大写字母开始，大小写字母、数字组合而成,长度不超过64位")
     @ApiModelProperty(value = "权限编码，不能重复 不能为空", notes = "权限编码，不能重复 不能为空")
     private String code;
 

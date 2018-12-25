@@ -2,6 +2,7 @@ package com.github.fosin.cdp.platform.controller;
 
 import com.github.fosin.cdp.mvc.controller.ISimpleController;
 import com.github.fosin.cdp.mvc.service.ISimpleService;
+import com.github.fosin.cdp.platformapi.entity.CdpSysVersionRoleEntity;
 import com.github.fosin.cdp.platformapi.entity.OauthClientDetailsEntity;
 import com.github.fosin.cdp.platformapi.service.inter.IOauthClientService;
 import io.swagger.annotations.Api;
@@ -16,13 +17,13 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("v1/client")
-@Api(value = "v1/client",tags = "OAuth2.0客户端授权管理",description = "OAuth2.0客户端授权管理相关操作")
-public class ClientController implements ISimpleController<OauthClientDetailsEntity, String> {
+@Api(value = "v1/client", tags = "OAuth2.0客户端授权管理", description = "OAuth2.0客户端授权管理相关操作")
+public class ClientController implements ISimpleController<OauthClientDetailsEntity, String, OauthClientDetailsEntity, OauthClientDetailsEntity> {
     @Autowired
     private IOauthClientService oauthClientService;
 
     @Override
-    public ISimpleService<OauthClientDetailsEntity, String> getService() {
+    public ISimpleService<OauthClientDetailsEntity, String, OauthClientDetailsEntity, OauthClientDetailsEntity> getService() {
         return oauthClientService;
     }
 }

@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("v1/invoice")
 @Api(value = "v1/invoice",tags = "系统支付发票表接入层API",description = "系统支付发票表(cdp_sys_pay_invoice)接入层API")
-public class CdpSysPayInvoiceController implements ISimpleController<CdpSysPayInvoiceEntity, Long> {
+public class CdpSysPayInvoiceController implements ISimpleController<CdpSysPayInvoiceEntity, Long,CdpSysPayInvoiceEntity,CdpSysPayInvoiceEntity> {
     /**
      * 服务对象
      */
@@ -26,7 +26,7 @@ public class CdpSysPayInvoiceController implements ISimpleController<CdpSysPayIn
     private ICdpSysPayInvoiceService cdpSysPayInvoiceService;
 
     @Override
-    public ISimpleService<CdpSysPayInvoiceEntity, Long> getService() {
+    public ISimpleService<CdpSysPayInvoiceEntity, Long,CdpSysPayInvoiceEntity,CdpSysPayInvoiceEntity> getService() {
         return cdpSysPayInvoiceService;
     }
 }

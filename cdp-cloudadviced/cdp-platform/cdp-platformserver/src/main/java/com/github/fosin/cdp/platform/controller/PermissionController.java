@@ -30,12 +30,12 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("v1/permission")
-@Api(value = "v1/permission",tags = "权限管理", description = "权限管理相关操作")
-public class PermissionController extends AbstractBaseController implements ISimpleController<CdpSysPermissionEntity, Long> {
+@Api(value = "v1/permission", tags = "权限管理", description = "权限管理相关操作")
+public class PermissionController extends AbstractBaseController implements ISimpleController<CdpSysPermissionEntity, Long, CdpSysPermissionEntity, CdpSysPermissionEntity> {
     @Autowired
     private IPermissionService permissionService;
 
-    @ApiOperation(value = "根据权限类型type获取权限树",notes = "如果权限类型type在0-4之内的任意值则返回对应的权限树，否则返回所有权限树")
+    @ApiOperation(value = "根据权限类型type获取权限树", notes = "如果权限类型type在0-4之内的任意值则返回对应的权限树，否则返回所有权限树")
     @ApiImplicitParam(name = "type", value = "权限类型type,CdpSysPermissionEntity.type")
     @RequestMapping(value = "/tree/{type}", method = {RequestMethod.POST})
     public ResponseEntity<Object> getListTree(@PathVariable Integer type) throws CdpControllerException, CdpServiceException {
@@ -119,7 +119,7 @@ public class PermissionController extends AbstractBaseController implements ISim
 //    }
 
     @Override
-    public ISimpleService<CdpSysPermissionEntity, Long> getService() {
+    public ISimpleService<CdpSysPermissionEntity, Long, CdpSysPermissionEntity, CdpSysPermissionEntity> getService() {
         return permissionService;
     }
 }

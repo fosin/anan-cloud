@@ -25,7 +25,7 @@ import java.util.List;
 @RestController
 @RequestMapping("v1/version")
 @Api(value = "v1/version", tags = "系统版本表接入层API", description = "系统版本表(cdp_sys_version)接入层API")
-public class CdpSysVersionController implements ISimpleController<CdpSysVersionEntity, Long> {
+public class CdpSysVersionController implements ISimpleController<CdpSysVersionEntity, Long, CdpSysVersionEntity, CdpSysVersionEntity> {
     /**
      * 服务对象
      */
@@ -97,7 +97,7 @@ public class CdpSysVersionController implements ISimpleController<CdpSysVersionE
     }
 
     @Override
-    public ISimpleService<CdpSysVersionEntity, Long> getService() {
+    public ISimpleService<CdpSysVersionEntity, Long, CdpSysVersionEntity, CdpSysVersionEntity> getService() {
         return cdpSysVersionService;
     }
 }

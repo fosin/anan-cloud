@@ -36,7 +36,11 @@ public class LoginUserUtil {
             return null;
         }
         Map details = (Map) userAuthentication.getDetails();
-        return BeanUtil.toBean(CdpUserDetail.class, (Map) details.get("principal"));
+        Object principal = details.get("principal");
+        if (principal instanceof Map) {
+            return BeanUtil.toBean(CdpUserDetail.class, (Map) principal);
+        }
+        return null;
     }
 
     private static HttpServletRequest getHttpServletRequest() {
@@ -118,8 +122,10 @@ public class LoginUserUtil {
             if (userDetail == null) {
                 try {
                     userDetail = getCurrentUserInfo(request);
-                    removeOldUserDetail(userDetail);
-                    userDetailMap.put(authentication, userDetail);
+                    if (userDetail != null) {
+                        removeOldUserDetail(userDetail);
+                        userDetailMap.put(authentication, userDetail);
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -156,7 +162,8 @@ public class LoginUserUtil {
      */
 
     public static CdpSysUserEntity getUser() {
-        return getUserDetail().getUser();
+        CdpUserDetail userDetail = getUserDetail();
+        return userDetail == null ? null : userDetail.getUser();
     }
 
     /**
@@ -165,7 +172,8 @@ public class LoginUserUtil {
      * @return CdpSysPermissionEntity
      */
     public static CdpSysPermissionEntity getPermissionTree() {
-        return getUserDetail().getPermissionTree();
+        CdpUserDetail userDetail = getUserDetail();
+        return userDetail == null ? null : userDetail.getPermissionTree();
     }
 
     /**
@@ -174,6 +182,7 @@ public class LoginUserUtil {
      * @return Client
      */
     public static Client getClient() {
-        return getUserDetail().getClient();
+        CdpUserDetail userDetail = getUserDetail();
+        return userDetail == null ? null : userDetail.getClient();
     }
 }

@@ -63,7 +63,7 @@ public class CdpSysUserEntity implements Serializable {
     @Basic
     @NotBlank
     @ApiModelProperty(value = "用户姓名", notes = "用户姓名")
-    @Pattern(regexp =RegexUtil.SPECIAL, message = "用户姓名不能包含特殊字符")
+    @Pattern(regexp = RegexUtil.SPECIAL, message = "用户姓名不能包含特殊字符")
     private String username;
 
     @Column(name = "password")
@@ -85,59 +85,59 @@ public class CdpSysUserEntity implements Serializable {
     @Column(name = "sex")
     @Basic
     @NotNull
-    @ApiModelProperty(value = "使用状态：具体取值于字典表cdp_sys_dictionary.code=15", notes = "使用状态：具体取值于字典表cdp_sys_dictionary.code=15")
+    @ApiModelProperty(value = "使用状态：具体取值于字典表cdp_sys_dictionary.code=15")
     private Integer sex;
 
     @Column(name = "email")
     @Basic
-    @ApiModelProperty(value = "电子邮箱", notes = "电子邮箱")
+    @ApiModelProperty(value = "电子邮箱")
     @Email
     private String email;
 
     @Column(name = "phone")
     @Basic
-    @Pattern(regexp =RegexUtil.PHONE_ZH_CN, message = "手机号码格式不正确")
-    @ApiModelProperty(value = "手机号码", notes = "手机号码")
+    @Pattern(regexp = RegexUtil.PHONE_ZH_CN, message = "手机号码格式不正确")
+    @ApiModelProperty(value = "手机号码")
     private String phone;
 
     @Column(name = "status")
     @Basic
     @NotNull
-    @ApiModelProperty(value = "使用状态：0=启用，1=禁用，具体取值于字典表cdp_sys_dictionary.code=11", notes = "使用状态：0=启用，1=禁用，具体取值于字典表cdp_sys_dictionary.code=11")
+    @ApiModelProperty(value = "使用状态：0=启用，1=禁用，具体取值于字典表cdp_sys_dictionary.code=11")
     private Integer status;
 
     @Column(name = "avatar")
     @Basic
-    @ApiModelProperty(value = "头像", notes = "头像")
+    @ApiModelProperty(value = "头像")
     private String avatar;
 
     @Column(name = "create_time")
     @Basic
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
-    @ApiModelProperty(value = "创建日期，该值由后台维护，更改数据时前端不需要关心", notes = "创建日期，该值由后台维护，更改数据时前端不需要关心")
+    @ApiModelProperty(value = "创建日期，该值由后台维护，更改数据时前端不需要关心")
     private Date createTime;
 
     @Column(name = "create_by")
     @Basic
-    @ApiModelProperty(value = "创建人，该值由后台维护，更改数据时前端不需要关心，取值于cdp_sys_user.id", notes = "创建人，该值由后台维护，更改数据时前端不需要关心，取值于cdp_sys_user.id")
+    @ApiModelProperty(value = "创建人，该值由后台维护，更改数据时前端不需要关心，取值于cdp_sys_user.id")
     private Long createBy;
 
     @Column(name = "update_time")
     @Basic
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
-    @ApiModelProperty(value = "更新日期，该值由后台维护，更改数据时前端不需要关心", notes = "更新日期，该值由后台维护，更改数据时前端不需要关心")
+    @ApiModelProperty(value = "更新日期，该值由后台维护，更改数据时前端不需要关心")
     private Date updateTime;
 
     @Column(name = "update_by")
     @Basic
-    @ApiModelProperty(value = "更新人，该值由后台维护，更改数据时前端不需要关心，取值于cdp_sys_user.id", notes = "更新人，该值由后台维护，更改数据时前端不需要关心，取值于cdp_sys_user.id")
+    @ApiModelProperty(value = "更新人，该值由后台维护，更改数据时前端不需要关心，取值于cdp_sys_user.id")
     private Long updateBy;
 
     @Column(name = "expire_time")
     @Basic
     @NotNull
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
-    @ApiModelProperty(value = "过期时间，账户过期后用户被锁定切不能登录系统", notes = "过期时间，账户过期后用户被锁定切不能登录系统")
+    @ApiModelProperty(value = "过期时间，账户过期后用户被锁定切不能登录系统")
     private Date expireTime;
 
 }

@@ -5,6 +5,7 @@ import com.github.fosin.cdp.core.exception.CdpServiceException;
 import com.github.fosin.cdp.mvc.controller.AbstractBaseController;
 import com.github.fosin.cdp.mvc.controller.ISimpleController;
 import com.github.fosin.cdp.mvc.service.ISimpleService;
+import com.github.fosin.cdp.platformapi.dto.CdpSysUserRequestDto;
 import com.github.fosin.cdp.platformapi.entity.CdpSysRoleEntity;
 import com.github.fosin.cdp.platformapi.entity.CdpSysUserEntity;
 import com.github.fosin.cdp.platformapi.entity.CdpSysUserPermissionEntity;
@@ -30,8 +31,8 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("v1/user")
-@Api(value = "v1/user",tags = "用户管理", description = "用户管理相关操作")
-public class UserController extends AbstractBaseController implements ISimpleController<CdpSysUserEntity, Long> {
+@Api(value = "v1/user", tags = "用户管理", description = "用户管理相关操作")
+public class UserController extends AbstractBaseController implements ISimpleController<CdpSysUserEntity, Long, CdpSysUserRequestDto.CreateDto, CdpSysUserRequestDto.UpdateDto> {
 
     @Autowired
     private IUserService userService;
@@ -45,7 +46,21 @@ public class UserController extends AbstractBaseController implements ISimpleCon
     @Autowired
     private IUserPermissionService userPermissionService;
 
-    @GetMapping("/usercode/{usercode}")
+//    @PostMapping
+//    @ApiImplicitParam(name = "createDTO", value = " 创建新用户实体类")
+//    @ApiOperation("创建新用户")
+//    public ResponseEntity<CdpSysUserEntity> createUser(@RequestBody CdpSysUserCreateDTO createDTO) {
+//        return ResponseEntity.ok(userService.createUser(createDTO));
+//    }
+//
+//    @PutMapping
+//    @ApiImplicitParam(name = "updateDTO", value = " 更新用户实体类")
+//    @ApiOperation("更新用户信息")
+//    public ResponseEntity<CdpSysUserEntity> updateUser(@RequestBody CdpSysUserUpdateDTO updateDTO) {
+//        return ResponseEntity.ok(userService.updateUser(updateDTO));
+//    }
+
+    @PostMapping("/usercode/{usercode}")
     @ApiImplicitParam(name = "usercode", value = "用户工号,取值于CdpSysUserEntity.usercode")
     @ApiOperation("根据用户工号查找用户信息")
     public ResponseEntity<CdpSysUserEntity> getByUsercode(@PathVariable("usercode") String usercode) {
@@ -143,7 +158,7 @@ public class UserController extends AbstractBaseController implements ISimpleCon
     }
 
     @Override
-    public ISimpleService<CdpSysUserEntity, Long> getService() {
+    public ISimpleService<CdpSysUserEntity, Long, CdpSysUserRequestDto.CreateDto, CdpSysUserRequestDto.UpdateDto> getService() {
         return userService;
     }
 }

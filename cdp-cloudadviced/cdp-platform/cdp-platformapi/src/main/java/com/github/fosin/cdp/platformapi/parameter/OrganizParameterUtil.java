@@ -114,6 +114,6 @@ public class OrganizParameterUtil extends AbstractParameterUtil {
 
     private static String getScope() {
         CdpSysUserEntity user = LoginUserUtil.getUser();
-        return user.getOrganizId() + "";
+        return user == null ? "" : user.getOrganizId() + "";
     }
 }

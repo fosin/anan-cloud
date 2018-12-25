@@ -6,13 +6,10 @@ import com.github.fosin.cdp.mvc.module.PageModule;
 import com.github.fosin.cdp.mvc.result.Result;
 import com.github.fosin.cdp.mvc.result.ResultUtils;
 import com.github.fosin.cdp.platformapi.constant.TableNameConstant;
+import com.github.fosin.cdp.platformapi.dto.CdpSysUserRequestDto;
 import com.github.fosin.cdp.platformapi.dto.RegisterDto;
-import com.github.fosin.cdp.platformapi.dto.UserRegisterDto;
 import com.github.fosin.cdp.platformapi.entity.*;
-import com.github.fosin.cdp.platformapi.repository.CdpSysOrganizationAuthRepository;
-import com.github.fosin.cdp.platformapi.repository.CdpSysPayOrderRepository;
 import com.github.fosin.cdp.platformapi.repository.OrganizationRepository;
-import com.github.fosin.cdp.platformapi.repository.UserRepository;
 import com.github.fosin.cdp.platformapi.service.inter.*;
 import com.github.fosin.cdp.platformapi.util.LoginUserUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -168,11 +165,9 @@ public class OrganizationServiceImpl implements IOrganizationService {
         Date now = new Date();
 
         //创建用户
-        CdpSysUserEntity user = new CdpSysUserEntity();
-        UserRegisterDto registerDtoUser = registerDto.getUser();
-        Assert.isTrue(registerDtoUser.getPassword().equals(registerDtoUser.getConfirmPassword()), "密码和确认密码必须一致!");
-        BeanUtils.copyProperties(registerDtoUser, user);
-        user = userService.create(user);
+        CdpSysUserRequestDto.CreateDto createDTO = registerDto.getUser();
+//        Assert.isTrue(createDTO.getPassword().equals(createDTO.getConfirmPassword()), "密码和确认密码必须一致!");
+        CdpSysUserEntity user = userService.create(createDTO);
 
         //创建机构
         CdpSysOrganizationEntity organization = new CdpSysOrganizationEntity();

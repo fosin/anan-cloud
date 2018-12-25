@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("v1/paydetail")
-@Api(value = "v1/paydetail",tags = "系统支付明细表接入层API",description = "系统支付明细表(cdp_sys_pay_detail)接入层API")
-public class CdpSysPayDetailController implements ISimpleController<CdpSysPayDetailEntity, Long> {
+@Api(value = "v1/paydetail", tags = "系统支付明细表接入层API", description = "系统支付明细表(cdp_sys_pay_detail)接入层API")
+public class CdpSysPayDetailController implements ISimpleController<CdpSysPayDetailEntity, Long, CdpSysPayDetailEntity, CdpSysPayDetailEntity> {
     /**
      * 服务对象
      */
@@ -26,7 +26,7 @@ public class CdpSysPayDetailController implements ISimpleController<CdpSysPayDet
     private ICdpSysPayDetailService cdpSysPayDetailService;
 
     @Override
-    public ISimpleService<CdpSysPayDetailEntity, Long> getService() {
+    public ISimpleService<CdpSysPayDetailEntity, Long, CdpSysPayDetailEntity, CdpSysPayDetailEntity> getService() {
         return cdpSysPayDetailService;
     }
 }

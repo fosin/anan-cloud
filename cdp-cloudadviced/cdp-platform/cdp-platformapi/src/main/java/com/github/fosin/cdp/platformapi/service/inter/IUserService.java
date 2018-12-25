@@ -1,6 +1,7 @@
 package com.github.fosin.cdp.platformapi.service.inter;
 
 import com.github.fosin.cdp.mvc.service.ISimpleService;
+import com.github.fosin.cdp.platformapi.dto.CdpSysUserRequestDto;
 import com.github.fosin.cdp.platformapi.entity.CdpSysUserEntity;
 
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.List;
  *
  * @author fosin
  */
-public interface IUserService extends ISimpleService<CdpSysUserEntity,Long> {
+public interface IUserService extends ISimpleService<CdpSysUserEntity, Long, CdpSysUserRequestDto.CreateDto, CdpSysUserRequestDto.UpdateDto> {
     CdpSysUserEntity findByUsercode(String usercode);
 
     CdpSysUserEntity changePassword(Long id, String password, String confirmPassword1, String confirmPassword2);
