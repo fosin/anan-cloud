@@ -9,5 +9,5 @@ import com.github.fosin.cdp.mvc.service.ISimpleService;
  *
  * @author fosin
  */
-public interface IDictionaryService extends ISimpleService<CdpSysDictionaryEntity, Long, CdpSysDictionaryEntity, CdpSysDictionaryEntity> {
+public interface IDictionaryService extends ISimpleService<CdpSysDictionaryEntity, Long, CdpSysDictionaryEntity, CdpSysDictionaryEntity, CdpSysDictionaryEntity> {
 }

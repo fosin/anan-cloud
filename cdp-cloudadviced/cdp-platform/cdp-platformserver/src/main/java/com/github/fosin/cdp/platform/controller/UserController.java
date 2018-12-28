@@ -32,7 +32,7 @@ import java.util.List;
 @RestController
 @RequestMapping("v1/user")
 @Api(value = "v1/user", tags = "用户管理", description = "用户管理相关操作")
-public class UserController extends AbstractBaseController implements ISimpleController<CdpSysUserEntity, Long, CdpSysUserRequestDto.CreateDto, CdpSysUserRequestDto.UpdateDto> {
+public class UserController extends AbstractBaseController implements ISimpleController<CdpSysUserEntity, Long, CdpSysUserRequestDto.CreateDto, CdpSysUserEntity, CdpSysUserRequestDto.UpdateDto> {
 
     @Autowired
     private IUserService userService;
@@ -158,7 +158,7 @@ public class UserController extends AbstractBaseController implements ISimpleCon
     }
 
     @Override
-    public ISimpleService<CdpSysUserEntity, Long, CdpSysUserRequestDto.CreateDto, CdpSysUserRequestDto.UpdateDto> getService() {
+    public ISimpleService<CdpSysUserEntity, Long, CdpSysUserRequestDto.CreateDto, CdpSysUserEntity, CdpSysUserRequestDto.UpdateDto> getService() {
         return userService;
     }
 }

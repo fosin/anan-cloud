@@ -28,7 +28,7 @@ spring:
         url: jdbc:sqlserver://192.168.2.250\MSSQL2016:49918;database=xflis
         username: sa
         password: '{cipher}AQAB30DlnFWqNZlTKUPW9tiqS3b/p3AUJ9q7zatMfysgDbRmB47rKHQZi+JUl4iP0JeNVweldrbDQa/Ga+zMP/ubyqoxZqmvH7rvzHllBLqCrAQDUSp8SGB/hyNN4gy2cFNTDzyHXBljj1He2NWi/Rm6Yyobo1hWOL9MeUqKijPQrnbF2vm4cjDeJRx22sK7im3ljus10R/1NXycBYLEgKs0l8oeCFMxixGCNIw/mf3JBJ94JsQz+pppKQm+1jxBVPLI4fESIZmB0pboXRqVBP6ZSJPed80JU+B9ePVVLetGnuPAV6Ous6CuAVBLn9VDOuKVF4x7NMLUECJUdNscKLjosGI8LaJzZWxQeaSXenq7TfVOkARJG9GkqskHkVlmyGE='
-      pacs:
+      tj:
         url: jdbc:oracle:thin:@10.211.10.35:1521:orcl
         #        url: jdbc:sqlserver://localhost:1433;DatabaseName=test1;
         username: '{cipher}AQBHrAB9SJPoyY/R6JcfO1/cQ5BvZi0vw3YTRPPvkNr2YHb27I7/IYM/lZoytHdT5btPz8Jy+7cQLARHl1wVLkD0rAt+pDM486vRX8RN3pFDRbdAkAK7RsdGw55C3Gh2TdS06Bp6y8OgQa0+KHEroN59DzGCv70JM0m4z91Up5pOEWBVFNBTBD+8l/IduPpcIms9ZXEs0xfR8EHfcsUvEYlcUSHO1/6rHU3dIHjw9uVTttB6Ut9m2JZXi7IqKIP08ZU7u33ex6bG5Rfhv1fh3fQaLUWvfSSGhj1ptuvP6kDeV5SMb2JqM/+81E+jr2sjFNX4nB4Mh/iFlBVyBerHMb9cS1NCisj27+AVdiEG72c79jxUBcl3L1LQYUFehH0shcE='

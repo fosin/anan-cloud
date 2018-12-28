@@ -14,7 +14,7 @@ import java.util.List;
  *
  * @author fosin
  */
-public interface IDictionaryDetailService extends ISimpleService<CdpSysDictionaryDetailEntity, Long, CdpSysDictionaryDetailEntity, CdpSysDictionaryDetailEntity> {
+public interface IDictionaryDetailService extends ISimpleService<CdpSysDictionaryDetailEntity, Long, CdpSysDictionaryDetailEntity, CdpSysDictionaryDetailEntity, CdpSysDictionaryDetailEntity> {
     Page<CdpSysDictionaryDetailEntity> findAll(String searchCondition, Pageable pageable, Long code) throws CdpServiceException;
 
     List<CdpSysDictionaryDetailEntity> findByCode(Long code);

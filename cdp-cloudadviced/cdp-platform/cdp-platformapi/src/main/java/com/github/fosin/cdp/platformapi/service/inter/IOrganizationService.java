@@ -14,7 +14,7 @@ import java.util.List;
  *
  * @author fosin
  */
-public interface IOrganizationService extends ISimpleService<CdpSysOrganizationEntity, Long, CdpSysOrganizationEntity, CdpSysOrganizationEntity> {
+public interface IOrganizationService extends ISimpleService<CdpSysOrganizationEntity, Long, CdpSysOrganizationEntity, CdpSysOrganizationEntity, CdpSysOrganizationEntity> {
     List<CdpSysOrganizationEntity> findAllByTopId(Long topId);
 
     List<CdpSysOrganizationEntity> findByPid(Long pid) throws CdpServiceException;

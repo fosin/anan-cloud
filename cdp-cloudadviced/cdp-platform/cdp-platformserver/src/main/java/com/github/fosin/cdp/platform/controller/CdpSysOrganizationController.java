@@ -36,7 +36,7 @@ import java.util.List;
 @RequestMapping("v1/organiz")
 @Api(value = "v1/organiz", tags = "机构管理", description = "机构管理相关操作(增删改查)")
 public class CdpSysOrganizationController extends AbstractBaseController
-        implements ISimpleController<CdpSysOrganizationEntity, Long, CdpSysOrganizationEntity, CdpSysOrganizationEntity> {
+        implements ISimpleController<CdpSysOrganizationEntity, Long, CdpSysOrganizationEntity, CdpSysOrganizationEntity, CdpSysOrganizationEntity> {
     @Autowired
     private IOrganizationService organizationService;
 
@@ -141,7 +141,7 @@ public class CdpSysOrganizationController extends AbstractBaseController
     }
 
     @Override
-    public ISimpleService<CdpSysOrganizationEntity, Long, CdpSysOrganizationEntity, CdpSysOrganizationEntity> getService() {
+    public ISimpleService<CdpSysOrganizationEntity, Long, CdpSysOrganizationEntity, CdpSysOrganizationEntity, CdpSysOrganizationEntity> getService() {
         return organizationService;
     }
 }

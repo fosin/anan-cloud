@@ -9,5 +9,5 @@ import com.github.fosin.cdp.mvc.service.ISimpleService;
  * @author fosin
  * @date 2018-11-18 17:26:40
  */
-public interface ICdpSysPayService extends ISimpleService<CdpSysPayEntity, Long, CdpSysPayEntity, CdpSysPayEntity> {
+public interface ICdpSysPayService extends ISimpleService<CdpSysPayEntity, Long, CdpSysPayEntity, CdpSysPayEntity, CdpSysPayEntity> {
 }

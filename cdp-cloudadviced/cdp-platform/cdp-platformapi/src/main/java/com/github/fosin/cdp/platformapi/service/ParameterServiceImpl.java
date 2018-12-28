@@ -84,13 +84,13 @@ public class ParameterServiceImpl implements IParameterService {
     }
 
     @Override
-    public List<CdpSysParameterEntity> findAll() {
-        return parameterRepository.findAll();
+    public CdpSysParameterEntity findOne(Long id) {
+        return parameterRepository.findOne(id);
     }
 
     @Override
-    public CdpSysParameterEntity findOne(Long id) {
-        return parameterRepository.findOne(id);
+    public Collection<CdpSysParameterEntity> findAllByEntity(CdpSysParameterEntity cdpSysParameterEntity) {
+        return null;
     }
 
     @Override

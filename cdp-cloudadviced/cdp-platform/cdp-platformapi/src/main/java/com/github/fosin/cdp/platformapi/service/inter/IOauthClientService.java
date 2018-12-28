@@ -9,6 +9,6 @@ import com.github.fosin.cdp.mvc.service.ISimpleService;
  *
  * @author fosin
  */
-public interface IOauthClientService extends ISimpleService<OauthClientDetailsEntity, String, OauthClientDetailsEntity, OauthClientDetailsEntity> {
+public interface IOauthClientService extends ISimpleService<OauthClientDetailsEntity, String, OauthClientDetailsEntity, OauthClientDetailsEntity, OauthClientDetailsEntity> {
 
 }

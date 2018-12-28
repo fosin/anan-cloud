@@ -14,7 +14,7 @@ import java.util.List;
  * @author fosin
  * @date 2018-11-18 17:26:40
  */
-public interface ICdpSysVersionPermissionService extends ICrudBatchService<CdpSysVersionPermissionEntity, Long> {
+public interface ICdpSysVersionPermissionService extends ICrudBatchService<CdpSysVersionPermissionEntity> {
     List<CdpSysVersionPermissionEntity> findByVersionId(Long versionId);
 
     long countByPermissionId(Long permissionId);

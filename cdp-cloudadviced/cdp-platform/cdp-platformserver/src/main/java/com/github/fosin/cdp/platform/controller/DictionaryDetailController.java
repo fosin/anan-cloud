@@ -30,12 +30,12 @@ import java.util.List;
 @RestController
 @RequestMapping("v1/dictionaryDetail")
 @Api(value = "v1/dictionaryDetail", tags = "通用字典明细管理", description = "通用字典明细管理(增删改查)")
-public class DictionaryDetailController implements ISimpleController<CdpSysDictionaryDetailEntity, Long, CdpSysDictionaryDetailEntity, CdpSysDictionaryDetailEntity> {
+public class DictionaryDetailController implements ISimpleController<CdpSysDictionaryDetailEntity, Long, CdpSysDictionaryDetailEntity, CdpSysDictionaryDetailEntity, CdpSysDictionaryDetailEntity> {
     @Autowired
     private IDictionaryDetailService dictionaryDetailService;
 
     @Override
-    public ISimpleService<CdpSysDictionaryDetailEntity, Long, CdpSysDictionaryDetailEntity, CdpSysDictionaryDetailEntity> getService() {
+    public ISimpleService<CdpSysDictionaryDetailEntity, Long, CdpSysDictionaryDetailEntity, CdpSysDictionaryDetailEntity, CdpSysDictionaryDetailEntity> getService() {
         return dictionaryDetailService;
     }
 

@@ -82,13 +82,13 @@ public class DictionaryDetailServiceImpl implements IDictionaryDetailService {
     }
 
     @Override
-    public List<CdpSysDictionaryDetailEntity> findAll() {
-        return dictionaryDetailRepository.findAll();
+    public CdpSysDictionaryDetailEntity findOne(Long id) {
+        return dictionaryDetailRepository.findOne(id);
     }
 
     @Override
-    public CdpSysDictionaryDetailEntity findOne(Long id) {
-        return dictionaryDetailRepository.findOne(id);
+    public Collection<CdpSysDictionaryDetailEntity> findAllByEntity(CdpSysDictionaryDetailEntity cdpSysDictionaryDetailEntity) {
+        return null;
     }
 
     @Override

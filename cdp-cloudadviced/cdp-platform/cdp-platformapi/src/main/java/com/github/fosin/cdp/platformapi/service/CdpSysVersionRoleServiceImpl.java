@@ -20,6 +20,7 @@ import com.github.fosin.cdp.mvc.module.PageModule;
 import com.github.fosin.cdp.mvc.result.Result;
 import com.github.fosin.cdp.mvc.result.ResultUtils;
 import javax.persistence.criteria.*;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import com.github.fosin.cdp.core.exception.CdpServiceException;
@@ -76,11 +77,6 @@ public class CdpSysVersionRoleServiceImpl implements ICdpSysVersionRoleService {
         entity.setUpdateTime(new Date());
         return getRepository().save(entity);
     }
-    
-    @Override
-    public List<CdpSysVersionRoleEntity> findAll() {
-        return getRepository().findAll();
-    }
 
     /**
      * 通过主键查找一条数据
@@ -91,6 +87,11 @@ public class CdpSysVersionRoleServiceImpl implements ICdpSysVersionRoleService {
     @Override
     public CdpSysVersionRoleEntity findOne(Long id) {
         return getRepository().findOne(id);
+    }
+
+    @Override
+    public Collection<CdpSysVersionRoleEntity> findAllByEntity(CdpSysVersionRoleEntity cdpSysVersionRoleEntity) {
+        return null;
     }
 
     /**

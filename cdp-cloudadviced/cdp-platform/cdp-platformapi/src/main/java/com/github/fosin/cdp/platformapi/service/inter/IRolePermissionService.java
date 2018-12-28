@@ -8,11 +8,12 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- *  2017/12/29.
+ * 2017/12/29.
  * Time:12:37
+ *
  * @author fosin
  */
-public interface IRolePermissionService extends ICrudBatchService<CdpSysRolePermissionEntity,Long> {
+public interface IRolePermissionService extends ICrudBatchService<CdpSysRolePermissionEntity> {
     List<CdpSysRolePermissionEntity> findByRoleId(Long roleId);
 
     long countByPermissionId(Long permissionId);

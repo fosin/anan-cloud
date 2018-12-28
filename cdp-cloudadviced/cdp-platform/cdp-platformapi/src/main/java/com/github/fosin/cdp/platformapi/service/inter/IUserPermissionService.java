@@ -7,11 +7,12 @@ import com.github.fosin.cdp.mvc.service.ICrudBatchService;
 import java.util.List;
 
 /**
- *  2017/12/29.
+ * 2017/12/29.
  * Time:12:37
+ *
  * @author fosin
  */
-public interface IUserPermissionService extends ICrudBatchService<CdpSysUserPermissionEntity,Integer> {
+public interface IUserPermissionService extends ICrudBatchService<CdpSysUserPermissionEntity> {
     List<CdpSysUserPermissionEntity> findByUserIdAndOrganizId(Long userId, Long organizId);
 
     List<CdpSysUserPermissionEntity> findByUserId(Long userId);

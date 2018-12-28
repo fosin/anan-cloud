@@ -69,13 +69,13 @@ public class DictionaryServiceImpl implements IDictionaryService {
     }
 
     @Override
-    public List<CdpSysDictionaryEntity> findAll() {
-        return dictionaryRepository.findAll();
+    public CdpSysDictionaryEntity findOne(Long code) {
+        return dictionaryRepository.findOne(code);
     }
 
     @Override
-    public CdpSysDictionaryEntity findOne(Long code) {
-        return dictionaryRepository.findOne(code);
+    public Collection<CdpSysDictionaryEntity> findAllByEntity(CdpSysDictionaryEntity cdpSysDictionaryEntity) {
+        return null;
     }
 
     @Override

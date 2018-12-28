@@ -31,7 +31,7 @@ import java.util.List;
 @RestController
 @RequestMapping("v1/permission")
 @Api(value = "v1/permission", tags = "权限管理", description = "权限管理相关操作")
-public class PermissionController extends AbstractBaseController implements ISimpleController<CdpSysPermissionEntity, Long, CdpSysPermissionEntity, CdpSysPermissionEntity> {
+public class PermissionController extends AbstractBaseController implements ISimpleController<CdpSysPermissionEntity, Long, CdpSysPermissionEntity, CdpSysPermissionEntity, CdpSysPermissionEntity> {
     @Autowired
     private IPermissionService permissionService;
 
@@ -119,7 +119,7 @@ public class PermissionController extends AbstractBaseController implements ISim
 //    }
 
     @Override
-    public ISimpleService<CdpSysPermissionEntity, Long, CdpSysPermissionEntity, CdpSysPermissionEntity> getService() {
+    public ISimpleService<CdpSysPermissionEntity, Long, CdpSysPermissionEntity, CdpSysPermissionEntity, CdpSysPermissionEntity> getService() {
         return permissionService;
     }
 }

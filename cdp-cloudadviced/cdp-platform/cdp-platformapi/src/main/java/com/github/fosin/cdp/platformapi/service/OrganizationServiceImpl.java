@@ -77,6 +77,11 @@ public class OrganizationServiceImpl implements IOrganizationService {
     }
 
     @Override
+    public Collection<CdpSysOrganizationEntity> findAllByEntity(CdpSysOrganizationEntity cdpSysOrganizationEntity) {
+        return null;
+    }
+
+    @Override
     @CacheEvict(value = TableNameConstant.CDP_SYS_ORGANIZATION, key = "#id")
     public CdpSysOrganizationEntity delete(Long id) throws CdpServiceException {
         Assert.notNull(id, "传入了空ID!");
@@ -95,12 +100,6 @@ public class OrganizationServiceImpl implements IOrganizationService {
         Assert.isTrue(entities == null || entities.size() == 0, "该节点还存在子节点不能直接删除!");
         organizationRepository.delete(entity);
         return entity;
-    }
-
-    @Override
-    public Collection<CdpSysOrganizationEntity> findAll() {
-        Sort sort = new Sort("code");
-        return organizationRepository.findAll(sort);
     }
 
     @Override

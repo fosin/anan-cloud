@@ -60,13 +60,13 @@ public class OauthClientServiceImpl implements IOauthClientService {
     }
 
     @Override
-    public List<OauthClientDetailsEntity> findAll() {
-        return oauthClientRepository.findAll();
+    public OauthClientDetailsEntity findOne(String id) {
+        return oauthClientRepository.findOne(id);
     }
 
     @Override
-    public OauthClientDetailsEntity findOne(String id) {
-        return oauthClientRepository.findOne(id);
+    public Collection<OauthClientDetailsEntity> findAllByEntity(OauthClientDetailsEntity oauthClientDetailsEntity) {
+        return null;
     }
 
     @Override

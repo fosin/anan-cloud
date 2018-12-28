@@ -5,10 +5,7 @@ import com.github.fosin.cdp.mvc.controller.ISimpleController;
 import com.github.fosin.cdp.mvc.module.PageModule;
 import com.github.fosin.cdp.mvc.result.Result;
 import com.github.fosin.cdp.mvc.service.ISimpleService;
-import com.github.fosin.cdp.platformapi.entity.CdpSysRoleEntity;
-import com.github.fosin.cdp.platformapi.entity.CdpSysRolePermissionEntity;
-import com.github.fosin.cdp.platformapi.entity.CdpSysUserEntity;
-import com.github.fosin.cdp.platformapi.entity.CdpSysUserRoleEntity;
+import com.github.fosin.cdp.platformapi.entity.*;
 import com.github.fosin.cdp.platformapi.service.inter.IRolePermissionService;
 import com.github.fosin.cdp.platformapi.service.inter.IRoleService;
 import com.github.fosin.cdp.platformapi.service.inter.IUserRoleService;
@@ -32,7 +29,7 @@ import java.util.List;
 @RestController
 @RequestMapping("v1/role")
 @Api(value = "v1/role", tags = "角色管理", description = "角色管理相关操作")
-public class RoleController implements ISimpleController<CdpSysRoleEntity, Long, CdpSysRoleEntity, CdpSysRoleEntity> {
+public class RoleController implements ISimpleController<CdpSysRoleEntity, Long, CdpSysRoleEntity, CdpSysRoleEntity, CdpSysRoleEntity> {
     @Autowired
     private IRoleService roleService;
     @Autowired
@@ -101,7 +98,7 @@ public class RoleController implements ISimpleController<CdpSysRoleEntity, Long,
     }
 
     @Override
-    public ISimpleService<CdpSysRoleEntity, Long, CdpSysRoleEntity, CdpSysRoleEntity> getService() {
+    public ISimpleService<CdpSysRoleEntity, Long, CdpSysRoleEntity, CdpSysRoleEntity, CdpSysRoleEntity> getService() {
         return roleService;
     }
 }

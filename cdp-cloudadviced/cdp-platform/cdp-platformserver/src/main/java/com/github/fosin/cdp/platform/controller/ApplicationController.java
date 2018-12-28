@@ -1,6 +1,5 @@
 package com.github.fosin.cdp.platform.controller;
 
-import com.netflix.loadbalancer.IRule;
 import com.github.fosin.cdp.platform.dto.PageURI;
 import com.github.fosin.cdp.util.StringUtil;
 import io.swagger.annotations.Api;
@@ -45,7 +44,7 @@ public class ApplicationController {
 
     @ApiOperation(value = "获取服务名称列表", notes = "获取当前注册到Eureka注册中心的所有节点服务名称")
     @RequestMapping(value = "/serviceNames", method = {RequestMethod.POST})
-    public ResponseEntity<Object> getServiceNames() {
+    public ResponseEntity<List<String>> getServiceNames() {
         Assert.notNull(discoveryClient, "discoveryClient不能为空!");
         List<String> services = discoveryClient.getServices();
         return ResponseEntity.ok(services);
@@ -59,7 +58,7 @@ public class ApplicationController {
                     value = "当前服务节点管理端点的url")
     })
     @RequestMapping(value = "/ui/url", method = {RequestMethod.POST})
-    public ResponseEntity<Object> uiUrl(@RequestParam String serviceId, @RequestParam(value = "path", required = false) String path) {
+    public ResponseEntity<PageURI> uiUrl(@RequestParam String serviceId, @RequestParam(value = "path", required = false) String path) {
         Assert.isTrue(StringUtil.hasText(serviceId), "serviceId不能为空!");
         ServiceInstance serviceInstance = getServiceInstance(serviceId);
         Assert.notNull(serviceInstance, "未找到可用的服务实例!");

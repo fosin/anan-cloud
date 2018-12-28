@@ -12,7 +12,7 @@ import java.util.List;
  *
  * @author fosin
  */
-public interface IUserService extends ISimpleService<CdpSysUserEntity, Long, CdpSysUserRequestDto.CreateDto, CdpSysUserRequestDto.UpdateDto> {
+public interface IUserService extends ISimpleService<CdpSysUserEntity, Long, CdpSysUserRequestDto.CreateDto, CdpSysUserEntity, CdpSysUserRequestDto.UpdateDto> {
     CdpSysUserEntity findByUsercode(String usercode);
 
     CdpSysUserEntity changePassword(Long id, String password, String confirmPassword1, String confirmPassword2);

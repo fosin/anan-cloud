@@ -123,6 +123,11 @@ public class PermissionServiceImpl implements IPermissionService {
     }
 
     @Override
+    public Collection<CdpSysPermissionEntity> findAllByEntity(CdpSysPermissionEntity cdpSysPermissionEntity) {
+        return null;
+    }
+
+    @Override
     @CachePut(value = TableNameConstant.CDP_SYS_PERMISSION, key = "#entity.id")
     public CdpSysPermissionEntity update(CdpSysPermissionEntity entity) throws CdpServiceException {
         Assert.notNull(entity, "传入了空对象!");

@@ -16,6 +16,7 @@ import com.github.fosin.cdp.mvc.module.PageModule;
 import com.github.fosin.cdp.mvc.result.Result;
 import com.github.fosin.cdp.mvc.result.ResultUtils;
 import javax.persistence.criteria.*;
+import java.util.Collection;
 import java.util.List;
 import com.github.fosin.cdp.core.exception.CdpServiceException;
 
@@ -60,11 +61,6 @@ public class CdpSysPayServiceImpl implements ICdpSysPayService {
         Assert.notNull(entity,"更新数据的实体对象不能为空!");
         return getRepository().save(entity);
     }
-    
-    @Override
-    public List<CdpSysPayEntity> findAll() {
-        return getRepository().findAll();
-    }
 
     /**
      * 通过主键查找一条数据
@@ -75,6 +71,11 @@ public class CdpSysPayServiceImpl implements ICdpSysPayService {
     @Override
     public CdpSysPayEntity findOne(Long payId) {
         return getRepository().findOne(payId);
+    }
+
+    @Override
+    public Collection<CdpSysPayEntity> findAllByEntity(CdpSysPayEntity cdpSysPayEntity) {
+        return null;
     }
 
     /**

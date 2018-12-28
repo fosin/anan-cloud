@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("v1/parameter")
 @Api(value = "v1/parameter", tags = "通用参数管理", description = "通用参数管理相关操作(参数获取、自动创建)")
-public class ParameterController implements ISimpleController<CdpSysParameterEntity, Long, CdpSysParameterEntity, CdpSysParameterEntity> {
+public class ParameterController implements ISimpleController<CdpSysParameterEntity, Long, CdpSysParameterEntity, CdpSysParameterEntity, CdpSysParameterEntity> {
     @Autowired
     private IParameterService parameterService;
 
@@ -137,7 +137,7 @@ public class ParameterController implements ISimpleController<CdpSysParameterEnt
     }
 
     @Override
-    public ISimpleService<CdpSysParameterEntity, Long, CdpSysParameterEntity, CdpSysParameterEntity> getService() {
+    public ISimpleService<CdpSysParameterEntity, Long, CdpSysParameterEntity, CdpSysParameterEntity, CdpSysParameterEntity> getService() {
         return parameterService;
     }
 }

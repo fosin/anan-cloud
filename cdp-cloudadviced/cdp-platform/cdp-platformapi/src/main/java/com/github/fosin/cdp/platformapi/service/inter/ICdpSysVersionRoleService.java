@@ -9,5 +9,5 @@ import com.github.fosin.cdp.mvc.service.ISimpleService;
  * @author fosin
  * @date 2018-11-18 17:26:40
  */
-public interface ICdpSysVersionRoleService extends ISimpleService<CdpSysVersionRoleEntity, Long, CdpSysVersionRoleEntity, CdpSysVersionRoleEntity> {
+public interface ICdpSysVersionRoleService extends ISimpleService<CdpSysVersionRoleEntity, Long, CdpSysVersionRoleEntity, CdpSysVersionRoleEntity, CdpSysVersionRoleEntity> {
 }

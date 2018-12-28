@@ -4,6 +4,7 @@ package com.github.fosin.cdp.platformapi.service.inter;
 import com.github.fosin.cdp.mvc.service.ISimpleService;
 import com.github.fosin.cdp.platformapi.entity.CdpSysPermissionEntity;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -12,7 +13,9 @@ import java.util.List;
  *
  * @author fosin
  */
-public interface IPermissionService extends ISimpleService<CdpSysPermissionEntity, Long, CdpSysPermissionEntity, CdpSysPermissionEntity> {
+public interface IPermissionService extends ISimpleService<CdpSysPermissionEntity, Long, CdpSysPermissionEntity, CdpSysPermissionEntity, CdpSysPermissionEntity> {
+    Collection<CdpSysPermissionEntity> findAll();
+
     List<CdpSysPermissionEntity> findByPId(Long pId);
 
     List<CdpSysPermissionEntity> findByType(Integer type);

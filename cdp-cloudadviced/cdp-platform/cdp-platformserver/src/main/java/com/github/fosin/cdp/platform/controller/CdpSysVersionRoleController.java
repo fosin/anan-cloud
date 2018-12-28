@@ -26,7 +26,7 @@ import java.util.List;
 @RestController
 @RequestMapping("v1/version/role")
 @Api(value = "v1/version/role", tags = "系统版本角色表接入层API", description = "系统版本角色表(cdp_sys_version_role)接入层API")
-public class CdpSysVersionRoleController implements ISimpleController<CdpSysVersionRoleEntity, Long, CdpSysVersionRoleEntity, CdpSysVersionRoleEntity> {
+public class CdpSysVersionRoleController implements ISimpleController<CdpSysVersionRoleEntity, Long, CdpSysVersionRoleEntity, CdpSysVersionRoleEntity, CdpSysVersionRoleEntity> {
     /**
      * 服务对象
      */
@@ -57,7 +57,7 @@ public class CdpSysVersionRoleController implements ISimpleController<CdpSysVers
     }
 
     @Override
-    public ISimpleService<CdpSysVersionRoleEntity, Long, CdpSysVersionRoleEntity, CdpSysVersionRoleEntity> getService() {
+    public ISimpleService<CdpSysVersionRoleEntity, Long, CdpSysVersionRoleEntity, CdpSysVersionRoleEntity, CdpSysVersionRoleEntity> getService() {
         return cdpSysVersionRoleService;
     }
 }

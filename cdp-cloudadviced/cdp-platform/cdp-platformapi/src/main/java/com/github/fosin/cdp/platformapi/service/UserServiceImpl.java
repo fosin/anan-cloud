@@ -38,10 +38,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import javax.persistence.criteria.*;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 /**
  * 2017/12/27.
@@ -104,11 +101,7 @@ public class UserServiceImpl implements IUserService {
         createUser.setCreateBy(userId);
         createUser.setUpdateTime(now);
         createUser.setUpdateBy(userId);
-//        List<CdpSysUserRoleEntity> userRoles = entity.getUserRoles();
-//        for (CdpSysUserRoleEntity userRole : userRoles) {
-//            userRole.setCreateBy(userId);
-//            userRole.setCreateTime(now);
-//        }
+
         String passwordStrength = OrganizParameterUtil.getOrCreateParameter("DefaultPasswordStrength", RegexUtil.PASSWORD_STRONG, "用户密码强度正则表达式,密码最少6位，包括至少1个大写字母，1个小写字母，1个数字，1个特殊字符");
         Assert.isTrue(RegexUtil.matcher(createUser.getPassword(), passwordStrength), "密码强度不符合强度要求!");
         String password = encryptBeforeSave(createUser);
@@ -116,19 +109,6 @@ public class UserServiceImpl implements IUserService {
         savedEntity.setPassword(password);
         return savedEntity;
     }
-
-//    @Override
-//    @Caching(
-//            put = {
-//                    @CachePut(value = TableNameConstant.CDP_SYS_USER, key = "#result.id", condition = "#result.id != null"),
-//                    @CachePut(value = TableNameConstant.CDP_SYS_USER, key = "#result.usercode", condition = "#result.usercode != null"),
-//            }
-//    )
-//    public CdpSysUserEntity createUser(CdpSysUserCreateDTO createDTO) {
-//        CdpSysUserEntity createUser = new CdpSysUserEntity();
-//        BeanUtils.copyProperties(createDTO, createUser);
-//        return create(createUser);
-//    }
 
     @Override
     @Caching(
@@ -162,46 +142,7 @@ public class UserServiceImpl implements IUserService {
         }
         createUser.setUpdateBy(userId);
         createUser.setUpdateTime(now);
-//        List<CdpSysUserRoleEntity> userRoles = createUser.getUserRoles();
-//        for (CdpSysUserRoleEntity userRole : userRoles) {
-//            userRole.setCreateBy(loginUser.getId());
-//            userRole.setCreateTime(now);
-//        }
         return userRepository.save(createUser);
-    }
-
-//    @Override
-//    @Caching(
-//            evict = {
-//                    @CacheEvict(value = TableNameConstant.CDP_SYS_USER, beforeInvocation = true, key = "#root.caches[0].get(#updateDTO.id).get().usercode", condition = "#root.caches[0].get(#entity.id) != null && !#root.caches[0].get(#entity.id).get().usercode.equals(#entity.usercode)"),
-//                    @CacheEvict(value = TableNameConstant.CDP_SYS_USER_PERMISSION, key = "#updateDTO.id")
-//            },
-//            put = {
-//                    @CachePut(value = TableNameConstant.CDP_SYS_USER, key = "#result.id", condition = "#result.id != null"),
-//                    @CachePut(value = TableNameConstant.CDP_SYS_USER, key = "#result.usercode", condition = "#result.usercode != null"),
-//            }
-//    )
-//    public CdpSysUserEntity updateUser(CdpSysUserUpdateDTO updateDTO) {
-//        CdpSysUserEntity createUser = userRepository.findOne(updateDTO.getId());
-//        BeanUtils.copyProperties(updateDTO, createUser);
-//        return update(createUser);
-//    }
-
-    @Override
-    public List<CdpSysUserEntity> findAll() {
-        CdpSysUserEntity loginUser = LoginUserUtil.getUser();
-        Specification<CdpSysUserEntity> condition = new Specification<CdpSysUserEntity>() {
-            @Override
-            public Predicate toPredicate(Root<CdpSysUserEntity> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-                Path<String> usercode = root.get("usercode");
-                if (loginUser != null && loginUser.getUsercode().equals(SystemConstant.SUPER_USER_CODE)) {
-                    return query.getRestriction();
-                } else {
-                    return cb.and(cb.notEqual(usercode, SystemConstant.SUPER_USER_CODE));
-                }
-            }
-        };
-        return userRepository.findAll(condition);
     }
 
     public List<CdpSysUserEntity> findAll(Iterable<Long> ids) throws CdpServiceException {
@@ -256,6 +197,11 @@ public class UserServiceImpl implements IUserService {
         List<CdpSysUserRoleEntity> userRoles = userEntity.getUserRoles();
         log.debug(userRoles.toString());
         return userEntity;
+    }
+
+    @Override
+    public Collection<CdpSysUserEntity> findAllByEntity(CdpSysUserEntity cdpSysUserEntity) {
+        return null;
     }
 
     @Override

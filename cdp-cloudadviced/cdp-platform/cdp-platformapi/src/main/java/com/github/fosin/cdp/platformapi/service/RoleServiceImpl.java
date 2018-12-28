@@ -79,26 +79,14 @@ public class RoleServiceImpl implements IRoleService {
     }
 
     @Override
-    public List<CdpSysRoleEntity> findAll() {
-        CdpSysUserEntity loginUser = LoginUserUtil.getUser();
-        Specification<CdpSysRoleEntity> condition = new Specification<CdpSysRoleEntity>() {
-            @Override
-            public Predicate toPredicate(Root<CdpSysRoleEntity> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-                Path<String> roleValue = root.get("value");
-                if (loginUser.getUsercode().equals(SystemConstant.SUPER_USER_CODE)) {
-                    return query.getRestriction();
-                } else {
-                    return cb.and(cb.notEqual(roleValue, SystemConstant.SUPER_ROLE_NAME));
-                }
-            }
-        };
-        return roleRepository.findAll(condition);
-    }
-
-    @Override
     public CdpSysRoleEntity findOne(Long id) {
         Assert.isTrue(id != null && id > 0, "传入的角色ID无效！");
         return roleRepository.findOne(id);
+    }
+
+    @Override
+    public Collection<CdpSysRoleEntity> findAllByEntity(CdpSysRoleEntity cdpSysRoleEntity) {
+        return null;
     }
 
     @Override

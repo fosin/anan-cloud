@@ -13,7 +13,7 @@ import java.util.List;
  *
  * @author fosin
  */
-public interface IRoleService extends ISimpleService<CdpSysRoleEntity, Long, CdpSysRoleEntity, CdpSysRoleEntity> {
+public interface IRoleService extends ISimpleService<CdpSysRoleEntity, Long, CdpSysRoleEntity, CdpSysRoleEntity, CdpSysRoleEntity> {
 
     List<CdpSysRoleEntity> findOtherUsersByRoleId(Long userId);
 

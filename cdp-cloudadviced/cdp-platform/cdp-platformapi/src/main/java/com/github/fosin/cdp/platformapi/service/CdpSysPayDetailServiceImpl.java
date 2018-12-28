@@ -15,8 +15,11 @@ import org.springframework.util.Assert;
 import com.github.fosin.cdp.mvc.module.PageModule;
 import com.github.fosin.cdp.mvc.result.Result;
 import com.github.fosin.cdp.mvc.result.ResultUtils;
+
 import javax.persistence.criteria.*;
+import java.util.Collection;
 import java.util.List;
+
 import com.github.fosin.cdp.core.exception.CdpServiceException;
 
 /**
@@ -37,6 +40,7 @@ public class CdpSysPayDetailServiceImpl implements ICdpSysPayDetailService {
     protected CdpSysPayDetailRepository getRepository() {
         return cdpSysPayDetailRepository;
     }
+
     /**
      * 通过实体类创建新数据
      *
@@ -45,7 +49,7 @@ public class CdpSysPayDetailServiceImpl implements ICdpSysPayDetailService {
      */
     @Override
     public CdpSysPayDetailEntity create(CdpSysPayDetailEntity entity) {
-        Assert.notNull(entity,"创建数据的实体对象不能为空!");
+        Assert.notNull(entity, "创建数据的实体对象不能为空!");
         return getRepository().save(entity);
     }
 
@@ -57,13 +61,8 @@ public class CdpSysPayDetailServiceImpl implements ICdpSysPayDetailService {
      */
     @Override
     public CdpSysPayDetailEntity update(CdpSysPayDetailEntity entity) {
-        Assert.notNull(entity,"更新数据的实体对象不能为空!");
+        Assert.notNull(entity, "更新数据的实体对象不能为空!");
         return getRepository().save(entity);
-    }
-    
-    @Override
-    public List<CdpSysPayDetailEntity> findAll() {
-        return getRepository().findAll();
     }
 
     /**
@@ -77,6 +76,11 @@ public class CdpSysPayDetailServiceImpl implements ICdpSysPayDetailService {
         return getRepository().findOne(paydetailId);
     }
 
+    @Override
+    public Collection<CdpSysPayDetailEntity> findAllByEntity(CdpSysPayDetailEntity cdpSysPayDetailEntity) {
+        return null;
+    }
+
     /**
      * 通过主键删除数据
      *
@@ -85,10 +89,10 @@ public class CdpSysPayDetailServiceImpl implements ICdpSysPayDetailService {
      */
     @Override
     public CdpSysPayDetailEntity delete(Long paydetailId) {
-        Assert.notNull(paydetailId,"需要删除的数据主键不能为空!");
+        Assert.notNull(paydetailId, "需要删除的数据主键不能为空!");
         return delete(getRepository().findOne(paydetailId));
     }
-    
+
     /**
      * 通过实体对象删除数据
      *
@@ -97,10 +101,11 @@ public class CdpSysPayDetailServiceImpl implements ICdpSysPayDetailService {
      */
     @Override
     public CdpSysPayDetailEntity delete(CdpSysPayDetailEntity entity) {
-        Assert.notNull(entity,"删除数据的实体对象不能为空!");
+        Assert.notNull(entity, "删除数据的实体对象不能为空!");
         getRepository().delete(entity);
         return entity;
     }
+
     /**
      * 根据查询条件查询分页排序数据集
      *
@@ -113,14 +118,14 @@ public class CdpSysPayDetailServiceImpl implements ICdpSysPayDetailService {
         String searchCondition = pageModule.getSearchText();
         Specification<CdpSysPayDetailEntity> condition = (root, query, cb) -> {
             Path<Long> paydetailId = root.get("paydetailId");
-  
+
             if (StringUtils.isBlank(searchCondition)) {
                 return query.getRestriction();
             }
             Predicate predicate = cb.equal(paydetailId, searchCondition);
             return predicate;
         };
-   
+
         //分页查找
         Page<CdpSysPayDetailEntity> page = getRepository().findAll(condition, pageable);
 
