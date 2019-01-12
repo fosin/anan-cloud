@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -69,7 +70,7 @@ public class CdpSysVersionController implements ISimpleController<CdpSysVersionE
                                                @PathVariable("versionId") Long versionId) {
 
         //更新版本权限
-        List<CdpSysVersionPermissionEntity> cdpSysVersionPermissionEntities = versionPermissionService.updateInBatch(versionId, entities);
+        Collection<CdpSysVersionPermissionEntity> cdpSysVersionPermissionEntities = versionPermissionService.updateInBatch(versionId, entities);
 
         //准备版本相关联的机构权限数据
         List<CdpSysOrganizationPermissionEntity> organizationPermissionEntities = new ArrayList<>();

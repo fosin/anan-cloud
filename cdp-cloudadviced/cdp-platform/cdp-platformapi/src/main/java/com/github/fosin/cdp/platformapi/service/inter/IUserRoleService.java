@@ -4,7 +4,7 @@ package com.github.fosin.cdp.platformapi.service.inter;
 import com.github.fosin.cdp.platformapi.entity.CdpSysUserRoleEntity;
 import com.github.fosin.cdp.core.exception.CdpServiceException;
 import com.github.fosin.cdp.core.exception.CdpUserOrPassInvalidException;
-import com.github.fosin.cdp.mvc.service.ICrudBatchService;
+import com.github.fosin.cdp.jpa.service.batch.ICrudBatchJpaService;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ import java.util.List;
  *
  * @author fosin
  */
-public interface IUserRoleService extends ICrudBatchService<CdpSysUserRoleEntity> {
+public interface IUserRoleService extends ICrudBatchJpaService<CdpSysUserRoleEntity, Long, Long> {
     List<CdpSysUserRoleEntity> findByUserId(Long userId);
 
     List<CdpSysUserRoleEntity> findByRoleId(Long roleId);

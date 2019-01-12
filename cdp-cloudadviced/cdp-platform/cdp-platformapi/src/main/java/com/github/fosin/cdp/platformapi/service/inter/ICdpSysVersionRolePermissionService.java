@@ -1,10 +1,8 @@
 package com.github.fosin.cdp.platformapi.service.inter;
 
-import com.github.fosin.cdp.mvc.service.ICrudBatchService;
+import com.github.fosin.cdp.jpa.service.batch.ICrudBatchJpaService;
 import com.github.fosin.cdp.platformapi.entity.CdpSysVersionRolePermissionEntity;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -13,10 +11,8 @@ import java.util.List;
  * @author fosin
  * @date 2018-11-18 17:26:40
  */
-public interface ICdpSysVersionRolePermissionService extends ICrudBatchService<CdpSysVersionRolePermissionEntity> {
+public interface ICdpSysVersionRolePermissionService extends ICrudBatchJpaService<CdpSysVersionRolePermissionEntity, Long, Long> {
     List<CdpSysVersionRolePermissionEntity> findByRoleId(Long roleId);
 
     long countByPermissionId(Long permissionId);
-
-    List<CdpSysVersionRolePermissionEntity> updateInBatch(Long roleId, Collection<CdpSysVersionRolePermissionEntity> entities);
 }

@@ -1,11 +1,9 @@
 package com.github.fosin.cdp.platformapi.service.inter;
 
-import com.github.fosin.cdp.mvc.service.ICrudBatchService;
-import com.github.fosin.cdp.platformapi.entity.CdpSysRolePermissionEntity;
-import com.github.fosin.cdp.platformapi.entity.CdpSysVersionPermissionEntity;
-import com.github.fosin.cdp.mvc.service.ISimpleService;
 
-import java.util.Collection;
+import com.github.fosin.cdp.jpa.service.batch.ICrudBatchJpaService;
+import com.github.fosin.cdp.platformapi.entity.CdpSysVersionPermissionEntity;
+
 import java.util.List;
 
 /**
@@ -14,11 +12,9 @@ import java.util.List;
  * @author fosin
  * @date 2018-11-18 17:26:40
  */
-public interface ICdpSysVersionPermissionService extends ICrudBatchService<CdpSysVersionPermissionEntity> {
+public interface ICdpSysVersionPermissionService extends ICrudBatchJpaService<CdpSysVersionPermissionEntity, Long, Long> {
     List<CdpSysVersionPermissionEntity> findByVersionId(Long versionId);
 
     long countByPermissionId(Long permissionId);
-
-    List<CdpSysVersionPermissionEntity> updateInBatch(Long versionId, Collection<CdpSysVersionPermissionEntity> entities);
 
 }

@@ -2,6 +2,7 @@ package com.github.fosin.cdp.platformapi.service;
 
 
 import com.github.fosin.cdp.core.exception.CdpServiceException;
+import com.github.fosin.cdp.jpa.repository.IJpaRepository;
 import com.github.fosin.cdp.mvc.module.PageModule;
 import com.github.fosin.cdp.mvc.result.Result;
 import com.github.fosin.cdp.mvc.result.ResultUtils;
@@ -77,11 +78,6 @@ public class OrganizationServiceImpl implements IOrganizationService {
     }
 
     @Override
-    public Collection<CdpSysOrganizationEntity> findAllByEntity(CdpSysOrganizationEntity cdpSysOrganizationEntity) {
-        return null;
-    }
-
-    @Override
     @CacheEvict(value = TableNameConstant.CDP_SYS_ORGANIZATION, key = "#id")
     public CdpSysOrganizationEntity delete(Long id) throws CdpServiceException {
         Assert.notNull(id, "传入了空ID!");
@@ -113,7 +109,7 @@ public class OrganizationServiceImpl implements IOrganizationService {
     }
 
     @Override
-    public Result findAllPage(PageModule pageModule) {
+    public Result findAllByPageSort(PageModule pageModule) {
         PageRequest pageable = new PageRequest(pageModule.getPageNumber() - 1, pageModule.getPageSize(), Sort.Direction.fromString(pageModule.getSortOrder()), pageModule.getSortName());
         String searchCondition = pageModule.getSearchText();
 
@@ -218,5 +214,10 @@ public class OrganizationServiceImpl implements IOrganizationService {
     private String getAuthCode(CdpSysOrganizationAuthEntity auth) {
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
         return bCryptPasswordEncoder.encode(auth.toString());
+    }
+
+    @Override
+    public IJpaRepository<CdpSysOrganizationEntity, Long> getRepository() {
+        return organizationRepository;
     }
 }

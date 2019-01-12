@@ -52,7 +52,7 @@ public class RoleController implements ISimpleController<CdpSysRoleEntity, Long,
             @ApiImplicitParam(name = "roleId", value = "角色ID,取值于CdpSysRoleEntity.id")
     })
     @PutMapping(value = "/permissions/{roleId}")
-    public ResponseEntity<List<CdpSysRolePermissionEntity>> permissions(@RequestBody List<CdpSysRolePermissionEntity> entities,
+    public ResponseEntity<Collection<CdpSysRolePermissionEntity>> permissions(@RequestBody List<CdpSysRolePermissionEntity> entities,
                                                                         @PathVariable("roleId") Long roleId) {
         return ResponseEntity.ok(rolePermissionService.updateInBatch(roleId, entities));
     }

@@ -2,7 +2,7 @@ package com.github.fosin.cdp.platformapi.service.inter;
 
 import com.github.fosin.cdp.platformapi.entity.CdpSysDictionaryDetailEntity;
 import com.github.fosin.cdp.core.exception.CdpServiceException;
-import com.github.fosin.cdp.mvc.service.ISimpleService;
+import com.github.fosin.cdp.jpa.service.ISimpleJpaService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -14,7 +14,7 @@ import java.util.List;
  *
  * @author fosin
  */
-public interface IDictionaryDetailService extends ISimpleService<CdpSysDictionaryDetailEntity, Long, CdpSysDictionaryDetailEntity, CdpSysDictionaryDetailEntity, CdpSysDictionaryDetailEntity> {
+public interface IDictionaryDetailService extends ISimpleJpaService<CdpSysDictionaryDetailEntity, Long, CdpSysDictionaryDetailEntity, CdpSysDictionaryDetailEntity, CdpSysDictionaryDetailEntity> {
     Page<CdpSysDictionaryDetailEntity> findAll(String searchCondition, Pageable pageable, Long code) throws CdpServiceException;
 
     List<CdpSysDictionaryDetailEntity> findByCode(Long code);

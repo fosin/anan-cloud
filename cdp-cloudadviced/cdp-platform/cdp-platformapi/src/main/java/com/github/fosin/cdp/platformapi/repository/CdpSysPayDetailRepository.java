@@ -1,8 +1,7 @@
 package com.github.fosin.cdp.platformapi.repository;
 
 import com.github.fosin.cdp.platformapi.entity.CdpSysPayDetailEntity;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import com.github.fosin.cdp.jpa.repository.IJpaRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.context.annotation.Lazy;
 
@@ -14,5 +13,5 @@ import org.springframework.context.annotation.Lazy;
  */
 @Repository
 @Lazy
-public interface CdpSysPayDetailRepository extends JpaRepository<CdpSysPayDetailEntity, Long>, JpaSpecificationExecutor<CdpSysPayDetailEntity> {
+public interface CdpSysPayDetailRepository extends IJpaRepository<CdpSysPayDetailEntity, Long> {
 }

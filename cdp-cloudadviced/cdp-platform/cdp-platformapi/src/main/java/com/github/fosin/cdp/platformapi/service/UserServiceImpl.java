@@ -2,6 +2,7 @@ package com.github.fosin.cdp.platformapi.service;
 
 import com.github.fosin.cdp.cache.util.CacheUtil;
 import com.github.fosin.cdp.core.exception.CdpServiceException;
+import com.github.fosin.cdp.jpa.repository.IJpaRepository;
 import com.github.fosin.cdp.mvc.module.PageModule;
 import com.github.fosin.cdp.mvc.result.Result;
 import com.github.fosin.cdp.mvc.result.ResultUtils;
@@ -200,11 +201,6 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public Collection<CdpSysUserEntity> findAllByEntity(CdpSysUserEntity cdpSysUserEntity) {
-        return null;
-    }
-
-    @Override
     @Caching(
             evict = {
                     @CacheEvict(value = TableNameConstant.CDP_SYS_USER, key = "#entity.id"),
@@ -223,7 +219,7 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public Result findAllPage(PageModule pageModule) {
+    public Result findAllByPageSort(PageModule pageModule) {
         PageRequest pageable = new PageRequest(pageModule.getPageNumber() - 1, pageModule.getPageSize(), Sort.Direction.fromString(pageModule.getSortOrder()), pageModule.getSortName());
         String searchCondition = pageModule.getSearchText();
 
@@ -374,5 +370,10 @@ public class UserServiceImpl implements IUserService {
             };
             return userRepository.findAll(condition);
         }
+    }
+
+    @Override
+    public IJpaRepository<CdpSysUserEntity, Long> getRepository() {
+        return userRepository;
     }
 }

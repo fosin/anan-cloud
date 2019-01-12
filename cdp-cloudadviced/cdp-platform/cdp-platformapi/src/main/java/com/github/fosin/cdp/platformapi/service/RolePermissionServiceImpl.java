@@ -1,5 +1,6 @@
 package com.github.fosin.cdp.platformapi.service;
 
+import com.github.fosin.cdp.jpa.repository.IJpaRepository;
 import com.github.fosin.cdp.platformapi.repository.RolePermissionRepository;
 import com.github.fosin.cdp.core.exception.CdpServiceException;
 import com.github.fosin.cdp.platformapi.constant.TableNameConstant;
@@ -77,11 +78,6 @@ public class RolePermissionServiceImpl implements IRolePermissionService {
     }
 
     @Override
-    public Collection<CdpSysRolePermissionEntity> updateInBatch(Collection<CdpSysRolePermissionEntity> entities) {
-        throw new CdpServiceException("该方法还没有实现!");
-    }
-
-    @Override
     @Caching(
             evict = {
                     @CacheEvict(value = TableNameConstant.CDP_SYS_ROLE_PERMISSION, key = "#roleId")
@@ -107,5 +103,10 @@ public class RolePermissionServiceImpl implements IRolePermissionService {
         }
 
         return null;
+    }
+
+    @Override
+    public IJpaRepository<CdpSysRolePermissionEntity, Long> getRepository() {
+        return rolePermissionRepository;
     }
 }

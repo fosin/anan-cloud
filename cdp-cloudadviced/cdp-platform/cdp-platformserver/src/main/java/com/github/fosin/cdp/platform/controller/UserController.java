@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -113,7 +114,7 @@ public class UserController extends AbstractBaseController implements ISimpleCon
             @ApiImplicitParam(name = "userId", value = "用户ID,取值于CdpSysUserEntity.id")
     })
     @PutMapping(value = "/permissions/{userId}")
-    public ResponseEntity<List<CdpSysUserPermissionEntity>> permissions(@RequestBody List<CdpSysUserPermissionEntity> entities, @PathVariable Long userId) throws CdpServiceException {
+    public ResponseEntity<Collection<CdpSysUserPermissionEntity>> permissions(@RequestBody List<CdpSysUserPermissionEntity> entities, @PathVariable Long userId) throws CdpServiceException {
         return ResponseEntity.ok(userPermissionService.updateInBatch(userId, entities));
     }
 

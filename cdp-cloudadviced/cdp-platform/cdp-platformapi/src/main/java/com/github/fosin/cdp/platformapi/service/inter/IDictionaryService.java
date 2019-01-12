@@ -1,7 +1,7 @@
 package com.github.fosin.cdp.platformapi.service.inter;
 
 import com.github.fosin.cdp.platformapi.entity.CdpSysDictionaryEntity;
-import com.github.fosin.cdp.mvc.service.ISimpleService;
+import com.github.fosin.cdp.jpa.service.ISimpleJpaService;
 
 /**
  * 2017/12/29.
@@ -9,5 +9,5 @@ import com.github.fosin.cdp.mvc.service.ISimpleService;
  *
  * @author fosin
  */
-public interface IDictionaryService extends ISimpleService<CdpSysDictionaryEntity, Long, CdpSysDictionaryEntity, CdpSysDictionaryEntity, CdpSysDictionaryEntity> {
+public interface IDictionaryService extends ISimpleJpaService<CdpSysDictionaryEntity, Long, CdpSysDictionaryEntity, CdpSysDictionaryEntity, CdpSysDictionaryEntity> {
 }

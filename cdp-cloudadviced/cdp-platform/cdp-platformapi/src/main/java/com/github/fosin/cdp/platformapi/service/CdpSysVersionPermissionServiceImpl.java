@@ -1,6 +1,5 @@
 package com.github.fosin.cdp.platformapi.service;
 
-import com.github.fosin.cdp.core.exception.CdpServiceException;
 import com.github.fosin.cdp.platformapi.entity.CdpSysUserEntity;
 import com.github.fosin.cdp.platformapi.entity.CdpSysVersionPermissionEntity;
 import com.github.fosin.cdp.platformapi.repository.CdpSysVersionPermissionRepository;
@@ -31,7 +30,8 @@ public class CdpSysVersionPermissionServiceImpl implements ICdpSysVersionPermiss
     /**
      * 获取DAO
      */
-    protected CdpSysVersionPermissionRepository getRepository() {
+    @Override
+    public CdpSysVersionPermissionRepository getRepository() {
         return cdpSysVersionPermissionRepository;
     }
 
@@ -86,11 +86,6 @@ public class CdpSysVersionPermissionServiceImpl implements ICdpSysVersionPermiss
     public void deleteInBatch(Collection<CdpSysVersionPermissionEntity> entities) {
         Assert.notEmpty(entities, "要删除的集合不能为空!");
         getRepository().deleteInBatch(entities);
-    }
-
-    @Override
-    public Collection<CdpSysVersionPermissionEntity> updateInBatch(Collection<CdpSysVersionPermissionEntity> collection) {
-        throw new CdpServiceException("该方法还没有实现!");
     }
 
 }

@@ -1,7 +1,7 @@
 package com.github.fosin.cdp.platformapi.repository;
 
 import com.github.fosin.cdp.platformapi.entity.CdpSysDictionaryEntity;
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.github.fosin.cdp.jpa.repository.IJpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 import org.springframework.context.annotation.Lazy;
@@ -13,6 +13,5 @@ import org.springframework.context.annotation.Lazy;
  */
 @Repository
 @Lazy
-public interface DictionaryRepository extends JpaRepository<CdpSysDictionaryEntity,Long>,
-                                    JpaSpecificationExecutor<CdpSysDictionaryEntity> {
+public interface DictionaryRepository extends IJpaRepository<CdpSysDictionaryEntity,Long> {
 }

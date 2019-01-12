@@ -1,6 +1,5 @@
 package com.github.fosin.cdp.platformapi.entity;
 
-import com.github.fosin.cdp.util.RegexUtil;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;

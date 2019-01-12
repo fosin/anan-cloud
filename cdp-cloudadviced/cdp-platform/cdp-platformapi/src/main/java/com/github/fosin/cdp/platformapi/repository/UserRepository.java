@@ -1,11 +1,10 @@
 package com.github.fosin.cdp.platformapi.repository;
 
+import com.github.fosin.cdp.jpa.repository.IJpaRepository;
 import com.github.fosin.cdp.platformapi.entity.CdpSysUserEntity;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-import org.springframework.context.annotation.Lazy;
 
 import java.util.List;
 
@@ -16,7 +15,7 @@ import java.util.List;
  */
 @Repository
 @Lazy
-public interface UserRepository extends JpaRepository<CdpSysUserEntity,Long>,JpaSpecificationExecutor<CdpSysUserEntity> {
+public interface UserRepository extends IJpaRepository<CdpSysUserEntity,Long> {
     CdpSysUserEntity findByUsercode(String usercode);
 
     @Query(value = "select * from cdp_sys_user where id not in (select user_id from cdp_sys_user_role where role_id =?1)",nativeQuery = true)

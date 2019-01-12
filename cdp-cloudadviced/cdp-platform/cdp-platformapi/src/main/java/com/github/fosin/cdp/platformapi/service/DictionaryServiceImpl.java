@@ -1,6 +1,7 @@
 package com.github.fosin.cdp.platformapi.service;
 
 
+import com.github.fosin.cdp.jpa.repository.IJpaRepository;
 import com.github.fosin.cdp.platformapi.repository.DictionaryDetailRepository;
 import com.github.fosin.cdp.core.exception.CdpServiceException;
 import com.github.fosin.cdp.mvc.module.PageModule;
@@ -69,16 +70,6 @@ public class DictionaryServiceImpl implements IDictionaryService {
     }
 
     @Override
-    public CdpSysDictionaryEntity findOne(Long code) {
-        return dictionaryRepository.findOne(code);
-    }
-
-    @Override
-    public Collection<CdpSysDictionaryEntity> findAllByEntity(CdpSysDictionaryEntity cdpSysDictionaryEntity) {
-        return null;
-    }
-
-    @Override
     @Transactional(rollbackFor = CdpServiceException.class)
     public CdpSysDictionaryEntity delete(Long code) throws CdpServiceException {
         if (code == null) {
@@ -117,7 +108,7 @@ public class DictionaryServiceImpl implements IDictionaryService {
     }
 
     @Override
-    public Result findAllPage(PageModule pageModule) {
+    public Result findAllByPageSort(PageModule pageModule) {
         PageRequest pageable = new PageRequest(pageModule.getPageNumber() - 1, pageModule.getPageSize(), Sort.Direction.fromString(pageModule.getSortOrder()), pageModule.getSortName());
         String searchCondition = pageModule.getSearchText();
 
@@ -143,5 +134,10 @@ public class DictionaryServiceImpl implements IDictionaryService {
         Page<CdpSysDictionaryEntity> page = dictionaryRepository.findAll(condition, pageable);
 
         return ResultUtils.success(page.getTotalElements(), page.getContent());
+    }
+
+    @Override
+    public IJpaRepository<CdpSysDictionaryEntity, Long> getRepository() {
+        return dictionaryRepository;
     }
 }

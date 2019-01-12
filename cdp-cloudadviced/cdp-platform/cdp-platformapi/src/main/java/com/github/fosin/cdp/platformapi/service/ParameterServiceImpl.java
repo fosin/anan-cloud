@@ -1,6 +1,7 @@
 package com.github.fosin.cdp.platformapi.service;
 
 
+import com.github.fosin.cdp.jpa.repository.IJpaRepository;
 import com.github.fosin.cdp.platformapi.repository.ParameterRepository;
 import com.github.fosin.cdp.core.exception.CdpServiceException;
 import com.github.fosin.cdp.mvc.module.PageModule;
@@ -84,16 +85,6 @@ public class ParameterServiceImpl implements IParameterService {
     }
 
     @Override
-    public CdpSysParameterEntity findOne(Long id) {
-        return parameterRepository.findOne(id);
-    }
-
-    @Override
-    public Collection<CdpSysParameterEntity> findAllByEntity(CdpSysParameterEntity cdpSysParameterEntity) {
-        return null;
-    }
-
-    @Override
     public CdpSysParameterEntity delete(Long id) throws CdpServiceException {
         CdpSysParameterEntity entity = parameterRepository.findOne(id);
         Assert.notNull(entity, "通过ID没有能找到参数数据,删除被取消!");
@@ -118,7 +109,7 @@ public class ParameterServiceImpl implements IParameterService {
     }
 
     @Override
-    public Result findAllPage(PageModule pageModule) {
+    public Result findAllByPageSort(PageModule pageModule) {
         PageRequest pageable = new PageRequest(pageModule.getPageNumber() - 1, pageModule.getPageSize(), Sort.Direction.fromString(pageModule.getSortOrder()), pageModule.getSortName());
         String searchCondition = pageModule.getSearchText();
 
@@ -141,11 +132,11 @@ public class ParameterServiceImpl implements IParameterService {
         return ResultUtils.success(page.getTotalElements(), page.getContent());
     }
 
-    public String getCacheKey(CdpSysParameterEntity entity) {
+    private String getCacheKey(CdpSysParameterEntity entity) {
         return getCacheKey(entity.getType(), entity.getScope(), entity.getName());
     }
 
-    public String getCacheKey(Integer type, String scope, String name) {
+    private String getCacheKey(Integer type, String scope, String name) {
         if (StringUtil.isEmpty(scope)) {
             scope = "";
         }
@@ -210,6 +201,11 @@ public class ParameterServiceImpl implements IParameterService {
             applyChange(entity.getId());
         }
         return true;
+    }
+
+    @Override
+    public IJpaRepository<CdpSysParameterEntity, Long> getRepository() {
+        return parameterRepository;
     }
 
 //    protected synchronized void addCacheEvict(CdpSysParameterEntity entity) {

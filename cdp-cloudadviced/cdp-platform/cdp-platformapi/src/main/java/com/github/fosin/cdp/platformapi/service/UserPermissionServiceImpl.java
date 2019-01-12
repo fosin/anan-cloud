@@ -2,6 +2,7 @@ package com.github.fosin.cdp.platformapi.service;
 
 import com.github.fosin.cdp.cache.util.CacheUtil;
 import com.github.fosin.cdp.core.exception.CdpServiceException;
+import com.github.fosin.cdp.jpa.repository.IJpaRepository;
 import com.github.fosin.cdp.platformapi.constant.TableNameConstant;
 import com.github.fosin.cdp.platformapi.entity.CdpSysUserEntity;
 import com.github.fosin.cdp.platformapi.entity.CdpSysUserPermissionEntity;
@@ -81,21 +82,16 @@ public class UserPermissionServiceImpl implements IUserPermissionService {
     }
 
     @Override
-    public Collection<CdpSysUserPermissionEntity> updateInBatch(Collection<CdpSysUserPermissionEntity> entities) throws CdpServiceException {
-        return null;
-    }
-
-    @Override
     @Caching(
             evict = {
                     @CacheEvict(value = TableNameConstant.CDP_SYS_USER_PERMISSION, key = "#userId")
             }
     )
     @Transactional
-    public List<CdpSysUserPermissionEntity> updateInBatch(Long userId, Iterable<CdpSysUserPermissionEntity> entities) {
+    public List<CdpSysUserPermissionEntity> updateInBatch(Long userId, Collection<CdpSysUserPermissionEntity> entities) {
         Assert.notNull(userId, "传入的用户ID不能为空!");
         for (CdpSysUserPermissionEntity entity : entities) {
-            Assert.isTrue(entity.getUserId().equals(userId),"需要更新的数据集中有与用户ID不匹配的数据!");
+            Assert.isTrue(entity.getUserId().equals(userId), "需要更新的数据集中有与用户ID不匹配的数据!");
         }
 
         userPermissionRepository.deleteByUserId(userId);
@@ -110,5 +106,10 @@ public class UserPermissionServiceImpl implements IUserPermissionService {
         }
 
         return null;
+    }
+
+    @Override
+    public IJpaRepository<CdpSysUserPermissionEntity, Long> getRepository() {
+        return userPermissionRepository;
     }
 }

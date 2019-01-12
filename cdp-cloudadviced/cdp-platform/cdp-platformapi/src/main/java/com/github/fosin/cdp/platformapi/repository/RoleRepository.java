@@ -1,13 +1,10 @@
 package com.github.fosin.cdp.platformapi.repository;
 
+import com.github.fosin.cdp.jpa.repository.IJpaRepository;
 import com.github.fosin.cdp.platformapi.entity.CdpSysRoleEntity;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-import org.springframework.context.annotation.Lazy;
 
 import java.util.List;
 
@@ -19,7 +16,7 @@ import java.util.List;
  */
 @Repository
 @Lazy
-public interface RoleRepository extends JpaRepository<CdpSysRoleEntity, Long>, JpaSpecificationExecutor<CdpSysRoleEntity> {
+public interface RoleRepository extends IJpaRepository<CdpSysRoleEntity, Long>{
 
     @Query(value = "select * from cdp_sys_role where id not in (select role_id from cdp_sys_user_role where user_id =?1)", nativeQuery = true)
     List<CdpSysRoleEntity> findOtherRolesByUserId(Long userId);

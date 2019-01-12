@@ -4,7 +4,7 @@ package com.github.fosin.cdp.platformapi.service.inter;
 import com.github.fosin.cdp.platformapi.dto.RegisterDto;
 import com.github.fosin.cdp.platformapi.entity.CdpSysOrganizationEntity;
 import com.github.fosin.cdp.core.exception.CdpServiceException;
-import com.github.fosin.cdp.mvc.service.ISimpleService;
+import com.github.fosin.cdp.jpa.service.ISimpleJpaService;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ import java.util.List;
  *
  * @author fosin
  */
-public interface IOrganizationService extends ISimpleService<CdpSysOrganizationEntity, Long, CdpSysOrganizationEntity, CdpSysOrganizationEntity, CdpSysOrganizationEntity> {
+public interface IOrganizationService extends ISimpleJpaService<CdpSysOrganizationEntity, Long, CdpSysOrganizationEntity, CdpSysOrganizationEntity, CdpSysOrganizationEntity> {
     List<CdpSysOrganizationEntity> findAllByTopId(Long topId);
 
     List<CdpSysOrganizationEntity> findByPid(Long pid) throws CdpServiceException;

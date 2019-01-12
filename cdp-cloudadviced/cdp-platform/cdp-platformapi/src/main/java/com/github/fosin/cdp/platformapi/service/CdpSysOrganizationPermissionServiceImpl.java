@@ -1,6 +1,5 @@
 package com.github.fosin.cdp.platformapi.service;
 
-import com.github.fosin.cdp.core.exception.CdpServiceException;
 import com.github.fosin.cdp.platformapi.entity.CdpSysOrganizationPermissionEntity;
 import com.github.fosin.cdp.platformapi.entity.CdpSysUserEntity;
 import com.github.fosin.cdp.platformapi.repository.CdpSysOrganizationPermissionRepository;
@@ -31,7 +30,8 @@ public class CdpSysOrganizationPermissionServiceImpl implements ICdpSysOrganizat
     /**
      * 获取DAO
      */
-    protected CdpSysOrganizationPermissionRepository getRepository() {
+    @Override
+    public CdpSysOrganizationPermissionRepository getRepository() {
         return cdpSysOrganizationPermissionRepository;
     }
 
@@ -84,10 +84,5 @@ public class CdpSysOrganizationPermissionServiceImpl implements ICdpSysOrganizat
     public void deleteInBatch(Collection<CdpSysOrganizationPermissionEntity> entities) {
         Assert.notEmpty(entities, "要删除的集合不能为空!");
         getRepository().deleteInBatch(entities);
-    }
-
-    @Override
-    public Collection<CdpSysOrganizationPermissionEntity> updateInBatch(Collection<CdpSysOrganizationPermissionEntity> collection) {
-        throw new CdpServiceException("该方法还没有实现!");
     }
 }

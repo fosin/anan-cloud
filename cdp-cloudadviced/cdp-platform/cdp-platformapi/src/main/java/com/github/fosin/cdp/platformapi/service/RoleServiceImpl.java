@@ -1,6 +1,7 @@
 package com.github.fosin.cdp.platformapi.service;
 
 
+import com.github.fosin.cdp.jpa.repository.IJpaRepository;
 import com.github.fosin.cdp.platformapi.entity.*;
 import com.github.fosin.cdp.platformapi.repository.OrganizationRepository;
 import com.github.fosin.cdp.platformapi.repository.RoleRepository;
@@ -85,11 +86,6 @@ public class RoleServiceImpl implements IRoleService {
     }
 
     @Override
-    public Collection<CdpSysRoleEntity> findAllByEntity(CdpSysRoleEntity cdpSysRoleEntity) {
-        return null;
-    }
-
-    @Override
     public CdpSysRoleEntity delete(Long id) throws CdpServiceException {
         Assert.isTrue(id != null && id > 0, "传入的角色ID无效！");
         CdpSysRoleEntity entity = roleRepository.findOne(id);
@@ -119,7 +115,7 @@ public class RoleServiceImpl implements IRoleService {
     }
 
     @Override
-    public Result findAllPage(PageModule pageModule) {
+    public Result findAllByPageSort(PageModule pageModule) {
         PageRequest pageable = new PageRequest(pageModule.getPageNumber() - 1, pageModule.getPageSize(), Sort.Direction.fromString(pageModule.getSortOrder()), pageModule.getSortName());
         String searchCondition = pageModule.getSearchText();
 
@@ -234,5 +230,10 @@ public class RoleServiceImpl implements IRoleService {
             };
             return roleRepository.findAll(condition);
         }
+    }
+
+    @Override
+    public IJpaRepository<CdpSysRoleEntity, Long> getRepository() {
+        return roleRepository;
     }
 }

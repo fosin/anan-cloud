@@ -4,6 +4,7 @@ package com.github.fosin.cdp.platformapi.service;
 import com.github.fosin.cdp.cache.util.CacheUtil;
 import com.github.fosin.cdp.core.exception.CdpServiceException;
 import com.github.fosin.cdp.core.exception.CdpUserOrPassInvalidException;
+import com.github.fosin.cdp.jpa.repository.IJpaRepository;
 import com.github.fosin.cdp.platformapi.constant.TableNameConstant;
 import com.github.fosin.cdp.platformapi.entity.CdpSysUserEntity;
 import com.github.fosin.cdp.platformapi.entity.CdpSysUserRoleEntity;
@@ -74,7 +75,7 @@ public class UserRoleServiceImpl implements IUserRoleService {
     }
 
     @Override
-    public Collection<CdpSysUserRoleEntity> updateInBatch(Collection<CdpSysUserRoleEntity> entities) throws CdpServiceException {
+    public Collection<CdpSysUserRoleEntity> updateInBatch(Long key, Collection<CdpSysUserRoleEntity> entities) throws CdpServiceException {
         throw new CdpServiceException("该方法还未实现!");
     }
 
@@ -85,7 +86,7 @@ public class UserRoleServiceImpl implements IUserRoleService {
         Assert.notNull(entities, "传入的实体集合不能为空!");
 
         for (CdpSysUserRoleEntity entity : entities) {
-            Assert.isTrue(entity.getUserId().equals(userId),"需要更新的数据集中有与用户ID不匹配的数据!");
+            Assert.isTrue(entity.getUserId().equals(userId), "需要更新的数据集中有与用户ID不匹配的数据!");
         }
 
         userRoleRepository.deleteByUserId(userId);
@@ -116,7 +117,7 @@ public class UserRoleServiceImpl implements IUserRoleService {
         Assert.notNull(roleId, "传入的角色ID不能为空!");
         Assert.notNull(entities, "传入的实体集合不能为空!");
         for (CdpSysUserRoleEntity entity : entities) {
-            Assert.isTrue(entity.getRole().getId().equals(roleId),"需要更新的数据集中有与角色ID不匹配的数据!");
+            Assert.isTrue(entity.getRole().getId().equals(roleId), "需要更新的数据集中有与角色ID不匹配的数据!");
         }
 
         userRoleRepository.deleteByRoleId(roleId);
@@ -158,5 +159,10 @@ public class UserRoleServiceImpl implements IUserRoleService {
         } else {
             return "UserId" + id;
         }
+    }
+
+    @Override
+    public IJpaRepository<CdpSysUserRoleEntity, Long> getRepository() {
+        return userRoleRepository;
     }
 }

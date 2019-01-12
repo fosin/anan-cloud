@@ -2,7 +2,7 @@ package com.github.fosin.cdp.platformapi.service.inter;
 
 import com.github.fosin.cdp.mvc.module.PageModule;
 import com.github.fosin.cdp.mvc.result.Result;
-import com.github.fosin.cdp.mvc.service.ISimpleService;
+import com.github.fosin.cdp.jpa.service.ISimpleJpaService;
 import com.github.fosin.cdp.platformapi.entity.CdpSysRoleEntity;
 
 import java.util.List;
@@ -13,7 +13,7 @@ import java.util.List;
  *
  * @author fosin
  */
-public interface IRoleService extends ISimpleService<CdpSysRoleEntity, Long, CdpSysRoleEntity, CdpSysRoleEntity, CdpSysRoleEntity> {
+public interface IRoleService extends ISimpleJpaService<CdpSysRoleEntity, Long, CdpSysRoleEntity, CdpSysRoleEntity, CdpSysRoleEntity> {
 
     List<CdpSysRoleEntity> findOtherUsersByRoleId(Long userId);
 

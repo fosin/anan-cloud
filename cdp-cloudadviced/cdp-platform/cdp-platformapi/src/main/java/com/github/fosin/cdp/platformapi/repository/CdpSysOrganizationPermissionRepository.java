@@ -1,8 +1,7 @@
 package com.github.fosin.cdp.platformapi.repository;
 
 import com.github.fosin.cdp.platformapi.entity.CdpSysOrganizationPermissionEntity;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import com.github.fosin.cdp.jpa.repository.IJpaRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.context.annotation.Lazy;
 
@@ -16,7 +15,7 @@ import java.util.List;
  */
 @Repository
 @Lazy
-public interface CdpSysOrganizationPermissionRepository extends JpaRepository<CdpSysOrganizationPermissionEntity, Long>,JpaSpecificationExecutor<CdpSysOrganizationPermissionEntity>{
+public interface CdpSysOrganizationPermissionRepository extends IJpaRepository<CdpSysOrganizationPermissionEntity, Long>{
     List<CdpSysOrganizationPermissionEntity> findByOrganizId(Long organizId);
 
     long countByPermissionId(Long permissionId);

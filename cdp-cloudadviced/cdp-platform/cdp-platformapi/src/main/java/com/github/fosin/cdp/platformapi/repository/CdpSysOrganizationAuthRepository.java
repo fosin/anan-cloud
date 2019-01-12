@@ -1,10 +1,9 @@
 package com.github.fosin.cdp.platformapi.repository;
 
+import com.github.fosin.cdp.jpa.repository.IJpaRepository;
 import com.github.fosin.cdp.platformapi.entity.CdpSysOrganizationAuthEntity;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import org.springframework.stereotype.Repository;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -16,7 +15,7 @@ import java.util.List;
  */
 @Repository
 @Lazy
-public interface CdpSysOrganizationAuthRepository extends JpaRepository<CdpSysOrganizationAuthEntity, Long>,JpaSpecificationExecutor<CdpSysOrganizationAuthEntity>{
+public interface CdpSysOrganizationAuthRepository extends IJpaRepository<CdpSysOrganizationAuthEntity, Long>{
     List<CdpSysOrganizationAuthEntity> findAllByVersionId(Long versionId);
 
     List<CdpSysOrganizationAuthEntity> findAllByOrganizId(Long organizId);

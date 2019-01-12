@@ -3,6 +3,7 @@ package com.github.fosin.cdp.platformapi.service;
 
 import com.github.fosin.cdp.cache.util.CacheUtil;
 import com.github.fosin.cdp.core.exception.CdpServiceException;
+import com.github.fosin.cdp.jpa.repository.IJpaRepository;
 import com.github.fosin.cdp.mvc.module.PageModule;
 import com.github.fosin.cdp.mvc.result.Result;
 import com.github.fosin.cdp.mvc.result.ResultUtils;
@@ -82,16 +83,6 @@ public class DictionaryDetailServiceImpl implements IDictionaryDetailService {
     }
 
     @Override
-    public CdpSysDictionaryDetailEntity findOne(Long id) {
-        return dictionaryDetailRepository.findOne(id);
-    }
-
-    @Override
-    public Collection<CdpSysDictionaryDetailEntity> findAllByEntity(CdpSysDictionaryDetailEntity cdpSysDictionaryDetailEntity) {
-        return null;
-    }
-
-    @Override
     public CdpSysDictionaryDetailEntity delete(Long id) {
         Assert.notNull(id, "传入了空的ID!");
         CdpSysDictionaryDetailEntity entity = dictionaryDetailRepository.findOne(id);
@@ -135,7 +126,7 @@ public class DictionaryDetailServiceImpl implements IDictionaryDetailService {
     }
 
     @Override
-    public Result findAllPage(PageModule pageModule) {
+    public Result findAllByPageSort(PageModule pageModule) {
         PageRequest pageable = new PageRequest(pageModule.getPageNumber() - 1, pageModule.getPageSize(), Sort.Direction.fromString(pageModule.getSortOrder()), pageModule.getSortName());
         String searchCondition = pageModule.getSearchText();
 
@@ -188,4 +179,8 @@ public class DictionaryDetailServiceImpl implements IDictionaryDetailService {
     }
 
 
+    @Override
+    public IJpaRepository<CdpSysDictionaryDetailEntity, Long> getRepository() {
+        return dictionaryDetailRepository;
+    }
 }

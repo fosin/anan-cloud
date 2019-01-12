@@ -1,8 +1,7 @@
 package com.github.fosin.cdp.platformapi.repository;
 
 import com.github.fosin.cdp.platformapi.entity.CdpSysOrganizationEntity;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import com.github.fosin.cdp.jpa.repository.IJpaRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.context.annotation.Lazy;
 import java.util.List;
@@ -15,8 +14,7 @@ import java.util.List;
  */
 @Repository
 @Lazy
-public interface OrganizationRepository extends JpaRepository<CdpSysOrganizationEntity, Long>,
-        JpaSpecificationExecutor<CdpSysOrganizationEntity> {
+public interface OrganizationRepository extends IJpaRepository<CdpSysOrganizationEntity, Long> {
     List<CdpSysOrganizationEntity> findByPIdOrderByCodeAsc(Long pId);
 
     List<CdpSysOrganizationEntity> findByCodeStartingWithOrderByCodeAsc(String code);

@@ -1,8 +1,7 @@
 package com.github.fosin.cdp.platformapi.repository;
 
 import com.github.fosin.cdp.platformapi.entity.CdpSysDictionaryDetailEntity;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import com.github.fosin.cdp.jpa.repository.IJpaRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.context.annotation.Lazy;
 
@@ -15,8 +14,8 @@ import java.util.List;
  */
 @Repository
 @Lazy
-public interface DictionaryDetailRepository extends JpaRepository<CdpSysDictionaryDetailEntity,Long>,
-                                    JpaSpecificationExecutor<CdpSysDictionaryDetailEntity> {
+public interface DictionaryDetailRepository extends IJpaRepository<CdpSysDictionaryDetailEntity,Long>
+                                     {
     List<CdpSysDictionaryDetailEntity> findByCode(Long code);
     void deleteAllByCode(Long code);
 }

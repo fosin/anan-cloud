@@ -59,8 +59,8 @@ public class CdpSysOrganizationController extends AbstractBaseController
             @ApiImplicitParam(name = "organizId", value = "版本ID,取值于CdpSysOrganizationEntity.id")
     })
     @PutMapping(value = "/permissions/{organizId}")
-    public ResponseEntity<List<CdpSysOrganizationPermissionEntity>> permissions(@RequestBody List<CdpSysOrganizationPermissionEntity> entities,
-                                                                                @PathVariable("organizId") Long organizId) {
+    public ResponseEntity<Collection<CdpSysOrganizationPermissionEntity>> permissions(@RequestBody List<CdpSysOrganizationPermissionEntity> entities,
+                                                                                      @PathVariable("organizId") Long organizId) {
         return ResponseEntity.ok(organizationPermissionService.updateInBatch(organizId, entities));
     }
 

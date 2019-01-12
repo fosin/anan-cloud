@@ -1,6 +1,7 @@
 package com.github.fosin.cdp.platformapi.service;
 
 
+import com.github.fosin.cdp.jpa.repository.IJpaRepository;
 import com.github.fosin.cdp.platformapi.repository.OauthClientRepository;
 import com.github.fosin.cdp.core.exception.CdpServiceException;
 import com.github.fosin.cdp.mvc.module.PageModule;
@@ -60,30 +61,7 @@ public class OauthClientServiceImpl implements IOauthClientService {
     }
 
     @Override
-    public OauthClientDetailsEntity findOne(String id) {
-        return oauthClientRepository.findOne(id);
-    }
-
-    @Override
-    public Collection<OauthClientDetailsEntity> findAllByEntity(OauthClientDetailsEntity oauthClientDetailsEntity) {
-        return null;
-    }
-
-    @Override
-    public OauthClientDetailsEntity delete(String id) throws CdpServiceException {
-        oauthClientRepository.delete(id);
-        return null;
-    }
-
-    @Override
-    public OauthClientDetailsEntity delete(OauthClientDetailsEntity entity) throws CdpServiceException {
-        Assert.notNull(entity, "传入了空对象!");
-        oauthClientRepository.delete(entity);
-        return entity;
-    }
-
-    @Override
-    public Result findAllPage(PageModule pageModule) {
+    public Result findAllByPageSort(PageModule pageModule) {
         PageRequest pageable = new PageRequest(pageModule.getPageNumber() - 1, pageModule.getPageSize(), Sort.Direction.fromString(pageModule.getSortOrder()), pageModule.getSortName());
         String searchCondition = pageModule.getSearchText();
 
@@ -105,5 +83,10 @@ public class OauthClientServiceImpl implements IOauthClientService {
         Page<OauthClientDetailsEntity> page = oauthClientRepository.findAll(condition, pageable);
 
         return ResultUtils.success(page.getTotalElements(), page.getContent());
+    }
+
+    @Override
+    public IJpaRepository<OauthClientDetailsEntity, String> getRepository() {
+        return oauthClientRepository;
     }
 }

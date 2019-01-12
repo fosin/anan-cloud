@@ -1,5 +1,6 @@
 package com.github.fosin.cdp.platformapi.service;
 
+import com.github.fosin.cdp.jpa.repository.IJpaRepository;
 import com.github.fosin.cdp.platformapi.entity.CdpSysPermissionEntity;
 import com.github.fosin.cdp.core.exception.CdpServiceException;
 import com.github.fosin.cdp.mvc.module.PageModule;
@@ -93,7 +94,7 @@ public class PermissionServiceImpl implements IPermissionService {
     }
 
     @Override
-    public Result findAllPage(PageModule pageModule) {
+    public Result findAllByPageSort(PageModule pageModule) {
         PageRequest pageable = new PageRequest(pageModule.getPageNumber() - 1, pageModule.getPageSize(), Sort.Direction.fromString(pageModule.getSortOrder()), pageModule.getSortName());
         String searchCondition = pageModule.getSearchText();
 
@@ -122,10 +123,6 @@ public class PermissionServiceImpl implements IPermissionService {
         return permissionRepository.findOne(id);
     }
 
-    @Override
-    public Collection<CdpSysPermissionEntity> findAllByEntity(CdpSysPermissionEntity cdpSysPermissionEntity) {
-        return null;
-    }
 
     @Override
     @CachePut(value = TableNameConstant.CDP_SYS_PERMISSION, key = "#entity.id")
@@ -151,7 +148,7 @@ public class PermissionServiceImpl implements IPermissionService {
 
     @Override
     public List<CdpSysPermissionEntity> findByPId(Long pId, Long versionId) {
-        return permissionRepository.findByPId(pId,versionId);
+        return permissionRepository.findByPId(pId, versionId);
     }
 
     @Override
@@ -162,5 +159,10 @@ public class PermissionServiceImpl implements IPermissionService {
     @Override
     public List<CdpSysPermissionEntity> findByAppName(String appName) {
         return permissionRepository.findByAppName(appName);
+    }
+
+    @Override
+    public IJpaRepository<CdpSysPermissionEntity, Long> getRepository() {
+        return permissionRepository;
     }
 }

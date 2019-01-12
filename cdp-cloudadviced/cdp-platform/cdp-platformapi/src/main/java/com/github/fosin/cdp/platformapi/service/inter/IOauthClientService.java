@@ -1,7 +1,7 @@
 package com.github.fosin.cdp.platformapi.service.inter;
 
 import com.github.fosin.cdp.platformapi.entity.OauthClientDetailsEntity;
-import com.github.fosin.cdp.mvc.service.ISimpleService;
+import com.github.fosin.cdp.jpa.service.ISimpleJpaService;
 
 /**
  * 2017/12/29.
@@ -9,6 +9,6 @@ import com.github.fosin.cdp.mvc.service.ISimpleService;
  *
  * @author fosin
  */
-public interface IOauthClientService extends ISimpleService<OauthClientDetailsEntity, String, OauthClientDetailsEntity, OauthClientDetailsEntity, OauthClientDetailsEntity> {
+public interface IOauthClientService extends ISimpleJpaService<OauthClientDetailsEntity, String, OauthClientDetailsEntity, OauthClientDetailsEntity, OauthClientDetailsEntity> {
 
 }
