@@ -29,7 +29,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import javax.persistence.criteria.*;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -140,80 +139,6 @@ public class OrganizationServiceImpl implements IOrganizationService {
     @Override
     public List<CdpSysOrganizationEntity> findByCodeStartingWith(String code) throws CdpServiceException {
         return organizationRepository.findByCodeStartingWithOrderByCodeAsc(code);
-    }
-
-    @Autowired
-    private ICdpSysOrganizationAuthService organizationAuthService;
-
-    @Autowired
-    private IUserService userService;
-
-    @Autowired
-    private ICdpSysPayOrderService payOrderService;
-
-    @Autowired
-    private ICdpSysVersionService versionService;
-
-    @Override
-    @Transactional
-    public Boolean register(RegisterDto registerDto) {
-        Date now = new Date();
-
-        //创建用户
-        CdpSysUserRequestDto.CreateDto createDTO = registerDto.getUser();
-//        Assert.isTrue(createDTO.getPassword().equals(createDTO.getConfirmPassword()), "密码和确认密码必须一致!");
-        CdpSysUserEntity user = userService.create(createDTO);
-
-        //创建机构
-        CdpSysOrganizationEntity organization = new CdpSysOrganizationEntity();
-        BeanUtils.copyProperties(registerDto.getOrganization(), organization);
-        organization.setPId(0L);
-        organization.setTopId(0L);
-        organization.setLevel(1);
-        organization.setStatus(0);
-        CdpSysOrganizationEntity organizationEntity = this.create(organization);
-        organizationEntity.setTopId(organizationEntity.getId());
-        this.update(organizationEntity);
-
-        Long versionId = registerDto.getVersionId();
-        CdpSysVersionEntity versionEntity = versionService.findOne(versionId);
-
-        //创建订单
-        CdpSysPayOrderEntity orderEntity = new CdpSysPayOrderEntity();
-        orderEntity.setMoney(versionEntity.getPrice());
-        orderEntity.setOrderTime(now);
-        orderEntity.setVersionId(versionId);
-        orderEntity.setOrganizId(organizationEntity.getId());
-        orderEntity.setUserId(user.getId());
-        if (versionEntity.getPrice() == 0) {
-            orderEntity.setStatus(1);
-            orderEntity.setPayTime(now);
-        } else {
-            orderEntity.setStatus(0);
-        }
-        orderEntity = payOrderService.create(orderEntity);
-
-
-        //创建机构认证信息
-        CdpSysOrganizationAuthEntity auth = new CdpSysOrganizationAuthEntity();
-        auth.setVersionId(versionId);
-        auth.setOrderId(orderEntity.getOrderId());
-        auth.setMaxOrganizs(versionEntity.getMaxOrganizs());
-        auth.setMaxUsers(versionEntity.getMaxUsers());
-        auth.setOrganizId(organizationEntity.getId());
-        auth.setProtectDays(versionEntity.getProtectDays());
-        auth.setTryout(versionEntity.getTryout());
-        auth.setTryoutDays(versionEntity.getTryoutDays());
-        auth.setValidity(versionEntity.getValidity());
-        auth.setAuthorizationCode(getAuthCode(auth));
-        organizationAuthService.create(auth);
-
-        return true;
-    }
-
-    private String getAuthCode(CdpSysOrganizationAuthEntity auth) {
-        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-        return bCryptPasswordEncoder.encode(auth.toString());
     }
 
     @Override

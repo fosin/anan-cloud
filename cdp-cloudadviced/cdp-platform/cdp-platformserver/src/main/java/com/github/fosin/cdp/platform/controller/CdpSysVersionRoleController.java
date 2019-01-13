@@ -3,9 +3,10 @@ package com.github.fosin.cdp.platform.controller;
 
 import com.github.fosin.cdp.mvc.controller.ISimpleController;
 import com.github.fosin.cdp.mvc.service.ISimpleService;
-import com.github.fosin.cdp.platformapi.entity.*;
-import com.github.fosin.cdp.platformapi.service.inter.ICdpSysVersionRolePermissionService;
-import com.github.fosin.cdp.platformapi.service.inter.ICdpSysVersionRoleService;
+import com.github.fosin.cdp.platform.entity.CdpSysVersionRoleEntity;
+import com.github.fosin.cdp.platform.entity.CdpSysVersionRolePermissionEntity;
+import com.github.fosin.cdp.platform.service.inter.ICdpSysVersionRolePermissionService;
+import com.github.fosin.cdp.platform.service.inter.ICdpSysVersionRoleService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -14,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

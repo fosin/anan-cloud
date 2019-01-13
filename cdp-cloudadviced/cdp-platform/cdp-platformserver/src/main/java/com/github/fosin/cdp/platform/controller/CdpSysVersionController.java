@@ -3,6 +3,14 @@ package com.github.fosin.cdp.platform.controller;
 
 import com.github.fosin.cdp.mvc.controller.ISimpleController;
 import com.github.fosin.cdp.mvc.service.ISimpleService;
+import com.github.fosin.cdp.platform.entity.CdpSysOrganizationAuthEntity;
+import com.github.fosin.cdp.platform.entity.CdpSysOrganizationPermissionEntity;
+import com.github.fosin.cdp.platform.entity.CdpSysVersionEntity;
+import com.github.fosin.cdp.platform.entity.CdpSysVersionPermissionEntity;
+import com.github.fosin.cdp.platform.service.inter.ICdpSysOrganizationAuthService;
+import com.github.fosin.cdp.platform.service.inter.ICdpSysOrganizationPermissionService;
+import com.github.fosin.cdp.platform.service.inter.ICdpSysVersionPermissionService;
+import com.github.fosin.cdp.platform.service.inter.ICdpSysVersionService;
 import com.github.fosin.cdp.platformapi.entity.*;
 import com.github.fosin.cdp.platformapi.service.inter.*;
 import io.swagger.annotations.Api;

@@ -24,7 +24,10 @@
         <dependency>
             <groupId>${cdp.groupId}</groupId>
             <artifactId>cdp-oauth2</artifactId>
-            <version>${cdp.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${cdp.groupId}</groupId>
+            <artifactId>cdp-jpa</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>

@@ -132,11 +132,11 @@ public class ParameterServiceImpl implements IParameterService {
         return ResultUtils.success(page.getTotalElements(), page.getContent());
     }
 
-    private String getCacheKey(CdpSysParameterEntity entity) {
+    public String getCacheKey(CdpSysParameterEntity entity) {
         return getCacheKey(entity.getType(), entity.getScope(), entity.getName());
     }
 
-    private String getCacheKey(Integer type, String scope, String name) {
+    public String getCacheKey(Integer type, String scope, String name) {
         if (StringUtil.isEmpty(scope)) {
             scope = "";
         }

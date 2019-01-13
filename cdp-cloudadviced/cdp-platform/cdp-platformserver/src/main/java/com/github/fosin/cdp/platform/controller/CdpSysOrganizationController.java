@@ -5,12 +5,12 @@ import com.github.fosin.cdp.core.exception.CdpServiceException;
 import com.github.fosin.cdp.mvc.controller.AbstractBaseController;
 import com.github.fosin.cdp.mvc.controller.ISimpleController;
 import com.github.fosin.cdp.mvc.service.ISimpleService;
+import com.github.fosin.cdp.platform.entity.CdpSysOrganizationAuthEntity;
+import com.github.fosin.cdp.platform.entity.CdpSysOrganizationPermissionEntity;
+import com.github.fosin.cdp.platform.service.inter.ICdpSysOrganizationAuthService;
+import com.github.fosin.cdp.platform.service.inter.ICdpSysOrganizationPermissionService;
 import com.github.fosin.cdp.platformapi.dto.RegisterDto;
-import com.github.fosin.cdp.platformapi.entity.CdpSysOrganizationAuthEntity;
 import com.github.fosin.cdp.platformapi.entity.CdpSysOrganizationEntity;
-import com.github.fosin.cdp.platformapi.entity.CdpSysOrganizationPermissionEntity;
-import com.github.fosin.cdp.platformapi.service.inter.ICdpSysOrganizationAuthService;
-import com.github.fosin.cdp.platformapi.service.inter.ICdpSysOrganizationPermissionService;
 import com.github.fosin.cdp.platformapi.service.inter.IOrganizationService;
 import com.github.fosin.cdp.util.TreeUtil;
 import io.swagger.annotations.Api;
@@ -128,7 +128,7 @@ public class CdpSysOrganizationController extends AbstractBaseController
     })
     @PutMapping(value = "/register")
     public ResponseEntity<Boolean> register(@RequestBody RegisterDto registerDto) {
-        return ResponseEntity.ok(organizationService.register(registerDto));
+        return ResponseEntity.ok(organizationAuthService.register(registerDto));
     }
 
 

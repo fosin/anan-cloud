@@ -20,7 +20,5 @@ public interface IOrganizationService extends ISimpleJpaService<CdpSysOrganizati
     List<CdpSysOrganizationEntity> findByPid(Long pid) throws CdpServiceException;
 
     List<CdpSysOrganizationEntity> findByCodeStartingWith(String code) throws CdpServiceException;
-
-    Boolean register(RegisterDto registerDto);
 }
 

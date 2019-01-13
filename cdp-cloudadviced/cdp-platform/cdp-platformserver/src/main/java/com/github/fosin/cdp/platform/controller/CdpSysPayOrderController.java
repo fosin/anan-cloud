@@ -2,8 +2,8 @@ package com.github.fosin.cdp.platform.controller;
 
 import com.github.fosin.cdp.mvc.controller.ISimpleController;
 import com.github.fosin.cdp.mvc.service.ISimpleService;
-import com.github.fosin.cdp.platformapi.entity.CdpSysPayOrderEntity;
-import com.github.fosin.cdp.platformapi.service.inter.ICdpSysPayOrderService;
+import com.github.fosin.cdp.platform.entity.CdpSysPayOrderEntity;
+import com.github.fosin.cdp.platform.service.inter.ICdpSysPayOrderService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
