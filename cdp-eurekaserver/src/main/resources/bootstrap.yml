@@ -9,6 +9,9 @@ spring:
   zipkin:
     rabbitmq:
       queue: zipkin
+  jackson: #该参数一定要放bootstrap中，而放application.yml或者后面的配置文件都不能生效
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
 server:
   port: 1000
 eureka:
