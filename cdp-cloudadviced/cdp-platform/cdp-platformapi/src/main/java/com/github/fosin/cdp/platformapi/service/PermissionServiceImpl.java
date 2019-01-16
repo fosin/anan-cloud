@@ -53,13 +53,6 @@ public class PermissionServiceImpl implements IPermissionService {
     @CachePut(value = TableNameConstant.CDP_SYS_PERMISSION, key = "#entity.id")
     public CdpSysPermissionEntity create(CdpSysPermissionEntity entity) throws CdpServiceException {
         Assert.notNull(entity, "传入了空对象!");
-        CdpSysUserEntity loginUser = LoginUserUtil.getUser();
-        Date now = new Date();
-        entity.setCreateTime(now);
-        entity.setUpdateTime(now);
-        Long id = loginUser.getId();
-        entity.setCreateBy(id);
-        entity.setUpdateBy(id);
         return permissionRepository.save(entity);
     }
 
@@ -129,9 +122,6 @@ public class PermissionServiceImpl implements IPermissionService {
     public CdpSysPermissionEntity update(CdpSysPermissionEntity entity) throws CdpServiceException {
         Assert.notNull(entity, "传入了空对象!");
         Assert.notNull(entity.getId(), "传入了空ID!");
-        CdpSysUserEntity loginUser = LoginUserUtil.getUser();
-        entity.setUpdateTime(new Date());
-        entity.setUpdateBy(loginUser.getId());
         return permissionRepository.save(entity);
     }
 

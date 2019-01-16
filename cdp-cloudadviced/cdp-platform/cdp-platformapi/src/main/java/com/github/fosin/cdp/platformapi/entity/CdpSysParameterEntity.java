@@ -1,10 +1,12 @@
 package com.github.fosin.cdp.platformapi.entity;
 
+import com.github.fosin.cdp.jpa.entity.AbstractCreateUpdateJpaEntity;
 import com.github.fosin.cdp.util.DateTimeUtil;
 import com.github.fosin.cdp.util.RegexUtil;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -23,11 +25,12 @@ import java.util.Date;
  * @since 1.0.0
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @DynamicUpdate
 @Table(name = "cdp_sys_parameter")
 @ApiModel(value = "用于存放各种分类分组的个性化参数实体类", description = "表(cdp_sys_parameter)的对应的实体类")
-public class CdpSysParameterEntity implements Serializable {
+public class CdpSysParameterEntity extends AbstractCreateUpdateJpaEntity implements Serializable {
     private static final long serialVersionUID = -98889841142479554L;
     
     @Column(name = "id")
@@ -69,29 +72,7 @@ public class CdpSysParameterEntity implements Serializable {
     @Basic
     @ApiModelProperty(value = "参数描述", notes = "参数描述")
     private String description;
-    
-    @Column(name = "create_time")
-    @Basic
-    @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
-    @ApiModelProperty(value = "创建日期，该值由后台维护，更改数据时前端不需要关心", notes = "创建日期，该值由后台维护，更改数据时前端不需要关心")
-    private Date createTime;
-    
-    @Column(name = "create_by")
-    @Basic
-    @ApiModelProperty(value = "该值由后台维护，更改数据时前端不需要关心，取值于cdp_sys_user.id", notes = "该值由后台维护，更改数据时前端不需要关心，取值于cdp_sys_user.id")
-    private Long createBy;
-    
-    @Column(name = "update_time")
-    @Basic
-    @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
-    @ApiModelProperty(value = "更新日期，该值由后台维护，更改数据时前端不需要关心", notes = "更新日期，该值由后台维护，更改数据时前端不需要关心")
-    private Date updateTime;
-    
-    @Column(name = "update_by")
-    @Basic
-    @ApiModelProperty(value = "该值由后台维护，更改数据时前端不需要关心，取值于cdp_sys_user.id", notes = "该值由后台维护，更改数据时前端不需要关心，取值于cdp_sys_user.id")
-    private Long updateBy;
-    
+
     @Column(name = "apply_time")
     @Basic
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)

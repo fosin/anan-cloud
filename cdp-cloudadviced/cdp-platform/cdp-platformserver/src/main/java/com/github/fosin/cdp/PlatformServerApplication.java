@@ -11,6 +11,7 @@ import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerInterceptor;
 import org.springframework.context.annotation.Bean;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 
@@ -25,6 +26,7 @@ import org.springframework.session.data.redis.config.annotation.web.http.EnableR
 @EnableCdpSwagger2
 @EnableCdpOauth2
 @EnableWebSecurity
+@EnableJpaAuditing
 public class PlatformServerApplication {
     public static void main(String[] args) {
         new SpringApplicationBuilder(PlatformServerApplication.class)

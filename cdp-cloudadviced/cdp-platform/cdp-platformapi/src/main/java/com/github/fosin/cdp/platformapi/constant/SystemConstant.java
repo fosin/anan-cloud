@@ -15,4 +15,5 @@ public class SystemConstant {
     public static final Long ROOT_PERMISSION_ID = 1L;
     public static final Integer SYSTEM_DICTIONARY_TYPE = 1;
 
+    public static final Long SUPER_USER_ID = 1L;
 }

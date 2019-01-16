@@ -14,7 +14,7 @@ import java.util.List;
  *
  * @author fosin
  */
-public interface IUserRoleService extends ICrudBatchJpaService<CdpSysUserRoleEntity, Long, Long> {
+public interface IUserRoleService extends ICrudBatchJpaService<CdpSysUserRoleEntity, Long, Long, CdpSysUserRoleEntity, CdpSysUserRoleEntity, CdpSysUserRoleEntity> {
     List<CdpSysUserRoleEntity> findByUserId(Long userId);
 
     List<CdpSysUserRoleEntity> findByRoleId(Long roleId);

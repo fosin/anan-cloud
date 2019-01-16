@@ -52,12 +52,6 @@ public class CdpSysVersionRoleServiceImpl implements ICdpSysVersionRoleService {
     public CdpSysVersionRoleEntity create(CdpSysVersionRoleEntity entity) {
         Assert.notNull(entity, "创建数据的实体对象不能为空!");
         Assert.isTrue(!entity.getValue().equals(SystemConstant.SUPER_USER_CODE), "角色标识不能为:" + SystemConstant.SUPER_USER_CODE);
-        CdpSysUserEntity loginUser = LoginUserUtil.getUser();
-        Date now = new Date();
-        entity.setCreateTime(now);
-        entity.setCreateBy(loginUser.getId());
-        entity.setUpdateTime(now);
-        entity.setUpdateBy(loginUser.getId());
         return getRepository().save(entity);
     }
 
@@ -71,9 +65,6 @@ public class CdpSysVersionRoleServiceImpl implements ICdpSysVersionRoleService {
     public CdpSysVersionRoleEntity update(CdpSysVersionRoleEntity entity) {
         Assert.notNull(entity, "更新数据的实体对象不能为空!");
         Assert.isTrue(!entity.getValue().equals(SystemConstant.SUPER_USER_CODE), "角色标识不能为:" + SystemConstant.SUPER_USER_CODE);
-        CdpSysUserEntity loginUser = LoginUserUtil.getUser();
-        entity.setUpdateBy(loginUser.getId());
-        entity.setUpdateTime(new Date());
         return getRepository().save(entity);
     }
 

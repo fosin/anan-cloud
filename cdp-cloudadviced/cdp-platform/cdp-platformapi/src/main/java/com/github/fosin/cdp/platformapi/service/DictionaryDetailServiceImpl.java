@@ -53,12 +53,6 @@ public class DictionaryDetailServiceImpl implements IDictionaryDetailService {
     @Override
     @CacheEvict(value = TableNameConstant.CDP_SYS_DICTIONARY_DETAIL, key = "#entity.code")
     public CdpSysDictionaryDetailEntity create(CdpSysDictionaryDetailEntity entity) {
-        CdpSysUserEntity loginUser = LoginUserUtil.getUser();
-        Date now = new Date();
-        entity.setCreateBy(loginUser.getId());
-        entity.setCreateTime(now);
-        entity.setUpdateTime(now);
-        entity.setUpdateBy(loginUser.getId());
         return dictionaryDetailRepository.save(entity);
     }
 
@@ -77,8 +71,6 @@ public class DictionaryDetailServiceImpl implements IDictionaryDetailService {
                 throw new CdpServiceException("没有权限修改系统创建的字典明细项!");
             }
         }
-        entity.setUpdateBy(loginUser.getId());
-        entity.setUpdateTime(new Date());
         return dictionaryDetailRepository.save(entity);
     }
 

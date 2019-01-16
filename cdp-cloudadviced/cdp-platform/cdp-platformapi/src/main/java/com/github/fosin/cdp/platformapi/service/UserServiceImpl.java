@@ -92,16 +92,6 @@ public class UserServiceImpl implements IUserService {
     public CdpSysUserEntity create(CdpSysUserRequestDto.CreateDto entity) {
         CdpSysUserEntity createUser = new CdpSysUserEntity();
         BeanUtils.copyProperties(entity, createUser);
-        CdpSysUserEntity loginUser = LoginUserUtil.getUser();
-        Date now = new Date();
-        Long userId = 1L;
-        if (loginUser != null) {
-            userId = loginUser.getId();
-        }
-        createUser.setCreateTime(now);
-        createUser.setCreateBy(userId);
-        createUser.setUpdateTime(now);
-        createUser.setUpdateBy(userId);
 
         String passwordStrength = OrganizParameterUtil.getOrCreateParameter("DefaultPasswordStrength", RegexUtil.PASSWORD_STRONG, "用户密码强度正则表达式,密码最少6位，包括至少1个大写字母，1个小写字母，1个数字，1个特殊字符");
         Assert.isTrue(RegexUtil.matcher(createUser.getPassword(), passwordStrength), "密码强度不符合强度要求!");
@@ -135,14 +125,6 @@ public class UserServiceImpl implements IUserService {
         Assert.isTrue(!SystemConstant.SUPER_USER_CODE.equals(oldEntity.getUsercode().toLowerCase()),
                 "不能修改超级管理员帐号信息!");
 
-        CdpSysUserEntity loginUser = LoginUserUtil.getUser();
-        Date now = new Date();
-        Long userId = 1L;
-        if (loginUser != null) {
-            userId = loginUser.getId();
-        }
-        createUser.setUpdateBy(userId);
-        createUser.setUpdateTime(now);
         return userRepository.save(createUser);
     }
 

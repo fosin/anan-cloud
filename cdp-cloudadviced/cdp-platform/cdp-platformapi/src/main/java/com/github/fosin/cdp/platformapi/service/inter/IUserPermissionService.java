@@ -12,7 +12,7 @@ import java.util.List;
  *
  * @author fosin
  */
-public interface IUserPermissionService extends ICrudBatchJpaService<CdpSysUserPermissionEntity, Long, Long> {
+public interface IUserPermissionService extends ICrudBatchJpaService<CdpSysUserPermissionEntity, Long, Long, CdpSysUserPermissionEntity, CdpSysUserPermissionEntity, CdpSysUserPermissionEntity> {
     List<CdpSysUserPermissionEntity> findByUserIdAndOrganizId(Long userId, Long organizId);
 
     List<CdpSysUserPermissionEntity> findByUserId(Long userId);

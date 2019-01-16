@@ -44,20 +44,6 @@ public class CdpSysOrganizationAuthServiceImpl implements ICdpSysOrganizationAut
         return cdpSysOrganizationAuthRepository;
     }
 
-    /**
-     * 通过实体类创建新数据
-     *
-     * @param entity 系统机构授权表 实体对象
-     * @return entity 实例对象
-     */
-    @Override
-    public CdpSysOrganizationAuthEntity create(CdpSysOrganizationAuthEntity entity) {
-        Assert.notNull(entity, "创建数据的实体对象不能为空!");
-        entity.setCreateBy(1L);
-        entity.setCreateTime(new Date());
-        return getRepository().save(entity);
-    }
-
     @Override
     public List<CdpSysOrganizationAuthEntity> findAllByVersionId(Long versionId) {
         return getRepository().findAllByVersionId(versionId);

@@ -1,10 +1,12 @@
 package com.github.fosin.cdp.platformapi.entity;
 
+import com.github.fosin.cdp.jpa.entity.AbstractCreateUpdateJpaEntity;
 import com.github.fosin.cdp.util.DateTimeUtil;
 import com.github.fosin.cdp.util.RegexUtil;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -23,11 +25,12 @@ import java.util.Date;
  * @since 1.0.0
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @DynamicUpdate
 @Table(name = "cdp_sys_organization")
 @ApiModel(value = "系统机构表实体类", description = "表(cdp_sys_organization)的对应的实体类")
-public class CdpSysOrganizationEntity implements Serializable {
+public class CdpSysOrganizationEntity extends AbstractCreateUpdateJpaEntity implements Serializable {
     private static final long serialVersionUID = -15967926351456872L;
 
     @Column(name = "id")
@@ -71,7 +74,7 @@ public class CdpSysOrganizationEntity implements Serializable {
     @Column(name = "fullname")
     @Basic
     @ApiModelProperty(value = "机构全名", notes = "机构全名")
-    @Pattern(regexp =RegexUtil.SPECIAL, message = "名称不能包含特殊字符")
+    @Pattern(regexp = RegexUtil.SPECIAL, message = "名称不能包含特殊字符")
     private String fullname;
 
     @Column(name = "address")
@@ -89,27 +92,5 @@ public class CdpSysOrganizationEntity implements Serializable {
     @NotNull
     @ApiModelProperty(value = "使用状态：0=启用，1=禁用，具体取值于字典表cdp_sys_dictionary.code=11", notes = "使用状态：0=启用，1=禁用，具体取值于字典表cdp_sys_dictionary.code=11")
     private Integer status;
-
-    @Column(name = "create_time")
-    @Basic
-    @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
-    @ApiModelProperty(value = "创建日期，该值由后台维护，更改数据时前端不需要关心", notes = "创建日期，该值由后台维护，更改数据时前端不需要关心")
-    private Date createTime;
-
-    @Column(name = "create_by")
-    @Basic
-    @ApiModelProperty(value = "该值由后台维护，更改数据时前端不需要关心，取值于cdp_sys_user.id", notes = "该值由后台维护，更改数据时前端不需要关心，取值于cdp_sys_user.id")
-    private Long createBy;
-
-    @Column(name = "update_time")
-    @Basic
-    @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
-    @ApiModelProperty(value = "更新日期，该值由后台维护，更改数据时前端不需要关心", notes = "更新日期，该值由后台维护，更改数据时前端不需要关心")
-    private Date updateTime;
-
-    @Column(name = "update_by")
-    @Basic
-    @ApiModelProperty(value = "该值由后台维护，更改数据时前端不需要关心，取值于cdp_sys_user.id", notes = "该值由后台维护，更改数据时前端不需要关心，取值于cdp_sys_user.id")
-    private Long updateBy;
 
 }

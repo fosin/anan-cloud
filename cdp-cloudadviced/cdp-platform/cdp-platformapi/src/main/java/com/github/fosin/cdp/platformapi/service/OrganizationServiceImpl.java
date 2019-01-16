@@ -1,35 +1,27 @@
 package com.github.fosin.cdp.platformapi.service;
 
 
-import com.github.fosin.cdp.core.exception.CdpServiceException;
 import com.github.fosin.cdp.jpa.repository.IJpaRepository;
 import com.github.fosin.cdp.mvc.module.PageModule;
 import com.github.fosin.cdp.mvc.result.Result;
 import com.github.fosin.cdp.mvc.result.ResultUtils;
 import com.github.fosin.cdp.platformapi.constant.TableNameConstant;
-import com.github.fosin.cdp.platformapi.dto.CdpSysUserRequestDto;
-import com.github.fosin.cdp.platformapi.dto.RegisterDto;
-import com.github.fosin.cdp.platformapi.entity.*;
+import com.github.fosin.cdp.platformapi.entity.CdpSysOrganizationEntity;
 import com.github.fosin.cdp.platformapi.repository.OrganizationRepository;
-import com.github.fosin.cdp.platformapi.service.inter.*;
-import com.github.fosin.cdp.platformapi.util.LoginUserUtil;
+import com.github.fosin.cdp.platformapi.service.inter.IOrganizationService;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import javax.persistence.criteria.*;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -46,27 +38,15 @@ public class OrganizationServiceImpl implements IOrganizationService {
 
     @Override
     @CacheEvict(value = TableNameConstant.CDP_SYS_ORGANIZATION, key = "#entity.id")
-    public CdpSysOrganizationEntity create(CdpSysOrganizationEntity entity) throws CdpServiceException {
+    public CdpSysOrganizationEntity create(CdpSysOrganizationEntity entity) {
         Assert.notNull(entity, "传入了空对象!");
-        Assert.isTrue(entity.getPId() != null, "无效的父机构编码!");
-        CdpSysUserEntity loginUser = LoginUserUtil.getUser();
-        entity.setCreateBy(loginUser.getId());
-        entity.setUpdateBy(loginUser.getId());
-        Date now = new Date();
-        entity.setCreateTime(now);
-        entity.setUpdateTime(now);
         return organizationRepository.save(entity);
     }
 
     @Override
     @CacheEvict(value = TableNameConstant.CDP_SYS_ORGANIZATION, key = "#entity.id")
-    public CdpSysOrganizationEntity update(CdpSysOrganizationEntity entity) throws CdpServiceException {
+    public CdpSysOrganizationEntity update(CdpSysOrganizationEntity entity) {
         Assert.notNull(entity, "传入了空对象!");
-        Assert.isTrue(entity.getId() != null, "无效的ID!");
-
-        CdpSysUserEntity loginUser = LoginUserUtil.getUser();
-        entity.setUpdateBy(loginUser.getId());
-        entity.setUpdateTime(new Date());
         return organizationRepository.save(entity);
     }
 
@@ -78,7 +58,7 @@ public class OrganizationServiceImpl implements IOrganizationService {
 
     @Override
     @CacheEvict(value = TableNameConstant.CDP_SYS_ORGANIZATION, key = "#id")
-    public CdpSysOrganizationEntity delete(Long id) throws CdpServiceException {
+    public CdpSysOrganizationEntity delete(Long id) {
         Assert.notNull(id, "传入了空ID!");
         List<CdpSysOrganizationEntity> entities = findByPid(id);
         Assert.isTrue(entities == null || entities.size() == 0, "该节点还存在子节点不能直接删除!");
@@ -88,7 +68,7 @@ public class OrganizationServiceImpl implements IOrganizationService {
 
     @Override
     @CacheEvict(value = TableNameConstant.CDP_SYS_ORGANIZATION, key = "#entity.id")
-    public CdpSysOrganizationEntity delete(CdpSysOrganizationEntity entity) throws CdpServiceException {
+    public CdpSysOrganizationEntity delete(CdpSysOrganizationEntity entity) {
         Assert.notNull(entity, "传入了空对象!");
         Assert.notNull(entity.getId(), "传入了空ID!");
         List<CdpSysOrganizationEntity> entities = findByPid(entity.getId());
@@ -132,12 +112,12 @@ public class OrganizationServiceImpl implements IOrganizationService {
     }
 
     @Override
-    public List<CdpSysOrganizationEntity> findByPid(Long pid) throws CdpServiceException {
+    public List<CdpSysOrganizationEntity> findByPid(Long pid) {
         return organizationRepository.findByPIdOrderByCodeAsc(pid);
     }
 
     @Override
-    public List<CdpSysOrganizationEntity> findByCodeStartingWith(String code) throws CdpServiceException {
+    public List<CdpSysOrganizationEntity> findByCodeStartingWith(String code) {
         return organizationRepository.findByCodeStartingWithOrderByCodeAsc(code);
     }
 

@@ -14,8 +14,6 @@ import java.util.List;
  * @author fosin
  */
 public interface IPermissionService extends ISimpleJpaService<CdpSysPermissionEntity, Long, CdpSysPermissionEntity, CdpSysPermissionEntity, CdpSysPermissionEntity> {
-    Collection<CdpSysPermissionEntity> findAll();
-
     List<CdpSysPermissionEntity> findByPId(Long pId);
 
     List<CdpSysPermissionEntity> findByType(Integer type);

@@ -49,17 +49,6 @@ public class RoleServiceImpl implements IRoleService {
     private OrganizationRepository organizationRepository;
 
     @Override
-    public CdpSysRoleEntity create(CdpSysRoleEntity entity) {
-        CdpSysUserEntity loginUser = LoginUserUtil.getUser();
-        Date now = new Date();
-        entity.setCreateTime(now);
-        entity.setCreateBy(loginUser.getId());
-        entity.setUpdateTime(now);
-        entity.setUpdateBy(loginUser.getId());
-        return roleRepository.save(entity);
-    }
-
-    @Override
     public CdpSysRoleEntity update(CdpSysRoleEntity entity) throws CdpServiceException {
         Assert.notNull(entity, "传入了空对象!");
         Long id = entity.getId();
@@ -72,10 +61,6 @@ public class RoleServiceImpl implements IRoleService {
         }
         Assert.isTrue(!SystemConstant.SUPER_ROLE_NAME.equals(oldEntity.getValue().toUpperCase()),
                 "不能修改超级管理员角色帐号信息!");
-
-        CdpSysUserEntity loginUser = LoginUserUtil.getUser();
-        entity.setUpdateBy(loginUser.getId());
-        entity.setUpdateTime(new Date());
         return roleRepository.save(entity);
     }
 

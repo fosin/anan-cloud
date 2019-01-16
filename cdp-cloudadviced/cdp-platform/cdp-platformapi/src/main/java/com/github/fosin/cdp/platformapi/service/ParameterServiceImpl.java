@@ -51,10 +51,6 @@ public class ParameterServiceImpl implements IParameterService {
         Assert.notNull(entity, "传入了空对象!");
         CdpSysUserEntity loginUser = LoginUserUtil.getUser();
         Date now = new Date();
-        entity.setCreateBy(loginUser.getId());
-        entity.setCreateTime(now);
-        entity.setUpdateBy(loginUser.getId());
-        entity.setUpdateTime(now);
         entity.setApplyBy(loginUser.getId());
         entity.setApplyTime(now);
         entity.setStatus(0);
@@ -67,9 +63,6 @@ public class ParameterServiceImpl implements IParameterService {
         Long id = entity.getId();
         Assert.notNull(id, "ID不能为空!");
         CdpSysParameterEntity cEntity = parameterRepository.findOne(id);
-        CdpSysUserEntity loginUser = LoginUserUtil.getUser();
-        entity.setUpdateBy(loginUser.getId());
-        entity.setUpdateTime(new Date());
         CdpSysParameterEntity save = parameterRepository.save(entity);
         if (save != null) {
             String cCacheKey = getCacheKey(cEntity);

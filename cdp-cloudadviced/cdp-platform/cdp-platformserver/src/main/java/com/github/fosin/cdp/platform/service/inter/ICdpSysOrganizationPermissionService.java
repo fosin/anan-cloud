@@ -11,7 +11,10 @@ import java.util.List;
  * @author fosin
  * @date 2018-11-18 17:26:40
  */
-public interface ICdpSysOrganizationPermissionService extends ICrudBatchJpaService<CdpSysOrganizationPermissionEntity, Long, Long> {
+public interface ICdpSysOrganizationPermissionService extends
+        ICrudBatchJpaService<CdpSysOrganizationPermissionEntity, Long, Long,
+                CdpSysOrganizationPermissionEntity, CdpSysOrganizationPermissionEntity,
+                CdpSysOrganizationPermissionEntity> {
     List<CdpSysOrganizationPermissionEntity> findByOrganizId(Long organizId);
 
     long countByPermissionId(Long permissionId);

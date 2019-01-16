@@ -1,10 +1,12 @@
 package com.github.fosin.cdp.platformapi.entity;
 
+import com.github.fosin.cdp.jpa.entity.AbstractOrganizIdJpaEntity;
 import com.github.fosin.cdp.util.DateTimeUtil;
 import com.github.fosin.cdp.util.RegexUtil;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
@@ -27,10 +29,11 @@ import java.util.List;
  */
 @Data
 @Entity
+@EqualsAndHashCode(callSuper = true)
 @DynamicUpdate
 @Table(name = "cdp_sys_user")
 @ApiModel(value = "系统用户表实体类", description = "表(cdp_sys_user)的对应的实体类")
-public class CdpSysUserEntity implements Serializable {
+public class CdpSysUserEntity extends AbstractOrganizIdJpaEntity implements Serializable {
     private static final long serialVersionUID = 897030139778409164L;
 
     /**
@@ -45,12 +48,6 @@ public class CdpSysUserEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @ApiModelProperty(value = "用户ID", notes = "主键，系统自动生成,用户ID")
     private Long id;
-
-    @Column(name = "organiz_id")
-    @Basic
-    @NotNull
-    @ApiModelProperty(value = "机构ID", notes = "机构ID")
-    private Long organizId;
 
     @Column(name = "usercode")
     @Basic
@@ -110,28 +107,6 @@ public class CdpSysUserEntity implements Serializable {
     @Basic
     @ApiModelProperty(value = "头像")
     private String avatar;
-
-    @Column(name = "create_time")
-    @Basic
-    @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
-    @ApiModelProperty(value = "创建日期，该值由后台维护，更改数据时前端不需要关心")
-    private Date createTime;
-
-    @Column(name = "create_by")
-    @Basic
-    @ApiModelProperty(value = "创建人，该值由后台维护，更改数据时前端不需要关心，取值于cdp_sys_user.id")
-    private Long createBy;
-
-    @Column(name = "update_time")
-    @Basic
-    @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
-    @ApiModelProperty(value = "更新日期，该值由后台维护，更改数据时前端不需要关心")
-    private Date updateTime;
-
-    @Column(name = "update_by")
-    @Basic
-    @ApiModelProperty(value = "更新人，该值由后台维护，更改数据时前端不需要关心，取值于cdp_sys_user.id")
-    private Long updateBy;
 
     @Column(name = "expire_time")
     @Basic
