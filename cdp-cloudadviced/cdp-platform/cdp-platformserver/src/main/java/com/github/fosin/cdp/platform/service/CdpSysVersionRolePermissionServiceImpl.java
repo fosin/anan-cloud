@@ -34,14 +34,10 @@ public class CdpSysVersionRolePermissionServiceImpl implements ICdpSysVersionRol
     public CdpSysVersionRolePermissionRepository getRepository() {
         return versionRolePermissionRepository;
     }
+
     @Override
     public List<CdpSysVersionRolePermissionEntity> findByRoleId(Long roleId) {
         return getRepository().findByRoleId(roleId);
-    }
-
-    @Override
-    public long countByPermissionId(Long permissionId) {
-        return getRepository().countByPermissionId(permissionId);
     }
 
     @Override
@@ -68,23 +64,4 @@ public class CdpSysVersionRolePermissionServiceImpl implements ICdpSysVersionRol
 
         return null;
     }
-
-    @Override
-    public Collection<CdpSysVersionRolePermissionEntity> createInBatch(Collection<CdpSysVersionRolePermissionEntity> entities) {
-        Assert.notEmpty(entities, "要删除的集合不能为空!");
-        CdpSysUserEntity loginUser = LoginUserUtil.getUser();
-        Date now = new Date();
-        for (CdpSysVersionRolePermissionEntity entity : entities) {
-            entity.setCreateBy(loginUser.getId());
-            entity.setCreateTime(now);
-        }
-        return getRepository().save(entities);
-    }
-
-    @Override
-    public void deleteInBatch(Collection<CdpSysVersionRolePermissionEntity> entities) {
-        Assert.notEmpty(entities, "要删除的集合不能为空!");
-        getRepository().deleteInBatch(entities);
-    }
-
 }

@@ -18,7 +18,5 @@ import java.util.List;
 public interface CdpSysVersionRolePermissionRepository extends IJpaRepository<CdpSysVersionRolePermissionEntity, Long>{
     List<CdpSysVersionRolePermissionEntity> findByRoleId(Long roleId);
 
-    long countByPermissionId(Long permissionId);
-
     void deleteByRoleId(Long roleId);
 }

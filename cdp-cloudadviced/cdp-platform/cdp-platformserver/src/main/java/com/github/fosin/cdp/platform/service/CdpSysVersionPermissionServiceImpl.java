@@ -48,7 +48,7 @@ public class CdpSysVersionPermissionServiceImpl implements ICdpSysVersionPermiss
     @Override
     @Transactional
     public List<CdpSysVersionPermissionEntity> updateInBatch(Long versionId, Collection<CdpSysVersionPermissionEntity> entities) {
-        
+
         Assert.notNull(versionId, "传入的版本ID不能为空!");
 
         for (CdpSysVersionPermissionEntity entity : entities) {
@@ -68,24 +68,6 @@ public class CdpSysVersionPermissionServiceImpl implements ICdpSysVersionPermiss
 
 
         return null;
-    }
-
-    @Override
-    public Collection<CdpSysVersionPermissionEntity> createInBatch(Collection<CdpSysVersionPermissionEntity> entities) {
-        Assert.notEmpty(entities, "要删除的集合不能为空!");
-        CdpSysUserEntity loginUser = LoginUserUtil.getUser();
-        Date now = new Date();
-        for (CdpSysVersionPermissionEntity entity : entities) {
-            entity.setCreateBy(loginUser.getId());
-            entity.setCreateTime(now);
-        }
-        return getRepository().save(entities);
-    }
-
-    @Override
-    public void deleteInBatch(Collection<CdpSysVersionPermissionEntity> entities) {
-        Assert.notEmpty(entities, "要删除的集合不能为空!");
-        getRepository().deleteInBatch(entities);
     }
 
 }

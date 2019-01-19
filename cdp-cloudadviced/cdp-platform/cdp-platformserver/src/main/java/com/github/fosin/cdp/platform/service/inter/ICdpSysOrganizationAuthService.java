@@ -18,6 +18,5 @@ public interface ICdpSysOrganizationAuthService extends ISimpleJpaService<CdpSys
 
     List<CdpSysOrganizationAuthEntity> findAllByOrganizId(Long organizId);
 
-    @Transactional
     Boolean register(RegisterDto registerDto);
 }
