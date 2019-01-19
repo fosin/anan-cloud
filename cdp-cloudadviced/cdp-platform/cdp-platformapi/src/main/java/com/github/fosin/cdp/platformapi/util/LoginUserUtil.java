@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
+import org.springframework.util.Assert;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -30,25 +31,29 @@ import java.util.Set;
 public class LoginUserUtil {
     private static Map<String, CdpUserDetail> userDetailMap = new HashMap<>();
 
-    private static CdpUserDetail getCurrentUserInfo(HttpServletRequest request) throws Exception {
+    private static CdpUserDetail getCurrentUserInfo(HttpServletRequest request) {
         Authentication userAuthentication = getUserAuthentication(request);
-        if (userAuthentication == null) {
-            return null;
-        }
+        Assert.notNull(userAuthentication, "userAuthentication不能为空，请检查是否没有登录用户!");
+
         Map details = (Map) userAuthentication.getDetails();
         Object principal = details.get("principal");
-        if (principal instanceof Map) {
-            return BeanUtil.toBean(CdpUserDetail.class, (Map) principal);
+        Assert.isTrue(principal instanceof Map, "principal不是Map类型，请检查是否没有登录用户!");
+
+        CdpUserDetail cdpUserDetail;
+        try {
+            cdpUserDetail = BeanUtil.toBean(CdpUserDetail.class, (Map) principal);
+        } catch (Exception e) {
+            throw new IllegalArgumentException(e.getMessage());
         }
-        return null;
+
+        return cdpUserDetail;
     }
 
     private static HttpServletRequest getHttpServletRequest() {
         RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
-        if (requestAttributes instanceof ServletRequestAttributes) {
-            return ((ServletRequestAttributes) requestAttributes).getRequest();
-        }
-        return null;
+        Assert.isTrue(requestAttributes instanceof ServletRequestAttributes, "requestAttributes不是ServletRequestAttributes类型，请检查是否没有登录用户!");
+
+        return ((ServletRequestAttributes) requestAttributes).getRequest();
     }
 
     /**
@@ -57,14 +62,10 @@ public class LoginUserUtil {
      * @return CdpUserDetail
      */
     private static OAuth2Authentication getOAuth2Authentication(HttpServletRequest request) {
-        if (request == null) {
-            return null;
-        }
+        Assert.notNull(request, "请求对象HttpServletRequest不能为空!");
         Principal userPrincipal = request.getUserPrincipal();
-        if (userPrincipal instanceof OAuth2Authentication) {
-            return (OAuth2Authentication) userPrincipal;
-        }
-        return null;
+        Assert.isTrue(userPrincipal instanceof OAuth2Authentication, "不是Oauth2认证方式UserPrincipal!");
+        return (OAuth2Authentication) userPrincipal;
     }
 
     /**
@@ -73,11 +74,9 @@ public class LoginUserUtil {
      * @return CdpUserDetail
      */
     private static Authentication getUserAuthentication(HttpServletRequest request) {
-        if (request == null) {
-            return null;
-        }
+        Assert.notNull(request, "请求对象HttpServletRequest不能为空!");
         OAuth2Authentication oAuth2Authentication = getOAuth2Authentication(request);
-        return oAuth2Authentication == null ? null : oAuth2Authentication.getUserAuthentication();
+        return oAuth2Authentication.getUserAuthentication();
     }
 
     /**
@@ -105,29 +104,20 @@ public class LoginUserUtil {
      */
     public static CdpUserDetail getUserDetail() {
         HttpServletRequest request = getHttpServletRequest();
-        if (request == null) {
-            return null;
-        }
+        Assert.notNull(request, "请求对象HttpServletRequest不能为空!");
         String authentication = request.getHeader(HttpHeaders.AUTHORIZATION);
-        CdpUserDetail userDetail = null;
+        CdpUserDetail userDetail;
         if (authentication == null || "".equals(authentication)) {
-            try {
-                userDetail = getCurrentUserInfo(request);
-                removeOldUserDetail(userDetail);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            userDetail = getCurrentUserInfo(request);
+            removeOldUserDetail(userDetail);
+
         } else {
             userDetail = userDetailMap.get(authentication);
             if (userDetail == null) {
-                try {
-                    userDetail = getCurrentUserInfo(request);
-                    if (userDetail != null) {
-                        removeOldUserDetail(userDetail);
-                        userDetailMap.put(authentication, userDetail);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
+                userDetail = getCurrentUserInfo(request);
+                if (userDetail != null) {
+                    removeOldUserDetail(userDetail);
+                    userDetailMap.put(authentication, userDetail);
                 }
             }
         }
@@ -135,9 +125,7 @@ public class LoginUserUtil {
     }
 
     private static void removeOldUserDetail(CdpUserDetail userDetail) {
-        if (userDetail == null) {
-            return;
-        }
+        Assert.notNull(userDetail, "用户信息不能为空!");
         CdpSysUserEntity user = userDetail.getUser();
         Set<String> needDelKeys = new HashSet<>();
         for (String key : userDetailMap.keySet()) {
@@ -162,8 +150,7 @@ public class LoginUserUtil {
      */
 
     public static CdpSysUserEntity getUser() {
-        CdpUserDetail userDetail = getUserDetail();
-        return userDetail == null ? null : userDetail.getUser();
+        return getUserDetail().getUser();
     }
 
     /**
@@ -172,8 +159,7 @@ public class LoginUserUtil {
      * @return CdpSysPermissionEntity
      */
     public static CdpSysPermissionEntity getPermissionTree() {
-        CdpUserDetail userDetail = getUserDetail();
-        return userDetail == null ? null : userDetail.getPermissionTree();
+        return getUserDetail().getPermissionTree();
     }
 
     /**
@@ -182,7 +168,6 @@ public class LoginUserUtil {
      * @return Client
      */
     public static Client getClient() {
-        CdpUserDetail userDetail = getUserDetail();
-        return userDetail == null ? null : userDetail.getClient();
+        return getUserDetail().getClient();
     }
 }

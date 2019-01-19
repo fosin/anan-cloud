@@ -8,6 +8,7 @@ package com.github.fosin.cdp.platformapi.constant;
  */
 public class SystemConstant {
     public static final String SUPER_USER_CODE = "super";
+    public static final Long SUPER_USER_ID = 1L;
     public static final String ADMIN_USER_CODE = "admin";
     public static final String SUPER_ROLE_NAME = "SUPER";
     public static final String ADMIN_ROLE_NAME = "ADMIN";
@@ -15,5 +16,4 @@ public class SystemConstant {
     public static final Long ROOT_PERMISSION_ID = 1L;
     public static final Integer SYSTEM_DICTIONARY_TYPE = 1;
 
-    public static final Long SUPER_USER_ID = 1L;
 }
