@@ -31,7 +31,7 @@
                 <pattern>${pattern}</pattern>
             </PatternLayout>
             <!-- 按大小划分 -->
-            <SizeBasedTriggeringPolicy size="50 MB"/>
+            <SizeBasedTriggeringPolicy size="50MB"/>
         </RollingFile>
     </Appenders>
     <Loggers>
@@ -40,9 +40,9 @@
             /> <Logger name="org.apache.tomcat.util.net.NioSelectorPool" level="WARN"
             /> -->
         <Root level="INFO">
-            <AppenderRef ref="console"></AppenderRef>
-            <AppenderRef ref="error"></AppenderRef>
-            <AppenderRef ref="rollingFile"></AppenderRef>
+            <AppenderRef ref="console"/>
+            <AppenderRef ref="error"/>
+            <AppenderRef ref="rollingFile"/>
         </Root>
     </Loggers>
 </configuration>
