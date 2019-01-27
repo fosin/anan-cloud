@@ -3,6 +3,9 @@ package com.github.fosin.cdp.platform.controller;
 import com.github.fosin.cdp.core.exception.CdpServiceException;
 import com.github.fosin.cdp.mvc.controller.ISimpleController;
 import com.github.fosin.cdp.mvc.service.ISimpleService;
+import com.github.fosin.cdp.platformapi.dto.request.CdpSysParameterCreateDto;
+import com.github.fosin.cdp.platformapi.dto.request.CdpSysParameterRetrieveDto;
+import com.github.fosin.cdp.platformapi.dto.request.CdpSysParameterUpdateDto;
 import com.github.fosin.cdp.platformapi.entity.CdpSysParameterEntity;
 import com.github.fosin.cdp.platformapi.parameter.OrganizParameterUtil;
 import com.github.fosin.cdp.platformapi.parameter.ParameterUtil;
@@ -27,7 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("v1/parameter")
 @Api(value = "v1/parameter", tags = "通用参数管理", description = "通用参数管理相关操作(参数获取、自动创建)")
-public class ParameterController implements ISimpleController<CdpSysParameterEntity, Long, CdpSysParameterEntity, CdpSysParameterEntity, CdpSysParameterEntity> {
+public class ParameterController implements ISimpleController<CdpSysParameterEntity, Long, CdpSysParameterCreateDto, CdpSysParameterRetrieveDto, CdpSysParameterUpdateDto> {
     @Autowired
     private IParameterService parameterService;
 
@@ -129,18 +132,18 @@ public class ParameterController implements ISimpleController<CdpSysParameterEnt
     @ApiOperation(value = "根据参数ID刷新参数缓存信息", notes = "该方法是幂等性的，可以重复调用")
     @ApiImplicitParam(name = "id", value = "参数ID,取值于CdpSysParameterEntity.id")
     @RequestMapping(value = "/apply/{id}", method = {RequestMethod.POST, RequestMethod.GET})
-    public ResponseEntity<Object> apply(@PathVariable("id") Long id) throws CdpServiceException {
+    public ResponseEntity<Object> apply(@PathVariable("id") Long id) {
         return ResponseEntity.ok(parameterService.applyChange(id));
     }
 
     @ApiOperation(value = "刷新所有已更改参数缓存信息", notes = "该方法只能在有修改参数信息的情况下使用，这是一个批量刷新参数缓存的操作")
     @RequestMapping(value = "/applys", method = {RequestMethod.POST, RequestMethod.GET})
-    public ResponseEntity<Object> applys() throws CdpServiceException {
+    public ResponseEntity<Object> applys() {
         return ResponseEntity.ok(parameterService.applyChanges());
     }
 
     @Override
-    public ISimpleService<CdpSysParameterEntity, Long, CdpSysParameterEntity, CdpSysParameterEntity, CdpSysParameterEntity> getService() {
+    public ISimpleService<CdpSysParameterEntity, Long, CdpSysParameterCreateDto, CdpSysParameterRetrieveDto, CdpSysParameterUpdateDto> getService() {
         return parameterService;
     }
 }

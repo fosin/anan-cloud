@@ -1,6 +1,8 @@
 package com.github.fosin.cdp.platformapi.service;
 
 import com.github.fosin.cdp.jpa.repository.IJpaRepository;
+import com.github.fosin.cdp.platformapi.dto.request.CdpSysPermissionCreateDto;
+import com.github.fosin.cdp.platformapi.dto.request.CdpSysPermissionUpdateDto;
 import com.github.fosin.cdp.platformapi.entity.CdpSysPermissionEntity;
 import com.github.fosin.cdp.core.exception.CdpServiceException;
 import com.github.fosin.cdp.mvc.module.PageModule;
@@ -13,7 +15,9 @@ import com.github.fosin.cdp.platformapi.service.inter.IPermissionService;
 import com.github.fosin.cdp.platformapi.service.inter.IRolePermissionService;
 import com.github.fosin.cdp.platformapi.service.inter.IUserPermissionService;
 import com.github.fosin.cdp.platformapi.util.LoginUserUtil;
+import com.github.fosin.cdp.util.ClassUtil;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
@@ -50,15 +54,17 @@ public class PermissionServiceImpl implements IPermissionService {
     private IRolePermissionService rolePermissionService;
 
     @Override
-    @CachePut(value = TableNameConstant.CDP_SYS_PERMISSION, key = "#entity.id")
-    public CdpSysPermissionEntity create(CdpSysPermissionEntity entity) throws CdpServiceException {
-        Assert.notNull(entity, "传入了空对象!");
-        return permissionRepository.save(entity);
+    @CachePut(value = TableNameConstant.CDP_SYS_PERMISSION, key = "#result.id")
+    public CdpSysPermissionEntity create(CdpSysPermissionCreateDto entity) {
+        Assert.notNull(entity, "传入的创建数据实体对象不能为空!");
+        CdpSysPermissionEntity createEntiy = new CdpSysPermissionEntity();
+        BeanUtils.copyProperties(entity, createEntiy);
+        return getRepository().save(createEntiy);
     }
 
     @Override
     @CacheEvict(value = TableNameConstant.CDP_SYS_PERMISSION, key = "#id")
-    public CdpSysPermissionEntity delete(Long id) throws CdpServiceException {
+    public CdpSysPermissionEntity delete(Long id) {
         Assert.notNull(id, "传入了空ID!");
         CdpSysPermissionEntity entity = permissionRepository.findOne(id);
         Assert.notNull(entity, "传入了空对象!");
@@ -78,7 +84,7 @@ public class PermissionServiceImpl implements IPermissionService {
 
     @Override
     @CacheEvict(value = TableNameConstant.CDP_SYS_PERMISSION, key = "#entity.id")
-    public CdpSysPermissionEntity delete(CdpSysPermissionEntity entity) throws CdpServiceException {
+    public CdpSysPermissionEntity delete(CdpSysPermissionEntity entity) {
         Assert.notNull(entity, "传入了空对象!");
         Long id = entity.getId();
         Assert.notNull(id, "传入了空ID!");
@@ -119,17 +125,14 @@ public class PermissionServiceImpl implements IPermissionService {
 
     @Override
     @CachePut(value = TableNameConstant.CDP_SYS_PERMISSION, key = "#entity.id")
-    public CdpSysPermissionEntity update(CdpSysPermissionEntity entity) throws CdpServiceException {
+    public CdpSysPermissionEntity update(CdpSysPermissionUpdateDto entity) {
         Assert.notNull(entity, "传入了空对象!");
         Assert.notNull(entity.getId(), "传入了空ID!");
-        return permissionRepository.save(entity);
+        CdpSysPermissionEntity updateEntiy = new CdpSysPermissionEntity();
+        BeanUtils.copyProperties(entity, updateEntiy);
+        return getRepository().save(updateEntiy);
     }
-
-    @Override
-    public Collection<CdpSysPermissionEntity> findAll() {
-        return permissionRepository.findAll();
-    }
-
+    
     @Override
     public List<CdpSysPermissionEntity> findByPId(Long pId) {
         Sort sort = new Sort(Sort.Direction.fromString("ASC"), "sort");

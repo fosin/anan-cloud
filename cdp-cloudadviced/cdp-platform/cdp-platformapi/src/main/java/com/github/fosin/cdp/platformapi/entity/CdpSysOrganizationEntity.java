@@ -1,96 +1,79 @@
 package com.github.fosin.cdp.platformapi.entity;
 
 import com.github.fosin.cdp.jpa.entity.AbstractCreateUpdateJpaEntity;
-import com.github.fosin.cdp.util.DateTimeUtil;
-import com.github.fosin.cdp.util.RegexUtil;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.validator.constraints.NotBlank;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 import java.io.Serializable;
-import java.util.Date;
-
 /**
  * 系统机构表(CdpSysOrganization)实体类
  *
  * @author fosin
- * @date 2018-10-27 09:38:39
+ * @date 2019-01-27 18:42:49
  * @since 1.0.0
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
 @Entity
+@EqualsAndHashCode(callSuper = true)
 @DynamicUpdate
 @Table(name = "cdp_sys_organization")
 @ApiModel(value = "系统机构表实体类", description = "表(cdp_sys_organization)的对应的实体类")
 public class CdpSysOrganizationEntity extends AbstractCreateUpdateJpaEntity implements Serializable {
-    private static final long serialVersionUID = -15967926351456872L;
-
-    @Column(name = "id")
+    private static final long serialVersionUID = -27331190994806707L;
+    
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @ApiModelProperty(value = "机构ID", notes = "主键，系统自动生成,机构ID")
+    @ApiModelProperty(value = "机构ID, 主键，一般系统自动生成")
+    @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "p_id")
     @Basic
-    @NotNull
-    @ApiModelProperty(value = "父机构编码，取值于id，表示当前数据所属的父类机构", notes = "父机构编码，取值于id，表示当前数据所属的父类机构")
+    @ApiModelProperty(value = "父机构编码，取值于id，表示当前数据所属的父类机构", required = true)
+    @Column(name = "p_id", nullable = false)
     private Long pId;
 
-    @Column(name = "top_id")
     @Basic
-    @NotNull
-    @ApiModelProperty(value = "顶级机构编码，取值于id，表示当前机构所属机构的注册机构")
+    @ApiModelProperty(value = "顶级机构编码：一般指用户注册的机构，通常是一个集团组的最高级别机构，取值于id", required = true)
+    @Column(name = "top_id", nullable = false)
     private Long topId;
 
-    @Column(name = "code")
     @Basic
-    @NotBlank
-    @Pattern(regexp = "[\\w]{1,64}", message = "机构编码只能大小写字母、数字、下杠(_)组合而成,长度不超过64位")
-    @ApiModelProperty(value = "机构编码，自定义机构编码，下级机构必须以上级机构编码为前缀", notes = "机构编码，自定义机构编码，下级机构必须以上级机构编码为前缀")
+    @ApiModelProperty(value = "机构编码，自定义机构编码，下级机构必须以上级机构编码为前缀", required = true)
+    @Column(name = "code", nullable = false, length = 64)
     private String code;
 
-    @Column(name = "name")
     @Basic
-    @NotBlank
-    @ApiModelProperty(value = "机构名称", notes = "机构名称")
-    @Pattern(regexp = RegexUtil.SPECIAL, message = "名称不能包含特殊字符")
+    @ApiModelProperty(value = "机构名称", required = true)
+    @Column(name = "name", nullable = false, length = 64)
     private String name;
 
-    @Column(name = "level")
     @Basic
-    @NotNull
-    @ApiModelProperty(value = "深度", notes = "深度")
+    @ApiModelProperty(value = "深度", required = true)
+    @Column(name = "level", nullable = false)
     private Integer level;
 
-    @Column(name = "fullname")
     @Basic
-    @ApiModelProperty(value = "机构全名", notes = "机构全名")
-    @Pattern(regexp = RegexUtil.SPECIAL, message = "名称不能包含特殊字符")
+    @ApiModelProperty(value = "机构全名")
+    @Column(name = "fullname", length = 128)
     private String fullname;
 
-    @Column(name = "address")
     @Basic
-    @ApiModelProperty(value = "机构地址", notes = "机构地址")
+    @ApiModelProperty(value = "机构地址")
+    @Column(name = "address", length = 128)
     private String address;
 
-    @Column(name = "telphone")
     @Basic
-    @ApiModelProperty(value = "机构电话", notes = "机构电话")
+    @ApiModelProperty(value = "机构电话")
+    @Column(name = "telphone", length = 24)
     private String telphone;
 
-    @Column(name = "status")
     @Basic
-    @NotNull
-    @ApiModelProperty(value = "使用状态：0=启用，1=禁用，具体取值于字典表cdp_sys_dictionary.code=11", notes = "使用状态：0=启用，1=禁用，具体取值于字典表cdp_sys_dictionary.code=11")
+    @ApiModelProperty(value = "使用状态：0=启用，1=禁用，具体取值于字典表cdp_sys_dictionary.code=11", required = true)
+    @Column(name = "status", nullable = false)
     private Integer status;
 
 }

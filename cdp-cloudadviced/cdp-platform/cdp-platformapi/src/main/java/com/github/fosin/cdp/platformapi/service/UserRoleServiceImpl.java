@@ -65,17 +65,17 @@ public class UserRoleServiceImpl implements IUserRoleService {
     }
 
     @Override
-    public List<CdpSysUserRoleEntity> createInBatch(Collection<CdpSysUserRoleEntity> entitis) throws CdpServiceException {
+    public List<CdpSysUserRoleEntity> createInBatch(Collection<CdpSysUserRoleEntity> entitis) {
         return userRoleRepository.save(entitis);
     }
 
     @Override
-    public void deleteInBatch(Collection<CdpSysUserRoleEntity> entitis) throws CdpServiceException {
+    public void deleteInBatch(Collection<CdpSysUserRoleEntity> entitis) {
         userRoleRepository.deleteInBatch(entitis);
     }
 
     @Override
-    public Collection<CdpSysUserRoleEntity> updateInBatch(Long key, Collection<CdpSysUserRoleEntity> entities) throws CdpServiceException {
+    public Collection<CdpSysUserRoleEntity> updateInBatch(Long key, Collection<CdpSysUserRoleEntity> entities) {
         throw new CdpServiceException("该方法还未实现!");
     }
 
@@ -113,7 +113,7 @@ public class UserRoleServiceImpl implements IUserRoleService {
     @Override
     @Transactional
     public List<CdpSysUserRoleEntity> updateInBatchByRoleId(Long roleId, Iterable<CdpSysUserRoleEntity> entities)
-            throws CdpServiceException {
+            {
         Assert.notNull(roleId, "传入的角色ID不能为空!");
         Assert.notNull(entities, "传入的实体集合不能为空!");
         for (CdpSysUserRoleEntity entity : entities) {

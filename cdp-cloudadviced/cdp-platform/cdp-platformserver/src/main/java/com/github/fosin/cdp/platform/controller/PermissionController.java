@@ -6,6 +6,9 @@ import com.github.fosin.cdp.mvc.controller.AbstractBaseController;
 import com.github.fosin.cdp.mvc.controller.ISimpleController;
 import com.github.fosin.cdp.mvc.service.ISimpleService;
 import com.github.fosin.cdp.platformapi.constant.SystemConstant;
+import com.github.fosin.cdp.platformapi.dto.request.CdpSysPermissionCreateDto;
+import com.github.fosin.cdp.platformapi.dto.request.CdpSysPermissionRetrieveDto;
+import com.github.fosin.cdp.platformapi.dto.request.CdpSysPermissionUpdateDto;
 import com.github.fosin.cdp.platformapi.entity.CdpSysPermissionEntity;
 import com.github.fosin.cdp.platformapi.service.inter.IPermissionService;
 import com.github.fosin.cdp.util.TreeUtil;
@@ -31,7 +34,7 @@ import java.util.List;
 @RestController
 @RequestMapping("v1/permission")
 @Api(value = "v1/permission", tags = "权限管理", description = "权限管理相关操作")
-public class PermissionController extends AbstractBaseController implements ISimpleController<CdpSysPermissionEntity, Long, CdpSysPermissionEntity, CdpSysPermissionEntity, CdpSysPermissionEntity> {
+public class PermissionController extends AbstractBaseController implements ISimpleController<CdpSysPermissionEntity, Long, CdpSysPermissionCreateDto, CdpSysPermissionRetrieveDto, CdpSysPermissionUpdateDto> {
     @Autowired
     private IPermissionService permissionService;
 
@@ -119,7 +122,7 @@ public class PermissionController extends AbstractBaseController implements ISim
 //    }
 
     @Override
-    public ISimpleService<CdpSysPermissionEntity, Long, CdpSysPermissionEntity, CdpSysPermissionEntity, CdpSysPermissionEntity> getService() {
+    public ISimpleService<CdpSysPermissionEntity, Long, CdpSysPermissionCreateDto, CdpSysPermissionRetrieveDto, CdpSysPermissionUpdateDto> getService() {
         return permissionService;
     }
 }

@@ -5,13 +5,21 @@ import com.github.fosin.cdp.jpa.repository.IJpaRepository;
 import com.github.fosin.cdp.mvc.module.PageModule;
 import com.github.fosin.cdp.mvc.result.Result;
 import com.github.fosin.cdp.mvc.result.ResultUtils;
+import com.github.fosin.cdp.platformapi.constant.SystemConstant;
 import com.github.fosin.cdp.platformapi.constant.TableNameConstant;
+import com.github.fosin.cdp.platformapi.dto.request.CdpSysOrganizationCreateDto;
+import com.github.fosin.cdp.platformapi.dto.request.CdpSysOrganizationUpdateDto;
+import com.github.fosin.cdp.platformapi.entity.CdpSysDictionaryEntity;
 import com.github.fosin.cdp.platformapi.entity.CdpSysOrganizationEntity;
+import com.github.fosin.cdp.platformapi.entity.CdpSysUserEntity;
 import com.github.fosin.cdp.platformapi.repository.OrganizationRepository;
 import com.github.fosin.cdp.platformapi.service.inter.IOrganizationService;
+import com.github.fosin.cdp.platformapi.util.LoginUserUtil;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
@@ -37,17 +45,24 @@ public class OrganizationServiceImpl implements IOrganizationService {
     private OrganizationRepository organizationRepository;
 
     @Override
-    @CacheEvict(value = TableNameConstant.CDP_SYS_ORGANIZATION, key = "#entity.id")
-    public CdpSysOrganizationEntity create(CdpSysOrganizationEntity entity) {
-        Assert.notNull(entity, "传入了空对象!");
-        return organizationRepository.save(entity);
+    @CachePut(value = TableNameConstant.CDP_SYS_ORGANIZATION, key = "#result.id")
+    public CdpSysOrganizationEntity create(CdpSysOrganizationCreateDto entity) {
+        Assert.notNull(entity, "传入的创建数据实体对象不能为空!");
+        CdpSysOrganizationEntity createEntity = new CdpSysOrganizationEntity();
+        BeanUtils.copyProperties(entity, createEntity);
+        return organizationRepository.save(createEntity);
     }
 
     @Override
-    @CacheEvict(value = TableNameConstant.CDP_SYS_ORGANIZATION, key = "#entity.id")
-    public CdpSysOrganizationEntity update(CdpSysOrganizationEntity entity) {
-        Assert.notNull(entity, "传入了空对象!");
-        return organizationRepository.save(entity);
+    @CachePut(value = TableNameConstant.CDP_SYS_ORGANIZATION, key = "#entity.id")
+    public CdpSysOrganizationEntity update(CdpSysOrganizationUpdateDto entity) {
+        Assert.notNull(entity, "无效的更新数据");
+        Long id = entity.getId();
+        Assert.notNull(id, "无效的字典代码code");
+        CdpSysOrganizationEntity updateEntity = organizationRepository.findOne(id);
+        Assert.notNull(updateEntity, "根据传入的机构ID" + id + "在数据库中未能找到对于数据!");
+        BeanUtils.copyProperties(entity, updateEntity);
+        return organizationRepository.save(updateEntity);
     }
 
     @Override

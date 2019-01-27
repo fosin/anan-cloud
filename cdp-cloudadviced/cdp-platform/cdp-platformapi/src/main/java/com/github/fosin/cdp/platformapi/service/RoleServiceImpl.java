@@ -2,6 +2,8 @@ package com.github.fosin.cdp.platformapi.service;
 
 
 import com.github.fosin.cdp.jpa.repository.IJpaRepository;
+import com.github.fosin.cdp.platformapi.dto.request.CdpSysRoleCreateDto;
+import com.github.fosin.cdp.platformapi.dto.request.CdpSysRoleUpdateDto;
 import com.github.fosin.cdp.platformapi.entity.*;
 import com.github.fosin.cdp.platformapi.repository.OrganizationRepository;
 import com.github.fosin.cdp.platformapi.repository.RoleRepository;
@@ -14,6 +16,7 @@ import com.github.fosin.cdp.platformapi.constant.SystemConstant;
 import com.github.fosin.cdp.platformapi.service.inter.IRoleService;
 import com.github.fosin.cdp.platformapi.util.LoginUserUtil;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -49,11 +52,12 @@ public class RoleServiceImpl implements IRoleService {
     private OrganizationRepository organizationRepository;
 
     @Override
-    public CdpSysRoleEntity update(CdpSysRoleEntity entity) throws CdpServiceException {
+    public CdpSysRoleEntity update(CdpSysRoleUpdateDto entity) {
         Assert.notNull(entity, "传入了空对象!");
         Long id = entity.getId();
         Assert.notNull(id, "传入了空ID!");
-
+        CdpSysRoleEntity saveEntity = new CdpSysRoleEntity();
+        BeanUtils.copyProperties(entity, saveEntity);
         CdpSysRoleEntity oldEntity = roleRepository.findOne(id);
         if (SystemConstant.ADMIN_ROLE_NAME.equals(oldEntity.getValue().toUpperCase()) &&
                 !SystemConstant.ADMIN_ROLE_NAME.equals(entity.getValue().toUpperCase())) {
@@ -61,17 +65,11 @@ public class RoleServiceImpl implements IRoleService {
         }
         Assert.isTrue(!SystemConstant.SUPER_ROLE_NAME.equals(oldEntity.getValue().toUpperCase()),
                 "不能修改超级管理员角色帐号信息!");
-        return roleRepository.save(entity);
+        return roleRepository.save(saveEntity);
     }
 
     @Override
-    public CdpSysRoleEntity findOne(Long id) {
-        Assert.isTrue(id != null && id > 0, "传入的角色ID无效！");
-        return roleRepository.findOne(id);
-    }
-
-    @Override
-    public CdpSysRoleEntity delete(Long id) throws CdpServiceException {
+    public CdpSysRoleEntity delete(Long id) {
         Assert.isTrue(id != null && id > 0, "传入的角色ID无效！");
         CdpSysRoleEntity entity = roleRepository.findOne(id);
         Assert.notNull(entity, "根据角色ID未能找到角色数据!");
@@ -87,7 +85,7 @@ public class RoleServiceImpl implements IRoleService {
     }
 
     @Override
-    public CdpSysRoleEntity delete(CdpSysRoleEntity entity) throws CdpServiceException {
+    public CdpSysRoleEntity delete(CdpSysRoleEntity entity) {
         Assert.notNull(entity, "传入了空对象!");
         Assert.isTrue(!SystemConstant.SUPER_ROLE_NAME.equals(entity.getValue())
                         && !SystemConstant.ADMIN_ROLE_NAME.equals(entity.getValue()),

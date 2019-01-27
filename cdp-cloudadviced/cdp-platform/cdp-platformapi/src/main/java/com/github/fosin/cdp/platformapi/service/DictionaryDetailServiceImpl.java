@@ -9,14 +9,18 @@ import com.github.fosin.cdp.mvc.result.Result;
 import com.github.fosin.cdp.mvc.result.ResultUtils;
 import com.github.fosin.cdp.platformapi.constant.SystemConstant;
 import com.github.fosin.cdp.platformapi.constant.TableNameConstant;
+import com.github.fosin.cdp.platformapi.dto.request.CdpSysDictionaryDetailCreateDto;
+import com.github.fosin.cdp.platformapi.dto.request.CdpSysDictionaryDetailUpdateDto;
 import com.github.fosin.cdp.platformapi.entity.CdpSysDictionaryDetailEntity;
 import com.github.fosin.cdp.platformapi.entity.CdpSysUserEntity;
 import com.github.fosin.cdp.platformapi.repository.DictionaryDetailRepository;
 import com.github.fosin.cdp.platformapi.service.inter.IDictionaryDetailService;
 import com.github.fosin.cdp.platformapi.service.inter.IUserService;
 import com.github.fosin.cdp.platformapi.util.LoginUserUtil;
+import com.github.fosin.cdp.util.ClassUtil;
 import com.github.fosin.cdp.util.NumberUtil;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -52,26 +56,32 @@ public class DictionaryDetailServiceImpl implements IDictionaryDetailService {
 
     @Override
     @CacheEvict(value = TableNameConstant.CDP_SYS_DICTIONARY_DETAIL, key = "#entity.code")
-    public CdpSysDictionaryDetailEntity create(CdpSysDictionaryDetailEntity entity) {
-        return dictionaryDetailRepository.save(entity);
+    public CdpSysDictionaryDetailEntity create(CdpSysDictionaryDetailCreateDto entity) {
+        Assert.notNull(entity, "传入的创建数据实体对象不能为空!");
+        CdpSysDictionaryDetailEntity createEntiy = new CdpSysDictionaryDetailEntity();
+        BeanUtils.copyProperties(entity, createEntiy);
+        return getRepository().save(createEntiy);
     }
 
     @Override
     @CacheEvict(value = TableNameConstant.CDP_SYS_DICTIONARY_DETAIL, key = "#entity.code")
-    public CdpSysDictionaryDetailEntity update(CdpSysDictionaryDetailEntity entity) {
-        Assert.notNull(entity, "传入了空的对象!");
-        Long key = entity.getCode();
-        Assert.notNull(key, "无效的更新数据!");
+    public CdpSysDictionaryDetailEntity update(CdpSysDictionaryDetailUpdateDto entity) {
+        Assert.notNull(entity, "传入的更新数据实体对象不能为空!");
+        Long id = entity.getId();
+        Assert.notNull(id, "传入的更新数据实体对象主键不能为空!");
+        CdpSysDictionaryDetailEntity findEntity = dictionaryDetailRepository.findOne(id);
+        Assert.notNull(findEntity, "根据传入的主键[" + id + "]在数据库中未能找到数据!");
         CdpSysUserEntity loginUser = LoginUserUtil.getUser();
         //不是超级管理员
         if (!SystemConstant.SUPER_USER_CODE.equals(loginUser.getUsercode())) {
             CdpSysUserEntity superUser = userService.findByUsercode(SystemConstant.SUPER_USER_CODE);
             //是超级管理员创建的数据则不需要非超级管理员修改
-            if (superUser.getId().equals(entity.getCreateBy())) {
+            if (superUser.getId().equals(findEntity.getCreateBy())) {
                 throw new CdpServiceException("没有权限修改系统创建的字典明细项!");
             }
         }
-        return dictionaryDetailRepository.save(entity);
+        BeanUtils.copyProperties(entity, findEntity);
+        return dictionaryDetailRepository.save(findEntity);
     }
 
     @Override
@@ -102,7 +112,7 @@ public class DictionaryDetailServiceImpl implements IDictionaryDetailService {
 
     @Override
     @CacheEvict(value = TableNameConstant.CDP_SYS_DICTIONARY_DETAIL, key = "#entity.code")
-    public CdpSysDictionaryDetailEntity delete(CdpSysDictionaryDetailEntity entity) throws CdpServiceException {
+    public CdpSysDictionaryDetailEntity delete(CdpSysDictionaryDetailEntity entity) {
         Assert.notNull(entity, "传入了空的对象!");
         CdpSysUserEntity loginUser = LoginUserUtil.getUser();
         //不是超级管理员
@@ -142,7 +152,7 @@ public class DictionaryDetailServiceImpl implements IDictionaryDetailService {
     }
 
     @Override
-    public Page<CdpSysDictionaryDetailEntity> findAll(String searchCondition, Pageable pageable, Long code) throws CdpServiceException {
+    public Page<CdpSysDictionaryDetailEntity> findAll(String searchCondition, Pageable pageable, Long code) {
         Specification<CdpSysDictionaryDetailEntity> condition = new Specification<CdpSysDictionaryDetailEntity>() {
             @Override
             public Predicate toPredicate(Root<CdpSysDictionaryDetailEntity> root, CriteriaQuery<?> query, CriteriaBuilder cb) {

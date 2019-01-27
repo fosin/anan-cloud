@@ -2,6 +2,8 @@ package com.github.fosin.cdp.platformapi.service;
 
 
 import com.github.fosin.cdp.jpa.repository.IJpaRepository;
+import com.github.fosin.cdp.platformapi.dto.request.CdpSysParameterCreateDto;
+import com.github.fosin.cdp.platformapi.dto.request.CdpSysParameterUpdateDto;
 import com.github.fosin.cdp.platformapi.repository.ParameterRepository;
 import com.github.fosin.cdp.core.exception.CdpServiceException;
 import com.github.fosin.cdp.mvc.module.PageModule;
@@ -13,8 +15,10 @@ import com.github.fosin.cdp.platformapi.entity.CdpSysUserEntity;
 import com.github.fosin.cdp.platformapi.service.inter.IParameterService;
 import com.github.fosin.cdp.platformapi.util.LoginUserUtil;
 import com.github.fosin.cdp.cache.util.CacheUtil;
+import com.github.fosin.cdp.util.ClassUtil;
 import com.github.fosin.cdp.util.StringUtil;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
@@ -47,26 +51,24 @@ public class ParameterServiceImpl implements IParameterService {
 
     @Override
     @CachePut(value = TableNameConstant.CDP_SYS_PARAMETER, key = "#root.target.getCacheKey(#result)")
-    public CdpSysParameterEntity create(CdpSysParameterEntity entity) throws CdpServiceException {
-        Assert.notNull(entity, "传入了空对象!");
-        CdpSysUserEntity loginUser = LoginUserUtil.getUser();
-        Date now = new Date();
-        entity.setApplyBy(loginUser.getId());
-        entity.setApplyTime(now);
-        entity.setStatus(0);
-        return parameterRepository.save(entity);
+    public CdpSysParameterEntity create(CdpSysParameterCreateDto entity) {
+        Assert.notNull(entity, "传入的创建数据实体对象不能为空!");
+        CdpSysParameterEntity createEntiy = new CdpSysParameterEntity();
+        BeanUtils.copyProperties(entity, createEntiy);
+        return getRepository().save(createEntiy);
     }
 
     @Override
-    public CdpSysParameterEntity update(CdpSysParameterEntity entity) throws CdpServiceException {
+    public CdpSysParameterEntity update(CdpSysParameterUpdateDto entity) {
         Assert.notNull(entity, "传入了空对象!");
         Long id = entity.getId();
         Assert.notNull(id, "ID不能为空!");
         CdpSysParameterEntity cEntity = parameterRepository.findOne(id);
-        CdpSysParameterEntity save = parameterRepository.save(entity);
+        BeanUtils.copyProperties(entity, cEntity);
+        CdpSysParameterEntity save = parameterRepository.save(cEntity);
         if (save != null) {
             String cCacheKey = getCacheKey(cEntity);
-            String cacheKey = getCacheKey(entity);
+            String cacheKey = getCacheKey(entity.getType(), entity.getScope(), entity.getName());
             //如果修改了type、scope、name则需要删除以前的缓存并设置新缓存
             if (!cCacheKey.equals(cacheKey)) {
                 //新key设置旧值，需要发布以后才刷新缓存换成本次更新的新值
@@ -78,7 +80,7 @@ public class ParameterServiceImpl implements IParameterService {
     }
 
     @Override
-    public CdpSysParameterEntity delete(Long id) throws CdpServiceException {
+    public CdpSysParameterEntity delete(Long id) {
         CdpSysParameterEntity entity = parameterRepository.findOne(id);
         Assert.notNull(entity, "通过ID没有能找到参数数据,删除被取消!");
         String cacheKey = getCacheKey(entity);
@@ -95,7 +97,7 @@ public class ParameterServiceImpl implements IParameterService {
 
     @Override
     @CacheEvict(value = TableNameConstant.CDP_SYS_PARAMETER, key = "#root.target.getCacheKey(#entity)")
-    public CdpSysParameterEntity delete(CdpSysParameterEntity entity) throws CdpServiceException {
+    public CdpSysParameterEntity delete(CdpSysParameterEntity entity) {
         Assert.notNull(entity, "传入了空对象!");
         parameterRepository.delete(entity);
         return entity;
@@ -133,9 +135,7 @@ public class ParameterServiceImpl implements IParameterService {
         if (StringUtil.isEmpty(scope)) {
             scope = "";
         }
-        StringBuilder sb = new StringBuilder();
-        sb.append(type).append("-").append(scope).append("-").append(name);
-        return sb.toString();
+        return type + "-" + scope + "-" + name;
     }
 
     @Override
@@ -151,7 +151,7 @@ public class ParameterServiceImpl implements IParameterService {
 
     @Override
     @Transactional(rollbackFor = CdpServiceException.class)
-    public boolean applyChange(Long id) throws CdpServiceException {
+    public boolean applyChange(Long id) {
         CdpSysParameterEntity entity = parameterRepository.findOne(id);
         Assert.notNull(entity, "该参数已经不存在!");
         String cacheKey = getCacheKey(entity);
@@ -187,7 +187,7 @@ public class ParameterServiceImpl implements IParameterService {
     }
 
     @Override
-    public boolean applyChanges() throws CdpServiceException {
+    public boolean applyChanges() {
         List<CdpSysParameterEntity> entities = parameterRepository.findByStatusNot(0);
         Assert.isTrue(entities != null && entities.size() != 0, "没有更改过任何参数，不需要发布!");
         for (CdpSysParameterEntity entity : entities) {

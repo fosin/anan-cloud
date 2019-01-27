@@ -5,6 +5,10 @@ import com.github.fosin.cdp.mvc.controller.ISimpleController;
 import com.github.fosin.cdp.mvc.module.PageModule;
 import com.github.fosin.cdp.mvc.result.Result;
 import com.github.fosin.cdp.mvc.service.ISimpleService;
+import com.github.fosin.cdp.platformapi.dto.request.CdpSysRoleCreateDto;
+import com.github.fosin.cdp.platformapi.dto.request.CdpSysRolePermissionUpdateDto;
+import com.github.fosin.cdp.platformapi.dto.request.CdpSysRoleRetrieveDto;
+import com.github.fosin.cdp.platformapi.dto.request.CdpSysRoleUpdateDto;
 import com.github.fosin.cdp.platformapi.entity.*;
 import com.github.fosin.cdp.platformapi.service.inter.IRolePermissionService;
 import com.github.fosin.cdp.platformapi.service.inter.IRoleService;
@@ -29,7 +33,7 @@ import java.util.List;
 @RestController
 @RequestMapping("v1/role")
 @Api(value = "v1/role", tags = "角色管理", description = "角色管理相关操作")
-public class RoleController implements ISimpleController<CdpSysRoleEntity, Long, CdpSysRoleEntity, CdpSysRoleEntity, CdpSysRoleEntity> {
+public class RoleController implements ISimpleController<CdpSysRoleEntity, Long, CdpSysRoleCreateDto, CdpSysRoleRetrieveDto, CdpSysRoleUpdateDto> {
     @Autowired
     private IRoleService roleService;
     @Autowired
@@ -52,8 +56,8 @@ public class RoleController implements ISimpleController<CdpSysRoleEntity, Long,
             @ApiImplicitParam(name = "roleId", value = "角色ID,取值于CdpSysRoleEntity.id")
     })
     @PutMapping(value = "/permissions/{roleId}")
-    public ResponseEntity<Collection<CdpSysRolePermissionEntity>> permissions(@RequestBody List<CdpSysRolePermissionEntity> entities,
-                                                                        @PathVariable("roleId") Long roleId) {
+    public ResponseEntity<Collection<CdpSysRolePermissionEntity>> permissions(@RequestBody List<CdpSysRolePermissionUpdateDto> entities,
+                                                                              @PathVariable("roleId") Long roleId) {
         return ResponseEntity.ok(rolePermissionService.updateInBatch(roleId, entities));
     }
 
@@ -98,7 +102,7 @@ public class RoleController implements ISimpleController<CdpSysRoleEntity, Long,
     }
 
     @Override
-    public ISimpleService<CdpSysRoleEntity, Long, CdpSysRoleEntity, CdpSysRoleEntity, CdpSysRoleEntity> getService() {
+    public ISimpleService<CdpSysRoleEntity, Long, CdpSysRoleCreateDto, CdpSysRoleRetrieveDto, CdpSysRoleUpdateDto> getService() {
         return roleService;
     }
 }

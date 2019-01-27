@@ -1,18 +1,14 @@
 package com.github.fosin.cdp.platformapi.entity;
 
 import com.github.fosin.cdp.jpa.entity.AbstractOrganizIdCreateJpaEntity;
-import com.github.fosin.cdp.util.DateTimeUtil;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.DynamicUpdate;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * 系统用户角色表(CdpSysUserRole)实体类

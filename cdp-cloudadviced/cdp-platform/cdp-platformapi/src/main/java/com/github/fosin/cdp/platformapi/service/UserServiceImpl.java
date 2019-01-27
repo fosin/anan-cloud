@@ -8,7 +8,9 @@ import com.github.fosin.cdp.mvc.result.Result;
 import com.github.fosin.cdp.mvc.result.ResultUtils;
 import com.github.fosin.cdp.platformapi.constant.SystemConstant;
 import com.github.fosin.cdp.platformapi.constant.TableNameConstant;
-import com.github.fosin.cdp.platformapi.dto.CdpSysUserRequestDto;
+import com.github.fosin.cdp.platformapi.dto.request.CdpSysUserCreateDto;
+import com.github.fosin.cdp.platformapi.dto.request.CdpSysUserRetrieveDto;
+import com.github.fosin.cdp.platformapi.dto.request.CdpSysUserUpdateDto;
 import com.github.fosin.cdp.platformapi.entity.CdpSysOrganizationEntity;
 import com.github.fosin.cdp.platformapi.entity.CdpSysUserEntity;
 import com.github.fosin.cdp.platformapi.entity.CdpSysUserRoleEntity;
@@ -39,7 +41,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import javax.persistence.criteria.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Random;
 
 /**
  * 2017/12/27.
@@ -89,7 +94,7 @@ public class UserServiceImpl implements IUserService {
                     @CachePut(value = TableNameConstant.CDP_SYS_USER, key = "#result.usercode", condition = "#result.usercode != null"),
             }
     )
-    public CdpSysUserEntity create(CdpSysUserRequestDto.CreateDto entity) {
+    public CdpSysUserEntity create(CdpSysUserCreateDto entity) {
         CdpSysUserEntity createUser = new CdpSysUserEntity();
         BeanUtils.copyProperties(entity, createUser);
 
@@ -112,7 +117,7 @@ public class UserServiceImpl implements IUserService {
                     @CachePut(value = TableNameConstant.CDP_SYS_USER, key = "#result.usercode", condition = "#result.usercode != null"),
             }
     )
-    public CdpSysUserEntity update(CdpSysUserRequestDto.UpdateDto entity) throws CdpServiceException {
+    public CdpSysUserEntity update(CdpSysUserUpdateDto entity) {
         Long id = entity.getId();
         Assert.notNull(id, "更新的数据id不能为空或者小于1!");
         CdpSysUserEntity createUser = userRepository.findOne(entity.getId());
@@ -128,7 +133,7 @@ public class UserServiceImpl implements IUserService {
         return userRepository.save(createUser);
     }
 
-    public List<CdpSysUserEntity> findAll(Iterable<Long> ids) throws CdpServiceException {
+    public List<CdpSysUserEntity> findAll(Iterable<Long> ids) {
         List<CdpSysUserEntity> rcList = new ArrayList<>();
         List<Long> needQueryIds = new ArrayList<>();
         for (Long id : ids) {
@@ -155,7 +160,7 @@ public class UserServiceImpl implements IUserService {
                     @CacheEvict(value = TableNameConstant.CDP_SYS_USER_PERMISSION, key = "#id")
             }
     )
-    public CdpSysUserEntity delete(Long id) throws CdpServiceException {
+    public CdpSysUserEntity delete(Long id) {
         Assert.isTrue(id != null && id > 0, "传入的用户ID无效！");
         CdpSysUserEntity entity = CacheUtil.get(TableNameConstant.CDP_SYS_USER, id + "", CdpSysUserEntity.class);
         if (entity == null) {
@@ -190,7 +195,7 @@ public class UserServiceImpl implements IUserService {
                     @CacheEvict(value = TableNameConstant.CDP_SYS_USER_PERMISSION, key = "#entity.id")
             }
     )
-    public CdpSysUserEntity delete(CdpSysUserEntity entity) throws CdpServiceException {
+    public CdpSysUserEntity delete(CdpSysUserEntity entity) {
         Assert.notNull(entity, "不能删除空的用户对象!");
         Assert.isTrue(!SystemConstant.SUPER_USER_CODE.equals(entity.getUsercode())
                 && !SystemConstant.ADMIN_USER_CODE.equals(entity.getUsercode()), "不能删除管理员帐号!");

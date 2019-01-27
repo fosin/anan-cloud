@@ -1,8 +1,8 @@
 package com.github.fosin.cdp.platformapi.util;
 
 import com.github.fosin.cdp.platformapi.dto.CdpUserDetail;
-import com.github.fosin.cdp.platformapi.entity.CdpSysPermissionEntity;
 import com.github.fosin.cdp.platformapi.dto.Client;
+import com.github.fosin.cdp.platformapi.entity.CdpSysPermissionEntity;
 import com.github.fosin.cdp.platformapi.entity.CdpSysUserEntity;
 import com.github.fosin.cdp.util.BeanUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -113,9 +113,9 @@ public class LoginUserUtil {
 
         } else {
             userDetail = userDetailMap.get(authentication);
-            if (userDetail == null) {
+            if (userDetail == null || userDetail.getUser() == null) {
                 userDetail = getCurrentUserInfo(request);
-                if (userDetail != null) {
+                if (userDetail != null && userDetail.getUser() != null) {
                     removeOldUserDetail(userDetail);
                     userDetailMap.put(authentication, userDetail);
                 }

@@ -3,7 +3,10 @@ package com.github.fosin.cdp.platformapi.service;
 import com.github.fosin.cdp.cache.util.CacheUtil;
 import com.github.fosin.cdp.core.exception.CdpServiceException;
 import com.github.fosin.cdp.jpa.repository.IJpaRepository;
+import com.github.fosin.cdp.jpa.util.JpaUtil;
 import com.github.fosin.cdp.platformapi.constant.TableNameConstant;
+import com.github.fosin.cdp.platformapi.dto.request.CdpSysUserPermissionUpdateDto;
+import com.github.fosin.cdp.platformapi.entity.CdpSysRolePermissionEntity;
 import com.github.fosin.cdp.platformapi.entity.CdpSysUserEntity;
 import com.github.fosin.cdp.platformapi.entity.CdpSysUserPermissionEntity;
 import com.github.fosin.cdp.platformapi.repository.UserPermissionRepository;
@@ -50,18 +53,7 @@ public class UserPermissionServiceImpl implements IUserPermissionService {
     }
 
     @Override
-    public List<CdpSysUserPermissionEntity> createInBatch(Collection<CdpSysUserPermissionEntity> entities) throws CdpServiceException {
-        CdpSysUserEntity loginUser = LoginUserUtil.getUser();
-        Date now = new Date();
-        for (CdpSysUserPermissionEntity entity : entities) {
-            entity.setCreateBy(loginUser.getId());
-            entity.setCreateTime(now);
-        }
-        return userPermissionRepository.save(entities);
-    }
-
-    @Override
-    public void deleteInBatch(Collection<CdpSysUserPermissionEntity> entities) throws CdpServiceException {
+    public void deleteInBatch(Collection<CdpSysUserPermissionEntity> entities) {
         Set<Long> needDelUsers = new HashSet<>();
         for (CdpSysUserPermissionEntity entity : entities) {
             needDelUsers.add(entity.getUserId());
@@ -88,24 +80,17 @@ public class UserPermissionServiceImpl implements IUserPermissionService {
             }
     )
     @Transactional
-    public List<CdpSysUserPermissionEntity> updateInBatch(Long userId, Collection<CdpSysUserPermissionEntity> entities) {
+    public List<CdpSysUserPermissionEntity> updateInBatch(Long userId, Collection<CdpSysUserPermissionUpdateDto> entities) {
         Assert.notNull(userId, "传入的用户ID不能为空!");
-        for (CdpSysUserPermissionEntity entity : entities) {
+        for (CdpSysUserPermissionUpdateDto entity : entities) {
             Assert.isTrue(entity.getUserId().equals(userId), "需要更新的数据集中有与用户ID不匹配的数据!");
         }
 
-        userPermissionRepository.deleteByUserId(userId);
-        if (entities.iterator().hasNext()) {
-            CdpSysUserEntity loginUser = LoginUserUtil.getUser();
-            Date now = new Date();
-            for (CdpSysUserPermissionEntity entity : entities) {
-                entity.setCreateBy(loginUser.getId());
-                entity.setCreateTime(now);
-            }
-            return userPermissionRepository.save(entities);
-        }
+        Collection<CdpSysUserPermissionEntity> saveEntities = JpaUtil.copyCollectionProperties(this.getClass(), entities);
 
-        return null;
+        userPermissionRepository.deleteByUserId(userId);
+
+        return userPermissionRepository.save(saveEntities);
     }
 
     @Override

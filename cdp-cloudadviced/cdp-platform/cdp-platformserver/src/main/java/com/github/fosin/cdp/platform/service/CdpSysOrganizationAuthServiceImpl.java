@@ -7,19 +7,20 @@ import com.github.fosin.cdp.platform.repository.CdpSysOrganizationAuthRepository
 import com.github.fosin.cdp.platform.service.inter.ICdpSysOrganizationAuthService;
 import com.github.fosin.cdp.platform.service.inter.ICdpSysPayOrderService;
 import com.github.fosin.cdp.platform.service.inter.ICdpSysVersionService;
-import com.github.fosin.cdp.platformapi.dto.CdpSysUserRequestDto;
 import com.github.fosin.cdp.platformapi.dto.RegisterDto;
+import com.github.fosin.cdp.platformapi.dto.request.CdpSysOrganizationCreateDto;
+import com.github.fosin.cdp.platformapi.dto.request.CdpSysOrganizationUpdateDto;
+import com.github.fosin.cdp.platformapi.dto.request.CdpSysUserCreateDto;
 import com.github.fosin.cdp.platformapi.entity.CdpSysOrganizationEntity;
 import com.github.fosin.cdp.platformapi.entity.CdpSysUserEntity;
 import com.github.fosin.cdp.platformapi.service.inter.IOrganizationService;
 import com.github.fosin.cdp.platformapi.service.inter.IUserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
 
 import java.util.Date;
 import java.util.List;
@@ -74,20 +75,22 @@ public class CdpSysOrganizationAuthServiceImpl implements ICdpSysOrganizationAut
         Date now = new Date();
 
         //创建用户
-        CdpSysUserRequestDto.CreateDto createDTO = registerDto.getUser();
+        CdpSysUserCreateDto createDTO = registerDto.getUser();
 //        Assert.isTrue(createDTO.getPassword().equals(createDTO.getConfirmPassword()), "密码和确认密码必须一致!");
         CdpSysUserEntity user = userService.create(createDTO);
 
         //创建机构
-        CdpSysOrganizationEntity organization = new CdpSysOrganizationEntity();
+        CdpSysOrganizationCreateDto organization = new CdpSysOrganizationCreateDto();
         BeanUtils.copyProperties(registerDto.getOrganization(), organization);
         organization.setPId(0L);
         organization.setTopId(0L);
         organization.setLevel(1);
         organization.setStatus(0);
         CdpSysOrganizationEntity organizationEntity = organizationService.create(organization);
-        organizationEntity.setTopId(organizationEntity.getId());
-        organizationService.update(organizationEntity);
+        CdpSysOrganizationUpdateDto updateDto = new CdpSysOrganizationUpdateDto();
+        BeanUtils.copyProperties(organizationEntity, updateDto);
+        updateDto.setTopId(organizationEntity.getId());
+        organizationService.update(updateDto);
 
         Long versionId = registerDto.getVersionId();
         CdpSysVersionEntity versionEntity = versionService.findOne(versionId);

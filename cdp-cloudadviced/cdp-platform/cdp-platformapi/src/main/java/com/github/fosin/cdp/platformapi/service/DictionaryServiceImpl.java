@@ -2,6 +2,8 @@ package com.github.fosin.cdp.platformapi.service;
 
 
 import com.github.fosin.cdp.jpa.repository.IJpaRepository;
+import com.github.fosin.cdp.platformapi.dto.request.CdpSysDictionaryCreateDto;
+import com.github.fosin.cdp.platformapi.dto.request.CdpSysDictionaryUpdateDto;
 import com.github.fosin.cdp.platformapi.repository.DictionaryDetailRepository;
 import com.github.fosin.cdp.core.exception.CdpServiceException;
 import com.github.fosin.cdp.mvc.module.PageModule;
@@ -15,6 +17,7 @@ import com.github.fosin.cdp.platformapi.service.inter.IDictionaryService;
 import com.github.fosin.cdp.platformapi.util.LoginUserUtil;
 import com.github.fosin.cdp.util.NumberUtil;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -44,7 +47,8 @@ public class DictionaryServiceImpl implements IDictionaryService {
     private DictionaryDetailRepository dictionaryDetailRepository;
 
     @Override
-    public CdpSysDictionaryEntity create(CdpSysDictionaryEntity entity) throws CdpServiceException {
+    public CdpSysDictionaryEntity create(CdpSysDictionaryCreateDto entity) {
+        Assert.notNull(entity, "传入的创建数据实体对象不能为空!");
         //系统字典
         if (entity.getType().equals(SystemConstant.SYSTEM_DICTIONARY_TYPE)) {
             CdpSysUserEntity loginUser = LoginUserUtil.getUser();
@@ -52,26 +56,32 @@ public class DictionaryServiceImpl implements IDictionaryService {
             Assert.isTrue(SystemConstant.SUPER_USER_CODE.equals(loginUser.getUsercode()), "没有权限创建系统字典!");
 
         }
-        return dictionaryRepository.save(entity);
+        CdpSysDictionaryEntity createEntity = new CdpSysDictionaryEntity();
+        BeanUtils.copyProperties(entity, createEntity);
+        return dictionaryRepository.save(createEntity);
     }
 
     @Override
-    public CdpSysDictionaryEntity update(CdpSysDictionaryEntity entity) throws CdpServiceException {
+    public CdpSysDictionaryEntity update(CdpSysDictionaryUpdateDto entity) {
         Assert.notNull(entity, "无效的更新数据");
         Long code = entity.getCode();
         Assert.notNull(code, "无效的字典代码code");
+        CdpSysDictionaryEntity updateEntity = dictionaryRepository.findOne(code);
+        Assert.notNull(updateEntity, "根据传入的字典code" + code + "在数据库中未能找到对于数据!");
         //系统字典
         if (entity.getType().equals(SystemConstant.SYSTEM_DICTIONARY_TYPE)) {
             CdpSysUserEntity loginUser = LoginUserUtil.getUser();
             //非超级管理员不能创建系统字典
             Assert.isTrue(SystemConstant.SUPER_USER_CODE.equals(loginUser.getUsercode()), "没有权限修改系统字典!");
         }
-        return dictionaryRepository.save(entity);
+
+        BeanUtils.copyProperties(entity, updateEntity);
+        return dictionaryRepository.save(updateEntity);
     }
 
     @Override
     @Transactional(rollbackFor = CdpServiceException.class)
-    public CdpSysDictionaryEntity delete(Long code) throws CdpServiceException {
+    public CdpSysDictionaryEntity delete(Long code) {
         if (code == null) {
             throw new CdpServiceException("传入的code无效!");
         }
@@ -94,7 +104,7 @@ public class DictionaryServiceImpl implements IDictionaryService {
 
     @Override
     @Transactional(rollbackFor = CdpServiceException.class)
-    public CdpSysDictionaryEntity delete(CdpSysDictionaryEntity entity) throws CdpServiceException {
+    public CdpSysDictionaryEntity delete(CdpSysDictionaryEntity entity) {
         Assert.notNull(entity, "传入了空的对象!");
         //系统字典
         if (entity.getType().equals(SystemConstant.SYSTEM_DICTIONARY_TYPE)) {

@@ -1,37 +1,27 @@
 package com.github.fosin.cdp.platformapi.entity;
 
 import com.github.fosin.cdp.jpa.entity.AbstractCreateUpdateJpaEntity;
-import com.github.fosin.cdp.util.DateTimeUtil;
-import com.github.fosin.cdp.util.RegexUtil;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
 import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.validator.constraints.NotBlank;
-import org.hibernate.validator.constraints.Range;
-import org.springframework.format.annotation.DateTimeFormat;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 import java.io.Serializable;
-import java.util.Date;
 import java.util.List;
 
 /**
  * 包含菜单、按钮两种权限(CdpSysPermission)实体类
  *
  * @author fosin
- * @date 2018-10-27 09:38:39
+ * @date 2019-01-27 17:03:13
  * @since 1.0.0
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
 @Entity
+@EqualsAndHashCode(callSuper = true)
 @DynamicUpdate
 @Table(name = "cdp_sys_permission")
 @ApiModel(value = "包含菜单、按钮两种权限实体类", description = "表(cdp_sys_permission)的对应的实体类")
@@ -42,9 +32,10 @@ public class CdpSysPermissionEntity extends AbstractCreateUpdateJpaEntity implem
     @ApiModelProperty(value = "孩子节点，虚拟字段，增删改时不需要关心", notes = "孩子节点，虚拟字段，增删改时不需要关心")
     private List<CdpSysPermissionEntity> children;
 
+
     @Transient
     @ApiModelProperty(value = "是否叶子节点，虚拟字段，增删改时不需要关心", notes = "是否叶子节点，虚拟字段，增删改时不需要关心")
-    private Boolean leaf;
+    private Boolean leaf = this.type != 1 && this.type != 3;
 
     /**
      * 当权限类型是1：组件菜单 3：目录菜单 表示该节点不是一个叶子节点
@@ -58,84 +49,71 @@ public class CdpSysPermissionEntity extends AbstractCreateUpdateJpaEntity implem
     public void setLeaf(Boolean leaf) {
         this.leaf = leaf;
     }
-
-    @Column(name = "id")
+    
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @ApiModelProperty(value = "权限ID", notes = "主键，系统自动生成,权限ID")
+    @ApiModelProperty(value = "权限ID, 主键，一般系统自动生成")
+    @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "code")
     @Basic
-    @NotBlank
-    @Pattern(regexp = "[A-Z][a-zA-Z0-9]{1,64}", message = "权限编码只能大写字母开始，大小写字母、数字组合而成,长度不超过64位")
-    @ApiModelProperty(value = "权限编码，不能重复 不能为空", notes = "权限编码，不能重复 不能为空")
+    @ApiModelProperty(value = "权限编码，不能重复 不能为空", required = true)
+    @Column(name = "code", nullable = false, length = 64)
     private String code;
 
-    @Column(name = "p_id")
     @Basic
-    @NotNull
-    @ApiModelProperty(value = "父权限ID，取值于id，表示当前数据的父类权限", notes = "父权限ID，取值于id，表示当前数据的父类权限")
+    @ApiModelProperty(value = "父权限ID，取值于id，表示当前数据的父类权限", required = true)
+    @Column(name = "p_id", nullable = false)
     private Long pId;
 
-    @Column(name = "name")
     @Basic
-    @NotBlank
-    @ApiModelProperty(value = "权限名称", notes = "权限名称")
-    @Pattern(regexp = RegexUtil.SPECIAL, message = "名称不能包含特殊字符")
+    @ApiModelProperty(value = "权限名称", required = true)
+    @Column(name = "name", nullable = false, length = 64)
     private String name;
 
-    @Column(name = "url")
     @Basic
-    @Pattern(regexp = "[A-Za-z0-9/:.@?=& -]*", message = "资源路径只支持大小写字母 数字 & / : . @ - ? =")
-    @ApiModelProperty(value = "该字段必须和type字段共同使用，详情请看type字段", notes = "该字段必须和type字段共同使用，详情请看type字段")
+    @ApiModelProperty(value = "该字段必须和type字段共同使用，详情请看type字段")
+    @Column(name = "url", length = 255)
     private String url;
 
-    @Column(name = "type")
     @Basic
-    @NotNull
-    @ApiModelProperty(value = "权限类型：0=按钮、1=组件菜单，对应ur是前端组件l、2=链接菜单，对应url是http(s)链接地址、3=目录菜单，对应是目录菜单，具体取值于字典表cdp_sys_dictionary.code=13，当权限类型是1：组件菜单 3：目录菜单时表示该节点不是一个叶子节点", notes = "权限类型：0=按钮、1=组件菜单，对应ur是前端组件l、2=链接菜单，对应url是http(s)链接地址、3=目录菜单，对应是目录菜单，具体取值于字典表cdp_sys_dictionary.code=13，当权限类型是1：组件菜单 3：目录菜单时表示该节点不是一个叶子节点")
+    @ApiModelProperty(value = "权限类型：0=按钮、1=组件菜单，对应ur是前端组件l、2=链接菜单，对应url是http(s)链接地址、3=目录菜单，对应是目录菜单，具体取值于字典表cdp_sys_dictionary.code=13，当权限类型是1：组件菜单 3：目录菜单时表示该节点不是一个叶子节点", required = true)
+    @Column(name = "type", nullable = false)
     private Integer type;
 
-    @Column(name = "level")
     @Basic
-    @NotNull
-    @ApiModelProperty(value = "菜单层级", notes = "菜单层级")
+    @ApiModelProperty(value = "菜单层级", required = true)
+    @Column(name = "level", nullable = false)
     private Integer level;
 
-    @Column(name = "sort")
     @Basic
-    @ApiModelProperty(value = "排序，用于显示数据时的顺序，数值越小越靠前", notes = "排序，用于显示数据时的顺序，数值越小越靠前")
+    @ApiModelProperty(value = "排序，用于显示数据时的顺序，数值越小越靠前")
+    @Column(name = "sort")
     private Integer sort;
 
-    @Column(name = "status")
     @Basic
-    @NotNull
-    @Range(max = 1)
-    @ApiModelProperty(value = "使用状态：0=启用，1=禁用，具体取值于字典表cdp_sys_dictionary.code=11", notes = "使用状态：0=启用，1=禁用，具体取值于字典表cdp_sys_dictionary.code=11")
+    @ApiModelProperty(value = "使用状态：0=启用，1=禁用，具体取值于字典表cdp_sys_dictionary.code=11", required = true)
+    @Column(name = "status", nullable = false)
     private Integer status;
 
-    @Column(name = "app_name")
     @Basic
-    @NotBlank
-    @Pattern(regexp = "[a-zA-Z][a-zA-Z0-9_-]{1,64}", message = "应用名称只能大小写字母开始、数字、下杠(_)组合而成,长度不超过64位")
-    @ApiModelProperty(value = "所属应用名称,等同于配置文件中的spring.application.name", notes = "所属应用名称,等同于配置文件中的spring.application.name")
+    @ApiModelProperty(value = "所属应用名称,等同于配置文件中的spring.application.name", required = true)
+    @Column(name = "app_name", nullable = false, length = 64)
     private String appName;
 
-    @Column(name = "path")
     @Basic
-    @Pattern(regexp = "[A-Za-z0-9/?*. -]+", message = "权限路径只支持大小写字母 数字 / . * - ?")
-    @ApiModelProperty(value = "后台请求权限地址，权限路径ant风格表达式，用于动态验证HTTP后台请求的权限标识", notes = "后台请求权限地址，权限路径ant风格表达式，用于动态验证HTTP后台请求的权限标识")
+    @ApiModelProperty(value = "后台请求权限地址，权限路径ant风格表达式，用于动态验证HTTP后台请求的权限标识")
+    @Column(name = "path", length = 64)
     private String path;
 
-    @Column(name = "method")
     @Basic
-    @Pattern(regexp = "[A-Z]{0,20}", message = "请求方法只能大写字母组合而成,长度不超过20位")
-    @ApiModelProperty(value = "http请求方法：GET、POST、DELETE、OPTIONS、PUT、PATCH，具体取值于字典表cdp_sys_dictionary.code=12 ", notes = "http请求方法：GET、POST、DELETE、OPTIONS、PUT、PATCH，具体取值于字典表cdp_sys_dictionary.code=12")
+    @ApiModelProperty(value = "http请求方法：GET、POST、DELETE、OPTIONS、PUT、PATCH，具体取值于字典表cdp_sys_dictionary.code=12")
+    @Column(name = "method", length = 64)
     private String method;
 
-    @Column(name = "icon")
     @Basic
-    @ApiModelProperty(value = "一般用于前端菜单选项前的图标", notes = "一般用于前端菜单选项前的图标")
+    @ApiModelProperty(value = "一般用于前端菜单选项前的图标")
+    @Column(name = "icon", length = 64)
     private String icon;
+
 }

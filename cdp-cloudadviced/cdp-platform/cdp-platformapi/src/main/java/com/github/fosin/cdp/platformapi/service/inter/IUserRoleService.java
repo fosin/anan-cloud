@@ -21,7 +21,7 @@ public interface IUserRoleService extends ICrudBatchJpaService<CdpSysUserRoleEnt
 
     List<CdpSysUserRoleEntity> findByUsercodeAndPassword(String usercode, String password) throws CdpUserOrPassInvalidException;
 
-    List<CdpSysUserRoleEntity> updateInBatchByUserId(Long userId, Iterable<CdpSysUserRoleEntity> entitis) throws CdpServiceException;
+    List<CdpSysUserRoleEntity> updateInBatchByUserId(Long userId, Iterable<CdpSysUserRoleEntity> entitis);
 
-    List<CdpSysUserRoleEntity> updateInBatchByRoleId(Long roleId, Iterable<CdpSysUserRoleEntity> entitis) throws CdpServiceException;
+    List<CdpSysUserRoleEntity> updateInBatchByRoleId(Long roleId, Iterable<CdpSysUserRoleEntity> entitis);
 }

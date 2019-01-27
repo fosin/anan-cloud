@@ -10,6 +10,9 @@ import com.github.fosin.cdp.platform.entity.CdpSysOrganizationPermissionEntity;
 import com.github.fosin.cdp.platform.service.inter.ICdpSysOrganizationAuthService;
 import com.github.fosin.cdp.platform.service.inter.ICdpSysOrganizationPermissionService;
 import com.github.fosin.cdp.platformapi.dto.RegisterDto;
+import com.github.fosin.cdp.platformapi.dto.request.CdpSysOrganizationCreateDto;
+import com.github.fosin.cdp.platformapi.dto.request.CdpSysOrganizationRetrieveDto;
+import com.github.fosin.cdp.platformapi.dto.request.CdpSysOrganizationUpdateDto;
 import com.github.fosin.cdp.platformapi.entity.CdpSysOrganizationEntity;
 import com.github.fosin.cdp.platformapi.service.inter.IOrganizationService;
 import com.github.fosin.cdp.util.TreeUtil;
@@ -36,7 +39,7 @@ import java.util.List;
 @RequestMapping("v1/organiz")
 @Api(value = "v1/organiz", tags = "机构管理", description = "机构管理相关操作(增删改查)")
 public class CdpSysOrganizationController extends AbstractBaseController
-        implements ISimpleController<CdpSysOrganizationEntity, Long, CdpSysOrganizationEntity, CdpSysOrganizationEntity, CdpSysOrganizationEntity> {
+        implements ISimpleController<CdpSysOrganizationEntity, Long, CdpSysOrganizationCreateDto, CdpSysOrganizationRetrieveDto, CdpSysOrganizationUpdateDto> {
     @Autowired
     private IOrganizationService organizationService;
 
@@ -68,14 +71,14 @@ public class CdpSysOrganizationController extends AbstractBaseController
     @ApiOperation("根据父机构ID获取其孩子节点数据")
     @ApiImplicitParam(name = "pId", value = "父节点ID,CdpSysOrganizationEntity.pid")
     @PostMapping("/listChild/{pId}")
-    public ResponseEntity<List<CdpSysOrganizationEntity>> listChild(@PathVariable("pId") Long pId) throws CdpServiceException {
+    public ResponseEntity<List<CdpSysOrganizationEntity>> listChild(@PathVariable("pId") Long pId) {
         return ResponseEntity.ok(organizationService.findByPid(pId));
     }
 
     @ApiOperation("根据父机构ID获取其所有后代节点数据")
     @ApiImplicitParam(name = "pId", value = "父节点ID,CdpSysOrganizationEntity.pid")
     @PostMapping("/listAllChild/{pId}")
-    public ResponseEntity<List<CdpSysOrganizationEntity>> listAllChild(@PathVariable("pId") Long pId) throws CdpServiceException {
+    public ResponseEntity<List<CdpSysOrganizationEntity>> listAllChild(@PathVariable("pId") Long pId) {
         List<String> codes = new ArrayList<>();
         if (pId == 0) {
             List<CdpSysOrganizationEntity> list = organizationService.findByPid(pId);
@@ -135,13 +138,13 @@ public class CdpSysOrganizationController extends AbstractBaseController
     @ApiOperation("根据父机构ID获取其孩子节点数据")
     @ApiImplicitParam(name = "organizId", value = "机构ID,取值于CdpSysOrganizationEntity.id")
     @PostMapping("/auth/{organizId}")
-    public ResponseEntity<CdpSysOrganizationAuthEntity> getOrganizAuth(@PathVariable("organizId") Long organizId) throws CdpServiceException {
+    public ResponseEntity<CdpSysOrganizationAuthEntity> getOrganizAuth(@PathVariable("organizId") Long organizId) {
         List<CdpSysOrganizationAuthEntity> organizationAuthEntities = organizationAuthService.findAllByOrganizId(organizId);
         return ResponseEntity.ok(organizationAuthEntities.get(0));
     }
 
     @Override
-    public ISimpleService<CdpSysOrganizationEntity, Long, CdpSysOrganizationEntity, CdpSysOrganizationEntity, CdpSysOrganizationEntity> getService() {
+    public ISimpleService<CdpSysOrganizationEntity, Long, CdpSysOrganizationCreateDto, CdpSysOrganizationRetrieveDto, CdpSysOrganizationUpdateDto> getService() {
         return organizationService;
     }
 }

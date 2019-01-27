@@ -1,7 +1,6 @@
 package com.github.fosin.cdp.platform.service;
 
 
-import com.github.fosin.cdp.core.exception.CdpServiceException;
 import com.github.fosin.cdp.jpa.repository.IJpaRepository;
 import com.github.fosin.cdp.mvc.module.PageModule;
 import com.github.fosin.cdp.mvc.result.Result;
@@ -36,7 +35,7 @@ public class OauthClientServiceImpl implements IOauthClientService {
     private OauthClientRepository oauthClientRepository;
 
     @Override
-    public OauthClientDetailsEntity create(OauthClientDetailsEntity entity) throws CdpServiceException {
+    public OauthClientDetailsEntity create(OauthClientDetailsEntity entity) {
         Assert.notNull(entity, "传入了空对象!");
         String id = entity.getClientId();
         OauthClientDetailsEntity existsEntity = oauthClientRepository.findOne(id);
@@ -46,7 +45,7 @@ public class OauthClientServiceImpl implements IOauthClientService {
     }
 
     @Override
-    public OauthClientDetailsEntity update(OauthClientDetailsEntity entity) throws CdpServiceException {
+    public OauthClientDetailsEntity update(OauthClientDetailsEntity entity) {
         Assert.notNull(entity, "传入了空对象!");
         String id = entity.getClientId();
         Assert.isTrue(StringUtils.hasText(id), "更新数据时ClientId不能为空!");

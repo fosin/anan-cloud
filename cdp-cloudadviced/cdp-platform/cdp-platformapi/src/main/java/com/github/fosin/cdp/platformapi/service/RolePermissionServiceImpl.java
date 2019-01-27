@@ -1,6 +1,8 @@
 package com.github.fosin.cdp.platformapi.service;
 
 import com.github.fosin.cdp.jpa.repository.IJpaRepository;
+import com.github.fosin.cdp.jpa.util.JpaUtil;
+import com.github.fosin.cdp.platformapi.dto.request.CdpSysRolePermissionUpdateDto;
 import com.github.fosin.cdp.platformapi.repository.RolePermissionRepository;
 import com.github.fosin.cdp.core.exception.CdpServiceException;
 import com.github.fosin.cdp.platformapi.constant.TableNameConstant;
@@ -44,18 +46,6 @@ public class RolePermissionServiceImpl implements IRolePermissionService {
     }
 
     @Override
-    public List<CdpSysRolePermissionEntity> createInBatch(Collection<CdpSysRolePermissionEntity> entities) {
-        Assert.notEmpty(entities, "要删除的集合不能为空!");
-        CdpSysUserEntity loginUser = LoginUserUtil.getUser();
-        Date now = new Date();
-        for (CdpSysRolePermissionEntity entity : entities) {
-            entity.setCreateBy(loginUser.getId());
-            entity.setCreateTime(now);
-        }
-        return rolePermissionRepository.save(entities);
-    }
-
-    @Override
     public void deleteInBatch(Collection<CdpSysRolePermissionEntity> entities) {
         Assert.notEmpty(entities, "要删除的集合不能为空!");
         Set<Long> needDelRoles = new HashSet<>();
@@ -84,25 +74,16 @@ public class RolePermissionServiceImpl implements IRolePermissionService {
             }
     )
     @Transactional
-    public List<CdpSysRolePermissionEntity> updateInBatch(Long roleId, Collection<CdpSysRolePermissionEntity> entities) {
+    public List<CdpSysRolePermissionEntity> updateInBatch(Long roleId, Collection<CdpSysRolePermissionUpdateDto> entities) {
         Assert.notNull(roleId, "传入的角色ID不能为空!");
 
-        for (CdpSysRolePermissionEntity entity : entities) {
+        for (CdpSysRolePermissionUpdateDto entity : entities) {
             Assert.isTrue(entity.getRoleId().equals(roleId), "需要更新的数据集中有与角色ID不匹配的数据!");
         }
+        Collection<CdpSysRolePermissionEntity> saveEntities = JpaUtil.copyCollectionProperties(this.getClass(), entities);
 
         rolePermissionRepository.deleteByRoleId(roleId);
-        if (entities.iterator().hasNext()) {
-            CdpSysUserEntity loginUser = LoginUserUtil.getUser();
-            Date now = new Date();
-            for (CdpSysRolePermissionEntity entity : entities) {
-                entity.setCreateBy(loginUser.getId());
-                entity.setCreateTime(now);
-            }
-            return rolePermissionRepository.save(entities);
-        }
-
-        return null;
+        return rolePermissionRepository.save(saveEntities);
     }
 
     @Override

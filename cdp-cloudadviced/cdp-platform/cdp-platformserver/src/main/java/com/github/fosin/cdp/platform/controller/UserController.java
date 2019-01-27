@@ -5,7 +5,10 @@ import com.github.fosin.cdp.core.exception.CdpServiceException;
 import com.github.fosin.cdp.mvc.controller.AbstractBaseController;
 import com.github.fosin.cdp.mvc.controller.ISimpleController;
 import com.github.fosin.cdp.mvc.service.ISimpleService;
-import com.github.fosin.cdp.platformapi.dto.CdpSysUserRequestDto;
+import com.github.fosin.cdp.platformapi.dto.request.CdpSysUserCreateDto;
+import com.github.fosin.cdp.platformapi.dto.request.CdpSysUserPermissionUpdateDto;
+import com.github.fosin.cdp.platformapi.dto.request.CdpSysUserRetrieveDto;
+import com.github.fosin.cdp.platformapi.dto.request.CdpSysUserUpdateDto;
 import com.github.fosin.cdp.platformapi.entity.CdpSysRoleEntity;
 import com.github.fosin.cdp.platformapi.entity.CdpSysUserEntity;
 import com.github.fosin.cdp.platformapi.entity.CdpSysUserPermissionEntity;
@@ -33,7 +36,7 @@ import java.util.List;
 @RestController
 @RequestMapping("v1/user")
 @Api(value = "v1/user", tags = "用户管理", description = "用户管理相关操作")
-public class UserController extends AbstractBaseController implements ISimpleController<CdpSysUserEntity, Long, CdpSysUserRequestDto.CreateDto, CdpSysUserEntity, CdpSysUserRequestDto.UpdateDto> {
+public class UserController extends AbstractBaseController implements ISimpleController<CdpSysUserEntity, Long, CdpSysUserCreateDto, CdpSysUserRetrieveDto, CdpSysUserUpdateDto> {
 
     @Autowired
     private IUserService userService;
@@ -46,20 +49,6 @@ public class UserController extends AbstractBaseController implements ISimpleCon
 
     @Autowired
     private IUserPermissionService userPermissionService;
-
-//    @PostMapping
-//    @ApiImplicitParam(name = "createDTO", value = " 创建新用户实体类")
-//    @ApiOperation("创建新用户")
-//    public ResponseEntity<CdpSysUserEntity> createUser(@RequestBody CdpSysUserCreateDTO createDTO) {
-//        return ResponseEntity.ok(userService.createUser(createDTO));
-//    }
-//
-//    @PutMapping
-//    @ApiImplicitParam(name = "updateDTO", value = " 更新用户实体类")
-//    @ApiOperation("更新用户信息")
-//    public ResponseEntity<CdpSysUserEntity> updateUser(@RequestBody CdpSysUserUpdateDTO updateDTO) {
-//        return ResponseEntity.ok(userService.updateUser(updateDTO));
-//    }
 
     @PostMapping("/usercode/{usercode}")
     @ApiImplicitParam(name = "usercode", value = "用户工号,取值于CdpSysUserEntity.usercode")
@@ -114,14 +103,14 @@ public class UserController extends AbstractBaseController implements ISimpleCon
             @ApiImplicitParam(name = "userId", value = "用户ID,取值于CdpSysUserEntity.id")
     })
     @PutMapping(value = "/permissions/{userId}")
-    public ResponseEntity<Collection<CdpSysUserPermissionEntity>> permissions(@RequestBody List<CdpSysUserPermissionEntity> entities, @PathVariable Long userId) throws CdpServiceException {
+    public ResponseEntity<Collection<CdpSysUserPermissionEntity>> permissions(@RequestBody List<CdpSysUserPermissionUpdateDto> entities, @PathVariable Long userId) {
         return ResponseEntity.ok(userPermissionService.updateInBatch(userId, entities));
     }
 
     @ApiOperation(value = "根据用户ID重置用户密码", notes = "重置后的密码或是固定密码或是随机密码，具体由机构参数UserResetPasswordType决定")
     @ApiImplicitParam(name = "id", value = "用户ID,取值于CdpSysUserEntity.id")
     @PostMapping("/resetPassword/{id}")
-    public ResponseEntity<String> resetPassword(@PathVariable() Long id) throws CdpServiceException {
+    public ResponseEntity<String> resetPassword(@PathVariable() Long id) {
         return ResponseEntity.ok(userService.resetPassword(id));
     }
 
@@ -159,7 +148,7 @@ public class UserController extends AbstractBaseController implements ISimpleCon
     }
 
     @Override
-    public ISimpleService<CdpSysUserEntity, Long, CdpSysUserRequestDto.CreateDto, CdpSysUserEntity, CdpSysUserRequestDto.UpdateDto> getService() {
+    public ISimpleService<CdpSysUserEntity, Long, CdpSysUserCreateDto, CdpSysUserRetrieveDto, CdpSysUserUpdateDto> getService() {
         return userService;
     }
 }
