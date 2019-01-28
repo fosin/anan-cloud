@@ -35,7 +35,7 @@ public class CdpSysPermissionEntity extends AbstractCreateUpdateJpaEntity implem
 
     @Transient
     @ApiModelProperty(value = "是否叶子节点，虚拟字段，增删改时不需要关心", notes = "是否叶子节点，虚拟字段，增删改时不需要关心")
-    private Boolean leaf = this.type != 1 && this.type != 3;
+    private Boolean leaf;
 
     /**
      * 当权限类型是1：组件菜单 3：目录菜单 表示该节点不是一个叶子节点
@@ -49,7 +49,7 @@ public class CdpSysPermissionEntity extends AbstractCreateUpdateJpaEntity implem
     public void setLeaf(Boolean leaf) {
         this.leaf = leaf;
     }
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @ApiModelProperty(value = "权限ID, 主键，一般系统自动生成")
