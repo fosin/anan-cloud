@@ -1,24 +1,18 @@
 package com.github.fosin.cdp.platform.entity;
 
-import java.util.Date;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.validator.constraints.NotBlank;
-import org.hibernate.validator.constraints.NotEmpty;
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import java.io.Serializable;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import lombok.Data;
-import org.springframework.format.annotation.DateTimeFormat;
-import com.github.fosin.cdp.util.DateTimeUtil;
+import org.hibernate.annotations.DynamicUpdate;
+
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.Date;
 /**
  * 系统支付表(CdpSysPay)实体类
  *
  * @author fosin
- * @date 2018-11-18 17:28:24
+ * @date 2019-01-28 12:50:38
  * @since 1.0.0
  */
 @Data
@@ -26,79 +20,63 @@ import com.github.fosin.cdp.util.DateTimeUtil;
 @DynamicUpdate
 @Table(name = "cdp_sys_pay")
 @ApiModel(value = "系统支付表实体类", description = "表(cdp_sys_pay)的对应的实体类")
-public class CdpSysPayEntity implements Serializable {
-    private static final long serialVersionUID = -56983684877267659L;
+public class CdpSysPayEntity  implements Serializable {
+    private static final long serialVersionUID = 197340387949290400L;
     
     @Id
-    @Column(name = "pay_id")
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @ApiModelProperty(value = "主键，系统自动生成,支付ID")
+    @ApiModelProperty(value = "支付ID, 主键，一般系统自动生成")
+    @Column(name = "pay_id", nullable = false)
     private Long payId;
-    
+
     @Basic
-    @NotNull
-    @Column(name = "organiz_id")
-    @ApiModelProperty(value = "付款机构")
-    private Long organizId;
-    
-    @Basic
-    @NotNull
-    @Column(name = "user_id")
-    @ApiModelProperty(value = "付款用户")
+    @ApiModelProperty(value = "付款用户", required = true)
+    @Column(name = "user_id", nullable = false)
     private Long userId;
-    
+
     @Basic
-    @NotNull
-    @Column(name = "order_id")
-    @ApiModelProperty(value = "订单ID")
+    @ApiModelProperty(value = "订单ID", required = true)
+    @Column(name = "order_id", nullable = false)
     private Long orderId;
-    
+
     @Basic
-    @NotNull
-    @Column(name = "invoice_id")
-    @ApiModelProperty(value = "发票ID")
+    @ApiModelProperty(value = "发票ID", required = true)
+    @Column(name = "invoice_id", nullable = false)
     private Long invoiceId;
-    
+
     @Basic
-    @NotNull
-    @Column(name = "pay_type")
-    @ApiModelProperty(value = "交易类型：0=正交易 1：负交易")
+    @ApiModelProperty(value = "交易类型：0=正交易 1：负交易", required = true)
+    @Column(name = "pay_type", nullable = false)
     private Integer payType;
-    
+
     @Basic
-    @NotNull
-    @Column(name = "total_money")
-    @ApiModelProperty(value = "应收金额")
+    @ApiModelProperty(value = "应收金额", required = true)
+    @Column(name = "total_money", nullable = false, precision = 12, scale = 2)
     private Double totalMoney;
-    
+
     @Basic
-    @NotNull
-    @Column(name = "pay_money")
-    @ApiModelProperty(value = "支付金额")
+    @ApiModelProperty(value = "支付金额", required = true)
+    @Column(name = "pay_money", nullable = false, precision = 12, scale = 2)
     private Double payMoney;
-    
+
     @Basic
-    @NotNull
-    @Column(name = "discount_monery")
-    @ApiModelProperty(value = "优惠金额")
+    @ApiModelProperty(value = "优惠金额", required = true)
+    @Column(name = "discount_monery", nullable = false, precision = 12, scale = 2)
     private Double discountMonery;
-    
+
     @Basic
-    @NotNull
-    @Column(name = "uncollect_money")
-    @ApiModelProperty(value = "待收金额")
+    @ApiModelProperty(value = "待收金额", required = true)
+    @Column(name = "uncollect_money", nullable = false, precision = 12, scale = 2)
     private Double uncollectMoney;
-    
+
     @Basic
-    @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
-    @Column(name = "pay_time")
-    @ApiModelProperty(value = "付款日期")
+    @ApiModelProperty(value = "付款日期", required = true)
+    @Column(name = "pay_time", nullable = false)
     private Date payTime;
-    
+
     @Basic
-    @NotNull
-    @Column(name = "pay_flag")
-    @ApiModelProperty(value = "付款标志：0=未付款，1=分期，2=付全款")
+    @ApiModelProperty(value = "付款标志：0=未付款，1=分期，2=付全款", required = true)
+    @Column(name = "pay_flag", nullable = false)
     private Integer payFlag;
-    
+
 }

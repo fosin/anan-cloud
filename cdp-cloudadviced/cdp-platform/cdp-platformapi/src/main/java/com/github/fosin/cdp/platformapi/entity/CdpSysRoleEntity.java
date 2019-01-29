@@ -9,6 +9,7 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.io.Serializable;
+
 /**
  * 系统角色表(CdpSysRole)实体类
  *
@@ -24,7 +25,7 @@ import java.io.Serializable;
 @ApiModel(value = "系统角色表实体类", description = "表(cdp_sys_role)的对应的实体类")
 public class CdpSysRoleEntity extends AbstractOrganizIdJpaEntity implements Serializable {
     private static final long serialVersionUID = -64971271359941469L;
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @ApiModelProperty(value = "角色ID, 主键，一般系统自动生成")
@@ -47,13 +48,13 @@ public class CdpSysRoleEntity extends AbstractOrganizIdJpaEntity implements Seri
     private String tips;
 
     @Basic
-    @ApiModelProperty(value = "使用状态：0=启用，1=禁用，具体取值于字典表cdp_sys_dictionary.code=11", required = true)
+    @ApiModelProperty(value = "使用状态：0=启用，1=禁用，具体取值于字典表cdp_sys_dictionary.id=11", required = true)
     @Column(name = "status", nullable = false)
     private Integer status;
 
     @Basic
     @ApiModelProperty(value = "内置标志：是否是系统内置角色，内置角色不能被用户删除和修改，0=不是 1=是", required = true)
     @Column(name = "built_in", nullable = false)
-    private Integer builtIn;
+    private Integer builtIn = 0;
 
 }

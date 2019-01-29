@@ -65,7 +65,7 @@ public class CdpSysUserEntity extends AbstractOrganizIdJpaEntity implements Seri
     private Date birthday;
 
     @Basic
-    @ApiModelProperty(value = "使用状态：具体取值于字典表cdp_sys_dictionary.code=15", required = true)
+    @ApiModelProperty(value = "使用状态：具体取值于字典表cdp_sys_dictionary.id=15", required = true)
     @Column(name = "sex", nullable = false)
     private Integer sex;
 
@@ -80,7 +80,7 @@ public class CdpSysUserEntity extends AbstractOrganizIdJpaEntity implements Seri
     private String phone;
 
     @Basic
-    @ApiModelProperty(value = "使用状态：0=启用，1=禁用，具体取值于字典表cdp_sys_dictionary.code=11", required = true)
+    @ApiModelProperty(value = "使用状态：0=启用，1=禁用，具体取值于字典表cdp_sys_dictionary.id=11", required = true)
     @Column(name = "status", nullable = false)
     private Integer status;
 

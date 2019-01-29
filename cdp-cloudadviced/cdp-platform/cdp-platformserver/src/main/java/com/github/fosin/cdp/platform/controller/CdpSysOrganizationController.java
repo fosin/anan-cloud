@@ -5,6 +5,7 @@ import com.github.fosin.cdp.core.exception.CdpServiceException;
 import com.github.fosin.cdp.mvc.controller.AbstractBaseController;
 import com.github.fosin.cdp.mvc.controller.ISimpleController;
 import com.github.fosin.cdp.mvc.service.ISimpleService;
+import com.github.fosin.cdp.platform.dto.request.CdpSysOrganizationPermissionUpdateDto;
 import com.github.fosin.cdp.platform.entity.CdpSysOrganizationAuthEntity;
 import com.github.fosin.cdp.platform.entity.CdpSysOrganizationPermissionEntity;
 import com.github.fosin.cdp.platform.service.inter.ICdpSysOrganizationAuthService;
@@ -62,7 +63,7 @@ public class CdpSysOrganizationController extends AbstractBaseController
             @ApiImplicitParam(name = "organizId", value = "版本ID,取值于CdpSysOrganizationEntity.id")
     })
     @PutMapping(value = "/permissions/{organizId}")
-    public ResponseEntity<Collection<CdpSysOrganizationPermissionEntity>> permissions(@RequestBody List<CdpSysOrganizationPermissionEntity> entities,
+    public ResponseEntity<Collection<CdpSysOrganizationPermissionEntity>> permissions(@RequestBody List<CdpSysOrganizationPermissionUpdateDto> entities,
                                                                                       @PathVariable("organizId") Long organizId) {
         return ResponseEntity.ok(organizationPermissionService.updateInBatch(organizId, entities));
     }

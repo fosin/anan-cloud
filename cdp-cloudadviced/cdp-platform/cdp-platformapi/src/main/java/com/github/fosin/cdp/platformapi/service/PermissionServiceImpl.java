@@ -3,6 +3,7 @@ package com.github.fosin.cdp.platformapi.service;
 import com.github.fosin.cdp.jpa.repository.IJpaRepository;
 import com.github.fosin.cdp.platformapi.dto.request.CdpSysPermissionCreateDto;
 import com.github.fosin.cdp.platformapi.dto.request.CdpSysPermissionUpdateDto;
+import com.github.fosin.cdp.platformapi.entity.CdpSysOrganizationEntity;
 import com.github.fosin.cdp.platformapi.entity.CdpSysPermissionEntity;
 import com.github.fosin.cdp.core.exception.CdpServiceException;
 import com.github.fosin.cdp.mvc.module.PageModule;
@@ -57,10 +58,40 @@ public class PermissionServiceImpl implements IPermissionService {
     @CachePut(value = TableNameConstant.CDP_SYS_PERMISSION, key = "#result.id")
     public CdpSysPermissionEntity create(CdpSysPermissionCreateDto entity) {
         Assert.notNull(entity, "传入的创建数据实体对象不能为空!");
-        CdpSysPermissionEntity createEntiy = new CdpSysPermissionEntity();
-        BeanUtils.copyProperties(entity, createEntiy);
-        return getRepository().save(createEntiy);
+
+        CdpSysPermissionEntity createEntity = new CdpSysPermissionEntity();
+        BeanUtils.copyProperties(entity, createEntity);
+        Long pId = entity.getPId();
+
+        int level = 1;
+        if (pId != 0) {
+            CdpSysPermissionEntity parentEntity = permissionRepository.findOne(pId);
+            Assert.notNull(parentEntity, "传入的创建数据实体找不到对于的父节点数据!");
+            level = parentEntity.getLevel() + 1;
+        }
+        createEntity.setLevel(level);
+        return permissionRepository.save(createEntity);
     }
+
+    @Override
+    @CachePut(value = TableNameConstant.CDP_SYS_PERMISSION, key = "#entity.id")
+    public CdpSysPermissionEntity update(CdpSysPermissionUpdateDto entity) {
+        Assert.notNull(entity, "传入了空对象!");
+        Long id = entity.getId();
+        Assert.notNull(id, "传入了空ID!");
+
+        CdpSysPermissionEntity updateEntity = permissionRepository.findOne(id);
+        BeanUtils.copyProperties(entity, updateEntity);
+        Long pId = entity.getPId();
+        if (!updateEntity.getPId().equals(pId)) {
+            CdpSysPermissionEntity parentEntity = permissionRepository.findOne(pId);
+            Assert.notNull(parentEntity, "传入的创建数据实体找不到对于的父节点数据!");
+            updateEntity.setLevel(parentEntity.getLevel() + 1);
+        }
+
+        return permissionRepository.save(updateEntity);
+    }
+
 
     @Override
     @CacheEvict(value = TableNameConstant.CDP_SYS_PERMISSION, key = "#id")
@@ -122,17 +153,6 @@ public class PermissionServiceImpl implements IPermissionService {
         return permissionRepository.findOne(id);
     }
 
-
-    @Override
-    @CachePut(value = TableNameConstant.CDP_SYS_PERMISSION, key = "#entity.id")
-    public CdpSysPermissionEntity update(CdpSysPermissionUpdateDto entity) {
-        Assert.notNull(entity, "传入了空对象!");
-        Assert.notNull(entity.getId(), "传入了空ID!");
-        CdpSysPermissionEntity updateEntiy = new CdpSysPermissionEntity();
-        BeanUtils.copyProperties(entity, updateEntiy);
-        return getRepository().save(updateEntiy);
-    }
-    
     @Override
     public List<CdpSysPermissionEntity> findByPId(Long pId) {
         Sort sort = new Sort(Sort.Direction.fromString("ASC"), "sort");

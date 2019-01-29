@@ -3,6 +3,10 @@ package com.github.fosin.cdp.platform.controller;
 
 import com.github.fosin.cdp.mvc.controller.ISimpleController;
 import com.github.fosin.cdp.mvc.service.ISimpleService;
+import com.github.fosin.cdp.platform.dto.request.CdpSysVersionRoleCreateDto;
+import com.github.fosin.cdp.platform.dto.request.CdpSysVersionRolePermissionUpdateDto;
+import com.github.fosin.cdp.platform.dto.request.CdpSysVersionRoleRetrieveDto;
+import com.github.fosin.cdp.platform.dto.request.CdpSysVersionRoleUpdateDto;
 import com.github.fosin.cdp.platform.entity.CdpSysVersionRoleEntity;
 import com.github.fosin.cdp.platform.entity.CdpSysVersionRolePermissionEntity;
 import com.github.fosin.cdp.platform.service.inter.ICdpSysVersionRolePermissionService;
@@ -26,7 +30,7 @@ import java.util.List;
 @RestController
 @RequestMapping("v1/version/role")
 @Api(value = "v1/version/role", tags = "系统版本角色表接入层API", description = "系统版本角色表(cdp_sys_version_role)接入层API")
-public class CdpSysVersionRoleController implements ISimpleController<CdpSysVersionRoleEntity, Long, CdpSysVersionRoleEntity, CdpSysVersionRoleEntity, CdpSysVersionRoleEntity> {
+public class CdpSysVersionRoleController implements ISimpleController<CdpSysVersionRoleEntity, Long, CdpSysVersionRoleCreateDto, CdpSysVersionRoleRetrieveDto, CdpSysVersionRoleUpdateDto> {
     /**
      * 服务对象
      */
@@ -49,7 +53,7 @@ public class CdpSysVersionRoleController implements ISimpleController<CdpSysVers
             @ApiImplicitParam(name = "roleId", value = "版本ID,取值于CdpSysVersionRoleEntity.id")
     })
     @PutMapping(value = "/permissions/{roleId}")
-    public ResponseEntity<Boolean> permissions(@RequestBody List<CdpSysVersionRolePermissionEntity> entities,
+    public ResponseEntity<Boolean> permissions(@RequestBody List<CdpSysVersionRolePermissionUpdateDto> entities,
                                                @PathVariable("roleId") Long roleId) {
         //更新版本权限
         versionRolePermissionService.updateInBatch(roleId, entities);
@@ -57,7 +61,7 @@ public class CdpSysVersionRoleController implements ISimpleController<CdpSysVers
     }
 
     @Override
-    public ISimpleService<CdpSysVersionRoleEntity, Long, CdpSysVersionRoleEntity, CdpSysVersionRoleEntity, CdpSysVersionRoleEntity> getService() {
+    public ISimpleService<CdpSysVersionRoleEntity, Long, CdpSysVersionRoleCreateDto, CdpSysVersionRoleRetrieveDto, CdpSysVersionRoleUpdateDto> getService() {
         return cdpSysVersionRoleService;
     }
 }

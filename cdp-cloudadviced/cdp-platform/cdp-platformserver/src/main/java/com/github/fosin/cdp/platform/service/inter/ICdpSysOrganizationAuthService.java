@@ -1,6 +1,9 @@
 package com.github.fosin.cdp.platform.service.inter;
 
 import com.github.fosin.cdp.jpa.service.ISimpleJpaService;
+import com.github.fosin.cdp.platform.dto.request.CdpSysOrganizationAuthCreateDto;
+import com.github.fosin.cdp.platform.dto.request.CdpSysOrganizationAuthRetrieveDto;
+import com.github.fosin.cdp.platform.dto.request.CdpSysOrganizationAuthUpdateDto;
 import com.github.fosin.cdp.platform.entity.CdpSysOrganizationAuthEntity;
 import com.github.fosin.cdp.platformapi.dto.RegisterDto;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,7 +16,7 @@ import java.util.List;
  * @author fosin
  * @date 2018-11-18 17:26:40
  */
-public interface ICdpSysOrganizationAuthService extends ISimpleJpaService<CdpSysOrganizationAuthEntity, Long, CdpSysOrganizationAuthEntity, CdpSysOrganizationAuthEntity, CdpSysOrganizationAuthEntity> {
+public interface ICdpSysOrganizationAuthService extends ISimpleJpaService<CdpSysOrganizationAuthEntity, Long, CdpSysOrganizationAuthCreateDto, CdpSysOrganizationAuthRetrieveDto, CdpSysOrganizationAuthUpdateDto> {
     List<CdpSysOrganizationAuthEntity> findAllByVersionId(Long versionId);
 
     List<CdpSysOrganizationAuthEntity> findAllByOrganizId(Long organizId);

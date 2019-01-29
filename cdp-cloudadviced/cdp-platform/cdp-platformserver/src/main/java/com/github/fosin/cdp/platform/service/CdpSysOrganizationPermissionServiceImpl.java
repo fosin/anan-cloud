@@ -1,9 +1,13 @@
 package com.github.fosin.cdp.platform.service;
 
+import com.github.fosin.cdp.jpa.util.JpaUtil;
+import com.github.fosin.cdp.platform.dto.request.CdpSysOrganizationPermissionCreateDto;
+import com.github.fosin.cdp.platform.dto.request.CdpSysOrganizationPermissionUpdateDto;
 import com.github.fosin.cdp.platform.entity.CdpSysOrganizationPermissionEntity;
 import com.github.fosin.cdp.platform.repository.CdpSysOrganizationPermissionRepository;
 import com.github.fosin.cdp.platform.service.inter.ICdpSysOrganizationPermissionService;
 import com.github.fosin.cdp.platformapi.entity.CdpSysUserEntity;
+import com.github.fosin.cdp.platformapi.entity.CdpSysUserPermissionEntity;
 import com.github.fosin.cdp.platformapi.util.LoginUserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -47,42 +51,17 @@ public class CdpSysOrganizationPermissionServiceImpl implements ICdpSysOrganizat
 
     @Override
     @Transactional
-    public List<CdpSysOrganizationPermissionEntity> updateInBatch(Long organizId, Collection<CdpSysOrganizationPermissionEntity> entities) {
+    public List<CdpSysOrganizationPermissionEntity> updateInBatch(Long organizId, Collection<CdpSysOrganizationPermissionUpdateDto> entities) {
         Assert.notNull(organizId, "传入的版本ID不能为空!");
 
-        for (CdpSysOrganizationPermissionEntity entity : entities) {
+        for (CdpSysOrganizationPermissionUpdateDto entity : entities) {
             Assert.isTrue(entity.getOrganizId().equals(organizId), "需要更新的数据集中有与版本ID不匹配的数据!");
         }
 
-        getRepository().deleteByOrganizId(organizId);
-        if (entities.iterator().hasNext()) {
-            CdpSysUserEntity loginUser = LoginUserUtil.getUser();
-            Date now = new Date();
-            for (CdpSysOrganizationPermissionEntity entity : entities) {
-                entity.setCreateBy(loginUser.getId());
-                entity.setCreateTime(now);
-            }
-            return getRepository().save(entities);
-        }
+        cdpSysOrganizationPermissionRepository.deleteByOrganizId(organizId);
 
-        return null;
-    }
+        Collection<CdpSysOrganizationPermissionEntity> saveEntities = JpaUtil.copyCollectionProperties(this.getClass(), entities);
 
-    @Override
-    public Collection<CdpSysOrganizationPermissionEntity> createInBatch(Collection<CdpSysOrganizationPermissionEntity> entities) {
-        Assert.notEmpty(entities, "要删除的集合不能为空!");
-        CdpSysUserEntity loginUser = LoginUserUtil.getUser();
-        Date now = new Date();
-        for (CdpSysOrganizationPermissionEntity entity : entities) {
-            entity.setCreateBy(loginUser.getId());
-            entity.setCreateTime(now);
-        }
-        return getRepository().save(entities);
-    }
-
-    @Override
-    public void deleteInBatch(Collection<CdpSysOrganizationPermissionEntity> entities) {
-        Assert.notEmpty(entities, "要删除的集合不能为空!");
-        getRepository().deleteInBatch(entities);
+        return cdpSysOrganizationPermissionRepository.save(saveEntities);
     }
 }

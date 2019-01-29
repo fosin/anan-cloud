@@ -72,7 +72,7 @@ public class CdpSysOrganizationEntity extends AbstractCreateUpdateJpaEntity impl
     private String telphone;
 
     @Basic
-    @ApiModelProperty(value = "使用状态：0=启用，1=禁用，具体取值于字典表cdp_sys_dictionary.code=11", required = true)
+    @ApiModelProperty(value = "使用状态：0=启用，1=禁用，具体取值于字典表cdp_sys_dictionary.id=11", required = true)
     @Column(name = "status", nullable = false)
     private Integer status;
 

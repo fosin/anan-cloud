@@ -1,6 +1,9 @@
 package com.github.fosin.cdp.platform.service.inter;
 
 import com.github.fosin.cdp.jpa.service.batch.ICrudBatchJpaService;
+import com.github.fosin.cdp.platform.dto.request.CdpSysOrganizationPermissionCreateDto;
+import com.github.fosin.cdp.platform.dto.request.CdpSysOrganizationPermissionRetrieveDto;
+import com.github.fosin.cdp.platform.dto.request.CdpSysOrganizationPermissionUpdateDto;
 import com.github.fosin.cdp.platform.entity.CdpSysOrganizationPermissionEntity;
 
 import java.util.List;
@@ -13,8 +16,8 @@ import java.util.List;
  */
 public interface ICdpSysOrganizationPermissionService extends
         ICrudBatchJpaService<CdpSysOrganizationPermissionEntity, Long, Long,
-                CdpSysOrganizationPermissionEntity, CdpSysOrganizationPermissionEntity,
-                CdpSysOrganizationPermissionEntity> {
+                CdpSysOrganizationPermissionCreateDto, CdpSysOrganizationPermissionRetrieveDto,
+                CdpSysOrganizationPermissionUpdateDto> {
     List<CdpSysOrganizationPermissionEntity> findByOrganizId(Long organizId);
 
     long countByPermissionId(Long permissionId);

@@ -29,8 +29,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import javax.persistence.criteria.*;
-import java.util.Collection;
-import java.util.List;
 
 /**
  * 字典表服务
@@ -64,10 +62,10 @@ public class DictionaryServiceImpl implements IDictionaryService {
     @Override
     public CdpSysDictionaryEntity update(CdpSysDictionaryUpdateDto entity) {
         Assert.notNull(entity, "无效的更新数据");
-        Long code = entity.getCode();
-        Assert.notNull(code, "无效的字典代码code");
-        CdpSysDictionaryEntity updateEntity = dictionaryRepository.findOne(code);
-        Assert.notNull(updateEntity, "根据传入的字典code" + code + "在数据库中未能找到对于数据!");
+        Long id = entity.getId();
+        Assert.notNull(id, "无效的字典代码id");
+        CdpSysDictionaryEntity updateEntity = dictionaryRepository.findOne(id);
+        Assert.notNull(updateEntity, "根据传入的字典code" + id + "在数据库中未能找到对于数据!");
         //系统字典
         if (entity.getType().equals(SystemConstant.SYSTEM_DICTIONARY_TYPE)) {
             CdpSysUserEntity loginUser = LoginUserUtil.getUser();
@@ -97,7 +95,7 @@ public class DictionaryServiceImpl implements IDictionaryService {
                 throw new CdpServiceException("没有权限删除系统字典!");
             }
         }
-        dictionaryDetailRepository.deleteAllByCode(entity.getCode());
+        dictionaryDetailRepository.deleteAllByDictionaryId(entity.getId());
         dictionaryRepository.delete(code);
         return null;
     }
@@ -112,7 +110,7 @@ public class DictionaryServiceImpl implements IDictionaryService {
             //非超级管理员不能删除系统字典
             Assert.isTrue(SystemConstant.SUPER_USER_CODE.equals(loginUser.getUsercode()), "没有权限删除系统字典!");
         }
-        dictionaryDetailRepository.deleteAllByCode(entity.getCode());
+        dictionaryDetailRepository.deleteAllByDictionaryId(entity.getId());
         dictionaryRepository.delete(entity);
         return entity;
     }
@@ -127,7 +125,6 @@ public class DictionaryServiceImpl implements IDictionaryService {
             public Predicate toPredicate(Root<CdpSysDictionaryEntity> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
                 Path<String> type = root.get("type");
                 Path<String> scope = root.get("scope");
-                Path<String> code = root.get("code");
                 Path<String> name = root.get("name");
 
                 Predicate predicate = cb.or(cb.like(scope, "%" + searchCondition + "%"), cb.like(name, "%" + searchCondition + "%"));
@@ -135,7 +132,7 @@ public class DictionaryServiceImpl implements IDictionaryService {
                     return query.getRestriction();
                 }
                 if (NumberUtil.isInteger(searchCondition)) {
-                    predicate = cb.or(cb.like(type, "%" + searchCondition + "%"), cb.like(code, "%" + searchCondition + "%"));
+                    predicate = cb.or(cb.like(type, "%" + searchCondition + "%"));
                 }
                 return predicate;
             }

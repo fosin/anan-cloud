@@ -1,22 +1,18 @@
 package com.github.fosin.cdp.platform.entity;
 
-import com.github.fosin.cdp.util.DateTimeUtil;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.validator.constraints.NotBlank;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
 /**
  * 系统版本表(CdpSysVersion)实体类
  *
  * @author fosin
- * @date 2018-12-03 15:20:20
+ * @date 2019-01-28 12:50:37
  * @since 1.0.0
  */
 @Data
@@ -24,96 +20,78 @@ import java.util.Date;
 @DynamicUpdate
 @Table(name = "cdp_sys_version")
 @ApiModel(value = "系统版本表实体类", description = "表(cdp_sys_version)的对应的实体类")
-public class CdpSysVersionEntity implements Serializable {
-    private static final long serialVersionUID = -47876152527742919L;
+public class CdpSysVersionEntity  implements Serializable {
+    private static final long serialVersionUID = -54459367678395780L;
     
     @Id
-    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @ApiModelProperty(value = "主键，系统自动生成,版本ID")
+    @ApiModelProperty(value = "版本ID, 主键，一般系统自动生成")
+    @Column(name = "id", nullable = false)
     private Long id;
-    
+
     @Basic
-    @NotBlank
-    @Column(name = "name")
-    @ApiModelProperty(value = "版本名称")
+    @ApiModelProperty(value = "版本名称", required = true)
+    @Column(name = "name", nullable = false, length = 30)
     private String name;
-    
+
     @Basic
-    @NotNull
-    @Column(name = "type")
-    @ApiModelProperty(value = "版本类型：0=收费版 1=免费版 2=开发版")
+    @ApiModelProperty(value = "版本类型：0=收费版 1=免费版 2=开发版", required = true)
+    @Column(name = "type", nullable = false)
     private Integer type;
-    
+
     @Basic
-    @NotNull
-    @Column(name = "price")
-    @ApiModelProperty(value = "版本价格")
+    @ApiModelProperty(value = "版本价格", required = true)
+    @Column(name = "price", nullable = false, precision = 8, scale = 2)
     private Double price;
-    
+
     @Basic
-    @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
-    @Column(name = "begin_time")
-    @ApiModelProperty(value = "开始日期")
+    @ApiModelProperty(value = "开始日期", required = true)
+    @Column(name = "begin_time", nullable = false)
     private Date beginTime;
-    
+
     @Basic
-    @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
-    @Column(name = "end_time")
-    @ApiModelProperty(value = "结束日期")
+    @ApiModelProperty(value = "结束日期", required = true)
+    @Column(name = "end_time", nullable = false)
     private Date endTime;
-    
+
     @Basic
-    @NotNull
-    @Column(name = "validity")
-    @ApiModelProperty(value = "有效期：一般按天计算")
+    @ApiModelProperty(value = "有效期：一般按天计算", required = true)
+    @Column(name = "validity", nullable = false)
     private Integer validity;
-    
+
     @Basic
-    @NotNull
-    @Column(name = "protect_days")
-    @ApiModelProperty(value = "到期后保护期")
+    @ApiModelProperty(value = "到期后保护期", required = true)
+    @Column(name = "protect_days", nullable = false)
     private Integer protectDays;
-    
+
     @Basic
-    @NotNull
-    @Column(name = "max_organizs")
-    @ApiModelProperty(value = "最大机构数：0=无限制 n=限制数")
+    @ApiModelProperty(value = "最大机构数：0=无限制 n=限制数", required = true)
+    @Column(name = "max_organizs", nullable = false)
     private Integer maxOrganizs;
-    
+
     @Basic
-    @NotNull
-    @Column(name = "max_users")
-    @ApiModelProperty(value = "最大机构数：0=无限制 n=限制数")
+    @ApiModelProperty(value = "最大机构数：0=无限制 n=限制数", required = true)
+    @Column(name = "max_users", nullable = false)
     private Integer maxUsers;
-    
+
     @Basic
-    @NotNull
-    @Column(name = "tryout")
-    @ApiModelProperty(value = "是否试用：0=不试用 1=试用")
+    @ApiModelProperty(value = "是否试用：0=不试用 1=试用", required = true)
+    @Column(name = "tryout", nullable = false)
     private Integer tryout;
-    
+
     @Basic
-    @NotNull
-    @Column(name = "tryout_days")
-    @ApiModelProperty(value = "试用天数")
+    @ApiModelProperty(value = "试用天数", required = true)
+    @Column(name = "tryout_days", nullable = false)
     private Integer tryoutDays;
-    
+
     @Basic
-    @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
-    @Column(name = "create_time")
-    @ApiModelProperty(value = "创建日期")
-    private Date createTime;
-    
-    @Basic
-    @NotNull
-    @Column(name = "status")
-    @ApiModelProperty(value = "启用状态：0=启用，1=禁用")
+    @ApiModelProperty(value = "启用状态：0=启用，1=禁用", required = true)
+    @Column(name = "status", nullable = false)
     private Integer status;
-    
+
     @Basic
-    @Column(name = "description")
     @ApiModelProperty(value = "版本描述")
+    @Column(name = "description", length = 512)
     private String description;
-    
+
 }

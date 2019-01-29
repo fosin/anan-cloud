@@ -56,7 +56,7 @@ public class CdpSysUserUpdateDto implements Serializable {
     private Date birthday;
 
     @NotNull
-    @ApiModelProperty(value = "使用状态：具体取值于字典表cdp_sys_dictionary.code=15", example = "Integer", required = true)
+    @ApiModelProperty(value = "使用状态：具体取值于字典表cdp_sys_dictionary.id=15", example = "Integer", required = true)
     private Integer sex;
 
     @ApiModelProperty(value = "电子邮箱", example = "String")
@@ -68,7 +68,7 @@ public class CdpSysUserUpdateDto implements Serializable {
     private String phone;
 
     @NotNull
-    @ApiModelProperty(value = "使用状态：0=启用，1=禁用，具体取值于字典表cdp_sys_dictionary.code=11", example = "Integer", required = true)
+    @ApiModelProperty(value = "使用状态：0=启用，1=禁用，具体取值于字典表cdp_sys_dictionary.id=11", example = "Integer", required = true)
     private Integer status;
 
     @ApiModelProperty(value = "头像", example = "String")

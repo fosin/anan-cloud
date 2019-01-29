@@ -17,7 +17,6 @@ import com.github.fosin.cdp.platformapi.repository.DictionaryDetailRepository;
 import com.github.fosin.cdp.platformapi.service.inter.IDictionaryDetailService;
 import com.github.fosin.cdp.platformapi.service.inter.IUserService;
 import com.github.fosin.cdp.platformapi.util.LoginUserUtil;
-import com.github.fosin.cdp.util.ClassUtil;
 import com.github.fosin.cdp.util.NumberUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -34,8 +33,6 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.util.Assert;
 
 import javax.persistence.criteria.*;
-import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -55,7 +52,7 @@ public class DictionaryDetailServiceImpl implements IDictionaryDetailService {
     private IUserService userService;
 
     @Override
-    @CacheEvict(value = TableNameConstant.CDP_SYS_DICTIONARY_DETAIL, key = "#entity.code")
+    @CacheEvict(value = TableNameConstant.CDP_SYS_DICTIONARY_DETAIL, key = "#result.dictionaryId")
     public CdpSysDictionaryDetailEntity create(CdpSysDictionaryDetailCreateDto entity) {
         Assert.notNull(entity, "传入的创建数据实体对象不能为空!");
         CdpSysDictionaryDetailEntity createEntiy = new CdpSysDictionaryDetailEntity();
@@ -64,7 +61,7 @@ public class DictionaryDetailServiceImpl implements IDictionaryDetailService {
     }
 
     @Override
-    @CacheEvict(value = TableNameConstant.CDP_SYS_DICTIONARY_DETAIL, key = "#entity.code")
+    @CacheEvict(value = TableNameConstant.CDP_SYS_DICTIONARY_DETAIL, key = "#entity.dictionaryId")
     public CdpSysDictionaryDetailEntity update(CdpSysDictionaryDetailUpdateDto entity) {
         Assert.notNull(entity, "传入的更新数据实体对象不能为空!");
         Long id = entity.getId();
@@ -99,19 +96,19 @@ public class DictionaryDetailServiceImpl implements IDictionaryDetailService {
             }
         }
 
-        CacheUtil.evict(TableNameConstant.CDP_SYS_DICTIONARY_DETAIL, entity.getCode() + "");
+        CacheUtil.evict(TableNameConstant.CDP_SYS_DICTIONARY_DETAIL, entity.getDictionaryId() + "");
         dictionaryDetailRepository.delete(id);
         try {
             Thread.sleep(500);
         } catch (InterruptedException e) {
             throw new CdpServiceException(e);
         }
-        CacheUtil.evict(TableNameConstant.CDP_SYS_DICTIONARY_DETAIL, entity.getCode() + "");
+        CacheUtil.evict(TableNameConstant.CDP_SYS_DICTIONARY_DETAIL, entity.getDictionaryId() + "");
         return null;
     }
 
     @Override
-    @CacheEvict(value = TableNameConstant.CDP_SYS_DICTIONARY_DETAIL, key = "#entity.code")
+    @CacheEvict(value = TableNameConstant.CDP_SYS_DICTIONARY_DETAIL, key = "#entity.dictionaryId")
     public CdpSysDictionaryDetailEntity delete(CdpSysDictionaryDetailEntity entity) {
         Assert.notNull(entity, "传入了空的对象!");
         CdpSysUserEntity loginUser = LoginUserUtil.getUser();
@@ -124,7 +121,7 @@ public class DictionaryDetailServiceImpl implements IDictionaryDetailService {
             }
         }
         dictionaryDetailRepository.delete(entity);
-        return null;
+        return entity;
     }
 
     @Override
@@ -132,18 +129,15 @@ public class DictionaryDetailServiceImpl implements IDictionaryDetailService {
         PageRequest pageable = new PageRequest(pageModule.getPageNumber() - 1, pageModule.getPageSize(), Sort.Direction.fromString(pageModule.getSortOrder()), pageModule.getSortName());
         String searchCondition = pageModule.getSearchText();
 
-        Specification<CdpSysDictionaryDetailEntity> condition = new Specification<CdpSysDictionaryDetailEntity>() {
-            @Override
-            public Predicate toPredicate(Root<CdpSysDictionaryDetailEntity> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-                Path<String> name = root.get("name");
-                Path<String> value = root.get("value");
-                Path<String> code = root.get("code");
-                if (StringUtils.isBlank(searchCondition)) {
-                    return query.getRestriction();
-                }
-                return cb.or(cb.like(code, "%" + searchCondition + "%"), cb.like(name, "%" + searchCondition + "%"), cb.like(value, "%" + searchCondition + "%"));
-
+        Specification<CdpSysDictionaryDetailEntity> condition = (root, query, cb) -> {
+            Path<String> name = root.get("name");
+            Path<String> value = root.get("value");
+            Path<String> code = root.get("dictionaryId");
+            if (StringUtils.isBlank(searchCondition)) {
+                return query.getRestriction();
             }
+            return cb.or(cb.like(code, "%" + searchCondition + "%"), cb.like(name, "%" + searchCondition + "%"), cb.like(value, "%" + searchCondition + "%"));
+
         };
         //分页查找
         Page<CdpSysDictionaryDetailEntity> page = dictionaryDetailRepository.findAll(condition, pageable);
@@ -152,32 +146,29 @@ public class DictionaryDetailServiceImpl implements IDictionaryDetailService {
     }
 
     @Override
-    public Page<CdpSysDictionaryDetailEntity> findAll(String searchCondition, Pageable pageable, Long code) {
-        Specification<CdpSysDictionaryDetailEntity> condition = new Specification<CdpSysDictionaryDetailEntity>() {
-            @Override
-            public Predicate toPredicate(Root<CdpSysDictionaryDetailEntity> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-                Path<String> name = root.get("name");
-                Path<String> value = root.get("value");
-                Path<String> codePath = root.get("code");
-                Predicate predicate1 = cb.equal(codePath, code);
-                Predicate predicate2 = cb.or(cb.like(value, "%" + searchCondition + "%"));
-                if (StringUtils.isBlank(searchCondition)) {
-                    return predicate1;
-                }
-                if (NumberUtil.isInteger(searchCondition)) {
-                    predicate2 = cb.or(cb.like(name, "%" + searchCondition + "%"), cb.like(codePath, "%" + searchCondition + "%"), predicate2);
-                }
-
-                return cb.and(predicate1, predicate2);
+    public Page<CdpSysDictionaryDetailEntity> findAll(String searchCondition, Pageable pageable, Long dictionaryId) {
+        Specification<CdpSysDictionaryDetailEntity> condition = (root, query, cb) -> {
+            Path<String> name = root.get("name");
+            Path<String> value = root.get("value");
+            Path<String> dictionaryIdPath = root.get("dictionaryId");
+            Predicate predicate1 = cb.equal(dictionaryIdPath, dictionaryId);
+            Predicate predicate2 = cb.or(cb.like(value, "%" + searchCondition + "%"));
+            if (StringUtils.isBlank(searchCondition)) {
+                return predicate1;
             }
+            if (NumberUtil.isInteger(searchCondition)) {
+                predicate2 = cb.or(cb.like(name, "%" + searchCondition + "%"), cb.like(dictionaryIdPath, "%" + searchCondition + "%"), predicate2);
+            }
+
+            return cb.and(predicate1, predicate2);
         };
         return dictionaryDetailRepository.findAll(condition, pageable);
     }
 
     @Override
-    @Cacheable(value = TableNameConstant.CDP_SYS_DICTIONARY_DETAIL, key = "#code")
-    public List<CdpSysDictionaryDetailEntity> findByCode(Long code) {
-        return dictionaryDetailRepository.findByCode(code);
+    @Cacheable(value = TableNameConstant.CDP_SYS_DICTIONARY_DETAIL, key = "#dictionaryId")
+    public List<CdpSysDictionaryDetailEntity> findByDictionaryId(Long dictionaryId) {
+        return dictionaryDetailRepository.findByDictionaryId(dictionaryId);
     }
 
 

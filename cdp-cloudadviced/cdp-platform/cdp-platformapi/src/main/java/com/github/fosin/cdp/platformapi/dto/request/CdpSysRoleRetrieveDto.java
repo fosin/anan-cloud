@@ -43,24 +43,8 @@ public class CdpSysRoleRetrieveDto implements Serializable {
     private String tips;
 
     @NotNull
-    @ApiModelProperty(value = "使用状态：0=启用，1=禁用，具体取值于字典表cdp_sys_dictionary.code=11", example = "Integer")
+    @ApiModelProperty(value = "使用状态：0=启用，1=禁用，具体取值于字典表cdp_sys_dictionary.id=11", example = "Integer")
     private Integer status;
-
-    @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
-    @ApiModelProperty(value = "创建时间", example = "Date")
-    private Date createTime;
-
-    @NotNull
-    @ApiModelProperty(value = "创建人，该值由后台维护，更改数据时前端不需要关心，取值于cdp_sys_user.id", example = "Long")
-    private Long createBy;
-
-    @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
-    @ApiModelProperty(value = "更新时间", example = "Date")
-    private Date updateTime;
-
-    @NotNull
-    @ApiModelProperty(value = "更新人，该值由后台维护，更改数据时前端不需要关心，取值于cdp_sys_user.id", example = "Long")
-    private Long updateBy;
 
     @NotNull
     @ApiModelProperty(value = "内置标志：是否是系统内置角色，内置角色不能被用户删除和修改，0=不是 1=是", example = "Integer")

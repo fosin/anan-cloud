@@ -1,10 +1,11 @@
 package com.github.fosin.cdp.platform.service;
 
+import com.github.fosin.cdp.jpa.util.JpaUtil;
+import com.github.fosin.cdp.platform.dto.request.CdpSysVersionPermissionCreateDto;
+import com.github.fosin.cdp.platform.dto.request.CdpSysVersionPermissionUpdateDto;
 import com.github.fosin.cdp.platform.entity.CdpSysVersionPermissionEntity;
 import com.github.fosin.cdp.platform.repository.CdpSysVersionPermissionRepository;
 import com.github.fosin.cdp.platform.service.inter.ICdpSysVersionPermissionService;
-import com.github.fosin.cdp.platformapi.entity.CdpSysUserEntity;
-import com.github.fosin.cdp.platformapi.util.LoginUserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -12,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -47,27 +47,19 @@ public class CdpSysVersionPermissionServiceImpl implements ICdpSysVersionPermiss
 
     @Override
     @Transactional
-    public List<CdpSysVersionPermissionEntity> updateInBatch(Long versionId, Collection<CdpSysVersionPermissionEntity> entities) {
+    public Collection<CdpSysVersionPermissionEntity> updateInBatch(Long versionId, Collection<CdpSysVersionPermissionUpdateDto> entities) {
 
         Assert.notNull(versionId, "传入的版本ID不能为空!");
 
-        for (CdpSysVersionPermissionEntity entity : entities) {
+        for (CdpSysVersionPermissionUpdateDto entity : entities) {
             Assert.isTrue(entity.getVersionId().equals(versionId), "需要更新的数据集中有与版本ID不匹配的数据!");
         }
 
-        getRepository().deleteByVersionId(versionId);
-        if (entities.iterator().hasNext()) {
-            CdpSysUserEntity loginUser = LoginUserUtil.getUser();
-            Date now = new Date();
-            for (CdpSysVersionPermissionEntity entity : entities) {
-                entity.setCreateBy(loginUser.getId());
-                entity.setCreateTime(now);
-            }
-            return getRepository().save(entities);
-        }
+        cdpSysVersionPermissionRepository.deleteByVersionId(versionId);
 
+        Collection<CdpSysVersionPermissionEntity> saveEntities = JpaUtil.copyCollectionProperties(this.getClass(), entities);
 
-        return null;
+        return cdpSysVersionPermissionRepository.save(saveEntities);
     }
 
 }

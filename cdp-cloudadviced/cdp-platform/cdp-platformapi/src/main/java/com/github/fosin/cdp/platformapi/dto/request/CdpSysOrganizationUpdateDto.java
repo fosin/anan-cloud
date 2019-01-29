@@ -44,10 +44,6 @@ public class CdpSysOrganizationUpdateDto implements Serializable {
     @Pattern(regexp = RegexUtil.SPECIAL, message = "名称不能包含特殊字符")
     private String name;
 
-    @NotNull
-    @ApiModelProperty(value = "深度", example = "Integer", required = true)
-    private Integer level;
-
     @ApiModelProperty(value = "机构全名", example = "String")
     @Pattern(regexp = RegexUtil.SPECIAL, message = "名称不能包含特殊字符")
     private String fullname;
@@ -59,7 +55,7 @@ public class CdpSysOrganizationUpdateDto implements Serializable {
     private String telphone;
 
     @NotNull
-    @ApiModelProperty(value = "使用状态：0=启用，1=禁用，具体取值于字典表cdp_sys_dictionary.code=11", example = "Integer", required = true)
+    @ApiModelProperty(value = "使用状态：0=启用，1=禁用，具体取值于字典表cdp_sys_dictionary.id=11", example = "Integer", required = true)
     private Integer status;
 
 }

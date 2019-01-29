@@ -1,5 +1,7 @@
 package com.github.fosin.cdp.platform.service;
 
+import com.github.fosin.cdp.platform.dto.request.CdpSysVersionRoleCreateDto;
+import com.github.fosin.cdp.platform.dto.request.CdpSysVersionRoleUpdateDto;
 import com.github.fosin.cdp.platform.repository.CdpSysVersionRoleRepository;
 import com.github.fosin.cdp.platform.service.inter.ICdpSysVersionRoleService;
 import com.github.fosin.cdp.platformapi.constant.SystemConstant;
@@ -7,6 +9,7 @@ import com.github.fosin.cdp.platform.entity.CdpSysVersionRoleEntity;
 import com.github.fosin.cdp.platformapi.entity.CdpSysUserEntity;
 import com.github.fosin.cdp.platformapi.util.LoginUserUtil;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -49,10 +52,12 @@ public class CdpSysVersionRoleServiceImpl implements ICdpSysVersionRoleService {
      * @return entity 实例对象
      */
     @Override
-    public CdpSysVersionRoleEntity create(CdpSysVersionRoleEntity entity) {
+    public CdpSysVersionRoleEntity create(CdpSysVersionRoleCreateDto entity) {
         Assert.notNull(entity, "创建数据的实体对象不能为空!");
         Assert.isTrue(!entity.getValue().equals(SystemConstant.SUPER_USER_CODE), "角色标识不能为:" + SystemConstant.SUPER_USER_CODE);
-        return getRepository().save(entity);
+        CdpSysVersionRoleEntity createEntity = new CdpSysVersionRoleEntity();
+        BeanUtils.copyProperties(entity, createEntity);
+        return getRepository().save(createEntity);
     }
 
     /**
@@ -62,10 +67,15 @@ public class CdpSysVersionRoleServiceImpl implements ICdpSysVersionRoleService {
      * @return entity 实例对象
      */
     @Override
-    public CdpSysVersionRoleEntity update(CdpSysVersionRoleEntity entity) {
+    public CdpSysVersionRoleEntity update(CdpSysVersionRoleUpdateDto entity) {
         Assert.notNull(entity, "更新数据的实体对象不能为空!");
+        Long id = entity.getId();
+        Assert.isTrue(id != null && id > 0, "传入的主键无效!");
         Assert.isTrue(!entity.getValue().equals(SystemConstant.SUPER_USER_CODE), "角色标识不能为:" + SystemConstant.SUPER_USER_CODE);
-        return getRepository().save(entity);
+        CdpSysVersionRoleEntity createEntity = getRepository().findOne(id);
+        Assert.notNull(createEntity, "更新数据的实体对象不能为空!");
+        BeanUtils.copyProperties(entity, createEntity);
+        return getRepository().save(createEntity);
     }
 
     /**

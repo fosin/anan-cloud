@@ -1,5 +1,8 @@
 package com.github.fosin.cdp.platform.service.inter;
 
+import com.github.fosin.cdp.platform.dto.request.CdpSysPayOrderCreateDto;
+import com.github.fosin.cdp.platform.dto.request.CdpSysPayOrderRetrieveDto;
+import com.github.fosin.cdp.platform.dto.request.CdpSysPayOrderUpdateDto;
 import com.github.fosin.cdp.platform.entity.CdpSysPayInvoiceEntity;
 import com.github.fosin.cdp.platform.entity.CdpSysPayOrderEntity;
 import com.github.fosin.cdp.jpa.service.ISimpleJpaService;
@@ -10,5 +13,5 @@ import com.github.fosin.cdp.jpa.service.ISimpleJpaService;
  * @author fosin
  * @date 2018-11-18 17:26:40
  */
-public interface ICdpSysPayOrderService extends ISimpleJpaService<CdpSysPayOrderEntity, Long, CdpSysPayOrderEntity, CdpSysPayOrderEntity, CdpSysPayOrderEntity> {
+public interface ICdpSysPayOrderService extends ISimpleJpaService<CdpSysPayOrderEntity, Long, CdpSysPayOrderCreateDto, CdpSysPayOrderRetrieveDto, CdpSysPayOrderUpdateDto> {
 }

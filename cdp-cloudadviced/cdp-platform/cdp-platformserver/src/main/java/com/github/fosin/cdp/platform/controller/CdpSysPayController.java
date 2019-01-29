@@ -2,6 +2,9 @@ package com.github.fosin.cdp.platform.controller;
 
 import com.github.fosin.cdp.mvc.controller.ISimpleController;
 import com.github.fosin.cdp.mvc.service.ISimpleService;
+import com.github.fosin.cdp.platform.dto.request.CdpSysPayCreateDto;
+import com.github.fosin.cdp.platform.dto.request.CdpSysPayRetrieveDto;
+import com.github.fosin.cdp.platform.dto.request.CdpSysPayUpdateDto;
 import com.github.fosin.cdp.platform.entity.CdpSysPayEntity;
 import com.github.fosin.cdp.platform.service.inter.ICdpSysPayService;
 import io.swagger.annotations.Api;
@@ -18,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("v1/pay")
 @Api(value = "v1/pay", tags = "系统支付表接入层API", description = "系统支付表(cdp_sys_pay)接入层API")
-public class CdpSysPayController implements ISimpleController<CdpSysPayEntity, Long, CdpSysPayEntity, CdpSysPayEntity, CdpSysPayEntity> {
+public class CdpSysPayController implements ISimpleController<CdpSysPayEntity, Long, CdpSysPayCreateDto, CdpSysPayRetrieveDto, CdpSysPayUpdateDto> {
     /**
      * 服务对象
      */
@@ -26,7 +29,7 @@ public class CdpSysPayController implements ISimpleController<CdpSysPayEntity, L
     private ICdpSysPayService cdpSysPayService;
 
     @Override
-    public ISimpleService<CdpSysPayEntity, Long, CdpSysPayEntity, CdpSysPayEntity, CdpSysPayEntity> getService() {
+    public ISimpleService<CdpSysPayEntity, Long, CdpSysPayCreateDto, CdpSysPayRetrieveDto, CdpSysPayUpdateDto> getService() {
         return cdpSysPayService;
     }
 }

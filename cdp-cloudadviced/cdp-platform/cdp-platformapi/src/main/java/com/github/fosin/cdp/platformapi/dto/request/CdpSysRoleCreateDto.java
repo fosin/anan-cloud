@@ -46,12 +46,6 @@ public class CdpSysRoleCreateDto implements Serializable {
 
     @NotNull
     @Range(max = 1)
-    @ApiModelProperty(value = "使用状态：0=启用，1=禁用，具体取值于字典表cdp_sys_dictionary.code=11", example = "Integer", required = true)
+    @ApiModelProperty(value = "使用状态：0=启用，1=禁用，具体取值于字典表cdp_sys_dictionary.id=11", example = "Integer", required = true)
     private Integer status;
-
-    @NotNull
-    @Range(max = 1)
-    @ApiModelProperty(value = "内置标志：是否是系统内置角色，内置角色不能被用户删除和修改，0=不是 1=是", example = "Integer", required = true)
-    private Integer builtIn;
-
 }

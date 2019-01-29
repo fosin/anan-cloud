@@ -1,5 +1,7 @@
 package com.github.fosin.cdp.platform.service;
 
+import com.github.fosin.cdp.platform.dto.request.CdpSysOrganizationAuthCreateDto;
+import com.github.fosin.cdp.platform.dto.request.CdpSysPayOrderCreateDto;
 import com.github.fosin.cdp.platform.entity.CdpSysOrganizationAuthEntity;
 import com.github.fosin.cdp.platform.entity.CdpSysPayOrderEntity;
 import com.github.fosin.cdp.platform.entity.CdpSysVersionEntity;
@@ -84,7 +86,6 @@ public class CdpSysOrganizationAuthServiceImpl implements ICdpSysOrganizationAut
         BeanUtils.copyProperties(registerDto.getOrganization(), organization);
         organization.setPId(0L);
         organization.setTopId(0L);
-        organization.setLevel(1);
         organization.setStatus(0);
         CdpSysOrganizationEntity organizationEntity = organizationService.create(organization);
         CdpSysOrganizationUpdateDto updateDto = new CdpSysOrganizationUpdateDto();
@@ -96,7 +97,7 @@ public class CdpSysOrganizationAuthServiceImpl implements ICdpSysOrganizationAut
         CdpSysVersionEntity versionEntity = versionService.findOne(versionId);
 
         //创建订单
-        CdpSysPayOrderEntity orderEntity = new CdpSysPayOrderEntity();
+        CdpSysPayOrderCreateDto orderEntity = new CdpSysPayOrderCreateDto();
         orderEntity.setMoney(versionEntity.getPrice());
         orderEntity.setOrderTime(now);
         orderEntity.setVersionId(versionId);
@@ -108,13 +109,12 @@ public class CdpSysOrganizationAuthServiceImpl implements ICdpSysOrganizationAut
         } else {
             orderEntity.setStatus(0);
         }
-        orderEntity = payOrderService.create(orderEntity);
-
+        CdpSysPayOrderEntity orderSaveEntity = payOrderService.create(orderEntity);
 
         //创建机构认证信息
-        CdpSysOrganizationAuthEntity auth = new CdpSysOrganizationAuthEntity();
+        CdpSysOrganizationAuthCreateDto auth = new CdpSysOrganizationAuthCreateDto();
         auth.setVersionId(versionId);
-        auth.setOrderId(orderEntity.getOrderId());
+        auth.setOrderId(orderSaveEntity.getOrderId());
         auth.setMaxOrganizs(versionEntity.getMaxOrganizs());
         auth.setMaxUsers(versionEntity.getMaxUsers());
         auth.setOrganizId(organizationEntity.getId());
@@ -128,7 +128,7 @@ public class CdpSysOrganizationAuthServiceImpl implements ICdpSysOrganizationAut
         return true;
     }
 
-    private String getAuthCode(CdpSysOrganizationAuthEntity auth) {
+    private String getAuthCode(CdpSysOrganizationAuthCreateDto auth) {
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
         return bCryptPasswordEncoder.encode(auth.toString());
     }

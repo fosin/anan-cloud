@@ -3,6 +3,7 @@ package com.github.fosin.cdp.platformapi.entity;
 import java.util.Date;
 
 import com.github.fosin.cdp.jpa.entity.AbstractCreateUpdateJpaEntity;
+import com.github.fosin.cdp.jpa.entity.AbstractSoftDeleteJpaEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.EqualsAndHashCode;
@@ -12,6 +13,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 import lombok.Data;
+import org.hibernate.annotations.SQLDelete;
 
 /**
  * 用于存放各种分类分组的个性化参数(CdpSysParameter)实体类
@@ -24,9 +26,10 @@ import lombok.Data;
 @Entity
 @EqualsAndHashCode(callSuper = true)
 @DynamicUpdate
+//@SQLDelete(sql = "update cdp_sys_parameter set deleted = 1 where id = ?")
 @Table(name = "cdp_sys_parameter")
 @ApiModel(value = "用于存放各种分类分组的个性化参数实体类", description = "表(cdp_sys_parameter)的对应的实体类")
-public class CdpSysParameterEntity extends AbstractCreateUpdateJpaEntity implements Serializable {
+public class CdpSysParameterEntity extends AbstractSoftDeleteJpaEntity implements Serializable {
     private static final long serialVersionUID = 301081721804164443L;
 
     @Id
@@ -46,7 +49,7 @@ public class CdpSysParameterEntity extends AbstractCreateUpdateJpaEntity impleme
     private String value;
 
     @Basic
-    @ApiModelProperty(value = "参数分类：具体取值于字典表cdp_sys_dictionary.code=10", required = true)
+    @ApiModelProperty(value = "参数分类：具体取值于字典表cdp_sys_dictionary.id=10", required = true)
     @Column(name = "type", nullable = false)
     private Integer type;
 

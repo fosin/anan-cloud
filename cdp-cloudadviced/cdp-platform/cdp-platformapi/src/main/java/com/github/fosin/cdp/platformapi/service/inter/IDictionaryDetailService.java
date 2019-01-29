@@ -20,5 +20,5 @@ import java.util.List;
 public interface IDictionaryDetailService extends ISimpleJpaService<CdpSysDictionaryDetailEntity, Long, CdpSysDictionaryDetailCreateDto, CdpSysDictionaryDetailRetrieveDto, CdpSysDictionaryDetailUpdateDto> {
     Page<CdpSysDictionaryDetailEntity> findAll(String searchCondition, Pageable pageable, Long code);
 
-    List<CdpSysDictionaryDetailEntity> findByCode(Long code);
+    List<CdpSysDictionaryDetailEntity> findByDictionaryId(Long dictionaryId);
 }

@@ -1,6 +1,9 @@
 package com.github.fosin.cdp.platform.service.inter;
 
 import com.github.fosin.cdp.jpa.service.batch.ICrudBatchJpaService;
+import com.github.fosin.cdp.platform.dto.request.CdpSysVersionRolePermissionCreateDto;
+import com.github.fosin.cdp.platform.dto.request.CdpSysVersionRolePermissionRetrieveDto;
+import com.github.fosin.cdp.platform.dto.request.CdpSysVersionRolePermissionUpdateDto;
 import com.github.fosin.cdp.platform.entity.CdpSysVersionRolePermissionEntity;
 
 import java.util.List;
@@ -12,6 +15,6 @@ import java.util.List;
  * @date 2018-11-18 17:26:40
  */
 public interface ICdpSysVersionRolePermissionService extends ICrudBatchJpaService<CdpSysVersionRolePermissionEntity,
-        Long, Long, CdpSysVersionRolePermissionEntity, CdpSysVersionRolePermissionEntity, CdpSysVersionRolePermissionEntity> {
+        Long, Long, CdpSysVersionRolePermissionCreateDto, CdpSysVersionRolePermissionRetrieveDto, CdpSysVersionRolePermissionUpdateDto> {
     List<CdpSysVersionRolePermissionEntity> findByRoleId(Long roleId);
 }

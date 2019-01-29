@@ -37,7 +37,7 @@ public class CdpSysParameterCreateDto implements Serializable {
     private String value;
 
     @NotNull
-    @ApiModelProperty(value = "参数分类：具体取值于字典表cdp_sys_dictionary.code=10", example = "Integer", required = true)
+    @ApiModelProperty(value = "参数分类：具体取值于字典表cdp_sys_dictionary.id=10", example = "Integer", required = true)
     private Integer type;
 
     @ApiModelProperty(value = "参数作用域", example = "String")
@@ -49,13 +49,6 @@ public class CdpSysParameterCreateDto implements Serializable {
 
     @ApiModelProperty(value = "参数描述", example = "String")
     private String description;
-
-    @ApiModelProperty(value = "生效日期，该值由后台维护，更改数据时前端不需要关心", example = "Date")
-    @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
-    private Date applyTime;
-
-    @ApiModelProperty(value = "该值由后台维护，更改数据时前端不需要关心，取值于cdp_sys_user.id", example = "Long")
-    private Long applyBy;
 
     @NotNull
     @ApiModelProperty(value = "参数状态：0=正常状态、1=修改状态、2=删除状态", example = "Integer", required = true)

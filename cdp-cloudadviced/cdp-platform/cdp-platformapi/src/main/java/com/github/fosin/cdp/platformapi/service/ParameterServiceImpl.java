@@ -187,6 +187,7 @@ public class ParameterServiceImpl implements IParameterService {
     }
 
     @Override
+    @Transactional(rollbackFor = CdpServiceException.class)
     public boolean applyChanges() {
         List<CdpSysParameterEntity> entities = parameterRepository.findByStatusNot(0);
         Assert.isTrue(entities != null && entities.size() != 0, "没有更改过任何参数，不需要发布!");

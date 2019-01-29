@@ -51,7 +51,7 @@ public class UserRegisterDto implements Serializable {
     @ApiModelProperty(value = "生日", notes = "生日")
     private Date birthday;
 
-    @ApiModelProperty(value = "使用状态：具体取值于字典表cdp_sys_dictionary.code=15", notes = "使用状态：具体取值于字典表cdp_sys_dictionary.code=15")
+    @ApiModelProperty(value = "使用状态：具体取值于字典表cdp_sys_dictionary.id=15", notes = "使用状态：具体取值于字典表cdp_sys_dictionary.id=15")
     private Integer sex;
 
     @ApiModelProperty(value = "电子邮箱", notes = "电子邮箱")

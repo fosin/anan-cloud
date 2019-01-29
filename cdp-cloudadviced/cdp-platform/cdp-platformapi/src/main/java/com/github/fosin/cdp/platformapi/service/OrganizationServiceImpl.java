@@ -11,6 +11,7 @@ import com.github.fosin.cdp.platformapi.dto.request.CdpSysOrganizationCreateDto;
 import com.github.fosin.cdp.platformapi.dto.request.CdpSysOrganizationUpdateDto;
 import com.github.fosin.cdp.platformapi.entity.CdpSysDictionaryEntity;
 import com.github.fosin.cdp.platformapi.entity.CdpSysOrganizationEntity;
+import com.github.fosin.cdp.platformapi.entity.CdpSysPermissionEntity;
 import com.github.fosin.cdp.platformapi.entity.CdpSysUserEntity;
 import com.github.fosin.cdp.platformapi.repository.OrganizationRepository;
 import com.github.fosin.cdp.platformapi.service.inter.IOrganizationService;
@@ -50,6 +51,14 @@ public class OrganizationServiceImpl implements IOrganizationService {
         Assert.notNull(entity, "传入的创建数据实体对象不能为空!");
         CdpSysOrganizationEntity createEntity = new CdpSysOrganizationEntity();
         BeanUtils.copyProperties(entity, createEntity);
+        Long pId = entity.getPId();
+        int level = 1;
+        if (pId != 0) {
+            CdpSysOrganizationEntity parentEntity = organizationRepository.findOne(pId);
+            Assert.notNull(parentEntity, "传入的创建数据实体找不到对于的父节点数据!");
+            level = parentEntity.getLevel() + 1;
+        }
+        createEntity.setLevel(level);
         return organizationRepository.save(createEntity);
     }
 
@@ -62,6 +71,13 @@ public class OrganizationServiceImpl implements IOrganizationService {
         CdpSysOrganizationEntity updateEntity = organizationRepository.findOne(id);
         Assert.notNull(updateEntity, "根据传入的机构ID" + id + "在数据库中未能找到对于数据!");
         BeanUtils.copyProperties(entity, updateEntity);
+
+        Long pId = entity.getPId();
+        if (!updateEntity.getPId().equals(pId)) {
+            CdpSysOrganizationEntity parentEntity = organizationRepository.findOne(pId);
+            Assert.notNull(parentEntity, "传入的创建数据实体找不到对于的父节点数据!");
+            updateEntity.setLevel(parentEntity.getLevel() + 1);
+        }
         return organizationRepository.save(updateEntity);
     }
 

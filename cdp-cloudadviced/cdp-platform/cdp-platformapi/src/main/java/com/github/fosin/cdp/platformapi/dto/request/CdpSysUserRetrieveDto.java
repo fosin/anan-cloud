@@ -48,7 +48,7 @@ public class CdpSysUserRetrieveDto implements Serializable {
     private Date birthday;
 
     @NotNull
-    @ApiModelProperty(value = "使用状态：具体取值于字典表cdp_sys_dictionary.code=15", example = "Integer")
+    @ApiModelProperty(value = "使用状态：具体取值于字典表cdp_sys_dictionary.id=15", example = "Integer")
     private Integer sex;
 
     @ApiModelProperty(value = "电子邮箱", example = "String")
@@ -58,7 +58,7 @@ public class CdpSysUserRetrieveDto implements Serializable {
     private String phone;
 
     @NotNull
-    @ApiModelProperty(value = "使用状态：0=启用，1=禁用，具体取值于字典表cdp_sys_dictionary.code=11", example = "Integer")
+    @ApiModelProperty(value = "使用状态：0=启用，1=禁用，具体取值于字典表cdp_sys_dictionary.id=11", example = "Integer")
     private Integer status;
 
     @ApiModelProperty(value = "头像", example = "String")

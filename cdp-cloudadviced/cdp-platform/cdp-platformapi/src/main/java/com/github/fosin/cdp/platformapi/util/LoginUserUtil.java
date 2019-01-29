@@ -45,7 +45,7 @@ public class LoginUserUtil {
         } catch (Exception e) {
             throw new IllegalArgumentException(e.getMessage());
         }
-
+        cdpUserDetail.getUser();
         return cdpUserDetail;
     }
 

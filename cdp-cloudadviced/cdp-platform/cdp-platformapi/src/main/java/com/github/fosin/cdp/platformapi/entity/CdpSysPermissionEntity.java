@@ -77,7 +77,7 @@ public class CdpSysPermissionEntity extends AbstractCreateUpdateJpaEntity implem
     private String url;
 
     @Basic
-    @ApiModelProperty(value = "权限类型：0=按钮、1=组件菜单，对应ur是前端组件l、2=链接菜单，对应url是http(s)链接地址、3=目录菜单，对应是目录菜单，具体取值于字典表cdp_sys_dictionary.code=13，当权限类型是1：组件菜单 3：目录菜单时表示该节点不是一个叶子节点", required = true)
+    @ApiModelProperty(value = "权限类型：0=按钮、1=组件菜单，对应ur是前端组件l、2=链接菜单，对应url是http(s)链接地址、3=目录菜单，对应是目录菜单，具体取值于字典表cdp_sys_dictionary.id=13，当权限类型是1：组件菜单 3：目录菜单时表示该节点不是一个叶子节点", required = true)
     @Column(name = "type", nullable = false)
     private Integer type;
 
@@ -92,7 +92,7 @@ public class CdpSysPermissionEntity extends AbstractCreateUpdateJpaEntity implem
     private Integer sort;
 
     @Basic
-    @ApiModelProperty(value = "使用状态：0=启用，1=禁用，具体取值于字典表cdp_sys_dictionary.code=11", required = true)
+    @ApiModelProperty(value = "使用状态：0=启用，1=禁用，具体取值于字典表cdp_sys_dictionary.id=11", required = true)
     @Column(name = "status", nullable = false)
     private Integer status;
 
@@ -107,7 +107,7 @@ public class CdpSysPermissionEntity extends AbstractCreateUpdateJpaEntity implem
     private String path;
 
     @Basic
-    @ApiModelProperty(value = "http请求方法：GET、POST、DELETE、OPTIONS、PUT、PATCH，具体取值于字典表cdp_sys_dictionary.code=12")
+    @ApiModelProperty(value = "http请求方法：GET、POST、DELETE、OPTIONS、PUT、PATCH，具体取值于字典表cdp_sys_dictionary.id=12")
     @Column(name = "method", length = 64)
     private String method;
 

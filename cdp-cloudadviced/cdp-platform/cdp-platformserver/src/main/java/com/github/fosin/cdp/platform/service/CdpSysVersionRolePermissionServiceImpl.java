@@ -1,5 +1,8 @@
 package com.github.fosin.cdp.platform.service;
 
+import com.github.fosin.cdp.jpa.util.JpaUtil;
+import com.github.fosin.cdp.platform.dto.request.CdpSysVersionRolePermissionUpdateDto;
+import com.github.fosin.cdp.platform.entity.CdpSysOrganizationPermissionEntity;
 import com.github.fosin.cdp.platform.entity.CdpSysVersionRolePermissionEntity;
 import com.github.fosin.cdp.platform.repository.CdpSysVersionRolePermissionRepository;
 import com.github.fosin.cdp.platform.service.inter.ICdpSysVersionRolePermissionService;
@@ -42,26 +45,18 @@ public class CdpSysVersionRolePermissionServiceImpl implements ICdpSysVersionRol
 
     @Override
     @Transactional
-    public List<CdpSysVersionRolePermissionEntity> updateInBatch(Long roleId, Collection<CdpSysVersionRolePermissionEntity> entities) {
+    public List<CdpSysVersionRolePermissionEntity> updateInBatch(Long roleId, Collection<CdpSysVersionRolePermissionUpdateDto> entities) {
 
         Assert.notNull(roleId, "传入的版本ID不能为空!");
 
-        for (CdpSysVersionRolePermissionEntity entity : entities) {
+        for (CdpSysVersionRolePermissionUpdateDto entity : entities) {
             Assert.isTrue(entity.getRoleId().equals(roleId), "需要更新的数据集中有与版本ID不匹配的数据!");
         }
 
-        getRepository().deleteByRoleId(roleId);
-        if (entities.iterator().hasNext()) {
-            CdpSysUserEntity loginUser = LoginUserUtil.getUser();
-            Date now = new Date();
-            for (CdpSysVersionRolePermissionEntity entity : entities) {
-                entity.setCreateBy(loginUser.getId());
-                entity.setCreateTime(now);
-            }
-            return getRepository().save(entities);
-        }
+        versionRolePermissionRepository.deleteByRoleId(roleId);
 
+        Collection<CdpSysVersionRolePermissionEntity> saveEntities = JpaUtil.copyCollectionProperties(this.getClass(), entities);
 
-        return null;
+        return versionRolePermissionRepository.save(saveEntities);
     }
 }

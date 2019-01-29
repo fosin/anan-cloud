@@ -1,5 +1,8 @@
 package com.github.fosin.cdp.platform.service.inter;
 
+import com.github.fosin.cdp.platform.dto.request.CdpSysVersionRoleCreateDto;
+import com.github.fosin.cdp.platform.dto.request.CdpSysVersionRoleRetrieveDto;
+import com.github.fosin.cdp.platform.dto.request.CdpSysVersionRoleUpdateDto;
 import com.github.fosin.cdp.platform.entity.CdpSysVersionRoleEntity;
 import com.github.fosin.cdp.jpa.service.ISimpleJpaService;
 
@@ -9,5 +12,5 @@ import com.github.fosin.cdp.jpa.service.ISimpleJpaService;
  * @author fosin
  * @date 2018-11-18 17:26:40
  */
-public interface ICdpSysVersionRoleService extends ISimpleJpaService<CdpSysVersionRoleEntity, Long, CdpSysVersionRoleEntity, CdpSysVersionRoleEntity, CdpSysVersionRoleEntity> {
+public interface ICdpSysVersionRoleService extends ISimpleJpaService<CdpSysVersionRoleEntity, Long, CdpSysVersionRoleCreateDto, CdpSysVersionRoleRetrieveDto, CdpSysVersionRoleUpdateDto> {
 }

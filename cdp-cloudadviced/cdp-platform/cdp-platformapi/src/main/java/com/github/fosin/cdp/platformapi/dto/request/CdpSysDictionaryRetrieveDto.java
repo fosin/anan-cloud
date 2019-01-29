@@ -26,7 +26,7 @@ public class CdpSysDictionaryRetrieveDto implements Serializable {
     
     @NotNull
     @ApiModelProperty(value = "字典代码", example = "Long")
-    private Long code;
+    private Long id;
 
     @NotBlank
     @ApiModelProperty(value = "字典名称", example = "String")
@@ -34,7 +34,7 @@ public class CdpSysDictionaryRetrieveDto implements Serializable {
    private String name;
 
     @NotNull
-    @ApiModelProperty(value = "字典类别，区别字典的大分类，取值于表cdp_sys_dictionary.code = 1数据", example = "Integer")
+    @ApiModelProperty(value = "字典类别，区别字典的大分类，取值于表cdp_sys_dictionary.id = 1数据", example = "Integer")
     private Integer type;
 
     @ApiModelProperty(value = "字典作用域，以字典类别为前提，在字典类别基础上再次细化分类字典", example = "String")

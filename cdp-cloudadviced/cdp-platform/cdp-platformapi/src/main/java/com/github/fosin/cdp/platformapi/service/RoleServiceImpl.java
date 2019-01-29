@@ -52,12 +52,26 @@ public class RoleServiceImpl implements IRoleService {
     private OrganizationRepository organizationRepository;
 
     @Override
+    public CdpSysRoleEntity create(CdpSysRoleCreateDto entity) {
+        Assert.notNull(entity, "传入了空对象!");
+
+        if (SystemConstant.ADMIN_ROLE_NAME.equals(entity.getValue().toUpperCase()) &&
+                !SystemConstant.ADMIN_ROLE_NAME.equals(entity.getValue().toUpperCase())) {
+            throw new IllegalArgumentException("不能创建角色标识" + SystemConstant.ADMIN_ROLE_NAME + "!");
+        }
+        Assert.isTrue(!SystemConstant.SUPER_ROLE_NAME.equals(entity.getValue().toUpperCase()),
+                "不能创建超级管理员角色帐号信息!");
+        CdpSysRoleEntity saveEntity = new CdpSysRoleEntity();
+        BeanUtils.copyProperties(entity, saveEntity);
+        return roleRepository.save(saveEntity);
+    }
+
+    @Override
     public CdpSysRoleEntity update(CdpSysRoleUpdateDto entity) {
         Assert.notNull(entity, "传入了空对象!");
         Long id = entity.getId();
         Assert.notNull(id, "传入了空ID!");
-        CdpSysRoleEntity saveEntity = new CdpSysRoleEntity();
-        BeanUtils.copyProperties(entity, saveEntity);
+
         CdpSysRoleEntity oldEntity = roleRepository.findOne(id);
         if (SystemConstant.ADMIN_ROLE_NAME.equals(oldEntity.getValue().toUpperCase()) &&
                 !SystemConstant.ADMIN_ROLE_NAME.equals(entity.getValue().toUpperCase())) {
@@ -65,6 +79,8 @@ public class RoleServiceImpl implements IRoleService {
         }
         Assert.isTrue(!SystemConstant.SUPER_ROLE_NAME.equals(oldEntity.getValue().toUpperCase()),
                 "不能修改超级管理员角色帐号信息!");
+        CdpSysRoleEntity saveEntity = new CdpSysRoleEntity();
+        BeanUtils.copyProperties(entity, saveEntity);
         return roleRepository.save(saveEntity);
     }
 

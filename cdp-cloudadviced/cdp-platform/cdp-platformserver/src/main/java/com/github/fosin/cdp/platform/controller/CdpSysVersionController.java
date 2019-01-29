@@ -3,6 +3,7 @@ package com.github.fosin.cdp.platform.controller;
 
 import com.github.fosin.cdp.mvc.controller.ISimpleController;
 import com.github.fosin.cdp.mvc.service.ISimpleService;
+import com.github.fosin.cdp.platform.dto.request.*;
 import com.github.fosin.cdp.platform.entity.CdpSysOrganizationAuthEntity;
 import com.github.fosin.cdp.platform.entity.CdpSysOrganizationPermissionEntity;
 import com.github.fosin.cdp.platform.entity.CdpSysVersionEntity;
@@ -34,7 +35,7 @@ import java.util.List;
 @RestController
 @RequestMapping("v1/version")
 @Api(value = "v1/version", tags = "系统版本表接入层API", description = "系统版本表(cdp_sys_version)接入层API")
-public class CdpSysVersionController implements ISimpleController<CdpSysVersionEntity, Long, CdpSysVersionEntity, CdpSysVersionEntity, CdpSysVersionEntity> {
+public class CdpSysVersionController implements ISimpleController<CdpSysVersionEntity, Long, CdpSysVersionCreateDto, CdpSysVersionRetrieveDto, CdpSysVersionUpdateDto> {
     /**
      * 服务对象
      */
@@ -74,18 +75,16 @@ public class CdpSysVersionController implements ISimpleController<CdpSysVersionE
             @ApiImplicitParam(name = "versionId", value = "版本ID,取值于CdpSysVersionEntity.id")
     })
     @PutMapping(value = "/permissions/{versionId}")
-    public ResponseEntity<Boolean> permissions(@RequestBody List<CdpSysVersionPermissionEntity> entities,
+    public ResponseEntity<Boolean> permissions(@RequestBody List<CdpSysVersionPermissionUpdateDto> entities,
                                                @PathVariable("versionId") Long versionId) {
 
         //更新版本权限
         Collection<CdpSysVersionPermissionEntity> cdpSysVersionPermissionEntities = versionPermissionService.updateInBatch(versionId, entities);
 
         //准备版本相关联的机构权限数据
-        List<CdpSysOrganizationPermissionEntity> organizationPermissionEntities = new ArrayList<>();
+        List<CdpSysOrganizationPermissionUpdateDto> organizationPermissionEntities = new ArrayList<>();
         for (CdpSysVersionPermissionEntity entity : cdpSysVersionPermissionEntities) {
-            CdpSysOrganizationPermissionEntity organizationPermissionEntity = new CdpSysOrganizationPermissionEntity();
-            organizationPermissionEntity.setCreateBy(entity.getCreateBy());
-            organizationPermissionEntity.setCreateTime(entity.getCreateTime());
+            CdpSysOrganizationPermissionUpdateDto organizationPermissionEntity = new CdpSysOrganizationPermissionUpdateDto();
             organizationPermissionEntity.setPermissionId(entity.getPermissionId());
             organizationPermissionEntities.add(organizationPermissionEntity);
         }
@@ -96,7 +95,7 @@ public class CdpSysVersionController implements ISimpleController<CdpSysVersionE
         //更新所有机构权限数据
         for (CdpSysOrganizationAuthEntity entity : organizationAuthEntities) {
             Long organizId = entity.getOrganizId();
-            for (CdpSysOrganizationPermissionEntity entity1 : organizationPermissionEntities) {
+            for (CdpSysOrganizationPermissionUpdateDto entity1 : organizationPermissionEntities) {
                 entity1.setOrganizId(organizId);
                 entity1.setId(null);
             }
@@ -106,7 +105,7 @@ public class CdpSysVersionController implements ISimpleController<CdpSysVersionE
     }
 
     @Override
-    public ISimpleService<CdpSysVersionEntity, Long, CdpSysVersionEntity, CdpSysVersionEntity, CdpSysVersionEntity> getService() {
+    public ISimpleService<CdpSysVersionEntity, Long, CdpSysVersionCreateDto, CdpSysVersionRetrieveDto, CdpSysVersionUpdateDto> getService() {
         return cdpSysVersionService;
     }
 }
