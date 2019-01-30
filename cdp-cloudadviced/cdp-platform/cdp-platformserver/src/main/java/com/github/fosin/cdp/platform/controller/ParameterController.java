@@ -1,6 +1,5 @@
 package com.github.fosin.cdp.platform.controller;
 
-import com.github.fosin.cdp.core.exception.CdpServiceException;
 import com.github.fosin.cdp.mvc.controller.ISimpleController;
 import com.github.fosin.cdp.mvc.service.ISimpleService;
 import com.github.fosin.cdp.platformapi.dto.request.CdpSysParameterCreateDto;

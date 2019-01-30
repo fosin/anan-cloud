@@ -6,6 +6,8 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -21,7 +23,8 @@ import java.io.Serializable;
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @DynamicUpdate
-//@SQLDelete(sql = "update cdp_sys_dictionary set deleted = 1 where id = ?")
+@SQLDelete(sql = "update cdp_sys_dictionary set deleted = 1 where id = ?")
+@Where(clause = "deleted = 0")
 @Table(name = "cdp_sys_dictionary")
 @ApiModel(value = "系统通用字典表实体类", description = "表(cdp_sys_dictionary)的对应的实体类")
 public class CdpSysDictionaryEntity extends AbstractSoftDeleteJpaEntity implements Serializable {

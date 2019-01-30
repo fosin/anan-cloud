@@ -23,8 +23,8 @@ import java.io.Serializable;
 @Entity
 @EqualsAndHashCode(callSuper = true)
 @DynamicUpdate
-//@SQLDelete(sql = "update cdp_sys_dictionary_detail set deleted = 1 where id = ?")
-//@Where(clause = "deleted = 0")
+@SQLDelete(sql = "update cdp_sys_dictionary_detail set deleted = 1 where id = ?")
+@Where(clause = "deleted = 0")
 @Table(name = "cdp_sys_dictionary_detail")
 @ApiModel(value = "系统通用字典明细表实体类", description = "表(cdp_sys_dictionary_detail)的对应的实体类")
 public class CdpSysDictionaryDetailEntity extends AbstractSoftDeleteJpaEntity implements Serializable {

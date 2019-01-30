@@ -14,6 +14,7 @@ import java.io.Serializable;
 
 import lombok.Data;
 import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 /**
  * 用于存放各种分类分组的个性化参数(CdpSysParameter)实体类
@@ -26,7 +27,8 @@ import org.hibernate.annotations.SQLDelete;
 @Entity
 @EqualsAndHashCode(callSuper = true)
 @DynamicUpdate
-//@SQLDelete(sql = "update cdp_sys_parameter set deleted = 1 where id = ?")
+@SQLDelete(sql = "update cdp_sys_parameter set deleted = 1 where id = ?")
+@Where(clause = "deleted = 0")
 @Table(name = "cdp_sys_parameter")
 @ApiModel(value = "用于存放各种分类分组的个性化参数实体类", description = "表(cdp_sys_parameter)的对应的实体类")
 public class CdpSysParameterEntity extends AbstractSoftDeleteJpaEntity implements Serializable {
