@@ -13,10 +13,12 @@ import com.github.fosin.cdp.platformapi.dto.RegisterDto;
 import com.github.fosin.cdp.platformapi.dto.request.CdpSysOrganizationCreateDto;
 import com.github.fosin.cdp.platformapi.dto.request.CdpSysOrganizationUpdateDto;
 import com.github.fosin.cdp.platformapi.dto.request.CdpSysUserCreateDto;
+import com.github.fosin.cdp.platformapi.dto.request.CdpSysUserRegisterDto;
 import com.github.fosin.cdp.platformapi.entity.CdpSysOrganizationEntity;
 import com.github.fosin.cdp.platformapi.entity.CdpSysUserEntity;
 import com.github.fosin.cdp.platformapi.service.inter.IOrganizationService;
 import com.github.fosin.cdp.platformapi.service.inter.IUserService;
+import com.github.fosin.cdp.util.DateTimeUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -24,6 +26,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -76,11 +81,6 @@ public class CdpSysOrganizationAuthServiceImpl implements ICdpSysOrganizationAut
     public Boolean register(RegisterDto registerDto) {
         Date now = new Date();
 
-        //创建用户
-        CdpSysUserCreateDto createDTO = registerDto.getUser();
-//        Assert.isTrue(createDTO.getPassword().equals(createDTO.getConfirmPassword()), "密码和确认密码必须一致!");
-        CdpSysUserEntity user = userService.create(createDTO);
-
         //创建机构
         CdpSysOrganizationCreateDto organization = new CdpSysOrganizationCreateDto();
         BeanUtils.copyProperties(registerDto.getOrganization(), organization);
@@ -92,6 +92,21 @@ public class CdpSysOrganizationAuthServiceImpl implements ICdpSysOrganizationAut
         BeanUtils.copyProperties(organizationEntity, updateDto);
         updateDto.setTopId(organizationEntity.getId());
         organizationService.update(updateDto);
+
+        //创建用户
+        CdpSysUserRegisterDto registerDTO = registerDto.getUser();
+        CdpSysUserCreateDto createDTO = new CdpSysUserCreateDto();
+        BeanUtils.copyProperties(registerDTO, createDTO);
+        createDTO.setOrganizId(updateDto.getId());
+
+        try {
+            createDTO.setExpireTime(new SimpleDateFormat(DateTimeUtil.DATETIME_PATTERN).parse("2050-12-31 23:59:59"));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+//        Assert.isTrue(createDTO.getPassword().equals(createDTO.getConfirmPassword()), "密码和确认密码必须一致!");
+        CdpSysUserEntity user = userService.create(createDTO);
+
 
         Long versionId = registerDto.getVersionId();
         CdpSysVersionEntity versionEntity = versionService.findOne(versionId);
