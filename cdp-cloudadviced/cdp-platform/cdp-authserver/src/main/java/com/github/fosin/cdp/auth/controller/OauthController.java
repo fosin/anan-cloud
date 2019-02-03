@@ -61,7 +61,7 @@ public class OauthController {
     @RequestMapping(value = "/principal", method = {RequestMethod.GET, RequestMethod.POST})
     @ApiOperation(value = "根据令牌获取当前认证用户信息", notes = "根据令牌获取当前认证用户信息，包括用户信息、客户端信息、Oauth2.0相关信息")
     @ApiImplicitParam(name = "Authorization", value = "Basic认证信息,格式例如：Basic ouZTJoQk5BQVFLUjVVemlJSw==", required = true, dataType = "string", paramType = "header")
-    public ResponseEntity<Object> principal(Principal principal) {
+    public ResponseEntity<Principal> principal(Principal principal) {
         return ResponseEntity.ok(principal);
     }
 
