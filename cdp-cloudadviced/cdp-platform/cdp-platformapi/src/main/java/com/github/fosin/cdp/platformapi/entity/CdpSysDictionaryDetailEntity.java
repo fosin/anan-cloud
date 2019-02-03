@@ -27,14 +27,8 @@ import java.io.Serializable;
 @Where(clause = "deleted = 0")
 @Table(name = "cdp_sys_dictionary_detail")
 @ApiModel(value = "系统通用字典明细表实体类", description = "表(cdp_sys_dictionary_detail)的对应的实体类")
-public class CdpSysDictionaryDetailEntity extends AbstractSoftDeleteJpaEntity implements Serializable {
+public class CdpSysDictionaryDetailEntity extends AbstractSoftDeleteJpaEntity<Long, Long> implements Serializable {
     private static final long serialVersionUID = -36972961529681499L;
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @ApiModelProperty(value = "字典明细ID, 主键，一般系统自动生成")
-    @Column(name = "id", nullable = false)
-    private Long id;
 
     @Basic
     @ApiModelProperty(value = "字典明细键，不能重复，字典内明细项唯一代码", required = true)

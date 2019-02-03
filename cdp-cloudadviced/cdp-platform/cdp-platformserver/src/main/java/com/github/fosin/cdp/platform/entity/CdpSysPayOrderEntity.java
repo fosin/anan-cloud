@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.hibernate.annotations.DynamicUpdate;
+import org.springframework.data.jpa.domain.AbstractPersistable;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -21,14 +22,8 @@ import java.util.Date;
 @DynamicUpdate
 @Table(name = "cdp_sys_pay_order")
 @ApiModel(value = "系统支付订单表实体类", description = "表(cdp_sys_pay_order)的对应的实体类")
-public class CdpSysPayOrderEntity  implements Serializable {
+public class CdpSysPayOrderEntity  extends AbstractPersistable<Long> implements Serializable {
     private static final long serialVersionUID = -88896111334285360L;
-    
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @ApiModelProperty(value = "订单ID, 主键，一般系统自动生成")
-    @Column(name = "order_id", nullable = false)
-    private Long orderId;
 
     @Basic
     @ApiModelProperty(value = "订单用户", required = true)

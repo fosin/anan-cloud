@@ -22,14 +22,8 @@ import java.io.Serializable;
 @DynamicUpdate
 @Table(name = "cdp_sys_organization")
 @ApiModel(value = "系统机构表实体类", description = "表(cdp_sys_organization)的对应的实体类")
-public class CdpSysOrganizationEntity extends AbstractCreateUpdateJpaEntity implements Serializable {
+public class CdpSysOrganizationEntity extends AbstractCreateUpdateJpaEntity<Long, Long> implements Serializable {
     private static final long serialVersionUID = -27331190994806707L;
-    
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @ApiModelProperty(value = "机构ID, 主键，一般系统自动生成")
-    @Column(name = "id", nullable = false)
-    private Long id;
 
     @Basic
     @ApiModelProperty(value = "父机构编码，取值于id，表示当前数据所属的父类机构", required = true)

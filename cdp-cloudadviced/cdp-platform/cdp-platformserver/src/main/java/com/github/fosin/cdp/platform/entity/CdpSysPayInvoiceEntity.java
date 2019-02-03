@@ -8,6 +8,8 @@ import org.hibernate.annotations.DynamicUpdate;
 import javax.persistence.*;
 import java.io.Serializable;
 import lombok.Data;
+import org.springframework.data.jpa.domain.AbstractPersistable;
+
 /**
  * 系统支付发票表(CdpSysPayInvoice)实体类
  *
@@ -20,14 +22,8 @@ import lombok.Data;
 @DynamicUpdate
 @Table(name = "cdp_sys_pay_invoice")
 @ApiModel(value = "系统支付发票表实体类", description = "表(cdp_sys_pay_invoice)的对应的实体类")
-public class CdpSysPayInvoiceEntity  implements Serializable {
+public class CdpSysPayInvoiceEntity  extends AbstractPersistable<Long> implements Serializable {
     private static final long serialVersionUID = 120666820121378212L;
-    
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @ApiModelProperty(value = "发票ID, 主键，一般系统自动生成")
-    @Column(name = "invoce_id", nullable = false)
-    private Long invoceId;
 
     @Basic
     @ApiModelProperty(value = "支付ID", required = true)

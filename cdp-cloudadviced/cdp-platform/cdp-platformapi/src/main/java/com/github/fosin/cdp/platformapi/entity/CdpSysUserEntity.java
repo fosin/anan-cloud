@@ -27,7 +27,7 @@ import lombok.Data;
 @DynamicUpdate
 @Table(name = "cdp_sys_user")
 @ApiModel(value = "系统用户表实体类", description = "表(cdp_sys_user)的对应的实体类")
-public class CdpSysUserEntity extends AbstractOrganizIdJpaEntity implements Serializable {
+public class CdpSysUserEntity extends AbstractOrganizIdJpaEntity<Long, Long> implements Serializable {
     private static final long serialVersionUID = 897030139778409164L;
 
     /**
@@ -37,12 +37,6 @@ public class CdpSysUserEntity extends AbstractOrganizIdJpaEntity implements Seri
     @JoinColumn(name = "user_id")
     @ApiModelProperty(value = "用户拥有的角色")
     private List<CdpSysUserRoleEntity> userRoles;
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @ApiModelProperty(value = "用户ID, 主键，一般系统自动生成")
-    @Column(name = "id", nullable = false)
-    private Long id;
 
     @Basic
     @ApiModelProperty(value = "用户工号", required = true)

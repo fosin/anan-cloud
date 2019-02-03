@@ -5,6 +5,8 @@ import com.github.fosin.cdp.platformapi.dto.Client;
 import com.github.fosin.cdp.platformapi.entity.CdpSysPermissionEntity;
 import com.github.fosin.cdp.platformapi.entity.CdpSysUserEntity;
 import com.github.fosin.cdp.util.BeanUtil;
+import com.github.fosin.cdp.util.ClassUtil;
+import com.github.fosin.cdp.util.DateTimeUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.Authentication;
@@ -15,11 +17,12 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.Serializable;
+import java.lang.reflect.*;
 import java.security.Principal;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+
+import static com.github.fosin.cdp.util.ClientUtil.PATTERN;
 
 /**
  * Description:
@@ -41,11 +44,11 @@ public class LoginUserUtil {
 
         CdpUserDetail cdpUserDetail;
         try {
-            cdpUserDetail = BeanUtil.toBean(CdpUserDetail.class, (Map) principal);
+            cdpUserDetail = BeanUtil.mapToBean((Map) principal, CdpUserDetail.class);
         } catch (Exception e) {
             throw new IllegalArgumentException(e.getMessage());
         }
-        cdpUserDetail.getUser();
+
         return cdpUserDetail;
     }
 
@@ -110,7 +113,6 @@ public class LoginUserUtil {
         if (authentication == null || "".equals(authentication)) {
             userDetail = getCurrentUserInfo(request);
             removeOldUserDetail(userDetail);
-
         } else {
             userDetail = userDetailMap.get(authentication);
             if (userDetail == null || userDetail.getUser() == null) {

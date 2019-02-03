@@ -31,14 +31,8 @@ import org.hibernate.annotations.Where;
 @Where(clause = "deleted = 0")
 @Table(name = "cdp_sys_parameter")
 @ApiModel(value = "用于存放各种分类分组的个性化参数实体类", description = "表(cdp_sys_parameter)的对应的实体类")
-public class CdpSysParameterEntity extends AbstractSoftDeleteJpaEntity implements Serializable {
+public class CdpSysParameterEntity extends AbstractSoftDeleteJpaEntity<Long, Long> implements Serializable {
     private static final long serialVersionUID = 301081721804164443L;
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @ApiModelProperty(value = "参数ID, 主键，一般系统自动生成")
-    @Column(name = "id", nullable = false)
-    private Long id;
 
     @Basic
     @ApiModelProperty(value = "参数键", required = true)

@@ -22,14 +22,8 @@ import java.io.Serializable;
 @DynamicUpdate
 @Table(name = "cdp_sys_organization_permission")
 @ApiModel(value = "系统机构权限表实体类", description = "表(cdp_sys_organization_permission)的对应的实体类")
-public class CdpSysOrganizationPermissionEntity extends AbstractOrganizIdCreateJpaEntity implements Serializable {
+public class CdpSysOrganizationPermissionEntity extends AbstractOrganizIdCreateJpaEntity<Long, Long> implements Serializable {
     private static final long serialVersionUID = -76400180272089246L;
-    
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @ApiModelProperty(value = "机构权限ID, 主键，一般系统自动生成")
-    @Column(name = "id", nullable = false)
-    private Long id;
 
     @Basic
     @ApiModelProperty(value = "权限ID", required = true)

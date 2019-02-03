@@ -22,14 +22,8 @@ import lombok.Data;
 @DynamicUpdate
 @Table(name = "cdp_sys_organization_auth")
 @ApiModel(value = "系统机构授权表实体类", description = "表(cdp_sys_organization_auth)的对应的实体类")
-public class CdpSysOrganizationAuthEntity extends AbstractOrganizIdCreateJpaEntity implements Serializable {
+public class CdpSysOrganizationAuthEntity extends AbstractOrganizIdCreateJpaEntity<Long, Long> implements Serializable {
     private static final long serialVersionUID = -99392087741484947L;
-    
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @ApiModelProperty(value = "机构授权ID, 主键，一般系统自动生成")
-    @Column(name = "id", nullable = false)
-    private Long id;
 
     @Basic
     @ApiModelProperty(value = "版本ID", required = true)

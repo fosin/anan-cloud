@@ -25,7 +25,7 @@ import java.util.List;
 @DynamicUpdate
 @Table(name = "cdp_sys_permission")
 @ApiModel(value = "包含菜单、按钮两种权限实体类", description = "表(cdp_sys_permission)的对应的实体类")
-public class CdpSysPermissionEntity extends AbstractCreateUpdateJpaEntity implements Serializable {
+public class CdpSysPermissionEntity extends AbstractCreateUpdateJpaEntity<Long, Long> implements Serializable {
     private static final long serialVersionUID = -77218975959330473L;
 
     @Transient
@@ -49,12 +49,6 @@ public class CdpSysPermissionEntity extends AbstractCreateUpdateJpaEntity implem
     public void setLeaf(Boolean leaf) {
         this.leaf = leaf;
     }
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @ApiModelProperty(value = "权限ID, 主键，一般系统自动生成")
-    @Column(name = "id", nullable = false)
-    private Long id;
 
     @Basic
     @ApiModelProperty(value = "权限编码，不能重复 不能为空", required = true)

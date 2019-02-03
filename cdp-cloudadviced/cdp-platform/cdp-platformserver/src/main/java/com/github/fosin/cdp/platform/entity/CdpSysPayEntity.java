@@ -4,10 +4,12 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.hibernate.annotations.DynamicUpdate;
+import org.springframework.data.jpa.domain.AbstractPersistable;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+
 /**
  * 系统支付表(CdpSysPay)实体类
  *
@@ -20,14 +22,8 @@ import java.util.Date;
 @DynamicUpdate
 @Table(name = "cdp_sys_pay")
 @ApiModel(value = "系统支付表实体类", description = "表(cdp_sys_pay)的对应的实体类")
-public class CdpSysPayEntity  implements Serializable {
+public class CdpSysPayEntity extends AbstractPersistable<Long> implements Serializable {
     private static final long serialVersionUID = 197340387949290400L;
-    
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @ApiModelProperty(value = "支付ID, 主键，一般系统自动生成")
-    @Column(name = "pay_id", nullable = false)
-    private Long payId;
 
     @Basic
     @ApiModelProperty(value = "付款用户", required = true)

@@ -22,14 +22,8 @@ import java.io.Serializable;
 @DynamicUpdate
 @Table(name = "cdp_sys_version_permission")
 @ApiModel(value = "系统版本权限表实体类", description = "表(cdp_sys_version_permission)的对应的实体类")
-public class CdpSysVersionPermissionEntity extends AbstractCreateJpaEntity implements Serializable {
+public class CdpSysVersionPermissionEntity extends AbstractCreateJpaEntity<Long, Long> implements Serializable {
     private static final long serialVersionUID = 117455991817648863L;
-    
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @ApiModelProperty(value = "版本权限ID, 主键，一般系统自动生成")
-    @Column(name = "id", nullable = false)
-    private Long id;
 
     @Basic
     @ApiModelProperty(value = "版本ID", required = true)

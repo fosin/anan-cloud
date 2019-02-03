@@ -4,10 +4,12 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.hibernate.annotations.DynamicUpdate;
+import org.springframework.data.jpa.domain.AbstractPersistable;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+
 /**
  * 系统版本表(CdpSysVersion)实体类
  *
@@ -20,14 +22,8 @@ import java.util.Date;
 @DynamicUpdate
 @Table(name = "cdp_sys_version")
 @ApiModel(value = "系统版本表实体类", description = "表(cdp_sys_version)的对应的实体类")
-public class CdpSysVersionEntity  implements Serializable {
+public class CdpSysVersionEntity extends AbstractPersistable<Long> implements Serializable {
     private static final long serialVersionUID = -54459367678395780L;
-    
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @ApiModelProperty(value = "版本ID, 主键，一般系统自动生成")
-    @Column(name = "id", nullable = false)
-    private Long id;
 
     @Basic
     @ApiModelProperty(value = "版本名称", required = true)

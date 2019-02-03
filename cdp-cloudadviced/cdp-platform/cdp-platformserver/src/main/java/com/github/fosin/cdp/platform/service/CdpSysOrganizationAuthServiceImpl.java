@@ -114,7 +114,7 @@ public class CdpSysOrganizationAuthServiceImpl implements ICdpSysOrganizationAut
         //创建机构认证信息
         CdpSysOrganizationAuthCreateDto auth = new CdpSysOrganizationAuthCreateDto();
         auth.setVersionId(versionId);
-        auth.setOrderId(orderSaveEntity.getOrderId());
+        auth.setOrderId(orderSaveEntity.getId());
         auth.setMaxOrganizs(versionEntity.getMaxOrganizs());
         auth.setMaxUsers(versionEntity.getMaxUsers());
         auth.setOrganizId(organizationEntity.getId());

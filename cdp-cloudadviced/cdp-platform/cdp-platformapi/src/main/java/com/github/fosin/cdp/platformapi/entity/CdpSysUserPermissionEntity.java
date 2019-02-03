@@ -22,14 +22,8 @@ import java.io.Serializable;
 @DynamicUpdate
 @Table(name = "cdp_sys_user_permission")
 @ApiModel(value = "用于增减用户的单项权限，通常实在角色的基础上增减单项权限实体类", description = "表(cdp_sys_user_permission)的对应的实体类")
-public class CdpSysUserPermissionEntity extends AbstractOrganizIdCreateJpaEntity implements Serializable {
+public class CdpSysUserPermissionEntity extends AbstractOrganizIdCreateJpaEntity<Long, Long> implements Serializable {
     private static final long serialVersionUID = 539048606557875412L;
-    
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @ApiModelProperty(value = "用户权限ID, 主键，一般系统自动生成")
-    @Column(name = "id", nullable = false)
-    private Long id;
 
     @Basic
     @ApiModelProperty(value = "用户ID", required = true)
