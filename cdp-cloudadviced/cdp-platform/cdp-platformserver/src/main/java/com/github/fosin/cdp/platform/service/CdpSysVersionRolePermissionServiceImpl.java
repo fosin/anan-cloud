@@ -1,13 +1,11 @@
 package com.github.fosin.cdp.platform.service;
 
+import com.github.fosin.cdp.jpa.service.batch.IUpdateInBatchJpaService;
 import com.github.fosin.cdp.jpa.util.JpaUtil;
 import com.github.fosin.cdp.platform.dto.request.CdpSysVersionRolePermissionUpdateDto;
-import com.github.fosin.cdp.platform.entity.CdpSysOrganizationPermissionEntity;
 import com.github.fosin.cdp.platform.entity.CdpSysVersionRolePermissionEntity;
 import com.github.fosin.cdp.platform.repository.CdpSysVersionRolePermissionRepository;
 import com.github.fosin.cdp.platform.service.inter.ICdpSysVersionRolePermissionService;
-import com.github.fosin.cdp.platformapi.entity.CdpSysUserEntity;
-import com.github.fosin.cdp.platformapi.util.LoginUserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -15,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -55,7 +52,7 @@ public class CdpSysVersionRolePermissionServiceImpl implements ICdpSysVersionRol
 
         versionRolePermissionRepository.deleteByRoleId(roleId);
 
-        Collection<CdpSysVersionRolePermissionEntity> saveEntities = JpaUtil.copyCollectionProperties(this.getClass(), entities);
+        Collection<CdpSysVersionRolePermissionEntity> saveEntities = JpaUtil.copyCollectionProperties(this.getClass(), IUpdateInBatchJpaService.class, entities);
 
         return versionRolePermissionRepository.save(saveEntities);
     }

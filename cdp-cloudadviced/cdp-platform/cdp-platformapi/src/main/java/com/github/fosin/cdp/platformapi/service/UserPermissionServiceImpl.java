@@ -3,6 +3,7 @@ package com.github.fosin.cdp.platformapi.service;
 import com.github.fosin.cdp.cache.util.CacheUtil;
 import com.github.fosin.cdp.core.exception.CdpServiceException;
 import com.github.fosin.cdp.jpa.repository.IJpaRepository;
+import com.github.fosin.cdp.jpa.service.batch.IUpdateInBatchJpaService;
 import com.github.fosin.cdp.jpa.util.JpaUtil;
 import com.github.fosin.cdp.platformapi.constant.TableNameConstant;
 import com.github.fosin.cdp.platformapi.dto.request.CdpSysUserPermissionUpdateDto;
@@ -86,7 +87,7 @@ public class UserPermissionServiceImpl implements IUserPermissionService {
             Assert.isTrue(entity.getUserId().equals(userId), "需要更新的数据集中有与用户ID不匹配的数据!");
         }
 
-        Collection<CdpSysUserPermissionEntity> saveEntities = JpaUtil.copyCollectionProperties(this.getClass(), entities);
+        Collection<CdpSysUserPermissionEntity> saveEntities = JpaUtil.copyCollectionProperties(this.getClass(), IUpdateInBatchJpaService.class, entities);
 
         userPermissionRepository.deleteByUserId(userId);
 
