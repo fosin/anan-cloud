@@ -17,6 +17,7 @@ import org.springframework.data.jpa.domain.AbstractPersistable;
  * @date 2019-01-28 12:50:38
  * @since 1.0.0
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Entity
 @DynamicUpdate

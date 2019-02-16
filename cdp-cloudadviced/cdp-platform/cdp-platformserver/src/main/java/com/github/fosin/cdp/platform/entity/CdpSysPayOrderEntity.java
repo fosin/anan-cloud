@@ -3,6 +3,7 @@ package com.github.fosin.cdp.platform.entity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
@@ -17,6 +18,7 @@ import java.util.Date;
  * @date 2019-01-28 12:50:35
  * @since 1.0.0
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Entity
 @DynamicUpdate
