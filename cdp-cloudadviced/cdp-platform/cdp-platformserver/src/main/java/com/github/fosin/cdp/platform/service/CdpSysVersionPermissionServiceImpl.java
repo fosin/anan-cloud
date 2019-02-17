@@ -1,11 +1,11 @@
 package com.github.fosin.cdp.platform.service;
 
 import com.github.fosin.cdp.jpa.service.batch.IUpdateInBatchJpaService;
-import com.github.fosin.cdp.jpa.util.JpaUtil;
 import com.github.fosin.cdp.platform.dto.request.CdpSysVersionPermissionUpdateDto;
 import com.github.fosin.cdp.platform.entity.CdpSysVersionPermissionEntity;
 import com.github.fosin.cdp.platform.repository.CdpSysVersionPermissionRepository;
 import com.github.fosin.cdp.platform.service.inter.ICdpSysVersionPermissionService;
+import com.github.fosin.cdp.util.BeanUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -57,7 +57,7 @@ public class CdpSysVersionPermissionServiceImpl implements ICdpSysVersionPermiss
 
         cdpSysVersionPermissionRepository.deleteByVersionId(versionId);
 
-        Collection<CdpSysVersionPermissionEntity> saveEntities = JpaUtil.copyCollectionProperties(this.getClass(), IUpdateInBatchJpaService.class, entities);
+        Collection<CdpSysVersionPermissionEntity> saveEntities = BeanUtil.copyCollectionProperties(this.getClass(), IUpdateInBatchJpaService.class, entities);
 
         return cdpSysVersionPermissionRepository.save(saveEntities);
     }

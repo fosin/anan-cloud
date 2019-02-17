@@ -6,6 +6,7 @@ import com.github.fosin.cdp.platform.dto.request.CdpSysVersionRolePermissionUpda
 import com.github.fosin.cdp.platform.entity.CdpSysVersionRolePermissionEntity;
 import com.github.fosin.cdp.platform.repository.CdpSysVersionRolePermissionRepository;
 import com.github.fosin.cdp.platform.service.inter.ICdpSysVersionRolePermissionService;
+import com.github.fosin.cdp.util.BeanUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -52,7 +53,7 @@ public class CdpSysVersionRolePermissionServiceImpl implements ICdpSysVersionRol
 
         versionRolePermissionRepository.deleteByRoleId(roleId);
 
-        Collection<CdpSysVersionRolePermissionEntity> saveEntities = JpaUtil.copyCollectionProperties(this.getClass(), IUpdateInBatchJpaService.class, entities);
+        Collection<CdpSysVersionRolePermissionEntity> saveEntities = BeanUtil.copyCollectionProperties(this.getClass(), IUpdateInBatchJpaService.class, entities);
 
         return versionRolePermissionRepository.save(saveEntities);
     }

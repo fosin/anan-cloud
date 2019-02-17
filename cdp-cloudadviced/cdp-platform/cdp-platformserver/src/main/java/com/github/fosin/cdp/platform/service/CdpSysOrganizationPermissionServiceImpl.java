@@ -6,6 +6,7 @@ import com.github.fosin.cdp.platform.dto.request.CdpSysOrganizationPermissionUpd
 import com.github.fosin.cdp.platform.entity.CdpSysOrganizationPermissionEntity;
 import com.github.fosin.cdp.platform.repository.CdpSysOrganizationPermissionRepository;
 import com.github.fosin.cdp.platform.service.inter.ICdpSysOrganizationPermissionService;
+import com.github.fosin.cdp.util.BeanUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -56,7 +57,7 @@ public class CdpSysOrganizationPermissionServiceImpl implements ICdpSysOrganizat
 
         cdpSysOrganizationPermissionRepository.deleteByOrganizId(organizId);
 
-        Collection<CdpSysOrganizationPermissionEntity> saveEntities = JpaUtil.copyCollectionProperties(this.getClass(), IUpdateInBatchJpaService.class, entities);
+        Collection<CdpSysOrganizationPermissionEntity> saveEntities = BeanUtil.copyCollectionProperties(this.getClass(), IUpdateInBatchJpaService.class, entities);
 
         return cdpSysOrganizationPermissionRepository.save(saveEntities);
     }

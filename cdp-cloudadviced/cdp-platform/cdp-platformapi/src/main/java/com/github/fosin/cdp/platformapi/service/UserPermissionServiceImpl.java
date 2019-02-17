@@ -13,6 +13,7 @@ import com.github.fosin.cdp.platformapi.entity.CdpSysUserPermissionEntity;
 import com.github.fosin.cdp.platformapi.repository.UserPermissionRepository;
 import com.github.fosin.cdp.platformapi.service.inter.IUserPermissionService;
 import com.github.fosin.cdp.platformapi.util.LoginUserUtil;
+import com.github.fosin.cdp.util.BeanUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -87,7 +88,7 @@ public class UserPermissionServiceImpl implements IUserPermissionService {
             Assert.isTrue(entity.getUserId().equals(userId), "需要更新的数据集中有与用户ID不匹配的数据!");
         }
 
-        Collection<CdpSysUserPermissionEntity> saveEntities = JpaUtil.copyCollectionProperties(this.getClass(), IUpdateInBatchJpaService.class, entities);
+        Collection<CdpSysUserPermissionEntity> saveEntities = BeanUtil.copyCollectionProperties(this.getClass(), IUpdateInBatchJpaService.class, entities);
 
         userPermissionRepository.deleteByUserId(userId);
 

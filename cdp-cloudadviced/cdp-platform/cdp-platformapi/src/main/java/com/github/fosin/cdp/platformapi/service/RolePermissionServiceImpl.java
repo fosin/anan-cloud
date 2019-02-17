@@ -4,12 +4,12 @@ import com.github.fosin.cdp.cache.util.CacheUtil;
 import com.github.fosin.cdp.core.exception.CdpServiceException;
 import com.github.fosin.cdp.jpa.repository.IJpaRepository;
 import com.github.fosin.cdp.jpa.service.batch.IUpdateInBatchJpaService;
-import com.github.fosin.cdp.jpa.util.JpaUtil;
 import com.github.fosin.cdp.platformapi.constant.TableNameConstant;
 import com.github.fosin.cdp.platformapi.dto.request.CdpSysRolePermissionUpdateDto;
 import com.github.fosin.cdp.platformapi.entity.CdpSysRolePermissionEntity;
 import com.github.fosin.cdp.platformapi.repository.RolePermissionRepository;
 import com.github.fosin.cdp.platformapi.service.inter.IRolePermissionService;
+import com.github.fosin.cdp.util.BeanUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -82,7 +82,7 @@ public class RolePermissionServiceImpl implements IRolePermissionService {
         for (CdpSysRolePermissionUpdateDto entity : entities) {
             Assert.isTrue(entity.getRoleId().equals(roleId), "需要更新的数据集中有与角色ID不匹配的数据!");
         }
-        Collection<CdpSysRolePermissionEntity> saveEntities = JpaUtil.copyCollectionProperties(this.getClass(), IUpdateInBatchJpaService.class, entities);
+        Collection<CdpSysRolePermissionEntity> saveEntities = BeanUtil.copyCollectionProperties(this.getClass(), IUpdateInBatchJpaService.class, entities);
 
         rolePermissionRepository.deleteByRoleId(roleId);
         return rolePermissionRepository.save(saveEntities);
