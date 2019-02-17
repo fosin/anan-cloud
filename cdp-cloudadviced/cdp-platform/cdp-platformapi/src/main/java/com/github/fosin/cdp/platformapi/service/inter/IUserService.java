@@ -1,10 +1,10 @@
 package com.github.fosin.cdp.platformapi.service.inter;
 
 import com.github.fosin.cdp.jpa.service.ISimpleJpaService;
-import com.github.fosin.cdp.platformapi.dto.request.CdpSysUserCreateDto;
-import com.github.fosin.cdp.platformapi.dto.request.CdpSysUserRetrieveDto;
-import com.github.fosin.cdp.platformapi.dto.request.CdpSysUserUpdateDto;
-import com.github.fosin.cdp.platformapi.entity.CdpSysUserEntity;
+import com.github.fosin.cdp.platformapi.dto.request.CdpUserCreateDto;
+import com.github.fosin.cdp.platformapi.dto.request.CdpUserRetrieveDto;
+import com.github.fosin.cdp.platformapi.dto.request.CdpUserUpdateDto;
+import com.github.fosin.cdp.platformapi.entity.CdpUserEntity;
 
 import java.util.List;
 
@@ -14,16 +14,16 @@ import java.util.List;
  *
  * @author fosin
  */
-public interface IUserService extends ISimpleJpaService<CdpSysUserEntity, Long, CdpSysUserCreateDto, CdpSysUserRetrieveDto, CdpSysUserUpdateDto> {
-    CdpSysUserEntity findByUsercode(String usercode);
+public interface IUserService extends ISimpleJpaService<CdpUserEntity, Long, CdpUserCreateDto, CdpUserRetrieveDto, CdpUserUpdateDto> {
+    CdpUserEntity findByUsercode(String usercode);
 
-    CdpSysUserEntity changePassword(Long id, String password, String confirmPassword1, String confirmPassword2);
+    CdpUserEntity changePassword(Long id, String password, String confirmPassword1, String confirmPassword2);
 
     String resetPassword(Long id);
 
-    List<CdpSysUserEntity> findOtherUsersByRoleId(Long roleId);
+    List<CdpUserEntity> findOtherUsersByRoleId(Long roleId);
 
-    List<CdpSysUserEntity> findRoleUsersByRoleId(Long roleId);
+    List<CdpUserEntity> findRoleUsersByRoleId(Long roleId);
 
-    List<CdpSysUserEntity> findAllByOrganizId(Long organizId);
+    List<CdpUserEntity> findAllByOrganizId(Long organizId);
 }

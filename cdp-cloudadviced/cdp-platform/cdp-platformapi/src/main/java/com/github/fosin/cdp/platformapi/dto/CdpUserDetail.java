@@ -1,7 +1,7 @@
 package com.github.fosin.cdp.platformapi.dto;
 
-import com.github.fosin.cdp.platformapi.entity.CdpSysPermissionEntity;
-import com.github.fosin.cdp.platformapi.entity.CdpSysUserEntity;
+import com.github.fosin.cdp.platformapi.entity.CdpPermissionEntity;
+import com.github.fosin.cdp.platformapi.entity.CdpUserEntity;
 import com.github.fosin.cdp.util.ClientUtil;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
@@ -22,9 +22,9 @@ import java.util.HashSet;
  */
 public class CdpUserDetail extends User {
     @Getter
-    private CdpSysUserEntity user;
+    private CdpUserEntity user;
     @Getter
-    private CdpSysPermissionEntity permissionTree;
+    private CdpPermissionEntity permissionTree;
     @Getter
     private Client client;
 
@@ -33,7 +33,7 @@ public class CdpUserDetail extends User {
         super("dfgsdfgdsgr", "sdfgergergerg", new HashSet<GrantedAuthority>());
     }
 
-    public CdpUserDetail(CdpSysUserEntity user, CdpSysPermissionEntity permissionTree, Collection<? extends GrantedAuthority> authorities) {
+    public CdpUserDetail(CdpUserEntity user, CdpPermissionEntity permissionTree, Collection<? extends GrantedAuthority> authorities) {
         super(user.getUsercode(), user.getPassword(), user.getStatus() == 0, user.getExpireTime().after(new Date()), true, user.getStatus() != 9, authorities);
         this.user = user;
         this.permissionTree = permissionTree;

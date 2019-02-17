@@ -2,10 +2,10 @@ package com.github.fosin.cdp.platform.controller;
 
 import com.github.fosin.cdp.mvc.controller.ISimpleController;
 import com.github.fosin.cdp.mvc.service.ISimpleService;
-import com.github.fosin.cdp.platformapi.dto.request.CdpSysParameterCreateDto;
-import com.github.fosin.cdp.platformapi.dto.request.CdpSysParameterRetrieveDto;
-import com.github.fosin.cdp.platformapi.dto.request.CdpSysParameterUpdateDto;
-import com.github.fosin.cdp.platformapi.entity.CdpSysParameterEntity;
+import com.github.fosin.cdp.platformapi.dto.request.CdpParameterCreateDto;
+import com.github.fosin.cdp.platformapi.dto.request.CdpParameterRetrieveDto;
+import com.github.fosin.cdp.platformapi.dto.request.CdpParameterUpdateDto;
+import com.github.fosin.cdp.platformapi.entity.CdpParameterEntity;
 import com.github.fosin.cdp.platformapi.parameter.OrganizParameterUtil;
 import com.github.fosin.cdp.platformapi.parameter.ParameterUtil;
 import com.github.fosin.cdp.platformapi.parameter.UserParameterUtil;
@@ -29,15 +29,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("v1/parameter")
 @Api(value = "v1/parameter", tags = "通用参数管理", description = "通用参数管理相关操作(参数获取、自动创建)")
-public class ParameterController implements ISimpleController<CdpSysParameterEntity, Long, CdpSysParameterCreateDto, CdpSysParameterRetrieveDto, CdpSysParameterUpdateDto> {
+public class ParameterController implements ISimpleController<CdpParameterEntity, Long, CdpParameterCreateDto, CdpParameterRetrieveDto, CdpParameterUpdateDto> {
     @Autowired
     private IParameterService parameterService;
 
     @ApiOperation(value = "获取指定机构或指定用户的参数整条数据", notes = "type=1则是机构参数(机构参数系统会从当前机构向逐级上级机构查找该参数),type=2则是用户参数,如果缓存和数据库中都没有找到参数，返回null值")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "type", value = "参数类型,取值于CdpSysParameterEntity.type"),
-            @ApiImplicitParam(name = "scope", value = "作用域，一般指机构ID或用户ID，也可能是自定义扩展的数据,取值于CdpSysParameterEntity.scope"),
-            @ApiImplicitParam(name = "name", value = "参数键,取值于CdpSysParameterEntity.name"),
+            @ApiImplicitParam(name = "type", value = "参数类型,取值于CdpParameterEntity.type"),
+            @ApiImplicitParam(name = "scope", value = "作用域，一般指机构ID或用户ID，也可能是自定义扩展的数据,取值于CdpParameterEntity.scope"),
+            @ApiImplicitParam(name = "name", value = "参数键,取值于CdpParameterEntity.name"),
     })
     @RequestMapping(value = "/{type}/{scope}/{name}", method = {RequestMethod.POST, RequestMethod.GET})
     public ResponseEntity<Object> getByTypeAndscopeAndName(@PathVariable("type") Integer type,
@@ -47,8 +47,8 @@ public class ParameterController implements ISimpleController<CdpSysParameterEnt
 
     @ApiOperation(value = "获取当前机构或用户的参数值", notes = "type=1则是机构参数(机构参数系统会从当前机构向逐级上级机构查找该参数),type=2则是用户参数,如果缓存和数据库中都没有找到参数，返回null值")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "type", value = "参数类型,取值于CdpSysParameterEntity.type"),
-            @ApiImplicitParam(name = "name", value = "参数键,取值于CdpSysParameterEntity.name"),
+            @ApiImplicitParam(name = "type", value = "参数类型,取值于CdpParameterEntity.type"),
+            @ApiImplicitParam(name = "name", value = "参数键,取值于CdpParameterEntity.name"),
     })
     @RequestMapping(value = "/value/{type}/{name}", method = {RequestMethod.POST, RequestMethod.GET})
     public ResponseEntity<Object> getValueByTypeAndName(@PathVariable("type") Integer type, @PathVariable("name") String name) {
@@ -64,10 +64,10 @@ public class ParameterController implements ISimpleController<CdpSysParameterEnt
 
     @ApiOperation(value = "获取或创建当前机构或用户参数值", notes = "type=1则是机构参数(机构参数系统会从当前机构向逐级上级机构查找该参数),type=2则是用户参数，如果缓存和数据库中都没有找到参数，则自动创建一个无域参数")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "type", value = "参数类型,取值于CdpSysParameterEntity.type"),
-            @ApiImplicitParam(name = "name", value = "参数键,取值于CdpSysParameterEntity.name"),
-            @ApiImplicitParam(name = "defaultValue", value = "默认值,取值于CdpSysParameterEntity.defaultValue"),
-            @ApiImplicitParam(name = "description", value = "参数描述,取值于CdpSysParameterEntity.description"),
+            @ApiImplicitParam(name = "type", value = "参数类型,取值于CdpParameterEntity.type"),
+            @ApiImplicitParam(name = "name", value = "参数键,取值于CdpParameterEntity.name"),
+            @ApiImplicitParam(name = "defaultValue", value = "默认值,取值于CdpParameterEntity.defaultValue"),
+            @ApiImplicitParam(name = "description", value = "参数描述,取值于CdpParameterEntity.description"),
     })
     @RequestMapping(value = "/value/{type}/{name}/{defaultValue}/{description}", method = {RequestMethod.POST, RequestMethod.GET})
     public ResponseEntity<Object> getOrCreateValueByTypeAndscopeAndName(@PathVariable("type") Integer type,
@@ -87,9 +87,9 @@ public class ParameterController implements ISimpleController<CdpSysParameterEnt
 
     @ApiOperation(value = "获取指定机构或指定用户参数值", notes = "type=1则是机构参数(机构参数系统会从当前机构向逐级上级机构查找该参数),type=2则是用户参数,如果缓存和数据库中都没有找到参数，返回null值")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "type", value = "参数类型,取值于CdpSysParameterEntity.type"),
-            @ApiImplicitParam(name = "scope", value = "作用域，一般指机构ID或用户ID，也可能是自定义扩展的数据,取值于CdpSysParameterEntity.scope"),
-            @ApiImplicitParam(name = "name", value = "参数键,取值于CdpSysParameterEntity.name"),
+            @ApiImplicitParam(name = "type", value = "参数类型,取值于CdpParameterEntity.type"),
+            @ApiImplicitParam(name = "scope", value = "作用域，一般指机构ID或用户ID，也可能是自定义扩展的数据,取值于CdpParameterEntity.scope"),
+            @ApiImplicitParam(name = "name", value = "参数键,取值于CdpParameterEntity.name"),
     })
     @RequestMapping(value = "/value/{type}/{scope}/{name}", method = {RequestMethod.POST, RequestMethod.GET})
     public ResponseEntity<Object> getValueByTypeAndscopeAndName(@PathVariable("type") Integer type, @PathVariable("scope") String scope, @PathVariable("name") String name) {
@@ -105,11 +105,11 @@ public class ParameterController implements ISimpleController<CdpSysParameterEnt
 
     @ApiOperation(value = "获取或创建指定机构或指定用户参数值", notes = "type=1则是机构参数(机构参数系统会从当前机构向逐级上级机构查找该参数),type=2则是用户参数，如果缓存和数据库中都没有找到参数，则自动创建一个无域参数")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "type", value = "参数类型,取值于CdpSysParameterEntity.type"),
-            @ApiImplicitParam(name = "scope", value = "作用域，一般指机构ID或用户ID，也可能是自定义扩展的数据,取值于CdpSysParameterEntity.scope"),
-            @ApiImplicitParam(name = "name", value = "参数键,取值于CdpSysParameterEntity.name"),
-            @ApiImplicitParam(name = "defaultValue", value = "默认值,取值于CdpSysParameterEntity.defaultValue"),
-            @ApiImplicitParam(name = "description", value = "参数描述,取值于CdpSysParameterEntity.description"),
+            @ApiImplicitParam(name = "type", value = "参数类型,取值于CdpParameterEntity.type"),
+            @ApiImplicitParam(name = "scope", value = "作用域，一般指机构ID或用户ID，也可能是自定义扩展的数据,取值于CdpParameterEntity.scope"),
+            @ApiImplicitParam(name = "name", value = "参数键,取值于CdpParameterEntity.name"),
+            @ApiImplicitParam(name = "defaultValue", value = "默认值,取值于CdpParameterEntity.defaultValue"),
+            @ApiImplicitParam(name = "description", value = "参数描述,取值于CdpParameterEntity.description"),
     })
     @RequestMapping(value = "/value/{type}/{scope}/{name}/{defaultValue}/{description}", method = {RequestMethod.POST, RequestMethod.GET})
     public ResponseEntity<Object> getOrCreateValueByTypeAndscopeAndName(@PathVariable("type") Integer type,
@@ -129,7 +129,7 @@ public class ParameterController implements ISimpleController<CdpSysParameterEnt
     }
 
     @ApiOperation(value = "根据参数ID刷新参数缓存信息", notes = "该方法是幂等性的，可以重复调用")
-    @ApiImplicitParam(name = "id", value = "参数ID,取值于CdpSysParameterEntity.id")
+    @ApiImplicitParam(name = "id", value = "参数ID,取值于CdpParameterEntity.id")
     @RequestMapping(value = "/apply/{id}", method = {RequestMethod.POST, RequestMethod.GET})
     public ResponseEntity<Object> apply(@PathVariable("id") Long id) {
         return ResponseEntity.ok(parameterService.applyChange(id));
@@ -142,7 +142,7 @@ public class ParameterController implements ISimpleController<CdpSysParameterEnt
     }
 
     @Override
-    public ISimpleService<CdpSysParameterEntity, Long, CdpSysParameterCreateDto, CdpSysParameterRetrieveDto, CdpSysParameterUpdateDto> getService() {
+    public ISimpleService<CdpParameterEntity, Long, CdpParameterCreateDto, CdpParameterRetrieveDto, CdpParameterUpdateDto> getService() {
         return parameterService;
     }
 }

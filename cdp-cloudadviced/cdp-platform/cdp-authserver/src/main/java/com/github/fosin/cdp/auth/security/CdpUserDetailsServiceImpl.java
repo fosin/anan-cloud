@@ -41,17 +41,17 @@ public class CdpUserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public User loadUserByUsername(String username) throws UsernameNotFoundException {
-        //这里的username对应cdp_sys_user.usercode
-        CdpSysUserEntity userEntity = userService.findByUsercode(username);
+        //这里的username对应cdp_user.usercode
+        CdpUserEntity userEntity = userService.findByUsercode(username);
 
         if (userEntity == null) {
             throw new UsernameNotFoundException("用户:" + username + "不存在!");
         }
         Set<GrantedAuthority> grantedAuthoritySet = new HashSet<>();
 
-        List<CdpSysUserRoleEntity> userRoles = userEntity.getUserRoles();
+        List<CdpUserRoleEntity> userRoles = userEntity.getUserRoles();
         Long userId = userEntity.getId();
-        Set<CdpSysPermissionEntity> userPermissions = new TreeSet<>((o1, o2) -> {
+        Set<CdpPermissionEntity> userPermissions = new TreeSet<>((o1, o2) -> {
             long subId = o1.getId() - o2.getId();
             if (subId == 0) {
                 return 0;
@@ -67,18 +67,18 @@ public class CdpUserDetailsServiceImpl implements UserDetailsService {
 
             return o1.getCode().compareToIgnoreCase(o2.getCode());
         });
-        for (CdpSysUserRoleEntity userRole : userRoles) {
-            CdpSysRoleEntity role = userRole.getRole();
+        for (CdpUserRoleEntity userRole : userRoles) {
+            CdpRoleEntity role = userRole.getRole();
             if (role.getStatus() != 0) {
                 continue;
             }
             Long roleId = role.getId();
 
             //获取角色权限
-            List<CdpSysRolePermissionEntity> rolePermissionList = rolePermissionService.findByRoleId(roleId);
-            for (CdpSysRolePermissionEntity rolePermissionEntity : rolePermissionList) {
+            List<CdpRolePermissionEntity> rolePermissionList = rolePermissionService.findByRoleId(roleId);
+            for (CdpRolePermissionEntity rolePermissionEntity : rolePermissionList) {
                 Long permissionId = rolePermissionEntity.getPermissionId();
-                CdpSysPermissionEntity entity = permissionService.findOne(permissionId);
+                CdpPermissionEntity entity = permissionService.findOne(permissionId);
                 // 只添加状态为启用的权限
                 if (entity.getStatus() == 0) {
                     userPermissions.add(entity);
@@ -87,11 +87,11 @@ public class CdpUserDetailsServiceImpl implements UserDetailsService {
             }
         }
         //获取用户权限
-        List<CdpSysUserPermissionEntity> userPermissionList = userPermissionService.findByUserId(userId);
-        for (CdpSysUserPermissionEntity userPermissionEntity : userPermissionList) {
+        List<CdpUserPermissionEntity> userPermissionList = userPermissionService.findByUserId(userId);
+        for (CdpUserPermissionEntity userPermissionEntity : userPermissionList) {
             int addmode = userPermissionEntity.getAddMode();
             Long permissionId = userPermissionEntity.getPermissionId();
-            CdpSysPermissionEntity entity = permissionService.findOne(permissionId);
+            CdpPermissionEntity entity = permissionService.findOne(permissionId);
             // 只操作状态为启用的权限
             if (entity.getStatus() == 0) {
                 //获取用户增权限
@@ -105,7 +105,7 @@ public class CdpUserDetailsServiceImpl implements UserDetailsService {
             }
         }
 
-        CdpSysPermissionEntity permissionTree = TreeUtil.createTree(userPermissions, SystemConstant.ROOT_PERMISSION_ID, "id", "pId", "children");
+        CdpPermissionEntity permissionTree = TreeUtil.createTree(userPermissions, SystemConstant.ROOT_PERMISSION_ID, "id", "pId", "children");
 
         CdpUserDetail user = new CdpUserDetail(userEntity, permissionTree, grantedAuthoritySet);
         log.debug("UserDetailsServiceImpl User:" + user.toString());

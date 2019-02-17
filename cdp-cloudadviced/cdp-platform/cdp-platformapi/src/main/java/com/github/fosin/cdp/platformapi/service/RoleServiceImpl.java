@@ -2,8 +2,8 @@ package com.github.fosin.cdp.platformapi.service;
 
 
 import com.github.fosin.cdp.jpa.repository.IJpaRepository;
-import com.github.fosin.cdp.platformapi.dto.request.CdpSysRoleCreateDto;
-import com.github.fosin.cdp.platformapi.dto.request.CdpSysRoleUpdateDto;
+import com.github.fosin.cdp.platformapi.dto.request.CdpRoleCreateDto;
+import com.github.fosin.cdp.platformapi.dto.request.CdpRoleUpdateDto;
 import com.github.fosin.cdp.platformapi.entity.*;
 import com.github.fosin.cdp.platformapi.repository.OrganizationRepository;
 import com.github.fosin.cdp.platformapi.repository.RoleRepository;
@@ -52,7 +52,7 @@ public class RoleServiceImpl implements IRoleService {
     private OrganizationRepository organizationRepository;
 
     @Override
-    public CdpSysRoleEntity create(CdpSysRoleCreateDto entity) {
+    public CdpRoleEntity create(CdpRoleCreateDto entity) {
         Assert.notNull(entity, "传入了空对象!");
 
         if (SystemConstant.ADMIN_ROLE_NAME.equals(entity.getValue().toUpperCase()) &&
@@ -61,39 +61,39 @@ public class RoleServiceImpl implements IRoleService {
         }
         Assert.isTrue(!SystemConstant.SUPER_ROLE_NAME.equals(entity.getValue().toUpperCase()),
                 "不能创建超级管理员角色帐号信息!");
-        CdpSysRoleEntity saveEntity = new CdpSysRoleEntity();
+        CdpRoleEntity saveEntity = new CdpRoleEntity();
         BeanUtils.copyProperties(entity, saveEntity);
         return roleRepository.save(saveEntity);
     }
 
     @Override
-    public CdpSysRoleEntity update(CdpSysRoleUpdateDto entity) {
+    public CdpRoleEntity update(CdpRoleUpdateDto entity) {
         Assert.notNull(entity, "传入了空对象!");
         Long id = entity.getId();
         Assert.notNull(id, "传入了空ID!");
 
-        CdpSysRoleEntity oldEntity = roleRepository.findOne(id);
+        CdpRoleEntity oldEntity = roleRepository.findOne(id);
         if (SystemConstant.ADMIN_ROLE_NAME.equals(oldEntity.getValue().toUpperCase()) &&
                 !SystemConstant.ADMIN_ROLE_NAME.equals(entity.getValue().toUpperCase())) {
             throw new IllegalArgumentException("不能修改角色标识" + SystemConstant.ADMIN_ROLE_NAME + "!");
         }
         Assert.isTrue(!SystemConstant.SUPER_ROLE_NAME.equals(oldEntity.getValue().toUpperCase()),
                 "不能修改超级管理员角色帐号信息!");
-        CdpSysRoleEntity saveEntity = new CdpSysRoleEntity();
+        CdpRoleEntity saveEntity = new CdpRoleEntity();
         BeanUtils.copyProperties(entity, saveEntity);
         return roleRepository.save(saveEntity);
     }
 
     @Override
-    public CdpSysRoleEntity delete(Long id) {
+    public CdpRoleEntity delete(Long id) {
         Assert.isTrue(id != null && id > 0, "传入的角色ID无效！");
-        CdpSysRoleEntity entity = roleRepository.findOne(id);
+        CdpRoleEntity entity = roleRepository.findOne(id);
         Assert.notNull(entity, "根据角色ID未能找到角色数据!");
         Assert.isTrue(!SystemConstant.SUPER_ROLE_NAME.equals(entity.getValue())
                         && !SystemConstant.ADMIN_ROLE_NAME.equals(entity.getValue()),
                 "不能删除(超级)管理员角色帐号信息!");
 
-        List<CdpSysUserRoleEntity> roleUsers = userRoleRepository.findByRoleId(id);
+        List<CdpUserRoleEntity> roleUsers = userRoleRepository.findByRoleId(id);
         Assert.isTrue(roleUsers.size() == 0,
                 "该角色下还存在用户,不能直接删除角色!");
         roleRepository.delete(id);
@@ -101,12 +101,12 @@ public class RoleServiceImpl implements IRoleService {
     }
 
     @Override
-    public CdpSysRoleEntity delete(CdpSysRoleEntity entity) {
+    public CdpRoleEntity delete(CdpRoleEntity entity) {
         Assert.notNull(entity, "传入了空对象!");
         Assert.isTrue(!SystemConstant.SUPER_ROLE_NAME.equals(entity.getValue())
                         && !SystemConstant.ADMIN_ROLE_NAME.equals(entity.getValue()),
                 "不能删除(超级)管理员角色信息!");
-        List<CdpSysUserRoleEntity> roleUsers = userRoleRepository.findByRoleId(entity.getId());
+        List<CdpUserRoleEntity> roleUsers = userRoleRepository.findByRoleId(entity.getId());
         Assert.isTrue(roleUsers.size() == 0,
                 "该角色下还存在用户,不能直接删除角色!");
         roleRepository.delete(entity);
@@ -118,10 +118,10 @@ public class RoleServiceImpl implements IRoleService {
         PageRequest pageable = new PageRequest(pageModule.getPageNumber() - 1, pageModule.getPageSize(), Sort.Direction.fromString(pageModule.getSortOrder()), pageModule.getSortName());
         String searchCondition = pageModule.getSearchText();
 
-        CdpSysUserEntity loginUser = LoginUserUtil.getUser();
-        Specification<CdpSysRoleEntity> condition = new Specification<CdpSysRoleEntity>() {
+        CdpUserEntity loginUser = LoginUserUtil.getUser();
+        Specification<CdpRoleEntity> condition = new Specification<CdpRoleEntity>() {
             @Override
-            public Predicate toPredicate(Root<CdpSysRoleEntity> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+            public Predicate toPredicate(Root<CdpRoleEntity> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
                 Path<String> roleName = root.get("name");
                 Path<String> roleValue = root.get("value");
 
@@ -141,18 +141,18 @@ public class RoleServiceImpl implements IRoleService {
             }
         };
         //分页查找
-        Page<CdpSysRoleEntity> page = roleRepository.findAll(condition, pageable);
+        Page<CdpRoleEntity> page = roleRepository.findAll(condition, pageable);
 
         return ResultUtils.success(page.getTotalElements(), page.getContent());
     }
 
     @Override
-    public List<CdpSysRoleEntity> findOtherUsersByRoleId(Long userId) {
+    public List<CdpRoleEntity> findOtherUsersByRoleId(Long userId) {
         return roleRepository.findOtherRolesByUserId(userId);
     }
 
     @Override
-    public List<CdpSysRoleEntity> findRoleUsersByRoleId(Long userId) {
+    public List<CdpRoleEntity> findRoleUsersByRoleId(Long userId) {
         return roleRepository.findUserRolesByUserId(userId);
     }
 
@@ -161,12 +161,12 @@ public class RoleServiceImpl implements IRoleService {
         Assert.notNull(pageModule, "传入的分页信息不能为空!");
         Assert.notNull(organizId, "机构ID不能为空!");
         String searchCondition = pageModule.getSearchText();
-        CdpSysUserEntity loginUser = LoginUserUtil.getUser();
+        CdpUserEntity loginUser = LoginUserUtil.getUser();
         PageRequest pageable = new PageRequest(pageModule.getPageNumber() - 1, pageModule.getPageSize(), Sort.Direction.fromString(pageModule.getSortOrder()), pageModule.getSortName());
 
-        Page<CdpSysRoleEntity> page;
+        Page<CdpRoleEntity> page;
         if (loginUser.getUsercode().equals(SystemConstant.SUPER_USER_CODE)) {
-            Specification<CdpSysRoleEntity> condition = (root, query, cb) -> {
+            Specification<CdpRoleEntity> condition = (root, query, cb) -> {
                 Path<String> roleName = root.get("name");
                 Path<String> roleValue = root.get("value");
                 if (StringUtils.isBlank(searchCondition)) {
@@ -176,17 +176,17 @@ public class RoleServiceImpl implements IRoleService {
             };
             page = roleRepository.findAll(condition, pageable);
         } else {
-            CdpSysOrganizationEntity organiz = organizationRepository.findOne(organizId);
+            CdpOrganizationEntity organiz = organizationRepository.findOne(organizId);
             Assert.notNull(organiz, "根据传入的机构编码没有找到任何数据!");
-            List<CdpSysOrganizationEntity> organizs = organizationRepository.findByCodeStartingWithOrderByCodeAsc(organiz.getCode());
+            List<CdpOrganizationEntity> organizs = organizationRepository.findByCodeStartingWithOrderByCodeAsc(organiz.getCode());
 
-            Specification<CdpSysRoleEntity> condition = (root, query, cb) -> {
+            Specification<CdpRoleEntity> condition = (root, query, cb) -> {
                 Path<Long> organizIdPath = root.get("organizId");
                 Path<String> roleName = root.get("name");
                 Path<String> roleValue = root.get("value");
 
                 CriteriaBuilder.In<Long> in = cb.in(organizIdPath);
-                for (CdpSysOrganizationEntity entity : organizs) {
+                for (CdpOrganizationEntity entity : organizs) {
                     in.value(entity.getId());
                 }
 
@@ -206,23 +206,23 @@ public class RoleServiceImpl implements IRoleService {
     }
 
     @Override
-    public List<CdpSysRoleEntity> findAllByOrganizId(Long organizId) {
+    public List<CdpRoleEntity> findAllByOrganizId(Long organizId) {
         Assert.notNull(organizId, "机构ID不能为空!");
-        CdpSysUserEntity loginUser = LoginUserUtil.getUser();
+        CdpUserEntity loginUser = LoginUserUtil.getUser();
         if (loginUser.getUsercode().equals(SystemConstant.SUPER_USER_CODE)) {
             return roleRepository.findAll();
         } else {
-            CdpSysOrganizationEntity organiz = organizationRepository.findOne(organizId);
+            CdpOrganizationEntity organiz = organizationRepository.findOne(organizId);
             Assert.notNull(organiz, "根据传入的机构编码没有找到任何数据!");
-            CdpSysOrganizationEntity topOrganiz = organizationRepository.findOne(organiz.getTopId());
-            List<CdpSysOrganizationEntity> organizs = organizationRepository.findByCodeStartingWithOrderByCodeAsc(topOrganiz.getCode());
+            CdpOrganizationEntity topOrganiz = organizationRepository.findOne(organiz.getTopId());
+            List<CdpOrganizationEntity> organizs = organizationRepository.findByCodeStartingWithOrderByCodeAsc(topOrganiz.getCode());
 
-            Specification<CdpSysRoleEntity> condition = (root, query, cb) -> {
+            Specification<CdpRoleEntity> condition = (root, query, cb) -> {
                 Path<Long> organizIdPath = root.get("organizId");
                 Path<String> roleValue = root.get("value");
 
                 CriteriaBuilder.In<Long> in = cb.in(organizIdPath);
-                for (CdpSysOrganizationEntity entity : organizs) {
+                for (CdpOrganizationEntity entity : organizs) {
                     in.value(entity.getId());
                 }
                 return cb.and(in, cb.notEqual(roleValue, SystemConstant.SUPER_ROLE_NAME));
@@ -232,7 +232,7 @@ public class RoleServiceImpl implements IRoleService {
     }
 
     @Override
-    public IJpaRepository<CdpSysRoleEntity, Long> getRepository() {
+    public IJpaRepository<CdpRoleEntity, Long> getRepository() {
         return roleRepository;
     }
 }

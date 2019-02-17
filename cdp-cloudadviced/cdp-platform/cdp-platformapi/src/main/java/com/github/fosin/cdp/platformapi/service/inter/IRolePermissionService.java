@@ -2,10 +2,10 @@ package com.github.fosin.cdp.platformapi.service.inter;
 
 
 import com.github.fosin.cdp.jpa.service.batch.ICrudBatchJpaService;
-import com.github.fosin.cdp.platformapi.dto.request.CdpSysRolePermissionCreateDto;
-import com.github.fosin.cdp.platformapi.dto.request.CdpSysRolePermissionRetrieveDto;
-import com.github.fosin.cdp.platformapi.dto.request.CdpSysRolePermissionUpdateDto;
-import com.github.fosin.cdp.platformapi.entity.CdpSysRolePermissionEntity;
+import com.github.fosin.cdp.platformapi.dto.request.CdpRolePermissionCreateDto;
+import com.github.fosin.cdp.platformapi.dto.request.CdpRolePermissionRetrieveDto;
+import com.github.fosin.cdp.platformapi.dto.request.CdpRolePermissionUpdateDto;
+import com.github.fosin.cdp.platformapi.entity.CdpRolePermissionEntity;
 
 import java.util.Collection;
 import java.util.List;
@@ -16,8 +16,8 @@ import java.util.List;
  *
  * @author fosin
  */
-public interface IRolePermissionService extends ICrudBatchJpaService<CdpSysRolePermissionEntity, Long, Long, CdpSysRolePermissionCreateDto, CdpSysRolePermissionRetrieveDto, CdpSysRolePermissionUpdateDto> {
-    List<CdpSysRolePermissionEntity> findByRoleId(Long roleId);
+public interface IRolePermissionService extends ICrudBatchJpaService<CdpRolePermissionEntity, Long, Long, CdpRolePermissionCreateDto, CdpRolePermissionRetrieveDto, CdpRolePermissionUpdateDto> {
+    List<CdpRolePermissionEntity> findByRoleId(Long roleId);
 
     long countByPermissionId(Long permissionId);
 }

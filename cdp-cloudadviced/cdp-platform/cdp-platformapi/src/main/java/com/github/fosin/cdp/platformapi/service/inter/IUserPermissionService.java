@@ -1,10 +1,10 @@
 package com.github.fosin.cdp.platformapi.service.inter;
 
 
-import com.github.fosin.cdp.platformapi.dto.request.CdpSysUserPermissionCreateDto;
-import com.github.fosin.cdp.platformapi.dto.request.CdpSysUserPermissionRetrieveDto;
-import com.github.fosin.cdp.platformapi.dto.request.CdpSysUserPermissionUpdateDto;
-import com.github.fosin.cdp.platformapi.entity.CdpSysUserPermissionEntity;
+import com.github.fosin.cdp.platformapi.dto.request.CdpUserPermissionCreateDto;
+import com.github.fosin.cdp.platformapi.dto.request.CdpUserPermissionRetrieveDto;
+import com.github.fosin.cdp.platformapi.dto.request.CdpUserPermissionUpdateDto;
+import com.github.fosin.cdp.platformapi.entity.CdpUserPermissionEntity;
 import com.github.fosin.cdp.jpa.service.batch.ICrudBatchJpaService;
 
 import java.util.List;
@@ -15,10 +15,10 @@ import java.util.List;
  *
  * @author fosin
  */
-public interface IUserPermissionService extends ICrudBatchJpaService<CdpSysUserPermissionEntity, Long, Long, CdpSysUserPermissionCreateDto, CdpSysUserPermissionRetrieveDto, CdpSysUserPermissionUpdateDto> {
-    List<CdpSysUserPermissionEntity> findByUserIdAndOrganizId(Long userId, Long organizId);
+public interface IUserPermissionService extends ICrudBatchJpaService<CdpUserPermissionEntity, Long, Long, CdpUserPermissionCreateDto, CdpUserPermissionRetrieveDto, CdpUserPermissionUpdateDto> {
+    List<CdpUserPermissionEntity> findByUserIdAndOrganizId(Long userId, Long organizId);
 
-    List<CdpSysUserPermissionEntity> findByUserId(Long userId);
+    List<CdpUserPermissionEntity> findByUserId(Long userId);
 
     long countByPermissionId(Long permissionId);
 }

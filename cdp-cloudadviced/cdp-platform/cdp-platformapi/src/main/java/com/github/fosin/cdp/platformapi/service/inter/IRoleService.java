@@ -3,10 +3,10 @@ package com.github.fosin.cdp.platformapi.service.inter;
 import com.github.fosin.cdp.mvc.module.PageModule;
 import com.github.fosin.cdp.mvc.result.Result;
 import com.github.fosin.cdp.jpa.service.ISimpleJpaService;
-import com.github.fosin.cdp.platformapi.dto.request.CdpSysRoleCreateDto;
-import com.github.fosin.cdp.platformapi.dto.request.CdpSysRoleRetrieveDto;
-import com.github.fosin.cdp.platformapi.dto.request.CdpSysRoleUpdateDto;
-import com.github.fosin.cdp.platformapi.entity.CdpSysRoleEntity;
+import com.github.fosin.cdp.platformapi.dto.request.CdpRoleCreateDto;
+import com.github.fosin.cdp.platformapi.dto.request.CdpRoleRetrieveDto;
+import com.github.fosin.cdp.platformapi.dto.request.CdpRoleUpdateDto;
+import com.github.fosin.cdp.platformapi.entity.CdpRoleEntity;
 
 import java.util.List;
 
@@ -16,13 +16,13 @@ import java.util.List;
  *
  * @author fosin
  */
-public interface IRoleService extends ISimpleJpaService<CdpSysRoleEntity, Long, CdpSysRoleCreateDto, CdpSysRoleRetrieveDto, CdpSysRoleUpdateDto> {
+public interface IRoleService extends ISimpleJpaService<CdpRoleEntity, Long, CdpRoleCreateDto, CdpRoleRetrieveDto, CdpRoleUpdateDto> {
 
-    List<CdpSysRoleEntity> findOtherUsersByRoleId(Long userId);
+    List<CdpRoleEntity> findOtherUsersByRoleId(Long userId);
 
-    List<CdpSysRoleEntity> findRoleUsersByRoleId(Long userId);
+    List<CdpRoleEntity> findRoleUsersByRoleId(Long userId);
 
     Result findAllByOrganizId(Long organizId, PageModule pageModule);
 
-    List<CdpSysRoleEntity> findAllByOrganizId(Long organizId);
+    List<CdpRoleEntity> findAllByOrganizId(Long organizId);
 }

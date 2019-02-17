@@ -2,16 +2,16 @@ package com.github.fosin.cdp.platformapi.service;
 
 
 import com.github.fosin.cdp.jpa.repository.IJpaRepository;
-import com.github.fosin.cdp.platformapi.dto.request.CdpSysDictionaryCreateDto;
-import com.github.fosin.cdp.platformapi.dto.request.CdpSysDictionaryUpdateDto;
+import com.github.fosin.cdp.platformapi.dto.request.CdpDictionaryCreateDto;
+import com.github.fosin.cdp.platformapi.dto.request.CdpDictionaryUpdateDto;
 import com.github.fosin.cdp.platformapi.repository.DictionaryDetailRepository;
 import com.github.fosin.cdp.core.exception.CdpServiceException;
 import com.github.fosin.cdp.mvc.module.PageModule;
 import com.github.fosin.cdp.mvc.result.Result;
 import com.github.fosin.cdp.mvc.result.ResultUtils;
 import com.github.fosin.cdp.platformapi.constant.SystemConstant;
-import com.github.fosin.cdp.platformapi.entity.CdpSysDictionaryEntity;
-import com.github.fosin.cdp.platformapi.entity.CdpSysUserEntity;
+import com.github.fosin.cdp.platformapi.entity.CdpDictionaryEntity;
+import com.github.fosin.cdp.platformapi.entity.CdpUserEntity;
 import com.github.fosin.cdp.platformapi.repository.DictionaryRepository;
 import com.github.fosin.cdp.platformapi.service.inter.IDictionaryService;
 import com.github.fosin.cdp.platformapi.util.LoginUserUtil;
@@ -45,30 +45,30 @@ public class DictionaryServiceImpl implements IDictionaryService {
     private DictionaryDetailRepository dictionaryDetailRepository;
 
     @Override
-    public CdpSysDictionaryEntity create(CdpSysDictionaryCreateDto entity) {
+    public CdpDictionaryEntity create(CdpDictionaryCreateDto entity) {
         Assert.notNull(entity, "传入的创建数据实体对象不能为空!");
         //系统字典
         if (entity.getType().equals(SystemConstant.SYSTEM_DICTIONARY_TYPE)) {
-            CdpSysUserEntity loginUser = LoginUserUtil.getUser();
+            CdpUserEntity loginUser = LoginUserUtil.getUser();
             //非超级管理员不能创建系统字典
             Assert.isTrue(SystemConstant.SUPER_USER_CODE.equals(loginUser.getUsercode()), "没有权限创建系统字典!");
 
         }
-        CdpSysDictionaryEntity createEntity = new CdpSysDictionaryEntity();
+        CdpDictionaryEntity createEntity = new CdpDictionaryEntity();
         BeanUtils.copyProperties(entity, createEntity);
         return dictionaryRepository.save(createEntity);
     }
 
     @Override
-    public CdpSysDictionaryEntity update(CdpSysDictionaryUpdateDto entity) {
+    public CdpDictionaryEntity update(CdpDictionaryUpdateDto entity) {
         Assert.notNull(entity, "无效的更新数据");
         Long id = entity.getId();
         Assert.notNull(id, "无效的字典代码id");
-        CdpSysDictionaryEntity updateEntity = dictionaryRepository.findOne(id);
+        CdpDictionaryEntity updateEntity = dictionaryRepository.findOne(id);
         Assert.notNull(updateEntity, "根据传入的字典code" + id + "在数据库中未能找到对于数据!");
         //系统字典
         if (entity.getType().equals(SystemConstant.SYSTEM_DICTIONARY_TYPE)) {
-            CdpSysUserEntity loginUser = LoginUserUtil.getUser();
+            CdpUserEntity loginUser = LoginUserUtil.getUser();
             //非超级管理员不能创建系统字典
             Assert.isTrue(SystemConstant.SUPER_USER_CODE.equals(loginUser.getUsercode()), "没有权限修改系统字典!");
         }
@@ -79,17 +79,17 @@ public class DictionaryServiceImpl implements IDictionaryService {
 
     @Override
     @Transactional(rollbackFor = CdpServiceException.class)
-    public CdpSysDictionaryEntity delete(Long code) {
+    public CdpDictionaryEntity delete(Long code) {
         if (code == null) {
             throw new CdpServiceException("传入的code无效!");
         }
-        CdpSysDictionaryEntity entity = dictionaryRepository.findOne(code);
+        CdpDictionaryEntity entity = dictionaryRepository.findOne(code);
         if (entity == null) {
             throw new CdpServiceException("通过code没有找到对应的字典!");
         }
         //系统字典
         if (entity.getType().equals(SystemConstant.SYSTEM_DICTIONARY_TYPE)) {
-            CdpSysUserEntity loginUser = LoginUserUtil.getUser();
+            CdpUserEntity loginUser = LoginUserUtil.getUser();
             //非超级管理员不能删除系统字典
             if (!SystemConstant.SUPER_USER_CODE.equals(loginUser.getUsercode())) {
                 throw new CdpServiceException("没有权限删除系统字典!");
@@ -102,11 +102,11 @@ public class DictionaryServiceImpl implements IDictionaryService {
 
     @Override
     @Transactional(rollbackFor = CdpServiceException.class)
-    public CdpSysDictionaryEntity delete(CdpSysDictionaryEntity entity) {
+    public CdpDictionaryEntity delete(CdpDictionaryEntity entity) {
         Assert.notNull(entity, "传入了空的对象!");
         //系统字典
         if (entity.getType().equals(SystemConstant.SYSTEM_DICTIONARY_TYPE)) {
-            CdpSysUserEntity loginUser = LoginUserUtil.getUser();
+            CdpUserEntity loginUser = LoginUserUtil.getUser();
             //非超级管理员不能删除系统字典
             Assert.isTrue(SystemConstant.SUPER_USER_CODE.equals(loginUser.getUsercode()), "没有权限删除系统字典!");
         }
@@ -120,9 +120,9 @@ public class DictionaryServiceImpl implements IDictionaryService {
         PageRequest pageable = new PageRequest(pageModule.getPageNumber() - 1, pageModule.getPageSize(), Sort.Direction.fromString(pageModule.getSortOrder()), pageModule.getSortName());
         String searchCondition = pageModule.getSearchText();
 
-        Specification<CdpSysDictionaryEntity> condition = new Specification<CdpSysDictionaryEntity>() {
+        Specification<CdpDictionaryEntity> condition = new Specification<CdpDictionaryEntity>() {
             @Override
-            public Predicate toPredicate(Root<CdpSysDictionaryEntity> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+            public Predicate toPredicate(Root<CdpDictionaryEntity> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
                 Path<String> type = root.get("type");
                 Path<String> scope = root.get("scope");
                 Path<String> name = root.get("name");
@@ -138,13 +138,13 @@ public class DictionaryServiceImpl implements IDictionaryService {
             }
         };
         //分页查找
-        Page<CdpSysDictionaryEntity> page = dictionaryRepository.findAll(condition, pageable);
+        Page<CdpDictionaryEntity> page = dictionaryRepository.findAll(condition, pageable);
 
         return ResultUtils.success(page.getTotalElements(), page.getContent());
     }
 
     @Override
-    public IJpaRepository<CdpSysDictionaryEntity, Long> getRepository() {
+    public IJpaRepository<CdpDictionaryEntity, Long> getRepository() {
         return dictionaryRepository;
     }
 }

@@ -1,8 +1,8 @@
 package com.github.fosin.cdp.platformapi.parameter;
 
-import com.github.fosin.cdp.platformapi.entity.CdpSysOrganizationEntity;
-import com.github.fosin.cdp.platformapi.entity.CdpSysParameterEntity;
-import com.github.fosin.cdp.platformapi.entity.CdpSysUserEntity;
+import com.github.fosin.cdp.platformapi.entity.CdpOrganizationEntity;
+import com.github.fosin.cdp.platformapi.entity.CdpParameterEntity;
+import com.github.fosin.cdp.platformapi.entity.CdpUserEntity;
 import com.github.fosin.cdp.platformapi.service.inter.IOrganizationService;
 import com.github.fosin.cdp.platformapi.util.LoginUserUtil;
 import com.github.fosin.cdp.util.StringUtil;
@@ -29,11 +29,11 @@ public class OrganizParameterUtil extends AbstractParameterUtil {
         OrganizParameterUtil.organizationService = organizationService;
     }
 
-    public static CdpSysParameterEntity setParameter(String name, String value, String description) {
+    public static CdpParameterEntity setParameter(String name, String value, String description) {
         return setParameter(getScope(), name, value, description);
     }
 
-    public static CdpSysParameterEntity setParameter(String scope, String name, String value, String description) {
+    public static CdpParameterEntity setParameter(String scope, String name, String value, String description) {
         return ParameterUtil.setParameter(TYPE, scope, name, value, description);
     }
 
@@ -43,7 +43,7 @@ public class OrganizParameterUtil extends AbstractParameterUtil {
 
 
     public static String getParameter(String scope, String name) {
-        CdpSysParameterEntity parameter = ParameterUtil.getParameter(TYPE, scope, name);
+        CdpParameterEntity parameter = ParameterUtil.getParameter(TYPE, scope, name);
         String info = "没有从参数[" + "type:" + TYPE + " scope:" + scope + " name:" + name + "]中查询到参数";
         log.debug(info);
         Assert.isTrue(parameter != null && parameter.getId() != null, info);
@@ -53,7 +53,7 @@ public class OrganizParameterUtil extends AbstractParameterUtil {
     /**
      * 得到机构链中最接近的参数
      *
-     * @param name 参数名称CdpSysParameterEntity.name
+     * @param name 参数名称CdpParameterEntity.name
      * @return 参数
      */
     public static String getNearestParameter(String name) {
@@ -63,12 +63,12 @@ public class OrganizParameterUtil extends AbstractParameterUtil {
     /**
      * 得到机构链中最接近的参数
      *
-     * @param scope 机构ID CdpSysParameterEntity.scope
-     * @param name  参数名称 CdpSysParameterEntity.name
+     * @param scope 机构ID CdpParameterEntity.scope
+     * @param name  参数名称 CdpParameterEntity.name
      * @return 参数
      */
     public static String getNearestParameter(String scope, String name) {
-        CdpSysParameterEntity parameter = ParameterUtil.getParameter(TYPE, scope, name);
+        CdpParameterEntity parameter = ParameterUtil.getParameter(TYPE, scope, name);
         String value = getValue(parameter);
         if (StringUtil.isEmpty(scope)) {
             String info = "没有从参数[" + "type:" + TYPE + " scope:" + scope + " name:" + name + "]中查询到参数";
@@ -78,7 +78,7 @@ public class OrganizParameterUtil extends AbstractParameterUtil {
         //parameter为空表示没有参数记录，则依次向上找父机构的参数
         if (parameter.getId() == null || parameter.getId() < 1) {
             Long id = Long.parseLong(scope);
-            CdpSysOrganizationEntity entity = organizationService.findOne(id);
+            CdpOrganizationEntity entity = organizationService.findOne(id);
             if (entity == null || entity.getLevel() == 0) {
                 value = getNearestParameter("", name);
             } else {
@@ -91,7 +91,7 @@ public class OrganizParameterUtil extends AbstractParameterUtil {
     /**
      * 查询参数，如果没有找到参数数据则自动创建一条
      *
-     * @param name         数名称 CdpSysParameterEntity.name
+     * @param name         数名称 CdpParameterEntity.name
      * @param defaultValue 参数默认值
      * @param description  参数描述
      * @return 参数值

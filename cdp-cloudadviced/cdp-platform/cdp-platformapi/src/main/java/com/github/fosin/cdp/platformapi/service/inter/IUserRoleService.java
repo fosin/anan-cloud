@@ -1,7 +1,7 @@
 package com.github.fosin.cdp.platformapi.service.inter;
 
 
-import com.github.fosin.cdp.platformapi.entity.CdpSysUserRoleEntity;
+import com.github.fosin.cdp.platformapi.entity.CdpUserRoleEntity;
 import com.github.fosin.cdp.core.exception.CdpServiceException;
 import com.github.fosin.cdp.core.exception.CdpUserOrPassInvalidException;
 import com.github.fosin.cdp.jpa.service.batch.ICrudBatchJpaService;
@@ -14,14 +14,14 @@ import java.util.List;
  *
  * @author fosin
  */
-public interface IUserRoleService extends ICrudBatchJpaService<CdpSysUserRoleEntity, Long, Long, CdpSysUserRoleEntity, CdpSysUserRoleEntity, CdpSysUserRoleEntity> {
-    List<CdpSysUserRoleEntity> findByUserId(Long userId);
+public interface IUserRoleService extends ICrudBatchJpaService<CdpUserRoleEntity, Long, Long, CdpUserRoleEntity, CdpUserRoleEntity, CdpUserRoleEntity> {
+    List<CdpUserRoleEntity> findByUserId(Long userId);
 
-    List<CdpSysUserRoleEntity> findByRoleId(Long roleId);
+    List<CdpUserRoleEntity> findByRoleId(Long roleId);
 
-    List<CdpSysUserRoleEntity> findByUsercodeAndPassword(String usercode, String password) throws CdpUserOrPassInvalidException;
+    List<CdpUserRoleEntity> findByUsercodeAndPassword(String usercode, String password) throws CdpUserOrPassInvalidException;
 
-    List<CdpSysUserRoleEntity> updateInBatchByUserId(Long userId, Iterable<CdpSysUserRoleEntity> entitis);
+    List<CdpUserRoleEntity> updateInBatchByUserId(Long userId, Iterable<CdpUserRoleEntity> entitis);
 
-    List<CdpSysUserRoleEntity> updateInBatchByRoleId(Long roleId, Iterable<CdpSysUserRoleEntity> entitis);
+    List<CdpUserRoleEntity> updateInBatchByRoleId(Long roleId, Iterable<CdpUserRoleEntity> entitis);
 }

@@ -2,10 +2,10 @@ package com.github.fosin.cdp.platformapi.service.inter;
 
 
 import com.github.fosin.cdp.jpa.service.ISimpleJpaService;
-import com.github.fosin.cdp.platformapi.dto.request.CdpSysPermissionCreateDto;
-import com.github.fosin.cdp.platformapi.dto.request.CdpSysPermissionRetrieveDto;
-import com.github.fosin.cdp.platformapi.dto.request.CdpSysPermissionUpdateDto;
-import com.github.fosin.cdp.platformapi.entity.CdpSysPermissionEntity;
+import com.github.fosin.cdp.platformapi.dto.request.CdpPermissionCreateDto;
+import com.github.fosin.cdp.platformapi.dto.request.CdpPermissionRetrieveDto;
+import com.github.fosin.cdp.platformapi.dto.request.CdpPermissionUpdateDto;
+import com.github.fosin.cdp.platformapi.entity.CdpPermissionEntity;
 
 import java.util.Collection;
 import java.util.List;
@@ -16,12 +16,12 @@ import java.util.List;
  *
  * @author fosin
  */
-public interface IPermissionService extends ISimpleJpaService<CdpSysPermissionEntity, Long, CdpSysPermissionCreateDto, CdpSysPermissionRetrieveDto, CdpSysPermissionUpdateDto> {
-    List<CdpSysPermissionEntity> findByPId(Long pId);
+public interface IPermissionService extends ISimpleJpaService<CdpPermissionEntity, Long, CdpPermissionCreateDto, CdpPermissionRetrieveDto, CdpPermissionUpdateDto> {
+    List<CdpPermissionEntity> findByPId(Long pId);
 
-    List<CdpSysPermissionEntity> findByType(Integer type);
+    List<CdpPermissionEntity> findByType(Integer type);
 
-    List<CdpSysPermissionEntity> findByAppName(String appName);
+    List<CdpPermissionEntity> findByAppName(String appName);
 
-    List<CdpSysPermissionEntity> findByPId(Long pId, Long versionId);
+    List<CdpPermissionEntity> findByPId(Long pId, Long versionId);
 }

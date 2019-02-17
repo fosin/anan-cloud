@@ -1,6 +1,6 @@
 package com.github.fosin.cdp.platformapi.config;
 
-import com.github.fosin.cdp.platformapi.entity.CdpSysPermissionEntity;
+import com.github.fosin.cdp.platformapi.entity.CdpPermissionEntity;
 import com.github.fosin.cdp.oauth2.config.CdpAuthorityConfig;
 import com.github.fosin.cdp.oauth2.dto.CdpAuthorityDto;
 import com.github.fosin.cdp.platformapi.service.inter.IPermissionService;
@@ -31,11 +31,11 @@ public class AppAuthorityConfig {
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     public CdpAuthorityConfig authorityConfiggs(IPermissionService permissionService) {
         List<CdpAuthorityDto> authorityDtos = new ArrayList<>();
-        List<CdpSysPermissionEntity> entities;
+        List<CdpPermissionEntity> entities;
         if (StringUtil.hasText(appName)) {
             entities = permissionService.findByAppName(appName);
         } else {
-            entities = (List<CdpSysPermissionEntity>) permissionService.findAll();
+            entities = (List<CdpPermissionEntity>) permissionService.findAll();
         }
         entities.forEach(entity -> {
             if (StringUtil.hasText(entity.getPath())) {

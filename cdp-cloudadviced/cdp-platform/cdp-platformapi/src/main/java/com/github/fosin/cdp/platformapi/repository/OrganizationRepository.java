@@ -1,6 +1,6 @@
 package com.github.fosin.cdp.platformapi.repository;
 
-import com.github.fosin.cdp.platformapi.entity.CdpSysOrganizationEntity;
+import com.github.fosin.cdp.platformapi.entity.CdpOrganizationEntity;
 import com.github.fosin.cdp.jpa.repository.IJpaRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.context.annotation.Lazy;
@@ -14,10 +14,10 @@ import java.util.List;
  */
 @Repository
 @Lazy
-public interface OrganizationRepository extends IJpaRepository<CdpSysOrganizationEntity, Long> {
-    List<CdpSysOrganizationEntity> findByPIdOrderByCodeAsc(Long pId);
+public interface OrganizationRepository extends IJpaRepository<CdpOrganizationEntity, Long> {
+    List<CdpOrganizationEntity> findByPIdOrderByCodeAsc(Long pId);
 
-    List<CdpSysOrganizationEntity> findByCodeStartingWithOrderByCodeAsc(String code);
+    List<CdpOrganizationEntity> findByCodeStartingWithOrderByCodeAsc(String code);
 
-    List<CdpSysOrganizationEntity> findAllByTopId(Long topId);
+    List<CdpOrganizationEntity> findAllByTopId(Long topId);
 }

@@ -1,6 +1,6 @@
 package com.github.fosin.cdp.platformapi.repository;
 
-import com.github.fosin.cdp.platformapi.entity.CdpSysUserPermissionEntity;
+import com.github.fosin.cdp.platformapi.entity.CdpUserPermissionEntity;
 import com.github.fosin.cdp.jpa.repository.IJpaRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.context.annotation.Lazy;
@@ -14,10 +14,10 @@ import java.util.List;
  */
 @Repository
 @Lazy
-public interface UserPermissionRepository extends IJpaRepository<CdpSysUserPermissionEntity,Long> {
-    List<CdpSysUserPermissionEntity> findByUserIdAndOrganizId(Long userId, Long organizId);
+public interface UserPermissionRepository extends IJpaRepository<CdpUserPermissionEntity,Long> {
+    List<CdpUserPermissionEntity> findByUserIdAndOrganizId(Long userId, Long organizId);
 
-    List<CdpSysUserPermissionEntity> findByUserId(Long userId);
+    List<CdpUserPermissionEntity> findByUserId(Long userId);
 
     void deleteByUserId(Long userId);
 

@@ -2,8 +2,8 @@ package com.github.fosin.cdp.platformapi.util;
 
 import com.github.fosin.cdp.platformapi.dto.CdpUserDetail;
 import com.github.fosin.cdp.platformapi.dto.Client;
-import com.github.fosin.cdp.platformapi.entity.CdpSysPermissionEntity;
-import com.github.fosin.cdp.platformapi.entity.CdpSysUserEntity;
+import com.github.fosin.cdp.platformapi.entity.CdpPermissionEntity;
+import com.github.fosin.cdp.platformapi.entity.CdpUserEntity;
 import com.github.fosin.cdp.util.BeanUtil;
 import com.github.fosin.cdp.util.ClassUtil;
 import com.github.fosin.cdp.util.DateTimeUtil;
@@ -128,10 +128,10 @@ public class LoginUserUtil {
 
     private static void removeOldUserDetail(CdpUserDetail userDetail) {
         Assert.notNull(userDetail, "用户信息不能为空!");
-        CdpSysUserEntity user = userDetail.getUser();
+        CdpUserEntity user = userDetail.getUser();
         Set<String> needDelKeys = new HashSet<>();
         for (String key : userDetailMap.keySet()) {
-            CdpSysUserEntity userEntity = userDetailMap.get(key).getUser();
+            CdpUserEntity userEntity = userDetailMap.get(key).getUser();
             if (user.getId().equals(userEntity.getId())) {
                 needDelKeys.add(key);
             }
@@ -151,16 +151,16 @@ public class LoginUserUtil {
      * @return CdpUserDetail
      */
 
-    public static CdpSysUserEntity getUser() {
+    public static CdpUserEntity getUser() {
         return getUserDetail().getUser();
     }
 
     /**
      * 得到当前登录用户的权限数
      *
-     * @return CdpSysPermissionEntity
+     * @return CdpPermissionEntity
      */
-    public static CdpSysPermissionEntity getPermissionTree() {
+    public static CdpPermissionEntity getPermissionTree() {
         return getUserDetail().getPermissionTree();
     }
 

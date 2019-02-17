@@ -1,6 +1,6 @@
 package com.github.fosin.cdp.platformapi.parameter;
 
-import com.github.fosin.cdp.platformapi.entity.CdpSysParameterEntity;
+import com.github.fosin.cdp.platformapi.entity.CdpParameterEntity;
 
 /**
  * Description:
@@ -17,7 +17,7 @@ public interface IParameterUtil {
      * @param description 参数描述
      * @return 参数数据
      */
-    CdpSysParameterEntity setParameter(String name, String value, String description);
+    CdpParameterEntity setParameter(String name, String value, String description);
 
     /**
      * 设置当前上下文相关的参数
@@ -27,7 +27,7 @@ public interface IParameterUtil {
      * @param description 参数描述
      * @return 参数数据
      */
-    CdpSysParameterEntity setParameter(String scope, String name, String value, String description);
+    CdpParameterEntity setParameter(String scope, String name, String value, String description);
 
     /**
      * 获取当前上下文的参数

@@ -8,12 +8,12 @@ import com.github.fosin.cdp.mvc.result.Result;
 import com.github.fosin.cdp.mvc.result.ResultUtils;
 import com.github.fosin.cdp.platformapi.constant.SystemConstant;
 import com.github.fosin.cdp.platformapi.constant.TableNameConstant;
-import com.github.fosin.cdp.platformapi.dto.request.CdpSysUserCreateDto;
-import com.github.fosin.cdp.platformapi.dto.request.CdpSysUserRetrieveDto;
-import com.github.fosin.cdp.platformapi.dto.request.CdpSysUserUpdateDto;
-import com.github.fosin.cdp.platformapi.entity.CdpSysOrganizationEntity;
-import com.github.fosin.cdp.platformapi.entity.CdpSysUserEntity;
-import com.github.fosin.cdp.platformapi.entity.CdpSysUserRoleEntity;
+import com.github.fosin.cdp.platformapi.dto.request.CdpUserCreateDto;
+import com.github.fosin.cdp.platformapi.dto.request.CdpUserRetrieveDto;
+import com.github.fosin.cdp.platformapi.dto.request.CdpUserUpdateDto;
+import com.github.fosin.cdp.platformapi.entity.CdpOrganizationEntity;
+import com.github.fosin.cdp.platformapi.entity.CdpUserEntity;
+import com.github.fosin.cdp.platformapi.entity.CdpUserRoleEntity;
 import com.github.fosin.cdp.platformapi.parameter.OrganizParameterUtil;
 import com.github.fosin.cdp.platformapi.repository.OrganizationRepository;
 import com.github.fosin.cdp.platformapi.repository.UserRepository;
@@ -64,20 +64,20 @@ public class UserServiceImpl implements IUserService {
     private OrganizationRepository organizationRepository;
 
     @Override
-    @Cacheable(value = TableNameConstant.CDP_SYS_USER, key = "#usercode")
+    @Cacheable(value = TableNameConstant.CDP_USER, key = "#usercode")
     @Transactional(readOnly = true)
-    public CdpSysUserEntity findByUsercode(String usercode) {
+    public CdpUserEntity findByUsercode(String usercode) {
         Assert.notNull(usercode, "用户工号不能为空!");
         //该代码看似无用，其实是为了解决懒加载和缓存先后问题
-        CdpSysUserEntity userEntity = userRepository.findByUsercode(usercode);
+        CdpUserEntity userEntity = userRepository.findByUsercode(usercode);
         if (userEntity != null) {
-            List<CdpSysUserRoleEntity> userRoles = userEntity.getUserRoles();
+            List<CdpUserRoleEntity> userRoles = userEntity.getUserRoles();
             log.debug(userRoles.toString());
         }
         return userEntity;
     }
 
-    private String encryptBeforeSave(CdpSysUserEntity entity) {
+    private String encryptBeforeSave(CdpUserEntity entity) {
         String password = entity.getPassword();
         //如果密码为空则随机生成4位以下密码
         if (StringUtil.isEmpty(password)) {
@@ -90,18 +90,18 @@ public class UserServiceImpl implements IUserService {
     @Override
     @Caching(
             put = {
-                    @CachePut(value = TableNameConstant.CDP_SYS_USER, key = "#result.id", condition = "#result.id != null"),
-                    @CachePut(value = TableNameConstant.CDP_SYS_USER, key = "#result.usercode", condition = "#result.usercode != null"),
+                    @CachePut(value = TableNameConstant.CDP_USER, key = "#result.id", condition = "#result.id != null"),
+                    @CachePut(value = TableNameConstant.CDP_USER, key = "#result.usercode", condition = "#result.usercode != null"),
             }
     )
-    public CdpSysUserEntity create(CdpSysUserCreateDto entity) {
-        CdpSysUserEntity createUser = new CdpSysUserEntity();
+    public CdpUserEntity create(CdpUserCreateDto entity) {
+        CdpUserEntity createUser = new CdpUserEntity();
         BeanUtils.copyProperties(entity, createUser);
 
         String passwordStrength = OrganizParameterUtil.getOrCreateParameter("DefaultPasswordStrength", RegexUtil.PASSWORD_STRONG, "用户密码强度正则表达式,密码最少6位，包括至少1个大写字母，1个小写字母，1个数字，1个特殊字符");
         Assert.isTrue(RegexUtil.matcher(createUser.getPassword(), passwordStrength), "密码强度不符合强度要求!");
         String password = encryptBeforeSave(createUser);
-        CdpSysUserEntity savedEntity = userRepository.save(createUser);
+        CdpUserEntity savedEntity = userRepository.save(createUser);
         savedEntity.setPassword(password);
         return savedEntity;
     }
@@ -109,20 +109,20 @@ public class UserServiceImpl implements IUserService {
     @Override
     @Caching(
             evict = {
-                    @CacheEvict(value = TableNameConstant.CDP_SYS_USER, beforeInvocation = true, key = "#root.caches[0].get(#entity.id).get().usercode", condition = "#root.caches[0].get(#entity.id) != null && !#root.caches[0].get(#entity.id).get().usercode.equals(#entity.usercode)"),
-                    @CacheEvict(value = TableNameConstant.CDP_SYS_USER_PERMISSION, key = "#entity.id")
+                    @CacheEvict(value = TableNameConstant.CDP_USER, beforeInvocation = true, key = "#root.caches[0].get(#entity.id).get().usercode", condition = "#root.caches[0].get(#entity.id) != null && !#root.caches[0].get(#entity.id).get().usercode.equals(#entity.usercode)"),
+                    @CacheEvict(value = TableNameConstant.CDP_USER_PERMISSION, key = "#entity.id")
             },
             put = {
-                    @CachePut(value = TableNameConstant.CDP_SYS_USER, key = "#result.id", condition = "#result.id != null"),
-                    @CachePut(value = TableNameConstant.CDP_SYS_USER, key = "#result.usercode", condition = "#result.usercode != null"),
+                    @CachePut(value = TableNameConstant.CDP_USER, key = "#result.id", condition = "#result.id != null"),
+                    @CachePut(value = TableNameConstant.CDP_USER, key = "#result.usercode", condition = "#result.usercode != null"),
             }
     )
-    public CdpSysUserEntity update(CdpSysUserUpdateDto entity) {
+    public CdpUserEntity update(CdpUserUpdateDto entity) {
         Long id = entity.getId();
         Assert.notNull(id, "更新的数据id不能为空或者小于1!");
-        CdpSysUserEntity createUser = userRepository.findOne(entity.getId());
+        CdpUserEntity createUser = userRepository.findOne(entity.getId());
         BeanUtils.copyProperties(entity, createUser);
-        CdpSysUserEntity oldEntity = userRepository.findOne(id);
+        CdpUserEntity oldEntity = userRepository.findOne(id);
         if (SystemConstant.ADMIN_USER_CODE.equals(oldEntity.getUsercode().toLowerCase()) &&
                 !SystemConstant.ADMIN_USER_CODE.equals(entity.getUsercode().toLowerCase())) {
             throw new IllegalArgumentException("不能修改管理员" + SystemConstant.ADMIN_USER_CODE + "的帐号名称!");
@@ -133,11 +133,11 @@ public class UserServiceImpl implements IUserService {
         return userRepository.save(createUser);
     }
 
-    public List<CdpSysUserEntity> findAll(Iterable<Long> ids) {
-        List<CdpSysUserEntity> rcList = new ArrayList<>();
+    public List<CdpUserEntity> findAll(Iterable<Long> ids) {
+        List<CdpUserEntity> rcList = new ArrayList<>();
         List<Long> needQueryIds = new ArrayList<>();
         for (Long id : ids) {
-            CdpSysUserEntity userEntity = CacheUtil.get(TableNameConstant.CDP_SYS_USER, id + "", CdpSysUserEntity.class);
+            CdpUserEntity userEntity = CacheUtil.get(TableNameConstant.CDP_USER, id + "", CdpUserEntity.class);
             if (userEntity != null) {
                 rcList.add(userEntity);
             } else {
@@ -145,7 +145,7 @@ public class UserServiceImpl implements IUserService {
             }
         }
         if (needQueryIds.size() > 0) {
-            List<CdpSysUserEntity> queryList = userRepository.findAll(needQueryIds);
+            List<CdpUserEntity> queryList = userRepository.findAll(needQueryIds);
             rcList.addAll(queryList);
         }
 
@@ -155,34 +155,34 @@ public class UserServiceImpl implements IUserService {
     @Override
     @Caching(
             evict = {
-                    @CacheEvict(value = TableNameConstant.CDP_SYS_USER, key = "#root.caches[0].get(#id).get().usercode", condition = "#root.caches[0].get(#id) != null"),
-                    @CacheEvict(value = TableNameConstant.CDP_SYS_USER, key = "#id"),
-                    @CacheEvict(value = TableNameConstant.CDP_SYS_USER_PERMISSION, key = "#id")
+                    @CacheEvict(value = TableNameConstant.CDP_USER, key = "#root.caches[0].get(#id).get().usercode", condition = "#root.caches[0].get(#id) != null"),
+                    @CacheEvict(value = TableNameConstant.CDP_USER, key = "#id"),
+                    @CacheEvict(value = TableNameConstant.CDP_USER_PERMISSION, key = "#id")
             }
     )
-    public CdpSysUserEntity delete(Long id) {
+    public CdpUserEntity delete(Long id) {
         Assert.isTrue(id != null && id > 0, "传入的用户ID无效！");
-        CdpSysUserEntity entity = CacheUtil.get(TableNameConstant.CDP_SYS_USER, id + "", CdpSysUserEntity.class);
+        CdpUserEntity entity = CacheUtil.get(TableNameConstant.CDP_USER, id + "", CdpUserEntity.class);
         if (entity == null) {
             entity = userRepository.findOne(id);
         }
         Assert.notNull(entity, "通过该ID没有找到相应的用户数据!");
         Assert.isTrue(!SystemConstant.SUPER_USER_CODE.equals(entity.getUsercode())
                 && !SystemConstant.ADMIN_USER_CODE.equals(entity.getUsercode()), "不能删除管理员帐号!");
-//        List<CdpSysUserRoleEntity> userRoles = userRoleRepository.findByUserId(id);
+//        List<CdpUserRoleEntity> userRoles = userRoleRepository.findByUserId(id);
 //        Assert.isTrue(userRoles.size() == 0, "该用户下还存在角色信息,不能直接删除用户!");
         userRepository.delete(id);
         return entity;
     }
 
     @Override
-    @Cacheable(value = TableNameConstant.CDP_SYS_USER, key = "#id")
+    @Cacheable(value = TableNameConstant.CDP_USER, key = "#id")
     @Transactional(readOnly = true)
-    public CdpSysUserEntity findOne(Long id) {
+    public CdpUserEntity findOne(Long id) {
         Assert.isTrue(id != null && id > 0, "传入的用户ID无效！");
         //该代码看似无用，其实是为了解决懒加载和缓存先后问题
-        CdpSysUserEntity userEntity = userRepository.findOne(id);
-        List<CdpSysUserRoleEntity> userRoles = userEntity.getUserRoles();
+        CdpUserEntity userEntity = userRepository.findOne(id);
+        List<CdpUserRoleEntity> userRoles = userEntity.getUserRoles();
         log.debug(userRoles.toString());
         return userEntity;
     }
@@ -190,16 +190,16 @@ public class UserServiceImpl implements IUserService {
     @Override
     @Caching(
             evict = {
-                    @CacheEvict(value = TableNameConstant.CDP_SYS_USER, key = "#entity.id"),
-                    @CacheEvict(value = TableNameConstant.CDP_SYS_USER, key = "#entity.usercode"),
-                    @CacheEvict(value = TableNameConstant.CDP_SYS_USER_PERMISSION, key = "#entity.id")
+                    @CacheEvict(value = TableNameConstant.CDP_USER, key = "#entity.id"),
+                    @CacheEvict(value = TableNameConstant.CDP_USER, key = "#entity.usercode"),
+                    @CacheEvict(value = TableNameConstant.CDP_USER_PERMISSION, key = "#entity.id")
             }
     )
-    public CdpSysUserEntity delete(CdpSysUserEntity entity) {
+    public CdpUserEntity delete(CdpUserEntity entity) {
         Assert.notNull(entity, "不能删除空的用户对象!");
         Assert.isTrue(!SystemConstant.SUPER_USER_CODE.equals(entity.getUsercode())
                 && !SystemConstant.ADMIN_USER_CODE.equals(entity.getUsercode()), "不能删除管理员帐号!");
-        List<CdpSysUserRoleEntity> userRoles = userRoleRepository.findByUserId(entity.getId());
+        List<CdpUserRoleEntity> userRoles = userRoleRepository.findByUserId(entity.getId());
         Assert.isTrue(userRoles.size() == 0, "该用户下还存在角色信息,不能直接删除用户!");
         userRepository.delete(entity);
         return entity;
@@ -210,10 +210,10 @@ public class UserServiceImpl implements IUserService {
         PageRequest pageable = new PageRequest(pageModule.getPageNumber() - 1, pageModule.getPageSize(), Sort.Direction.fromString(pageModule.getSortOrder()), pageModule.getSortName());
         String searchCondition = pageModule.getSearchText();
 
-        CdpSysUserEntity loginUser = LoginUserUtil.getUser();
-        Specification<CdpSysUserEntity> condition = new Specification<CdpSysUserEntity>() {
+        CdpUserEntity loginUser = LoginUserUtil.getUser();
+        Specification<CdpUserEntity> condition = new Specification<CdpUserEntity>() {
             @Override
-            public Predicate toPredicate(Root<CdpSysUserEntity> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+            public Predicate toPredicate(Root<CdpUserEntity> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
                 Path<String> usercode = root.get("usercode");
                 Path<String> username = root.get("username");
                 Path<String> phone = root.get("phone");
@@ -222,11 +222,11 @@ public class UserServiceImpl implements IUserService {
                 CriteriaBuilder.In<Object> organizId1 = null;
                 if (loginUser != null && !loginUser.getUsercode().equals(SystemConstant.SUPER_USER_CODE)) {
                     Long organizId = loginUser.getOrganizId();
-                    CdpSysOrganizationEntity organizationEntity = organizationRepository.findOne(organizId);
+                    CdpOrganizationEntity organizationEntity = organizationRepository.findOne(organizId);
 
                     Subquery<Integer> subQuery = query.subquery(Integer.class);
                     //从哪张表查询
-                    Root<CdpSysOrganizationEntity> celluseRoot = subQuery.from(CdpSysOrganizationEntity.class);
+                    Root<CdpOrganizationEntity> celluseRoot = subQuery.from(CdpOrganizationEntity.class);
                     //查询出什么
                     subQuery.select(celluseRoot.get("id"));
                     //条件是什么
@@ -255,9 +255,9 @@ public class UserServiceImpl implements IUserService {
             }
         };
         //分页查找
-        Page<CdpSysUserEntity> page = userRepository.findAll(condition, pageable);
+        Page<CdpUserEntity> page = userRepository.findAll(condition, pageable);
         //主动清空用户角色属性，防止JPA懒加载加载这些数据，因为前端不需要角色信息，这样也可以提高性能
-        for (CdpSysUserEntity user : page) {
+        for (CdpUserEntity user : page) {
             user.setUserRoles(null);
         }
         return ResultUtils.success(page.getTotalElements(), page.getContent());
@@ -266,11 +266,11 @@ public class UserServiceImpl implements IUserService {
     @Override
     @Caching(
             evict = {
-                    @CacheEvict(value = TableNameConstant.CDP_SYS_USER, key = "#result.id"),
-                    @CacheEvict(value = TableNameConstant.CDP_SYS_USER, key = "#result.usercode")
+                    @CacheEvict(value = TableNameConstant.CDP_USER, key = "#result.id"),
+                    @CacheEvict(value = TableNameConstant.CDP_USER, key = "#result.usercode")
             }
     )
-    public CdpSysUserEntity changePassword(Long id, String password, String confirmPassword1, String confirmPassword2) {
+    public CdpUserEntity changePassword(Long id, String password, String confirmPassword1, String confirmPassword2) {
         Assert.notNull(id, "用户ID不能为空!");
         Assert.isTrue(!StringUtil.isEmpty(confirmPassword1) &&
                 !StringUtil.isEmpty(confirmPassword1) && confirmPassword1.equals(confirmPassword2), "新密码和确认新密码不能为空且必须一致!");
@@ -278,12 +278,12 @@ public class UserServiceImpl implements IUserService {
         String passwordStrength = OrganizParameterUtil.getOrCreateParameter("DefaultPasswordStrength", RegexUtil.PASSWORD_STRONG, "用户密码强度正则表达式,密码最少6位，包括至少1个大写字母，1个小写字母，1个数字，1个特殊字符");
         Assert.isTrue(RegexUtil.matcher(confirmPassword1, passwordStrength), "新密码强度不符合强度要求!");
 
-        CdpSysUserEntity user = userRepository.findOne(id);
+        CdpUserEntity user = userRepository.findOne(id);
         Assert.isTrue(user != null && user.getId() != null, "通过ID未找到对应的用户信息!");
         Assert.isTrue(new BCryptPasswordEncoder().matches(password, user.getPassword()), "原密码不正确!");
         user.setPassword(confirmPassword1);
         encryptBeforeSave(user);
-        CdpSysUserEntity loginUser = LoginUserUtil.getUser();
+        CdpUserEntity loginUser = LoginUserUtil.getUser();
         user.setUpdateTime(new Date());
         user.setUpdateBy(loginUser.getId());
         return userRepository.save(user);
@@ -292,16 +292,16 @@ public class UserServiceImpl implements IUserService {
     @Override
     @Caching(
             evict = {
-                    @CacheEvict(value = TableNameConstant.CDP_SYS_USER, key = "#root.caches[0].get(#id).get().usercode", condition = "#root.caches[0].get(#id) != null"),
-                    @CacheEvict(value = TableNameConstant.CDP_SYS_USER, key = "#id")
+                    @CacheEvict(value = TableNameConstant.CDP_USER, key = "#root.caches[0].get(#id).get().usercode", condition = "#root.caches[0].get(#id) != null"),
+                    @CacheEvict(value = TableNameConstant.CDP_USER, key = "#id")
             }
     )
     public String resetPassword(Long id) {
         Assert.notNull(id, "用户ID不能为空!");
-        CdpSysUserEntity loginUser = LoginUserUtil.getUser();
+        CdpUserEntity loginUser = LoginUserUtil.getUser();
         Long loginId = loginUser.getId();
         Assert.isTrue(!loginId.equals(id), "不能重置本人密码,请使用修改密码功能!");
-        CdpSysUserEntity user = userRepository.findOne(id);
+        CdpUserEntity user = userRepository.findOne(id);
         Assert.isTrue(user != null && user.getId() != null, "通过ID未找到对应的用户信息!");
         String password = getPassword();
         user.setPassword(password);
@@ -324,33 +324,33 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public List<CdpSysUserEntity> findOtherUsersByRoleId(Long roleId) {
+    public List<CdpUserEntity> findOtherUsersByRoleId(Long roleId) {
         return userRepository.findOtherUsersByRoleId(roleId);
     }
 
     @Override
-    public List<CdpSysUserEntity> findRoleUsersByRoleId(Long roleId) {
+    public List<CdpUserEntity> findRoleUsersByRoleId(Long roleId) {
         return userRepository.findRoleUsersByRoleId(roleId);
     }
 
     @Override
-    public List<CdpSysUserEntity> findAllByOrganizId(Long organizId) {
+    public List<CdpUserEntity> findAllByOrganizId(Long organizId) {
         Assert.notNull(organizId, "机构ID不能为空!");
-        CdpSysUserEntity loginUser = LoginUserUtil.getUser();
+        CdpUserEntity loginUser = LoginUserUtil.getUser();
         if (loginUser.getUsercode().equals(SystemConstant.SUPER_USER_CODE)) {
             return userRepository.findAll();
         } else {
-            CdpSysOrganizationEntity organiz = organizationRepository.findOne(organizId);
+            CdpOrganizationEntity organiz = organizationRepository.findOne(organizId);
             Assert.notNull(organiz, "根据传入的机构编码没有找到任何数据!");
-            CdpSysOrganizationEntity topOrganiz = organizationRepository.findOne(organiz.getTopId());
-            List<CdpSysOrganizationEntity> organizs = organizationRepository.findByCodeStartingWithOrderByCodeAsc(topOrganiz.getCode());
+            CdpOrganizationEntity topOrganiz = organizationRepository.findOne(organiz.getTopId());
+            List<CdpOrganizationEntity> organizs = organizationRepository.findByCodeStartingWithOrderByCodeAsc(topOrganiz.getCode());
 
-            Specification<CdpSysUserEntity> condition = (root, query, cb) -> {
+            Specification<CdpUserEntity> condition = (root, query, cb) -> {
                 Path<Long> organizIdPath = root.get("organizId");
                 Path<String> usercodePath = root.get("usercode");
 
                 CriteriaBuilder.In<Long> in = cb.in(organizIdPath);
-                for (CdpSysOrganizationEntity entity : organizs) {
+                for (CdpOrganizationEntity entity : organizs) {
                     in.value(entity.getId());
                 }
                 return cb.and(in, cb.notEqual(usercodePath, SystemConstant.SUPER_USER_CODE));
@@ -360,7 +360,7 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public IJpaRepository<CdpSysUserEntity, Long> getRepository() {
+    public IJpaRepository<CdpUserEntity, Long> getRepository() {
         return userRepository;
     }
 }

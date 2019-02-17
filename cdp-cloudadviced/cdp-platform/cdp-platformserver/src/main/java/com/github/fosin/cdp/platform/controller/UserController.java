@@ -5,14 +5,14 @@ import com.github.fosin.cdp.core.exception.CdpServiceException;
 import com.github.fosin.cdp.mvc.controller.AbstractBaseController;
 import com.github.fosin.cdp.mvc.controller.ISimpleController;
 import com.github.fosin.cdp.mvc.service.ISimpleService;
-import com.github.fosin.cdp.platformapi.dto.request.CdpSysUserCreateDto;
-import com.github.fosin.cdp.platformapi.dto.request.CdpSysUserPermissionUpdateDto;
-import com.github.fosin.cdp.platformapi.dto.request.CdpSysUserRetrieveDto;
-import com.github.fosin.cdp.platformapi.dto.request.CdpSysUserUpdateDto;
-import com.github.fosin.cdp.platformapi.entity.CdpSysRoleEntity;
-import com.github.fosin.cdp.platformapi.entity.CdpSysUserEntity;
-import com.github.fosin.cdp.platformapi.entity.CdpSysUserPermissionEntity;
-import com.github.fosin.cdp.platformapi.entity.CdpSysUserRoleEntity;
+import com.github.fosin.cdp.platformapi.dto.request.CdpUserCreateDto;
+import com.github.fosin.cdp.platformapi.dto.request.CdpUserPermissionUpdateDto;
+import com.github.fosin.cdp.platformapi.dto.request.CdpUserRetrieveDto;
+import com.github.fosin.cdp.platformapi.dto.request.CdpUserUpdateDto;
+import com.github.fosin.cdp.platformapi.entity.CdpRoleEntity;
+import com.github.fosin.cdp.platformapi.entity.CdpUserEntity;
+import com.github.fosin.cdp.platformapi.entity.CdpUserPermissionEntity;
+import com.github.fosin.cdp.platformapi.entity.CdpUserRoleEntity;
 import com.github.fosin.cdp.platformapi.service.inter.IRoleService;
 import com.github.fosin.cdp.platformapi.service.inter.IUserPermissionService;
 import com.github.fosin.cdp.platformapi.service.inter.IUserRoleService;
@@ -36,7 +36,7 @@ import java.util.List;
 @RestController
 @RequestMapping("v1/user")
 @Api(value = "v1/user", tags = "用户管理", description = "用户管理相关操作")
-public class UserController extends AbstractBaseController implements ISimpleController<CdpSysUserEntity, Long, CdpSysUserCreateDto, CdpSysUserRetrieveDto, CdpSysUserUpdateDto> {
+public class UserController extends AbstractBaseController implements ISimpleController<CdpUserEntity, Long, CdpUserCreateDto, CdpUserRetrieveDto, CdpUserUpdateDto> {
 
     @Autowired
     private IUserService userService;
@@ -51,16 +51,16 @@ public class UserController extends AbstractBaseController implements ISimpleCon
     private IUserPermissionService userPermissionService;
 
     @PostMapping("/usercode/{usercode}")
-    @ApiImplicitParam(name = "usercode", value = "用户工号,取值于CdpSysUserEntity.usercode")
+    @ApiImplicitParam(name = "usercode", value = "用户工号,取值于CdpUserEntity.usercode")
     @ApiOperation("根据用户工号查找用户信息")
-    public ResponseEntity<CdpSysUserEntity> getByUsercode(@PathVariable("usercode") String usercode) {
+    public ResponseEntity<CdpUserEntity> getByUsercode(@PathVariable("usercode") String usercode) {
         return ResponseEntity.ok(userService.findByUsercode(usercode));
     }
 
     @ApiOperation("修改用户帐号密码")
     @PostMapping("/changePassword")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "id", value = "参数类型,取值于CdpSysUserEntity.id"),
+            @ApiImplicitParam(name = "id", value = "参数类型,取值于CdpUserEntity.id"),
             @ApiImplicitParam(name = "password", value = "原密码(未加密)"),
             @ApiImplicitParam(name = "confirmPassword1", value = "确认新密码1(未加密)"),
             @ApiImplicitParam(name = "confirmPassword2", value = "确认新密码2(未加密)")
@@ -91,64 +91,64 @@ public class UserController extends AbstractBaseController implements ISimpleCon
 //    }
 
     @ApiOperation("根据用户ID查询用户权限列表")
-    @ApiImplicitParam(name = "userId", value = "用户ID,取值于CdpSysUserEntity.id")
+    @ApiImplicitParam(name = "userId", value = "用户ID,取值于CdpUserEntity.id")
     @RequestMapping(value = "/permissions/{userId}", method = {RequestMethod.GET, RequestMethod.POST})
-    public ResponseEntity<List<CdpSysUserPermissionEntity>> permissions(@PathVariable Long userId) {
+    public ResponseEntity<List<CdpUserPermissionEntity>> permissions(@PathVariable Long userId) {
         return ResponseEntity.ok(userPermissionService.findByUserId(userId));
     }
 
     @ApiOperation("根据用户ID更新用户权限")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "entities", value = "用户权限集合(List<CdpSysUserPermissionEntity>)"),
-            @ApiImplicitParam(name = "userId", value = "用户ID,取值于CdpSysUserEntity.id")
+            @ApiImplicitParam(name = "entities", value = "用户权限集合(List<CdpUserPermissionEntity>)"),
+            @ApiImplicitParam(name = "userId", value = "用户ID,取值于CdpUserEntity.id")
     })
     @PutMapping(value = "/permissions/{userId}")
-    public ResponseEntity<Collection<CdpSysUserPermissionEntity>> permissions(@RequestBody List<CdpSysUserPermissionUpdateDto> entities, @PathVariable Long userId) {
+    public ResponseEntity<Collection<CdpUserPermissionEntity>> permissions(@RequestBody List<CdpUserPermissionUpdateDto> entities, @PathVariable Long userId) {
         return ResponseEntity.ok(userPermissionService.updateInBatch(userId, entities));
     }
 
     @ApiOperation(value = "根据用户ID重置用户密码", notes = "重置后的密码或是固定密码或是随机密码，具体由机构参数UserResetPasswordType决定")
-    @ApiImplicitParam(name = "id", value = "用户ID,取值于CdpSysUserEntity.id")
+    @ApiImplicitParam(name = "id", value = "用户ID,取值于CdpUserEntity.id")
     @PostMapping("/resetPassword/{id}")
     public ResponseEntity<String> resetPassword(@PathVariable() Long id) {
         return ResponseEntity.ok(userService.resetPassword(id));
     }
 
     @ApiOperation("根据用户唯一id查找用户所有角色信息列表")
-    @ApiImplicitParam(name = "userId", value = "用户ID,取值于CdpSysUserEntity.id")
+    @ApiImplicitParam(name = "userId", value = "用户ID,取值于CdpUserEntity.id")
     @RequestMapping(value = "/roles/{userId}", method = {RequestMethod.GET, RequestMethod.POST})
-    public ResponseEntity<List<CdpSysRoleEntity>> getUserRoles(@PathVariable("userId") Long userId) {
+    public ResponseEntity<List<CdpRoleEntity>> getUserRoles(@PathVariable("userId") Long userId) {
         return ResponseEntity.ok(roleService.findRoleUsersByRoleId(userId));
     }
 
     @ApiOperation("更新用户拥有的角色")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "entities", value = "用户角色集合(List<CdpSysUserRoleEntity>)"),
-            @ApiImplicitParam(name = "userId", value = "用户ID,取值于CdpSysUserEntity.id")
+            @ApiImplicitParam(name = "entities", value = "用户角色集合(List<CdpUserRoleEntity>)"),
+            @ApiImplicitParam(name = "userId", value = "用户ID,取值于CdpUserEntity.id")
     })
     @PutMapping(value = "/roles/{userId}")
-    public ResponseEntity<List<CdpSysUserRoleEntity>> putUserRoles
-            (@RequestBody List<CdpSysUserRoleEntity> entities, @PathVariable Long userId) throws
+    public ResponseEntity<List<CdpUserRoleEntity>> putUserRoles
+            (@RequestBody List<CdpUserRoleEntity> entities, @PathVariable Long userId) throws
             CdpServiceException {
         return ResponseEntity.ok(userRoleService.updateInBatchByUserId(userId, entities));
     }
 
     @ApiOperation("根据用户唯一id查找用户所有角色信息")
-    @ApiImplicitParam(name = "userId", value = "用户ID,对应CdpSysRoleEntity.id", required = true, dataType = "Integer", paramType = "path")
+    @ApiImplicitParam(name = "userId", value = "用户ID,对应CdpRoleEntity.id", required = true, dataType = "Integer", paramType = "path")
     @RequestMapping(value = "/otherRoles/{userId}", method = {RequestMethod.GET, RequestMethod.POST})
-    public ResponseEntity<List<CdpSysRoleEntity>> getOtherRoles(@PathVariable("userId") Long userId) {
+    public ResponseEntity<List<CdpRoleEntity>> getOtherRoles(@PathVariable("userId") Long userId) {
         return ResponseEntity.ok(roleService.findOtherUsersByRoleId(userId));
     }
 
     @PostMapping({"/childList/organizId/{organizId}"})
     @ApiOperation("根据机构ID查询该机构及子机构的所有用户")
     @ApiImplicitParam(name = "organizId", value = "机构ID")
-    public ResponseEntity<List<CdpSysUserEntity>> findAllByOrganizId(@PathVariable("organizId") Long organizId) {
+    public ResponseEntity<List<CdpUserEntity>> findAllByOrganizId(@PathVariable("organizId") Long organizId) {
         return ResponseEntity.ok(userService.findAllByOrganizId(organizId));
     }
 
     @Override
-    public ISimpleService<CdpSysUserEntity, Long, CdpSysUserCreateDto, CdpSysUserRetrieveDto, CdpSysUserUpdateDto> getService() {
+    public ISimpleService<CdpUserEntity, Long, CdpUserCreateDto, CdpUserRetrieveDto, CdpUserUpdateDto> getService() {
         return userService;
     }
 }

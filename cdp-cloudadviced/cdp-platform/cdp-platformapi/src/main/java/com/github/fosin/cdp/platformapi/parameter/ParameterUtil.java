@@ -1,8 +1,8 @@
 package com.github.fosin.cdp.platformapi.parameter;
 
-import com.github.fosin.cdp.platformapi.dto.request.CdpSysParameterCreateDto;
-import com.github.fosin.cdp.platformapi.dto.request.CdpSysParameterUpdateDto;
-import com.github.fosin.cdp.platformapi.entity.CdpSysParameterEntity;
+import com.github.fosin.cdp.platformapi.dto.request.CdpParameterCreateDto;
+import com.github.fosin.cdp.platformapi.dto.request.CdpParameterUpdateDto;
+import com.github.fosin.cdp.platformapi.entity.CdpParameterEntity;
 import com.github.fosin.cdp.platformapi.service.inter.IParameterService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -26,25 +26,25 @@ public class ParameterUtil {
         ParameterUtil.parameterService = parameterService;
     }
 
-    public static CdpSysParameterEntity getOrCreateParameter(Integer type, String scope, String name, String defaultValue, String description) throws RuntimeException {
-        CdpSysParameterEntity parameterEntity = parameterService.findByTypeAndScopeAndName(type, scope, name);
+    public static CdpParameterEntity getOrCreateParameter(Integer type, String scope, String name, String defaultValue, String description) throws RuntimeException {
+        CdpParameterEntity parameterEntity = parameterService.findByTypeAndScopeAndName(type, scope, name);
         if (parameterEntity == null || parameterEntity.getId() == null) {
             parameterEntity = setParameter(type, scope, name, defaultValue, description);
         }
         return parameterEntity;
     }
 
-    public static CdpSysParameterEntity getParameter(Integer type, String scope, String name) throws RuntimeException {
+    public static CdpParameterEntity getParameter(Integer type, String scope, String name) throws RuntimeException {
         return parameterService.findByTypeAndScopeAndName(type, scope, name);
     }
 
-    public static synchronized CdpSysParameterEntity setParameter(Integer type, String scope, String name, String value, String description) throws RuntimeException {
-        CdpSysParameterEntity entity = getParameter(type, scope, name);
+    public static synchronized CdpParameterEntity setParameter(Integer type, String scope, String name, String value, String description) throws RuntimeException {
+        CdpParameterEntity entity = getParameter(type, scope, name);
         if (value == null) {
             value = "";
         }
         if (entity == null || entity.getId() == null) {
-            CdpSysParameterCreateDto createEntity = new CdpSysParameterCreateDto();
+            CdpParameterCreateDto createEntity = new CdpParameterCreateDto();
             createEntity.setScope(scope);
             createEntity.setType(type);
             createEntity.setName(name);
@@ -54,7 +54,7 @@ public class ParameterUtil {
             return parameterService.create(createEntity);
         }
 
-        CdpSysParameterUpdateDto updateEntity = new CdpSysParameterUpdateDto();
+        CdpParameterUpdateDto updateEntity = new CdpParameterUpdateDto();
         BeanUtils.copyProperties(entity, updateEntity);
         updateEntity.setValue(value);
         updateEntity.setType(type);

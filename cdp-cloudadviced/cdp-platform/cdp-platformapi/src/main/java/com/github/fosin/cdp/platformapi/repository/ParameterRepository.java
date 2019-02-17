@@ -1,6 +1,6 @@
 package com.github.fosin.cdp.platformapi.repository;
 
-import com.github.fosin.cdp.platformapi.entity.CdpSysParameterEntity;
+import com.github.fosin.cdp.platformapi.entity.CdpParameterEntity;
 import org.springframework.context.annotation.Lazy;
 import com.github.fosin.cdp.jpa.repository.IJpaRepository;
 import org.springframework.stereotype.Repository;
@@ -15,8 +15,8 @@ import java.util.List;
  */
 @Repository
 @Lazy
-public interface ParameterRepository extends IJpaRepository<CdpSysParameterEntity, Long> {
-    CdpSysParameterEntity findByTypeAndScopeAndName(Integer type, String scope, String name);
+public interface ParameterRepository extends IJpaRepository<CdpParameterEntity, Long> {
+    CdpParameterEntity findByTypeAndScopeAndName(Integer type, String scope, String name);
 
-    List<CdpSysParameterEntity> findByStatusNot(Integer status);
+    List<CdpParameterEntity> findByStatusNot(Integer status);
 }

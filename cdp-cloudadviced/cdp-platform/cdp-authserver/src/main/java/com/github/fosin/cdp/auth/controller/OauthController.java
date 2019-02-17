@@ -95,10 +95,10 @@ public class OauthController {
 //    private static RedisTokenStore redisTokenStore;
 
 //    @RequestMapping("/userRoles")
-//    public ResponseEntity<List<CdpSysRoleEntity>> getUserRoles(@RequestParam("usercode") String usercode, @RequestParam("password") String password) {
-//        List<CdpSysUserRoleEntity> allByUsercodeAndPassword = userRoleService.findByUsercodeAndPassword(usercode, password);
-//        List<CdpSysRoleEntity> cdpSysRoleEntities = new ArrayList<>();
-//        for (CdpSysUserRoleEntity anAllByUsercodeAndPassword : allByUsercodeAndPassword) {
+//    public ResponseEntity<List<CdpRoleEntity>> getUserRoles(@RequestParam("usercode") String usercode, @RequestParam("password") String password) {
+//        List<CdpUserRoleEntity> allByUsercodeAndPassword = userRoleService.findByUsercodeAndPassword(usercode, password);
+//        List<CdpRoleEntity> cdpSysRoleEntities = new ArrayList<>();
+//        for (CdpUserRoleEntity anAllByUsercodeAndPassword : allByUsercodeAndPassword) {
 //            cdpSysRoleEntities.add(anAllByUsercodeAndPassword.getRole());
 //        }
 //        return ResponseEntity.ok(cdpSysRoleEntities);

@@ -6,8 +6,8 @@ import com.github.fosin.cdp.core.exception.CdpServiceException;
 import com.github.fosin.cdp.core.exception.CdpUserOrPassInvalidException;
 import com.github.fosin.cdp.jpa.repository.IJpaRepository;
 import com.github.fosin.cdp.platformapi.constant.TableNameConstant;
-import com.github.fosin.cdp.platformapi.entity.CdpSysUserEntity;
-import com.github.fosin.cdp.platformapi.entity.CdpSysUserRoleEntity;
+import com.github.fosin.cdp.platformapi.entity.CdpUserEntity;
+import com.github.fosin.cdp.platformapi.entity.CdpUserRoleEntity;
 import com.github.fosin.cdp.platformapi.repository.UserRoleRepository;
 import com.github.fosin.cdp.platformapi.service.inter.IUserRoleService;
 import com.github.fosin.cdp.platformapi.service.inter.IUserService;
@@ -38,20 +38,20 @@ public class UserRoleServiceImpl implements IUserRoleService {
     private IUserService userService;
 
     @Override
-    public List<CdpSysUserRoleEntity> findByUserId(Long userId) {
+    public List<CdpUserRoleEntity> findByUserId(Long userId) {
         return userRoleRepository.findByUserId(userId);
     }
 
     @Override
-    public List<CdpSysUserRoleEntity> findByRoleId(Long roleId) {
+    public List<CdpUserRoleEntity> findByRoleId(Long roleId) {
         return userRoleRepository.findByRoleId(roleId);
     }
 
     @Override
-    public List<CdpSysUserRoleEntity> findByUsercodeAndPassword(String usercode, String password) throws CdpUserOrPassInvalidException {
+    public List<CdpUserRoleEntity> findByUsercodeAndPassword(String usercode, String password) throws CdpUserOrPassInvalidException {
         Assert.isTrue(null != usercode && !"".equals(usercode), "请输入用户名!");
         Assert.isTrue(null != password && !"".equals(password), "传入的用户ID不能为空!");
-        CdpSysUserEntity cdpSysUserEntity = userService.findByUsercode(usercode);
+        CdpUserEntity cdpSysUserEntity = userService.findByUsercode(usercode);
         if (null == cdpSysUserEntity || cdpSysUserEntity.getId() < 1) {
             throw new CdpUserOrPassInvalidException();
         }
@@ -65,39 +65,39 @@ public class UserRoleServiceImpl implements IUserRoleService {
     }
 
     @Override
-    public List<CdpSysUserRoleEntity> createInBatch(Collection<CdpSysUserRoleEntity> entitis) {
+    public List<CdpUserRoleEntity> createInBatch(Collection<CdpUserRoleEntity> entitis) {
         return userRoleRepository.save(entitis);
     }
 
     @Override
-    public void deleteInBatch(Collection<CdpSysUserRoleEntity> entitis) {
+    public void deleteInBatch(Collection<CdpUserRoleEntity> entitis) {
         userRoleRepository.deleteInBatch(entitis);
     }
 
     @Override
-    public Collection<CdpSysUserRoleEntity> updateInBatch(Long key, Collection<CdpSysUserRoleEntity> entities) {
+    public Collection<CdpUserRoleEntity> updateInBatch(Long key, Collection<CdpUserRoleEntity> entities) {
         throw new CdpServiceException("该方法还未实现!");
     }
 
     @Override
     @Transactional
-    public List<CdpSysUserRoleEntity> updateInBatchByUserId(Long userId, Iterable<CdpSysUserRoleEntity> entities) {
+    public List<CdpUserRoleEntity> updateInBatchByUserId(Long userId, Iterable<CdpUserRoleEntity> entities) {
         Assert.notNull(userId, "传入的用户ID不能为空!");
         Assert.notNull(entities, "传入的实体集合不能为空!");
 
-        for (CdpSysUserRoleEntity entity : entities) {
+        for (CdpUserRoleEntity entity : entities) {
             Assert.isTrue(entity.getUserId().equals(userId), "需要更新的数据集中有与用户ID不匹配的数据!");
         }
 
         userRoleRepository.deleteByUserId(userId);
         //如果是用户角色，则只需要删除一个用户的缓存
-        CacheUtil.evict(TableNameConstant.CDP_SYS_USER, userId + "");
-        CacheUtil.evict(TableNameConstant.CDP_SYS_USER, userService.findOne(userId).getUsercode());
+        CacheUtil.evict(TableNameConstant.CDP_USER, userId + "");
+        CacheUtil.evict(TableNameConstant.CDP_USER, userService.findOne(userId).getUsercode());
 
         if (entities.iterator().hasNext()) {
-            CdpSysUserEntity loginUser = LoginUserUtil.getUser();
+            CdpUserEntity loginUser = LoginUserUtil.getUser();
             Date now = new Date();
-            for (CdpSysUserRoleEntity entity : entities) {
+            for (CdpUserRoleEntity entity : entities) {
                 entity.setCreateBy(loginUser.getId());
                 entity.setCreateTime(now);
                 if (entity.getOrganizId() == null) {
@@ -112,26 +112,26 @@ public class UserRoleServiceImpl implements IUserRoleService {
 
     @Override
     @Transactional
-    public List<CdpSysUserRoleEntity> updateInBatchByRoleId(Long roleId, Iterable<CdpSysUserRoleEntity> entities)
+    public List<CdpUserRoleEntity> updateInBatchByRoleId(Long roleId, Iterable<CdpUserRoleEntity> entities)
             {
         Assert.notNull(roleId, "传入的角色ID不能为空!");
         Assert.notNull(entities, "传入的实体集合不能为空!");
-        for (CdpSysUserRoleEntity entity : entities) {
+        for (CdpUserRoleEntity entity : entities) {
             Assert.isTrue(entity.getRole().getId().equals(roleId), "需要更新的数据集中有与角色ID不匹配的数据!");
         }
 
         userRoleRepository.deleteByRoleId(roleId);
         //如果是角色用户，则需要删除所有角色相关用户的缓存
-        for (CdpSysUserRoleEntity entity : entities) {
+        for (CdpUserRoleEntity entity : entities) {
             Long userId = entity.getUserId();
-            CacheUtil.evict(TableNameConstant.CDP_SYS_USER, userId + "");
-            CacheUtil.evict(TableNameConstant.CDP_SYS_USER, userService.findOne(userId).getUsercode());
+            CacheUtil.evict(TableNameConstant.CDP_USER, userId + "");
+            CacheUtil.evict(TableNameConstant.CDP_USER, userService.findOne(userId).getUsercode());
         }
 
         if (entities.iterator().hasNext()) {
-            CdpSysUserEntity loginUser = LoginUserUtil.getUser();
+            CdpUserEntity loginUser = LoginUserUtil.getUser();
             Date now = new Date();
-            for (CdpSysUserRoleEntity entity : entities) {
+            for (CdpUserRoleEntity entity : entities) {
                 entity.setCreateTime(now);
                 entity.setCreateBy(loginUser.getId());
                 if (entity.getOrganizId() == null) {
@@ -144,7 +144,7 @@ public class UserRoleServiceImpl implements IUserRoleService {
         return null;
     }
 
-    public String getCacheKey(Integer type, Iterable<CdpSysUserRoleEntity> entitis) {
+    public String getCacheKey(Integer type, Iterable<CdpUserRoleEntity> entitis) {
         if (type == 1) {
             return getCacheKey(type, entitis.iterator().next().getRole().getId());
         } else {
@@ -162,7 +162,7 @@ public class UserRoleServiceImpl implements IUserRoleService {
     }
 
     @Override
-    public IJpaRepository<CdpSysUserRoleEntity, Long> getRepository() {
+    public IJpaRepository<CdpUserRoleEntity, Long> getRepository() {
         return userRoleRepository;
     }
 }

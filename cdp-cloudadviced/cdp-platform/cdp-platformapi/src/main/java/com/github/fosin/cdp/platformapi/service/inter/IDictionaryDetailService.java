@@ -1,9 +1,9 @@
 package com.github.fosin.cdp.platformapi.service.inter;
 
-import com.github.fosin.cdp.platformapi.dto.request.CdpSysDictionaryDetailCreateDto;
-import com.github.fosin.cdp.platformapi.dto.request.CdpSysDictionaryDetailRetrieveDto;
-import com.github.fosin.cdp.platformapi.dto.request.CdpSysDictionaryDetailUpdateDto;
-import com.github.fosin.cdp.platformapi.entity.CdpSysDictionaryDetailEntity;
+import com.github.fosin.cdp.platformapi.dto.request.CdpDictionaryDetailCreateDto;
+import com.github.fosin.cdp.platformapi.dto.request.CdpDictionaryDetailRetrieveDto;
+import com.github.fosin.cdp.platformapi.dto.request.CdpDictionaryDetailUpdateDto;
+import com.github.fosin.cdp.platformapi.entity.CdpDictionaryDetailEntity;
 import com.github.fosin.cdp.core.exception.CdpServiceException;
 import com.github.fosin.cdp.jpa.service.ISimpleJpaService;
 import org.springframework.data.domain.Page;
@@ -17,8 +17,8 @@ import java.util.List;
  *
  * @author fosin
  */
-public interface IDictionaryDetailService extends ISimpleJpaService<CdpSysDictionaryDetailEntity, Long, CdpSysDictionaryDetailCreateDto, CdpSysDictionaryDetailRetrieveDto, CdpSysDictionaryDetailUpdateDto> {
-    Page<CdpSysDictionaryDetailEntity> findAll(String searchCondition, Pageable pageable, Long code);
+public interface IDictionaryDetailService extends ISimpleJpaService<CdpDictionaryDetailEntity, Long, CdpDictionaryDetailCreateDto, CdpDictionaryDetailRetrieveDto, CdpDictionaryDetailUpdateDto> {
+    Page<CdpDictionaryDetailEntity> findAll(String searchCondition, Pageable pageable, Long code);
 
-    List<CdpSysDictionaryDetailEntity> findByDictionaryId(Long dictionaryId);
+    List<CdpDictionaryDetailEntity> findByDictionaryId(Long dictionaryId);
 }

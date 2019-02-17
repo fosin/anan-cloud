@@ -1,16 +1,16 @@
 package com.github.fosin.cdp.platformapi.service;
 
 import com.github.fosin.cdp.jpa.repository.IJpaRepository;
-import com.github.fosin.cdp.platformapi.dto.request.CdpSysPermissionCreateDto;
-import com.github.fosin.cdp.platformapi.dto.request.CdpSysPermissionUpdateDto;
-import com.github.fosin.cdp.platformapi.entity.CdpSysOrganizationEntity;
-import com.github.fosin.cdp.platformapi.entity.CdpSysPermissionEntity;
+import com.github.fosin.cdp.platformapi.dto.request.CdpPermissionCreateDto;
+import com.github.fosin.cdp.platformapi.dto.request.CdpPermissionUpdateDto;
+import com.github.fosin.cdp.platformapi.entity.CdpOrganizationEntity;
+import com.github.fosin.cdp.platformapi.entity.CdpPermissionEntity;
 import com.github.fosin.cdp.core.exception.CdpServiceException;
 import com.github.fosin.cdp.mvc.module.PageModule;
 import com.github.fosin.cdp.mvc.result.Result;
 import com.github.fosin.cdp.mvc.result.ResultUtils;
 import com.github.fosin.cdp.platformapi.constant.TableNameConstant;
-import com.github.fosin.cdp.platformapi.entity.CdpSysUserEntity;
+import com.github.fosin.cdp.platformapi.entity.CdpUserEntity;
 import com.github.fosin.cdp.platformapi.repository.PermissionRepository;
 import com.github.fosin.cdp.platformapi.service.inter.IPermissionService;
 import com.github.fosin.cdp.platformapi.service.inter.IRolePermissionService;
@@ -55,17 +55,17 @@ public class PermissionServiceImpl implements IPermissionService {
     private IRolePermissionService rolePermissionService;
 
     @Override
-    @CachePut(value = TableNameConstant.CDP_SYS_PERMISSION, key = "#result.id")
-    public CdpSysPermissionEntity create(CdpSysPermissionCreateDto entity) {
+    @CachePut(value = TableNameConstant.CDP_PERMISSION, key = "#result.id")
+    public CdpPermissionEntity create(CdpPermissionCreateDto entity) {
         Assert.notNull(entity, "传入的创建数据实体对象不能为空!");
 
-        CdpSysPermissionEntity createEntity = new CdpSysPermissionEntity();
+        CdpPermissionEntity createEntity = new CdpPermissionEntity();
         BeanUtils.copyProperties(entity, createEntity);
         Long pId = entity.getPId();
 
         int level = 1;
         if (pId != 0) {
-            CdpSysPermissionEntity parentEntity = permissionRepository.findOne(pId);
+            CdpPermissionEntity parentEntity = permissionRepository.findOne(pId);
             Assert.notNull(parentEntity, "传入的创建数据实体找不到对于的父节点数据!");
             level = parentEntity.getLevel() + 1;
         }
@@ -74,17 +74,17 @@ public class PermissionServiceImpl implements IPermissionService {
     }
 
     @Override
-    @CachePut(value = TableNameConstant.CDP_SYS_PERMISSION, key = "#entity.id")
-    public CdpSysPermissionEntity update(CdpSysPermissionUpdateDto entity) {
+    @CachePut(value = TableNameConstant.CDP_PERMISSION, key = "#entity.id")
+    public CdpPermissionEntity update(CdpPermissionUpdateDto entity) {
         Assert.notNull(entity, "传入了空对象!");
         Long id = entity.getId();
         Assert.notNull(id, "传入了空ID!");
 
-        CdpSysPermissionEntity updateEntity = permissionRepository.findOne(id);
+        CdpPermissionEntity updateEntity = permissionRepository.findOne(id);
         BeanUtils.copyProperties(entity, updateEntity);
         Long pId = entity.getPId();
         if (!updateEntity.getPId().equals(pId)) {
-            CdpSysPermissionEntity parentEntity = permissionRepository.findOne(pId);
+            CdpPermissionEntity parentEntity = permissionRepository.findOne(pId);
             Assert.notNull(parentEntity, "传入的创建数据实体找不到对于的父节点数据!");
             updateEntity.setLevel(parentEntity.getLevel() + 1);
         }
@@ -94,28 +94,28 @@ public class PermissionServiceImpl implements IPermissionService {
 
 
     @Override
-    @CacheEvict(value = TableNameConstant.CDP_SYS_PERMISSION, key = "#id")
-    public CdpSysPermissionEntity delete(Long id) {
+    @CacheEvict(value = TableNameConstant.CDP_PERMISSION, key = "#id")
+    public CdpPermissionEntity delete(Long id) {
         Assert.notNull(id, "传入了空ID!");
-        CdpSysPermissionEntity entity = permissionRepository.findOne(id);
+        CdpPermissionEntity entity = permissionRepository.findOne(id);
         Assert.notNull(entity, "传入了空对象!");
         delete(id, entity);
         return null;
     }
 
-    private void delete(Long id, CdpSysPermissionEntity entity) {
+    private void delete(Long id, CdpPermissionEntity entity) {
         long countByPermissionId = rolePermissionService.countByPermissionId(id);
         Assert.isTrue(countByPermissionId == 0, "还有角色在使用该权限，不能直接删除!");
         countByPermissionId = userPermissionService.countByPermissionId(id);
         Assert.isTrue(countByPermissionId == 0, "还有用户在使用该权限，不能直接删除!");
-        List<CdpSysPermissionEntity> entities = findByPId(id);
+        List<CdpPermissionEntity> entities = findByPId(id);
         Assert.isTrue(entities == null || entities.size() == 0, "该节点还存在子节点不能直接删除!");
         permissionRepository.delete(entity);
     }
 
     @Override
-    @CacheEvict(value = TableNameConstant.CDP_SYS_PERMISSION, key = "#entity.id")
-    public CdpSysPermissionEntity delete(CdpSysPermissionEntity entity) {
+    @CacheEvict(value = TableNameConstant.CDP_PERMISSION, key = "#entity.id")
+    public CdpPermissionEntity delete(CdpPermissionEntity entity) {
         Assert.notNull(entity, "传入了空对象!");
         Long id = entity.getId();
         Assert.notNull(id, "传入了空ID!");
@@ -128,9 +128,9 @@ public class PermissionServiceImpl implements IPermissionService {
         PageRequest pageable = new PageRequest(pageModule.getPageNumber() - 1, pageModule.getPageSize(), Sort.Direction.fromString(pageModule.getSortOrder()), pageModule.getSortName());
         String searchCondition = pageModule.getSearchText();
 
-        Specification<CdpSysPermissionEntity> condition = new Specification<CdpSysPermissionEntity>() {
+        Specification<CdpPermissionEntity> condition = new Specification<CdpPermissionEntity>() {
             @Override
-            public Predicate toPredicate(Root<CdpSysPermissionEntity> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+            public Predicate toPredicate(Root<CdpPermissionEntity> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
                 if (StringUtils.isBlank(searchCondition)) {
                     return query.getRestriction();
                 }
@@ -142,40 +142,40 @@ public class PermissionServiceImpl implements IPermissionService {
             }
         };
         //分页查找
-        Page<CdpSysPermissionEntity> page = permissionRepository.findAll(condition, pageable);
+        Page<CdpPermissionEntity> page = permissionRepository.findAll(condition, pageable);
 
         return ResultUtils.success(page.getTotalElements(), page.getContent());
     }
 
     @Override
-    @Cacheable(value = TableNameConstant.CDP_SYS_PERMISSION, key = "#id")
-    public CdpSysPermissionEntity findOne(Long id) {
+    @Cacheable(value = TableNameConstant.CDP_PERMISSION, key = "#id")
+    public CdpPermissionEntity findOne(Long id) {
         return permissionRepository.findOne(id);
     }
 
     @Override
-    public List<CdpSysPermissionEntity> findByPId(Long pId) {
+    public List<CdpPermissionEntity> findByPId(Long pId) {
         Sort sort = new Sort(Sort.Direction.fromString("ASC"), "sort");
         return permissionRepository.findByPId(pId, sort);
     }
 
     @Override
-    public List<CdpSysPermissionEntity> findByPId(Long pId, Long versionId) {
+    public List<CdpPermissionEntity> findByPId(Long pId, Long versionId) {
         return permissionRepository.findByPId(pId, versionId);
     }
 
     @Override
-    public List<CdpSysPermissionEntity> findByType(Integer type) {
+    public List<CdpPermissionEntity> findByType(Integer type) {
         return permissionRepository.findByType(type);
     }
 
     @Override
-    public List<CdpSysPermissionEntity> findByAppName(String appName) {
+    public List<CdpPermissionEntity> findByAppName(String appName) {
         return permissionRepository.findByAppName(appName);
     }
 
     @Override
-    public IJpaRepository<CdpSysPermissionEntity, Long> getRepository() {
+    public IJpaRepository<CdpPermissionEntity, Long> getRepository() {
         return permissionRepository;
     }
 }

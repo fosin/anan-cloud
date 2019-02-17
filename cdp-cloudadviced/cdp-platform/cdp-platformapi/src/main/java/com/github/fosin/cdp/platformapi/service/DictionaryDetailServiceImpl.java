@@ -9,10 +9,10 @@ import com.github.fosin.cdp.mvc.result.Result;
 import com.github.fosin.cdp.mvc.result.ResultUtils;
 import com.github.fosin.cdp.platformapi.constant.SystemConstant;
 import com.github.fosin.cdp.platformapi.constant.TableNameConstant;
-import com.github.fosin.cdp.platformapi.dto.request.CdpSysDictionaryDetailCreateDto;
-import com.github.fosin.cdp.platformapi.dto.request.CdpSysDictionaryDetailUpdateDto;
-import com.github.fosin.cdp.platformapi.entity.CdpSysDictionaryDetailEntity;
-import com.github.fosin.cdp.platformapi.entity.CdpSysUserEntity;
+import com.github.fosin.cdp.platformapi.dto.request.CdpDictionaryDetailCreateDto;
+import com.github.fosin.cdp.platformapi.dto.request.CdpDictionaryDetailUpdateDto;
+import com.github.fosin.cdp.platformapi.entity.CdpDictionaryDetailEntity;
+import com.github.fosin.cdp.platformapi.entity.CdpUserEntity;
 import com.github.fosin.cdp.platformapi.repository.DictionaryDetailRepository;
 import com.github.fosin.cdp.platformapi.service.inter.IDictionaryDetailService;
 import com.github.fosin.cdp.platformapi.service.inter.IUserService;
@@ -53,26 +53,26 @@ public class DictionaryDetailServiceImpl implements IDictionaryDetailService {
     private IUserService userService;
 
     @Override
-    @CacheEvict(value = TableNameConstant.CDP_SYS_DICTIONARY_DETAIL, key = "#result.dictionaryId")
-    public CdpSysDictionaryDetailEntity create(CdpSysDictionaryDetailCreateDto entity) {
+    @CacheEvict(value = TableNameConstant.CDP_DICTIONARY_DETAIL, key = "#result.dictionaryId")
+    public CdpDictionaryDetailEntity create(CdpDictionaryDetailCreateDto entity) {
         Assert.notNull(entity, "传入的创建数据实体对象不能为空!");
-        CdpSysDictionaryDetailEntity createEntiy = new CdpSysDictionaryDetailEntity();
+        CdpDictionaryDetailEntity createEntiy = new CdpDictionaryDetailEntity();
         BeanUtils.copyProperties(entity, createEntiy);
         return getRepository().save(createEntiy);
     }
 
     @Override
-    @CacheEvict(value = TableNameConstant.CDP_SYS_DICTIONARY_DETAIL, key = "#entity.dictionaryId")
-    public CdpSysDictionaryDetailEntity update(CdpSysDictionaryDetailUpdateDto entity) {
+    @CacheEvict(value = TableNameConstant.CDP_DICTIONARY_DETAIL, key = "#entity.dictionaryId")
+    public CdpDictionaryDetailEntity update(CdpDictionaryDetailUpdateDto entity) {
         Assert.notNull(entity, "传入的更新数据实体对象不能为空!");
         Long id = entity.getId();
         Assert.notNull(id, "传入的更新数据实体对象主键不能为空!");
-        CdpSysDictionaryDetailEntity findEntity = dictionaryDetailRepository.findOne(id);
+        CdpDictionaryDetailEntity findEntity = dictionaryDetailRepository.findOne(id);
         Assert.notNull(findEntity, "根据传入的主键[" + id + "]在数据库中未能找到数据!");
-        CdpSysUserEntity loginUser = LoginUserUtil.getUser();
+        CdpUserEntity loginUser = LoginUserUtil.getUser();
         //不是超级管理员
         if (!SystemConstant.SUPER_USER_CODE.equals(loginUser.getUsercode())) {
-            CdpSysUserEntity superUser = userService.findByUsercode(SystemConstant.SUPER_USER_CODE);
+            CdpUserEntity superUser = userService.findByUsercode(SystemConstant.SUPER_USER_CODE);
             //是超级管理员创建的数据则不需要非超级管理员修改
             if (superUser.getId().equals(findEntity.getCreateBy())) {
                 throw new CdpServiceException("没有权限修改系统创建的字典明细项!");
@@ -83,39 +83,39 @@ public class DictionaryDetailServiceImpl implements IDictionaryDetailService {
     }
 
     @Override
-    public CdpSysDictionaryDetailEntity delete(Long id) {
+    public CdpDictionaryDetailEntity delete(Long id) {
         Assert.notNull(id, "传入了空的ID!");
-        CdpSysDictionaryDetailEntity entity = dictionaryDetailRepository.findOne(id);
+        CdpDictionaryDetailEntity entity = dictionaryDetailRepository.findOne(id);
         Assert.notNull(entity, "传入的ID找不到数据!");
-        CdpSysUserEntity loginUser = LoginUserUtil.getUser();
+        CdpUserEntity loginUser = LoginUserUtil.getUser();
         //不是超级管理员
         if (!SystemConstant.SUPER_USER_CODE.equals(loginUser.getUsercode())) {
-            CdpSysUserEntity superUser = userService.findByUsercode(SystemConstant.SUPER_USER_CODE);
+            CdpUserEntity superUser = userService.findByUsercode(SystemConstant.SUPER_USER_CODE);
             //是超级管理员创建的数据则不需要非超级管理员修改
             if (superUser.getId().equals(entity.getCreateBy())) {
                 throw new CdpServiceException("没有权限修改系统创建的字典明细项!");
             }
         }
 
-        CacheUtil.evict(TableNameConstant.CDP_SYS_DICTIONARY_DETAIL, entity.getDictionaryId() + "");
+        CacheUtil.evict(TableNameConstant.CDP_DICTIONARY_DETAIL, entity.getDictionaryId() + "");
         dictionaryDetailRepository.delete(id);
         try {
             Thread.sleep(500);
         } catch (InterruptedException e) {
             throw new CdpServiceException(e);
         }
-        CacheUtil.evict(TableNameConstant.CDP_SYS_DICTIONARY_DETAIL, entity.getDictionaryId() + "");
+        CacheUtil.evict(TableNameConstant.CDP_DICTIONARY_DETAIL, entity.getDictionaryId() + "");
         return null;
     }
 
     @Override
-    @CacheEvict(value = TableNameConstant.CDP_SYS_DICTIONARY_DETAIL, key = "#entity.dictionaryId")
-    public CdpSysDictionaryDetailEntity delete(CdpSysDictionaryDetailEntity entity) {
+    @CacheEvict(value = TableNameConstant.CDP_DICTIONARY_DETAIL, key = "#entity.dictionaryId")
+    public CdpDictionaryDetailEntity delete(CdpDictionaryDetailEntity entity) {
         Assert.notNull(entity, "传入了空的对象!");
-        CdpSysUserEntity loginUser = LoginUserUtil.getUser();
+        CdpUserEntity loginUser = LoginUserUtil.getUser();
         //不是超级管理员
         if (!SystemConstant.SUPER_USER_CODE.equals(loginUser.getUsercode())) {
-            CdpSysUserEntity superUser = userService.findByUsercode(SystemConstant.SUPER_USER_CODE);
+            CdpUserEntity superUser = userService.findByUsercode(SystemConstant.SUPER_USER_CODE);
             //是超级管理员创建的数据则不需要非超级管理员修改
             if (superUser.getId().equals(entity.getCreateBy())) {
                 throw new CdpServiceException("没有权限修改系统创建的字典明细项!");
@@ -130,7 +130,7 @@ public class DictionaryDetailServiceImpl implements IDictionaryDetailService {
         PageRequest pageable = new PageRequest(pageModule.getPageNumber() - 1, pageModule.getPageSize(), Sort.Direction.fromString(pageModule.getSortOrder()), pageModule.getSortName());
         String searchCondition = pageModule.getSearchText();
 
-        Specification<CdpSysDictionaryDetailEntity> condition = (root, query, cb) -> {
+        Specification<CdpDictionaryDetailEntity> condition = (root, query, cb) -> {
             Path<String> name = root.get("name");
             Path<String> value = root.get("value");
             Path<String> code = root.get("dictionaryId");
@@ -141,14 +141,14 @@ public class DictionaryDetailServiceImpl implements IDictionaryDetailService {
 
         };
         //分页查找
-        Page<CdpSysDictionaryDetailEntity> page = dictionaryDetailRepository.findAll(condition, pageable);
+        Page<CdpDictionaryDetailEntity> page = dictionaryDetailRepository.findAll(condition, pageable);
 
         return ResultUtils.success(page.getTotalElements(), page.getContent());
     }
 
     @Override
-    public Page<CdpSysDictionaryDetailEntity> findAll(String searchCondition, Pageable pageable, Long dictionaryId) {
-        Specification<CdpSysDictionaryDetailEntity> condition = (root, query, cb) -> {
+    public Page<CdpDictionaryDetailEntity> findAll(String searchCondition, Pageable pageable, Long dictionaryId) {
+        Specification<CdpDictionaryDetailEntity> condition = (root, query, cb) -> {
             Path<String> name = root.get("name");
             Path<String> value = root.get("value");
             Path<String> dictionaryIdPath = root.get("dictionaryId");
@@ -167,14 +167,14 @@ public class DictionaryDetailServiceImpl implements IDictionaryDetailService {
     }
 
     @Override
-    @Cacheable(value = TableNameConstant.CDP_SYS_DICTIONARY_DETAIL, key = "#dictionaryId")
-    public List<CdpSysDictionaryDetailEntity> findByDictionaryId(Long dictionaryId) {
+    @Cacheable(value = TableNameConstant.CDP_DICTIONARY_DETAIL, key = "#dictionaryId")
+    public List<CdpDictionaryDetailEntity> findByDictionaryId(Long dictionaryId) {
         return dictionaryDetailRepository.findByDictionaryId(dictionaryId);
     }
 
 
     @Override
-    public IJpaRepository<CdpSysDictionaryDetailEntity, Long> getRepository() {
+    public IJpaRepository<CdpDictionaryDetailEntity, Long> getRepository() {
         return dictionaryDetailRepository;
     }
 }

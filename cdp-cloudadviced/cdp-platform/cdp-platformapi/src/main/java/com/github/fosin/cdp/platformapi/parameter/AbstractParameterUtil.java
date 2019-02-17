@@ -1,6 +1,6 @@
 package com.github.fosin.cdp.platformapi.parameter;
 
-import com.github.fosin.cdp.platformapi.entity.CdpSysParameterEntity;
+import com.github.fosin.cdp.platformapi.entity.CdpParameterEntity;
 
 /**
  * Description:
@@ -9,7 +9,7 @@ import com.github.fosin.cdp.platformapi.entity.CdpSysParameterEntity;
  * @date 2018.8.6
  */
 public class AbstractParameterUtil {
-    protected static String getValue(CdpSysParameterEntity entity) {
+    protected static String getValue(CdpParameterEntity entity) {
         return (entity == null) ? "" : entity.getValue();
     }
 }

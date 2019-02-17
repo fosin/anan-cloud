@@ -1,7 +1,7 @@
 package com.github.fosin.cdp.platformapi.dto;
 
-import com.github.fosin.cdp.platformapi.dto.request.CdpSysUserCreateDto;
-import com.github.fosin.cdp.platformapi.dto.request.CdpSysUserRegisterDto;
+import com.github.fosin.cdp.platformapi.dto.request.CdpUserCreateDto;
+import com.github.fosin.cdp.platformapi.dto.request.CdpUserRegisterDto;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -22,7 +22,7 @@ public class RegisterDto implements Serializable {
     private OrganizationRegisterDto organization;
 
     @ApiModelProperty(value = "用户信息")
-    private CdpSysUserRegisterDto user;
+    private CdpUserRegisterDto user;
 
     @ApiModelProperty(value = "版本ID")
     private Long versionId;
