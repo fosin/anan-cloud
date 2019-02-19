@@ -51,4 +51,8 @@ public class CdpRoleEntity extends AbstractOrganizIdJpaEntity<Long, Long> implem
     @Column(name = "built_in", nullable = false)
     private Integer builtIn = 0;
 
+    @Override
+    public void setId(Long id) {
+        super.setId(id);
+    }
 }

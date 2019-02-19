@@ -4,25 +4,24 @@ package com.github.fosin.cdp.platformapi.service;
 import com.github.fosin.cdp.cache.util.CacheUtil;
 import com.github.fosin.cdp.core.exception.CdpUserOrPassInvalidException;
 import com.github.fosin.cdp.jpa.repository.IJpaRepository;
-import com.github.fosin.cdp.jpa.service.batch.IUpdateInBatchJpaService;
 import com.github.fosin.cdp.platformapi.constant.TableNameConstant;
 import com.github.fosin.cdp.platformapi.dto.request.CdpUserRoleCreateDto;
+import com.github.fosin.cdp.platformapi.entity.CdpRoleEntity;
 import com.github.fosin.cdp.platformapi.entity.CdpUserEntity;
 import com.github.fosin.cdp.platformapi.entity.CdpUserRoleEntity;
 import com.github.fosin.cdp.platformapi.repository.UserRoleRepository;
 import com.github.fosin.cdp.platformapi.service.inter.IUserRoleService;
 import com.github.fosin.cdp.platformapi.service.inter.IUserService;
 import com.github.fosin.cdp.platformapi.util.LoginUserUtil;
-import com.github.fosin.cdp.util.BeanUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -70,7 +69,7 @@ public class UserRoleServiceImpl implements IUserRoleService {
     @Transactional
     public List<CdpUserRoleEntity> updateInBatchByUserId(Long userId, Collection<CdpUserRoleCreateDto> entities) {
         Assert.notNull(userId, "传入的用户ID不能为空!");
-        Assert.notNull(entities, "传入的实体集合不能为空!");
+        Assert.isTrue(entities != null && entities.size() > 0, "传入的实体集合不能为空!");
 
         for (CdpUserRoleCreateDto entity : entities) {
             Assert.isTrue(entity.getUserId().equals(userId), "需要更新的数据集中有与用户ID不匹配的数据!");
@@ -81,29 +80,41 @@ public class UserRoleServiceImpl implements IUserRoleService {
         CacheUtil.evict(TableNameConstant.CDP_USER, userId + "");
         CacheUtil.evict(TableNameConstant.CDP_USER, userService.findOne(userId).getUsercode());
 
-        if (entities.iterator().hasNext()) {
-            CdpUserEntity loginUser = LoginUserUtil.getUser();
-            for (CdpUserRoleCreateDto entity : entities) {
-                if (entity.getOrganizId() == null) {
-                    entity.setOrganizId(loginUser.getOrganizId());
-                }
+        return getCdpUserRoleEntities(entities);
+    }
+
+    private List<CdpUserRoleEntity> getCdpUserRoleEntities(Collection<CdpUserRoleCreateDto> entities) {
+        List<CdpUserRoleEntity> saveEntities = new ArrayList<>();
+        CdpUserEntity loginUser = LoginUserUtil.getUser();
+        for (CdpUserRoleCreateDto entity : entities) {
+            CdpUserRoleEntity cdpUserRoleEntity = new CdpUserRoleEntity();
+            cdpUserRoleEntity.setUserId(entity.getUserId());
+            CdpRoleEntity cdpRoleEntity = new CdpRoleEntity();
+            cdpRoleEntity.setId(entity.getRoleId());
+            cdpUserRoleEntity.setRole(cdpRoleEntity);
+            if (entity.getOrganizId() == null) {
+                cdpUserRoleEntity.setOrganizId(loginUser.getOrganizId());
+            } else {
+                cdpUserRoleEntity.setOrganizId(entity.getOrganizId());
             }
-            return getRepository().save(BeanUtil.copyCollectionProperties(this.getClass(), IUpdateInBatchJpaService.class, entities));
+            saveEntities.add(cdpUserRoleEntity);
         }
 
-        return null;
+        return getRepository().save(saveEntities);
     }
 
     @Override
     @Transactional
     public List<CdpUserRoleEntity> updateInBatchByRoleId(Long roleId, Collection<CdpUserRoleCreateDto> entities) {
         Assert.notNull(roleId, "传入的角色ID不能为空!");
-        Assert.notNull(entities, "传入的实体集合不能为空!");
+        Assert.isTrue(entities != null && entities.size() > 0, "传入的实体集合不能为空!");
+
         for (CdpUserRoleCreateDto entity : entities) {
             Assert.isTrue(entity.getRoleId().equals(roleId), "需要更新的数据集中有与角色ID不匹配的数据!");
         }
 
         userRoleRepository.deleteByRoleId(roleId);
+
         //如果是角色用户，则需要删除所有角色相关用户的缓存
         for (CdpUserRoleCreateDto entity : entities) {
             Long userId = entity.getUserId();
@@ -111,17 +122,7 @@ public class UserRoleServiceImpl implements IUserRoleService {
             CacheUtil.evict(TableNameConstant.CDP_USER, userService.findOne(userId).getUsercode());
         }
 
-        if (entities.iterator().hasNext()) {
-            CdpUserEntity loginUser = LoginUserUtil.getUser();
-            for (CdpUserRoleCreateDto entity : entities) {
-                if (entity.getOrganizId() == null) {
-                    entity.setOrganizId(loginUser.getOrganizId());
-                }
-            }
-            return getRepository().save(BeanUtil.copyCollectionProperties(this.getClass(), IUpdateInBatchJpaService.class, entities));
-        }
-
-        return null;
+        return getCdpUserRoleEntities(entities);
     }
 
     public String getCacheKey(Integer type, Iterable<CdpUserRoleEntity> entitis) {
