@@ -20,10 +20,6 @@ public class CdpRolePermissionUpdateDto implements Serializable {
     private static final long serialVersionUID = -29829025776577577L;
 
     @NotNull
-    @ApiModelProperty(value = "角色权限ID", example = "Long", required = true)
-    private Long id;
-
-    @NotNull
     @ApiModelProperty(value = "角色ID", example = "Long", required = true)
     private Long roleId;
 

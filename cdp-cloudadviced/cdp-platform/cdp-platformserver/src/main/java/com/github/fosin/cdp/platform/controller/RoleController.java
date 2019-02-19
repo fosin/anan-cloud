@@ -5,10 +5,7 @@ import com.github.fosin.cdp.mvc.controller.ISimpleController;
 import com.github.fosin.cdp.mvc.module.PageModule;
 import com.github.fosin.cdp.mvc.result.Result;
 import com.github.fosin.cdp.mvc.service.ISimpleService;
-import com.github.fosin.cdp.platformapi.dto.request.CdpRoleCreateDto;
-import com.github.fosin.cdp.platformapi.dto.request.CdpRolePermissionUpdateDto;
-import com.github.fosin.cdp.platformapi.dto.request.CdpRoleRetrieveDto;
-import com.github.fosin.cdp.platformapi.dto.request.CdpRoleUpdateDto;
+import com.github.fosin.cdp.platformapi.dto.request.*;
 import com.github.fosin.cdp.platformapi.entity.*;
 import com.github.fosin.cdp.platformapi.service.inter.IRolePermissionService;
 import com.github.fosin.cdp.platformapi.service.inter.IRoleService;
@@ -52,7 +49,7 @@ public class RoleController implements ISimpleController<CdpRoleEntity, Long, Cd
 
     @ApiOperation(value = "根据角色ID更新角色权限", notes = "根据角色ID更新角色权限，此操作将先删除原权限，再新增新权限")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "entities", value = "角色权限集合(List<CdpRolePermissionEntity>)"),
+//            @ApiImplicitParam(name = "entities", value = "角色权限集合(List<CdpRolePermissionEntity>)"),
             @ApiImplicitParam(name = "roleId", value = "角色ID,取值于CdpRoleEntity.id")
     })
     @PutMapping(value = "/permissions/{roleId}")
@@ -64,18 +61,18 @@ public class RoleController implements ISimpleController<CdpRoleEntity, Long, Cd
     @ApiOperation("根据角色唯一id查找该角色所有用户信息")
     @ApiImplicitParam(name = "roleId", value = "角色ID,取值于CdpRoleEntity.id")
     @RequestMapping(value = "/users/{roleId}", method = {RequestMethod.GET, RequestMethod.POST})
-    public ResponseEntity<List<CdpUserEntity>> getRoleUsers(@PathVariable("roleId") Long roleId) throws CdpControllerException {
+    public ResponseEntity<List<CdpUserEntity>> getRoleUsers(@PathVariable("roleId") Long roleId) {
         return ResponseEntity.ok(userService.findRoleUsersByRoleId(roleId));
     }
 
 
     @ApiOperation(value = "根据角色ID更新角色拥有的用户", notes = "更新角色拥有的用户，此操作将先删除原用户集合，再新增新用户集合")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "entities", value = "角色用户集合(List<CdpUserRoleEntity>)"),
+//            @ApiImplicitParam(name = "entities", value = "角色用户集合(List<CdpUserRoleEntity>)"),
             @ApiImplicitParam(name = "roleId", value = "角色ID,取值于CdpRoleEntity.id"),
     })
     @PutMapping(value = "/users/{roleId}")
-    public ResponseEntity<List<CdpUserRoleEntity>> putUsers(@RequestBody List<CdpUserRoleEntity> entities,
+    public ResponseEntity<List<CdpUserRoleEntity>> putUsers(@RequestBody List<CdpUserRoleCreateDto> entities,
                                                                @PathVariable("roleId") Long roleId) {
         return ResponseEntity.ok(userRoleService.updateInBatchByRoleId(roleId, entities));
     }

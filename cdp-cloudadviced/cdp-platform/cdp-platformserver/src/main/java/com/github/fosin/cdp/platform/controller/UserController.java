@@ -5,10 +5,7 @@ import com.github.fosin.cdp.core.exception.CdpServiceException;
 import com.github.fosin.cdp.mvc.controller.AbstractBaseController;
 import com.github.fosin.cdp.mvc.controller.ISimpleController;
 import com.github.fosin.cdp.mvc.service.ISimpleService;
-import com.github.fosin.cdp.platformapi.dto.request.CdpUserCreateDto;
-import com.github.fosin.cdp.platformapi.dto.request.CdpUserPermissionUpdateDto;
-import com.github.fosin.cdp.platformapi.dto.request.CdpUserRetrieveDto;
-import com.github.fosin.cdp.platformapi.dto.request.CdpUserUpdateDto;
+import com.github.fosin.cdp.platformapi.dto.request.*;
 import com.github.fosin.cdp.platformapi.entity.CdpRoleEntity;
 import com.github.fosin.cdp.platformapi.entity.CdpUserEntity;
 import com.github.fosin.cdp.platformapi.entity.CdpUserPermissionEntity;
@@ -99,7 +96,7 @@ public class UserController extends AbstractBaseController implements ISimpleCon
 
     @ApiOperation("根据用户ID更新用户权限")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "entities", value = "用户权限集合(List<CdpUserPermissionEntity>)"),
+//            @ApiImplicitParam(name = "entities", value = "用户权限集合(List<CdpUserPermissionEntity>)"),
             @ApiImplicitParam(name = "userId", value = "用户ID,取值于CdpUserEntity.id")
     })
     @PutMapping(value = "/permissions/{userId}")
@@ -123,12 +120,12 @@ public class UserController extends AbstractBaseController implements ISimpleCon
 
     @ApiOperation("更新用户拥有的角色")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "entities", value = "用户角色集合(List<CdpUserRoleEntity>)"),
+//            @ApiImplicitParam(name = "entities", value = "用户角色集合(List<CdpUserRoleEntity>)"),
             @ApiImplicitParam(name = "userId", value = "用户ID,取值于CdpUserEntity.id")
     })
     @PutMapping(value = "/roles/{userId}")
     public ResponseEntity<List<CdpUserRoleEntity>> putUserRoles
-            (@RequestBody List<CdpUserRoleEntity> entities, @PathVariable Long userId) throws
+            (@RequestBody List<CdpUserRoleCreateDto> entities, @PathVariable Long userId) throws
             CdpServiceException {
         return ResponseEntity.ok(userRoleService.updateInBatchByUserId(userId, entities));
     }

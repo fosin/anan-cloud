@@ -1,15 +1,11 @@
 package com.github.fosin.cdp.platform.dto.request;
 
-import java.util.Date;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import org.hibernate.validator.constraints.NotBlank;
-import org.hibernate.validator.constraints.NotEmpty;
+import lombok.Data;
+
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import lombok.Data;
-import org.springframework.format.annotation.DateTimeFormat;
-import com.github.fosin.cdp.util.DateTimeUtil;
 
 /**
  * 系统机构权限表(CdpOrganizationPermission)更新DTO

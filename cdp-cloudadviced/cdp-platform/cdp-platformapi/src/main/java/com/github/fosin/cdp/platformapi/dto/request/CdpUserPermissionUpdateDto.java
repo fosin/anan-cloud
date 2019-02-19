@@ -1,15 +1,11 @@
 package com.github.fosin.cdp.platformapi.dto.request;
 
-import java.util.Date;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import org.hibernate.validator.constraints.NotBlank;
-import org.hibernate.validator.constraints.NotEmpty;
+import lombok.Data;
+
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import lombok.Data;
-import org.springframework.format.annotation.DateTimeFormat;
-import com.github.fosin.cdp.util.DateTimeUtil;
 
 /**
  * 用于增减用户的单项权限，通常实在角色的基础上增减单项权限(CdpUserPermission)更新DTO
@@ -22,10 +18,6 @@ import com.github.fosin.cdp.util.DateTimeUtil;
 @ApiModel(value = "用于增减用户的单项权限，通常实在角色的基础上增减单项权限更新DTO", description = "表(cdp_user_permission)的对应的更新DTO")
 public class CdpUserPermissionUpdateDto implements Serializable {
     private static final long serialVersionUID = -22032968753010923L;
-
-    @NotNull
-    @ApiModelProperty(value = "用户权限ID", example = "Long", required = true)
-    private Long id;
 
     @NotNull
     @ApiModelProperty(value = "机构ID", example = "Long", required = true)

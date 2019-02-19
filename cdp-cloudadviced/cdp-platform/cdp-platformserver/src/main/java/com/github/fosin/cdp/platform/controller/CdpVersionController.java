@@ -71,7 +71,7 @@ public class CdpVersionController implements ISimpleController<CdpVersionEntity,
 
     @ApiOperation(value = "根据版本ID更新版本权限", notes = "根据版本ID更新版本权限，此操作将先删除原权限，再新增新权限")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "entities", value = "版本权限集合(List<CdpVersionPermissionEntity>)"),
+//            @ApiImplicitParam(name = "entities", value = "版本权限集合(List<CdpVersionPermissionEntity>)"),
             @ApiImplicitParam(name = "versionId", value = "版本ID,取值于CdpVersionEntity.id")
     })
     @PutMapping(value = "/permissions/{versionId}")

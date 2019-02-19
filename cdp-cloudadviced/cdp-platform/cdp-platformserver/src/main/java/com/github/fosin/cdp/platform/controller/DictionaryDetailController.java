@@ -44,7 +44,7 @@ public class DictionaryDetailController implements ISimpleController<CdpDictiona
 
     @ApiOperation("根据字典代码获取对应的字典明细并分页排序")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "pageModule", value = "分页排序实体类"),
+//            @ApiImplicitParam(name = "pageModule", value = "分页排序实体类"),
             @ApiImplicitParam(name = "dictionaryId", value = "字典代码,取值于CdpDictionaryEntity.id"),
     })
     @RequestMapping(value = MvcConstant.PATH_PAGE_LIST + "/{dictionaryId}", method = {RequestMethod.POST, RequestMethod.GET})
@@ -61,8 +61,7 @@ public class DictionaryDetailController implements ISimpleController<CdpDictiona
     @RequestMapping(value = "/byCode/{dictionaryId}", method = {RequestMethod.GET, RequestMethod.POST})
     @ApiImplicitParam(name = "dictionaryId", value = "字典代码,取值于CdpDictionaryEntity.id")
     public ResponseEntity<List<CdpDictionaryDetailEntity>> getdictionariesByDictionaryId(@PathVariable Long dictionaryId) throws CdpControllerException {
-        List<CdpDictionaryDetailEntity> entities = dictionaryDetailService.findByDictionaryId(dictionaryId);
-        return ResponseEntity.ok(entities);
+        return ResponseEntity.ok(dictionaryDetailService.findByDictionaryId(dictionaryId));
     }
 
 }
