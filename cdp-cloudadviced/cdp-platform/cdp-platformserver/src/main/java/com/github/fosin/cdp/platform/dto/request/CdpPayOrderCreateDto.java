@@ -15,31 +15,27 @@ import com.github.fosin.cdp.util.DateTimeUtil;
  * 系统支付订单表(CdpPayOrder)创建DTO
  *
  * @author fosin
- * @date 2019-01-28 11:45:17
+ * @date 2019-02-19 18:14:31
  * @since 1.0.0
  */
 @Data
 @ApiModel(value = "系统支付订单表创建DTO", description = "表(cdp_pay_order)的对应的创建DTO")
 public class CdpPayOrderCreateDto implements Serializable {
-    private static final long serialVersionUID = 646187612687042049L;
-
-    @NotNull
-    @ApiModelProperty(value = "订单ID", example = "Long", required = true)
-    private Long orderId;
-
-    @NotNull
+    private static final long serialVersionUID = -16509988727597750L;
+    
+    @NotNull(message = "订单机构" + "{javax.validation.constraints.NotNull.message}")
     @ApiModelProperty(value = "订单机构", example = "Long", required = true)
     private Long organizId;
 
-    @NotNull
+    @NotNull(message = "订单用户" + "{javax.validation.constraints.NotNull.message}")
     @ApiModelProperty(value = "订单用户", example = "Long", required = true)
     private Long userId;
 
-    @NotNull
+    @NotNull(message = "版本ID" + "{javax.validation.constraints.NotNull.message}")
     @ApiModelProperty(value = "版本ID", example = "Long", required = true)
     private Long versionId;
 
-    @NotNull
+    @NotNull(message = "版本金额" + "{javax.validation.constraints.NotNull.message}")
     @ApiModelProperty(value = "版本金额", example = "Double", required = true)
     private Double money;
 
@@ -47,7 +43,7 @@ public class CdpPayOrderCreateDto implements Serializable {
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
     private Date orderTime;
 
-    @NotNull
+    @NotNull(message = "订单状态：0=新建，1=支付，2=取消，3=作废" + "{javax.validation.constraints.NotNull.message}")
     @ApiModelProperty(value = "订单状态：0=新建，1=支付，2=取消，3=作废", example = "Integer", required = true)
     private Integer status;
 

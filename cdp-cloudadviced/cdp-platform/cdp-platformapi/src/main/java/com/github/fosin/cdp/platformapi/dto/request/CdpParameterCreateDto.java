@@ -1,20 +1,14 @@
 package com.github.fosin.cdp.platformapi.dto.request;
 
-import java.util.Date;
-
 import com.github.fosin.cdp.util.RegexUtil;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 import org.hibernate.validator.constraints.NotBlank;
-import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.io.Serializable;
-
-import lombok.Data;
-import org.springframework.format.annotation.DateTimeFormat;
-import com.github.fosin.cdp.util.DateTimeUtil;
 
 /**
  * 用于存放各种分类分组的个性化参数(CdpParameter)创建DTO
@@ -26,9 +20,9 @@ import com.github.fosin.cdp.util.DateTimeUtil;
 @Data
 @ApiModel(value = "用于存放各种分类分组的个性化参数创建DTO", description = "表(cdp_parameter)的对应的创建DTO")
 public class CdpParameterCreateDto implements Serializable {
-    private static final long serialVersionUID = 733014438276171613L;
+    private static final long serialVersionUID = -73747092156452855L;
 
-    @NotBlank
+    @NotBlank(message = "参数键" + "{org.hibernate.validator.constraints.NotBlank.message}")
     @ApiModelProperty(value = "参数键", example = "String", required = true)
     @Pattern(regexp = "[\\w]{1,64}", message = "参数键只能大小写字母、数字、下杠(_)组合而成,长度不超过64位")
     private String name;
@@ -36,8 +30,8 @@ public class CdpParameterCreateDto implements Serializable {
     @ApiModelProperty(value = "参数值", example = "String")
     private String value;
 
-    @NotNull
-    @ApiModelProperty(value = "参数分类：具体取值于字典表cdp_dictionary.id=10", example = "Integer", required = true)
+    @NotNull(message = "参数分类：具体取值于字典表cdp_dictionary.code=10" + "{javax.validation.constraints.NotNull.message}")
+    @ApiModelProperty(value = "参数分类：具体取值于字典表cdp_dictionary.code=10", example = "Integer", required = true)
     private Integer type;
 
     @ApiModelProperty(value = "参数作用域", example = "String")
@@ -50,7 +44,7 @@ public class CdpParameterCreateDto implements Serializable {
     @ApiModelProperty(value = "参数描述", example = "String")
     private String description;
 
-    @NotNull
+    @NotNull(message = "参数状态：0=正常状态、1=修改状态、2=删除状态" + "{javax.validation.constraints.NotNull.message}")
     @ApiModelProperty(value = "参数状态：0=正常状态、1=修改状态、2=删除状态", example = "Integer", required = true)
     private Integer status;
 

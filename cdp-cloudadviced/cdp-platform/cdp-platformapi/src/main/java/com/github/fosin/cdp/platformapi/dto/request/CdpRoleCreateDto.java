@@ -1,19 +1,15 @@
 package com.github.fosin.cdp.platformapi.dto.request;
 
-import java.util.Date;
-
 import com.github.fosin.cdp.util.RegexUtil;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 import org.hibernate.validator.constraints.NotBlank;
-import org.hibernate.validator.constraints.NotEmpty;
+import org.hibernate.validator.constraints.Range;
+
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.io.Serializable;
-import lombok.Data;
-import org.hibernate.validator.constraints.Range;
-import org.springframework.format.annotation.DateTimeFormat;
-import com.github.fosin.cdp.util.DateTimeUtil;
 
 /**
  * 系统角色表(CdpRole)创建DTO
@@ -25,19 +21,18 @@ import com.github.fosin.cdp.util.DateTimeUtil;
 @Data
 @ApiModel(value = "系统角色表创建DTO", description = "表(cdp_role)的对应的创建DTO")
 public class CdpRoleCreateDto implements Serializable {
-    private static final long serialVersionUID = 490605449601121846L;
+    private static final long serialVersionUID = -87184860142214551L;
 
-    @NotNull
+    @NotNull(message = "机构ID" + "{javax.validation.constraints.NotNull.message}")
     @ApiModelProperty(value = "机构ID", example = "Long", required = true)
     private Long organizId;
 
-    @NotBlank
+    @NotBlank(message = "角色名称" + "{org.hibernate.validator.constraints.NotBlank.message}")
     @ApiModelProperty(value = "角色名称", example = "String", required = true)
     @Pattern(regexp = RegexUtil.SPECIAL, message = "名称不能包含特殊字符")
     private String name;
 
-    @NotBlank
-    @Pattern(regexp = "[\\w]{1,40}", message = "角色标识只能大小写字母、数字、下杠(_)组合而成,长度不超过40位")
+    @NotBlank(message = "角色标识" + "{org.hibernate.validator.constraints.NotBlank.message}")    @Pattern(regexp = "[\\w]{1,40}", message = "角色标识只能大小写字母、数字、下杠(_)组合而成,长度不超过40位")
     @ApiModelProperty(value = "角色标识", example = "String", required = true)
     private String value;
 

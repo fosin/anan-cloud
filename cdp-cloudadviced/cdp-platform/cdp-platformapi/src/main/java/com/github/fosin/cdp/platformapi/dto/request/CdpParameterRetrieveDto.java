@@ -3,9 +3,7 @@ package com.github.fosin.cdp.platformapi.dto.request;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import org.hibernate.validator.constraints.NotBlank;
 
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
@@ -18,21 +16,18 @@ import java.io.Serializable;
 @Data
 @ApiModel(value = "用于存放各种分类分组的个性化参数查询DTO", description = "表(cdp_parameter)的对应的查询DTO")
 public class CdpParameterRetrieveDto implements Serializable {
-    private static final long serialVersionUID = -44492949479676093L;
+    private static final long serialVersionUID = -95372770044687456L;
 
-    @NotNull
-    @ApiModelProperty(value = "参数ID", example = "Long")
+    @ApiModelProperty(value = "参数ID, 主键", example = "Long")
     private Long id;
 
-    @NotBlank
     @ApiModelProperty(value = "参数键", example = "String")
     private String name;
 
     @ApiModelProperty(value = "参数值", example = "String")
     private String value;
 
-    @NotNull
-    @ApiModelProperty(value = "参数分类：具体取值于字典表cdp_dictionary.id=10", example = "Integer")
+    @ApiModelProperty(value = "参数分类：具体取值于字典表cdp_dictionary.code=10", example = "Integer")
     private Integer type;
 
     @ApiModelProperty(value = "参数作用域", example = "String")
@@ -44,18 +39,6 @@ public class CdpParameterRetrieveDto implements Serializable {
     @ApiModelProperty(value = "参数描述", example = "String")
     private String description;
 
-    @NotNull
-    @ApiModelProperty(value = "该值由后台维护，更改数据时前端不需要关心，取值于cdp_user.id", example = "Long")
-    private Long createBy;
-
-    @NotNull
-    @ApiModelProperty(value = "该值由后台维护，更改数据时前端不需要关心，取值于cdp_user.id", example = "Long")
-    private Long updateBy;
-
-    @ApiModelProperty(value = "该值由后台维护，更改数据时前端不需要关心，取值于cdp_user.id", example = "Long")
-    private Long applyBy;
-
-    @NotNull
     @ApiModelProperty(value = "参数状态：0=正常状态、1=修改状态、2=删除状态", example = "Integer")
     private Integer status;
 

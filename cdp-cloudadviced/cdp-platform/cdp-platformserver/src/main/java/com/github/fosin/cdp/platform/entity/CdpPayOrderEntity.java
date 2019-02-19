@@ -39,7 +39,6 @@ public class CdpPayOrderEntity  extends AbstractPersistable<Long> implements Ser
 
     @Column(name = "organiz_id", nullable = false)
     @Basic
-    @NotNull(message = "机构ID不能为空!")
     @ApiModelProperty(value = "机构ID")
     private Long organizId;
 

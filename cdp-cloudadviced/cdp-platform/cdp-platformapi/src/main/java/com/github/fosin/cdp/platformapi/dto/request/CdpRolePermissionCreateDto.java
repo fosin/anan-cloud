@@ -17,13 +17,14 @@ import java.io.Serializable;
 @Data
 @ApiModel(value = "系统角色权限表创建DTO", description = "表(cdp_role_permission)的对应的创建DTO")
 public class CdpRolePermissionCreateDto implements Serializable {
-    private static final long serialVersionUID = 716493880109322923L;
+    private static final long serialVersionUID = -15682978445746756L;
 
-    @NotNull
+    @NotNull(message = "角色ID" + "{javax.validation.constraints.NotNull.message}")
     @ApiModelProperty(value = "角色ID", example = "Long", required = true)
     private Long roleId;
 
-    @NotNull
+    @NotNull(message = "权限ID" + "{javax.validation.constraints.NotNull.message}")
     @ApiModelProperty(value = "权限ID", example = "Long", required = true)
     private Long permissionId;
+
 }

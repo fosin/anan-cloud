@@ -1,15 +1,11 @@
 package com.github.fosin.cdp.platformapi.dto.request;
 
-import java.util.Date;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import org.hibernate.validator.constraints.NotBlank;
-import org.hibernate.validator.constraints.NotEmpty;
+import lombok.Data;
+
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import lombok.Data;
-import org.springframework.format.annotation.DateTimeFormat;
-import com.github.fosin.cdp.util.DateTimeUtil;
 
 /**
  * 用于增减用户的单项权限，通常实在角色的基础上增减单项权限(CdpUserPermission)创建DTO
@@ -21,21 +17,21 @@ import com.github.fosin.cdp.util.DateTimeUtil;
 @Data
 @ApiModel(value = "用于增减用户的单项权限，通常实在角色的基础上增减单项权限创建DTO", description = "表(cdp_user_permission)的对应的创建DTO")
 public class CdpUserPermissionCreateDto implements Serializable {
-    private static final long serialVersionUID = 336874245725133910L;
+    private static final long serialVersionUID = -29204374865503979L;
 
-    @NotNull
+    @NotNull(message = "机构ID" + "{javax.validation.constraints.NotNull.message}")
     @ApiModelProperty(value = "机构ID", example = "Long", required = true)
     private Long organizId;
 
-    @NotNull
+    @NotNull(message = "用户ID" + "{javax.validation.constraints.NotNull.message}")
     @ApiModelProperty(value = "用户ID", example = "Long", required = true)
     private Long userId;
 
-    @NotNull
+    @NotNull(message = "权限ID" + "{javax.validation.constraints.NotNull.message}")
     @ApiModelProperty(value = "权限ID", example = "Long", required = true)
     private Long permissionId;
 
-    @NotNull
+    @NotNull(message = "补充方式：0=增加权限、1=删除权限" + "{javax.validation.constraints.NotNull.message}")
     @ApiModelProperty(value = "补充方式：0=增加权限、1=删除权限", example = "Integer", required = true)
     private Integer addMode;
 

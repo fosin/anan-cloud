@@ -27,17 +27,17 @@ import java.util.Date;
 @ApiModel(value = "创建用户")
 public class CdpUserRegisterDto implements Serializable {
 
-    @NotBlank
+    @NotBlank(message = "用户工号" + "{org.hibernate.validator.constraints.NotBlank.message}")
     @ApiModelProperty(value = "用户工号", example = "String", required = true)
     @Pattern(regexp = "[A-Za-z][A-Za-z0-9]{1,30}", message = "用户工号只能大小写字母开头，数字、下杠(_)组合而成,长度不超过30位")
     private String usercode;
 
-    @NotBlank
+    @NotBlank(message = "用户姓名" + "{org.hibernate.validator.constraints.NotBlank.message}")
     @ApiModelProperty(value = "用户姓名", example = "String", required = true)
     @Pattern(regexp = RegexUtil.SPECIAL, message = "用户姓名不能包含特殊字符")
     private String username;
 
-    @NotBlank
+    @NotBlank(message = "密码" + "{org.hibernate.validator.constraints.NotBlank.message}")
     @ApiModelProperty(value = "传入原始密码，后台会对原始密码进行加密后再存储", example = "String", required = true)
     private String password;
 
@@ -46,7 +46,7 @@ public class CdpUserRegisterDto implements Serializable {
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
     private Date birthday;
 
-    @NotNull
+    @NotNull(message = "使用状态" + "{javax.validation.constraints.NotNull.message}")
     @ApiModelProperty(value = "使用状态：具体取值于字典表cdp_dictionary.id=15", example = "Integer", required = true)
     private Integer sex;
 
@@ -58,7 +58,7 @@ public class CdpUserRegisterDto implements Serializable {
     @ApiModelProperty(value = "手机号码", example = "String")
     private String phone;
 
-    @NotNull
+    @NotNull(message = "使用状态" + "{javax.validation.constraints.NotNull.message}")
     @ApiModelProperty(value = "使用状态：0=启用，1=禁用，具体取值于字典表cdp_dictionary.id=11", example = "Integer", required = true)
     private Integer status;
 

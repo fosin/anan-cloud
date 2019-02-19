@@ -15,23 +15,19 @@ import com.github.fosin.cdp.util.DateTimeUtil;
  * 系统支付发票表(CdpPayInvoice)创建DTO
  *
  * @author fosin
- * @date 2019-01-28 11:45:18
+ * @date 2019-02-19 18:14:31
  * @since 1.0.0
  */
 @Data
 @ApiModel(value = "系统支付发票表创建DTO", description = "表(cdp_pay_invoice)的对应的创建DTO")
 public class CdpPayInvoiceCreateDto implements Serializable {
-    private static final long serialVersionUID = 780966112542474654L;
-
-    @NotNull
-    @ApiModelProperty(value = "发票ID", example = "Long", required = true)
-    private Long invoceId;
-
-    @NotNull
+    private static final long serialVersionUID = 216983964108957018L;
+    
+    @NotNull(message = "支付ID" + "{javax.validation.constraints.NotNull.message}")
     @ApiModelProperty(value = "支付ID", example = "Long", required = true)
     private Long payId;
 
-    @NotBlank
+    @NotBlank(message = "发票号码" + "{org.hibernate.validator.constraints.NotBlank.message}")
     @ApiModelProperty(value = "发票号码", example = "String", required = true)
     private String invoceNo;
 
@@ -39,7 +35,7 @@ public class CdpPayInvoiceCreateDto implements Serializable {
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
     private Date invoceTime;
 
-    @NotNull
+    @NotNull(message = "操作人" + "{javax.validation.constraints.NotNull.message}")
     @ApiModelProperty(value = "操作人", example = "Long", required = true)
     private Long crreateBy;
 
