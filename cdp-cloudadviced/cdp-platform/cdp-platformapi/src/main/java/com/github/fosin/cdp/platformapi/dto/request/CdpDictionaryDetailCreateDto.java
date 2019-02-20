@@ -21,7 +21,7 @@ import java.io.Serializable;
 public class CdpDictionaryDetailCreateDto implements Serializable {
     private static final long serialVersionUID = -81112310562332311L;
 
-    @NotNull(message = "字典明细键，不能重复，字典内明细项唯一代码" + "{javax.validation.constraints.NotNull.message}")
+    @NotNull(message = "字典明细键" + "{javax.validation.constraints.NotNull.message}")
     @ApiModelProperty(value = "字典明细键，不能重复，字典内明细项唯一代码", example = "Long", required = true)
     private Long name;
 
@@ -29,27 +29,27 @@ public class CdpDictionaryDetailCreateDto implements Serializable {
     @Pattern(regexp = RegexUtil.SPECIAL, message = "字典明细值不能包含特殊字符")
     private String value;
 
-    @NotNull(message = "取值于字典明细表CdpSysDictionaryDetailEntity.code" + "{javax.validation.constraints.NotNull.message}")
-    @ApiModelProperty(value = "取值于字典明细表CdpSysDictionaryDetailEntity.code", example = "Long", required = true)
+    @NotNull(message = "字典ID" + "{javax.validation.constraints.NotNull.message}")
+    @ApiModelProperty(value = "字典ID，取值于字典明细表CdpSysDictionaryDetailEntity.code", example = "Long", required = true)
     private Long dictionaryId;
 
-    @NotNull(message = "顺序，用于显示数据时的顺序，数值越小越靠前" + "{javax.validation.constraints.NotNull.message}")
+    @NotNull(message = "顺序" + "{javax.validation.constraints.NotNull.message}")
     @ApiModelProperty(value = "顺序，用于显示数据时的顺序，数值越小越靠前", example = "Integer", required = true)
     private Integer sort;
 
-    @NotNull(message = "使用状态：0=启用，1=禁用，具体取值于字典表cdp_dictionary.code=11" + "{javax.validation.constraints.NotNull.message}")
+    @NotNull(message = "使用状态" + "{javax.validation.constraints.NotNull.message}")
     @ApiModelProperty(value = "使用状态：0=启用，1=禁用，具体取值于字典表cdp_dictionary.code=11", example = "Integer", required = true)
     private Integer status;
 
-    @ApiModelProperty(value = "标准代码，该字段通常用于对接标准字典", example = "String")
+    @ApiModelProperty(value = "标准代码", example = "String")
     @Pattern(regexp = RegexUtil.SPECIAL, message = "标准代码不能包含特殊字符")
     private String scode;
 
-    @ApiModelProperty(value = "作用域，用于字典明细项的作用域", example = "String")
+    @ApiModelProperty(value = "作用域", example = "String")
     @Pattern(regexp = RegexUtil.SPECIAL, message = "作用域不能包含特殊字符")
     private String scope;
 
-    @NotNull(message = "使用标志：0=未使用，1=已使用，已使用的字典就不能再修改name属性" + "{javax.validation.constraints.NotNull.message}")
+    @NotNull(message = "使用标志" + "{javax.validation.constraints.NotNull.message}")
     @ApiModelProperty(value = "使用标志：0=未使用，1=已使用，已使用的字典就不能再修改name属性", example = "Integer", required = true)
     private Integer used;
 

@@ -22,12 +22,12 @@ import java.io.Serializable;
 public class CdpPermissionCreateDto implements Serializable {
     private static final long serialVersionUID = -64600322422519137L;
 
-    @NotBlank(message = "权限编码，不能重复 不能为空" + "{org.hibernate.validator.constraints.NotBlank.message}")
+    @NotBlank(message = "权限编码" + "{org.hibernate.validator.constraints.NotBlank.message}")
     @ApiModelProperty(value = "权限编码，不能重复 不能为空", example = "String", required = true)
     @Pattern(regexp = "[A-Z][a-zA-Z0-9]{1,64}", message = "权限编码只能大写字母开始，大小写字母、数字组合而成,长度不超过64位")
     private String code;
 
-    @NotNull(message = "父权限ID，取值于id，表示当前数据的父类权限" + "{javax.validation.constraints.NotNull.message}")
+    @NotNull(message = "父权限ID" + "{javax.validation.constraints.NotNull.message}")
     @ApiModelProperty(value = "父权限ID，取值于id，表示当前数据的父类权限", example = "Long", required = true)
     private Long pId;
 
@@ -36,11 +36,11 @@ public class CdpPermissionCreateDto implements Serializable {
     @Pattern(regexp = RegexUtil.SPECIAL, message = "名称不能包含特殊字符")
     private String name;
 
-    @ApiModelProperty(value = "该字段必须和type字段共同使用，详情请看type字段", example = "String")
+    @ApiModelProperty(value = "资源路径必须和type字段共同使用，详情请看type字段", example = "String")
     @Pattern(regexp = "[A-Za-z0-9/:.@?=& -]*", message = "资源路径只支持大小写字母 数字 & / : . @ - ? =")
     private String url;
 
-    @NotNull(message = "权限类型：0=按钮、1=组件菜单，对应ur是前端组件l、2=链接菜单，对应url是http(s)链接地址、3=目录菜单，对应是目录菜单，具体取值于字典表cdp_dictionary.code=13，当权限类型是1：组件菜单 3：目录菜单时表示该节点不是一个叶子节点" + "{javax.validation.constraints.NotNull.message}")
+    @NotNull(message = "权限类型" + "{javax.validation.constraints.NotNull.message}")
     @ApiModelProperty(value = "权限类型：0=按钮、1=组件菜单，对应ur是前端组件l、2=链接菜单，对应url是http(s)链接地址、3=目录菜单，对应是目录菜单，具体取值于字典表cdp_dictionary.code=13，当权限类型是1：组件菜单 3：目录菜单时表示该节点不是一个叶子节点", example = "Integer", required = true)
     private Integer type;
 
@@ -51,20 +51,20 @@ public class CdpPermissionCreateDto implements Serializable {
     @ApiModelProperty(value = "排序，用于显示数据时的顺序，数值越小越靠前", example = "Integer")
     private Integer sort;
 
-    @NotNull(message = "使用状态：0=启用，1=禁用，具体取值于字典表cdp_dictionary.code=11" + "{javax.validation.constraints.NotNull.message}")
+    @NotNull(message = "使用状态" + "{javax.validation.constraints.NotNull.message}")
     @ApiModelProperty(value = "使用状态：0=启用，1=禁用，具体取值于字典表cdp_dictionary.code=11", example = "Integer", required = true)
     private Integer status;
 
-    @NotBlank(message = "所属应用名称,等同于配置文件中的spring.application.name" + "{org.hibernate.validator.constraints.NotBlank.message}")
-    @ApiModelProperty(value = "所属应用名称,等同于配置文件中的spring.application.name", example = "String", required = true)
-    @Pattern(regexp = "[a-zA-Z][a-zA-Z0-9_-]{1,64}", message = "应用名称只能大小写字母开始、数字、下杠(_)组合而成,长度不超过64位")
+    @NotBlank(message = "所属应用名称" + "{org.hibernate.validator.constraints.NotBlank.message}")
+    @ApiModelProperty(value = "所属应用名称：等同于配置文件中的spring.application.name", example = "String", required = true)
+    @Pattern(regexp = "[a-zA-Z][a-zA-Z0-9_-]{1,64}", message = "所属应用名称：只能大小写字母开始、数字、下杠(_)组合而成,长度不超过64位")
     private String appName;
 
     @ApiModelProperty(value = "后台请求权限地址，权限路径ant风格表达式，用于动态验证HTTP后台请求的权限标识", example = "String")
     private String path;
 
     @ApiModelProperty(value = "http请求方法：GET、POST、DELETE、OPTIONS、PUT、PATCH，具体取值于字典表cdp_dictionary.id=12", example = "String")
-    @Pattern(regexp = "[A-Z]{0,20}", message = "请求方法只能大写字母组合而成,长度不超过20位")
+    @Pattern(regexp = "[A-Z]{0,20}", message = "http请求方法：只能大写字母组合而成,长度不超过20位")
     private String method;
 
     @ApiModelProperty(value = "一般用于前端菜单选项前的图标", example = "String")

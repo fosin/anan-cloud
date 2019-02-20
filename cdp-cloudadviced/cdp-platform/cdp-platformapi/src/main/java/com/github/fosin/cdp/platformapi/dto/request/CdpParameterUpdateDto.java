@@ -34,7 +34,7 @@ public class CdpParameterUpdateDto implements Serializable {
     @ApiModelProperty(value = "参数值", example = "String")
     private String value;
 
-    @NotNull(message = "参数分类：具体取值于字典表cdp_dictionary.code=10" + "{javax.validation.constraints.NotNull.message}")
+    @NotNull(message = "参数分类" + "{javax.validation.constraints.NotNull.message}")
     @ApiModelProperty(value = "参数分类：具体取值于字典表cdp_dictionary.code=10", example = "Integer", required = true)
     private Integer type;
 
@@ -48,7 +48,7 @@ public class CdpParameterUpdateDto implements Serializable {
     @ApiModelProperty(value = "参数描述", example = "String")
     private String description;
 
-    @NotNull(message = "参数状态：0=正常状态、1=修改状态、2=删除状态" + "{javax.validation.constraints.NotNull.message}")
+    @NotNull(message = "参数状态" + "{javax.validation.constraints.NotNull.message}")
     @ApiModelProperty(value = "参数状态：0=正常状态、1=修改状态、2=删除状态", example = "Integer", required = true)
     private Integer status;
 

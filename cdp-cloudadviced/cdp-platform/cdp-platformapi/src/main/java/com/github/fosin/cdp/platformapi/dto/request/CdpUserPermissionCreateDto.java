@@ -31,7 +31,7 @@ public class CdpUserPermissionCreateDto implements Serializable {
     @ApiModelProperty(value = "权限ID", example = "Long", required = true)
     private Long permissionId;
 
-    @NotNull(message = "补充方式：0=增加权限、1=删除权限" + "{javax.validation.constraints.NotNull.message}")
+    @NotNull(message = "补充方式" + "{javax.validation.constraints.NotNull.message}")
     @ApiModelProperty(value = "补充方式：0=增加权限、1=删除权限", example = "Integer", required = true)
     private Integer addMode;
 

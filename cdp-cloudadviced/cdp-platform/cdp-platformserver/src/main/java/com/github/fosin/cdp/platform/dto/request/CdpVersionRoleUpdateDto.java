@@ -22,7 +22,7 @@ import com.github.fosin.cdp.util.DateTimeUtil;
 @ApiModel(value = "系统版本角色表更新DTO", description = "表(cdp_version_role)的对应的更新DTO")
 public class CdpVersionRoleUpdateDto implements Serializable {
     private static final long serialVersionUID = 574007298574981650L;
-    
+
     @NotNull(message = "角色ID" + "{javax.validation.constraints.NotNull.message}")
     @ApiModelProperty(value = "角色ID, 主键", example = "Long", required = true)
     private Long id;
@@ -42,7 +42,7 @@ public class CdpVersionRoleUpdateDto implements Serializable {
     @ApiModelProperty(value = "角色说明", example = "String")
     private String tips;
 
-    @NotNull(message = "使用状态：0=启用，1=禁用，具体取值于字典表cdp_dictionary.code=11" + "{javax.validation.constraints.NotNull.message}")
+    @NotNull(message = "使用状态" + "{javax.validation.constraints.NotNull.message}")
     @ApiModelProperty(value = "使用状态：0=启用，1=禁用，具体取值于字典表cdp_dictionary.code=11", example = "Integer", required = true)
     private Integer status;
 

@@ -22,12 +22,12 @@ import com.github.fosin.cdp.util.DateTimeUtil;
 @ApiModel(value = "系统版本表创建DTO", description = "表(cdp_version)的对应的创建DTO")
 public class CdpVersionCreateDto implements Serializable {
     private static final long serialVersionUID = 694132641358640789L;
-    
+
     @NotBlank(message = "版本名称" + "{org.hibernate.validator.constraints.NotBlank.message}")
     @ApiModelProperty(value = "版本名称", example = "String", required = true)
     private String name;
 
-    @NotNull(message = "版本类型：0=收费版 1=免费版 2=开发版" + "{javax.validation.constraints.NotNull.message}")
+    @NotNull(message = "版本类型" + "{javax.validation.constraints.NotNull.message}")
     @ApiModelProperty(value = "版本类型：0=收费版 1=免费版 2=开发版", example = "Integer", required = true)
     private Integer type;
 
@@ -43,7 +43,7 @@ public class CdpVersionCreateDto implements Serializable {
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
     private Date endTime;
 
-    @NotNull(message = "有效期：一般按天计算" + "{javax.validation.constraints.NotNull.message}")
+    @NotNull(message = "有效期" + "{javax.validation.constraints.NotNull.message}")
     @ApiModelProperty(value = "有效期：一般按天计算", example = "Integer", required = true)
     private Integer validity;
 
@@ -51,15 +51,15 @@ public class CdpVersionCreateDto implements Serializable {
     @ApiModelProperty(value = "到期后保护期", example = "Integer", required = true)
     private Integer protectDays;
 
-    @NotNull(message = "最大机构数：0=无限制 n=限制数" + "{javax.validation.constraints.NotNull.message}")
+    @NotNull(message = "最大机构数" + "{javax.validation.constraints.NotNull.message}")
     @ApiModelProperty(value = "最大机构数：0=无限制 n=限制数", example = "Integer", required = true)
     private Integer maxOrganizs;
 
-    @NotNull(message = "最大机构数：0=无限制 n=限制数" + "{javax.validation.constraints.NotNull.message}")
+    @NotNull(message = "最大机构数" + "{javax.validation.constraints.NotNull.message}")
     @ApiModelProperty(value = "最大机构数：0=无限制 n=限制数", example = "Integer", required = true)
     private Integer maxUsers;
 
-    @NotNull(message = "是否试用：0=不试用 1=试用" + "{javax.validation.constraints.NotNull.message}")
+    @NotNull(message = "是否试用" + "{javax.validation.constraints.NotNull.message}")
     @ApiModelProperty(value = "是否试用：0=不试用 1=试用", example = "Integer", required = true)
     private Integer tryout;
 
@@ -67,7 +67,7 @@ public class CdpVersionCreateDto implements Serializable {
     @ApiModelProperty(value = "试用天数", example = "Integer", required = true)
     private Integer tryoutDays;
 
-    @NotNull(message = "启用状态：0=启用，1=禁用" + "{javax.validation.constraints.NotNull.message}")
+    @NotNull(message = "启用状态" + "{javax.validation.constraints.NotNull.message}")
     @ApiModelProperty(value = "启用状态：0=启用，1=禁用", example = "Integer", required = true)
     private Integer status;
 

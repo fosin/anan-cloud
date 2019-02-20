@@ -30,7 +30,7 @@ public class CdpDictionaryDetailUpdateDto implements Serializable {
     @ApiModelProperty(value = "字典明细ID, 主键", example = "Long", required = true)
     private Long id;
 
-    @NotNull(message = "字典明细键，不能重复，字典内明细项唯一代码" + "{javax.validation.constraints.NotNull.message}")
+    @NotNull(message = "字典明细键" + "{javax.validation.constraints.NotNull.message}")
     @ApiModelProperty(value = "字典明细键，不能重复，字典内明细项唯一代码", example = "Long", required = true)
     private Long name;
 
@@ -38,15 +38,15 @@ public class CdpDictionaryDetailUpdateDto implements Serializable {
     @Pattern(regexp = RegexUtil.SPECIAL, message = "字典明细值不能包含特殊字符")
     private String value;
 
-    @NotNull(message = "取值于字典明细表CdpSysDictionaryDetailEntity.code" + "{javax.validation.constraints.NotNull.message}")
-    @ApiModelProperty(value = "取值于字典明细表CdpSysDictionaryDetailEntity.code", example = "Long", required = true)
+    @NotNull(message = "字典ID" + "{javax.validation.constraints.NotNull.message}")
+    @ApiModelProperty(value = "字典ID，取值于字典明细表CdpSysDictionaryEntity.id", example = "Long", required = true)
     private Long dictionaryId;
 
-    @NotNull(message = "顺序，用于显示数据时的顺序，数值越小越靠前" + "{javax.validation.constraints.NotNull.message}")
+    @NotNull(message = "顺序" + "{javax.validation.constraints.NotNull.message}")
     @ApiModelProperty(value = "顺序，用于显示数据时的顺序，数值越小越靠前", example = "Integer", required = true)
     private Integer sort;
 
-    @NotNull(message = "使用状态：0=启用，1=禁用，具体取值于字典表cdp_dictionary.code=11" + "{javax.validation.constraints.NotNull.message}")
+    @NotNull(message = "使用状态" + "{javax.validation.constraints.NotNull.message}")
     @ApiModelProperty(value = "使用状态：0=启用，1=禁用，具体取值于字典表cdp_dictionary.code=11", example = "Integer", required = true)
     private Integer status;
 

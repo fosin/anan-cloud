@@ -45,7 +45,7 @@ public class CdpUserUpdateDto implements Serializable {
     @Pattern(regexp = RegexUtil.SPECIAL, message = "用户姓名不能包含特殊字符")
     private String username;
 
-    @NotBlank(message = "传入原始密码，后台会对原始密码进行加密后再存储" + "{org.hibernate.validator.constraints.NotBlank.message}")
+    @NotBlank(message = "密码" + "{org.hibernate.validator.constraints.NotBlank.message}")
     @ApiModelProperty(value = "传入原始密码，后台会对原始密码进行加密后再存储", example = "String", required = true)
     private String password;
 
@@ -54,7 +54,7 @@ public class CdpUserUpdateDto implements Serializable {
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
     private Date birthday;
 
-    @NotNull(message = "使用状态：具体取值于字典表cdp_dictionary.code=15" + "{javax.validation.constraints.NotNull.message}")
+    @NotNull(message = "使用状态" + "{javax.validation.constraints.NotNull.message}")
     @ApiModelProperty(value = "使用状态：具体取值于字典表cdp_dictionary.code=15", example = "Integer", required = true)
     private Integer sex;
 
@@ -66,7 +66,7 @@ public class CdpUserUpdateDto implements Serializable {
     @ApiModelProperty(value = "手机号码", example = "String")
     private String phone;
 
-    @NotNull(message = "使用状态：0=启用，1=禁用，具体取值于字典表cdp_dictionary.code=11" + "{javax.validation.constraints.NotNull.message}")
+    @NotNull(message = "使用状态" + "{javax.validation.constraints.NotNull.message}")
     @ApiModelProperty(value = "使用状态：0=启用，1=禁用，具体取值于字典表cdp_dictionary.code=11", example = "Integer", required = true)
     private Integer status;
 

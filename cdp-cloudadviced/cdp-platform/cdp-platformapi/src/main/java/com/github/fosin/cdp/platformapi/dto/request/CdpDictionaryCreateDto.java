@@ -26,7 +26,7 @@ public class CdpDictionaryCreateDto implements Serializable {
     @ApiModelProperty(value = "字典名称", example = "String", required = true)
     private String name;
 
-    @NotNull(message = "字典类别，区别字典的大分类，取值于表cdp_dictionary.code = 1数据" + "{javax.validation.constraints.NotNull.message}")
+    @NotNull(message = "字典类别" + "{javax.validation.constraints.NotNull.message}")
     @ApiModelProperty(value = "字典类别，区别字典的大分类，取值于表cdp_dictionary.code = 1数据", example = "Integer", required = true)
     private Integer type;
 

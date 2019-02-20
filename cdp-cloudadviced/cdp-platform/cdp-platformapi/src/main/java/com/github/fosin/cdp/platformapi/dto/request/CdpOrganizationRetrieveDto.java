@@ -1,16 +1,12 @@
 package com.github.fosin.cdp.platformapi.dto.request;
 
-import java.util.Date;
-
 import com.github.fosin.cdp.util.RegexUtil;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import java.io.Serializable;
 import lombok.Data;
-import org.springframework.format.annotation.DateTimeFormat;
-import com.github.fosin.cdp.util.DateTimeUtil;
 
 import javax.validation.constraints.Pattern;
+import java.io.Serializable;
 
 /**
  * 系统机构表(CdpOrganization)查询DTO

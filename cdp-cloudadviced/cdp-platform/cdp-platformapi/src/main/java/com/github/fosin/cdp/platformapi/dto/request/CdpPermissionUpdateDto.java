@@ -26,12 +26,12 @@ public class CdpPermissionUpdateDto implements Serializable {
     @ApiModelProperty(value = "权限ID, 主键", example = "Long", required = true)
     private Long id;
 
-    @NotBlank(message = "权限编码，不能重复 不能为空" + "{org.hibernate.validator.constraints.NotBlank.message}")
+    @NotBlank(message = "权限编码" + "{org.hibernate.validator.constraints.NotBlank.message}")
     @ApiModelProperty(value = "权限编码，不能重复 不能为空", example = "String", required = true)
     @Pattern(regexp = "[A-Z][a-zA-Z0-9]{1,64}", message = "权限编码只能大写字母开始，大小写字母、数字组合而成,长度不超过64位")
     private String code;
 
-    @NotNull(message = "父权限ID，取值于id，表示当前数据的父类权限" + "{javax.validation.constraints.NotNull.message}")
+    @NotNull(message = "父权限ID" + "{javax.validation.constraints.NotNull.message}")
     @ApiModelProperty(value = "父权限ID，取值于id，表示当前数据的父类权限", example = "Long", required = true)
     private Long pId;
 
@@ -55,11 +55,11 @@ public class CdpPermissionUpdateDto implements Serializable {
     @ApiModelProperty(value = "排序，用于显示数据时的顺序，数值越小越靠前", example = "Integer")
     private Integer sort;
 
-    @NotNull(message = "使用状态：0=启用，1=禁用，具体取值于字典表cdp_dictionary.code=11" + "{javax.validation.constraints.NotNull.message}")
+    @NotNull(message = "使用状态" + "{javax.validation.constraints.NotNull.message}")
     @ApiModelProperty(value = "使用状态：0=启用，1=禁用，具体取值于字典表cdp_dictionary.code=11", example = "Integer", required = true)
     private Integer status;
 
-    @NotBlank(message = "所属应用名称,等同于配置文件中的spring.application.name" + "{org.hibernate.validator.constraints.NotBlank.message}")
+    @NotBlank(message = "所属应用名称" + "{org.hibernate.validator.constraints.NotBlank.message}")
     @ApiModelProperty(value = "所属应用名称,等同于配置文件中的spring.application.name", example = "String", required = true)
     @Pattern(regexp = "[a-zA-Z][a-zA-Z0-9_-]{1,64}", message = "应用名称只能大小写字母开始、数字、下杠(_)组合而成,长度不超过64位")
     private String appName;

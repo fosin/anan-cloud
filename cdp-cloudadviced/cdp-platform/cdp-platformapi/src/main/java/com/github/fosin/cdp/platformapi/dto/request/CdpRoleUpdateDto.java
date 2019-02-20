@@ -44,7 +44,7 @@ public class CdpRoleUpdateDto implements Serializable {
     @ApiModelProperty(value = "角色说明", example = "String")
     private String tips;
 
-    @NotNull(message = "使用状态：0=启用，1=禁用，具体取值于字典表cdp_dictionary.code=11" + "{javax.validation.constraints.NotNull.message}")
+    @NotNull(message = "使用状态" + "{javax.validation.constraints.NotNull.message}")
     @Range(max = 1)
     @ApiModelProperty(value = "使用状态：0=启用，1=禁用，具体取值于字典表cdp_dictionary.id=11", example = "Integer", required = true)
     private Integer status;

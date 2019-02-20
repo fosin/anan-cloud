@@ -31,7 +31,7 @@ public class CdpDictionaryUpdateDto implements Serializable {
     @Pattern(regexp = RegexUtil.SPECIAL, message = "名称不能包含特殊字符")
     private String name;
 
-    @NotNull(message = "字典类别，区别字典的大分类，取值于表cdp_dictionary.code = 1数据" + "{javax.validation.constraints.NotNull.message}")
+    @NotNull(message = "字典类别" + "{javax.validation.constraints.NotNull.message}")
     @ApiModelProperty(value = "字典类别，区别字典的大分类，取值于表cdp_dictionary.code = 1数据", example = "Integer", required = true)
     private Integer type;
 
