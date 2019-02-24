@@ -48,7 +48,7 @@
                 <spring.rabbitmq.password>'{cipher}AQBKDi1e2O8RxX1JkwCpYZ8gdF8uFahNH3oUvFrEM8UXfmJGWthztlBOxvDFNB4Cqu6FZKibXkZZEWStiLvATSl6+EiWMEhQqBv1Kt8u65Qquzxt5Ab/IdTP1EGUA2i0KN0Mi+TArbRjoXwxvh5DjqQ4Td22QhgnhRCn8USpmNF9vcma0if/DIPyjweOYaayF5ynJO3gTibPLDjOj194DbeXnmR1nVlO/hcfjM5a65Hr+rRoisgSUbOCcsAuxluEhDT35+rjEPumxaRo58DOckq0XkJhoyQ69g/Do3NBEx0ewEcEVg2t/DJyPp9BbSRGYV67HUqup39c//RuhP2AHTN94qZgrxEBtBsGu+E1E/xtBjNjqSeQPdeJb200dTF99rQ='</spring.rabbitmq.password>
                 <eureka.username>cdp</eureka.username>
                 <eureka.password>local</eureka.password>
-                <encrypt.key-store.location>file:D:\source\MyProject\cdp\01-Source\cdp-cloud\cdp-config\local\cdp.keystore</encrypt.key-store.location>
+                <encrypt.key-store.location>classpath:cdp.keystore</encrypt.key-store.location>
                 <encrypt.key-store.password>123456</encrypt.key-store.password>
                 <encrypt.key-store.alias>cdp</encrypt.key-store.alias>
                 <encrypt.key-store.secret>123456</encrypt.key-store.secret>
