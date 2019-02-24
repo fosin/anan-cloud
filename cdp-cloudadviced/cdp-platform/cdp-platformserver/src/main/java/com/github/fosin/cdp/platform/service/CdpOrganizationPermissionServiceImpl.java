@@ -59,6 +59,6 @@ public class CdpOrganizationPermissionServiceImpl implements ICdpOrganizationPer
 
         Collection<CdpOrganizationPermissionEntity> saveEntities = BeanUtil.copyCollectionProperties(this.getClass(), IUpdateInBatchJpaService.class, entities);
 
-        return cdpSysOrganizationPermissionRepository.save(saveEntities);
+        return cdpSysOrganizationPermissionRepository.saveAll(saveEntities);
     }
 }

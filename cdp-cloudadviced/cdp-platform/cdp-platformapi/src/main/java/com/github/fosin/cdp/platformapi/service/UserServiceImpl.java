@@ -41,10 +41,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import javax.persistence.criteria.*;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 /**
  * 2017/12/27.
@@ -120,9 +117,9 @@ public class UserServiceImpl implements IUserService {
     public CdpUserEntity update(CdpUserUpdateDto entity) {
         Long id = entity.getId();
         Assert.notNull(id, "更新的数据id不能为空或者小于1!");
-        CdpUserEntity createUser = userRepository.findOne(entity.getId());
+        CdpUserEntity createUser = userRepository.findById(entity.getId()).get();
         BeanUtils.copyProperties(entity, createUser);
-        CdpUserEntity oldEntity = userRepository.findOne(id);
+        CdpUserEntity oldEntity = userRepository.findById(id).get();
         if (SystemConstant.ADMIN_USER_CODE.equals(oldEntity.getUsercode().toLowerCase()) &&
                 !SystemConstant.ADMIN_USER_CODE.equals(entity.getUsercode().toLowerCase())) {
             throw new IllegalArgumentException("不能修改管理员" + SystemConstant.ADMIN_USER_CODE + "的帐号名称!");
@@ -145,7 +142,7 @@ public class UserServiceImpl implements IUserService {
             }
         }
         if (needQueryIds.size() > 0) {
-            List<CdpUserEntity> queryList = userRepository.findAll(needQueryIds);
+            List<CdpUserEntity> queryList = userRepository.findAllById(needQueryIds);
             rcList.addAll(queryList);
         }
 
@@ -160,28 +157,28 @@ public class UserServiceImpl implements IUserService {
                     @CacheEvict(value = TableNameConstant.CDP_USER_PERMISSION, key = "#id")
             }
     )
-    public CdpUserEntity delete(Long id) {
+    public CdpUserEntity deleteById(Long id) {
         Assert.isTrue(id != null && id > 0, "传入的用户ID无效！");
         CdpUserEntity entity = CacheUtil.get(TableNameConstant.CDP_USER, id + "", CdpUserEntity.class);
         if (entity == null) {
-            entity = userRepository.findOne(id);
+            entity = userRepository.findById(id).get();
         }
         Assert.notNull(entity, "通过该ID没有找到相应的用户数据!");
         Assert.isTrue(!SystemConstant.SUPER_USER_CODE.equals(entity.getUsercode())
                 && !SystemConstant.ADMIN_USER_CODE.equals(entity.getUsercode()), "不能删除管理员帐号!");
 //        List<CdpUserRoleEntity> userRoles = userRoleRepository.findByUserId(id);
 //        Assert.isTrue(userRoles.size() == 0, "该用户下还存在角色信息,不能直接删除用户!");
-        userRepository.delete(id);
+        userRepository.deleteById(id);
         return entity;
     }
 
     @Override
     @Cacheable(value = TableNameConstant.CDP_USER, key = "#id")
     @Transactional(readOnly = true)
-    public CdpUserEntity findOne(Long id) {
+    public CdpUserEntity findById(Long id) {
         Assert.isTrue(id != null && id > 0, "传入的用户ID无效！");
         //该代码看似无用，其实是为了解决懒加载和缓存先后问题
-        CdpUserEntity userEntity = userRepository.findOne(id);
+        CdpUserEntity userEntity = userRepository.findById(id).get();
         List<CdpUserRoleEntity> userRoles = userEntity.getUserRoles();
         log.debug(userRoles.toString());
         return userEntity;
@@ -195,7 +192,7 @@ public class UserServiceImpl implements IUserService {
                     @CacheEvict(value = TableNameConstant.CDP_USER_PERMISSION, key = "#entity.id")
             }
     )
-    public CdpUserEntity delete(CdpUserEntity entity) {
+    public CdpUserEntity deleteByEntity(CdpUserEntity entity) {
         Assert.notNull(entity, "不能删除空的用户对象!");
         Assert.isTrue(!SystemConstant.SUPER_USER_CODE.equals(entity.getUsercode())
                 && !SystemConstant.ADMIN_USER_CODE.equals(entity.getUsercode()), "不能删除管理员帐号!");
@@ -207,51 +204,48 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public Result findAllByPageSort(PageModule pageModule) {
-        PageRequest pageable = new PageRequest(pageModule.getPageNumber() - 1, pageModule.getPageSize(), Sort.Direction.fromString(pageModule.getSortOrder()), pageModule.getSortName());
+        PageRequest pageable = PageRequest.of(pageModule.getPageNumber() - 1, pageModule.getPageSize(), Sort.Direction.fromString(pageModule.getSortOrder()), pageModule.getSortName());
         String searchCondition = pageModule.getSearchText();
 
         CdpUserEntity loginUser = LoginUserUtil.getUser();
-        Specification<CdpUserEntity> condition = new Specification<CdpUserEntity>() {
-            @Override
-            public Predicate toPredicate(Root<CdpUserEntity> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-                Path<String> usercode = root.get("usercode");
-                Path<String> username = root.get("username");
-                Path<String> phone = root.get("phone");
-                Path<String> email = root.get("email");
+        Specification<CdpUserEntity> condition = (Specification<CdpUserEntity>) (root, query, cb) -> {
+            Path<String> usercode = root.get("usercode");
+            Path<String> username = root.get("username");
+            Path<String> phone = root.get("phone");
+            Path<String> email = root.get("email");
 
-                CriteriaBuilder.In<Object> organizId1 = null;
-                if (loginUser != null && !loginUser.getUsercode().equals(SystemConstant.SUPER_USER_CODE)) {
-                    Long organizId = loginUser.getOrganizId();
-                    CdpOrganizationEntity organizationEntity = organizationRepository.findOne(organizId);
+            CriteriaBuilder.In<Object> organizId1 = null;
+            if (loginUser != null && !loginUser.getUsercode().equals(SystemConstant.SUPER_USER_CODE)) {
+                Long organizId = loginUser.getOrganizId();
+                CdpOrganizationEntity organizationEntity = organizationRepository.findById(organizId).get();
 
-                    Subquery<Integer> subQuery = query.subquery(Integer.class);
-                    //从哪张表查询
-                    Root<CdpOrganizationEntity> celluseRoot = subQuery.from(CdpOrganizationEntity.class);
-                    //查询出什么
-                    subQuery.select(celluseRoot.get("id"));
-                    //条件是什么
-                    Predicate p = cb.like(celluseRoot.get("code"), organizationEntity.getCode() + "%");
-                    subQuery.where(p);
+                Subquery<Integer> subQuery = query.subquery(Integer.class);
+                //从哪张表查询
+                Root<CdpOrganizationEntity> celluseRoot = subQuery.from(CdpOrganizationEntity.class);
+                //查询出什么
+                subQuery.select(celluseRoot.get("id"));
+                //条件是什么
+                Predicate p = cb.like(celluseRoot.get("code"), organizationEntity.getCode() + "%");
+                subQuery.where(p);
 
-                    organizId1 = cb.in(root.get("organizId")).value(subQuery);
-                }
+                organizId1 = cb.in(root.get("organizId")).value(subQuery);
+            }
 
-                if (StringUtils.isBlank(searchCondition)) {
-                    if (loginUser != null && loginUser.getUsercode().equals(SystemConstant.SUPER_USER_CODE)) {
-                        return query.getRestriction();
-                    } else {
-                        return cb.and(cb.notEqual(usercode, SystemConstant.SUPER_USER_CODE), organizId1);
-                    }
-                }
-                Predicate predicate = cb.or(cb.like(username, "%" + searchCondition + "%"),
-                        cb.like(usercode, "%" + searchCondition + "%"),
-                        cb.like(phone, "%" + searchCondition + "%"),
-                        cb.like(email, "%" + searchCondition + "%"));
+            if (StringUtils.isBlank(searchCondition)) {
                 if (loginUser != null && loginUser.getUsercode().equals(SystemConstant.SUPER_USER_CODE)) {
-                    return predicate;
+                    return query.getRestriction();
                 } else {
-                    return cb.and(cb.notEqual(usercode, SystemConstant.SUPER_USER_CODE), predicate, organizId1);
+                    return cb.and(cb.notEqual(usercode, SystemConstant.SUPER_USER_CODE), organizId1);
                 }
+            }
+            Predicate predicate = cb.or(cb.like(username, "%" + searchCondition + "%"),
+                    cb.like(usercode, "%" + searchCondition + "%"),
+                    cb.like(phone, "%" + searchCondition + "%"),
+                    cb.like(email, "%" + searchCondition + "%"));
+            if (loginUser != null && loginUser.getUsercode().equals(SystemConstant.SUPER_USER_CODE)) {
+                return predicate;
+            } else {
+                return cb.and(cb.notEqual(usercode, SystemConstant.SUPER_USER_CODE), predicate, organizId1);
             }
         };
         //分页查找
@@ -278,8 +272,8 @@ public class UserServiceImpl implements IUserService {
         String passwordStrength = OrganizParameterUtil.getOrCreateParameter("DefaultPasswordStrength", RegexUtil.PASSWORD_STRONG, "用户密码强度正则表达式,密码最少6位，包括至少1个大写字母，1个小写字母，1个数字，1个特殊字符");
         Assert.isTrue(RegexUtil.matcher(confirmPassword1, passwordStrength), "新密码强度不符合强度要求!");
 
-        CdpUserEntity user = userRepository.findOne(id);
-        Assert.isTrue(user != null && user.getId() != null, "通过ID未找到对应的用户信息!");
+        CdpUserEntity user = userRepository.findById(id).get();
+        Assert.isTrue(user.getId() != null, "通过ID未找到对应的用户信息!");
         Assert.isTrue(new BCryptPasswordEncoder().matches(password, user.getPassword()), "原密码不正确!");
         user.setPassword(confirmPassword1);
         encryptBeforeSave(user);
@@ -300,9 +294,9 @@ public class UserServiceImpl implements IUserService {
         Assert.notNull(id, "用户ID不能为空!");
         CdpUserEntity loginUser = LoginUserUtil.getUser();
         Long loginId = loginUser.getId();
-        Assert.isTrue(!loginId.equals(id), "不能重置本人密码,请使用修改密码功能!");
-        CdpUserEntity user = userRepository.findOne(id);
-        Assert.isTrue(user != null && user.getId() != null, "通过ID未找到对应的用户信息!");
+        Assert.isTrue(!Objects.equals(loginId, id), "不能重置本人密码,请使用修改密码功能!");
+        CdpUserEntity user = userRepository.findById(id).get();
+        Assert.isTrue(user.getId() != null, "通过ID未找到对应的用户信息!");
         String password = getPassword();
         user.setPassword(password);
         encryptBeforeSave(user);
@@ -340,9 +334,9 @@ public class UserServiceImpl implements IUserService {
         if (loginUser.getUsercode().equals(SystemConstant.SUPER_USER_CODE)) {
             return userRepository.findAll();
         } else {
-            CdpOrganizationEntity organiz = organizationRepository.findOne(organizId);
+            CdpOrganizationEntity organiz = organizationRepository.findById(organizId).get();
             Assert.notNull(organiz, "根据传入的机构编码没有找到任何数据!");
-            CdpOrganizationEntity topOrganiz = organizationRepository.findOne(organiz.getTopId());
+            CdpOrganizationEntity topOrganiz = organizationRepository.findById(organiz.getTopId()).get();
             List<CdpOrganizationEntity> organizs = organizationRepository.findByCodeStartingWithOrderByCodeAsc(topOrganiz.getCode());
 
             Specification<CdpUserEntity> condition = (root, query, cb) -> {

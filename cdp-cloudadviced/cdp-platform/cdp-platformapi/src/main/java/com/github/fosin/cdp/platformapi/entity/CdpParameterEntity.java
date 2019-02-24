@@ -1,20 +1,20 @@
 package com.github.fosin.cdp.platformapi.entity;
 
-import java.util.Date;
-
-import com.github.fosin.cdp.jpa.entity.AbstractCreateUpdateJpaEntity;
 import com.github.fosin.cdp.jpa.entity.AbstractSoftDeleteJpaEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.DynamicUpdate;
-
-import javax.persistence.*;
-import java.io.Serializable;
-
-import lombok.Data;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
+
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import java.io.Serializable;
+import java.util.Date;
 
 /**
  * 用于存放各种分类分组的个性化参数(CdpParameter)实体类

@@ -1,0 +1,53 @@
+spring:
+  jpa:
+    show-sql: true
+  datasource:
+    url: jdbc:oracle:thin:@10.211.10.35:1521:yaoan
+    username: '{cipher}AQBHrAB9SJPoyY/R6JcfO1/cQ5BvZi0vw3YTRPPvkNr2YHb27I7/IYM/lZoytHdT5btPz8Jy+7cQLARHl1wVLkD0rAt+pDM486vRX8RN3pFDRbdAkAK7RsdGw55C3Gh2TdS06Bp6y8OgQa0+KHEroN59DzGCv70JM0m4z91Up5pOEWBVFNBTBD+8l/IduPpcIms9ZXEs0xfR8EHfcsUvEYlcUSHO1/6rHU3dIHjw9uVTttB6Ut9m2JZXi7IqKIP08ZU7u33ex6bG5Rfhv1fh3fQaLUWvfSSGhj1ptuvP6kDeV5SMb2JqM/+81E+jr2sjFNX4nB4Mh/iFlBVyBerHMb9cS1NCisj27+AVdiEG72c79jxUBcl3L1LQYUFehH0shcE='
+    password: '{cipher}AQBHrAB9SJPoyY/R6JcfO1/cQ5BvZi0vw3YTRPPvkNr2YHb27I7/IYM/lZoytHdT5btPz8Jy+7cQLARHl1wVLkD0rAt+pDM486vRX8RN3pFDRbdAkAK7RsdGw55C3Gh2TdS06Bp6y8OgQa0+KHEroN59DzGCv70JM0m4z91Up5pOEWBVFNBTBD+8l/IduPpcIms9ZXEs0xfR8EHfcsUvEYlcUSHO1/6rHU3dIHjw9uVTttB6Ut9m2JZXi7IqKIP08ZU7u33ex6bG5Rfhv1fh3fQaLUWvfSSGhj1ptuvP6kDeV5SMb2JqM/+81E+jr2sjFNX4nB4Mh/iFlBVyBerHMb9cS1NCisj27+AVdiEG72c79jxUBcl3L1LQYUFehH0shcE='
+    initial-size: 5 #初始化大小
+    min-idle: 5 #最小
+    maxActive: 30 # 最大
+    maxWait: 60000 #配置获取连接等待超时的时间
+    timeBetweenEvictionRunsMillis: 60000 # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+    minEvictableIdleTimeMillis: 300000 # 配置一个连接在池中最小生存的时间，单位是毫秒
+    validationQuery: SELECT 1 FROM DUAL
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+#      poolPreparedStatements: true # 打开PSCache，并且指定每个连接上PSCache的大小
+#      maxPoolPreparedStatementPerConnectionSize: 20
+#      filters: stat,wall,log4j # 配置监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙
+#      connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000 # 通过connectProperties属性来打开mergeSql功能；慢SQL记录
+#      useGlobalDataSourceStat: true # 合并多个DruidDataSource的监控数据
+#    platform: mysql
+#    continue-on-error: true
+  redis:
+    database: 10
+    host: 192.168.2.242
+    port: 6379
+    password: '{cipher}AQA0IIpb8cuWF9PppP2sK0c5t1Wp5n/J57IM095CU4Dm1ndfA3+GrJPOVFrAah1TeryGUhuPJpyS9Ai6xn3gb23uhvMgVm4axGyLt7u25gzzQB5JYrYNDwCRpbrjpAnqFl4uzYRglaDY2ALCf6/K7GXZsOdxP3oP37pt2l7+hmRaSHN0LFPzioT/zqU4XHIGYFEp/fr7ID5JMKcdCuU68oi+UojkmBXmRcXiGaOWH9ZCMKI4WLfmRZERWVxrzOTV4/cfA1uXo1u8ObMOPgxLaq0q3kAigVW3kU+h3Ix56H1FiGuuq8RUIs/v0Kkhf3Eccra8ooWJ+jQtETuuLrYLuBQXfIeXr1sBXbZykqDQp7k3DowM0Kxh2sWKj19WaUHXcMI='
+  session:
+    store-type: redis 
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+cdp:
+  swagger:
+    enabled: true
+    title: ${spring.application.name}
+    description: ${info.description}
+    version: ${info.version}
+    base-package: com.xingyj.dih
+    authorization:
+      name: Oauth2.0 Authorization
+      keyName: Authorization
+    #      authRegex: ^[^/oauth/token]$
+    contact:
+      name: fosin
+      email: 28860823@qq.com
+  oauth2:
+    disablecsrf: true
+    disableHttpBasic: true
+    blackWhiteList:
+      - path: /**/v2/api-docs

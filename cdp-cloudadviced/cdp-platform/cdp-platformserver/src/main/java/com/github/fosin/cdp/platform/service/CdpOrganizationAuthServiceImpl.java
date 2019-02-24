@@ -109,7 +109,7 @@ public class CdpOrganizationAuthServiceImpl implements ICdpOrganizationAuthServi
 
 
         Long versionId = registerDto.getVersionId();
-        CdpVersionEntity versionEntity = versionService.findOne(versionId);
+        CdpVersionEntity versionEntity = versionService.findById(versionId);
 
         //创建订单
         CdpPayOrderCreateDto orderEntity = new CdpPayOrderCreateDto();

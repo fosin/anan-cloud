@@ -85,7 +85,7 @@ public class RolePermissionServiceImpl implements IRolePermissionService {
         Collection<CdpRolePermissionEntity> saveEntities = BeanUtil.copyCollectionProperties(this.getClass(), IUpdateInBatchJpaService.class, entities);
 
         rolePermissionRepository.deleteByRoleId(roleId);
-        return rolePermissionRepository.save(saveEntities);
+        return rolePermissionRepository.saveAll(saveEntities);
     }
 
     @Override

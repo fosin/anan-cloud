@@ -4,7 +4,7 @@ import com.github.fosin.cdp.util.RegexUtil;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import org.hibernate.validator.constraints.NotBlank;
+import javax.validation.constraints.NotBlank;
 
 import javax.validation.constraints.Pattern;
 import java.io.Serializable;
@@ -19,12 +19,12 @@ import java.io.Serializable;
 @ApiModel(value = "创建机构")
 public class OrganizationRegisterDto implements Serializable {
 
-    @NotBlank(message = "机构编码" + "{org.hibernate.validator.constraints.NotBlank.message}")
+    @NotBlank(message = "机构编码" + "{javax.validation.constraints.NotBlank.message}")
     @Pattern(regexp = "[\\w]{1,64}", message = "机构编码只能大小写字母、数字、下杠(_)组合而成,长度不超过64位")
     @ApiModelProperty(value = "机构编码，自定义机构编码，下级机构必须以上级机构编码为前缀", notes = "机构编码，自定义机构编码，下级机构必须以上级机构编码为前缀")
     private String code;
 
-    @NotBlank(message = "机构名称" + "{org.hibernate.validator.constraints.NotBlank.message}")
+    @NotBlank(message = "机构名称" + "{javax.validation.constraints.NotBlank.message}")
     @ApiModelProperty(value = "机构名称", notes = "机构名称")
     @Pattern(regexp = RegexUtil.SPECIAL, message = "机构名称不能包含特殊字符")
     private String name;

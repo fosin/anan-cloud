@@ -2,8 +2,8 @@ package com.github.fosin.cdp.platform.dto.request;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import org.hibernate.validator.constraints.NotBlank;
-import org.hibernate.validator.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import lombok.Data;
@@ -21,7 +21,7 @@ import com.github.fosin.cdp.util.DateTimeUtil;
 @ApiModel(value = "系统支付明细表创建DTO", description = "表(cdp_pay_detail)的对应的创建DTO")
 public class CdpPayDetailCreateDto implements Serializable {
     private static final long serialVersionUID = -77766644338507723L;
-    
+
     @NotNull(message = "支付ID" + "{javax.validation.constraints.NotNull.message}")
     @ApiModelProperty(value = "支付ID", example = "Long", required = true)
     private Long payId;

@@ -35,6 +35,10 @@ spring:
   jackson: #该参数一定要放bootstrap中，而放application.yml或者后面的配置文件都不能生效
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
+  security:
+    user:
+      name: @eureka.username@
+      password: @eureka.password@
 eureka:
   client:
     service-url:
@@ -42,16 +46,9 @@ eureka:
   instance:
     prefer-ip-address: true
     metadata-map: #用于SBA认证
-      user.name: ${security.user.name}
-      user.password: ${security.user.password}
+      user.name: ${spring.security.user.name}
+      user.password: ${spring.security.user.password}
 #    instance-id: http://${spring.cloud.client.ipAddress}:${server.port}
-security:
-  user:
-    name: @eureka.username@
-    password: @eureka.password@
-management:
-  security:
-    enabled: false
 #endpoints:
 #  health:
 #    sensitive: false

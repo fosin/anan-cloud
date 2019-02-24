@@ -2,8 +2,11 @@ package com.github.fosin.cdp.platformapi.service;
 
 import org.springframework.data.auditing.DateTimeProvider;
 
+import java.time.LocalDateTime;
+import java.time.temporal.TemporalAccessor;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.Optional;
 
 /**
  * Description:
@@ -14,7 +17,7 @@ import java.util.GregorianCalendar;
 public class PlatformDateTimeProviderImpl implements DateTimeProvider {
 
     @Override
-    public Calendar getNow() {
-        return new GregorianCalendar();
+    public Optional<TemporalAccessor> getNow() {
+        return Optional.of(LocalDateTime.now());
     }
 }

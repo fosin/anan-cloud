@@ -24,7 +24,6 @@ public class OrganizParameterUtil extends AbstractParameterUtil {
     private static IOrganizationService organizationService;
 
     @Autowired
-    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     public OrganizParameterUtil(IOrganizationService organizationService) {
         OrganizParameterUtil.organizationService = organizationService;
     }
@@ -78,7 +77,7 @@ public class OrganizParameterUtil extends AbstractParameterUtil {
         //parameter为空表示没有参数记录，则依次向上找父机构的参数
         if (parameter.getId() == null || parameter.getId() < 1) {
             Long id = Long.parseLong(scope);
-            CdpOrganizationEntity entity = organizationService.findOne(id);
+            CdpOrganizationEntity entity = organizationService.findById(id);
             if (entity == null || entity.getLevel() == 0) {
                 value = getNearestParameter("", name);
             } else {

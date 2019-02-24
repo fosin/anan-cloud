@@ -5,8 +5,8 @@ import java.util.Date;
 import com.github.fosin.cdp.util.RegexUtil;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import org.hibernate.validator.constraints.NotBlank;
-import org.hibernate.validator.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.io.Serializable;
@@ -34,12 +34,12 @@ public class CdpOrganizationCreateDto implements Serializable {
     @ApiModelProperty(value = "顶级机构编码：一般指用户注册的机构，通常是一个集团组的最高级别机构，取值于id", example = "Long", required = true)
     private Long topId;
 
-    @NotBlank(message = "机构编码" + "{org.hibernate.validator.constraints.NotBlank.message}")
+    @NotBlank(message = "机构编码" + "{javax.validation.constraints.NotBlank.message}")
     @ApiModelProperty(value = "机构编码，自定义机构编码，下级机构必须以上级机构编码为前缀", example = "String", required = true)
     @Pattern(regexp = "[\\w]{1,64}", message = "机构编码只能大小写字母、数字、下杠(_)组合而成,长度不超过64位")
     private String code;
 
-    @NotBlank(message = "机构名称" + "{org.hibernate.validator.constraints.NotBlank.message}")
+    @NotBlank(message = "机构名称" + "{javax.validation.constraints.NotBlank.message}")
     @ApiModelProperty(value = "机构名称", example = "String", required = true)
     @Pattern(regexp = RegexUtil.SPECIAL, message = "名称不能包含特殊字符")
     private String name;

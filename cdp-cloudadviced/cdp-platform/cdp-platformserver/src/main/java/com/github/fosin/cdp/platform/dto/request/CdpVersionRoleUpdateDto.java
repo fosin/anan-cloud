@@ -3,8 +3,8 @@ package com.github.fosin.cdp.platform.dto.request;
 import java.util.Date;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import org.hibernate.validator.constraints.NotBlank;
-import org.hibernate.validator.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import lombok.Data;
@@ -31,11 +31,11 @@ public class CdpVersionRoleUpdateDto implements Serializable {
     @ApiModelProperty(value = "版本ID", example = "Long", required = true)
     private Long versionId;
 
-    @NotBlank(message = "角色名称" + "{org.hibernate.validator.constraints.NotBlank.message}")
+    @NotBlank(message = "角色名称" + "{javax.validation.constraints.NotBlank.message}")
     @ApiModelProperty(value = "角色名称", example = "String", required = true)
     private String name;
 
-    @NotBlank(message = "角色标识" + "{org.hibernate.validator.constraints.NotBlank.message}")
+    @NotBlank(message = "角色标识" + "{javax.validation.constraints.NotBlank.message}")
     @ApiModelProperty(value = "角色标识", example = "String", required = true)
     private String value;
 

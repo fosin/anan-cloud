@@ -63,29 +63,27 @@ public class ParameterServiceImpl implements IParameterService {
         Assert.notNull(entity, "传入了空对象!");
         Long id = entity.getId();
         Assert.notNull(id, "ID不能为空!");
-        CdpParameterEntity cEntity = parameterRepository.findOne(id);
+        CdpParameterEntity cEntity = parameterRepository.findById(id).get();
         BeanUtils.copyProperties(entity, cEntity);
         CdpParameterEntity save = parameterRepository.save(cEntity);
-        if (save != null) {
-            String cCacheKey = getCacheKey(cEntity);
-            String cacheKey = getCacheKey(entity.getType(), entity.getScope(), entity.getName());
-            //如果修改了type、scope、name则需要删除以前的缓存并设置新缓存
-            if (!cCacheKey.equals(cacheKey)) {
-                //新key设置旧值，需要发布以后才刷新缓存换成本次更新的新值
-                CacheUtil.put(TableNameConstant.CDP_PARAMETER, cacheKey, cEntity);
-                CacheUtil.evict(TableNameConstant.CDP_PARAMETER, cCacheKey);
-            }
+        String cCacheKey = getCacheKey(cEntity);
+        String cacheKey = getCacheKey(entity.getType(), entity.getScope(), entity.getName());
+        //如果修改了type、scope、name则需要删除以前的缓存并设置新缓存
+        if (!cCacheKey.equals(cacheKey)) {
+            //新key设置旧值，需要发布以后才刷新缓存换成本次更新的新值
+            CacheUtil.put(TableNameConstant.CDP_PARAMETER, cacheKey, cEntity);
+            CacheUtil.evict(TableNameConstant.CDP_PARAMETER, cCacheKey);
         }
         return save;
     }
 
     @Override
-    public CdpParameterEntity delete(Long id) {
-        CdpParameterEntity entity = parameterRepository.findOne(id);
+    public CdpParameterEntity deleteById(Long id) {
+        CdpParameterEntity entity = parameterRepository.findById(id).get();
         Assert.notNull(entity, "通过ID没有能找到参数数据,删除被取消!");
         String cacheKey = getCacheKey(entity);
         CacheUtil.evict(TableNameConstant.CDP_PARAMETER, cacheKey);
-        parameterRepository.delete(id);
+        parameterRepository.deleteById(id);
         try {
             Thread.sleep(500);
         } catch (InterruptedException e) {
@@ -97,7 +95,7 @@ public class ParameterServiceImpl implements IParameterService {
 
     @Override
     @CacheEvict(value = TableNameConstant.CDP_PARAMETER, key = "#root.target.getCacheKey(#entity)")
-    public CdpParameterEntity delete(CdpParameterEntity entity) {
+    public CdpParameterEntity deleteByEntity(CdpParameterEntity entity) {
         Assert.notNull(entity, "传入了空对象!");
         parameterRepository.delete(entity);
         return entity;
@@ -105,21 +103,18 @@ public class ParameterServiceImpl implements IParameterService {
 
     @Override
     public Result findAllByPageSort(PageModule pageModule) {
-        PageRequest pageable = new PageRequest(pageModule.getPageNumber() - 1, pageModule.getPageSize(), Sort.Direction.fromString(pageModule.getSortOrder()), pageModule.getSortName());
+        PageRequest pageable = PageRequest.of(pageModule.getPageNumber() - 1, pageModule.getPageSize(), Sort.Direction.fromString(pageModule.getSortOrder()), pageModule.getSortName());
         String searchCondition = pageModule.getSearchText();
 
-        Specification<CdpParameterEntity> condition = new Specification<CdpParameterEntity>() {
-            @Override
-            public Predicate toPredicate(Root<CdpParameterEntity> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-                Path<String> name = root.get("name");
-                Path<String> scope = root.get("scope");
-                Path<String> value = root.get("value");
-                if (StringUtils.isBlank(searchCondition)) {
-                    return query.getRestriction();
-                }
-                return cb.or(cb.like(scope, "%" + searchCondition + "%"), cb.like(name, "%" + searchCondition + "%"), cb.like(value, "%" + searchCondition + "%"));
-
+        Specification<CdpParameterEntity> condition = (Specification<CdpParameterEntity>) (root, query, cb) -> {
+            Path<String> name = root.get("name");
+            Path<String> scope = root.get("scope");
+            Path<String> value = root.get("value");
+            if (StringUtils.isBlank(searchCondition)) {
+                return query.getRestriction();
             }
+            return cb.or(cb.like(scope, "%" + searchCondition + "%"), cb.like(name, "%" + searchCondition + "%"), cb.like(value, "%" + searchCondition + "%"));
+
         };
         //分页查找
         Page<CdpParameterEntity> page = parameterRepository.findAll(condition, pageable);
@@ -152,7 +147,7 @@ public class ParameterServiceImpl implements IParameterService {
     @Override
     @Transactional(rollbackFor = CdpServiceException.class)
     public boolean applyChange(Long id) {
-        CdpParameterEntity entity = parameterRepository.findOne(id);
+        CdpParameterEntity entity = parameterRepository.findById(id).get();
         Assert.notNull(entity, "该参数已经不存在!");
         String cacheKey = getCacheKey(entity);
         CdpUserEntity loginUser;
@@ -171,7 +166,7 @@ public class ParameterServiceImpl implements IParameterService {
             case 2:
                 success = CacheUtil.evict(TableNameConstant.CDP_PARAMETER, cacheKey);
                 if (success) {
-                    parameterRepository.delete(id);
+                    parameterRepository.deleteById(id);
                     try {
                         Thread.sleep(500);
                     } catch (InterruptedException e) {

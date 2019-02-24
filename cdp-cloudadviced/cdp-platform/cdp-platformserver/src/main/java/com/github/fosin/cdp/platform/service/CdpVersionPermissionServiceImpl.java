@@ -59,7 +59,7 @@ public class CdpVersionPermissionServiceImpl implements ICdpVersionPermissionSer
 
         Collection<CdpVersionPermissionEntity> saveEntities = BeanUtil.copyCollectionProperties(this.getClass(), IUpdateInBatchJpaService.class, entities);
 
-        return cdpSysVersionPermissionRepository.save(saveEntities);
+        return cdpSysVersionPermissionRepository.saveAll(saveEntities);
     }
 
 }

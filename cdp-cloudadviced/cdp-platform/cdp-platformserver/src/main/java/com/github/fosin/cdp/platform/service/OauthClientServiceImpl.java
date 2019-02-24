@@ -20,6 +20,7 @@ import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.criteria.*;
+import java.util.Optional;
 
 /**
  * 2017/12/29.
@@ -38,8 +39,8 @@ public class OauthClientServiceImpl implements IOauthClientService {
     public OauthClientDetailsEntity create(OauthClientDetailsEntity entity) {
         Assert.notNull(entity, "传入了空对象!");
         String id = entity.getClientId();
-        OauthClientDetailsEntity existsEntity = oauthClientRepository.findOne(id);
-        Assert.isTrue(existsEntity == null, "该数据已存在，请重新设置客户端标识以区分");
+        Optional<OauthClientDetailsEntity> entityOptional = oauthClientRepository.findById(id);
+        Assert.isTrue(entityOptional.isPresent(), "该数据已存在，请重新设置客户端标识以区分");
         entity.setClientSecret(new BCryptPasswordEncoder().encode(entity.getClientSecret()));
         return oauthClientRepository.save(entity);
     }
@@ -49,7 +50,7 @@ public class OauthClientServiceImpl implements IOauthClientService {
         Assert.notNull(entity, "传入了空对象!");
         String id = entity.getClientId();
         Assert.isTrue(StringUtils.hasText(id), "更新数据时ClientId不能为空!");
-        OauthClientDetailsEntity existsEntity = oauthClientRepository.findOne(id);
+        OauthClientDetailsEntity existsEntity = oauthClientRepository.findById(id).get();
         //如果密码与数据库中的不一致则需要加密
         if (!existsEntity.getClientSecret().equals(entity.getClientSecret())) {
             entity.setClientSecret(new BCryptPasswordEncoder().encode(entity.getClientSecret()));
@@ -59,22 +60,19 @@ public class OauthClientServiceImpl implements IOauthClientService {
 
     @Override
     public Result findAllByPageSort(PageModule pageModule) {
-        PageRequest pageable = new PageRequest(pageModule.getPageNumber() - 1, pageModule.getPageSize(), Sort.Direction.fromString(pageModule.getSortOrder()), pageModule.getSortName());
+        PageRequest pageable = PageRequest.of(pageModule.getPageNumber() - 1, pageModule.getPageSize(), Sort.Direction.fromString(pageModule.getSortOrder()), pageModule.getSortName());
         String searchCondition = pageModule.getSearchText();
 
-        Specification<OauthClientDetailsEntity> condition = new Specification<OauthClientDetailsEntity>() {
-            @Override
-            public Predicate toPredicate(Root<OauthClientDetailsEntity> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-                Path<String> clientId = root.get("clientId");
-                Path<String> clientSecret = root.get("clientSecret");
+        Specification<OauthClientDetailsEntity> condition = (Specification<OauthClientDetailsEntity>) (root, query, cb) -> {
+            Path<String> clientId = root.get("clientId");
+            Path<String> clientSecret = root.get("clientSecret");
 
-                if (StringUtils.isEmpty(searchCondition)) {
-                    return query.getRestriction();
-                }
-                Predicate predicate = cb.or(cb.like(clientId, "%" + searchCondition + "%"), cb.like(clientSecret, "%" + searchCondition + "%"));
-                return predicate;
-
+            if (StringUtils.isEmpty(searchCondition)) {
+                return query.getRestriction();
             }
+            Predicate predicate = cb.or(cb.like(clientId, "%" + searchCondition + "%"), cb.like(clientSecret, "%" + searchCondition + "%"));
+            return predicate;
+
         };
         //分页查找
         Page<OauthClientDetailsEntity> page = oauthClientRepository.findAll(condition, pageable);

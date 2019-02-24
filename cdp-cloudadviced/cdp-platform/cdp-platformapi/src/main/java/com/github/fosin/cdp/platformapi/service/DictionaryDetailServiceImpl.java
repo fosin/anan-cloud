@@ -35,6 +35,7 @@ import org.springframework.util.Assert;
 
 import javax.persistence.criteria.*;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 字典表服务
@@ -67,38 +68,34 @@ public class DictionaryDetailServiceImpl implements IDictionaryDetailService {
         Assert.notNull(entity, "传入的更新数据实体对象不能为空!");
         Long id = entity.getId();
         Assert.notNull(id, "传入的更新数据实体对象主键不能为空!");
-        CdpDictionaryDetailEntity findEntity = dictionaryDetailRepository.findOne(id);
+        CdpDictionaryDetailEntity findEntity = dictionaryDetailRepository.findById(id).get();
         Assert.notNull(findEntity, "根据传入的主键[" + id + "]在数据库中未能找到数据!");
-        CdpUserEntity loginUser = LoginUserUtil.getUser();
-        //不是超级管理员
-        if (!SystemConstant.SUPER_USER_CODE.equals(loginUser.getUsercode())) {
-            CdpUserEntity superUser = userService.findByUsercode(SystemConstant.SUPER_USER_CODE);
-            //是超级管理员创建的数据则不需要非超级管理员修改
-            if (superUser.getId().equals(findEntity.getCreateBy())) {
-                throw new CdpServiceException("没有权限修改系统创建的字典明细项!");
-            }
-        }
+        isSuperUser(findEntity);
         BeanUtils.copyProperties(entity, findEntity);
         return dictionaryDetailRepository.save(findEntity);
     }
 
-    @Override
-    public CdpDictionaryDetailEntity delete(Long id) {
-        Assert.notNull(id, "传入了空的ID!");
-        CdpDictionaryDetailEntity entity = dictionaryDetailRepository.findOne(id);
-        Assert.notNull(entity, "传入的ID找不到数据!");
+    private void isSuperUser(CdpDictionaryDetailEntity findEntity) {
         CdpUserEntity loginUser = LoginUserUtil.getUser();
         //不是超级管理员
         if (!SystemConstant.SUPER_USER_CODE.equals(loginUser.getUsercode())) {
             CdpUserEntity superUser = userService.findByUsercode(SystemConstant.SUPER_USER_CODE);
             //是超级管理员创建的数据则不需要非超级管理员修改
-            if (superUser.getId().equals(entity.getCreateBy())) {
+            if (Objects.equals(superUser.getId(), findEntity.getCreateBy())) {
                 throw new CdpServiceException("没有权限修改系统创建的字典明细项!");
             }
         }
+    }
+
+    @Override
+    public CdpDictionaryDetailEntity deleteById(Long id) {
+        Assert.notNull(id, "传入了空的ID!");
+        CdpDictionaryDetailEntity entity = dictionaryDetailRepository.findById(id).get();
+        Assert.notNull(entity, "传入的ID找不到数据!");
+        isSuperUser(entity);
 
         CacheUtil.evict(TableNameConstant.CDP_DICTIONARY_DETAIL, entity.getDictionaryId() + "");
-        dictionaryDetailRepository.delete(id);
+        dictionaryDetailRepository.deleteById(id);
         try {
             Thread.sleep(500);
         } catch (InterruptedException e) {
@@ -110,24 +107,16 @@ public class DictionaryDetailServiceImpl implements IDictionaryDetailService {
 
     @Override
     @CacheEvict(value = TableNameConstant.CDP_DICTIONARY_DETAIL, key = "#entity.dictionaryId")
-    public CdpDictionaryDetailEntity delete(CdpDictionaryDetailEntity entity) {
+    public CdpDictionaryDetailEntity deleteByEntity(CdpDictionaryDetailEntity entity) {
         Assert.notNull(entity, "传入了空的对象!");
-        CdpUserEntity loginUser = LoginUserUtil.getUser();
-        //不是超级管理员
-        if (!SystemConstant.SUPER_USER_CODE.equals(loginUser.getUsercode())) {
-            CdpUserEntity superUser = userService.findByUsercode(SystemConstant.SUPER_USER_CODE);
-            //是超级管理员创建的数据则不需要非超级管理员修改
-            if (superUser.getId().equals(entity.getCreateBy())) {
-                throw new CdpServiceException("没有权限修改系统创建的字典明细项!");
-            }
-        }
+        isSuperUser(entity);
         dictionaryDetailRepository.delete(entity);
         return entity;
     }
 
     @Override
     public Result findAllByPageSort(PageModule pageModule) {
-        PageRequest pageable = new PageRequest(pageModule.getPageNumber() - 1, pageModule.getPageSize(), Sort.Direction.fromString(pageModule.getSortOrder()), pageModule.getSortName());
+        PageRequest pageable = PageRequest.of(pageModule.getPageNumber() - 1, pageModule.getPageSize(), Sort.Direction.fromString(pageModule.getSortOrder()), pageModule.getSortName());
         String searchCondition = pageModule.getSearchText();
 
         Specification<CdpDictionaryDetailEntity> condition = (root, query, cb) -> {

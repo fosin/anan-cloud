@@ -17,8 +17,8 @@ spring:
     inetutils:
       preferred-networks: @spring.cloud.inetutils.preferred-networks@
     config:
-      username: ${security.user.name}
-      password: ${security.user.password}
+      username: ${spring.security.user.name}
+      password: ${spring.security.user.password}
       discovery:
         enabled: true
         service-id: cdp-configserver
@@ -38,10 +38,10 @@ spring:
   jackson: #该参数一定要放bootstrap中，而放application.yml或者后面的配置文件都不能生效
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
-security:
-  user:
-    name: @eureka.username@
-    password: @eureka.password@
+  security:
+    user:
+      name: @eureka.username@
+      password: @eureka.password@
 encrypt:
   key-store:
     location: @encrypt.key-store.location@

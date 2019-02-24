@@ -4,6 +4,8 @@ import com.github.fosin.cdp.platformapi.util.LoginUserUtil;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;
 
+import java.util.Optional;
+
 /**
  * Description:
  *
@@ -13,7 +15,7 @@ import org.springframework.data.domain.AuditorAware;
 @Configuration
 public class UserIdAuditorImpl implements AuditorAware<Long> {
     @Override
-    public Long getCurrentAuditor() {
-        return LoginUserUtil.getUser().getId();
+    public Optional<Long> getCurrentAuditor() {
+        return Optional.of(LoginUserUtil.getUser().getId());
     }
 }

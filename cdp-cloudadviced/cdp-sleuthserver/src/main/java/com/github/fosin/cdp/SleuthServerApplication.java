@@ -5,7 +5,7 @@ import com.github.fosin.cdp.oauth2.annotation.EnableCdpOauth2;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import zipkin.server.internal.EnableZipkinServer;
+import zipkin2.server.internal.EnableZipkinServer;
 
 /**
  * Description

@@ -78,7 +78,7 @@ public class UserRoleServiceImpl implements IUserRoleService {
         userRoleRepository.deleteByUserId(userId);
         //如果是用户角色，则只需要删除一个用户的缓存
         CacheUtil.evict(TableNameConstant.CDP_USER, userId + "");
-        CacheUtil.evict(TableNameConstant.CDP_USER, userService.findOne(userId).getUsercode());
+        CacheUtil.evict(TableNameConstant.CDP_USER, userService.findById(userId).getUsercode());
 
         return getCdpUserRoleEntities(entities);
     }
@@ -100,7 +100,7 @@ public class UserRoleServiceImpl implements IUserRoleService {
             saveEntities.add(cdpUserRoleEntity);
         }
 
-        return getRepository().save(saveEntities);
+        return getRepository().saveAll(saveEntities);
     }
 
     @Override
@@ -119,7 +119,7 @@ public class UserRoleServiceImpl implements IUserRoleService {
         for (CdpUserRoleCreateDto entity : entities) {
             Long userId = entity.getUserId();
             CacheUtil.evict(TableNameConstant.CDP_USER, userId + "");
-            CacheUtil.evict(TableNameConstant.CDP_USER, userService.findOne(userId).getUsercode());
+            CacheUtil.evict(TableNameConstant.CDP_USER, userService.findById(userId).getUsercode());
         }
 
         return getCdpUserRoleEntities(entities);

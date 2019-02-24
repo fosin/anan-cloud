@@ -3,8 +3,8 @@ package com.github.fosin.cdp.platform.dto.request;
 import java.util.Date;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import org.hibernate.validator.constraints.NotBlank;
-import org.hibernate.validator.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import lombok.Data;
@@ -22,7 +22,7 @@ import com.github.fosin.cdp.util.DateTimeUtil;
 @ApiModel(value = "系统支付发票表更新DTO", description = "表(cdp_pay_invoice)的对应的更新DTO")
 public class CdpPayInvoiceUpdateDto implements Serializable {
     private static final long serialVersionUID = 595865760081308395L;
-    
+
     @NotNull(message = "发票ID" + "{javax.validation.constraints.NotNull.message}")
     @ApiModelProperty(value = "发票ID, 主键", example = "Long", required = true)
     private Long id;
@@ -31,7 +31,7 @@ public class CdpPayInvoiceUpdateDto implements Serializable {
     @ApiModelProperty(value = "支付ID", example = "Long", required = true)
     private Long payId;
 
-    @NotBlank(message = "发票号码" + "{org.hibernate.validator.constraints.NotBlank.message}")
+    @NotBlank(message = "发票号码" + "{javax.validation.constraints.NotBlank.message}")
     @ApiModelProperty(value = "发票号码", example = "String", required = true)
     private String invoceNo;
 

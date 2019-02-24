@@ -87,7 +87,7 @@ public class CdpOrganizationController extends AbstractBaseController
                 codes.add(organizationEntity.getCode());
             }
         } else {
-            CdpOrganizationEntity organizationEntity = organizationService.findOne(pId);
+            CdpOrganizationEntity organizationEntity = organizationService.findById(pId);
             if (organizationEntity != null) {
                 codes.add(organizationEntity.getCode());
             }

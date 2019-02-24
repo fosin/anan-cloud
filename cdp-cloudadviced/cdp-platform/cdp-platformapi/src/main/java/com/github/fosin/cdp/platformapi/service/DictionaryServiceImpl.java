@@ -64,7 +64,7 @@ public class DictionaryServiceImpl implements IDictionaryService {
         Assert.notNull(entity, "无效的更新数据");
         Long id = entity.getId();
         Assert.notNull(id, "无效的字典代码id");
-        CdpDictionaryEntity updateEntity = dictionaryRepository.findOne(id);
+        CdpDictionaryEntity updateEntity = dictionaryRepository.findById(id).get();
         Assert.notNull(updateEntity, "根据传入的字典code" + id + "在数据库中未能找到对于数据!");
         //系统字典
         if (entity.getType().equals(SystemConstant.SYSTEM_DICTIONARY_TYPE)) {
@@ -79,14 +79,14 @@ public class DictionaryServiceImpl implements IDictionaryService {
 
     @Override
     @Transactional(rollbackFor = CdpServiceException.class)
-    public CdpDictionaryEntity delete(Long code) {
+    public CdpDictionaryEntity deleteById(Long code) {
         if (code == null) {
             throw new CdpServiceException("传入的code无效!");
         }
-        CdpDictionaryEntity entity = dictionaryRepository.findOne(code);
-        if (entity == null) {
-            throw new CdpServiceException("通过code没有找到对应的字典!");
-        }
+        CdpDictionaryEntity entity = dictionaryRepository.findById(code).get();
+//        if (entity == null) {
+//            throw new CdpServiceException("通过code没有找到对应的字典!");
+//        }
         //系统字典
         if (entity.getType().equals(SystemConstant.SYSTEM_DICTIONARY_TYPE)) {
             CdpUserEntity loginUser = LoginUserUtil.getUser();
@@ -96,13 +96,13 @@ public class DictionaryServiceImpl implements IDictionaryService {
             }
         }
         dictionaryDetailRepository.deleteAllByDictionaryId(entity.getId());
-        dictionaryRepository.delete(code);
+        dictionaryRepository.deleteById(code);
         return null;
     }
 
     @Override
     @Transactional(rollbackFor = CdpServiceException.class)
-    public CdpDictionaryEntity delete(CdpDictionaryEntity entity) {
+    public CdpDictionaryEntity deleteByEntity(CdpDictionaryEntity entity) {
         Assert.notNull(entity, "传入了空的对象!");
         //系统字典
         if (entity.getType().equals(SystemConstant.SYSTEM_DICTIONARY_TYPE)) {
@@ -117,7 +117,7 @@ public class DictionaryServiceImpl implements IDictionaryService {
 
     @Override
     public Result findAllByPageSort(PageModule pageModule) {
-        PageRequest pageable = new PageRequest(pageModule.getPageNumber() - 1, pageModule.getPageSize(), Sort.Direction.fromString(pageModule.getSortOrder()), pageModule.getSortName());
+        PageRequest pageable = PageRequest.of(pageModule.getPageNumber() - 1, pageModule.getPageSize(), Sort.Direction.fromString(pageModule.getSortOrder()), pageModule.getSortName());
         String searchCondition = pageModule.getSearchText();
 
         Specification<CdpDictionaryEntity> condition = new Specification<CdpDictionaryEntity>() {

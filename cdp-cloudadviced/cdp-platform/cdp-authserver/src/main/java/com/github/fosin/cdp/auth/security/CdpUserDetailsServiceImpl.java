@@ -78,7 +78,7 @@ public class CdpUserDetailsServiceImpl implements UserDetailsService {
             List<CdpRolePermissionEntity> rolePermissionList = rolePermissionService.findByRoleId(roleId);
             for (CdpRolePermissionEntity rolePermissionEntity : rolePermissionList) {
                 Long permissionId = rolePermissionEntity.getPermissionId();
-                CdpPermissionEntity entity = permissionService.findOne(permissionId);
+                CdpPermissionEntity entity = permissionService.findById(permissionId);
                 // 只添加状态为启用的权限
                 if (entity.getStatus() == 0) {
                     userPermissions.add(entity);
@@ -91,7 +91,7 @@ public class CdpUserDetailsServiceImpl implements UserDetailsService {
         for (CdpUserPermissionEntity userPermissionEntity : userPermissionList) {
             int addmode = userPermissionEntity.getAddMode();
             Long permissionId = userPermissionEntity.getPermissionId();
-            CdpPermissionEntity entity = permissionService.findOne(permissionId);
+            CdpPermissionEntity entity = permissionService.findById(permissionId);
             // 只操作状态为启用的权限
             if (entity.getStatus() == 0) {
                 //获取用户增权限

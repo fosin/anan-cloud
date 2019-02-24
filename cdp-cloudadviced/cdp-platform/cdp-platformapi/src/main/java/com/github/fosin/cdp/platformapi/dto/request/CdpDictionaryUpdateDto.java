@@ -4,7 +4,7 @@ import com.github.fosin.cdp.util.RegexUtil;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import org.hibernate.validator.constraints.NotBlank;
+import javax.validation.constraints.NotBlank;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -26,7 +26,7 @@ public class CdpDictionaryUpdateDto implements Serializable {
     @ApiModelProperty(value = "字典代码, 主键", example = "Long", required = true)
     private Long id;
 
-    @NotBlank(message = "字典名称" + "{org.hibernate.validator.constraints.NotBlank.message}")
+    @NotBlank(message = "字典名称" + "{javax.validation.constraints.NotBlank.message}")
     @ApiModelProperty(value = "字典名称", example = "String", required = true)
     @Pattern(regexp = RegexUtil.SPECIAL, message = "名称不能包含特殊字符")
     private String name;

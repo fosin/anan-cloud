@@ -54,7 +54,7 @@ public class OrganizationServiceImpl implements IOrganizationService {
         Long pId = entity.getPId();
         int level = 1;
         if (pId != 0) {
-            CdpOrganizationEntity parentEntity = organizationRepository.findOne(pId);
+            CdpOrganizationEntity parentEntity = organizationRepository.findById(pId).get();
             Assert.notNull(parentEntity, "传入的创建数据实体找不到对于的父节点数据!");
             level = parentEntity.getLevel() + 1;
         }
@@ -68,13 +68,13 @@ public class OrganizationServiceImpl implements IOrganizationService {
         Assert.notNull(entity, "无效的更新数据");
         Long id = entity.getId();
         Assert.notNull(id, "无效的字典代码code");
-        CdpOrganizationEntity updateEntity = organizationRepository.findOne(id);
+        CdpOrganizationEntity updateEntity = organizationRepository.findById(id).get();
         Assert.notNull(updateEntity, "根据传入的机构ID" + id + "在数据库中未能找到对于数据!");
         BeanUtils.copyProperties(entity, updateEntity);
 
         Long pId = entity.getPId();
         if (!updateEntity.getPId().equals(pId)) {
-            CdpOrganizationEntity parentEntity = organizationRepository.findOne(pId);
+            CdpOrganizationEntity parentEntity = organizationRepository.findById(pId).get();
             Assert.notNull(parentEntity, "传入的创建数据实体找不到对于的父节点数据!");
             updateEntity.setLevel(parentEntity.getLevel() + 1);
         }
@@ -83,23 +83,23 @@ public class OrganizationServiceImpl implements IOrganizationService {
 
     @Override
     @Cacheable(value = TableNameConstant.CDP_ORGANIZATION, key = "#id")
-    public CdpOrganizationEntity findOne(Long id) {
-        return organizationRepository.findOne(id);
+    public CdpOrganizationEntity findById(Long id) {
+        return organizationRepository.findById(id).get();
     }
 
     @Override
     @CacheEvict(value = TableNameConstant.CDP_ORGANIZATION, key = "#id")
-    public CdpOrganizationEntity delete(Long id) {
+    public CdpOrganizationEntity deleteById(Long id) {
         Assert.notNull(id, "传入了空ID!");
         List<CdpOrganizationEntity> entities = findByPid(id);
         Assert.isTrue(entities == null || entities.size() == 0, "该节点还存在子节点不能直接删除!");
-        organizationRepository.delete(id);
+        organizationRepository.deleteById(id);
         return null;
     }
 
     @Override
     @CacheEvict(value = TableNameConstant.CDP_ORGANIZATION, key = "#entity.id")
-    public CdpOrganizationEntity delete(CdpOrganizationEntity entity) {
+    public CdpOrganizationEntity deleteByEntity(CdpOrganizationEntity entity) {
         Assert.notNull(entity, "传入了空对象!");
         Assert.notNull(entity.getId(), "传入了空ID!");
         List<CdpOrganizationEntity> entities = findByPid(entity.getId());
@@ -120,7 +120,7 @@ public class OrganizationServiceImpl implements IOrganizationService {
 
     @Override
     public Result findAllByPageSort(PageModule pageModule) {
-        PageRequest pageable = new PageRequest(pageModule.getPageNumber() - 1, pageModule.getPageSize(), Sort.Direction.fromString(pageModule.getSortOrder()), pageModule.getSortName());
+        PageRequest pageable = PageRequest.of(pageModule.getPageNumber() - 1, pageModule.getPageSize(), Sort.Direction.fromString(pageModule.getSortOrder()), pageModule.getSortName());
         String searchCondition = pageModule.getSearchText();
 
         Specification<CdpOrganizationEntity> condition = new Specification<CdpOrganizationEntity>() {

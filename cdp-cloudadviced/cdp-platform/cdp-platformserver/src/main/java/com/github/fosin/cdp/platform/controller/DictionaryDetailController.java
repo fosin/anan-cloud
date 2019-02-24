@@ -49,7 +49,7 @@ public class DictionaryDetailController implements ISimpleController<CdpDictiona
     })
     @RequestMapping(value = MvcConstant.PATH_PAGE_LIST + "/{dictionaryId}", method = {RequestMethod.POST, RequestMethod.GET})
     public ResponseEntity<ListResult<CdpDictionaryDetailEntity>> pageList(@RequestBody PageModule pageModule, @PathVariable Long dictionaryId) {
-        PageRequest pageRequest = new PageRequest(pageModule.getPageNumber() - 1, pageModule.getPageSize(), Sort.Direction.fromString(pageModule.getSortOrder()), pageModule.getSortName());
+        PageRequest pageRequest = PageRequest.of(pageModule.getPageNumber() - 1, pageModule.getPageSize(), Sort.Direction.fromString(pageModule.getSortOrder()), pageModule.getSortName());
         //分页查找
         Page<CdpDictionaryDetailEntity> page;
         page = dictionaryDetailService.findAll(pageModule.getSearchText(), pageRequest, dictionaryId);

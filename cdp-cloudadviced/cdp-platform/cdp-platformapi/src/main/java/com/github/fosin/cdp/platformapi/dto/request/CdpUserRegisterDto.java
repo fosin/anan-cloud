@@ -5,15 +5,9 @@ import com.github.fosin.cdp.util.RegexUtil;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import org.hibernate.validator.constraints.Email;
-import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Past;
-import javax.validation.constraints.Pattern;
+import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -27,17 +21,17 @@ import java.util.Date;
 @ApiModel(value = "创建用户")
 public class CdpUserRegisterDto implements Serializable {
 
-    @NotBlank(message = "用户工号" + "{org.hibernate.validator.constraints.NotBlank.message}")
+    @NotBlank(message = "用户工号" + "{javax.validation.constraints.NotBlank.message}")
     @ApiModelProperty(value = "用户工号", example = "String", required = true)
     @Pattern(regexp = "[A-Za-z][A-Za-z0-9]{1,30}", message = "用户工号只能大小写字母开头，数字、下杠(_)组合而成,长度不超过30位")
     private String usercode;
 
-    @NotBlank(message = "用户姓名" + "{org.hibernate.validator.constraints.NotBlank.message}")
+    @NotBlank(message = "用户姓名" + "{javax.validation.constraints.NotBlank.message}")
     @ApiModelProperty(value = "用户姓名", example = "String", required = true)
     @Pattern(regexp = RegexUtil.SPECIAL, message = "用户姓名不能包含特殊字符")
     private String username;
 
-    @NotBlank(message = "密码" + "{org.hibernate.validator.constraints.NotBlank.message}")
+    @NotBlank(message = "密码" + "{javax.validation.constraints.NotBlank.message}")
     @ApiModelProperty(value = "传入原始密码，后台会对原始密码进行加密后再存储", example = "String", required = true)
     private String password;
 

@@ -4,9 +4,8 @@ import com.github.fosin.cdp.util.RegexUtil;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.Range;
-
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.io.Serializable;
@@ -27,12 +26,12 @@ public class CdpRoleCreateDto implements Serializable {
     @ApiModelProperty(value = "机构ID", example = "Long", required = true)
     private Long organizId;
 
-    @NotBlank(message = "角色名称" + "{org.hibernate.validator.constraints.NotBlank.message}")
+    @NotBlank(message = "角色名称" + "{javax.validation.constraints.NotBlank.message}")
     @ApiModelProperty(value = "角色名称", example = "String", required = true)
     @Pattern(regexp = RegexUtil.SPECIAL, message = "名称不能包含特殊字符")
     private String name;
 
-    @NotBlank(message = "角色标识" + "{org.hibernate.validator.constraints.NotBlank.message}")    @Pattern(regexp = "[\\w]{1,40}", message = "角色标识只能大小写字母、数字、下杠(_)组合而成,长度不超过40位")
+    @NotBlank(message = "角色标识" + "{javax.validation.constraints.NotBlank.message}")    @Pattern(regexp = "[\\w]{1,40}", message = "角色标识只能大小写字母、数字、下杠(_)组合而成,长度不超过40位")
     @ApiModelProperty(value = "角色标识", example = "String", required = true)
     private String value;
 

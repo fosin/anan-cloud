@@ -9,8 +9,8 @@ eureka:
     #    instance-id: http://${spring.cloud.client.ipAddress}:${server.port}
     metadata-map:
       gated-launch: false #灰度发布标志，默认为false，设置为true表示灰度发布的点
-#      user.name: ${security.user.name} #用于SBA认证
-#      user.password: ${security.user.password}
+#      user.name: ${spring.security.user.name} #用于SBA认证
+#      user.password: ${spring.security.user.password}
 spring:
   profiles:
     active: @profileActive@
@@ -20,8 +20,8 @@ spring:
     inetutils:
       preferred-networks: @spring.cloud.inetutils.preferred-networks@
     config:
-      username: ${security.user.name}
-      password: ${security.user.password}
+      username: ${spring.security.user.name}
+      password: ${spring.security.user.password}
       discovery:
         enabled: true
         service-id: cdp-configserver
@@ -41,10 +41,10 @@ spring:
   jackson: #该参数一定要放bootstrap中，而放application.yml或者后面的配置文件都不能生效
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
-security:
-  user:
-    name: @eureka.username@
-    password: @eureka.password@
+  security:
+    user:
+      name: @eureka.username@
+      password: @eureka.password@
 encrypt:
   key-store:
     location: @encrypt.key-store.location@

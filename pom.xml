@@ -5,7 +5,7 @@
     <parent>
         <groupId>com.github.fosin</groupId>
         <artifactId>cdp-dependencies</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>2.0.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <packaging>pom</packaging>
@@ -13,18 +13,19 @@
     <properties>
         <cdp-placeholder1>${</cdp-placeholder1>
         <cdp-placeholder2>}</cdp-placeholder2>
-        <cdp-spring-cloud.version>Edgware.SR5</cdp-spring-cloud.version>
-        <cdp-spring-boot-admin.version>1.5.7</cdp-spring-boot-admin.version>
+        <cdp-spring-cloud.version>Greenwich.RELEASE</cdp-spring-cloud.version>
+        <cdp-spring-boot-admin.version>2.1.3</cdp-spring-boot-admin.version>
+        <cdp-spring-cloud-zipkin.version>2.12.0</cdp-spring-cloud-zipkin.version>
         <cdp-druid.version>1.1.9</cdp-druid.version>
-        <cdp-platformapi.version>1.0.0-SNAPSHOT</cdp-platformapi.version>
-        <cdp-platform.version>1.0.0-SNAPSHOT</cdp-platform.version>
-        <cdp-platformserver.version>1.0.0-SNAPSHOT</cdp-platformserver.version>
-        <cdp-authserver.version>1.0.0-SNAPSHOT</cdp-authserver.version>
-        <cdp-adminserver.version>1.0.0-SNAPSHOT</cdp-adminserver.version>
-        <cdp-sleuthserver.version>1.0.0-SNAPSHOT</cdp-sleuthserver.version>
-        <cdp-eurekaserver.version>1.0.0-SNAPSHOT</cdp-eurekaserver.version>
-        <cdp-configserver.version>1.0.0-SNAPSHOT</cdp-configserver.version>
-        <cdp-zuulgateway.version>1.0.0-SNAPSHOT</cdp-zuulgateway.version>
+        <cdp-platformapi.version>2.0.0-SNAPSHOT</cdp-platformapi.version>
+        <cdp-platform.version>2.0.0-SNAPSHOT</cdp-platform.version>
+        <cdp-platformserver.version>2.0.0-SNAPSHOT</cdp-platformserver.version>
+        <cdp-authserver.version>2.0.0-SNAPSHOT</cdp-authserver.version>
+        <cdp-adminserver.version>2.0.0-SNAPSHOT</cdp-adminserver.version>
+        <cdp-sleuthserver.version>2.0.0-SNAPSHOT</cdp-sleuthserver.version>
+        <cdp-eurekaserver.version>2.0.0-SNAPSHOT</cdp-eurekaserver.version>
+        <cdp-configserver.version>2.0.0-SNAPSHOT</cdp-configserver.version>
+        <cdp-zuulgateway.version>2.0.0-SNAPSHOT</cdp-zuulgateway.version>
     </properties>
     <profiles>
         <profile>
@@ -32,7 +33,7 @@
             <properties>
                 <profileActive>local</profileActive>
                 <eureka.client.service-url.defaultZone>
-                    http://${cdp-placeholder1}security.user.name${cdp-placeholder2}:${cdp-placeholder1}security.user.password${cdp-placeholder2}@localhost:1000/eureka/
+                    http://${cdp-placeholder1}spring.security.user.name${cdp-placeholder2}:${cdp-placeholder1}spring.security.user.password${cdp-placeholder2}@localhost:1000/eureka/
                 </eureka.client.service-url.defaultZone>
                 <spring.cloud.config.profileActive>native</spring.cloud.config.profileActive>
                 <spring.cloud.config.server.svn.uri></spring.cloud.config.server.svn.uri>
@@ -48,7 +49,7 @@
                 <spring.rabbitmq.password>'{cipher}AQBKDi1e2O8RxX1JkwCpYZ8gdF8uFahNH3oUvFrEM8UXfmJGWthztlBOxvDFNB4Cqu6FZKibXkZZEWStiLvATSl6+EiWMEhQqBv1Kt8u65Qquzxt5Ab/IdTP1EGUA2i0KN0Mi+TArbRjoXwxvh5DjqQ4Td22QhgnhRCn8USpmNF9vcma0if/DIPyjweOYaayF5ynJO3gTibPLDjOj194DbeXnmR1nVlO/hcfjM5a65Hr+rRoisgSUbOCcsAuxluEhDT35+rjEPumxaRo58DOckq0XkJhoyQ69g/Do3NBEx0ewEcEVg2t/DJyPp9BbSRGYV67HUqup39c//RuhP2AHTN94qZgrxEBtBsGu+E1E/xtBjNjqSeQPdeJb200dTF99rQ='</spring.rabbitmq.password>
                 <eureka.username>cdp</eureka.username>
                 <eureka.password>local</eureka.password>
-                <encrypt.key-store.location>file:D:\source\MyProject\cdp\01-Source\cdp-cloud\cdp-config\local\cdp.keystore</encrypt.key-store.location>
+                <encrypt.key-store.location>classpath:cdp.keystore</encrypt.key-store.location>
                 <encrypt.key-store.password>123456</encrypt.key-store.password>
                 <encrypt.key-store.alias>cdp</encrypt.key-store.alias>
                 <encrypt.key-store.secret>123456</encrypt.key-store.secret>
@@ -62,7 +63,7 @@
             <properties>
                 <profileActive>dev</profileActive>
                 <eureka.client.service-url.defaultZone>
-                    http://${cdp-placeholder1}security.user.name${cdp-placeholder2}:${cdp-placeholder1}security.user.password${cdp-placeholder2}${cdp-at}192.168.2.243:1000/eureka/,http://${cdp-placeholder1}security.user.name${cdp-placeholder2}:${cdp-placeholder1}security.user.password${cdp-placeholder2}${cdp-at}192.168.2.244:1000/eureka/
+                    http://${cdp-placeholder1}spring.security.user.name${cdp-placeholder2}:${cdp-placeholder1}spring.security.user.password${cdp-placeholder2}${cdp-at}192.168.2.243:1000/eureka/,http://${cdp-placeholder1}spring.security.user.name${cdp-placeholder2}:${cdp-placeholder1}spring.security.user.password${cdp-placeholder2}${cdp-at}192.168.2.244:1000/eureka/
                 </eureka.client.service-url.defaultZone>
                 <spring.cloud.config.profileActive>subversion</spring.cloud.config.profileActive>
                 <spring.cloud.config.server.svn.uri>https://192.168.2.237/svn/xingyj/01-Development/01-Platform/v1/01-Souce/cdp-cloud/cdp-config/</spring.cloud.config.server.svn.uri>
@@ -95,7 +96,7 @@
             <properties>
                 <profileActive>yaxrmyy</profileActive>
                 <eureka.client.service-url.defaultZone>
-                    http://${cdp-placeholder1}security.user.name${cdp-placeholder2}:${cdp-placeholder1}security.user.password${cdp-placeholder2}${cdp-at}192.168.106.4:1000/eureka/,http://${cdp-placeholder1}security.user.name${cdp-placeholder2}:${cdp-placeholder1}security.user.password${cdp-placeholder2}${cdp-at}192.168.106.5:1000/eureka/
+                    http://${cdp-placeholder1}spring.security.user.name${cdp-placeholder2}:${cdp-placeholder1}spring.security.user.password${cdp-placeholder2}${cdp-at}192.168.106.4:1000/eureka/,http://${cdp-placeholder1}spring.security.user.name${cdp-placeholder2}:${cdp-placeholder1}spring.security.user.password${cdp-placeholder2}${cdp-at}192.168.106.5:1000/eureka/
                 </eureka.client.service-url.defaultZone>
                 <spring.cloud.config.profileActive>native</spring.cloud.config.profileActive>
                 <spring.cloud.config.server.svn.uri></spring.cloud.config.server.svn.uri>

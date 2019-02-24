@@ -72,7 +72,7 @@ public class CdpVersionRoleServiceImpl implements ICdpVersionRoleService {
         Long id = entity.getId();
         Assert.isTrue(id != null && id > 0, "传入的主键无效!");
         Assert.isTrue(!entity.getValue().equals(SystemConstant.SUPER_USER_CODE), "角色标识不能为:" + SystemConstant.SUPER_USER_CODE);
-        CdpVersionRoleEntity createEntity = getRepository().findOne(id);
+        CdpVersionRoleEntity createEntity = getRepository().findById(id).get();
         Assert.notNull(createEntity, "更新数据的实体对象不能为空!");
         BeanUtils.copyProperties(entity, createEntity);
         return getRepository().save(createEntity);
@@ -86,7 +86,7 @@ public class CdpVersionRoleServiceImpl implements ICdpVersionRoleService {
      */
     @Override
     public Result findAllByPageSort(PageModule pageModule) {
-        PageRequest pageable = new PageRequest(pageModule.getPageNumber() - 1, pageModule.getPageSize(), Sort.Direction.fromString(pageModule.getSortOrder()), pageModule.getSortName());
+        PageRequest pageable = PageRequest.of(pageModule.getPageNumber() - 1, pageModule.getPageSize(), Sort.Direction.fromString(pageModule.getSortOrder()), pageModule.getSortName());
         String searchCondition = pageModule.getSearchText();
         Specification<CdpVersionRoleEntity> condition = (root, query, cb) -> {
             Path<String> roleName = root.get("name");

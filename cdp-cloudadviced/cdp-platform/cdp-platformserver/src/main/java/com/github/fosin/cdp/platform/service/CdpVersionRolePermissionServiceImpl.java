@@ -55,6 +55,6 @@ public class CdpVersionRolePermissionServiceImpl implements ICdpVersionRolePermi
 
         Collection<CdpVersionRolePermissionEntity> saveEntities = BeanUtil.copyCollectionProperties(this.getClass(), IUpdateInBatchJpaService.class, entities);
 
-        return versionRolePermissionRepository.save(saveEntities);
+        return versionRolePermissionRepository.saveAll(saveEntities);
     }
 }

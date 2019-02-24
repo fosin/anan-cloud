@@ -92,7 +92,7 @@ public class UserPermissionServiceImpl implements IUserPermissionService {
 
         userPermissionRepository.deleteByUserId(userId);
 
-        return userPermissionRepository.save(saveEntities);
+        return userPermissionRepository.saveAll(saveEntities);
     }
 
     @Override

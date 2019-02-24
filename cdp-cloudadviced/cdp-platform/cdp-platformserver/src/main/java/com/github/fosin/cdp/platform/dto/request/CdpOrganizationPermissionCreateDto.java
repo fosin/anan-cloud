@@ -3,8 +3,8 @@ package com.github.fosin.cdp.platform.dto.request;
 import java.util.Date;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import org.hibernate.validator.constraints.NotBlank;
-import org.hibernate.validator.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import lombok.Data;
@@ -22,7 +22,7 @@ import com.github.fosin.cdp.util.DateTimeUtil;
 @ApiModel(value = "系统机构权限表创建DTO", description = "表(cdp_organization_permission)的对应的创建DTO")
 public class CdpOrganizationPermissionCreateDto implements Serializable {
     private static final long serialVersionUID = -87000731093466069L;
-    
+
     @NotNull(message = "机构ID" + "{javax.validation.constraints.NotNull.message}")
     @ApiModelProperty(value = "机构ID", example = "Long", required = true)
     private Long organizId;

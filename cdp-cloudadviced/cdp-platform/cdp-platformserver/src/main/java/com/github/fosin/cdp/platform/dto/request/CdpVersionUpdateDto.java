@@ -3,8 +3,8 @@ package com.github.fosin.cdp.platform.dto.request;
 import java.util.Date;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import org.hibernate.validator.constraints.NotBlank;
-import org.hibernate.validator.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import lombok.Data;
@@ -22,12 +22,12 @@ import com.github.fosin.cdp.util.DateTimeUtil;
 @ApiModel(value = "系统版本表更新DTO", description = "表(cdp_version)的对应的更新DTO")
 public class CdpVersionUpdateDto implements Serializable {
     private static final long serialVersionUID = -76570893417143301L;
-    
+
     @NotNull(message = "版本ID" + "{javax.validation.constraints.NotNull.message}")
     @ApiModelProperty(value = "版本ID, 主键", example = "Long", required = true)
     private Long id;
 
-    @NotBlank(message = "版本名称" + "{org.hibernate.validator.constraints.NotBlank.message}")
+    @NotBlank(message = "版本名称" + "{javax.validation.constraints.NotBlank.message}")
     @ApiModelProperty(value = "版本名称", example = "String", required = true)
     private String name;
 

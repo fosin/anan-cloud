@@ -4,7 +4,7 @@ import com.github.fosin.cdp.util.RegexUtil;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import org.hibernate.validator.constraints.NotBlank;
+import javax.validation.constraints.NotBlank;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -22,7 +22,7 @@ import java.io.Serializable;
 public class CdpDictionaryCreateDto implements Serializable {
     private static final long serialVersionUID = -99315500947021174L;
 
-    @NotBlank(message = "字典名称" + "{org.hibernate.validator.constraints.NotBlank.message}")
+    @NotBlank(message = "字典名称" + "{javax.validation.constraints.NotBlank.message}")
     @ApiModelProperty(value = "字典名称", example = "String", required = true)
     private String name;
 

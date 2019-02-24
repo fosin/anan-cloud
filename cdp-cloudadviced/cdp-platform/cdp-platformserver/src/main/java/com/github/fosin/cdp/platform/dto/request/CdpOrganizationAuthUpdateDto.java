@@ -3,8 +3,8 @@ package com.github.fosin.cdp.platform.dto.request;
 import java.util.Date;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import org.hibernate.validator.constraints.NotBlank;
-import org.hibernate.validator.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import lombok.Data;
@@ -39,7 +39,7 @@ public class CdpOrganizationAuthUpdateDto implements Serializable {
     @ApiModelProperty(value = "订单ID", example = "Long", required = true)
     private Long orderId;
 
-    @NotBlank(message = "授权码" + "{org.hibernate.validator.constraints.NotBlank.message}")
+    @NotBlank(message = "授权码" + "{javax.validation.constraints.NotBlank.message}")
     @ApiModelProperty(value = "授权码", example = "String", required = true)
     private String authorizationCode;
 

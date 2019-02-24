@@ -72,7 +72,7 @@ public class RoleServiceImpl implements IRoleService {
         Long id = entity.getId();
         Assert.notNull(id, "传入了空ID!");
 
-        CdpRoleEntity oldEntity = roleRepository.findOne(id);
+        CdpRoleEntity oldEntity = roleRepository.findById(id).get();
         if (SystemConstant.ADMIN_ROLE_NAME.equals(oldEntity.getValue().toUpperCase()) &&
                 !SystemConstant.ADMIN_ROLE_NAME.equals(entity.getValue().toUpperCase())) {
             throw new IllegalArgumentException("不能修改角色标识" + SystemConstant.ADMIN_ROLE_NAME + "!");
@@ -85,9 +85,9 @@ public class RoleServiceImpl implements IRoleService {
     }
 
     @Override
-    public CdpRoleEntity delete(Long id) {
+    public CdpRoleEntity deleteById(Long id) {
         Assert.isTrue(id != null && id > 0, "传入的角色ID无效！");
-        CdpRoleEntity entity = roleRepository.findOne(id);
+        CdpRoleEntity entity = roleRepository.findById(id).get();
         Assert.notNull(entity, "根据角色ID未能找到角色数据!");
         Assert.isTrue(!SystemConstant.SUPER_ROLE_NAME.equals(entity.getValue())
                         && !SystemConstant.ADMIN_ROLE_NAME.equals(entity.getValue()),
@@ -96,12 +96,12 @@ public class RoleServiceImpl implements IRoleService {
         List<CdpUserRoleEntity> roleUsers = userRoleRepository.findByRoleId(id);
         Assert.isTrue(roleUsers.size() == 0,
                 "该角色下还存在用户,不能直接删除角色!");
-        roleRepository.delete(id);
+        roleRepository.deleteById(id);
         return null;
     }
 
     @Override
-    public CdpRoleEntity delete(CdpRoleEntity entity) {
+    public CdpRoleEntity deleteByEntity(CdpRoleEntity entity) {
         Assert.notNull(entity, "传入了空对象!");
         Assert.isTrue(!SystemConstant.SUPER_ROLE_NAME.equals(entity.getValue())
                         && !SystemConstant.ADMIN_ROLE_NAME.equals(entity.getValue()),
@@ -115,29 +115,26 @@ public class RoleServiceImpl implements IRoleService {
 
     @Override
     public Result findAllByPageSort(PageModule pageModule) {
-        PageRequest pageable = new PageRequest(pageModule.getPageNumber() - 1, pageModule.getPageSize(), Sort.Direction.fromString(pageModule.getSortOrder()), pageModule.getSortName());
+        PageRequest pageable = PageRequest.of(pageModule.getPageNumber() - 1, pageModule.getPageSize(), Sort.Direction.fromString(pageModule.getSortOrder()), pageModule.getSortName());
         String searchCondition = pageModule.getSearchText();
 
         CdpUserEntity loginUser = LoginUserUtil.getUser();
-        Specification<CdpRoleEntity> condition = new Specification<CdpRoleEntity>() {
-            @Override
-            public Predicate toPredicate(Root<CdpRoleEntity> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-                Path<String> roleName = root.get("name");
-                Path<String> roleValue = root.get("value");
+        Specification<CdpRoleEntity> condition = (Specification<CdpRoleEntity>) (root, query, cb) -> {
+            Path<String> roleName = root.get("name");
+            Path<String> roleValue = root.get("value");
 
-                if (StringUtils.isBlank(searchCondition)) {
-                    if (loginUser.getUsercode().equals(SystemConstant.SUPER_USER_CODE)) {
-                        return query.getRestriction();
-                    } else {
-                        return cb.and(cb.notEqual(roleValue, SystemConstant.SUPER_ROLE_NAME));
-                    }
-                }
-                Predicate predicate = cb.or(cb.like(roleName, "%" + searchCondition + "%"), cb.like(roleValue, "%" + searchCondition + "%"));
+            if (StringUtils.isBlank(searchCondition)) {
                 if (loginUser.getUsercode().equals(SystemConstant.SUPER_USER_CODE)) {
-                    return predicate;
+                    return query.getRestriction();
                 } else {
-                    return cb.and(cb.notEqual(roleValue, SystemConstant.SUPER_ROLE_NAME), predicate);
+                    return cb.and(cb.notEqual(roleValue, SystemConstant.SUPER_ROLE_NAME));
                 }
+            }
+            Predicate predicate = cb.or(cb.like(roleName, "%" + searchCondition + "%"), cb.like(roleValue, "%" + searchCondition + "%"));
+            if (loginUser.getUsercode().equals(SystemConstant.SUPER_USER_CODE)) {
+                return predicate;
+            } else {
+                return cb.and(cb.notEqual(roleValue, SystemConstant.SUPER_ROLE_NAME), predicate);
             }
         };
         //分页查找
@@ -162,7 +159,7 @@ public class RoleServiceImpl implements IRoleService {
         Assert.notNull(organizId, "机构ID不能为空!");
         String searchCondition = pageModule.getSearchText();
         CdpUserEntity loginUser = LoginUserUtil.getUser();
-        PageRequest pageable = new PageRequest(pageModule.getPageNumber() - 1, pageModule.getPageSize(), Sort.Direction.fromString(pageModule.getSortOrder()), pageModule.getSortName());
+        PageRequest pageable = PageRequest.of(pageModule.getPageNumber() - 1, pageModule.getPageSize(), Sort.Direction.fromString(pageModule.getSortOrder()), pageModule.getSortName());
 
         Page<CdpRoleEntity> page;
         if (loginUser.getUsercode().equals(SystemConstant.SUPER_USER_CODE)) {
@@ -176,7 +173,7 @@ public class RoleServiceImpl implements IRoleService {
             };
             page = roleRepository.findAll(condition, pageable);
         } else {
-            CdpOrganizationEntity organiz = organizationRepository.findOne(organizId);
+            CdpOrganizationEntity organiz = organizationRepository.findById(organizId).get();
             Assert.notNull(organiz, "根据传入的机构编码没有找到任何数据!");
             List<CdpOrganizationEntity> organizs = organizationRepository.findByCodeStartingWithOrderByCodeAsc(organiz.getCode());
 
@@ -212,9 +209,9 @@ public class RoleServiceImpl implements IRoleService {
         if (loginUser.getUsercode().equals(SystemConstant.SUPER_USER_CODE)) {
             return roleRepository.findAll();
         } else {
-            CdpOrganizationEntity organiz = organizationRepository.findOne(organizId);
+            CdpOrganizationEntity organiz = organizationRepository.findById(organizId).get();
             Assert.notNull(organiz, "根据传入的机构编码没有找到任何数据!");
-            CdpOrganizationEntity topOrganiz = organizationRepository.findOne(organiz.getTopId());
+            CdpOrganizationEntity topOrganiz = organizationRepository.findById(organiz.getTopId()).get();
             List<CdpOrganizationEntity> organizs = organizationRepository.findByCodeStartingWithOrderByCodeAsc(topOrganiz.getCode());
 
             Specification<CdpRoleEntity> condition = (root, query, cb) -> {

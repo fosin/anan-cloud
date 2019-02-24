@@ -30,6 +30,10 @@ zuul:
       path: /ehospital/test/**
       serviceId: ehospital
       retryable: true
+    dih:
+      path: /dih/**
+      serviceId: dih
+      retryable: true
 #  semaphore:
 #    max-semaphores: 100
 #  ribbon-isolation-strategy: THREAD
@@ -105,7 +109,7 @@ hystrix:
 #      access-token-uri: http://localhost:1400/oauth/token
 #      user-authorization-uri: http://localhost:1400/oauth/authorize
 ##      auto-approve-scopes:
-##      pre-established-redirect-uri: http://${security.user.name}:${security.user.password}@${eureka.instance.hostname}:${server.port}/
+##      pre-established-redirect-uri: http://${spring.security.user.name}:${spring.security.user.password}@${eureka.instance.hostname}:${server.port}/
 ##      token-name:
 ##      refresh-token-validity-seconds:
 ##      access-token-validity-seconds:
