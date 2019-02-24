@@ -2,10 +2,10 @@ spring:
   jpa:
     show-sql: true
   datasource:
-    driver-class-name: com.mysql.jdbc.Driver
+    driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://192.168.137.155:3306/mpi?useUnicode=true&characterEncoding=utf-8
-    username: '{cipher}AQBmphzkCLxk9OmJtZ4IUmbueDwos79U5y0URmC1zlH3fO+V7GtqBxKAxnSarOjPewUK55njl+NBrdOtBkElTrqwmcCT0Np4V9IOot/B85JARWbB3QJhJIHnwSOEYKWW0VCutaRfxphBfOa2dvS52kwi+qWI8KF/rghLeM8nHqKA6sOFeWwr0gyRK7gcMILyrjMEnX3UqZkw0C6+yoHN2ssnCcEpYIhZRo8yzSqh/dBWfraUV867lMKUMMVxNZBLuKvW0HBWRTGjpZwP6AoMAJtHtyUueRk+8WZ3YytL/Y95Ou2ckbJF7LD273eS06YdKsktqIicexrRV4/HAKF96JE71CiHY6U43sgylp5ziEFCbMkqPn7ZMkvQdRw+SQBJfpM='
-    password: '{cipher}AQBKDi1e2O8RxX1JkwCpYZ8gdF8uFahNH3oUvFrEM8UXfmJGWthztlBOxvDFNB4Cqu6FZKibXkZZEWStiLvATSl6+EiWMEhQqBv1Kt8u65Qquzxt5Ab/IdTP1EGUA2i0KN0Mi+TArbRjoXwxvh5DjqQ4Td22QhgnhRCn8USpmNF9vcma0if/DIPyjweOYaayF5ynJO3gTibPLDjOj194DbeXnmR1nVlO/hcfjM5a65Hr+rRoisgSUbOCcsAuxluEhDT35+rjEPumxaRo58DOckq0XkJhoyQ69g/Do3NBEx0ewEcEVg2t/DJyPp9BbSRGYV67HUqup39c//RuhP2AHTN94qZgrxEBtBsGu+E1E/xtBjNjqSeQPdeJb200dTF99rQ='
+    username: '{cipher}AQBK+yZdW+vCx8SMVNfmosh89xRkD2n13drLn1U10Q1n7vm7G025YjhbGXqrDNi0VLfK90LqWvEQs9ZA4C4kAk4TOWV6r1LfJHz0rbrhtXs8+cnEnHjMcHliuTvmPPn4/37mCcandERkFiWdNumXJyvH+Nnw6SWciYymIsmlTi61h1I3H8vpKCkxlttwjkwsUFLdMmYGeCb7/FZ0hjXlgsj6CkqsAiZ3EUqcE+kbrwPq/uivPJt7tn8xm/5u2tO8Lt2vWH0pjyCIqNxDcrsDQd+6OWj1Sp15NzDYaX2scZcWWJDxTNP3h4iIGan1Sts2/2lUJCFcVA/kqVjt8618x4FUAtHemVvp+dhiZbtLXX/Ezcb+xjvvMv/PzbIunYzWP/s='
+    password: '{cipher}AQAf9K0s8zLVaIk44+wqpHGuHsHEK5G4KKu1vk0HwxlojaYQHRkNsFhdQwmcrnkayWpGmNZezJCVb56JJTYL0wOus7L+zUIRWG0YIBzZBzG0iAX/6fQ0l7EVc6JyYmksGi6czSWhhAYvaJ2zupxU5pMou+k48ILP1MSZ+2n/mmM2OA/msXzum7hhSbuHKHkazorFlYLem2efeU0M61xWGRgzHAJ6pOxWGJx2NepgFDGLSTpDiqRTXD98AabHa28X8TpBbFynDONrU3mueuW/TSrXOlzp2LOO/cDbYGpZXAc/jypbH8SWfkSQlQrWaKBg2FJ8DYg/hUnxfSy+QbzyeGkPfJAcrDZ+9lhluKJ2RplT9bAedAWmvzPu2cJCQuf/RmM='
     druid:
       initial-size: 5 #初始化大小
       min-idle: 5 #最小
@@ -28,7 +28,7 @@ spring:
     database: 10
     host: 192.168.137.155
     port: 6379
-    password: '{cipher}AQBKDi1e2O8RxX1JkwCpYZ8gdF8uFahNH3oUvFrEM8UXfmJGWthztlBOxvDFNB4Cqu6FZKibXkZZEWStiLvATSl6+EiWMEhQqBv1Kt8u65Qquzxt5Ab/IdTP1EGUA2i0KN0Mi+TArbRjoXwxvh5DjqQ4Td22QhgnhRCn8USpmNF9vcma0if/DIPyjweOYaayF5ynJO3gTibPLDjOj194DbeXnmR1nVlO/hcfjM5a65Hr+rRoisgSUbOCcsAuxluEhDT35+rjEPumxaRo58DOckq0XkJhoyQ69g/Do3NBEx0ewEcEVg2t/DJyPp9BbSRGYV67HUqup39c//RuhP2AHTN94qZgrxEBtBsGu+E1E/xtBjNjqSeQPdeJb200dTF99rQ='
+    password: '{cipher}AQAf9K0s8zLVaIk44+wqpHGuHsHEK5G4KKu1vk0HwxlojaYQHRkNsFhdQwmcrnkayWpGmNZezJCVb56JJTYL0wOus7L+zUIRWG0YIBzZBzG0iAX/6fQ0l7EVc6JyYmksGi6czSWhhAYvaJ2zupxU5pMou+k48ILP1MSZ+2n/mmM2OA/msXzum7hhSbuHKHkazorFlYLem2efeU0M61xWGRgzHAJ6pOxWGJx2NepgFDGLSTpDiqRTXD98AabHa28X8TpBbFynDONrU3mueuW/TSrXOlzp2LOO/cDbYGpZXAc/jypbH8SWfkSQlQrWaKBg2FJ8DYg/hUnxfSy+QbzyeGkPfJAcrDZ+9lhluKJ2RplT9bAedAWmvzPu2cJCQuf/RmM='
   session:
     store-type: redis
 cdp:

@@ -28,7 +28,6 @@ public class AppAuthorityConfig {
 
     @Bean
     @ConditionalOnBean(IPermissionService.class)
-    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     public CdpAuthorityConfig authorityConfiggs(IPermissionService permissionService) {
         List<CdpAuthorityDto> authorityDtos = new ArrayList<>();
         List<CdpPermissionEntity> entities;

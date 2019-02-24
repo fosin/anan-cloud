@@ -11,10 +11,6 @@ security:
       loadBalanced: true #这个参数在OAuth2LoadBalancerClientAutoConfiguration可以找到，设置这个才可以使用eureka的服务名，配合loadBalancerInterceptor bean。
       user-info-uri: http://cdp-authserver/oauth/principal
       prefer-token-info: false
-      filter-order: 3
-management:
-  security:
-    enabled: false
 spring:
   zipkin:
     rabbitmq:
@@ -30,3 +26,8 @@ zipkin:
       queue: zipkin
   query:
     allowed-origins: '*'
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'

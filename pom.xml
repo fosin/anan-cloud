@@ -45,11 +45,13 @@
                 <spring.cloud.inetutils.preferred-networks>192.168.137.</spring.cloud.inetutils.preferred-networks>
                 <spring.rabbitmq.host>192.168.137.155</spring.rabbitmq.host>
                 <spring.rabbitmq.port>5672</spring.rabbitmq.port>
-                <spring.rabbitmq.username>'{cipher}AQBmphzkCLxk9OmJtZ4IUmbueDwos79U5y0URmC1zlH3fO+V7GtqBxKAxnSarOjPewUK55njl+NBrdOtBkElTrqwmcCT0Np4V9IOot/B85JARWbB3QJhJIHnwSOEYKWW0VCutaRfxphBfOa2dvS52kwi+qWI8KF/rghLeM8nHqKA6sOFeWwr0gyRK7gcMILyrjMEnX3UqZkw0C6+yoHN2ssnCcEpYIhZRo8yzSqh/dBWfraUV867lMKUMMVxNZBLuKvW0HBWRTGjpZwP6AoMAJtHtyUueRk+8WZ3YytL/Y95Ou2ckbJF7LD273eS06YdKsktqIicexrRV4/HAKF96JE71CiHY6U43sgylp5ziEFCbMkqPn7ZMkvQdRw+SQBJfpM='</spring.rabbitmq.username>
-                <spring.rabbitmq.password>'{cipher}AQBKDi1e2O8RxX1JkwCpYZ8gdF8uFahNH3oUvFrEM8UXfmJGWthztlBOxvDFNB4Cqu6FZKibXkZZEWStiLvATSl6+EiWMEhQqBv1Kt8u65Qquzxt5Ab/IdTP1EGUA2i0KN0Mi+TArbRjoXwxvh5DjqQ4Td22QhgnhRCn8USpmNF9vcma0if/DIPyjweOYaayF5ynJO3gTibPLDjOj194DbeXnmR1nVlO/hcfjM5a65Hr+rRoisgSUbOCcsAuxluEhDT35+rjEPumxaRo58DOckq0XkJhoyQ69g/Do3NBEx0ewEcEVg2t/DJyPp9BbSRGYV67HUqup39c//RuhP2AHTN94qZgrxEBtBsGu+E1E/xtBjNjqSeQPdeJb200dTF99rQ='</spring.rabbitmq.password>
+                <spring.rabbitmq.username>'{cipher}AQBK+yZdW+vCx8SMVNfmosh89xRkD2n13drLn1U10Q1n7vm7G025YjhbGXqrDNi0VLfK90LqWvEQs9ZA4C4kAk4TOWV6r1LfJHz0rbrhtXs8+cnEnHjMcHliuTvmPPn4/37mCcandERkFiWdNumXJyvH+Nnw6SWciYymIsmlTi61h1I3H8vpKCkxlttwjkwsUFLdMmYGeCb7/FZ0hjXlgsj6CkqsAiZ3EUqcE+kbrwPq/uivPJt7tn8xm/5u2tO8Lt2vWH0pjyCIqNxDcrsDQd+6OWj1Sp15NzDYaX2scZcWWJDxTNP3h4iIGan1Sts2/2lUJCFcVA/kqVjt8618x4FUAtHemVvp+dhiZbtLXX/Ezcb+xjvvMv/PzbIunYzWP/s='</spring.rabbitmq.username>
+                <spring.rabbitmq.password>'{cipher}AQAf9K0s8zLVaIk44+wqpHGuHsHEK5G4KKu1vk0HwxlojaYQHRkNsFhdQwmcrnkayWpGmNZezJCVb56JJTYL0wOus7L+zUIRWG0YIBzZBzG0iAX/6fQ0l7EVc6JyYmksGi6czSWhhAYvaJ2zupxU5pMou+k48ILP1MSZ+2n/mmM2OA/msXzum7hhSbuHKHkazorFlYLem2efeU0M61xWGRgzHAJ6pOxWGJx2NepgFDGLSTpDiqRTXD98AabHa28X8TpBbFynDONrU3mueuW/TSrXOlzp2LOO/cDbYGpZXAc/jypbH8SWfkSQlQrWaKBg2FJ8DYg/hUnxfSy+QbzyeGkPfJAcrDZ+9lhluKJ2RplT9bAedAWmvzPu2cJCQuf/RmM='</spring.rabbitmq.password>
+               <!-- <eureka.username>'{cipher}AQBK+yZdW+vCx8SMVNfmosh89xRkD2n13drLn1U10Q1n7vm7G025YjhbGXqrDNi0VLfK90LqWvEQs9ZA4C4kAk4TOWV6r1LfJHz0rbrhtXs8+cnEnHjMcHliuTvmPPn4/37mCcandERkFiWdNumXJyvH+Nnw6SWciYymIsmlTi61h1I3H8vpKCkxlttwjkwsUFLdMmYGeCb7/FZ0hjXlgsj6CkqsAiZ3EUqcE+kbrwPq/uivPJt7tn8xm/5u2tO8Lt2vWH0pjyCIqNxDcrsDQd+6OWj1Sp15NzDYaX2scZcWWJDxTNP3h4iIGan1Sts2/2lUJCFcVA/kqVjt8618x4FUAtHemVvp+dhiZbtLXX/Ezcb+xjvvMv/PzbIunYzWP/s='</eureka.username>
+                <eureka.password>'{cipher}AQAf9K0s8zLVaIk44+wqpHGuHsHEK5G4KKu1vk0HwxlojaYQHRkNsFhdQwmcrnkayWpGmNZezJCVb56JJTYL0wOus7L+zUIRWG0YIBzZBzG0iAX/6fQ0l7EVc6JyYmksGi6czSWhhAYvaJ2zupxU5pMou+k48ILP1MSZ+2n/mmM2OA/msXzum7hhSbuHKHkazorFlYLem2efeU0M61xWGRgzHAJ6pOxWGJx2NepgFDGLSTpDiqRTXD98AabHa28X8TpBbFynDONrU3mueuW/TSrXOlzp2LOO/cDbYGpZXAc/jypbH8SWfkSQlQrWaKBg2FJ8DYg/hUnxfSy+QbzyeGkPfJAcrDZ+9lhluKJ2RplT9bAedAWmvzPu2cJCQuf/RmM='</eureka.password>-->
                 <eureka.username>cdp</eureka.username>
                 <eureka.password>local</eureka.password>
-                <encrypt.key-store.location>classpath:cdp.keystore</encrypt.key-store.location>
+                <encrypt.key-store.location>classpath:/cdp.jks</encrypt.key-store.location>
                 <encrypt.key-store.password>123456</encrypt.key-store.password>
                 <encrypt.key-store.alias>cdp</encrypt.key-store.alias>
                 <encrypt.key-store.secret>123456</encrypt.key-store.secret>
@@ -75,14 +77,13 @@
                 <spring.cloud.inetutils.preferred-networks>192.168.2.</spring.cloud.inetutils.preferred-networks>
                 <spring.rabbitmq.host>192.168.2.242</spring.rabbitmq.host>
                 <spring.rabbitmq.port>5672</spring.rabbitmq.port>
-                <spring.rabbitmq.username>'{cipher}AQBmphzkCLxk9OmJtZ4IUmbueDwos79U5y0URmC1zlH3fO+V7GtqBxKAxnSarOjPewUK55njl+NBrdOtBkElTrqwmcCT0Np4V9IOot/B85JARWbB3QJhJIHnwSOEYKWW0VCutaRfxphBfOa2dvS52kwi+qWI8KF/rghLeM8nHqKA6sOFeWwr0gyRK7gcMILyrjMEnX3UqZkw0C6+yoHN2ssnCcEpYIhZRo8yzSqh/dBWfraUV867lMKUMMVxNZBLuKvW0HBWRTGjpZwP6AoMAJtHtyUueRk+8WZ3YytL/Y95Ou2ckbJF7LD273eS06YdKsktqIicexrRV4/HAKF96JE71CiHY6U43sgylp5ziEFCbMkqPn7ZMkvQdRw+SQBJfpM='</spring.rabbitmq.username>
-                <spring.rabbitmq.password>'{cipher}AQA0IIpb8cuWF9PppP2sK0c5t1Wp5n/J57IM095CU4Dm1ndfA3+GrJPOVFrAah1TeryGUhuPJpyS9Ai6xn3gb23uhvMgVm4axGyLt7u25gzzQB5JYrYNDwCRpbrjpAnqFl4uzYRglaDY2ALCf6/K7GXZsOdxP3oP37pt2l7+hmRaSHN0LFPzioT/zqU4XHIGYFEp/fr7ID5JMKcdCuU68oi+UojkmBXmRcXiGaOWH9ZCMKI4WLfmRZERWVxrzOTV4/cfA1uXo1u8ObMOPgxLaq0q3kAigVW3kU+h3Ix56H1FiGuuq8RUIs/v0Kkhf3Eccra8ooWJ+jQtETuuLrYLuBQXfIeXr1sBXbZykqDQp7k3DowM0Kxh2sWKj19WaUHXcMI='</spring.rabbitmq.password>
-                <!--eureka的安全帐号和密码设计加密后不能正确解决 TODO-->
-              <!--  <eureka.username>'{cipher}AQBmphzkCLxk9OmJtZ4IUmbueDwos79U5y0URmC1zlH3fO+V7GtqBxKAxnSarOjPewUK55njl+NBrdOtBkElTrqwmcCT0Np4V9IOot/B85JARWbB3QJhJIHnwSOEYKWW0VCutaRfxphBfOa2dvS52kwi+qWI8KF/rghLeM8nHqKA6sOFeWwr0gyRK7gcMILyrjMEnX3UqZkw0C6+yoHN2ssnCcEpYIhZRo8yzSqh/dBWfraUV867lMKUMMVxNZBLuKvW0HBWRTGjpZwP6AoMAJtHtyUueRk+8WZ3YytL/Y95Ou2ckbJF7LD273eS06YdKsktqIicexrRV4/HAKF96JE71CiHY6U43sgylp5ziEFCbMkqPn7ZMkvQdRw+SQBJfpM='</eureka.username>
-                <eureka.password>'{cipher}AQA0IIpb8cuWF9PppP2sK0c5t1Wp5n/J57IM095CU4Dm1ndfA3+GrJPOVFrAah1TeryGUhuPJpyS9Ai6xn3gb23uhvMgVm4axGyLt7u25gzzQB5JYrYNDwCRpbrjpAnqFl4uzYRglaDY2ALCf6/K7GXZsOdxP3oP37pt2l7+hmRaSHN0LFPzioT/zqU4XHIGYFEp/fr7ID5JMKcdCuU68oi+UojkmBXmRcXiGaOWH9ZCMKI4WLfmRZERWVxrzOTV4/cfA1uXo1u8ObMOPgxLaq0q3kAigVW3kU+h3Ix56H1FiGuuq8RUIs/v0Kkhf3Eccra8ooWJ+jQtETuuLrYLuBQXfIeXr1sBXbZykqDQp7k3DowM0Kxh2sWKj19WaUHXcMI='</eureka.password>-->
+                <spring.rabbitmq.username>'{cipher}AQBK+yZdW+vCx8SMVNfmosh89xRkD2n13drLn1U10Q1n7vm7G025YjhbGXqrDNi0VLfK90LqWvEQs9ZA4C4kAk4TOWV6r1LfJHz0rbrhtXs8+cnEnHjMcHliuTvmPPn4/37mCcandERkFiWdNumXJyvH+Nnw6SWciYymIsmlTi61h1I3H8vpKCkxlttwjkwsUFLdMmYGeCb7/FZ0hjXlgsj6CkqsAiZ3EUqcE+kbrwPq/uivPJt7tn8xm/5u2tO8Lt2vWH0pjyCIqNxDcrsDQd+6OWj1Sp15NzDYaX2scZcWWJDxTNP3h4iIGan1Sts2/2lUJCFcVA/kqVjt8618x4FUAtHemVvp+dhiZbtLXX/Ezcb+xjvvMv/PzbIunYzWP/s='</spring.rabbitmq.username>
+                <spring.rabbitmq.password>'{cipher}AQBDc1ErZqS+aPq0dXnNf3P7r80dn83dGdU7YPhuD3LzVKWdpdA7IMq+l3pScI+NnZnBEy1T8rFtFGl51q200vAyTaWI6XrsCp5J/wtiY3pHaQk98b1NHVRFWRshXYSSLVIuaDBFAt6dFedbBTfh53U8bHEiHxaw85dSwWbRO/oCY7/ct1MmrS6zIVgIrBokou/6HACoczLtwSIjj8F/R/Divrc7Po9TpZBJvsxVrrzW82yqeRejci1jB06Si53n+/XgnIyNvpZFMYPTQwexp5Xc31kQwDuUYmftnIvrGv+XIEezNtgtIJWe1TzedGnytTCYu8bz3FSRsHvRievafRntlgqGxKonxBAtzOWza3V74QUq4E+fdOi2T3Go4kD2/PY='</spring.rabbitmq.password>
+                <!--<eureka.username>'{cipher}AQBK+yZdW+vCx8SMVNfmosh89xRkD2n13drLn1U10Q1n7vm7G025YjhbGXqrDNi0VLfK90LqWvEQs9ZA4C4kAk4TOWV6r1LfJHz0rbrhtXs8+cnEnHjMcHliuTvmPPn4/37mCcandERkFiWdNumXJyvH+Nnw6SWciYymIsmlTi61h1I3H8vpKCkxlttwjkwsUFLdMmYGeCb7/FZ0hjXlgsj6CkqsAiZ3EUqcE+kbrwPq/uivPJt7tn8xm/5u2tO8Lt2vWH0pjyCIqNxDcrsDQd+6OWj1Sp15NzDYaX2scZcWWJDxTNP3h4iIGan1Sts2/2lUJCFcVA/kqVjt8618x4FUAtHemVvp+dhiZbtLXX/Ezcb+xjvvMv/PzbIunYzWP/s='</eureka.username>
+                <eureka.password>'{cipher}AQBDc1ErZqS+aPq0dXnNf3P7r80dn83dGdU7YPhuD3LzVKWdpdA7IMq+l3pScI+NnZnBEy1T8rFtFGl51q200vAyTaWI6XrsCp5J/wtiY3pHaQk98b1NHVRFWRshXYSSLVIuaDBFAt6dFedbBTfh53U8bHEiHxaw85dSwWbRO/oCY7/ct1MmrS6zIVgIrBokou/6HACoczLtwSIjj8F/R/Divrc7Po9TpZBJvsxVrrzW82yqeRejci1jB06Si53n+/XgnIyNvpZFMYPTQwexp5Xc31kQwDuUYmftnIvrGv+XIEezNtgtIJWe1TzedGnytTCYu8bz3FSRsHvRievafRntlgqGxKonxBAtzOWza3V74QUq4E+fdOi2T3Go4kD2/PY='</eureka.password>-->
                 <eureka.username>cdp</eureka.username>
                 <eureka.password>dev</eureka.password>
-                <encrypt.key-store.location>classpath:cdp.keystore</encrypt.key-store.location>
+                <encrypt.key-store.location>classpath:/cdp.jks</encrypt.key-store.location>
                 <encrypt.key-store.password>123456</encrypt.key-store.password>
                 <encrypt.key-store.alias>cdp</encrypt.key-store.alias>
                 <encrypt.key-store.secret>123456</encrypt.key-store.secret>
@@ -108,11 +109,13 @@
                 <spring.cloud.inetutils.preferred-networks>192.168.106.</spring.cloud.inetutils.preferred-networks>
                 <spring.rabbitmq.host>192.168.106.3</spring.rabbitmq.host>
                 <spring.rabbitmq.port>5672</spring.rabbitmq.port>
-                <spring.rabbitmq.username>'{cipher}AQBmphzkCLxk9OmJtZ4IUmbueDwos79U5y0URmC1zlH3fO+V7GtqBxKAxnSarOjPewUK55njl+NBrdOtBkElTrqwmcCT0Np4V9IOot/B85JARWbB3QJhJIHnwSOEYKWW0VCutaRfxphBfOa2dvS52kwi+qWI8KF/rghLeM8nHqKA6sOFeWwr0gyRK7gcMILyrjMEnX3UqZkw0C6+yoHN2ssnCcEpYIhZRo8yzSqh/dBWfraUV867lMKUMMVxNZBLuKvW0HBWRTGjpZwP6AoMAJtHtyUueRk+8WZ3YytL/Y95Ou2ckbJF7LD273eS06YdKsktqIicexrRV4/HAKF96JE71CiHY6U43sgylp5ziEFCbMkqPn7ZMkvQdRw+SQBJfpM='</spring.rabbitmq.username>
-                <spring.rabbitmq.password>'{cipher}AQBlIXAXaJEmsynM1IDD/i1vIXIoMVw7WCyHjah2V+4x8IPFCSqwicRsIsdP4F5+lVqrXl/nm7tGcYs4uU8U6bt41dFcKfnCycuXjTU5Rg0iJ5614HUkdfp3q60K/RuEfVdY4GME0tt8coa5AExEo8XNrJK9oC3By8DzbHgP2Py5N8Ikfa4YWC0r3TI+72x9acmeG9M4cmjnyMHLKfoCRTcR7dBkVgEwfsq/uUqKXavqL5UDrgXc1yQfwC8PNu7VxFIec5Ws8RgCOYbJT8B+Twq213OeFwccFC/4eW/4X7smvCmkvAMrHd6ePuOYTg8ljMM+BLVodNNkBaMASXdmA3PzwTgMaKwE/34jGtdO6cRNgL94juUrRoxQVPH3/nt1IIY='</spring.rabbitmq.password>
+                <spring.rabbitmq.username>'{cipher}AQBK+yZdW+vCx8SMVNfmosh89xRkD2n13drLn1U10Q1n7vm7G025YjhbGXqrDNi0VLfK90LqWvEQs9ZA4C4kAk4TOWV6r1LfJHz0rbrhtXs8+cnEnHjMcHliuTvmPPn4/37mCcandERkFiWdNumXJyvH+Nnw6SWciYymIsmlTi61h1I3H8vpKCkxlttwjkwsUFLdMmYGeCb7/FZ0hjXlgsj6CkqsAiZ3EUqcE+kbrwPq/uivPJt7tn8xm/5u2tO8Lt2vWH0pjyCIqNxDcrsDQd+6OWj1Sp15NzDYaX2scZcWWJDxTNP3h4iIGan1Sts2/2lUJCFcVA/kqVjt8618x4FUAtHemVvp+dhiZbtLXX/Ezcb+xjvvMv/PzbIunYzWP/s='</spring.rabbitmq.username>
+                <spring.rabbitmq.password>'{cipher}AQAb+qFiQkk4e6bNia6bBtZGeM4yNvzM6wk5B4KfpWnklmf6Misr5OW/7LvXkBssoPC6vvG49ixIb6iCapzktjlKYWY6HTNOdirGfhNZXsfPXOsTvche98uYZVIfBYJNj+/NQ+6BdJlKPjw9fGBRDHa6OFeWD4qcchl3KL1oYq9AzWIQ/nad26R4ErULUGkw9GAeCOjw6tRGeiS90wUZ5xKzY6WiakHenwJJx2P7IJ9EfcWDp+Bvwkx8bn78Yu+0J7Y0HETZqyIJHPo6Ob9aBgUJv3lqrkXmtUQ+7GaYwBBVq2NrE54n/YW5hgUJUcpFeN6pgDUJhDhMNXuV4AEBnCrCJuyJ1sKIo0NDTxA+RqrROa+X4pLuduSL3RK8qAKd0Ig='</spring.rabbitmq.password>
+                <!--<eureka.username>'{cipher}AQBK+yZdW+vCx8SMVNfmosh89xRkD2n13drLn1U10Q1n7vm7G025YjhbGXqrDNi0VLfK90LqWvEQs9ZA4C4kAk4TOWV6r1LfJHz0rbrhtXs8+cnEnHjMcHliuTvmPPn4/37mCcandERkFiWdNumXJyvH+Nnw6SWciYymIsmlTi61h1I3H8vpKCkxlttwjkwsUFLdMmYGeCb7/FZ0hjXlgsj6CkqsAiZ3EUqcE+kbrwPq/uivPJt7tn8xm/5u2tO8Lt2vWH0pjyCIqNxDcrsDQd+6OWj1Sp15NzDYaX2scZcWWJDxTNP3h4iIGan1Sts2/2lUJCFcVA/kqVjt8618x4FUAtHemVvp+dhiZbtLXX/Ezcb+xjvvMv/PzbIunYzWP/s='</eureka.username>
+                <eureka.password>'{cipher}AQAb+qFiQkk4e6bNia6bBtZGeM4yNvzM6wk5B4KfpWnklmf6Misr5OW/7LvXkBssoPC6vvG49ixIb6iCapzktjlKYWY6HTNOdirGfhNZXsfPXOsTvche98uYZVIfBYJNj+/NQ+6BdJlKPjw9fGBRDHa6OFeWD4qcchl3KL1oYq9AzWIQ/nad26R4ErULUGkw9GAeCOjw6tRGeiS90wUZ5xKzY6WiakHenwJJx2P7IJ9EfcWDp+Bvwkx8bn78Yu+0J7Y0HETZqyIJHPo6Ob9aBgUJv3lqrkXmtUQ+7GaYwBBVq2NrE54n/YW5hgUJUcpFeN6pgDUJhDhMNXuV4AEBnCrCJuyJ1sKIo0NDTxA+RqrROa+X4pLuduSL3RK8qAKd0Ig='</eureka.password>-->
                 <eureka.username>cdp</eureka.username>
                 <eureka.password>yaxrmyy</eureka.password>
-                <encrypt.key-store.location>classpath:cdp.keystore</encrypt.key-store.location>
+                <encrypt.key-store.location>classpath:/cdp.jks</encrypt.key-store.location>
                 <encrypt.key-store.password>123456</encrypt.key-store.password>
                 <encrypt.key-store.alias>cdp</encrypt.key-store.alias>
                 <encrypt.key-store.secret>123456</encrypt.key-store.secret>
@@ -226,7 +229,7 @@
                     <encoding>UTF-8</encoding>
                     <!--不过滤以下后缀的文件-->
                     <nonFilteredFileExtensions>
-                        <nonFilteredFileExtension>keystore</nonFilteredFileExtension>
+                        <nonFilteredFileExtension>jks</nonFilteredFileExtension>
                         <nonFilteredFileExtension>html</nonFilteredFileExtension>
                         <nonFilteredFileExtension>js</nonFilteredFileExtension>
                         <nonFilteredFileExtension>css</nonFilteredFileExtension>

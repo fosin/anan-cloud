@@ -2,9 +2,13 @@ package com.github.fosin.cdp.auth.config;
 
 import com.github.fosin.cdp.auth.security.CdpUserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.actuate.autoconfigure.web.server.ManagementServerProperties;
+import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -23,15 +27,19 @@ import javax.sql.DataSource;
  */
 @Configuration
 @EnableWebSecurity
-//@Order(1) TODO 这里有bug，无论怎么配置都不能使用自定义登录界面，这个官方例子不符，这里获取是Spring Security Oauth2低版本的bug，等升级到高版本会许能解决这个问题
-//@Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
-//@Order(ManagementServerProperties.ACCESS_OVERRIDE_ORDER)
+//@Order(3) //TODO 这里有bug，无论怎么配置都不能使用自定义登录界面，这个官方例子不符，这里获取是Spring Security Oauth2低版本的bug，等升级到高版本会许能解决这个问题
 public class CdpWebSecurityConfigurer extends WebSecurityConfigurerAdapter {
     private static final String INTERNAL_SECRET_KEY = "INTERNAL_SECRET_KEY";
     @Autowired
     private CdpUserDetailsServiceImpl userDetailsService;
     @Autowired
     private DataSource dataSource;
+
+    @Bean
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
+    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -68,7 +76,7 @@ public class CdpWebSecurityConfigurer extends WebSecurityConfigurerAdapter {
                 .loginProcessingUrl("/login")
                 .defaultSuccessUrl("/index")
                 .failureUrl("/login?error")
-                .and().httpBasic()
+                .and().httpBasic().disable()
         ;
     }
 

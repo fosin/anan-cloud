@@ -1,10 +1,16 @@
 server:
   port: 1400
 spring:
+  main:
+    allow-bean-definition-overriding: true
   profiles:
     active: @profileActive@
   application:
     name: cdp-authserver
+  security:
+    user:
+      name: @eureka.username@
+      password: @eureka.password@
   cloud:
     inetutils:
       preferred-networks: @spring.cloud.inetutils.preferred-networks@
@@ -30,18 +36,14 @@ spring:
   jackson: #该参数一定要放bootstrap中，而放application.yml或者后面的配置文件都不能生效
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
-  security:
-    user:
-      name: @eureka.username@
-      password: @eureka.password@
 eureka:
   client:
     service-url:
       defaultZone: @eureka.client.service-url.defaultZone@
   instance:
+    prefer-ip-address: true
     metadata-map:
       gated-launch: false #灰度发布标志，默认为false，设置为true表示灰度发布的点
-    prefer-ip-address: true
 #    instance-id: http://${spring.cloud.client.ipAddress}:${server.port}
 encrypt:
   key-store:

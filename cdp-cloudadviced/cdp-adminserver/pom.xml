@@ -35,15 +35,17 @@
              <artifactId>spring-boot-admin-server-ui-login</artifactId>
              <version>${cdp-spring-boot-admin.version}</version>
          </dependency>-->
-        <dependency>
+        <!--<dependency>
             <groupId>de.codecentric</groupId>
             <artifactId>spring-boot-admin-server-ui-turbine</artifactId>
-            <version>${cdp-spring-boot-admin.version}</version>
+            <version>1.5.7</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-turbine</artifactId>
-        </dependency>
+            <version>1.4.6.RELEASE</version>
+        </dependency>-->
+
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-hystrix</artifactId>

@@ -60,6 +60,7 @@ public class CdpAuthorizationServerConfigurer extends AuthorizationServerConfigu
         clients.withClientDetails(clientDetailsService());
     }
 
+
     /**
      * 用来配置授权（authorization）以及令牌（token）的访问端点和令牌服务(token services)。
      * 配置身份认证器，配置认证方式，TokenStore，TokenGranter，OAuth2RequestFactory

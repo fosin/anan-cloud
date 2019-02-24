@@ -12,6 +12,17 @@
     <packaging>jar</packaging>
     <description>CDP Auth Server</description>
     <dependencies>
+        <!--<dependency>
+            <groupId>${cdp.groupId}</groupId>
+            <artifactId>cdp-platformapi</artifactId>
+            <version>${cdp-platformapi.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>${cdp.groupId}</groupId>
+                    <artifactId>cdp-oauth2</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>-->
         <!--spring boot 项目引入了 spring的devtools 经常会产生java.lang.ClassCastException 两个一样的类不能强转-->
         <!--<dependency>
             <groupId>org.springframework.boot</groupId>
@@ -25,7 +36,7 @@
         </dependency>
         <dependency>
             <groupId>org.thymeleaf.extras</groupId>
-            <artifactId>thymeleaf-extras-springsecurity4</artifactId>
+            <artifactId>thymeleaf-extras-springsecurity5</artifactId>
         </dependency>
         <dependency>
             <groupId>org.webjars</groupId>
@@ -40,6 +51,7 @@
         <dependency>
             <groupId>org.webjars</groupId>
             <artifactId>webjars-locator</artifactId>
+            <version>0.36</version>
         </dependency>
         <dependency>
             <groupId>org.webjars</groupId>
