@@ -6,7 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.DynamicUpdate;
-import org.springframework.data.jpa.domain.AbstractPersistable;
+import com.github.fosin.cdp.jpa.entity.AbstractIdJpaEntity;
 
 import javax.persistence.*;
 import java.io.Serializable;

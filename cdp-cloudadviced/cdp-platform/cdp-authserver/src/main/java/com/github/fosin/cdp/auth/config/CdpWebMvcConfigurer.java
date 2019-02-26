@@ -1,5 +1,6 @@
 package com.github.fosin.cdp.auth.config;
 
+import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.format.datetime.DateFormatter;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -21,10 +22,12 @@ import java.util.List;
  * 2、implements WebMvcConfigurer + @EnableWebMvc ： 会覆盖@EnableAutoConfiguration关于WebMvcAutoConfiguration的配置
  * 3、extends WebMvcConfigurationSupport ：会覆盖@EnableAutoConfiguration关于WebMvcAutoConfiguration的配置
  * 4、extends DelegatingWebMvcConfiguration ：会覆盖@EnableAutoConfiguration关于WebMvcAutoConfiguration的配置
+ * 5、WebMvcConfigurerAdapter在SpringBoot2.0及Spring 5.0 WebMvcConfigurerAdapter已被废弃
  * @author fosin
  */
-//@Configuration
-//@EnableWebMvc
+@Configuration
+@EnableWebMvc
+
 public class CdpWebMvcConfigurer implements WebMvcConfigurer {
 //    @Bean
 //    public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
@@ -75,7 +78,7 @@ public class CdpWebMvcConfigurer implements WebMvcConfigurer {
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/").setViewName("forward:/index");
+        registry.addViewController("/").setViewName("/login");
         registry.addViewController("/login");
         registry.addViewController("/index");
     }
@@ -90,11 +93,20 @@ public class CdpWebMvcConfigurer implements WebMvcConfigurer {
 
     }
 
+    /**
+     * 静态资源
+     * @param returnValueHandlers
+     */
     @Override
     public void addReturnValueHandlers(List<HandlerMethodReturnValueHandler> returnValueHandlers) {
 
     }
 
+    /**
+     * 消息内容转换配置
+     * 配置fastJson返回json转换
+     * @param converters
+     */
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
 

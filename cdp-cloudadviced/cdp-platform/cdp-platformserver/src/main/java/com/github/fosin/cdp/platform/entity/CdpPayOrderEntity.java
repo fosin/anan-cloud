@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.DynamicUpdate;
-import org.springframework.data.jpa.domain.AbstractPersistable;
+import com.github.fosin.cdp.jpa.entity.AbstractIdJpaEntity;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -24,7 +24,7 @@ import java.util.Date;
 @DynamicUpdate
 @Table(name = "cdp_pay_order")
 @ApiModel(value = "系统支付订单表实体类", description = "表(cdp_pay_order)的对应的实体类")
-public class CdpPayOrderEntity  extends AbstractPersistable<Long> implements Serializable {
+public class CdpPayOrderEntity  extends AbstractIdJpaEntity<Long> implements Serializable {
     private static final long serialVersionUID = -88896111334285360L;
 
     @Basic

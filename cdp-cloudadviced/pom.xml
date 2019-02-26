@@ -15,12 +15,12 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-oauth2</artifactId>
-            <exclusions>
+           <!-- <exclusions>
                 <exclusion>
                     <artifactId>spring-security-oauth2-autoconfigure</artifactId>
                     <groupId>org.springframework.security.oauth.boot</groupId>
                 </exclusion>
-            </exclusions>
+            </exclusions>-->
         </dependency>
         <!--TODO spring-cloud-starter-oauth2自带依赖的spring-security-oauth2-autoconfigure.2.1.0.M4找不到，
         这是BUG，得官方修复了再改回来

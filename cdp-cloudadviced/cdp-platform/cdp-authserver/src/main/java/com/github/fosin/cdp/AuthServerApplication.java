@@ -1,7 +1,7 @@
 package com.github.fosin.cdp;
 
-import com.github.fosin.cdp.oauth2.annotation.EnableCdpOauth2;
 import com.github.fosin.cdp.core.banner.CdpBanner;
+import com.github.fosin.cdp.oauth2.annotation.EnableCdpOauth2;
 import com.github.fosin.cdp.swagger.annotation.EnableCdpSwagger2;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;

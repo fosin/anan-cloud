@@ -59,10 +59,8 @@ cdp:
       name: fosin
       email: 28860823@qq.com
   oauth2:
+    enabled: true
     disablecsrf: true
     disableHttpBasic: true
     blackWhiteList:
     - path: /**/v2/api-docs
-    - path: /oauth/**
-    - path: /login
-    - path: /logout

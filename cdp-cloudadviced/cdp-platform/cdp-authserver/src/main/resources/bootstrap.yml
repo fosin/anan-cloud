@@ -11,6 +11,8 @@ spring:
     user:
       name: @eureka.username@
       password: @eureka.password@
+#    filter:
+#      order: 9999
   cloud:
     inetutils:
       preferred-networks: @spring.cloud.inetutils.preferred-networks@

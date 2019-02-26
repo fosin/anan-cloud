@@ -27,7 +27,7 @@ import javax.sql.DataSource;
  */
 @Configuration
 @EnableWebSecurity
-//@Order(3) //TODO 这里有bug，无论怎么配置都不能使用自定义登录界面，这个官方例子不符，这里获取是Spring Security Oauth2低版本的bug，等升级到高版本会许能解决这个问题
+//@Order(1) //TODO 这里有bug，无论怎么配置都不能使用自定义登录界面，这个官方例子不符，这里获取是Spring Security Oauth2低版本的bug，等升级到高版本会许能解决这个问题
 public class CdpWebSecurityConfigurer extends WebSecurityConfigurerAdapter {
     private static final String INTERNAL_SECRET_KEY = "INTERNAL_SECRET_KEY";
     @Autowired
@@ -43,12 +43,13 @@ public class CdpWebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.requestMatchers()
-                .antMatchers("/login", "/oauth/authorize")
-                .and().authorizeRequests()
+        http.authorizeRequests().antMatchers("/login","/oauth/**").permitAll()
+//                .requestMatchers()
+//                .antMatchers("/login","/index", "/oauth/authorize")
+//                .and().authorizeRequests()
 //                .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
-                .antMatchers("/**/oauth/**").permitAll()
-                .antMatchers(HttpMethod.OPTIONS).permitAll()
+//                .antMatchers("/**/oauth/**").permitAll()
+//                .antMatchers(HttpMethod.OPTIONS).permitAll()
 //                .antMatchers("/index").authenticated()
                 //除以上路径都需要验证
                 .anyRequest().authenticated()
@@ -67,7 +68,7 @@ public class CdpWebSecurityConfigurer extends WebSecurityConfigurerAdapter {
                 //设置起效为2天
                 .rememberMeServices(rememberMeServices())
                 .and()
-                .formLogin()
+                .formLogin().permitAll()
                 //form表单密码参数名
                 .usernameParameter("usercode")
                 //form表单用户名参数名
@@ -76,7 +77,7 @@ public class CdpWebSecurityConfigurer extends WebSecurityConfigurerAdapter {
                 .loginProcessingUrl("/login")
                 .defaultSuccessUrl("/index")
                 .failureUrl("/login?error")
-                .and().httpBasic().disable()
+//                .and().httpBasic().disable()
         ;
     }
 
@@ -91,7 +92,7 @@ public class CdpWebSecurityConfigurer extends WebSecurityConfigurerAdapter {
         web.ignoring().antMatchers("/**/*.html",
                 "/**/*.css", "/**/*.js", "/**/webjars/**",
                 "/**/images/**", "/**/*.jpg","/**/swagger-resources/**",
-                "/**/v2/api-docs");
+                "/**/v2/api-docs","/**/oauth/**");
     }
 
     @Bean

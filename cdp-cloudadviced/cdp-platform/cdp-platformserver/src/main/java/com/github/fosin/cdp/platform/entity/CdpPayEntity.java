@@ -1,11 +1,11 @@
 package com.github.fosin.cdp.platform.entity;
-
+import com.github.fosin.cdp.jpa.entity.AbstractIdJpaEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.DynamicUpdate;
-import org.springframework.data.jpa.domain.AbstractPersistable;
+
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -24,7 +24,7 @@ import java.util.Date;
 @DynamicUpdate
 @Table(name = "cdp_pay")
 @ApiModel(value = "系统支付表实体类", description = "表(cdp_pay)的对应的实体类")
-public class CdpPayEntity extends AbstractPersistable<Long> implements Serializable {
+public class CdpPayEntity extends AbstractIdJpaEntity<Long> implements Serializable {
     private static final long serialVersionUID = 197340387949290400L;
 
     @Basic
