@@ -37,8 +37,8 @@ jQuery BootStrap | 前段开发框架
 ## 二、生产环境将eureka注册中心地址替换成实际地址并建议修改当前连接用户(cdp)和密码(cdp)为较安全复杂的用户和密码，如果是本机为开发环境则可以不需要修改。
 ## 三、Spring Config配置中心
        1、生成加密证书
-            keytool -genkeypair -alias cdp -keyalg RSA -dname "CN=cdp, OU=starlight, O=startlight, L=gy, ST=gz, C=cn" -keypass 123456 -keystore cdp.keystore -storepass 123456 -validity 365
-       2、将cdp.keystore分别放到各个项目的src/main/resources目录下
+            keytool -genkeypair -alias cdp -keyalg RSA -dname "CN=cdp, OU=starlight, O=startlight, L=gy, ST=gz, C=cn" -keypass 123456 -keystore /cdp.jks -storepass 123456 -validity 365
+       2、将/cdp.jks分别放到各个项目的src/main/resources目录下
        3、生产环境中将cdp-configserver配置中心替换实际地址并建议修改当前连接用户(cdp)和密码(cdp)为较安全复杂的用户和密码,
            然后启动cdp-configserver项目后，通过以下命令生成密码：
             curl -u cdp:cdp http://localhost:1100/encrypt -d cdp
@@ -51,4 +51,3 @@ jQuery BootStrap | 前段开发框架
        3、启动cdp-zuulgateway服务路由网关
        4、启动cdp-adminmonitor服务监控
        5、启动cdp-
-       
