@@ -68,7 +68,7 @@
                     http://${cdp-placeholder1}spring.security.user.name${cdp-placeholder2}:${cdp-placeholder1}spring.security.user.password${cdp-placeholder2}${cdp-at}192.168.2.243:1000/eureka/,http://${cdp-placeholder1}spring.security.user.name${cdp-placeholder2}:${cdp-placeholder1}spring.security.user.password${cdp-placeholder2}${cdp-at}192.168.2.244:1000/eureka/
                 </eureka.client.service-url.defaultZone>
                 <spring.cloud.config.profileActive>subversion</spring.cloud.config.profileActive>
-                <spring.cloud.config.server.svn.uri>https://192.168.2.237/svn/xingyj/01-Development/01-Platform/v1/01-Souce/cdp-cloud/cdp-config/</spring.cloud.config.server.svn.uri>
+                <spring.cloud.config.server.svn.uri>https://192.168.2.237/svn/xingyj/01-Development/01-Platform/v1/01-Souce/cdp-cloud/cdp-config</spring.cloud.config.server.svn.uri>
                 <spring.cloud.config.server.svn.username>configServer</spring.cloud.config.server.svn.username>
                 <spring.cloud.config.server.svn.password>xingyj</spring.cloud.config.server.svn.password>
                 <spring.cloud.config.server.native.search-locations></spring.cloud.config.server.native.search-locations>

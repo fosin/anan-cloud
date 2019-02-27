@@ -66,10 +66,9 @@ public class CdpAuthorizationServerConfigurer extends AuthorizationServerConfigu
      * 配置身份认证器，配置认证方式，TokenStore，TokenGranter，OAuth2RequestFactory
      *
      * @param endpoints
-     * @throws Exception
      */
     @Override
-    public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
+    public void configure(AuthorizationServerEndpointsConfigurer endpoints) {
         endpoints.tokenStore(redisTokenStore())
                 .tokenEnhancer(tokenEnhancer())
                 .userDetailsService(userDetailsService)
@@ -86,10 +85,9 @@ public class CdpAuthorizationServerConfigurer extends AuthorizationServerConfigu
      * 配置oauth认证安全策略 从表单提交经过OAuth认证
      *
      * @param security
-     * @throws Exception
      */
     @Override
-    public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
+    public void configure(AuthorizationServerSecurityConfigurer security) {
         security
                 //url:/oauth/token_key,exposes public key for token verification if using JWT tokens
                 .tokenKeyAccess("permitAll()")
@@ -153,18 +151,15 @@ public class CdpAuthorizationServerConfigurer extends AuthorizationServerConfigu
      */
     @Bean
     public TokenEnhancer tokenEnhancer() {
-        return new TokenEnhancer() {
-            @Override
-            public OAuth2AccessToken enhance(OAuth2AccessToken accessToken, OAuth2Authentication authentication) {
-                if (accessToken instanceof DefaultOAuth2AccessToken) {
-                    DefaultOAuth2AccessToken token = (DefaultOAuth2AccessToken) accessToken;
-                    Map<String, Object> additionalInformation = new LinkedHashMap<String, Object>();
+        return (accessToken, authentication) -> {
+            if (accessToken instanceof DefaultOAuth2AccessToken) {
+                DefaultOAuth2AccessToken token = (DefaultOAuth2AccessToken) accessToken;
+                Map<String, Object> additionalInformation = new LinkedHashMap<String, Object>();
 //                    additionalInformation.put("code",ResultCode.SUCCESS.getCode());
 //                    additionalInformation.put("msg",ResultCode.SUCCESS.getMsg());
-                    token.setAdditionalInformation(additionalInformation);
-                }
-                return accessToken;
+                token.setAdditionalInformation(additionalInformation);
             }
+            return accessToken;
         };
     }
     /**

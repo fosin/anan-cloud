@@ -28,7 +28,7 @@ zuul:
       serviceId: ehospital
       retryable: true
     dih:
-      path: /dih/**
+      path: /dih/test/**
       serviceId: dih
       retryable: true
 #  semaphore:

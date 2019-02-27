@@ -2,10 +2,9 @@ package com.github.fosin.cdp.auth.config;
 
 import com.github.fosin.cdp.auth.security.CdpUserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.actuate.autoconfigure.web.server.ManagementServerProperties;
-import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -14,7 +13,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.RememberMeServices;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
@@ -26,7 +25,9 @@ import javax.sql.DataSource;
  * @author fosin
  */
 @Configuration
-@EnableWebSecurity
+//@EnableWebSecurity
+@Primary
+@Order(90)
 //@Order(1) //TODO 这里有bug，无论怎么配置都不能使用自定义登录界面，这个官方例子不符，这里获取是Spring Security Oauth2低版本的bug，等升级到高版本会许能解决这个问题
 public class CdpWebSecurityConfigurer extends WebSecurityConfigurerAdapter {
     private static final String INTERNAL_SECRET_KEY = "INTERNAL_SECRET_KEY";
@@ -43,17 +44,13 @@ public class CdpWebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests().antMatchers("/login","/oauth/**").permitAll()
-//                .requestMatchers()
-//                .antMatchers("/login","/index", "/oauth/authorize")
-//                .and().authorizeRequests()
-//                .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
-//                .antMatchers("/**/oauth/**").permitAll()
-//                .antMatchers(HttpMethod.OPTIONS).permitAll()
-//                .antMatchers("/index").authenticated()
+        http.authorizeRequests()
+                .antMatchers("/login").permitAll()
+                .antMatchers("/**/oauth/**").permitAll()
+                .antMatchers(HttpMethod.OPTIONS).permitAll()
+                .antMatchers("/index").authenticated()
                 //除以上路径都需要验证
                 .anyRequest().authenticated()
-
 //                .and()
 //                .exceptionHandling()
 //                .accessDeniedPage("/login?authorization_error=true")
@@ -88,16 +85,16 @@ public class CdpWebSecurityConfigurer extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    public void configure(WebSecurity web) throws Exception {
+    public void configure(WebSecurity web) {
         web.ignoring().antMatchers("/**/*.html",
                 "/**/*.css", "/**/*.js", "/**/webjars/**",
-                "/**/images/**", "/**/*.jpg","/**/swagger-resources/**",
-                "/**/v2/api-docs","/**/oauth/**");
+                "/**/images/**", "/**/*.jpg", "/**/swagger-resources/**",
+                "/**/v2/api-docs", "/**/oauth/**");
     }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
     /**
