@@ -4,6 +4,7 @@ import com.github.fosin.cdp.platformapi.entity.CdpPermissionEntity;
 import com.github.fosin.cdp.platformapi.entity.CdpUserEntity;
 import com.github.fosin.cdp.util.ClientUtil;
 import lombok.Getter;
+import org.springframework.beans.BeanUtils;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -35,9 +36,10 @@ public class CdpUserDetail extends User {
 
     public CdpUserDetail(CdpUserEntity user, CdpPermissionEntity permissionTree, Collection<? extends GrantedAuthority> authorities) {
         super(user.getUsercode(), user.getPassword(), user.getStatus() == 0, user.getExpireTime().after(new Date()), true, user.getStatus() != 9, authorities);
-        this.user = user;
+        this.user = new CdpUserEntity();
+        BeanUtils.copyProperties(user,this.user);
+        this.user.setPassword(null);
         this.permissionTree = permissionTree;
-        this.user.setPassword("");
         client = new Client();
         ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         if (requestAttributes != null) {

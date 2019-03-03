@@ -101,8 +101,10 @@ public class UserServiceImpl implements IUserService {
         Assert.isTrue(RegexUtil.matcher(createUser.getPassword(), passwordStrength), "密码强度不符合强度要求!");
         String password = encryptBeforeSave(createUser);
         CdpUserEntity savedEntity = userRepository.save(createUser);
-        savedEntity.setPassword(password);
-        return savedEntity;
+        CdpUserEntity rcEntity = new CdpUserEntity();
+        BeanUtils.copyProperties(savedEntity, rcEntity);
+        rcEntity.setPassword(password);
+        return rcEntity;
     }
 
     @Override
@@ -258,6 +260,7 @@ public class UserServiceImpl implements IUserService {
         return ResultUtils.success(page.getTotalElements(), page.getContent());
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     @Caching(
             evict = {
@@ -280,6 +283,7 @@ public class UserServiceImpl implements IUserService {
         return userRepository.save(user);
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     @Caching(
             evict = {
@@ -297,8 +301,10 @@ public class UserServiceImpl implements IUserService {
         Objects.requireNonNull(user, "通过ID：" + id + "未找到对应的用户信息!").setPassword(password);
         encryptBeforeSave(user);
         userRepository.save(user);
-        user.setPassword(password);
-        return user;
+        CdpUserEntity rcEntity = new CdpUserEntity();
+        BeanUtils.copyProperties(user, rcEntity);
+        rcEntity.setPassword(password);
+        return rcEntity;
     }
 
     public String getPassword() {
