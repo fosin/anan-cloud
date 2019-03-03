@@ -11,6 +11,7 @@ import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerInterceptor;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Primary;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 
 /**
@@ -35,10 +36,11 @@ public class AdminServerApplication {
         return new LoadBalancerInterceptor(loadBalance);
     }
 
-//    @Bean
-//    @RefreshScope
-//    @ConfigurationProperties("spring.boot.admin")
-//    public AdminServerProperties adminServerProperties() {
-//        return new AdminServerProperties();
-//    }
+    @Bean
+    @Primary
+    @RefreshScope
+    @ConfigurationProperties("spring.boot.admin")
+    public AdminServerProperties adminServerProperties() {
+        return new AdminServerProperties();
+    }
 }

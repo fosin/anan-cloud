@@ -1,3 +1,10 @@
+spring:
+  boot:
+    admin:
+      turbine:
+        location: cdp-adminserver
+      routes:
+        endpoints: env,metrics,trace,dump,jolokia,info,configprops,trace,logfile,refresh,flyway,liquibase,heapdump,loggers,auditevents,hystrix.stream,turbine.stream
 turbine:
   cluster-name-expression: new String('default')
   app-config: cdp-zuulgateway
@@ -19,6 +26,7 @@ cdp:
       - path: /**/api/**
       - path: /**/login/**
       - path: /**/logout/**
+      - path: /**/applications/**
       - method: OPTIONS
 security:
   oauth2:
