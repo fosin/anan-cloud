@@ -4,7 +4,9 @@
 <configuration status="INFO">
     <!-- 全局参数 -->
     <Properties>
-        <Property name="pattern">%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p %c{1}:%L -%m%n</Property>
+        <Property name="pattern">%highlight{%d{yyyy-MM-dd HH:mm:ss,SSS} [%t] %-5level: %msg%n%throwable}{FATAL=Bright Red,
+            ERROR=Bright Red,WARN=Yellow,INFO=Bright White,DEBUG=Cyan,TRACE=Black}
+        </Property>
         <Property name="displayName">@project.artifactId@</Property>
     </Properties>
     <Appenders>
@@ -13,35 +15,23 @@
                 <pattern>${pattern}</pattern>
             </PatternLayout>
         </Console>
-        <!-- 文件 每次运行程序会自动清空，由append属性决定 -->
-        <File name="error" fileName="logs/${displayName}_error.log" append="false">
-            <!-- 指定error 级别的日志 -->
-            <ThresholdFilter level="ERROR" onMatch="ACCEPT"
-                             onMismatch="DENY"/>
-            <PatternLayout>
-                <pattern>${pattern}</pattern>
-            </PatternLayout>
-        </File>
         <!-- 滚动文件 -->
         <RollingFile name="rollingFile" fileName="logs/${displayName}.log"
-                     filePattern="${displayName}_%d{yyyy-MM-dd}.log">
+                     filePattern="${displayName}_%d{yyyy-MM-dd}-%i.log">
             <ThresholdFilter level="WARN" onMatch="ACCEPT"
                              onMismatch="DENY"/>
             <PatternLayout>
                 <pattern>${pattern}</pattern>
             </PatternLayout>
-            <!-- 按大小划分 -->
-            <SizeBasedTriggeringPolicy size="50MB"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+                <SizeBasedTriggeringPolicy size="50 MB"/>
+            </Policies>
         </RollingFile>
     </Appenders>
     <Loggers>
-        <!-- <Logger name="org.apache.catalina.util.LifecycleBase" level="ERROR"
-            /> <Logger name="org.apache.coyote.http11.Http11NioProtocol" level="WARN"
-            /> <Logger name="org.apache.tomcat.util.net.NioSelectorPool" level="WARN"
-            /> -->
         <Root level="INFO">
             <AppenderRef ref="console"/>
-            <AppenderRef ref="error"/>
             <AppenderRef ref="rollingFile"/>
         </Root>
     </Loggers>
