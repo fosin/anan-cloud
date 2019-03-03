@@ -43,9 +43,4 @@ public class CdpParameterCreateDto implements Serializable {
 
     @ApiModelProperty(value = "参数描述", example = "String")
     private String description;
-
-    @NotNull(message = "参数状态" + "{javax.validation.constraints.NotNull.message}")
-    @ApiModelProperty(value = "参数状态：0=正常状态、1=修改状态、2=删除状态", example = "Integer", required = true)
-    private Integer status;
-
 }

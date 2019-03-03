@@ -22,11 +22,10 @@ import com.github.fosin.cdp.util.DateTimeUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -75,6 +74,9 @@ public class CdpOrganizationAuthServiceImpl implements ICdpOrganizationAuthServi
     private ICdpVersionService versionService;
     @Autowired
     private IOrganizationService organizationService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     @Transactional
@@ -144,7 +146,6 @@ public class CdpOrganizationAuthServiceImpl implements ICdpOrganizationAuthServi
     }
 
     private String getAuthCode(CdpOrganizationAuthCreateDto auth) {
-        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-        return bCryptPasswordEncoder.encode(auth.toString());
+        return passwordEncoder.encode(auth.toString());
     }
 }

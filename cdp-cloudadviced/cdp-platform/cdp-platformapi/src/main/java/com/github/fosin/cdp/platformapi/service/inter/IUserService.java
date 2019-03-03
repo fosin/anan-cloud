@@ -19,7 +19,7 @@ public interface IUserService extends ISimpleJpaService<CdpUserEntity, Long, Cdp
 
     CdpUserEntity changePassword(Long id, String password, String confirmPassword1, String confirmPassword2);
 
-    String resetPassword(Long id);
+    CdpUserEntity resetPassword(Long id);
 
     List<CdpUserEntity> findOtherUsersByRoleId(Long roleId);
 

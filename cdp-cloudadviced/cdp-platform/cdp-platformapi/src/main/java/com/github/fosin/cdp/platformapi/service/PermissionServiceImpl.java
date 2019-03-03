@@ -35,6 +35,7 @@ import javax.persistence.criteria.*;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 2017/12/29.
@@ -65,7 +66,7 @@ public class PermissionServiceImpl implements IPermissionService {
 
         int level = 1;
         if (pId != 0) {
-            CdpPermissionEntity parentEntity = permissionRepository.findById(pId).get();
+            CdpPermissionEntity parentEntity = permissionRepository.findById(pId).orElse(null);
             Assert.notNull(parentEntity, "传入的创建数据实体找不到对于的父节点数据!");
             level = parentEntity.getLevel() + 1;
         }
@@ -80,11 +81,11 @@ public class PermissionServiceImpl implements IPermissionService {
         Long id = entity.getId();
         Assert.notNull(id, "传入了空ID!");
 
-        CdpPermissionEntity updateEntity = permissionRepository.findById(id).get();
-        BeanUtils.copyProperties(entity, updateEntity);
+        CdpPermissionEntity updateEntity = permissionRepository.findById(id).orElse(null);
+        BeanUtils.copyProperties(entity, Objects.requireNonNull(updateEntity, "通过ID：" + id + "未能找到对应的数据!"));
         Long pId = entity.getPId();
         if (!updateEntity.getPId().equals(pId)) {
-            CdpPermissionEntity parentEntity = permissionRepository.findById(pId).get();
+            CdpPermissionEntity parentEntity = permissionRepository.findById(pId).orElse(null);
             Assert.notNull(parentEntity, "传入的创建数据实体找不到对于的父节点数据!");
             updateEntity.setLevel(parentEntity.getLevel() + 1);
         }
@@ -97,9 +98,8 @@ public class PermissionServiceImpl implements IPermissionService {
     @CacheEvict(value = TableNameConstant.CDP_PERMISSION, key = "#id")
     public CdpPermissionEntity deleteById(Long id) {
         Assert.notNull(id, "传入了空ID!");
-        CdpPermissionEntity entity = permissionRepository.findById(id).get();
-        Assert.notNull(entity, "传入了空对象!");
-        deleteById(id, entity);
+        CdpPermissionEntity entity = permissionRepository.findById(id).orElse(null);
+        deleteById(id, Objects.requireNonNull(entity, "通过ID：" + id + "未能找到对应的数据!"));
         return null;
     }
 
@@ -147,7 +147,7 @@ public class PermissionServiceImpl implements IPermissionService {
     @Override
     @Cacheable(value = TableNameConstant.CDP_PERMISSION, key = "#id")
     public CdpPermissionEntity findById(Long id) {
-        return permissionRepository.findById(id).get();
+        return permissionRepository.findById(id).orElse(null);
     }
 
     @Override

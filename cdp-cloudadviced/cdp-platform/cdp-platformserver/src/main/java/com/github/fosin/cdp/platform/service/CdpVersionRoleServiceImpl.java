@@ -1,29 +1,26 @@
 package com.github.fosin.cdp.platform.service;
 
+import com.github.fosin.cdp.mvc.module.PageModule;
+import com.github.fosin.cdp.mvc.result.Result;
+import com.github.fosin.cdp.mvc.result.ResultUtils;
 import com.github.fosin.cdp.platform.dto.request.CdpVersionRoleCreateDto;
 import com.github.fosin.cdp.platform.dto.request.CdpVersionRoleUpdateDto;
+import com.github.fosin.cdp.platform.entity.CdpVersionRoleEntity;
 import com.github.fosin.cdp.platform.repository.CdpVersionRoleRepository;
 import com.github.fosin.cdp.platform.service.inter.ICdpVersionRoleService;
 import com.github.fosin.cdp.platformapi.constant.SystemConstant;
-import com.github.fosin.cdp.platform.entity.CdpVersionRoleEntity;
-import com.github.fosin.cdp.platformapi.entity.CdpUserEntity;
-import com.github.fosin.cdp.platformapi.util.LoginUserUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.util.Assert;
-import com.github.fosin.cdp.mvc.module.PageModule;
-import com.github.fosin.cdp.mvc.result.Result;
-import com.github.fosin.cdp.mvc.result.ResultUtils;
 
-import javax.persistence.criteria.*;
-import java.util.Date;
+import javax.persistence.criteria.Path;
 
 /**
  * 系统版本角色表(cdp_version_role)表服务实现类
@@ -72,7 +69,7 @@ public class CdpVersionRoleServiceImpl implements ICdpVersionRoleService {
         Long id = entity.getId();
         Assert.isTrue(id != null && id > 0, "传入的主键无效!");
         Assert.isTrue(!entity.getValue().equals(SystemConstant.SUPER_USER_CODE), "角色标识不能为:" + SystemConstant.SUPER_USER_CODE);
-        CdpVersionRoleEntity createEntity = getRepository().findById(id).get();
+        CdpVersionRoleEntity createEntity = getRepository().findById(id).orElse(null);
         Assert.notNull(createEntity, "更新数据的实体对象不能为空!");
         BeanUtils.copyProperties(entity, createEntity);
         return getRepository().save(createEntity);

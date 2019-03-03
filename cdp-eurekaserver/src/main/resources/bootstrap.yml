@@ -36,6 +36,9 @@ management:
     web:
       exposure:
         include: '*'
+  endpoint:
+    health:
+      show-details: ALWAYS
 encrypt:
   key-store:
     location: @encrypt.key-store.location@

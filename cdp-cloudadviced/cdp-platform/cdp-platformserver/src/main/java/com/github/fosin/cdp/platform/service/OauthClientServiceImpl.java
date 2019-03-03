@@ -14,12 +14,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
-import javax.persistence.criteria.*;
+import javax.persistence.criteria.Path;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -34,6 +35,8 @@ public class OauthClientServiceImpl implements IOauthClientService {
 
     @Autowired
     private OauthClientRepository oauthClientRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public OauthClientDetailsEntity create(OauthClientDetailsEntity entity) {
@@ -41,7 +44,7 @@ public class OauthClientServiceImpl implements IOauthClientService {
         String id = entity.getClientId();
         Optional<OauthClientDetailsEntity> entityOptional = oauthClientRepository.findById(id);
         Assert.isTrue(entityOptional.isPresent(), "该数据已存在，请重新设置客户端标识以区分");
-        entity.setClientSecret(new BCryptPasswordEncoder().encode(entity.getClientSecret()));
+        entity.setClientSecret(passwordEncoder.encode(entity.getClientSecret()));
         return oauthClientRepository.save(entity);
     }
 
@@ -50,10 +53,10 @@ public class OauthClientServiceImpl implements IOauthClientService {
         Assert.notNull(entity, "传入了空对象!");
         String id = entity.getClientId();
         Assert.isTrue(StringUtils.hasText(id), "更新数据时ClientId不能为空!");
-        OauthClientDetailsEntity existsEntity = oauthClientRepository.findById(id).get();
+        OauthClientDetailsEntity existsEntity = oauthClientRepository.findById(id).orElse(null);
         //如果密码与数据库中的不一致则需要加密
-        if (!existsEntity.getClientSecret().equals(entity.getClientSecret())) {
-            entity.setClientSecret(new BCryptPasswordEncoder().encode(entity.getClientSecret()));
+        if (!Objects.equals(entity.getClientSecret(), existsEntity.getClientSecret())) {
+            entity.setClientSecret(passwordEncoder.encode(entity.getClientSecret()));
         }
         return oauthClientRepository.save(entity);
     }
@@ -70,8 +73,7 @@ public class OauthClientServiceImpl implements IOauthClientService {
             if (StringUtils.isEmpty(searchCondition)) {
                 return query.getRestriction();
             }
-            Predicate predicate = cb.or(cb.like(clientId, "%" + searchCondition + "%"), cb.like(clientSecret, "%" + searchCondition + "%"));
-            return predicate;
+            return cb.or(cb.like(clientId, "%" + searchCondition + "%"), cb.like(clientSecret, "%" + searchCondition + "%"));
 
         };
         //分页查找

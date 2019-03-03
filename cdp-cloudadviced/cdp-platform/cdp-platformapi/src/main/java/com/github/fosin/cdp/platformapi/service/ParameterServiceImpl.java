@@ -36,6 +36,7 @@ import javax.persistence.criteria.*;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 字典表服务
@@ -63,8 +64,8 @@ public class ParameterServiceImpl implements IParameterService {
         Assert.notNull(entity, "传入了空对象!");
         Long id = entity.getId();
         Assert.notNull(id, "ID不能为空!");
-        CdpParameterEntity cEntity = parameterRepository.findById(id).get();
-        BeanUtils.copyProperties(entity, cEntity);
+        CdpParameterEntity cEntity = parameterRepository.findById(id).orElse(null);
+        BeanUtils.copyProperties(entity, Objects.requireNonNull(cEntity, "通过ID：" + id + "未能找到对应的数据!"));
         CdpParameterEntity save = parameterRepository.save(cEntity);
         String cCacheKey = getCacheKey(cEntity);
         String cacheKey = getCacheKey(entity.getType(), entity.getScope(), entity.getName());
@@ -79,7 +80,7 @@ public class ParameterServiceImpl implements IParameterService {
 
     @Override
     public CdpParameterEntity deleteById(Long id) {
-        CdpParameterEntity entity = parameterRepository.findById(id).get();
+        CdpParameterEntity entity = parameterRepository.findById(id).orElse(null);
         Assert.notNull(entity, "通过ID没有能找到参数数据,删除被取消!");
         String cacheKey = getCacheKey(entity);
         CacheUtil.evict(TableNameConstant.CDP_PARAMETER, cacheKey);
@@ -147,7 +148,7 @@ public class ParameterServiceImpl implements IParameterService {
     @Override
     @Transactional(rollbackFor = CdpServiceException.class)
     public boolean applyChange(Long id) {
-        CdpParameterEntity entity = parameterRepository.findById(id).get();
+        CdpParameterEntity entity = parameterRepository.findById(id).orElse(null);
         Assert.notNull(entity, "该参数已经不存在!");
         String cacheKey = getCacheKey(entity);
         CdpUserEntity loginUser;

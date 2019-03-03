@@ -29,6 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import javax.persistence.criteria.*;
+import java.util.Objects;
 
 /**
  * 字典表服务
@@ -48,7 +49,7 @@ public class DictionaryServiceImpl implements IDictionaryService {
     public CdpDictionaryEntity create(CdpDictionaryCreateDto entity) {
         Assert.notNull(entity, "传入的创建数据实体对象不能为空!");
         //系统字典
-        if (entity.getType().equals(SystemConstant.SYSTEM_DICTIONARY_TYPE)) {
+        if (Objects.equals(entity.getType(), SystemConstant.SYSTEM_DICTIONARY_TYPE)) {
             CdpUserEntity loginUser = LoginUserUtil.getUser();
             //非超级管理员不能创建系统字典
             Assert.isTrue(SystemConstant.SUPER_USER_CODE.equals(loginUser.getUsercode()), "没有权限创建系统字典!");
@@ -64,7 +65,7 @@ public class DictionaryServiceImpl implements IDictionaryService {
         Assert.notNull(entity, "无效的更新数据");
         Long id = entity.getId();
         Assert.notNull(id, "无效的字典代码id");
-        CdpDictionaryEntity updateEntity = dictionaryRepository.findById(id).get();
+        CdpDictionaryEntity updateEntity = dictionaryRepository.findById(id).orElse(null);
         Assert.notNull(updateEntity, "根据传入的字典code" + id + "在数据库中未能找到对于数据!");
         //系统字典
         if (entity.getType().equals(SystemConstant.SYSTEM_DICTIONARY_TYPE)) {
@@ -83,12 +84,13 @@ public class DictionaryServiceImpl implements IDictionaryService {
         if (code == null) {
             throw new CdpServiceException("传入的code无效!");
         }
-        CdpDictionaryEntity entity = dictionaryRepository.findById(code).get();
+        CdpDictionaryEntity entity = dictionaryRepository.findById(code).orElse(null);
 //        if (entity == null) {
 //            throw new CdpServiceException("通过code没有找到对应的字典!");
 //        }
         //系统字典
-        if (entity.getType().equals(SystemConstant.SYSTEM_DICTIONARY_TYPE)) {
+
+        if (Objects.equals(SystemConstant.SYSTEM_DICTIONARY_TYPE, Objects.requireNonNull(entity,"通过code没有找到对应的字典").getType())) {
             CdpUserEntity loginUser = LoginUserUtil.getUser();
             //非超级管理员不能删除系统字典
             if (!SystemConstant.SUPER_USER_CODE.equals(loginUser.getUsercode())) {
@@ -120,22 +122,19 @@ public class DictionaryServiceImpl implements IDictionaryService {
         PageRequest pageable = PageRequest.of(pageModule.getPageNumber() - 1, pageModule.getPageSize(), Sort.Direction.fromString(pageModule.getSortOrder()), pageModule.getSortName());
         String searchCondition = pageModule.getSearchText();
 
-        Specification<CdpDictionaryEntity> condition = new Specification<CdpDictionaryEntity>() {
-            @Override
-            public Predicate toPredicate(Root<CdpDictionaryEntity> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-                Path<String> type = root.get("type");
-                Path<String> scope = root.get("scope");
-                Path<String> name = root.get("name");
+        Specification<CdpDictionaryEntity> condition = (Specification<CdpDictionaryEntity>) (root, query, cb) -> {
+            Path<String> type = root.get("type");
+            Path<String> scope = root.get("scope");
+            Path<String> name = root.get("name");
 
-                Predicate predicate = cb.or(cb.like(scope, "%" + searchCondition + "%"), cb.like(name, "%" + searchCondition + "%"));
-                if (StringUtils.isBlank(searchCondition)) {
-                    return query.getRestriction();
-                }
-                if (NumberUtil.isInteger(searchCondition)) {
-                    predicate = cb.or(cb.like(type, "%" + searchCondition + "%"));
-                }
-                return predicate;
+            Predicate predicate = cb.or(cb.like(scope, "%" + searchCondition + "%"), cb.like(name, "%" + searchCondition + "%"));
+            if (StringUtils.isBlank(searchCondition)) {
+                return query.getRestriction();
             }
+            if (NumberUtil.isInteger(searchCondition)) {
+                predicate = cb.or(cb.like(type, "%" + searchCondition + "%"));
+            }
+            return predicate;
         };
         //分页查找
         Page<CdpDictionaryEntity> page = dictionaryRepository.findAll(condition, pageable);

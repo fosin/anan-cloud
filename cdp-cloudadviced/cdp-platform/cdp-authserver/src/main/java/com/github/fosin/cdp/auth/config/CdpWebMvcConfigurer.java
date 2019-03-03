@@ -70,10 +70,10 @@ public class CdpWebMvcConfigurer implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**")
-                .allowedHeaders(CorsConfiguration.ALL)
-                .allowedMethods(CorsConfiguration.ALL)
-                .allowedOrigins(CorsConfiguration.ALL);
+//        registry.addMapping("/**")
+//                .allowedHeaders(CorsConfiguration.ALL)
+//                .allowedMethods(CorsConfiguration.ALL)
+//                .allowedOrigins(CorsConfiguration.ALL);
     }
 
     @Override

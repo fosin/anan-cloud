@@ -27,10 +27,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.util.Assert;
 
 import javax.persistence.criteria.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * 2017/12/29.
@@ -72,7 +69,8 @@ public class RoleServiceImpl implements IRoleService {
         Long id = entity.getId();
         Assert.notNull(id, "传入了空ID!");
 
-        CdpRoleEntity oldEntity = roleRepository.findById(id).get();
+        CdpRoleEntity oldEntity = roleRepository.findById(id).orElse(null);
+        Assert.notNull(oldEntity, "通过传入的ID：" + id + "未能找到数据!");
         if (SystemConstant.ADMIN_ROLE_NAME.equals(oldEntity.getValue().toUpperCase()) &&
                 !SystemConstant.ADMIN_ROLE_NAME.equals(entity.getValue().toUpperCase())) {
             throw new IllegalArgumentException("不能修改角色标识" + SystemConstant.ADMIN_ROLE_NAME + "!");
@@ -87,7 +85,7 @@ public class RoleServiceImpl implements IRoleService {
     @Override
     public CdpRoleEntity deleteById(Long id) {
         Assert.isTrue(id != null && id > 0, "传入的角色ID无效！");
-        CdpRoleEntity entity = roleRepository.findById(id).get();
+        CdpRoleEntity entity = roleRepository.findById(id).orElse(null);
         Assert.notNull(entity, "根据角色ID未能找到角色数据!");
         Assert.isTrue(!SystemConstant.SUPER_ROLE_NAME.equals(entity.getValue())
                         && !SystemConstant.ADMIN_ROLE_NAME.equals(entity.getValue()),
@@ -173,7 +171,7 @@ public class RoleServiceImpl implements IRoleService {
             };
             page = roleRepository.findAll(condition, pageable);
         } else {
-            CdpOrganizationEntity organiz = organizationRepository.findById(organizId).get();
+            CdpOrganizationEntity organiz = organizationRepository.findById(organizId).orElse(null);
             Assert.notNull(organiz, "根据传入的机构编码没有找到任何数据!");
             List<CdpOrganizationEntity> organizs = organizationRepository.findByCodeStartingWithOrderByCodeAsc(organiz.getCode());
 
@@ -209,10 +207,10 @@ public class RoleServiceImpl implements IRoleService {
         if (loginUser.getUsercode().equals(SystemConstant.SUPER_USER_CODE)) {
             return roleRepository.findAll();
         } else {
-            CdpOrganizationEntity organiz = organizationRepository.findById(organizId).get();
+            CdpOrganizationEntity organiz = organizationRepository.findById(organizId).orElse(null);
             Assert.notNull(organiz, "根据传入的机构编码没有找到任何数据!");
-            CdpOrganizationEntity topOrganiz = organizationRepository.findById(organiz.getTopId()).get();
-            List<CdpOrganizationEntity> organizs = organizationRepository.findByCodeStartingWithOrderByCodeAsc(topOrganiz.getCode());
+            CdpOrganizationEntity topOrganiz = organizationRepository.findById(organiz.getTopId()).orElse(null);
+            List<CdpOrganizationEntity> organizs = organizationRepository.findByCodeStartingWithOrderByCodeAsc(Objects.requireNonNull(topOrganiz).getCode());
 
             Specification<CdpRoleEntity> condition = (root, query, cb) -> {
                 Path<Long> organizIdPath = root.get("organizId");

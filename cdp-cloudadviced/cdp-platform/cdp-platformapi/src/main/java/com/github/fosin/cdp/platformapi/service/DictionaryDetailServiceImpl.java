@@ -68,7 +68,7 @@ public class DictionaryDetailServiceImpl implements IDictionaryDetailService {
         Assert.notNull(entity, "传入的更新数据实体对象不能为空!");
         Long id = entity.getId();
         Assert.notNull(id, "传入的更新数据实体对象主键不能为空!");
-        CdpDictionaryDetailEntity findEntity = dictionaryDetailRepository.findById(id).get();
+        CdpDictionaryDetailEntity findEntity = dictionaryDetailRepository.findById(id).orElse(null);
         Assert.notNull(findEntity, "根据传入的主键[" + id + "]在数据库中未能找到数据!");
         isSuperUser(findEntity);
         BeanUtils.copyProperties(entity, findEntity);
@@ -90,7 +90,7 @@ public class DictionaryDetailServiceImpl implements IDictionaryDetailService {
     @Override
     public CdpDictionaryDetailEntity deleteById(Long id) {
         Assert.notNull(id, "传入了空的ID!");
-        CdpDictionaryDetailEntity entity = dictionaryDetailRepository.findById(id).get();
+        CdpDictionaryDetailEntity entity = dictionaryDetailRepository.findById(id).orElse(null);
         Assert.notNull(entity, "传入的ID找不到数据!");
         isSuperUser(entity);
 

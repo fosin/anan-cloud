@@ -108,7 +108,7 @@ public class UserController extends AbstractBaseController implements ISimpleCon
     @ApiImplicitParam(name = "id", value = "用户ID,取值于CdpUserEntity.id")
     @PostMapping("/resetPassword/{id}")
     public ResponseEntity<String> resetPassword(@PathVariable() Long id) {
-        return ResponseEntity.ok(userService.resetPassword(id));
+        return ResponseEntity.ok(userService.resetPassword(id).getPassword());
     }
 
     @ApiOperation("根据用户唯一id查找用户所有角色信息列表")

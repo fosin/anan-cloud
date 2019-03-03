@@ -5,17 +5,12 @@ import com.github.fosin.cdp.jpa.repository.IJpaRepository;
 import com.github.fosin.cdp.mvc.module.PageModule;
 import com.github.fosin.cdp.mvc.result.Result;
 import com.github.fosin.cdp.mvc.result.ResultUtils;
-import com.github.fosin.cdp.platformapi.constant.SystemConstant;
 import com.github.fosin.cdp.platformapi.constant.TableNameConstant;
 import com.github.fosin.cdp.platformapi.dto.request.CdpOrganizationCreateDto;
 import com.github.fosin.cdp.platformapi.dto.request.CdpOrganizationUpdateDto;
-import com.github.fosin.cdp.platformapi.entity.CdpDictionaryEntity;
 import com.github.fosin.cdp.platformapi.entity.CdpOrganizationEntity;
-import com.github.fosin.cdp.platformapi.entity.CdpPermissionEntity;
-import com.github.fosin.cdp.platformapi.entity.CdpUserEntity;
 import com.github.fosin.cdp.platformapi.repository.OrganizationRepository;
 import com.github.fosin.cdp.platformapi.service.inter.IOrganizationService;
-import com.github.fosin.cdp.platformapi.util.LoginUserUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,8 +25,9 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
-import javax.persistence.criteria.*;
+import javax.persistence.criteria.Path;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 2017/12/29.
@@ -54,7 +50,7 @@ public class OrganizationServiceImpl implements IOrganizationService {
         Long pId = entity.getPId();
         int level = 1;
         if (pId != 0) {
-            CdpOrganizationEntity parentEntity = organizationRepository.findById(pId).get();
+            CdpOrganizationEntity parentEntity = organizationRepository.findById(pId).orElse(null);
             Assert.notNull(parentEntity, "传入的创建数据实体找不到对于的父节点数据!");
             level = parentEntity.getLevel() + 1;
         }
@@ -68,15 +64,14 @@ public class OrganizationServiceImpl implements IOrganizationService {
         Assert.notNull(entity, "无效的更新数据");
         Long id = entity.getId();
         Assert.notNull(id, "无效的字典代码code");
-        CdpOrganizationEntity updateEntity = organizationRepository.findById(id).get();
-        Assert.notNull(updateEntity, "根据传入的机构ID" + id + "在数据库中未能找到对于数据!");
-        BeanUtils.copyProperties(entity, updateEntity);
+        CdpOrganizationEntity updateEntity = organizationRepository.findById(id).orElse(null);
+        BeanUtils.copyProperties(entity, Objects.requireNonNull(updateEntity, "根据传入的机构ID" + id + "在数据库中未能找到对于数据!"));
 
         Long pId = entity.getPId();
         if (!updateEntity.getPId().equals(pId)) {
-            CdpOrganizationEntity parentEntity = organizationRepository.findById(pId).get();
-            Assert.notNull(parentEntity, "传入的创建数据实体找不到对于的父节点数据!");
-            updateEntity.setLevel(parentEntity.getLevel() + 1);
+            CdpOrganizationEntity parentEntity = organizationRepository.findById(pId).orElse(null);
+            updateEntity.setLevel(Objects.requireNonNull(parentEntity,
+                    "传入的创建数据实体找不到对于的父节点数据!").getLevel() + 1);
         }
         return organizationRepository.save(updateEntity);
     }
@@ -84,7 +79,7 @@ public class OrganizationServiceImpl implements IOrganizationService {
     @Override
     @Cacheable(value = TableNameConstant.CDP_ORGANIZATION, key = "#id")
     public CdpOrganizationEntity findById(Long id) {
-        return organizationRepository.findById(id).get();
+        return organizationRepository.findById(id).orElse(null);
     }
 
     @Override
@@ -123,18 +118,15 @@ public class OrganizationServiceImpl implements IOrganizationService {
         PageRequest pageable = PageRequest.of(pageModule.getPageNumber() - 1, pageModule.getPageSize(), Sort.Direction.fromString(pageModule.getSortOrder()), pageModule.getSortName());
         String searchCondition = pageModule.getSearchText();
 
-        Specification<CdpOrganizationEntity> condition = new Specification<CdpOrganizationEntity>() {
-            @Override
-            public Predicate toPredicate(Root<CdpOrganizationEntity> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-                if (StringUtils.isBlank(searchCondition)) {
-                    return query.getRestriction();
-                }
-                Path<String> id = root.get("id");
-                Path<String> name = root.get("name");
-                Path<String> fullname = root.get("fullname");
-                Path<String> address = root.get("address");
-                return cb.or(cb.like(id, "%" + searchCondition + "%"), cb.like(name, "%" + searchCondition + "%"), cb.like(fullname, "%" + searchCondition + "%"), cb.like(address, "%" + searchCondition + "%"));
+        Specification<CdpOrganizationEntity> condition = (Specification<CdpOrganizationEntity>) (root, query, cb) -> {
+            if (StringUtils.isBlank(searchCondition)) {
+                return query.getRestriction();
             }
+            Path<String> id = root.get("id");
+            Path<String> name = root.get("name");
+            Path<String> fullname = root.get("fullname");
+            Path<String> address = root.get("address");
+            return cb.or(cb.like(id, "%" + searchCondition + "%"), cb.like(name, "%" + searchCondition + "%"), cb.like(fullname, "%" + searchCondition + "%"), cb.like(address, "%" + searchCondition + "%"));
         };
         //分页查找
         Page<CdpOrganizationEntity> page = organizationRepository.findAll(condition, pageable);

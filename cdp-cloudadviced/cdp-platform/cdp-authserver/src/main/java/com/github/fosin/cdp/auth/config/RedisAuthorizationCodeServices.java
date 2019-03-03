@@ -8,6 +8,8 @@ import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.code.RandomValueAuthorizationCodeServices;
 import org.springframework.util.Assert;
 
+import java.nio.charset.StandardCharsets;
+
 /**
  * Description
  * @author fosin
@@ -30,13 +32,13 @@ public class RedisAuthorizationCodeServices extends RandomValueAuthorizationCode
 
             try {
                 authentication = SerializationUtils
-                        .deserialize(conn.hGet(AUTH_CODE_KEY.getBytes("utf-8"), code.getBytes("utf-8")));
+                        .deserialize(conn.hGet(AUTH_CODE_KEY.getBytes(StandardCharsets.UTF_8), code.getBytes(StandardCharsets.UTF_8)));
             } catch (Exception e) {
                 return null;
             }
 
             if (null != authentication) {
-                conn.hDel(AUTH_CODE_KEY.getBytes("utf-8"), code.getBytes("utf-8"));
+                conn.hDel(AUTH_CODE_KEY.getBytes(StandardCharsets.UTF_8), code.getBytes(StandardCharsets.UTF_8));
             }
 
             return authentication;
@@ -51,7 +53,7 @@ public class RedisAuthorizationCodeServices extends RandomValueAuthorizationCode
     protected void store(String code, OAuth2Authentication authentication) {
         RedisConnection conn = getConnection();
         try {
-            conn.hSet(AUTH_CODE_KEY.getBytes("utf-8"), code.getBytes("utf-8"),
+            conn.hSet(AUTH_CODE_KEY.getBytes(StandardCharsets.UTF_8), code.getBytes(StandardCharsets.UTF_8),
                     SerializationUtils.serialize(authentication));
         } catch (Exception e) {
             log.error("保存authentication code 失败", e);

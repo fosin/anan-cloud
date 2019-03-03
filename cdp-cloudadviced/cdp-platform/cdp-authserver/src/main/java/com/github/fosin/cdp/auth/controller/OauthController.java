@@ -65,6 +65,12 @@ public class OauthController {
         return ResponseEntity.ok(principal);
     }
 
+//    @RequestMapping("/authentication/principal")
+//    public ResponseEntity<Object> authenticationPrincipal(Authentication authentication) {
+//        CdpUserDetail userDetail = LoginUserUtil.getUserDetail();
+//        return ResponseEntity.ok(authentication.getPrincipal());
+//    }
+
     @RequestMapping(value = "/removeToken", method = {RequestMethod.POST})
     @ResponseBody
     @ApiOperation(value = "移除指定令牌信息", notes = "移除指定令牌信息，通常用于前端的退出登录操作")
@@ -75,34 +81,9 @@ public class OauthController {
         OAuth2AuthenticationDetails details = (OAuth2AuthenticationDetails) ((OAuth2Authentication) principal).getDetails();
         return ResponseEntity.ok(consumerTokenServices.revokeToken(details.getTokenValue()));
     }
-//    @RequestMapping("/authentication/principal")
-//    public ResponseEntity<Object> authenticationPrincipal(Authentication authentication) {
-//        return ResponseEntity.ok(authentication.getPrincipal());
-//    }
-//
-//    @RequestMapping("/authentication")
-//    public ResponseEntity<Object> authentication(Authentication authentication) {
-//        return ResponseEntity.ok(authentication);
-//    }
 
-//    public ResponseEntity<Object> principal(Authentication authentication) {
-//        return ResponseEntity.ok(authentication.getPrincipal());
-//    }
-//    @Autowired
-//    private IUserRoleService userRoleService;
-//
 //    @Autowired
 //    private static RedisTokenStore redisTokenStore;
-
-//    @RequestMapping("/userRoles")
-//    public ResponseEntity<List<CdpRoleEntity>> getUserRoles(@RequestParam("usercode") String usercode, @RequestParam("password") String password) {
-//        List<CdpUserRoleEntity> allByUsercodeAndPassword = userRoleService.findByUsercodeAndPassword(usercode, password);
-//        List<CdpRoleEntity> cdpSysRoleEntities = new ArrayList<>();
-//        for (CdpUserRoleEntity anAllByUsercodeAndPassword : allByUsercodeAndPassword) {
-//            cdpSysRoleEntities.add(anAllByUsercodeAndPassword.getRole());
-//        }
-//        return ResponseEntity.ok(cdpSysRoleEntities);
-//    }
 
 //    @RequestMapping("/onlineUsers")
 //    public ResponseEntity<List<Map<String,Object>>> onlineUsers() {

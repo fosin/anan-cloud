@@ -13,15 +13,17 @@ cdp:
     blackWhiteList:
       - path: /**/*.html
       - path: /**/*.css
-      - path: /img/**
       - path: /**/*.js
+      - path: /**/img/**
       - path: /third-party/**
-      - path: /api/**
+      - path: /**/api/**
+      - path: /**/login/**
+      - path: /**/logout/**
       - method: OPTIONS
 security:
   oauth2:
     client:
       client-id: appServer
-      client-secret: $2a$10$JlQ0ryJ/x5YMvR/LO/h4dumxZZXPbXHXkODtC0Ge0bM8pGbYuHp5S
+      client-secret: appServer
       access-token-uri: http://localhost:1400/oauth/token
       grant-type: client_credentials

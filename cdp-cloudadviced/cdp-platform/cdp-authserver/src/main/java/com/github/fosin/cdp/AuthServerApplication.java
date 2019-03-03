@@ -18,7 +18,7 @@ import org.springframework.session.data.redis.config.annotation.web.http.EnableR
 @EnableCaching
 @EnableRedisHttpSession(maxInactiveIntervalInSeconds = 3600)
 @EnableCdpSwagger2
-//@EnableCdpOauth2
+@EnableCdpOauth2
 public class AuthServerApplication {
     public static void main(String[] args) {
         new SpringApplicationBuilder(AuthServerApplication.class)
