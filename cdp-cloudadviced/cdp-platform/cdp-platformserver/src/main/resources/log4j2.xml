@@ -4,7 +4,8 @@
 <configuration status="INFO">
     <!-- 全局参数 -->
     <Properties>
-        <Property name="pattern">%highlight{%d{yyyy-MM-dd HH:mm:ss,SSS} [%t] %-5level: %msg%n%throwable}{FATAL=Bright Red,
+       <Property name="pattern">%d{yyyy-MM-dd HH:mm:ss,SSS} [%t] %-5level: %msg%n%throwable</Property>
+        <Property name="patternColor">%highlight{%d{yyyy-MM-dd HH:mm:ss,SSS} [%t] %-5level: %msg%n%throwable}{FATAL=Bright Red,
             ERROR=Bright Red,WARN=Yellow,INFO=Bright White,DEBUG=Cyan,TRACE=Black}
         </Property>
         <Property name="displayName">@project.artifactId@</Property>
@@ -12,12 +13,12 @@
     <Appenders>
         <Console name="console" target="SYSTEM_OUT" follow="true">
             <PatternLayout>
-                <pattern>${pattern}</pattern>
+                <pattern>${patternColor}</pattern>
             </PatternLayout>
         </Console>
         <!-- 滚动文件 -->
         <RollingFile name="rollingFile" fileName="logs/${displayName}.log"
-                     filePattern="${displayName}_%d{yyyy-MM-dd}-%i.log">
+                     filePattern="logs/${displayName}_%d{yyyy-MM-dd}-%i.log">
             <ThresholdFilter level="WARN" onMatch="ACCEPT"
                              onMismatch="DENY"/>
             <PatternLayout>
