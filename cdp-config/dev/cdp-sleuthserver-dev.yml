@@ -1,7 +1,7 @@
 spring:
   datasource:
     schema: classpath:/mysql.sql
-    url: jdbc:mysql://192.168.2.241:3306/cdp_zipkin
+    url: jdbc:mysql://192.168.2.241:3306/cdp_zipkin?useUnicode=true&characterEncoding=utf-8&useLegacyDatetimeCode=false&serverTimezone=Asia/Shanghai
     username: '{cipher}AQBK+yZdW+vCx8SMVNfmosh89xRkD2n13drLn1U10Q1n7vm7G025YjhbGXqrDNi0VLfK90LqWvEQs9ZA4C4kAk4TOWV6r1LfJHz0rbrhtXs8+cnEnHjMcHliuTvmPPn4/37mCcandERkFiWdNumXJyvH+Nnw6SWciYymIsmlTi61h1I3H8vpKCkxlttwjkwsUFLdMmYGeCb7/FZ0hjXlgsj6CkqsAiZ3EUqcE+kbrwPq/uivPJt7tn8xm/5u2tO8Lt2vWH0pjyCIqNxDcrsDQd+6OWj1Sp15NzDYaX2scZcWWJDxTNP3h4iIGan1Sts2/2lUJCFcVA/kqVjt8618x4FUAtHemVvp+dhiZbtLXX/Ezcb+xjvvMv/PzbIunYzWP/s='
     password: '{cipher}AQBDc1ErZqS+aPq0dXnNf3P7r80dn83dGdU7YPhuD3LzVKWdpdA7IMq+l3pScI+NnZnBEy1T8rFtFGl51q200vAyTaWI6XrsCp5J/wtiY3pHaQk98b1NHVRFWRshXYSSLVIuaDBFAt6dFedbBTfh53U8bHEiHxaw85dSwWbRO/oCY7/ct1MmrS6zIVgIrBokou/6HACoczLtwSIjj8F/R/Divrc7Po9TpZBJvsxVrrzW82yqeRejci1jB06Si53n+/XgnIyNvpZFMYPTQwexp5Xc31kQwDuUYmftnIvrGv+XIEezNtgtIJWe1TzedGnytTCYu8bz3FSRsHvRievafRntlgqGxKonxBAtzOWza3V74QUq4E+fdOi2T3Go4kD2/PY='
     continueOnError: true
