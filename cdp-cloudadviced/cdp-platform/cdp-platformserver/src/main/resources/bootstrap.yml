@@ -13,14 +13,13 @@ spring:
   profiles:
     active: @profileActive@
   application:
-    name: cdp-platformserver
+    name: @project.artifactId@
   cloud:
     inetutils:
       preferred-networks: @spring.cloud.inetutils.preferred-networks@
     config:
       username: ${spring.security.user.name}
       password: ${spring.security.user.password}
-      #      headers: {Authorization: Basic Y2RwOmRldg==}
       discovery:
         enabled: true
         service-id: cdp-configserver

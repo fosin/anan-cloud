@@ -14,7 +14,7 @@ spring:
   profiles:
     active: @profileActive@
   application:
-    name: cdp-zuulgateway
+    name: @project.artifactId@
   cloud:
     inetutils:
       preferred-networks: @spring.cloud.inetutils.preferred-networks@

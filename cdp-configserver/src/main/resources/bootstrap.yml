@@ -14,7 +14,7 @@ spring:
   profiles:
     active: @spring.cloud.config.profileActive@ #native属性表示config使用本地文件配置，系统将从classpath目录下查找配置文件
   application:
-    name: cdp-configserver
+    name: @project.artifactId@
   zipkin:
     rabbitmq:
       queue: zipkin

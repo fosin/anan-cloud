@@ -6,13 +6,11 @@ spring:
   profiles:
     active: @profileActive@
   application:
-    name: cdp-authserver
+    name: @project.artifactId@
   security:
     user:
       name: @eureka.username@
       password: @eureka.password@
-#    filter:
-#      order: 9999
   cloud:
     inetutils:
       preferred-networks: @spring.cloud.inetutils.preferred-networks@
