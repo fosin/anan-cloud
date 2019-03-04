@@ -26,10 +26,6 @@ zuul:
       path: /mpi/**
       serviceId: mpi
       retryable: true
-    ehospital:
-      path: /ehospital/test/**
-      serviceId: ehospital
-      retryable: true
 #  semaphore:
 #    max-semaphores: 100
 #  ribbon-isolation-strategy: THREAD
