@@ -13,10 +13,14 @@ cdp:
     blackWhiteList:
       - path: /**/*.html
       - path: /**/*.css
-      - path: /img/**
       - path: /**/*.js
+      - path: /img/**
       - path: /third-party/**
       - path: /api/**
+      - path: /**/login/**
+      - path: /**/logout/**
+      - path: /**/applications/**
+      - path: /**/instances/**
       - method: OPTIONS
 security:
   oauth2:

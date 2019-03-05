@@ -27,6 +27,7 @@ cdp:
       - path: /**/login/**
       - path: /**/logout/**
       - path: /**/applications/**
+      - path: /**/instances/**
       - method: OPTIONS
 security:
   oauth2:

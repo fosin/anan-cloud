@@ -4,6 +4,7 @@ eureka:
     eviction-interval-timer-in-ms: 5000 #剔除无效节点时间，默认60 * 1000
     response-cache-update-interval-ms: 3000 #，默认30 * 1000
     use-read-only-response-cache: false
+    peer-node-read-timeout-ms: 400
   client:
     healthcheck:
       enabled: true
