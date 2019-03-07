@@ -13,8 +13,13 @@ security:
       prefer-token-info: false
 spring:
   zipkin:
-    rabbitmq:
-      queue: zipkin
+    baseUrl: http://cdp-sleuthserver/
+    sender:
+      type: rabbit
+    locator:
+      discovery:
+        enabled: true
+    discovery-client-enabled: true
 zipkin:
   storage:
     type: mysql
