@@ -1,0 +1,132 @@
+version: "3"
+services:
+  cdp-db:
+    container_name: cdp-db-${profileActive}
+    image: mysql:5.7
+#    build:
+#      context: ./
+#      dockerfile: ./sql/Dockerfile
+    environment:
+      MYSQL_ROOT_PASSWORD: ${defaultPassword}
+    volumes:
+      - ${dataPath}/mysql/data:/var/lib/mysql
+      - ${dataPath}/mysql/mysqld.cnf:/etc/mysql/conf.d/mysqld.cnf
+      - ${dataPath}/mysql/logs:/var/log/mysql
+    restart: on-failure
+    ports:
+      - 3306:3306
+
+  cdp-rabbitmq:
+    container_name: cdp-rabbitmq-${profileActive}
+    image: rabbitmq:3-management
+    environment:
+      RABBITMQ_ERLANG_COOKIE: SWQOKODSQALRPCLNMEQG
+      RABBITMQ_DEFAULT_USER: cdp
+      RABBITMQ_DEFAULT_PASS: ${defaultPassword}
+      RABBITMQ_DEFAULT_VHOST: /
+    restart: on-failure
+    ports:
+      - 15672:15672
+      - 5672:5672
+
+  cdp-redis:
+    container_name: cdp-redis-${profileActive}
+    image: redis:4.0
+    volumes:
+      - ${dataPath}/redis:/data
+    restart: on-failure
+    ports:
+      - 6379:6379
+    command: redis-server --appendonly yes --requirepass ${defaultPassword}
+
+  cdp-eurekaserver:
+    container_name: cdp-eurekaserver-${profileActive}
+    hostname: cdp-eurekaserver
+    build:
+      context: ./
+      dockerfile: ./Dockerfile
+    restart: on-failure
+    ports:
+      - 1000:1000
+
+  cdp-configserver:
+    container_name: cdp-configserver-${profileActive}
+    hostname: cdp-configserver
+    build:
+      context: ./
+      dockerfile: ./Dockerfile
+    restart: on-failures
+    ports:
+      - 1100:1100
+    depends_on:
+      - cdp-eurekaserver
+      - cdp-rabbitmq
+  cdp-zuulgateway:
+    container_name: cdp-zuulgateway-${profileActive}
+    hostname: cdp-zuulgateway
+    build:
+      context: ./
+      dockerfile: ./Dockerfile
+    restart: on-failure
+    ports:
+      - 9000:9000
+    depends_on:
+      - cdp-configserver
+      - cdp-redis
+      - cdp-db
+      - cdp-rabbitmq
+  cdp-authserver:
+    container_name: cdp-authserver-${profileActive}
+    hostname: cdp-authserver
+    build:
+      context: ./
+      dockerfile: ./Dockerfile
+    restart: on-failure
+    ports:
+      - 1400:1400
+    depends_on:
+      - cdp-configserver
+      - cdp-redis
+      - cdp-db
+      - cdp-rabbitmq
+  cdp-platformserver:
+    container_name: cdp-platformserver-${profileActive}
+    hostname: cdp-platformserver
+    build:
+      context: ./
+      dockerfile: ./Dockerfile
+    restart: on-failure
+    ports:
+      - 1500:1500
+    depends_on:
+      - cdp-configserver
+      - cdp-redis
+      - cdp-db
+      - cdp-rabbitmq
+  cdp-adminserver:
+    container_name: cdp-adminserver-${profileActive}
+    hostname: cdp-adminserver
+    build:
+      context: ./
+      dockerfile: ./Dockerfile
+    restart: on-failure
+    ports:
+      - 1700:1700
+    depends_on:
+      - cdp-configserver
+      - cdp-rabbitmq
+  cdp-sleuthserver:
+    container_name: cdp-sleuthserver-${profileActive}
+    hostname: cdp-sleuthserver
+    build:
+      context: ./
+      dockerfile: ./Dockerfile
+    restart: on-failure
+    ports:
+      - 1800:1800
+    depends_on:
+      - cdp-configserver
+      - cdp-rabbitmq
+      - cdp-db
+#volumes:
+#  local-mysqldata:/root/docker/mysql/data

@@ -38,7 +38,10 @@
             <artifactId>zipkin-server</artifactId>
             <version>${cdp-spring-cloud-zipkin.version}</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.jooq</groupId>
+            <artifactId>jooq</artifactId>
+        </dependency>
         <dependency>
             <groupId>io.zipkin.java</groupId>
             <artifactId>zipkin-autoconfigure-ui</artifactId>

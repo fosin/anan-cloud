@@ -234,6 +234,32 @@
                     <executable>true</executable>
                 </configuration>
             </plugin>
+            <!--Docker自动发布插件-->
+            <plugin>
+                <groupId>com.spotify</groupId>
+                <artifactId>dockerfile-maven-plugin</artifactId>
+                <version>1.4.10</version>
+                <executions>
+                    <execution>
+                        <id>default</id>
+                        <goals>
+                            <goal>build</goal>
+                            <goal>push</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <contextDirectory>${project.basedir}</contextDirectory>
+                    <useMavenSettingsForAuth>true</useMavenSettingsForAuth>
+                    <repository>fosin/${project.artifactId}</repository>
+                    <tag>${project.version}-${profileActive}</tag>
+                    <dockerfile>Dockerfile</dockerfile>
+                    <buildArgs>
+                        <jarFile>target/${project.build.finalName}.jar</jarFile>
+                        <profileActive>${profileActive}</profileActive>
+                    </buildArgs>
+                </configuration>
+            </plugin>
             <!-- 资源文件拷贝插件 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
