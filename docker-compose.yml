@@ -43,8 +43,8 @@ services:
     container_name: cdp-eurekaserver-${profileActive}
     hostname: cdp-eurekaserver
     build:
-      context: ./
-      dockerfile: ./Dockerfile
+      context: ./cdp-eurekaserver
+      dockerfile: Dockerfile
     restart: on-failure
     ports:
       - 1000:1000
@@ -53,8 +53,8 @@ services:
     container_name: cdp-configserver-${profileActive}
     hostname: cdp-configserver
     build:
-      context: ./
-      dockerfile: ./Dockerfile
+      context: ./cdp-configserver
+      dockerfile: Dockerfile
     restart: on-failures
     ports:
       - 1100:1100
@@ -65,8 +65,8 @@ services:
     container_name: cdp-zuulgateway-${profileActive}
     hostname: cdp-zuulgateway
     build:
-      context: ./
-      dockerfile: ./Dockerfile
+      context: ./cdp-cloudadviced/cdp-zuulgateway
+      dockerfile: Dockerfile
     restart: on-failure
     ports:
       - 9000:9000
@@ -79,8 +79,8 @@ services:
     container_name: cdp-authserver-${profileActive}
     hostname: cdp-authserver
     build:
-      context: ./
-      dockerfile: ./Dockerfile
+      context: ./cdp-cloudadviced/cdp-platform/cdp-authserver
+      dockerfile: Dockerfile
     restart: on-failure
     ports:
       - 1400:1400
@@ -93,8 +93,8 @@ services:
     container_name: cdp-platformserver-${profileActive}
     hostname: cdp-platformserver
     build:
-      context: ./
-      dockerfile: ./Dockerfile
+      context: ./cdp-cloudadviced/cdp-platform/cdp-platformserver
+      dockerfile: Dockerfile
     restart: on-failure
     ports:
       - 1500:1500
@@ -107,8 +107,8 @@ services:
     container_name: cdp-adminserver-${profileActive}
     hostname: cdp-adminserver
     build:
-      context: ./
-      dockerfile: ./Dockerfile
+      context: ./cdp-cloudadviced/cdp-adminserver
+      dockerfile: Dockerfile
     restart: on-failure
     ports:
       - 1700:1700
@@ -119,8 +119,8 @@ services:
     container_name: cdp-sleuthserver-${profileActive}
     hostname: cdp-sleuthserver
     build:
-      context: ./
-      dockerfile: ./Dockerfile
+      context: ./cdp-cloudadviced/cdp-sleuthserver
+      dockerfile: Dockerfile
     restart: on-failure
     ports:
       - 1800:1800
@@ -128,5 +128,3 @@ services:
       - cdp-configserver
       - cdp-rabbitmq
       - cdp-db
-#volumes:
-#  local-mysqldata:/root/docker/mysql/data
