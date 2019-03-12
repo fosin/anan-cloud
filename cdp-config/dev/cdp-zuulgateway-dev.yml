@@ -31,6 +31,10 @@ zuul:
       path: /dih/test/**
       serviceId: dih
       retryable: true
+    yongyou:
+      path: /yongyou/test/**
+      serviceId: yongyou
+      retryable: true
 #  semaphore:
 #    max-semaphores: 100
 #  ribbon-isolation-strategy: THREAD
@@ -43,9 +47,9 @@ zuul:
 #    repository: IN_MEMORY #对应存储类型（用来存储统计信息）,可选值REDIS、IN_MEMORY、JPA、CONSUL,默认IN_MEMORY
     behind-proxy: true #代理之后
     default-policy: #可选 - 针对所有的路由配置的策略，除非特别配置了policies
-      limit: 60 #可选 - 每个刷新时间窗口对应的请求数量限制
-      quota: 60 #可选-  每个刷新时间窗口对应的请求时间限制（秒）
-      refresh-interval: 3 # 刷新时间窗口的时间，默认值 (秒)
+      limit: 1000 #可选 - 每个刷新时间窗口对应的请求数量限制
+      quota: 1000 #可选-  每个刷新时间窗口对应的请求时间限制（秒）
+      refresh-interval: 60 # 刷新时间窗口的时间，默认值 (秒)
       type: #可选 限流方式
 #        - user #用户粒度
 #        - origin #ORIGIN粒度 (用户请求的origin作为粒度控制)
@@ -65,6 +69,9 @@ zuul:
         refresh-interval: 1 # 刷新时间窗口的时间，默认值 (秒)
         type: #可选 限流方式
         - url
+  host:
+    connect-timeout-millis: 60000
+    socket-timeout-millis: 60000
 #spring:
 #  redis:
 #    host: 192.168.137.155
@@ -77,8 +84,18 @@ zuul:
 #      max-idle: 8
 #      min-idle: 0
 ribbon:
-  connectTimeout: 30000
-  readTimeout: 60000
+  OkToRetryOnAllOperations: false #对所有操作请求都进行重试,默认false
+  ReadTimeout: 5000   #负载均衡超时时间，默认值5000
+  ConnectTimeout: 2000 #ribbon请求连接的超时时间，默认值2000
+  MaxAutoRetries: 0     #对当前实例的重试次数，默认0
+  MaxAutoRetriesNextServer: 1 #对切换实例的重试次数，默认1
+yongyou:
+  ribbon:
+    OkToRetryOnAllOperations: false #对所有操作请求都进行重试,默认false
+    ReadTimeout: 60000   #负载均衡超时时间，默认值5000
+    ConnectTimeout: 2000 #ribbon请求连接的超时时间，默认值2000
+    MaxAutoRetries: 0     #对当前实例的重试次数，默认0
+    MaxAutoRetriesNextServer: 1 #对切换实例的重试次数，默认1
 hystrix:
 #  threadpool:
 #    default:
@@ -92,7 +109,12 @@ hystrix:
         isolation:
           thread:
             timeoutInMilliseconds: 60000
-
+      timeout:
+        enabled: false
+      circuitBreaker:
+        requestVolumeThreshold: 20 #当在配置时间窗口内达到此数量的失败后，进行短路。默认20个
+        sleepWindowInMilliseconds: 5 #短路多久以后开始尝试是否恢复，默认5s
+        errorThresholdPercentage: 50% #出错百分比阈值，当达到此阈值后，开始短路。默认50%
 ##禁用自定义过滤器ThrowExceptionFilter
 #zuul.ThrowExceptionFilter.pre.disable=true
 #security:
