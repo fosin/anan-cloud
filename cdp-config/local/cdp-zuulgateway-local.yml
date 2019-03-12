@@ -23,10 +23,6 @@ zuul:
       path: /mpi/**
       serviceId: mpi
       retryable: true
-    ehospital:
-      path: /ehospital/**
-      serviceId: ehospital
-      retryable: true
 #  semaphore:
 #    max-semaphores: 100
 #  ribbon-isolation-strategy: THREAD
@@ -61,6 +57,9 @@ zuul:
         refresh-interval: 1 # 刷新时间窗口的时间，默认值 (秒)
         type: #可选 限流方式
         - url
+  host:
+    connect-timeout-millis: 60000
+    socket-timeout-millis: 60000
 #spring:
 #  redis:
 #    host: 192.168.137.155
@@ -72,22 +71,42 @@ zuul:
 #      max-wait: -1
 #      max-idle: 8
 #      min-idle: 0
+
+#1、如果hystrix.command.default.execution.timeout.enabled为true,则会有两个执行方法超时的配置,
+#   一个就是ribbon的ReadTimeout,一个就是熔断器hystrix的timeoutInMilliseconds, 此时谁的值小谁生效
+#2、如果hystrix.command.default.execution.timeout.enabled为false,则熔断器不进行超时熔断,
+#   而是根据ribbon的ReadTimeout抛出的异常而熔断,也就是取决于ribbon
+#3、ribbon.ConnectTimeout,配置的是请求服务的超时时间,除非服务找不到,或者网络原因,这个时间才会生效
+#4、ribbon.MaxAutoRetries对当前实例的重试次数,MaxAutoRetriesNextServer对切换实例的重试次数,
+#   如果ribbon的ReadTimeout超时,或者ConnectTimeout连接超时,会进行重试操作
+#5、由于ribbon的重试机制,通常熔断的超时时间需要配置的比ReadTimeout长,ReadTimeout比ConnectTimeout长,否则还未重试,就熔断了
+#6、为了确保重试机制的正常运作,理论上（以实际情况为准）建议hystrix的超时时间为:
+#    (1 + MaxAutoRetries + MaxAutoRetriesNextServer) * ReadTimeout
 ribbon:
-  connectTimeout: 30000
-  readTimeout: 60000
+  OkToRetryOnAllOperations: false #对所有操作请求都进行重试,默认false
+  ReadTimeout: 5000   #负载均衡超时时间，默认值5000
+  ConnectTimeout: 2000 #ribbon请求连接的超时时间，默认值2000
+  MaxAutoRetries: 0     #对当前实例的重试次数，默认0
+  MaxAutoRetriesNextServer: 1 #对切换实例的重试次数，默认1
 hystrix:
-#  threadpool:
-#    default:
-#      coreSize: 50
-#      maximumSize: 10000
-#      allowMaximumSizeToDivergeFromCoreSize: true
-#      maxQueueSize: -1
+  #  threadpool:
+  #    default:
+  #      coreSize: 50
+  #      maximumSize: 10000
+  #      allowMaximumSizeToDivergeFromCoreSize: true
+  #      maxQueueSize: -1
   command:
     default:
       execution:
         isolation:
           thread:
             timeoutInMilliseconds: 60000
+      timeout:
+        enabled: false
+      circuitBreaker:
+        requestVolumeThreshold: 20 #当在配置时间窗口内达到此数量的失败后，进行短路。默认20个
+        sleepWindowInMilliseconds: 5 #短路多久以后开始尝试是否恢复，默认5s
+        errorThresholdPercentage: 50% #出错百分比阈值，当达到此阈值后，开始短路。默认50%
 
 ##禁用自定义过滤器ThrowExceptionFilter
 #zuul.ThrowExceptionFilter.pre.disable=true
