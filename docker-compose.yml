@@ -2,6 +2,7 @@ version: "3"
 services:
   cdp-db:
     container_name: cdp-db-${profileActive}
+    hostname: cdp-db
     image: mysql:5.7
 #    build:
 #      context: ./
@@ -9,15 +10,16 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: ${defaultPassword}
     volumes:
-      - ${dataPath}/mysql/data:/var/lib/mysql
-      - ${dataPath}/mysql/mysqld.cnf:/etc/mysql/conf.d/mysqld.cnf
-      - ${dataPath}/mysql/logs:/var/log/mysql
+      - ${dataPath}mysql/data:/var/lib/mysql
+      - ${dataPath}mysql/mysqld.cnf:/etc/mysql/conf.d/mysqld.cnf
+      - ${dataPath}mysql/logs:/var/log/mysql
     restart: on-failure
     ports:
       - 3306:3306
 
   cdp-rabbitmq:
     container_name: cdp-rabbitmq-${profileActive}
+    hostname: cdp-rabbitmq
     image: rabbitmq:3-management
     environment:
       RABBITMQ_ERLANG_COOKIE: SWQOKODSQALRPCLNMEQG
@@ -31,13 +33,65 @@ services:
 
   cdp-redis:
     container_name: cdp-redis-${profileActive}
+    hostname: cdp-redis
     image: redis:4.0
     volumes:
-      - ${dataPath}/redis:/data
+      - ${dataPath}redis:/data
     restart: on-failure
     ports:
       - 6379:6379
     command: redis-server --appendonly yes --requirepass ${defaultPassword}
+
+  # The zipkin process services the UI, and also exposes a POST endpoint that
+  # instrumentation can send trace data to. Scribe is disabled by default.
+  cdp-zipkin:
+    image: openzipkin/zipkin
+    container_name: cdp-zipkin-${profileActive}
+    hostname: cdp-zipkin
+    # Environment settings are defined here https://github.com/openzipkin/zipkin/tree/1.19.0/zipkin-server#environment-variables
+    environment:
+      - STORAGE_TYPE=mysql
+      # Point the zipkin at the storage backend
+      - MYSQL_HOST=cdp-db
+      - MYSQL_USER=root
+      - MYSQL_PASS=${defaultPassword}
+      # Uncomment to enable scribe
+      # - SCRIBE_ENABLED=true
+      # Uncomment to enable self-tracing
+      # - SELF_TRACING_ENABLED=true
+      # Uncomment to enable debug logging
+      # - JAVA_OPTS=-Dlogging.level.zipkin=DEBUG -Dlogging.level.zipkin2=DEBUG
+    ports:
+      # Port used for the Zipkin UI and HTTP Api
+      - 9411:9411
+      # Uncomment if you set SCRIBE_ENABLED=true
+      # - 9410:9410
+    links:
+      - cdp-db
+    depends_on:
+      - cdp-db
+  # Adds a cron to process spans since midnight every hour, and all spans each day
+  # This data is served by http://192.168.99.100:8080/dependency
+  #
+  # For more details, see https://github.com/openzipkin/docker-zipkin-dependencies
+  cdp-zipkin-dependencies:
+    image: openzipkin/zipkin-dependencies
+    container_name: cdp-zipkin-dependencies-${profileActive}
+    entrypoint: crond -f
+    environment:
+      - STORAGE_TYPE=mysql
+      - MYSQL_HOST=cdp-db
+      # Add the baked-in username and password for the zipkin-mysql image
+      - MYSQL_USER=root
+      - MYSQL_PASS=${defaultPassword}
+      # Uncomment to see dependency processing logs
+      # - ZIPKIN_LOG_LEVEL=DEBUG
+      # Uncomment to adjust memory used by the dependencies job
+      # - JAVA_OPTS=-verbose:gc -Xms1G -Xmx1G
+    links:
+      - cdp-db
+    depends_on:
+      - cdp-db
 
   cdp-eurekaserver:
     container_name: cdp-eurekaserver-${profileActive}

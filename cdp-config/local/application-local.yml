@@ -20,6 +20,9 @@ spring:
       discovery:
         enabled: true
     discovery-client-enabled: true
+  #禁用sleuth，改用rabbitmq
+  sleuth:
+    enabled: false
 zipkin:
   storage:
     type: mysql
@@ -39,3 +42,7 @@ management:
   endpoint:
     health:
       show-details: ALWAYS
+  metrics:
+    web:
+      server:
+        auto-time-requests: false #解决zipkin异常：Prometheus requires that all meters with the same name have the same set of tag keys

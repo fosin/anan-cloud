@@ -7,11 +7,6 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import zipkin2.server.internal.EnableZipkinServer;
 
-/**
- * Description
- *
- * @author fosin
- */
 @SpringBootApplication
 @EnableZipkinServer
 @EnableCdpOauth2
