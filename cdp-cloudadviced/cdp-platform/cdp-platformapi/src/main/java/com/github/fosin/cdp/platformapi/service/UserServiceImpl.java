@@ -36,6 +36,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -62,7 +63,8 @@ public class UserServiceImpl implements IUserService {
     private UserRoleRepository userRoleRepository;
     @Autowired
     private OrganizationRepository organizationRepository;
-
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     @Override
     @Cacheable(value = TableNameConstant.CDP_USER, key = "#usercode")
     @Transactional(readOnly = true)
@@ -83,7 +85,7 @@ public class UserServiceImpl implements IUserService {
         if (StringUtil.isEmpty(password)) {
             password = getPassword();
         }
-        entity.setPassword(new BCryptPasswordEncoder().encode(password));
+        entity.setPassword(passwordEncoder.encode(password));
         return password;
     }
 
@@ -280,7 +282,7 @@ public class UserServiceImpl implements IUserService {
 
         CdpUserEntity user = userRepository.findOne(id);
         Assert.isTrue(user != null && user.getId() != null, "通过ID未找到对应的用户信息!");
-        Assert.isTrue(new BCryptPasswordEncoder().matches(password, user.getPassword()), "原密码不正确!");
+        Assert.isTrue(passwordEncoder.matches(password, user.getPassword()), "原密码不正确!");
         user.setPassword(confirmPassword1);
         encryptBeforeSave(user);
         CdpUserEntity loginUser = LoginUserUtil.getUser();

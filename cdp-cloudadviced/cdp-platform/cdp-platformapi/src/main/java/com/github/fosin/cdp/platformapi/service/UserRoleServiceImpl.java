@@ -15,7 +15,7 @@ import com.github.fosin.cdp.platformapi.service.inter.IUserService;
 import com.github.fosin.cdp.platformapi.util.LoginUserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -37,7 +37,8 @@ public class UserRoleServiceImpl implements IUserRoleService {
     private UserRoleRepository userRoleRepository;
     @Autowired
     private IUserService userService;
-
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     @Override
     public List<CdpUserRoleEntity> findByUserId(Long userId) {
         return userRoleRepository.findByUserId(userId);
@@ -57,8 +58,7 @@ public class UserRoleServiceImpl implements IUserRoleService {
             throw new CdpUserOrPassInvalidException();
         }
 
-        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-        if (!bCryptPasswordEncoder.matches(password, cdpSysUserEntity.getPassword())) {
+        if (!passwordEncoder.matches(password, cdpSysUserEntity.getPassword())) {
             throw new CdpUserOrPassInvalidException();
         }
 

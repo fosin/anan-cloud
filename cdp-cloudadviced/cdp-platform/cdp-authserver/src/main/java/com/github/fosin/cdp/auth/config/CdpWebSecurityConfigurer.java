@@ -10,7 +10,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.RememberMeServices;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
@@ -32,6 +31,9 @@ public class CdpWebSecurityConfigurer extends WebSecurityConfigurerAdapter {
     private CdpUserDetailsServiceImpl userDetailsService;
     @Autowired
     private DataSource dataSource;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -75,20 +77,15 @@ public class CdpWebSecurityConfigurer extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService)
-                .passwordEncoder(passwordEncoder());
+                .passwordEncoder(passwordEncoder);
     }
 
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring().antMatchers("/**/*.html",
                 "/**/*.css", "/**/*.js", "/**/webjars/**",
-                "/**/images/**", "/**/*.jpg","/**/swagger-resources/**",
+                "/**/images/**", "/**/*.jpg", "/**/swagger-resources/**",
                 "/**/v2/api-docs");
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
     }
 
     /**
