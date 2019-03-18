@@ -74,7 +74,7 @@ zuul:
     socket-timeout-millis: 60000
 #spring:
 #  redis:
-#    host: 192.168.137.155
+#    host: localhost
 #    port: 6379
 #    password: dev
 #    timeout: 10000
