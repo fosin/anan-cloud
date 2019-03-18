@@ -1,7 +1,6 @@
 package com.github.fosin.cdp.platformapi.service;
 
 import com.github.fosin.cdp.cache.util.CacheUtil;
-import com.github.fosin.cdp.core.exception.CdpServiceException;
 import com.github.fosin.cdp.jpa.repository.IJpaRepository;
 import com.github.fosin.cdp.mvc.module.PageModule;
 import com.github.fosin.cdp.mvc.result.Result;
@@ -9,7 +8,6 @@ import com.github.fosin.cdp.mvc.result.ResultUtils;
 import com.github.fosin.cdp.platformapi.constant.SystemConstant;
 import com.github.fosin.cdp.platformapi.constant.TableNameConstant;
 import com.github.fosin.cdp.platformapi.dto.request.CdpUserCreateDto;
-import com.github.fosin.cdp.platformapi.dto.request.CdpUserRetrieveDto;
 import com.github.fosin.cdp.platformapi.dto.request.CdpUserUpdateDto;
 import com.github.fosin.cdp.platformapi.entity.CdpOrganizationEntity;
 import com.github.fosin.cdp.platformapi.entity.CdpUserEntity;
@@ -35,7 +33,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
