@@ -39,7 +39,7 @@
                 <spring.cloud.config.server.svn.uri></spring.cloud.config.server.svn.uri>
                 <spring.cloud.config.server.svn.username></spring.cloud.config.server.svn.username>
                 <spring.cloud.config.server.svn.password></spring.cloud.config.server.svn.password>
-                <spring.cloud.config.server.native.search-locations>file:D:\source\MyProject\cdp\01-Source\cdp-cloud\cdp-config\@profileActive@</spring.cloud.config.server.native.search-locations>
+                <spring.cloud.config.server.native.search-locations>file:cdp-config\@profileActive@</spring.cloud.config.server.native.search-locations>
                 <spring.cloud.config.server.git.uri>https://github.com/fosin/cdp-cloud</spring.cloud.config.server.git.uri>
                 <spring.cloud.config.server.git.search-paths>cdp-config/@profileActive@</spring.cloud.config.server.git.search-paths>
                 <spring.cloud.inetutils.preferred-networks>172.17.</spring.cloud.inetutils.preferred-networks>
@@ -57,7 +57,7 @@
                 <encrypt.key-store.secret>123456</encrypt.key-store.secret>
             </properties>
             <activation>
-                <activeByDefault>false</activeByDefault>
+                <activeByDefault>true</activeByDefault>
             </activation>
         </profile>
         <profile>
@@ -89,7 +89,7 @@
                 <encrypt.key-store.secret>123456</encrypt.key-store.secret>
             </properties>
             <activation>
-                <activeByDefault>true</activeByDefault>
+                <activeByDefault>false</activeByDefault>
             </activation>
         </profile>
         <profile>
