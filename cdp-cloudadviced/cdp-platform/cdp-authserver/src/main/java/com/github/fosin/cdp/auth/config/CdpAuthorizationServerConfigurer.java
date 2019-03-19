@@ -8,6 +8,11 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
@@ -44,7 +49,6 @@ public class CdpAuthorizationServerConfigurer extends AuthorizationServerConfigu
     private CdpUserDetailsServiceImpl userDetailsService;
     @Autowired
     private RedisConnectionFactory redisConnectionFactory;
-
     @Autowired
     private PasswordEncoder passwordEncoder;
 
@@ -69,14 +73,22 @@ public class CdpAuthorizationServerConfigurer extends AuthorizationServerConfigu
      */
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
+
         endpoints.tokenStore(redisTokenStore())
                 .tokenEnhancer(tokenEnhancer())
                 .userDetailsService(userDetailsService)
                 .authenticationManager(authenticationManager)
+//                .authenticationManager(new AuthenticationManager() {
+//                    @Override
+//                    public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+//                        return authenticationProvider().authenticate(authentication);
+//                    }
+//                })
                 .tokenServices(defaultTokenServices())
                 //目前spring提供了内存和数据库两种方式存储授权码Authentication code，
                 // 要实现多个实例之间共享可以选在将AuthenTicationCode存储在数据中
-                .authorizationCodeServices(authorizationCodeServices());
+                .authorizationCodeServices(authorizationCodeServices())
+        ;
     }
 
     /**
@@ -135,6 +147,14 @@ public class CdpAuthorizationServerConfigurer extends AuthorizationServerConfigu
         return clientDetailsService;
     }
 
+//    @Bean
+//    public AuthenticationProvider authenticationProvider() {
+//        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
+//        authenticationProvider.setUserDetailsService(userDetailsService);
+//        authenticationProvider.setPasswordEncoder(passwordEncoder);
+//        return authenticationProvider;
+//    }
+
     /**
      * redis存储方式
      *
@@ -152,18 +172,15 @@ public class CdpAuthorizationServerConfigurer extends AuthorizationServerConfigu
      */
     @Bean
     public TokenEnhancer tokenEnhancer() {
-        return new TokenEnhancer() {
-            @Override
-            public OAuth2AccessToken enhance(OAuth2AccessToken accessToken, OAuth2Authentication authentication) {
-                if (accessToken instanceof DefaultOAuth2AccessToken) {
-                    DefaultOAuth2AccessToken token = (DefaultOAuth2AccessToken) accessToken;
-                    Map<String, Object> additionalInformation = new LinkedHashMap<String, Object>();
+        return (accessToken, authentication) -> {
+            if (accessToken instanceof DefaultOAuth2AccessToken) {
+                DefaultOAuth2AccessToken token = (DefaultOAuth2AccessToken) accessToken;
+                Map<String, Object> additionalInformation = new LinkedHashMap<String, Object>();
 //                    additionalInformation.put("code",ResultCode.SUCCESS.getCode());
 //                    additionalInformation.put("msg",ResultCode.SUCCESS.getMsg());
-                    token.setAdditionalInformation(additionalInformation);
-                }
-                return accessToken;
+                token.setAdditionalInformation(additionalInformation);
             }
+            return accessToken;
         };
     }
     /**

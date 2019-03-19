@@ -72,8 +72,7 @@ public class OauthClientServiceImpl implements IOauthClientService {
                 if (StringUtils.isEmpty(searchCondition)) {
                     return query.getRestriction();
                 }
-                Predicate predicate = cb.or(cb.like(clientId, "%" + searchCondition + "%"), cb.like(clientSecret, "%" + searchCondition + "%"));
-                return predicate;
+                return cb.or(cb.like(clientId, "%" + searchCondition + "%"), cb.like(clientSecret, "%" + searchCondition + "%"));
 
             }
         };

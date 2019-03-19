@@ -1,18 +1,16 @@
 package com.github.fosin.cdp.platformapi.config;
 
-import com.github.fosin.cdp.platformapi.entity.CdpPermissionEntity;
 import com.github.fosin.cdp.oauth2.config.CdpAuthorityConfig;
 import com.github.fosin.cdp.oauth2.dto.CdpAuthorityDto;
+import com.github.fosin.cdp.platformapi.entity.CdpPermissionEntity;
 import com.github.fosin.cdp.platformapi.service.inter.IPermissionService;
 import com.github.fosin.cdp.util.StringUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.ArrayList;
@@ -31,7 +29,6 @@ public class AppAuthorityConfig {
     private String appName;
 
     @Bean
-    @Primary
     public PasswordEncoder passwordEncoder() {
 //        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
         return new BCryptPasswordEncoder();
