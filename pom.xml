@@ -42,8 +42,7 @@
                 <spring.cloud.config.server.git.uri>https://github.com/fosin/cdp-cloud</spring.cloud.config.server.git.uri>
                 <spring.cloud.config.server.git.search-paths>cdp-config/@profileActive@</spring.cloud.config.server.git.search-paths>
                 <spring.cloud.inetutils.preferred-networks>10.0.75.</spring.cloud.inetutils.preferred-networks>
-                <spring.rabbitmq.host>localhost</spring.rabbitmq.host>
-                <spring.rabbitmq.port>5672</spring.rabbitmq.port>
+                <spring.rabbitmq.addresses>localhost:5672</spring.rabbitmq.addresses>
                 <spring.rabbitmq.username>'{cipher}AQBK+yZdW+vCx8SMVNfmosh89xRkD2n13drLn1U10Q1n7vm7G025YjhbGXqrDNi0VLfK90LqWvEQs9ZA4C4kAk4TOWV6r1LfJHz0rbrhtXs8+cnEnHjMcHliuTvmPPn4/37mCcandERkFiWdNumXJyvH+Nnw6SWciYymIsmlTi61h1I3H8vpKCkxlttwjkwsUFLdMmYGeCb7/FZ0hjXlgsj6CkqsAiZ3EUqcE+kbrwPq/uivPJt7tn8xm/5u2tO8Lt2vWH0pjyCIqNxDcrsDQd+6OWj1Sp15NzDYaX2scZcWWJDxTNP3h4iIGan1Sts2/2lUJCFcVA/kqVjt8618x4FUAtHemVvp+dhiZbtLXX/Ezcb+xjvvMv/PzbIunYzWP/s='</spring.rabbitmq.username>
                 <spring.rabbitmq.password>'{cipher}AQAf9K0s8zLVaIk44+wqpHGuHsHEK5G4KKu1vk0HwxlojaYQHRkNsFhdQwmcrnkayWpGmNZezJCVb56JJTYL0wOus7L+zUIRWG0YIBzZBzG0iAX/6fQ0l7EVc6JyYmksGi6czSWhhAYvaJ2zupxU5pMou+k48ILP1MSZ+2n/mmM2OA/msXzum7hhSbuHKHkazorFlYLem2efeU0M61xWGRgzHAJ6pOxWGJx2NepgFDGLSTpDiqRTXD98AabHa28X8TpBbFynDONrU3mueuW/TSrXOlzp2LOO/cDbYGpZXAc/jypbH8SWfkSQlQrWaKBg2FJ8DYg/hUnxfSy+QbzyeGkPfJAcrDZ+9lhluKJ2RplT9bAedAWmvzPu2cJCQuf/RmM='</spring.rabbitmq.password>
                <!-- <eureka.username>'{cipher}AQBK+yZdW+vCx8SMVNfmosh89xRkD2n13drLn1U10Q1n7vm7G025YjhbGXqrDNi0VLfK90LqWvEQs9ZA4C4kAk4TOWV6r1LfJHz0rbrhtXs8+cnEnHjMcHliuTvmPPn4/37mCcandERkFiWdNumXJyvH+Nnw6SWciYymIsmlTi61h1I3H8vpKCkxlttwjkwsUFLdMmYGeCb7/FZ0hjXlgsj6CkqsAiZ3EUqcE+kbrwPq/uivPJt7tn8xm/5u2tO8Lt2vWH0pjyCIqNxDcrsDQd+6OWj1Sp15NzDYaX2scZcWWJDxTNP3h4iIGan1Sts2/2lUJCFcVA/kqVjt8618x4FUAtHemVvp+dhiZbtLXX/Ezcb+xjvvMv/PzbIunYzWP/s='</eureka.username>
@@ -56,7 +55,7 @@
                 <encrypt.key-store.secret>123456</encrypt.key-store.secret>
             </properties>
             <activation>
-                <activeByDefault>false</activeByDefault>
+                <activeByDefault>true</activeByDefault>
             </activation>
         </profile>
         <profile>
@@ -74,8 +73,7 @@
                 <spring.cloud.config.server.git.uri></spring.cloud.config.server.git.uri>
                 <spring.cloud.config.server.git.search-paths></spring.cloud.config.server.git.search-paths>
                 <spring.cloud.inetutils.preferred-networks>192.168.2.</spring.cloud.inetutils.preferred-networks>
-                <spring.rabbitmq.host>192.168.2.242</spring.rabbitmq.host>
-                <spring.rabbitmq.port>5672</spring.rabbitmq.port>
+                <spring.rabbitmq.addresses>192.168.2.242:5672</spring.rabbitmq.addresses>
                 <spring.rabbitmq.username>'{cipher}AQBK+yZdW+vCx8SMVNfmosh89xRkD2n13drLn1U10Q1n7vm7G025YjhbGXqrDNi0VLfK90LqWvEQs9ZA4C4kAk4TOWV6r1LfJHz0rbrhtXs8+cnEnHjMcHliuTvmPPn4/37mCcandERkFiWdNumXJyvH+Nnw6SWciYymIsmlTi61h1I3H8vpKCkxlttwjkwsUFLdMmYGeCb7/FZ0hjXlgsj6CkqsAiZ3EUqcE+kbrwPq/uivPJt7tn8xm/5u2tO8Lt2vWH0pjyCIqNxDcrsDQd+6OWj1Sp15NzDYaX2scZcWWJDxTNP3h4iIGan1Sts2/2lUJCFcVA/kqVjt8618x4FUAtHemVvp+dhiZbtLXX/Ezcb+xjvvMv/PzbIunYzWP/s='</spring.rabbitmq.username>
                 <spring.rabbitmq.password>'{cipher}AQBDc1ErZqS+aPq0dXnNf3P7r80dn83dGdU7YPhuD3LzVKWdpdA7IMq+l3pScI+NnZnBEy1T8rFtFGl51q200vAyTaWI6XrsCp5J/wtiY3pHaQk98b1NHVRFWRshXYSSLVIuaDBFAt6dFedbBTfh53U8bHEiHxaw85dSwWbRO/oCY7/ct1MmrS6zIVgIrBokou/6HACoczLtwSIjj8F/R/Divrc7Po9TpZBJvsxVrrzW82yqeRejci1jB06Si53n+/XgnIyNvpZFMYPTQwexp5Xc31kQwDuUYmftnIvrGv+XIEezNtgtIJWe1TzedGnytTCYu8bz3FSRsHvRievafRntlgqGxKonxBAtzOWza3V74QUq4E+fdOi2T3Go4kD2/PY='</spring.rabbitmq.password>
                 <!--<eureka.username>'{cipher}AQBK+yZdW+vCx8SMVNfmosh89xRkD2n13drLn1U10Q1n7vm7G025YjhbGXqrDNi0VLfK90LqWvEQs9ZA4C4kAk4TOWV6r1LfJHz0rbrhtXs8+cnEnHjMcHliuTvmPPn4/37mCcandERkFiWdNumXJyvH+Nnw6SWciYymIsmlTi61h1I3H8vpKCkxlttwjkwsUFLdMmYGeCb7/FZ0hjXlgsj6CkqsAiZ3EUqcE+kbrwPq/uivPJt7tn8xm/5u2tO8Lt2vWH0pjyCIqNxDcrsDQd+6OWj1Sp15NzDYaX2scZcWWJDxTNP3h4iIGan1Sts2/2lUJCFcVA/kqVjt8618x4FUAtHemVvp+dhiZbtLXX/Ezcb+xjvvMv/PzbIunYzWP/s='</eureka.username>
@@ -88,7 +86,7 @@
                 <encrypt.key-store.secret>123456</encrypt.key-store.secret>
             </properties>
             <activation>
-                <activeByDefault>true</activeByDefault>
+                <activeByDefault>false</activeByDefault>
             </activation>
         </profile>
         <profile>
@@ -106,8 +104,7 @@
                 <spring.cloud.config.server.git.uri></spring.cloud.config.server.git.uri>
                 <spring.cloud.config.server.git.search-paths></spring.cloud.config.server.git.search-paths>
                 <spring.cloud.inetutils.preferred-networks>192.168.106.</spring.cloud.inetutils.preferred-networks>
-                <spring.rabbitmq.host>192.168.106.3</spring.rabbitmq.host>
-                <spring.rabbitmq.port>5672</spring.rabbitmq.port>
+                <spring.rabbitmq.addresses>192.168.106.3:5672</spring.rabbitmq.addresses>
                 <spring.rabbitmq.username>'{cipher}AQBK+yZdW+vCx8SMVNfmosh89xRkD2n13drLn1U10Q1n7vm7G025YjhbGXqrDNi0VLfK90LqWvEQs9ZA4C4kAk4TOWV6r1LfJHz0rbrhtXs8+cnEnHjMcHliuTvmPPn4/37mCcandERkFiWdNumXJyvH+Nnw6SWciYymIsmlTi61h1I3H8vpKCkxlttwjkwsUFLdMmYGeCb7/FZ0hjXlgsj6CkqsAiZ3EUqcE+kbrwPq/uivPJt7tn8xm/5u2tO8Lt2vWH0pjyCIqNxDcrsDQd+6OWj1Sp15NzDYaX2scZcWWJDxTNP3h4iIGan1Sts2/2lUJCFcVA/kqVjt8618x4FUAtHemVvp+dhiZbtLXX/Ezcb+xjvvMv/PzbIunYzWP/s='</spring.rabbitmq.username>
                 <spring.rabbitmq.password>'{cipher}AQAhPXqYasqI6a1KN0MfJE5S463GpH3wZnXUkAVS9NzIvHQhYqUkXSIgZyQkX3UKl4JlPhuoCmd9/sQAKHZK+6VTzIDW4oGgmYYV46oOTzpM+u9v5fC4HLVrLJQfJlF+RYy/1IHFXNcLbhE/bUsj8MLHeIZ+cWZzMnu5/nxCtrnZtdb6ZBW6Ua83TfFFx8s3EcDC/XDRNwkxucZSY7yWp0Uh3mV1VVuUAfhdBvjUUMq/TAOY64sMp8Od+rbMMIcyLfjaqplbFOxKg9PdfTEXcyyKK9n3axmgGZ7lt9rE+RXWGzl3UgQf72xa3ynPI4UMsXh+1HB/tFyIDaBPOyc2fnWc38lf4qQK2NA7P58ucxzhf83HDtl1I1XXftX7pewPgQE='</spring.rabbitmq.password>
                 <!--<eureka.username>'{cipher}AQBK+yZdW+vCx8SMVNfmosh89xRkD2n13drLn1U10Q1n7vm7G025YjhbGXqrDNi0VLfK90LqWvEQs9ZA4C4kAk4TOWV6r1LfJHz0rbrhtXs8+cnEnHjMcHliuTvmPPn4/37mCcandERkFiWdNumXJyvH+Nnw6SWciYymIsmlTi61h1I3H8vpKCkxlttwjkwsUFLdMmYGeCb7/FZ0hjXlgsj6CkqsAiZ3EUqcE+kbrwPq/uivPJt7tn8xm/5u2tO8Lt2vWH0pjyCIqNxDcrsDQd+6OWj1Sp15NzDYaX2scZcWWJDxTNP3h4iIGan1Sts2/2lUJCFcVA/kqVjt8618x4FUAtHemVvp+dhiZbtLXX/Ezcb+xjvvMv/PzbIunYzWP/s='</eureka.username>
@@ -218,6 +215,32 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
                     <executable>true</executable>
+                </configuration>
+            </plugin>
+            <!--Docker自动发布插件-->
+            <plugin>
+                <groupId>com.spotify</groupId>
+                <artifactId>dockerfile-maven-plugin</artifactId>
+                <version>1.4.10</version>
+                <executions>
+                    <execution>
+                        <id>default</id>
+                        <goals>
+                            <goal>build</goal>
+                            <goal>push</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <contextDirectory>${project.basedir}</contextDirectory>
+                    <useMavenSettingsForAuth>true</useMavenSettingsForAuth>
+                    <repository>fosin/${project.artifactId}</repository>
+                    <tag>${project.version}-${profileActive}</tag>
+                    <dockerfile>Dockerfile</dockerfile>
+                    <buildArgs>
+                        <jarFile>target/${project.build.finalName}.jar</jarFile>
+                        <profileActive>${profileActive}</profileActive>
+                    </buildArgs>
                 </configuration>
             </plugin>
             <!-- 资源文件拷贝插件 -->

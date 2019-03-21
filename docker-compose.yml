@@ -1,7 +1,7 @@
 version: "3"
 services:
   cdp-db:
-    container_name: cdp-db-${profileActive}
+    container_name: cdp-db
     hostname: cdp-db
     image: mysql:5.7
     #    build:
@@ -18,7 +18,7 @@ services:
       - 3306:3306
 
   cdp-rabbitmq:
-    container_name: cdp-rabbitmq-${profileActive}
+    container_name: cdp-rabbitmq
     hostname: cdp-rabbitmq
     image: rabbitmq:3-management
     environment:
@@ -31,8 +31,18 @@ services:
       - 15672:15672
       - 5672:5672
 
+  cdp-nginx:
+    container_name: cdp-nginx
+    image: nginx
+    hostname: cdp-nginx
+    volumes:
+      - ${dataPath}nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - ${dataPath}nginx/html:/usr/share/nginx/html
+    ports:
+      - 80:80
+
   cdp-redis:
-    container_name: cdp-redis-${profileActive}
+    container_name: cdp-redis
     hostname: cdp-redis
     image: redis:4.0
     volumes:
@@ -43,91 +53,94 @@ services:
     command: redis-server --appendonly yes --requirepass ${defaultPassword}
 
   cdp-eurekaserver:
-    container_name: cdp-eurekaserver-${profileActive}
+    image: fosin/cdp-eurekaserver:1.0.0-SNAPSHOT-local
+    container_name: cdp-eurekaserver
     hostname: cdp-eurekaserver
-    build:
-      context: ./cdp-eurekaserver
-      dockerfile: Dockerfile
     restart: on-failure
     ports:
       - 1000:1000
 
   cdp-configserver:
-    container_name: cdp-configserver-${profileActive}
+    image: fosin/cdp-configserver:1.0.0-SNAPSHOT-local
+    container_name: cdp-configserver
     hostname: cdp-configserver
-    build:
-      context: ./cdp-configserver
-      dockerfile: Dockerfile
     restart: on-failures
     ports:
       - 1100:1100
+    links:
+      - cdp-eurekaserver
+      - cdp-rabbitmq
     depends_on:
       - cdp-eurekaserver
       - cdp-rabbitmq
+
   cdp-zuulgateway:
-    container_name: cdp-zuulgateway-${profileActive}
+    image: fosin/cdp-zuulgateway:1.0.0-SNAPSHOT-local
+    container_name: cdp-zuulgateway
     hostname: cdp-zuulgateway
-    build:
-      context: ./cdp-cloudadviced/cdp-zuulgateway
-      dockerfile: Dockerfile
     restart: on-failure
     ports:
       - 9000:9000
+    links:
+      - cdp-eurekaserver
+      - cdp-rabbitmq
     depends_on:
       - cdp-configserver
-      - cdp-redis
       - cdp-db
-      - cdp-rabbitmq
+
   cdp-authserver:
-    container_name: cdp-authserver-${profileActive}
+    image: fosin/cdp-authserver:1.0.0-SNAPSHOT-local
+    container_name: cdp-authserver
     hostname: cdp-authserver
-    build:
-      context: ./cdp-cloudadviced/cdp-platform/cdp-authserver
-      dockerfile: Dockerfile
     restart: on-failure
     ports:
       - 1400:1400
+    links:
+      - cdp-eurekaserver
+      - cdp-rabbitmq
     depends_on:
       - cdp-configserver
       - cdp-redis
       - cdp-db
-      - cdp-rabbitmq
+
   cdp-platformserver:
-    container_name: cdp-platformserver-${profileActive}
+    image: fosin/cdp-platformserver:1.0.0-SNAPSHOT-local
+    container_name: cdp-platformserver
     hostname: cdp-platformserver
-    build:
-      context: ./cdp-cloudadviced/cdp-platform/cdp-platformserver
-      dockerfile: Dockerfile
     restart: on-failure
     ports:
       - 1500:1500
+    links:
+      - cdp-eurekaserver
+      - cdp-rabbitmq
     depends_on:
       - cdp-configserver
       - cdp-redis
       - cdp-db
-      - cdp-rabbitmq
+
   cdp-adminserver:
-    container_name: cdp-adminserver-${profileActive}
+    image: fosin/cdp-adminserver:1.0.0-SNAPSHOT-local
+    container_name: cdp-adminserver
     hostname: cdp-adminserver
-    build:
-      context: ./cdp-cloudadviced/cdp-adminserver
-      dockerfile: Dockerfile
     restart: on-failure
     ports:
       - 1700:1700
+    links:
+      - cdp-eurekaserver
+      - cdp-rabbitmq
     depends_on:
       - cdp-configserver
-      - cdp-rabbitmq
+
   cdp-sleuthserver:
-    container_name: cdp-sleuthserver-${profileActive}
+    image: fosin/cdp-sleuthserver:1.0.0-SNAPSHOT-local
+    container_name: cdp-sleuthserver
     hostname: cdp-sleuthserver
-    build:
-      context: ./cdp-cloudadviced/cdp-sleuthserver
-      dockerfile: Dockerfile
     restart: on-failure
     ports:
       - 1800:1800
+    links:
+      - cdp-eurekaserver
+      - cdp-rabbitmq
     depends_on:
       - cdp-configserver
-      - cdp-rabbitmq
       - cdp-db

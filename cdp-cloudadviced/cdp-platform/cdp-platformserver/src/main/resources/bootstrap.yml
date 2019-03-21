@@ -13,7 +13,7 @@ spring:
   profiles:
     active: @profileActive@
   application:
-    name: cdp-platformserver
+    name: @project.artifactId@
   cloud:
     inetutils:
       preferred-networks: @spring.cloud.inetutils.preferred-networks@
@@ -33,8 +33,7 @@ spring:
       profile:  @profileActive@
       enabled: true
   rabbitmq:
-    host: @spring.rabbitmq.host@
-    port: @spring.rabbitmq.port@
+    addresses: @spring.rabbitmq.address@
     username: @spring.rabbitmq.username@
     password: @spring.rabbitmq.password@
   jackson:

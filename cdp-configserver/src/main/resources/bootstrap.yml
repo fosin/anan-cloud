@@ -28,8 +28,7 @@ spring:
           password: @spring.cloud.config.server.svn.password@
         default-label: @profileActive@
   rabbitmq:
-    host: @spring.rabbitmq.host@
-    port: @spring.rabbitmq.port@
+    addresses: @spring.rabbitmq.address@
     username: @spring.rabbitmq.username@
     password: @spring.rabbitmq.password@
   jackson: #该参数一定要放bootstrap中，而放application.yml或者后面的配置文件都不能生效
