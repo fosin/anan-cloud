@@ -116,75 +116,86 @@ services:
       - 1000:1000
 
   cdp-configserver:
+    image: fosin/cdp-configserver:2.0.0-SNAPSHOT-local
     container_name: cdp-configserver
     hostname: cdp-configserver
-    build:
-      context: ./cdp-configserver
-      dockerfile: Dockerfile
     restart: on-failures
     ports:
       - 1100:1100
+    links:
+      - cdp-eurekaserver
+      - cdp-rabbitmq
     depends_on:
       - cdp-eurekaserver
       - cdp-rabbitmq
+
   cdp-zuulgateway:
+    image: fosin/cdp-zuulgateway:2.0.0-SNAPSHOT-local
     container_name: cdp-zuulgateway
     hostname: cdp-zuulgateway
-    build:
-      context: ./cdp-cloudadviced/cdp-zuulgateway
-      dockerfile: Dockerfile
     restart: on-failure
     ports:
       - 9000:9000
+    links:
+      - cdp-eurekaserver
+      - cdp-rabbitmq
     depends_on:
       - cdp-configserver
       - cdp-db
+
   cdp-authserver:
+    image: fosin/cdp-authserver:2.0.0-SNAPSHOT-local
     container_name: cdp-authserver
     hostname: cdp-authserver
-    build:
-      context: ./cdp-cloudadviced/cdp-platform/cdp-authserver
-      dockerfile: Dockerfile
     restart: on-failure
     ports:
       - 1400:1400
+    links:
+      - cdp-eurekaserver
+      - cdp-rabbitmq
     depends_on:
       - cdp-configserver
       - cdp-redis
       - cdp-db
+
   cdp-platformserver:
+    image: fosin/cdp-platformserver:2.0.0-SNAPSHOT-local
     container_name: cdp-platformserver
     hostname: cdp-platformserver
-    build:
-      context: ./cdp-cloudadviced/cdp-platform/cdp-platformserver
-      dockerfile: Dockerfile
     restart: on-failure
     ports:
       - 1500:1500
+    links:
+      - cdp-eurekaserver
+      - cdp-rabbitmq
     depends_on:
       - cdp-configserver
       - cdp-redis
       - cdp-db
+
   cdp-adminserver:
+    image: fosin/cdp-adminserver:2.0.0-SNAPSHOT-local
     container_name: cdp-adminserver
     hostname: cdp-adminserver
-    build:
-      context: ./cdp-cloudadviced/cdp-adminserver
-      dockerfile: Dockerfile
     restart: on-failure
     ports:
       - 1700:1700
+    links:
+      - cdp-eurekaserver
+      - cdp-rabbitmq
     depends_on:
       - cdp-configserver
+
   cdp-sleuthserver:
+    image: fosin/cdp-sleuthserver:2.0.0-SNAPSHOT-local
     container_name: cdp-sleuthserver
     hostname: cdp-sleuthserver
-    build:
-      context: ./cdp-cloudadviced/cdp-sleuthserver
-      dockerfile: Dockerfile
     restart: on-failure
     ports:
       - 1800:1800
+    links:
+      - cdp-eurekaserver
+      - cdp-rabbitmq
     depends_on:
       - cdp-configserver
       - cdp-db
