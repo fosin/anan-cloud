@@ -1,5 +1,5 @@
 server:
-  port: 1400
+  port: 51400
 spring:
   profiles:
     active: @profileActive@
@@ -23,7 +23,7 @@ spring:
       profile: @profileActive@
       enabled: true
   rabbitmq:
-    addresses: @spring.rabbitmq.address@
+    addresses: @spring.rabbitmq.addresses@
     username: @spring.rabbitmq.username@
     password: @spring.rabbitmq.password@
   jackson: #该参数一定要放bootstrap中，而放application.yml或者后面的配置文件都不能生效

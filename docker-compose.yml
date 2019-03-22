@@ -8,82 +8,89 @@ services:
     #      context: ./
     #      dockerfile: ./sql/Dockerfile
     environment:
-      MYSQL_ROOT_PASSWORD: ${defaultPassword}
+      MYSQL_ROOT_PASSWORD: local
     volumes:
-      - ${dataPath}mysql/data:/var/lib/mysql
-      - ${dataPath}mysql/mysqld.cnf:/etc/mysql/conf.d/mysqld.cnf
-      - ${dataPath}mysql/logs:/var/log/mysql
-    restart: on-failure
+      - e:/data/docker/mysql/data:/var/lib/mysql
+      - e:/data/docker/mysql/mysqld.cnf:/etc/mysql/conf.d/mysqld.cnf
+      - e:/data/docker/mysql/logs:/var/log/mysql
+    restart: "no"
     ports:
       - 3306:3306
 
-  cdp-rabbitmq:
-    container_name: cdp-rabbitmq
-    hostname: cdp-rabbitmq
+  cdp-rabbitmq1:
+    container_name: cdp-rabbitmq1
+    hostname: cdp-rabbitmq1
     image: rabbitmq:3-management
     environment:
       RABBITMQ_ERLANG_COOKIE: SWQOKODSQALRPCLNMEQG
       RABBITMQ_DEFAULT_USER: cdp
-      RABBITMQ_DEFAULT_PASS: ${defaultPassword}
+      RABBITMQ_DEFAULT_PASS: local
       RABBITMQ_DEFAULT_VHOST: /
-    restart: on-failure
+    restart: "no"
     ports:
       - 15672:15672
       - 5672:5672
 
-  cdp-nginx:
-    container_name: cdp-nginx
+  cdp-nginx1:
+    container_name: cdp-nginx1
     image: nginx
-    hostname: cdp-nginx
+    hostname: cdp-nginx1
     volumes:
-      - ${dataPath}nginx/default.conf:/etc/nginx/conf.d/default.conf
-      - ${dataPath}nginx/html:/usr/share/nginx/html
+      - e:/data/docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - e:/data/docker/nginx/html:/usr/share/nginx/html
     ports:
       - 80:80
 
-  cdp-redis:
-    container_name: cdp-redis
-    hostname: cdp-redis
+  cdp-redis1:
+    container_name: cdp-redis1
+    hostname: cdp-redis1
     image: redis:4.0
     volumes:
-      - ${dataPath}redis:/data
-    restart: on-failure
+      - e:/data/docker/redis:/data
+    restart: "no"
     ports:
       - 6379:6379
-    command: redis-server --appendonly yes --requirepass ${defaultPassword}
+    command: redis-server --appendonly yes --requirepass local
 
   cdp-eurekaserver:
     image: fosin/cdp-eurekaserver:1.0.0-SNAPSHOT-local
     container_name: cdp-eurekaserver
     hostname: cdp-eurekaserver
-    restart: on-failure
+    restart: "no"
+    volumes:
+      - e:/data/docker/cdp/logs:/logs
     ports:
-      - 1000:1000
+      - 51000:51000
 
   cdp-configserver:
     image: fosin/cdp-configserver:1.0.0-SNAPSHOT-local
     container_name: cdp-configserver
     hostname: cdp-configserver
-    restart: on-failures
+    restart: "no"
     ports:
-      - 1100:1100
+      - 51100:51100
+    volumes:
+      - e:/data/docker/cdp/logs:/logs
+      - D:/Source/myproject/cdp/cdp-cloud/cdp-config:/cdp-config
     links:
       - cdp-eurekaserver
-      - cdp-rabbitmq
+      - cdp-rabbitmq1
     depends_on:
       - cdp-eurekaserver
-      - cdp-rabbitmq
+      - cdp-rabbitmq1
 
   cdp-zuulgateway:
     image: fosin/cdp-zuulgateway:1.0.0-SNAPSHOT-local
     container_name: cdp-zuulgateway
     hostname: cdp-zuulgateway
-    restart: on-failure
+    restart: "no"
     ports:
       - 9000:9000
+    volumes:
+      - e:/data/docker/cdp/logs:/logs
     links:
       - cdp-eurekaserver
-      - cdp-rabbitmq
+      - cdp-rabbitmq1
     depends_on:
       - cdp-configserver
       - cdp-db
@@ -92,55 +99,67 @@ services:
     image: fosin/cdp-authserver:1.0.0-SNAPSHOT-local
     container_name: cdp-authserver
     hostname: cdp-authserver
-    restart: on-failure
+    restart: "no"
     ports:
-      - 1400:1400
+      - 51400:51400
+    volumes:
+      - e:/data/docker/cdp/logs:/logs
     links:
       - cdp-eurekaserver
-      - cdp-rabbitmq
+      - cdp-rabbitmq1
+      - cdp-db
     depends_on:
       - cdp-configserver
-      - cdp-redis
+      - cdp-redis1
       - cdp-db
 
   cdp-platformserver:
     image: fosin/cdp-platformserver:1.0.0-SNAPSHOT-local
     container_name: cdp-platformserver
     hostname: cdp-platformserver
-    restart: on-failure
+    restart: "no"
+    volumes:
+      - e:/data/docker/cdp/logs:/logs
     ports:
-      - 1500:1500
+      - 51500:51500
     links:
       - cdp-eurekaserver
-      - cdp-rabbitmq
+      - cdp-rabbitmq1
+      - cdp-db
     depends_on:
       - cdp-configserver
-      - cdp-redis
+      - cdp-redis1
       - cdp-db
 
   cdp-adminserver:
     image: fosin/cdp-adminserver:1.0.0-SNAPSHOT-local
     container_name: cdp-adminserver
     hostname: cdp-adminserver
-    restart: on-failure
+    restart: "no"
+    volumes:
+      - e:/data/docker/cdp/logs:/logs
     ports:
-      - 1700:1700
+      - 51700:51700
     links:
       - cdp-eurekaserver
-      - cdp-rabbitmq
+      - cdp-rabbitmq1
+      - cdp-authserver
     depends_on:
-      - cdp-configserver
+      - cdp-zuulgateway
 
   cdp-sleuthserver:
     image: fosin/cdp-sleuthserver:1.0.0-SNAPSHOT-local
     container_name: cdp-sleuthserver
     hostname: cdp-sleuthserver
-    restart: on-failure
+    restart: "no"
+    volumes:
+      - e:/data/docker/cdp/logs:/logs
     ports:
-      - 1800:1800
+      - 52100:52100
     links:
       - cdp-eurekaserver
-      - cdp-rabbitmq
+      - cdp-rabbitmq1
+      - cdp-db
     depends_on:
       - cdp-configserver
       - cdp-db

@@ -1,5 +1,5 @@
 server:
-  port: 1100
+  port: 51100
 spring:
   profiles:
     active: @spring.cloud.config.profileActive@ #native属性表示config使用本地文件配置，系统将从classpath目录下查找配置文件
@@ -28,7 +28,7 @@ spring:
           password: @spring.cloud.config.server.svn.password@
         default-label: @profileActive@
   rabbitmq:
-    addresses: @spring.rabbitmq.address@
+    addresses: @spring.rabbitmq.addresses@
     username: @spring.rabbitmq.username@
     password: @spring.rabbitmq.password@
   jackson: #该参数一定要放bootstrap中，而放application.yml或者后面的配置文件都不能生效

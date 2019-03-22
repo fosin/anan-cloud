@@ -24,7 +24,7 @@ zipkin:
     type: mysql
   collector:
     rabbitmq:
-      addresses: ${spring.rabbitmq.host}:${spring.rabbitmq.port}
+      addresses: ${spring.rabbitmq.addresses}
       username: ${spring.rabbitmq.username}
       password: ${spring.rabbitmq.password}
       queue: zipkin

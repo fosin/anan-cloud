@@ -136,8 +136,8 @@ hystrix:
 #      client-secret: dev
 ##      access-token-uri: http://localhost:9000/auth/oauth/token
 ##      user-authorization-uri: http://localhost:9000/auth/oauth/authorize
-#      access-token-uri: http://localhost:1400/oauth/token
-#      user-authorization-uri: http://localhost:1400/oauth/authorize
+#      access-token-uri: http://localhost:51400/oauth/token
+#      user-authorization-uri: http://localhost:51400/oauth/authorize
 ##      auto-approve-scopes:
 ##      pre-established-redirect-uri: http://${security.user.name}:${security.user.password}@${eureka.instance.hostname}:${server.port}/
 ##      token-name:

@@ -13,7 +13,7 @@ spring:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
 server:
-  port: 1000
+  port: 51000
 eureka:
   client:
     fetch-registry: false
@@ -22,7 +22,7 @@ eureka:
     register-with-eureka: true
   instance:
     prefer-ip-address: true #可以实现ip地址作为主机地址
-    hostname: localhost
+#    hostname: localhost
     #    instance-id: http://${spring.cloud.client.ipAddress}:${server.port} #启用就报错The request was rejected because the URL was not normalized.
     metadata-map: #用于SBA认证
       user.name: ${security.user.name}
