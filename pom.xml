@@ -38,7 +38,7 @@
                 <spring.cloud.config.server.svn.uri></spring.cloud.config.server.svn.uri>
                 <spring.cloud.config.server.svn.username></spring.cloud.config.server.svn.username>
                 <spring.cloud.config.server.svn.password></spring.cloud.config.server.svn.password>
-                <spring.cloud.config.server.native.search-locations>file:cdp-config/@profileActive@</spring.cloud.config.server.native.search-locations>
+                <spring.cloud.config.server.native.search-locations>file:/cdp-config/@profileActive@</spring.cloud.config.server.native.search-locations>
                 <spring.cloud.config.server.git.uri>https://github.com/fosin/cdp-cloud</spring.cloud.config.server.git.uri>
                 <spring.cloud.config.server.git.search-paths>cdp-config/@profileActive@</spring.cloud.config.server.git.search-paths>
                 <spring.cloud.inetutils.preferred-networks>10.0.75.</spring.cloud.inetutils.preferred-networks>
@@ -94,7 +94,7 @@
             <properties>
                 <profileActive>yaxrmyy</profileActive>
                 <eureka.client.service-url.defaultZone>
-                    http://${cdp-placeholder1}security.user.name${cdp-placeholder2}:${cdp-placeholder1}security.user.password${cdp-placeholder2}${cdp-at}>cdp-eurekaserver1:51000/eureka/,http://${cdp-placeholder1}security.user.name${cdp-placeholder2}:${cdp-placeholder1}security.user.password${cdp-placeholder2}${cdp-at}>cdp-eurekaserver2:51000/eureka/
+                    http://${cdp-placeholder1}security.user.name${cdp-placeholder2}:${cdp-placeholder1}security.user.password${cdp-placeholder2}@cdp-eurekaserver:51000/eureka/
                 </eureka.client.service-url.defaultZone>
                 <spring.cloud.config.profileActive>native</spring.cloud.config.profileActive>
                 <spring.cloud.config.server.svn.uri></spring.cloud.config.server.svn.uri>

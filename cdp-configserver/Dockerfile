@@ -5,5 +5,6 @@ VOLUME /logs
 VOLUME /cdp-config
 ARG jarFile
 COPY ${jarFile} app.jar
+RUN echo "Asia/Shanghai" > /etc/timezone
 EXPOSE 51100
 ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar"]
