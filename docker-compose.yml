@@ -17,6 +17,8 @@ services:
     restart: on-failure
     ports:
       - 3306:3306
+    networks:
+      - cdp-net
 
   cdp-rabbitmq1:
     container_name: cdp-rabbitmq1
@@ -32,6 +34,8 @@ services:
     ports:
       - 15672:15672
       - 5672:5672
+    networks:
+      - cdp-net
 
   cdp-nginx1:
     container_name: cdp-nginx1
@@ -44,6 +48,8 @@ services:
       - e:/data/docker/nginx/html:/usr/share/nginx/html
     ports:
       - 80:80
+    networks:
+      - cdp-net
 
   cdp-redis1:
     image: redis:4.0
@@ -57,12 +63,16 @@ services:
     ports:
       - 6379:6379
     command: redis-server --appendonly yes --requirepass local
+    networks:
+      - cdp-net
 
   cdp-eurekaserver:
     image: fosin/cdp-eurekaserver:1.0.0-SNAPSHOT-local
     container_name: cdp-eurekaserver
     hostname: cdp-eurekaserver
     restart: on-failure
+    networks:
+      - cdp-net
     volumes:
       - e:/data/docker/cdp/logs:/logs
     ports:
@@ -78,9 +88,8 @@ services:
     volumes:
       - e:/data/docker/cdp/logs:/logs
       - D:/Source/myproject/cdp/cdp-cloud/cdp-config:/cdp-config
-    links:
-      - cdp-eurekaserver
-      - cdp-rabbitmq1
+    networks:
+      - cdp-net
     depends_on:
       - cdp-eurekaserver
       - cdp-rabbitmq1
@@ -94,9 +103,8 @@ services:
       - 9000:9000
     volumes:
       - e:/data/docker/cdp/logs:/logs
-    links:
-      - cdp-eurekaserver
-      - cdp-rabbitmq1
+    networks:
+      - cdp-net
     depends_on:
       - cdp-configserver
       - cdp-db
@@ -110,10 +118,8 @@ services:
       - 51400:51400
     volumes:
       - e:/data/docker/cdp/logs:/logs
-    links:
-      - cdp-eurekaserver
-      - cdp-rabbitmq1
-      - cdp-db
+    networks:
+      - cdp-net
     depends_on:
       - cdp-configserver
       - cdp-redis1
@@ -128,10 +134,8 @@ services:
       - e:/data/docker/cdp/logs:/logs
     ports:
       - 51500:51500
-    links:
-      - cdp-eurekaserver
-      - cdp-rabbitmq1
-      - cdp-db
+    networks:
+      - cdp-net
     depends_on:
       - cdp-configserver
       - cdp-redis1
@@ -146,10 +150,8 @@ services:
       - e:/data/docker/cdp/logs:/logs
     ports:
       - 51700:51700
-    links:
-      - cdp-eurekaserver
-      - cdp-rabbitmq1
-      - cdp-authserver
+    networks:
+      - cdp-net
     depends_on:
       - cdp-zuulgateway
 
@@ -162,10 +164,11 @@ services:
       - e:/data/docker/cdp/logs:/logs
     ports:
       - 52100:52100
-    links:
-      - cdp-eurekaserver
-      - cdp-rabbitmq1
-      - cdp-db
+    networks:
+      - cdp-net
     depends_on:
       - cdp-configserver
       - cdp-db
+networks:
+  cdp-net:
+    driver: bridge
