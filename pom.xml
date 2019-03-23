@@ -94,7 +94,7 @@
             <properties>
                 <profileActive>yaxrmyy</profileActive>
                 <eureka.client.service-url.defaultZone>
-                    http://${cdp-placeholder1}security.user.name${cdp-placeholder2}:${cdp-placeholder1}security.user.password${cdp-placeholder2}@cdp-eurekaserver:51000/eureka/
+                    http://${cdp-placeholder1}security.user.name${cdp-placeholder2}:${cdp-placeholder1}security.user.password${cdp-placeholder2}${cdp-at}cdp-eurekaserver1:51000/eureka/,http://${cdp-placeholder1}security.user.name${cdp-placeholder2}:${cdp-placeholder1}security.user.password${cdp-placeholder2}${cdp-at}cdp-eurekaserver2:51000/eureka/
                 </eureka.client.service-url.defaultZone>
                 <spring.cloud.config.profileActive>native</spring.cloud.config.profileActive>
                 <spring.cloud.config.server.svn.uri></spring.cloud.config.server.svn.uri>
@@ -234,7 +234,7 @@
                 <configuration>
                     <contextDirectory>${project.basedir}</contextDirectory>
                     <useMavenSettingsForAuth>true</useMavenSettingsForAuth>
-                    <repository>fosin/${project.artifactId}</repository>
+                    <repository>registry.cn-hangzhou.aliyuncs.com/fosin/${project.artifactId}</repository>
                     <tag>${project.version}-${profileActive}</tag>
                     <dockerfile>Dockerfile</dockerfile>
                     <buildArgs>
