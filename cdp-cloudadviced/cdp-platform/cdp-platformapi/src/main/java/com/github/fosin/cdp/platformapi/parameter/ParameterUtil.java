@@ -21,7 +21,6 @@ public class ParameterUtil {
     private static IParameterService parameterService;
 
     @Autowired
-    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     public ParameterUtil(IParameterService parameterService) {
         ParameterUtil.parameterService = parameterService;
     }

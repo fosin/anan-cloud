@@ -1,8 +1,8 @@
 version: "3"
 services:
-  cdp-db:
-    container_name: cdp-db
-    hostname: cdp-db
+  cdp-mysql-platform:
+    container_name: cdp-mysql-platform
+    hostname: cdp-mysql-platform
     image: mysql:5.7
     #    build:
     #      context: ./
@@ -67,7 +67,7 @@ services:
       - cdp-net
 
   cdp-eurekaserver:
-    image: fosin/cdp-eurekaserver:1.0.0-SNAPSHOT-local
+    image: registry.cn-hangzhou.aliyuncs.com/fosin/cdp-eurekaserver:1.0.0-SNAPSHOT
     container_name: cdp-eurekaserver
     hostname: cdp-eurekaserver
     restart: on-failure
@@ -79,12 +79,14 @@ services:
       - 51000:51000
 
   cdp-configserver:
-    image: fosin/cdp-configserver:1.0.0-SNAPSHOT-local
+    image: registry.cn-hangzhou.aliyuncs.com/fosin/cdp-configserver:1.0.0-SNAPSHOT
     container_name: cdp-configserver
     hostname: cdp-configserver
     restart: on-failure
     ports:
       - 51100:51100
+    environment:
+      spring.cloud.config.server.native.search-locations: file:/cdp-config
     volumes:
       - e:/data/docker/cdp/logs:/logs
       - D:/Source/myproject/cdp/cdp-cloud/cdp-config:/cdp-config
@@ -95,7 +97,7 @@ services:
       - cdp-rabbitmq1
 
   cdp-zuulgateway:
-    image: fosin/cdp-zuulgateway:1.0.0-SNAPSHOT-local
+    image: registry.cn-hangzhou.aliyuncs.com/fosin/cdp-zuulgateway:1.0.0-SNAPSHOT
     container_name: cdp-zuulgateway
     hostname: cdp-zuulgateway
     restart: on-failure
@@ -107,10 +109,10 @@ services:
       - cdp-net
     depends_on:
       - cdp-configserver
-      - cdp-db
+      - cdp-mysql-platform
 
   cdp-authserver:
-    image: fosin/cdp-authserver:1.0.0-SNAPSHOT-local
+    image: registry.cn-hangzhou.aliyuncs.com/fosin/cdp-authserver:1.0.0-SNAPSHOT
     container_name: cdp-authserver
     hostname: cdp-authserver
     restart: on-failure
@@ -123,10 +125,10 @@ services:
     depends_on:
       - cdp-configserver
       - cdp-redis1
-      - cdp-db
+      - cdp-mysql-platform
 
   cdp-platformserver:
-    image: fosin/cdp-platformserver:1.0.0-SNAPSHOT-local
+    image: registry.cn-hangzhou.aliyuncs.com/fosin/cdp-platformserver:1.0.0-SNAPSHOT
     container_name: cdp-platformserver
     hostname: cdp-platformserver
     restart: on-failure
@@ -139,10 +141,10 @@ services:
     depends_on:
       - cdp-configserver
       - cdp-redis1
-      - cdp-db
+      - cdp-mysql-platform
 
   cdp-adminserver:
-    image: fosin/cdp-adminserver:1.0.0-SNAPSHOT-local
+    image: registry.cn-hangzhou.aliyuncs.com/fosin/cdp-adminserver:1.0.0-SNAPSHOT
     container_name: cdp-adminserver
     hostname: cdp-adminserver
     restart: on-failure
@@ -156,7 +158,7 @@ services:
       - cdp-zuulgateway
 
   cdp-sleuthserver:
-    image: fosin/cdp-sleuthserver:1.0.0-SNAPSHOT-local
+    image: registry.cn-hangzhou.aliyuncs.com/fosin/cdp-sleuthserver:1.0.0-SNAPSHOT
     container_name: cdp-sleuthserver
     hostname: cdp-sleuthserver
     restart: on-failure
@@ -168,7 +170,21 @@ services:
       - cdp-net
     depends_on:
       - cdp-configserver
-      - cdp-db
+      - cdp-mysql-platform
+  mpi1:
+    image: registry.cn-hangzhou.aliyuncs.com/fosin/mpi:1.0.0-SNAPSHOT
+    container_name: mpi1
+    hostname: mpi1
+    restart: on-failure
+    ports:
+      - 53000:53000
+    volumes:
+      - e:/data/docker/cdp/logs:/logs
+    networks:
+      - cdp-net
+    depends_on:
+      - cdp-configserver
+      - cdp-mysql-platform
 networks:
   cdp-net:
     driver: bridge

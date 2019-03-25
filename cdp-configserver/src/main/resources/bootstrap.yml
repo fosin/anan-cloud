@@ -16,7 +16,6 @@ spring:
         encrypt:
           enabled: true
         native:
-#          search-locations: file:@project.parent.parent.basedir@\\cdp-config\\local 相对路径方案尚未找到解决方法
           search-locations: @spring.cloud.config.server.native.search-locations@
         git:
           uri: @spring.cloud.config.server.git.uri@

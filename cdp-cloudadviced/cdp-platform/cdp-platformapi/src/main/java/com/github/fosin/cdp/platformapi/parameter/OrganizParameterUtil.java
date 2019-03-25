@@ -24,7 +24,6 @@ public class OrganizParameterUtil extends AbstractParameterUtil {
     private static IOrganizationService organizationService;
 
     @Autowired
-    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     public OrganizParameterUtil(IOrganizationService organizationService) {
         OrganizParameterUtil.organizationService = organizationService;
     }

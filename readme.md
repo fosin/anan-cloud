@@ -32,6 +32,15 @@ Slf4j Log4j2 | 日志框架
 OAuth2.0 | 单点登录、鉴权、认证框架
 jQuery BootStrap | 前段开发框架
 #环境部署
+
+##本地开发环境local设置
+127.0.0.1 cdp-eurekaserver
+127.0.0.1 cdp-authserver
+127.0.0.1 cdp-platformserver
+127.0.0.1 cdp-redis1
+127.0.0.1 cdp-mysql-platform
+127.0.0.1 cdp-rabbitmq1
+
 ## 一、设置mysql关系数据库、Redis内存数据库、RabbitMQ消息中间件的IP、用户、密码
        1、创建mysql数据库cdp，并导入相关sql语句和基础数据
 ## 二、生产环境将eureka注册中心地址替换成实际地址并建议修改当前连接用户(cdp)和密码(cdp)为较安全复杂的用户和密码，如果是本机为开发环境则可以不需要修改。
