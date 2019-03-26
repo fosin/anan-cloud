@@ -53,6 +53,8 @@
                 <encrypt.key-store.password>123456</encrypt.key-store.password>
                 <encrypt.key-store.alias>cdp</encrypt.key-store.alias>
                 <encrypt.key-store.secret>123456</encrypt.key-store.secret>
+                <docker.register.url>registry.cn-hangzhou.aliyuncs.com</docker.register.url>
+                <docker.register.ns>fosin</docker.register.ns>
             </properties>
             <activation>
                 <activeByDefault>true</activeByDefault>
@@ -84,6 +86,8 @@
                 <encrypt.key-store.password>123456</encrypt.key-store.password>
                 <encrypt.key-store.alias>cdp</encrypt.key-store.alias>
                 <encrypt.key-store.secret>123456</encrypt.key-store.secret>
+                <docker.register.url>registry.cn-hangzhou.aliyuncs.com</docker.register.url>
+                <docker.register.ns>fosin</docker.register.ns>
             </properties>
             <activation>
                 <activeByDefault>false</activeByDefault>
@@ -115,6 +119,8 @@
                 <encrypt.key-store.password>123456</encrypt.key-store.password>
                 <encrypt.key-store.alias>cdp</encrypt.key-store.alias>
                 <encrypt.key-store.secret>123456</encrypt.key-store.secret>
+                <docker.register.url>registry.cn-hangzhou.aliyuncs.com</docker.register.url>
+                <docker.register.ns>fosin</docker.register.ns>
             </properties>
             <activation>
                 <activeByDefault>false</activeByDefault>
@@ -235,7 +241,7 @@
                 <configuration>
                     <contextDirectory>${project.basedir}</contextDirectory>
                     <useMavenSettingsForAuth>true</useMavenSettingsForAuth>
-                    <repository>registry.cn-hangzhou.aliyuncs.com/fosin/${project.artifactId}</repository>
+                    <repository>${docker.register.url}/${docker.register.ns}/${project.artifactId}</repository>
                     <tag>${project.version}</tag>
                     <dockerfile>Dockerfile</dockerfile>
                     <buildArgs>

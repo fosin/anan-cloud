@@ -3,17 +3,17 @@ services:
   cdp-mysql-platform:
     container_name: cdp-mysql-platform
     hostname: cdp-mysql-platform
-    image: mysql:5.7
-    #    build:
-    #      context: ./
-    #      dockerfile: ./sql/Dockerfile
+    image: registry.cn-hangzhou.aliyuncs.com/fosin/cdp-mysql-platform:1.0.0-SNAPSHOT
+    build:
+      context: ./docs/mysql
+      dockerfile: Dockerfile
     environment:
       MYSQL_ROOT_PASSWORD: local
       TZ: Asia/Shanghai
     volumes:
-      - e:/data/docker/mysql/data:/var/lib/mysql
-      - e:/data/docker/mysql/mysqld.cnf:/etc/mysql/conf.d/mysqld.cnf
-      - e:/data/docker/mysql/logs:/var/log/mysql
+      - e:/data/docker/mysql/cdp_platform/data:/var/lib/mysql
+      - e:/data/docker/mysql/cdp_platform/mysqld.cnf:/etc/mysql/conf.d/mysqld.cnf
+      - e:/data/docker/mysql/cdp_platform/logs:/var/log/mysql
     restart: on-failure
     ports:
       - 3306:3306
@@ -30,6 +30,8 @@ services:
       RABBITMQ_DEFAULT_PASS: local
       RABBITMQ_DEFAULT_VHOST: /
       TZ: Asia/Shanghai
+#    volumes: TODO 启动后报错cookie file /var/lib/rabbitmq/.erlang.cookie must be accessible by owner only
+#      - e:/data/docker/rabbitmq:/var/lib/rabbitmq
     restart: on-failure
     ports:
       - 15672:15672
@@ -74,7 +76,7 @@ services:
     networks:
       - cdp-net
     volumes:
-      - e:/data/docker/cdp/logs:/logs
+      - e:/data/docker/logs/cdp:/logs
     ports:
       - 51000:51000
 
@@ -88,7 +90,7 @@ services:
     environment:
       spring.cloud.config.server.native.search-locations: file:/cdp-config
     volumes:
-      - e:/data/docker/cdp/logs:/logs
+      - e:/data/docker/logs/cdp:/logs
       - D:/Source/myproject/cdp/cdp-cloud/cdp-config:/cdp-config
     networks:
       - cdp-net
@@ -104,7 +106,7 @@ services:
     ports:
       - 9000:9000
     volumes:
-      - e:/data/docker/cdp/logs:/logs
+      - e:/data/docker/logs/cdp:/logs
     networks:
       - cdp-net
     depends_on:
@@ -119,7 +121,7 @@ services:
     ports:
       - 51400:51400
     volumes:
-      - e:/data/docker/cdp/logs:/logs
+      - e:/data/docker/logs/cdp:/logs
     networks:
       - cdp-net
     depends_on:
@@ -133,7 +135,7 @@ services:
     hostname: cdp-platformserver
     restart: on-failure
     volumes:
-      - e:/data/docker/cdp/logs:/logs
+      - e:/data/docker/logs/cdp:/logs
     ports:
       - 51500:51500
     networks:
@@ -149,7 +151,7 @@ services:
     hostname: cdp-adminserver
     restart: on-failure
     volumes:
-      - e:/data/docker/cdp/logs:/logs
+      - e:/data/docker/logs/cdp:/logs
     ports:
       - 51700:51700
     networks:
@@ -163,7 +165,7 @@ services:
     hostname: cdp-sleuthserver
     restart: on-failure
     volumes:
-      - e:/data/docker/cdp/logs:/logs
+      - e:/data/docker/logs/cdp:/logs
     ports:
       - 52100:52100
     networks:
@@ -171,20 +173,7 @@ services:
     depends_on:
       - cdp-configserver
       - cdp-mysql-platform
-  mpi1:
-    image: registry.cn-hangzhou.aliyuncs.com/fosin/mpi:1.0.0-SNAPSHOT
-    container_name: mpi1
-    hostname: mpi1
-    restart: on-failure
-    ports:
-      - 53000:53000
-    volumes:
-      - e:/data/docker/cdp/logs:/logs
-    networks:
-      - cdp-net
-    depends_on:
-      - cdp-configserver
-      - cdp-mysql-platform
+
 networks:
   cdp-net:
     driver: bridge
