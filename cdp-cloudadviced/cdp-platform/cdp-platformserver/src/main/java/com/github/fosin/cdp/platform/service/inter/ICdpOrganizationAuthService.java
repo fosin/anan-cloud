@@ -1,12 +1,11 @@
 package com.github.fosin.cdp.platform.service.inter;
 
 import com.github.fosin.cdp.jpa.service.ISimpleJpaService;
-import com.github.fosin.cdp.platform.dto.request.CdpOrganizationAuthCreateDto;
-import com.github.fosin.cdp.platform.dto.request.CdpOrganizationAuthRetrieveDto;
-import com.github.fosin.cdp.platform.dto.request.CdpOrganizationAuthUpdateDto;
-import com.github.fosin.cdp.platform.entity.CdpOrganizationAuthEntity;
+import com.github.fosin.cdp.platformapi.dto.request.CdpOrganizationAuthCreateDto;
+import com.github.fosin.cdp.platformapi.dto.request.CdpOrganizationAuthRetrieveDto;
+import com.github.fosin.cdp.platformapi.dto.request.CdpOrganizationAuthUpdateDto;
+import com.github.fosin.cdp.platformapi.entity.CdpOrganizationAuthEntity;
 import com.github.fosin.cdp.platformapi.dto.RegisterDto;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 

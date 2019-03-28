@@ -33,16 +33,13 @@ spring:
     password: '{cipher}AQAf9K0s8zLVaIk44+wqpHGuHsHEK5G4KKu1vk0HwxlojaYQHRkNsFhdQwmcrnkayWpGmNZezJCVb56JJTYL0wOus7L+zUIRWG0YIBzZBzG0iAX/6fQ0l7EVc6JyYmksGi6czSWhhAYvaJ2zupxU5pMou+k48ILP1MSZ+2n/mmM2OA/msXzum7hhSbuHKHkazorFlYLem2efeU0M61xWGRgzHAJ6pOxWGJx2NepgFDGLSTpDiqRTXD98AabHa28X8TpBbFynDONrU3mueuW/TSrXOlzp2LOO/cDbYGpZXAc/jypbH8SWfkSQlQrWaKBg2FJ8DYg/hUnxfSy+QbzyeGkPfJAcrDZ+9lhluKJ2RplT9bAedAWmvzPu2cJCQuf/RmM='
   session:
     store-type: redis
-#endpoints:
-#  health:
-#    sensitive: false
-#    enabled: true
-#logging:
-#  level:
-#    org:
-#      springframework:
-#        web: info
-#  config: classpath:logback.xml.bak
+security:
+  oauth2:
+    client:
+      client-id: appServer
+      client-secret: appServer
+      access-token-uri: http://cdp-authserver:51400/oauth/token
+      grant-type: client_credentials
 cdp:
   swagger:
     enabled: true

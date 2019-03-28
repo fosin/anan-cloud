@@ -22,6 +22,6 @@ security:
   oauth2:
     client:
       client-id: appServer
-      client-secret: $2a$10$JlQ0ryJ/x5YMvR/LO/h4dumxZZXPbXHXkODtC0Ge0bM8pGbYuHp5S
+      client-secret: appServer
       access-token-uri: http://cdp-authserver:51400/oauth/token
       grant-type: client_credentials

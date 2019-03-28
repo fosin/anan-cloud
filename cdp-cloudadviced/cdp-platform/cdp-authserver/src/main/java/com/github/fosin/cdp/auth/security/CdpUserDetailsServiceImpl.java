@@ -1,12 +1,12 @@
 package com.github.fosin.cdp.auth.security;
 
+import com.github.fosin.cdp.auth.service.inter.IPermissionService;
+import com.github.fosin.cdp.auth.service.inter.IRolePermissionService;
+import com.github.fosin.cdp.auth.service.inter.IUserPermissionService;
+import com.github.fosin.cdp.auth.service.inter.IUserService;
 import com.github.fosin.cdp.platformapi.constant.SystemConstant;
 import com.github.fosin.cdp.platformapi.dto.CdpUserDetail;
 import com.github.fosin.cdp.platformapi.entity.*;
-import com.github.fosin.cdp.platformapi.service.inter.IPermissionService;
-import com.github.fosin.cdp.platformapi.service.inter.IRolePermissionService;
-import com.github.fosin.cdp.platformapi.service.inter.IUserPermissionService;
-import com.github.fosin.cdp.platformapi.service.inter.IUserService;
 import com.github.fosin.cdp.util.TreeUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,10 +1,10 @@
 package com.github.fosin.cdp.platform.service.inter;
 
 import com.github.fosin.cdp.jpa.service.batch.ICrudBatchJpaService;
-import com.github.fosin.cdp.platform.dto.request.CdpOrganizationPermissionCreateDto;
-import com.github.fosin.cdp.platform.dto.request.CdpOrganizationPermissionRetrieveDto;
-import com.github.fosin.cdp.platform.dto.request.CdpOrganizationPermissionUpdateDto;
-import com.github.fosin.cdp.platform.entity.CdpOrganizationPermissionEntity;
+import com.github.fosin.cdp.platformapi.dto.request.CdpOrganizationPermissionCreateDto;
+import com.github.fosin.cdp.platformapi.dto.request.CdpOrganizationPermissionRetrieveDto;
+import com.github.fosin.cdp.platformapi.dto.request.CdpOrganizationPermissionUpdateDto;
+import com.github.fosin.cdp.platformapi.entity.CdpOrganizationPermissionEntity;
 
 import java.util.List;
 

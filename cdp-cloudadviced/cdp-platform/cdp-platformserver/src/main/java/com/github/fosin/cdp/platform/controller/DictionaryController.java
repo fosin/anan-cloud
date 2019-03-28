@@ -6,7 +6,7 @@ import com.github.fosin.cdp.platformapi.dto.request.CdpDictionaryCreateDto;
 import com.github.fosin.cdp.platformapi.dto.request.CdpDictionaryRetrieveDto;
 import com.github.fosin.cdp.platformapi.dto.request.CdpDictionaryUpdateDto;
 import com.github.fosin.cdp.platformapi.entity.CdpDictionaryEntity;
-import com.github.fosin.cdp.platformapi.service.inter.IDictionaryService;
+import com.github.fosin.cdp.platform.service.inter.IDictionaryService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
