@@ -28,4 +28,15 @@ public enum ParameterType {
         return type;
     }
 
+    public static ParameterType valueOf(int type) {    //手写的从int到enum的转换函数
+        switch (type) {
+            case 1:
+                return Organization;
+            case 2:
+                return User;
+            default:
+                return null;
+        }
+    }
+
 }
