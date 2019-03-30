@@ -11,9 +11,9 @@ services:
       MYSQL_ROOT_PASSWORD: local
       TZ: Asia/Shanghai
     volumes:
-      - e:/data/docker/mysql/cdp_platform/data:/var/lib/mysql
-      - e:/data/docker/mysql/cdp_platform/mysqld.cnf:/etc/mysql/conf.d/mysqld.cnf
-      - e:/data/docker/mysql/cdp_platform/logs:/var/log/mysql
+      - /root/docker/mysql/cdp_platform/data:/var/lib/mysql
+      - /root/docker/mysql/cdp_platform/mysqld.cnf:/etc/mysql/conf.d/mysqld.cnf
+      - /root/docker/mysql/cdp_platform/logs:/var/log/mysql
     restart: on-failure
     ports:
       - 3306:3306
@@ -31,7 +31,7 @@ services:
       RABBITMQ_DEFAULT_VHOST: /
       TZ: Asia/Shanghai
 #    volumes: TODO 启动后报错cookie file /var/lib/rabbitmq/.erlang.cookie must be accessible by owner only
-#      - e:/data/docker/rabbitmq:/var/lib/rabbitmq
+#      - /root/docker/rabbitmq:/var/lib/rabbitmq
     restart: on-failure
     ports:
       - 15672:15672
@@ -46,8 +46,8 @@ services:
     environment:
       TZ: Asia/Shanghai
     volumes:
-      - e:/data/docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
-      - e:/data/docker/nginx/html:/usr/share/nginx/html
+      - /root/docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - /root/docker/nginx/html:/usr/share/nginx/html
     ports:
       - 80:80
     networks:
@@ -60,7 +60,7 @@ services:
     environment:
       TZ: Asia/Shanghai
     volumes:
-      - e:/data/docker/redis:/data
+      - /root/docker/redis:/data
     restart: on-failure
     ports:
       - 6379:6379
@@ -76,7 +76,7 @@ services:
     networks:
       - cdp-net
     volumes:
-      - e:/data/docker/logs/cdp:/logs
+      - /root/docker/logs/cdp:/logs
     ports:
       - 51000:51000
 
@@ -90,7 +90,7 @@ services:
     environment:
       spring.cloud.config.server.native.search-locations: file:/cdp-config
     volumes:
-      - e:/data/docker/logs/cdp:/logs
+      - /root/docker/logs/cdp:/logs
       - D:/Source/myproject/cdp/cdp-cloud/cdp-config:/cdp-config
     networks:
       - cdp-net
@@ -106,7 +106,7 @@ services:
     ports:
       - 9000:9000
     volumes:
-      - e:/data/docker/logs/cdp:/logs
+      - /root/docker/logs/cdp:/logs
     networks:
       - cdp-net
     depends_on:
@@ -121,7 +121,7 @@ services:
     ports:
       - 51400:51400
     volumes:
-      - e:/data/docker/logs/cdp:/logs
+      - /root/docker/logs/cdp:/logs
     networks:
       - cdp-net
     depends_on:
@@ -135,7 +135,7 @@ services:
     hostname: cdp-platformserver
     restart: on-failure
     volumes:
-      - e:/data/docker/logs/cdp:/logs
+      - /root/docker/logs/cdp:/logs
     ports:
       - 51500:51500
     networks:
@@ -151,7 +151,7 @@ services:
     hostname: cdp-adminserver
     restart: on-failure
     volumes:
-      - e:/data/docker/logs/cdp:/logs
+      - /root/docker/logs/cdp:/logs
     ports:
       - 51700:51700
     networks:
@@ -165,7 +165,7 @@ services:
     hostname: cdp-sleuthserver
     restart: on-failure
     volumes:
-      - e:/data/docker/logs/cdp:/logs
+      - /root/docker/logs/cdp:/logs
     ports:
       - 52100:52100
     networks:

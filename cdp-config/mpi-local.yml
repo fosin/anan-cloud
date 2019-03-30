@@ -41,7 +41,7 @@ cdp:
     title: ${spring.application.name}
     description: ${info.description}
     version: ${info.version}
-    base-package: com.xingyj
+    base-package: com.github.fosin.mpi
     authorization:
       name: Oauth2.0 Authorization
       keyName: Authorization
@@ -53,3 +53,10 @@ cdp:
     disableHttpBasic: true
     blackWhiteList:
     - path: /**/v2/api-docs
+security:
+  oauth2:
+    client:
+      client-id: appServer
+      client-secret: appServer
+      access-token-uri: http://cdp-authserver:51400/oauth/token
+      grant-type: client_credentials
