@@ -1,7 +1,7 @@
 package com.github.fosin.cdp.platform.repository;
 
 import com.github.fosin.cdp.jpa.repository.IJpaRepository;
-import com.github.fosin.cdp.platformapi.entity.CdpOrganizationAuthEntity;
+import com.github.fosin.cdp.platform.entity.CdpOrganizationAuthEntity;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
 

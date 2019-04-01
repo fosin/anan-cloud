@@ -1,8 +1,8 @@
 package com.github.fosin.cdp.platform.service;
 
-import com.github.fosin.cdp.platformapi.dto.request.CdpOrganizationAuthCreateDto;
+import com.github.fosin.cdp.platform.dto.request.CdpOrganizationAuthCreateDto;
 import com.github.fosin.cdp.platform.dto.request.CdpPayOrderCreateDto;
-import com.github.fosin.cdp.platformapi.entity.CdpOrganizationAuthEntity;
+import com.github.fosin.cdp.platform.entity.CdpOrganizationAuthEntity;
 import com.github.fosin.cdp.platform.entity.CdpPayOrderEntity;
 import com.github.fosin.cdp.platform.entity.CdpVersionEntity;
 import com.github.fosin.cdp.platform.repository.CdpOrganizationAuthRepository;

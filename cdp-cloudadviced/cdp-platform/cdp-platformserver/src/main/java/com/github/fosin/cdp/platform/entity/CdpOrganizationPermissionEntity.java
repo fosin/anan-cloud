@@ -1,4 +1,4 @@
-package com.github.fosin.cdp.platformapi.entity;
+package com.github.fosin.cdp.platform.entity;
 
 import com.github.fosin.cdp.jpa.entity.AbstractOrganizIdCreateJpaEntity;
 import io.swagger.annotations.ApiModel;

@@ -1,4 +1,4 @@
-package com.github.fosin.cdp.platformapi.dto.request;
+package com.github.fosin.cdp.platform.dto.request;
 
 import java.util.Date;
 import io.swagger.annotations.ApiModel;
