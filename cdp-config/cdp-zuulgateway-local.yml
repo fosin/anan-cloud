@@ -19,9 +19,9 @@ zuul:
       path: /gateway/**
       serviceId: cdp-zuulgateway
       retryable: true
-    mpi:
+    cdp-mpi:
       path: /mpi/**
-      serviceId: mpi
+      serviceId: cdp-mpi
       retryable: true
 #  semaphore:
 #    max-semaphores: 100
@@ -51,7 +51,7 @@ zuul:
 #          - user
 #          - origin
           - url
-      mpi: #特定的路由
+      cdp-mpi: #特定的路由
         limit: 15 #可选- 每个刷新时间窗口对应的请求数量限制
         quota: 15 #可选-  每个刷新时间窗口对应的请求时间限制（秒）
         refresh-interval: 1 # 刷新时间窗口的时间，默认值 (秒)

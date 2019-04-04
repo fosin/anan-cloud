@@ -20,9 +20,9 @@ services:
     networks:
       - cdp-net
 
-  cdp-rabbitmq1:
-    container_name: cdp-rabbitmq1
-    hostname: cdp-rabbitmq1
+  cdp-rabbitmq:
+    container_name: cdp-rabbitmq
+    hostname: cdp-rabbitmq
     image: rabbitmq:3-management
     environment:
       RABBITMQ_ERLANG_COOKIE: SWQOKODSQALRPCLNMEQG
@@ -39,10 +39,10 @@ services:
     networks:
       - cdp-net
 
-  cdp-nginx1:
-    container_name: cdp-nginx1
+  cdp-nginx:
+    container_name: cdp-nginx
     image: nginx
-    hostname: cdp-nginx1
+    hostname: cdp-nginx
     environment:
       TZ: Asia/Shanghai
     volumes:
@@ -53,10 +53,10 @@ services:
     networks:
       - cdp-net
 
-  cdp-redis1:
+  cdp-redis:
     image: redis:4.0
-    container_name: cdp-redis1
-    hostname: cdp-redis1
+    container_name: cdp-redis
+    hostname: cdp-redis
     environment:
       TZ: Asia/Shanghai
     volumes:
@@ -96,7 +96,7 @@ services:
       - cdp-net
     depends_on:
       - cdp-eurekaserver
-      - cdp-rabbitmq1
+      - cdp-rabbitmq
 
   cdp-zuulgateway:
     image: registry.cn-hangzhou.aliyuncs.com/fosin/cdp-zuulgateway:1.0.0-SNAPSHOT
@@ -126,7 +126,7 @@ services:
       - cdp-net
     depends_on:
       - cdp-configserver
-      - cdp-redis1
+      - cdp-redis
       - cdp-mysql-platform
 
   cdp-platformserver:
@@ -142,7 +142,7 @@ services:
       - cdp-net
     depends_on:
       - cdp-configserver
-      - cdp-redis1
+      - cdp-redis
       - cdp-mysql-platform
 
   cdp-adminserver:
@@ -177,3 +177,7 @@ services:
 networks:
   cdp-net:
     driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.28.0.0/16

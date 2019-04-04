@@ -28,8 +28,8 @@ spring:
     database: 10
 #    cluster:
 #      max-redirects:  # （普通集群，不使用则不用开启）在群集中执行命令时要遵循的最大重定向数目。
-#      nodes: cdp-redis1:6379 # （普通集群，不使用则不用开启）以逗号分隔的“主机：端口”对列表进行引导。
-    host: cdp-redis1
+#      nodes: cdp-redis:6379 # （普通集群，不使用则不用开启）以逗号分隔的“主机：端口”对列表进行引导。
+    host: cdp-redis
     port: 6379
     password: '{cipher}AQAf9K0s8zLVaIk44+wqpHGuHsHEK5G4KKu1vk0HwxlojaYQHRkNsFhdQwmcrnkayWpGmNZezJCVb56JJTYL0wOus7L+zUIRWG0YIBzZBzG0iAX/6fQ0l7EVc6JyYmksGi6czSWhhAYvaJ2zupxU5pMou+k48ILP1MSZ+2n/mmM2OA/msXzum7hhSbuHKHkazorFlYLem2efeU0M61xWGRgzHAJ6pOxWGJx2NepgFDGLSTpDiqRTXD98AabHa28X8TpBbFynDONrU3mueuW/TSrXOlzp2LOO/cDbYGpZXAc/jypbH8SWfkSQlQrWaKBg2FJ8DYg/hUnxfSy+QbzyeGkPfJAcrDZ+9lhluKJ2RplT9bAedAWmvzPu2cJCQuf/RmM='
   session:
