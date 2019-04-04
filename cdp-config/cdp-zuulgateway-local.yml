@@ -1,0 +1,160 @@
+zuul:
+  add-host-header: true
+  add-proxy-headers: true
+  sensitiveHeaders:   #Cookie,Set-Cookie,Authorization   blacklist，如果不过滤，则须显式设为空。
+  retryable: true #默认启用重试
+  ignored-services: '*'
+#  strip-prefix: true #是否移除代理前缀
+#  prefix: /zuul #为所有http请求前增加/zuul前缀
+  routes:
+    cdp-platformserver:
+      path: /platform/**
+      serviceId: cdp-platformserver
+      retryable: true
+    cdp-authserver:
+      path: /auth/**
+      serviceId: cdp-authserver
+      retryable: true
+    cdp-zuulgateway:
+      path: /gateway/**
+      serviceId: cdp-zuulgateway
+      retryable: true
+    cdp-mpi:
+      path: /mpi/**
+      serviceId: cdp-mpi
+      retryable: true
+#  semaphore:
+#    max-semaphores: 100
+#  ribbon-isolation-strategy: THREAD
+#  thread-pool:
+#    use-separate-thread-pools: true
+#    thread-pool-key-prefix: zuulgw
+  ratelimit:
+    key-prefix: zuulgateway #对应用来标识请求的key的前缀
+    enabled: true
+#    repository: IN_MEMORY #对应存储类型（用来存储统计信息）,可选值REDIS、IN_MEMORY、JPA、CONSUL,默认IN_MEMORY
+    behind-proxy: true #代理之后
+    default-policy: #可选 - 针对所有的路由配置的策略，除非特别配置了policies
+      limit: 60 #可选 - 每个刷新时间窗口对应的请求数量限制
+      quota: 60 #可选-  每个刷新时间窗口对应的请求时间限制（秒）
+      refresh-interval: 3 # 刷新时间窗口的时间，默认值 (秒)
+      type: #可选 限流方式
+#        - user #用户粒度
+#        - origin #ORIGIN粒度 (用户请求的origin作为粒度控制)
+        - url #接口粒度 (请求接口的地址作为粒度控制)
+    policies:
+      cdp-platformserver: #特定的路由
+        limit: 10 #可选- 每个刷新时间窗口对应的请求数量限制
+        quota: 10 #可选-  每个刷新时间窗口对应的请求时间限制（秒）
+        refresh-interval: 1 # 刷新时间窗口的时间，默认值 (秒)
+        type: #可选 限流方式
+#          - user
+#          - origin
+          - url
+      cdp-mpi: #特定的路由
+        limit: 15 #可选- 每个刷新时间窗口对应的请求数量限制
+        quota: 15 #可选-  每个刷新时间窗口对应的请求时间限制（秒）
+        refresh-interval: 1 # 刷新时间窗口的时间，默认值 (秒)
+        type: #可选 限流方式
+        - url
+  host:
+    connect-timeout-millis: 60000
+    socket-timeout-millis: 60000
+#spring:
+#  redis:
+#    host: 192.168.137.155
+#    port: 6379
+#    password: local
+#    timeout: 10000
+#    pool:
+#      max-active: -1
+#      max-wait: -1
+#      max-idle: 8
+#      min-idle: 0
+ribbon:
+  OkToRetryOnAllOperations: false #对所有操作请求都进行重试,默认false
+  ReadTimeout: 5000   #负载均衡超时时间，默认值5000
+  ConnectTimeout: 2000 #ribbon请求连接的超时时间，默认值2000
+  MaxAutoRetries: 0     #对当前实例的重试次数，默认0
+  MaxAutoRetriesNextServer: 1 #对切换实例的重试次数，默认1
+hystrix:
+  #  threadpool:
+  #    default:
+  #      coreSize: 50
+  #      maximumSize: 10000
+  #      allowMaximumSizeToDivergeFromCoreSize: true
+  #      maxQueueSize: -1
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 60000
+      timeout:
+        enabled: false
+      circuitBreaker:
+        requestVolumeThreshold: 20 #当在配置时间窗口内达到此数量的失败后，进行短路。默认20个
+        sleepWindowInMilliseconds: 5 #短路多久以后开始尝试是否恢复，默认5s
+        errorThresholdPercentage: 50% #出错百分比阈值，当达到此阈值后，开始短路。默认50%
+
+##禁用自定义过滤器ThrowExceptionFilter
+#zuul.ThrowExceptionFilter.pre.disable=true
+#security:
+#  sessions: stateless
+#  oauth2:
+#    client:
+#      client-id: cdp
+#      client-secret: local
+##      access-token-uri: http://localhost:9000/auth/oauth/token
+##      user-authorization-uri: http://localhost:9000/auth/oauth/authorize
+#      access-token-uri: http://localhost:51400/oauth/token
+#      user-authorization-uri: http://localhost:51400/oauth/authorize
+##      auto-approve-scopes:
+##      pre-established-redirect-uri: http://${security.user.name}:${security.user.password}@${eureka.instance.hostname}:${server.port}/
+##      token-name:
+##      refresh-token-validity-seconds:
+##      access-token-validity-seconds:
+##      scope:
+#      authorized-grant-types: authorization_code
+##      use-current-uri: false
+##      registered-redirect-uri: http://localhost:9000/platform/login
+##      client-authentication-scheme: form
+cdp:
+  swagger:
+    enabled: true
+    title: ${spring.application.name}
+    description: ${info.description}
+    version: ${info.version}
+    base-package: com.github.fosin.cdp.zuulgateway
+    authorization:
+      name: Oauth2.0 Authorization
+      keyName: Authorization
+    #      authRegex: ^[^/oauth/token]$
+    contact:
+      name: fosin
+      email: 28860823@qq.com
+    ignoreResourceNames:
+      - cdp-zuulgateway
+  oauth2:
+    disablecsrf: true
+    disableHttpBasic: true
+    cors:
+      allowedOrigins: '*'
+      allowedMethods: '*'
+      allowedHeaders: '*'
+      allowCredentials: true
+    blackWhiteList:
+    - path: /**/oauth/**
+    - path: /**/*.js
+    - path: /**/*.html
+    - path: /**/*.css
+    - path: /hystrix
+    - path: /hystrix.stream
+    - path: /hystrix/**
+    - path: /**/webjars/**
+#    - path: /**/springfox-swagger-ui/**
+    - path: /**/swagger-resources/**
+    - path: /**/v2/api-docs
+    - path: /**/third-party/**
+    - path: /**/api/**
+    - path: /**/images/**

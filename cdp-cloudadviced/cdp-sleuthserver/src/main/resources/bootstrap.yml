@@ -1,5 +1,5 @@
 server:
-  port: 2100
+  port: 52100
 eureka:
   client:
     service-url:
@@ -34,7 +34,7 @@ spring:
       profile: @profileActive@
       enabled: true
   rabbitmq:
-    addresses: @spring.rabbitmq.address@
+    addresses: @spring.rabbitmq.addresses@
     username: @spring.rabbitmq.username@
     password: @spring.rabbitmq.password@
   jackson: #该参数一定要放bootstrap中，而放application.yml或者后面的配置文件都不能生效

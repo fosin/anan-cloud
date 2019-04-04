@@ -1,7 +1,6 @@
 package com.github.fosin.cdp.platform.service;
 
 import com.github.fosin.cdp.jpa.service.batch.IUpdateInBatchJpaService;
-import com.github.fosin.cdp.jpa.util.JpaUtil;
 import com.github.fosin.cdp.platform.dto.request.CdpOrganizationPermissionUpdateDto;
 import com.github.fosin.cdp.platform.entity.CdpOrganizationPermissionEntity;
 import com.github.fosin.cdp.platform.repository.CdpOrganizationPermissionRepository;

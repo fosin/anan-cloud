@@ -11,7 +11,7 @@ import com.github.fosin.cdp.platformapi.dto.request.CdpDictionaryDetailCreateDto
 import com.github.fosin.cdp.platformapi.dto.request.CdpDictionaryDetailRetrieveDto;
 import com.github.fosin.cdp.platformapi.dto.request.CdpDictionaryDetailUpdateDto;
 import com.github.fosin.cdp.platformapi.entity.CdpDictionaryDetailEntity;
-import com.github.fosin.cdp.platformapi.service.inter.IDictionaryDetailService;
+import com.github.fosin.cdp.platform.service.inter.IDictionaryDetailService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;

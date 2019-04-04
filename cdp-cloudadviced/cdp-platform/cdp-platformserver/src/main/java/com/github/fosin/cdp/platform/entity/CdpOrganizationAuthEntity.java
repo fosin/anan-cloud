@@ -1,14 +1,17 @@
 package com.github.fosin.cdp.platform.entity;
 
-import java.util.Date;
 import com.github.fosin.cdp.jpa.entity.AbstractOrganizIdCreateJpaEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.DynamicUpdate;
-import javax.persistence.*;
+
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.io.Serializable;
-import lombok.Data;
 /**
  * 系统机构授权表(CdpOrganizationAuth)实体类
  *

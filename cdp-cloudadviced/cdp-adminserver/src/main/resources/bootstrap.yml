@@ -1,11 +1,12 @@
 server:
-  port: 1700
+  port: 51700
 eureka:
   client:
     service-url:
       defaultZone: @eureka.client.service-url.defaultZone@
   instance:
     prefer-ip-address: true
+#    metadata-map: #用于SBA认证
 #    instance-id: http://${spring.cloud.client.ipAddress}:${server.port}
 spring:
   profiles:
@@ -30,7 +31,7 @@ spring:
       profile: @profileActive@
       enabled: true
   rabbitmq:
-    addresses: @spring.rabbitmq.address@
+    addresses: @spring.rabbitmq.addresses@
     username: @spring.rabbitmq.username@
     password: @spring.rabbitmq.password@
   jackson: #该参数一定要放bootstrap中，而放application.yml或者后面的配置文件都不能生效

@@ -1,5 +1,5 @@
 server:
-  port: 1100
+  port: 51100
 eureka:
   client:
     service-url:
@@ -26,7 +26,6 @@ spring:
         encrypt:
           enabled: true
         native:
-#          search-locations: file:@project.parent.parent.basedir@\\cdp-config\\local 相对路径方案尚未找到解决方法
           search-locations: @spring.cloud.config.server.native.search-locations@
         git:
           uri: @spring.cloud.config.server.git.uri@
@@ -38,7 +37,7 @@ spring:
           password: @spring.cloud.config.server.svn.password@
         default-label: @profileActive@
   rabbitmq:
-    addresses: @spring.rabbitmq.address@
+    addresses: @spring.rabbitmq.addresses@
     username: @spring.rabbitmq.username@
     password: @spring.rabbitmq.password@
   jackson: #该参数一定要放bootstrap中，而放application.yml或者后面的配置文件都不能生效

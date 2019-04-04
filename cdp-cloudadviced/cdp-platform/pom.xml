@@ -12,11 +12,6 @@
     <artifactId>cdp-platform</artifactId>
     <dependencies>
         <dependency>
-            <groupId>${cdp.groupId}</groupId>
-            <artifactId>cdp-platformapi</artifactId>
-            <version>${cdp-platformapi.version}</version>
-        </dependency>
-        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-rest</artifactId>
         </dependency>

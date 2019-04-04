@@ -8,6 +8,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 
@@ -20,6 +23,8 @@ import java.util.HashMap;
 @Slf4j
 public class CdpAuthenticationProvider implements AuthenticationProvider {
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
     private UserDetailsService userDetailsService;
@@ -34,22 +39,32 @@ public class CdpAuthenticationProvider implements AuthenticationProvider {
     public Authentication authenticate(Authentication authentication) {
         String username = authentication.getName();
         Object credentials = authentication.getCredentials();
-        Object details = authentication.getDetails();
-        if (details instanceof HashMap) {
-            HashMap<String, Object> map = (HashMap<String, Object>) details;
-            String randomStr = map.get("randomStr")+"";
-            String code = map.get("code")+"";
-            if (!randomStr.equals(code)) {
-                throw new BadCredentialsException("验证码错误");
-            }
+//        Object details = authentication.getDetails();
+//        if (details instanceof HashMap) {
+//            HashMap<String, Object> map = (HashMap<String, Object>) details;
+//            String randomStr = map.get("randomStr")+"";
+//            String code = map.get("code")+"";
+//            if (!randomStr.equals(code)) {
+//                throw new BadCredentialsException("验证码错误");
+//            }
+//
+//        }
 
-        }
         String password = credentials == null ? null : credentials.toString();
 
         log.info("start validate user {} login", username);
 
         // 通过用户名和密码校验，如果校验不通过会抛出 AuthenticationException
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+        if (userDetails == null) {
+            throw new UsernameNotFoundException("Invalid username/password");
+        }
+
+        if (!passwordEncoder.matches(password, userDetails.getPassword())) {
+            throw new BadCredentialsException("Bad password");
+        }
+
+
         return new UsernamePasswordAuthenticationToken(username, password, userDetails.getAuthorities());
     }
 

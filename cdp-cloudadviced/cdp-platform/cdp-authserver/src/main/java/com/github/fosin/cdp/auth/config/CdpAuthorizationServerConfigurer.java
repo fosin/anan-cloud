@@ -66,17 +66,26 @@ public class CdpAuthorizationServerConfigurer extends AuthorizationServerConfigu
      * 配置身份认证器，配置认证方式，TokenStore，TokenGranter，OAuth2RequestFactory
      *
      * @param endpoints
+     * @throws Exception
      */
     @Override
-    public void configure(AuthorizationServerEndpointsConfigurer endpoints) {
+    public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
+
         endpoints.tokenStore(redisTokenStore())
                 .tokenEnhancer(tokenEnhancer())
                 .userDetailsService(userDetailsService)
                 .authenticationManager(authenticationManager)
+//                .authenticationManager(new AuthenticationManager() {
+//                    @Override
+//                    public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+//                        return authenticationProvider().authenticate(authentication);
+//                    }
+//                })
                 .tokenServices(defaultTokenServices())
                 //目前spring提供了内存和数据库两种方式存储授权码Authentication code，
                 // 要实现多个实例之间共享可以选在将AuthenTicationCode存储在数据中
-                .authorizationCodeServices(authorizationCodeServices());
+                .authorizationCodeServices(authorizationCodeServices())
+        ;
     }
 
     /**
@@ -85,9 +94,10 @@ public class CdpAuthorizationServerConfigurer extends AuthorizationServerConfigu
      * 配置oauth认证安全策略 从表单提交经过OAuth认证
      *
      * @param security
+     * @throws Exception
      */
     @Override
-    public void configure(AuthorizationServerSecurityConfigurer security) {
+    public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
         security
                 //url:/oauth/token_key,exposes public key for token verification if using JWT tokens
                 .tokenKeyAccess("permitAll()")

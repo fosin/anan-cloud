@@ -6,7 +6,6 @@ import com.github.fosin.cdp.platform.dto.request.CdpOrganizationAuthRetrieveDto;
 import com.github.fosin.cdp.platform.dto.request.CdpOrganizationAuthUpdateDto;
 import com.github.fosin.cdp.platform.entity.CdpOrganizationAuthEntity;
 import com.github.fosin.cdp.platformapi.dto.RegisterDto;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 

@@ -16,8 +16,8 @@ import com.github.fosin.cdp.platformapi.dto.request.CdpUserCreateDto;
 import com.github.fosin.cdp.platformapi.dto.request.CdpUserRegisterDto;
 import com.github.fosin.cdp.platformapi.entity.CdpOrganizationEntity;
 import com.github.fosin.cdp.platformapi.entity.CdpUserEntity;
-import com.github.fosin.cdp.platformapi.service.inter.IOrganizationService;
-import com.github.fosin.cdp.platformapi.service.inter.IUserService;
+import com.github.fosin.cdp.platform.service.inter.IOrganizationService;
+import com.github.fosin.cdp.platform.service.inter.IUserService;
 import com.github.fosin.cdp.util.DateTimeUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -144,6 +144,9 @@ public class CdpOrganizationAuthServiceImpl implements ICdpOrganizationAuthServi
 
         return true;
     }
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     private String getAuthCode(CdpOrganizationAuthCreateDto auth) {
         return passwordEncoder.encode(auth.toString());
