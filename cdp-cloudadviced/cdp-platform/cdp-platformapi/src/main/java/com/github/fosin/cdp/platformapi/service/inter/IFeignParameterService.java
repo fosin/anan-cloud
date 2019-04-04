@@ -7,7 +7,7 @@ import com.github.fosin.cdp.platformapi.service.FeignParameterFallbackServiceImp
 import com.github.fosin.cdp.platformapi.dto.request.CdpParameterCreateDto;
 import com.github.fosin.cdp.platformapi.dto.request.CdpParameterUpdateDto;
 import com.github.fosin.cdp.platformapi.entity.CdpParameterEntity;
-import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

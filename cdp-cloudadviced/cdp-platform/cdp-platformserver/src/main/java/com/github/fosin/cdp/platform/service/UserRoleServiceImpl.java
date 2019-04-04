@@ -1,21 +1,20 @@
-package com.github.fosin.cdp.platformapi.service;
+package com.github.fosin.cdp.platform.service;
 
 
 import com.github.fosin.cdp.cache.util.CacheUtil;
 import com.github.fosin.cdp.core.exception.CdpUserOrPassInvalidException;
 import com.github.fosin.cdp.jpa.repository.IJpaRepository;
+import com.github.fosin.cdp.platform.repository.UserRoleRepository;
+import com.github.fosin.cdp.platform.service.inter.IUserRoleService;
+import com.github.fosin.cdp.platform.service.inter.IUserService;
 import com.github.fosin.cdp.platformapi.constant.TableNameConstant;
 import com.github.fosin.cdp.platformapi.dto.request.CdpUserRoleCreateDto;
 import com.github.fosin.cdp.platformapi.entity.CdpRoleEntity;
 import com.github.fosin.cdp.platformapi.entity.CdpUserEntity;
 import com.github.fosin.cdp.platformapi.entity.CdpUserRoleEntity;
-import com.github.fosin.cdp.platformapi.repository.UserRoleRepository;
-import com.github.fosin.cdp.platformapi.service.inter.IUserRoleService;
-import com.github.fosin.cdp.platformapi.service.inter.IUserService;
 import com.github.fosin.cdp.platformapi.util.LoginUserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,6 +39,7 @@ public class UserRoleServiceImpl implements IUserRoleService {
     private IUserService userService;
     @Autowired
     private PasswordEncoder passwordEncoder;
+
     @Override
     public List<CdpUserRoleEntity> findByUserId(Long userId) {
         return userRoleRepository.findByUserId(userId);

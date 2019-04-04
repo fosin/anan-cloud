@@ -1,19 +1,18 @@
-package com.github.fosin.cdp.platformapi.service;
+package com.github.fosin.cdp.platform.service;
 
 
 import com.github.fosin.cdp.jpa.repository.IJpaRepository;
+import com.github.fosin.cdp.platform.repository.OrganizationRepository;
+import com.github.fosin.cdp.platform.repository.RoleRepository;
+import com.github.fosin.cdp.platform.repository.UserRoleRepository;
+import com.github.fosin.cdp.platform.service.inter.IRoleService;
 import com.github.fosin.cdp.platformapi.dto.request.CdpRoleCreateDto;
 import com.github.fosin.cdp.platformapi.dto.request.CdpRoleUpdateDto;
 import com.github.fosin.cdp.platformapi.entity.*;
-import com.github.fosin.cdp.platformapi.repository.OrganizationRepository;
-import com.github.fosin.cdp.platformapi.repository.RoleRepository;
-import com.github.fosin.cdp.platformapi.repository.UserRoleRepository;
-import com.github.fosin.cdp.core.exception.CdpServiceException;
 import com.github.fosin.cdp.mvc.module.PageModule;
 import com.github.fosin.cdp.mvc.result.Result;
 import com.github.fosin.cdp.mvc.result.ResultUtils;
 import com.github.fosin.cdp.platformapi.constant.SystemConstant;
-import com.github.fosin.cdp.platformapi.service.inter.IRoleService;
 import com.github.fosin.cdp.platformapi.util.LoginUserUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;

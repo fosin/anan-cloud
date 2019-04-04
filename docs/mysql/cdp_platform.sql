@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 5.7.25, for Linux (x86_64)
 --
--- Host: localhost    Database: cdp_platform
+-- Host: localhost    Database: cdp_platform2
 -- ------------------------------------------------------
 -- Server version	5.7.25
 
@@ -16,12 +16,12 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Current Database: `cdp_platform`
+-- Current Database: `cdp_platform2`
 --
 
-CREATE DATABASE /*!32312 IF NOT EXISTS*/ `cdp_platform` /*!40100 DEFAULT CHARACTER SET utf8 */;
+CREATE DATABASE /*!32312 IF NOT EXISTS*/ `cdp_platform2` /*!40100 DEFAULT CHARACTER SET utf8 */;
 
-USE `cdp_platform`;
+USE `cdp_platform2`;
 
 --
 -- Table structure for table `cdp_dictionary`
@@ -43,7 +43,7 @@ CREATE TABLE `cdp_dictionary` (
   `update_by` int(11) unsigned NOT NULL COMMENT '修改人',
   `update_time` datetime NOT NULL COMMENT '修改日期',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=140 DEFAULT CHARSET=utf8mb4 COMMENT='系统通用字典表';
+  ) ENGINE=InnoDB AUTO_INCREMENT=140 DEFAULT CHARSET=utf8mb4 COMMENT='系统通用字典表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -84,7 +84,7 @@ CREATE TABLE `cdp_dictionary_detail` (
   UNIQUE KEY `idx_cdp_dictionarydetail_dictionaryid_name` (`name`,`dictionary_id`),
   KEY `fk_cdp_dictionary_ref_detail` (`dictionary_id`),
   CONSTRAINT `fk_cdp_dictionary_ref_detail` FOREIGN KEY (`dictionary_id`) REFERENCES `cdp_dictionary` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4545 DEFAULT CHARSET=utf8mb4 COMMENT='系统通用字典明细表';
+  ) ENGINE=InnoDB AUTO_INCREMENT=4545 DEFAULT CHARSET=utf8mb4 COMMENT='系统通用字典明细表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -121,7 +121,7 @@ CREATE TABLE `cdp_organization` (
   `update_by` int(11) unsigned NOT NULL COMMENT '修改人',
   PRIMARY KEY (`id`),
   UNIQUE KEY `idx_cdp_organization_code` (`code`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COMMENT='系统机构表';
+  ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COMMENT='系统机构表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -156,7 +156,7 @@ CREATE TABLE `cdp_organization_auth` (
   `tryout` tinyint(4) NOT NULL COMMENT '是否试用：0=不试用 1=试用',
   `tryout_days` tinyint(4) NOT NULL COMMENT '试用天数',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COMMENT='系统机构授权表';
+  ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COMMENT='系统机构授权表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -187,7 +187,7 @@ CREATE TABLE `cdp_organization_permission` (
   KEY `fk_cdp_permission_organization` (`permission_id`),
   CONSTRAINT `fk_cdp_organization_permission` FOREIGN KEY (`organiz_id`) REFERENCES `cdp_organization` (`id`),
   CONSTRAINT `fk_cdp_permission_organization` FOREIGN KEY (`permission_id`) REFERENCES `cdp_permission` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=438 DEFAULT CHARSET=utf8mb4 COMMENT='系统机构权限表';
+  ) ENGINE=InnoDB AUTO_INCREMENT=438 DEFAULT CHARSET=utf8mb4 COMMENT='系统机构权限表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -227,7 +227,7 @@ CREATE TABLE `cdp_parameter` (
   `deleted` tinyint(4) NOT NULL DEFAULT '0' COMMENT '删除标志(0=未删除 1=已删除)，该值由后台维护，默认为0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `idx_cdp_parameter_type_code_key` (`name`,`type`,`scope`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COMMENT='用于存放各种分类分组的个性化参数';
+  ) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COMMENT='用于存放各种分类分组的个性化参数';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -261,7 +261,7 @@ CREATE TABLE `cdp_pay` (
   `pay_time` datetime NOT NULL COMMENT '付款日期',
   `pay_flag` tinyint(4) NOT NULL COMMENT '付款标志：0=未付款，1=分期，2=付全款',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='系统支付表';
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='系统支付表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -286,7 +286,7 @@ CREATE TABLE `cdp_pay_detail` (
   `payway` tinyint(4) NOT NULL COMMENT '付款方式',
   `money` decimal(12,2) NOT NULL COMMENT '付款金额',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='系统支付明细表';
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='系统支付明细表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -312,7 +312,7 @@ CREATE TABLE `cdp_pay_invoice` (
   `invoce_time` datetime NOT NULL COMMENT '出票时间',
   `crreate_by` int(10) unsigned NOT NULL COMMENT '操作人',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='系统支付发票表';
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='系统支付发票表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -343,7 +343,7 @@ CREATE TABLE `cdp_pay_order` (
   `cancle_time` datetime DEFAULT NULL COMMENT '取消日期',
   `invalid_time` datetime DEFAULT NULL COMMENT '作废日期',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='系统支付订单表';
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='系统支付订单表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -382,7 +382,7 @@ CREATE TABLE `cdp_permission` (
   `update_by` int(11) unsigned NOT NULL COMMENT '修改人',
   PRIMARY KEY (`id`),
   UNIQUE KEY `unique_cdp_perimission_code` (`code`)
-) ENGINE=InnoDB AUTO_INCREMENT=134 DEFAULT CHARSET=utf8mb4 COMMENT='包含菜单、按钮两种权限';
+  ) ENGINE=InnoDB AUTO_INCREMENT=134 DEFAULT CHARSET=utf8mb4 COMMENT='包含菜单、按钮两种权限';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -416,7 +416,7 @@ CREATE TABLE `cdp_role` (
   `built_in` tinyint(4) NOT NULL DEFAULT '0' COMMENT '内置标志：是否是系统内置角色，内置角色不能被用户删除和修改，0=不是 1=是',
   PRIMARY KEY (`id`),
   UNIQUE KEY `uk_cdp_role_organizid_value` (`value`,`organiz_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COMMENT='系统角色表';
+  ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COMMENT='系统角色表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -447,7 +447,7 @@ CREATE TABLE `cdp_role_permission` (
   KEY `fk_cdp_role_rolepermission` (`role_id`),
   CONSTRAINT `fk_cdp_permission_rolepermission` FOREIGN KEY (`permission_id`) REFERENCES `cdp_permission` (`id`),
   CONSTRAINT `fk_cdp_role_rolepermission` FOREIGN KEY (`role_id`) REFERENCES `cdp_role` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3604 DEFAULT CHARSET=utf8mb4 COMMENT='系统角色权限表';
+  ) ENGINE=InnoDB AUTO_INCREMENT=3604 DEFAULT CHARSET=utf8mb4 COMMENT='系统角色权限表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -486,7 +486,7 @@ CREATE TABLE `cdp_user` (
   `expire_time` datetime NOT NULL COMMENT '过期时间，账户过期后用户被锁定切不能登录系统',
   PRIMARY KEY (`id`),
   UNIQUE KEY `uk_cdp_user_usercode` (`usercode`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COMMENT='系统用户表';
+  ) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COMMENT='系统用户表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -495,7 +495,7 @@ CREATE TABLE `cdp_user` (
 
 LOCK TABLES `cdp_user` WRITE;
 /*!40000 ALTER TABLE `cdp_user` DISABLE KEYS */;
-INSERT INTO `cdp_user` VALUES (1,0,'super','超级管理员','$2a$10$mEX4ma07reEOJR3VMI3SBeHoXjc2ziuSWP4EdDkXHYt9nmWknPMR.','1982-01-01',1,'28860823@qq.com','13639003908',0,'mavatar','2017-06-20 15:12:16',1,'2018-12-01 12:47:49',1,'2050-12-31 23:59:59'),(2,1,'admin','管理员','$2a$10$cKRbR9IJktfmKmf/wShyo.5.J8IxO/7YVn8twuWFtvPgruAF8gtKq','2018-08-06',1,'1234567890@qq.com','13666666666',0,'mavatar','2018-07-24 15:47:57',1,'2018-12-08 14:04:39',1,'2050-12-31 23:59:59'),(3,1,'user1','秦皇','$2a$10$cwE7dnLyA11PMh5hKZ1uy.J0a6RYYnf42nKGleqtuKmw5C0mb1qhi','2008-07-01',1,NULL,NULL,0,'eye','2017-09-18 16:11:15',1,'2018-12-08 14:03:52',1,'2025-08-01 00:00:00'),(4,2,'user2','汉武','$2a$10$carEzsPtmYEUpt73udKYBuqNkdQ81l4AlTfJCl8TwH8fRp7761Uki','1982-01-01',1,NULL,NULL,0,'404','2017-09-21 17:09:51',1,'2018-12-08 14:12:11',2,'2050-12-31 23:59:59'),(5,2,'yandi','炎帝','$2a$10$exuC.5M08L5GDUDObsREC.41g.Cz0jhfKt7WEL9BCLL4H6O1DlSsm','2008-07-01',1,NULL,NULL,0,'example','2018-07-29 12:37:41',1,'2018-12-08 14:12:01',2,'2050-12-31 23:59:59'),(6,4,'chiyou','蚩尤','$2a$10$R4umSyKZClhxAMqLdbhFO.sDJhx1MTzgf1gqUqdDlL1RH.EgnOtK.','2008-07-01',1,NULL,NULL,1,'user2','2018-07-29 12:38:35',1,'2018-12-08 14:04:32',1,'2050-12-31 23:59:59'),(7,1,'yao','尧','$2a$10$LJcGM5851SkIL7nGR.hlZO4246ODCeOMT6Wq.dt/LU/asMXG5t9Ra','2000-01-01',1,'12345667@qq.com',NULL,0,'mavatar','2018-07-29 12:39:21',1,'2018-12-16 19:46:27',1,'2050-12-31 23:59:59'),(8,4,'shun','舜','$2a$10$LAZLe3sy3tCOFuHnAs7Zq.kxfaUltE65e5jt4Si36CkWL7OWa0L6.','2018-08-01',1,NULL,NULL,0,'people','2018-08-07 16:09:53',1,'2018-12-08 14:04:11',1,'2050-12-31 23:59:59'),(9,2,'huangdi','黄帝','$2a$10$TOYdBIr4W58ALOnQVUXL8O4tw1O5Nfo7dzbkyZ/IVAADky2AC9tjW','2018-08-07',1,NULL,NULL,0,'user','2018-08-07 16:15:03',1,'2018-12-08 14:04:18',1,'2050-12-31 23:59:59'),(10,5,'yu','禹2','$2a$10$4iohZcnwFlXw.dOsf59aFehzQIs9uIP.5MUPhLwKE5zHi4yn8Dfdu','2011-12-01',1,NULL,NULL,0,'menu','2018-08-10 15:31:10',1,'2018-12-08 14:12:25',2,'2050-12-31 23:59:59'),(14,2,'10086','移动客户','$2a$10$9epIG6zMt/SiUo2Li.1bau691TwxMCdgnANFkp0kwHv98fFqv/1We','2015-11-03',2,NULL,'13238349302',0,'favatar','2018-11-28 11:39:59',7,'2018-12-08 14:04:48',1,'2050-12-31 23:59:59'),(15,3,'yaxrmyy','姚安县人民医院','$2a$10$knZPo.WV3i4Kt6KXTqwz2O2KqOZOCGvSKPtuRSGwGJYVlsvffnoji','2018-12-01',1,NULL,NULL,0,'mavatar','2018-12-20 10:25:42',1,'2018-12-20 10:25:42',1,'2050-12-31 23:59:59');
+INSERT INTO `cdp_user` VALUES (1,0,'super','超级管理员','{bcrypt}$2a$10$mEX4ma07reEOJR3VMI3SBeHoXjc2ziuSWP4EdDkXHYt9nmWknPMR.','1982-01-01',1,'28860823@qq.com','13639003908',0,'mavatar','2017-06-20 15:12:16',1,'2019-03-19 13:03:37',1,'2050-12-31 23:59:59'),(2,1,'admin','管理员','{bcrypt}$2a$10$cKRbR9IJktfmKmf/wShyo.5.J8IxO/7YVn8twuWFtvPgruAF8gtKq','2018-08-06',1,'1234567890@qq.com','13666666666',0,'mavatar','2018-07-24 15:47:57',1,'2018-12-08 14:04:39',1,'2050-12-31 23:59:59'),(3,1,'user1','秦皇','{bcrypt}$2a$10$cwE7dnLyA11PMh5hKZ1uy.J0a6RYYnf42nKGleqtuKmw5C0mb1qhi','2008-07-01',1,NULL,NULL,0,'eye','2017-09-18 16:11:15',1,'2018-12-08 14:03:52',1,'2025-08-01 00:00:00'),(4,2,'user2','汉武','{bcrypt}$2a$10$carEzsPtmYEUpt73udKYBuqNkdQ81l4AlTfJCl8TwH8fRp7761Uki','1982-01-01',1,NULL,NULL,0,'404','2017-09-21 17:09:51',1,'2018-12-08 14:12:11',2,'2050-12-31 23:59:59'),(5,2,'yandi','炎帝','{bcrypt}$2a$10$exuC.5M08L5GDUDObsREC.41g.Cz0jhfKt7WEL9BCLL4H6O1DlSsm','2008-07-01',1,NULL,NULL,0,'example','2018-07-29 12:37:41',1,'2018-12-08 14:12:01',2,'2050-12-31 23:59:59'),(6,4,'chiyou','蚩尤','{bcrypt}$2a$10$R4umSyKZClhxAMqLdbhFO.sDJhx1MTzgf1gqUqdDlL1RH.EgnOtK.','2008-07-01',1,NULL,NULL,1,'user2','2018-07-29 12:38:35',1,'2018-12-08 14:04:32',1,'2050-12-31 23:59:59'),(7,1,'yao','尧','{bcrypt}$2a$10$LJcGM5851SkIL7nGR.hlZO4246ODCeOMT6Wq.dt/LU/asMXG5t9Ra','2000-01-01',1,'12345667@qq.com',NULL,0,'mavatar','2018-07-29 12:39:21',1,'2018-12-16 19:46:27',1,'2050-12-31 23:59:59'),(8,4,'shun','舜','{bcrypt}$2a$10$LAZLe3sy3tCOFuHnAs7Zq.kxfaUltE65e5jt4Si36CkWL7OWa0L6.','2018-08-01',1,NULL,NULL,0,'people','2018-08-07 16:09:53',1,'2018-12-08 14:04:11',1,'2050-12-31 23:59:59'),(9,2,'huangdi','黄帝','{bcrypt}$2a$10$TOYdBIr4W58ALOnQVUXL8O4tw1O5Nfo7dzbkyZ/IVAADky2AC9tjW','2018-08-07',1,NULL,NULL,0,'user','2018-08-07 16:15:03',1,'2018-12-08 14:04:18',1,'2050-12-31 23:59:59'),(10,5,'yu','禹2','{bcrypt}$2a$10$4iohZcnwFlXw.dOsf59aFehzQIs9uIP.5MUPhLwKE5zHi4yn8Dfdu','2011-12-01',1,NULL,NULL,0,'menu','2018-08-10 15:31:10',1,'2018-12-08 14:12:25',2,'2050-12-31 23:59:59'),(14,2,'10086','移动客户','{bcrypt}$2a$10$9epIG6zMt/SiUo2Li.1bau691TwxMCdgnANFkp0kwHv98fFqv/1We','2015-11-03',2,NULL,'13238349302',0,'favatar','2018-11-28 11:39:59',7,'2018-12-08 14:04:48',1,'2050-12-31 23:59:59'),(15,3,'yaxrmyy','姚安县人民医院','{bcrypt}$2a$10$knZPo.WV3i4Kt6KXTqwz2O2KqOZOCGvSKPtuRSGwGJYVlsvffnoji','2018-12-01',1,NULL,NULL,0,'mavatar','2018-12-20 10:25:42',1,'2018-12-20 10:25:42',1,'2050-12-31 23:59:59');
 /*!40000 ALTER TABLE `cdp_user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -515,7 +515,7 @@ CREATE TABLE `cdp_user_permission` (
   `create_by` int(11) unsigned NOT NULL COMMENT '创建人',
   `add_mode` tinyint(3) unsigned NOT NULL COMMENT '补充方式：0=增加权限、1=删除权限',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=123 DEFAULT CHARSET=utf8mb4 COMMENT='用于增减用户的单项权限，通常实在角色的基础上增减单项权限';
+  ) ENGINE=InnoDB AUTO_INCREMENT=123 DEFAULT CHARSET=utf8mb4 COMMENT='用于增减用户的单项权限，通常实在角色的基础上增减单项权限';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -548,7 +548,7 @@ CREATE TABLE `cdp_user_role` (
   CONSTRAINT `fk_cdp_role_roleuser` FOREIGN KEY (`role_id`) REFERENCES `cdp_role` (`id`),
   CONSTRAINT `fk_cdp_use_userpermission` FOREIGN KEY (`user_id`) REFERENCES `cdp_user` (`id`),
   CONSTRAINT `fk_cdp_user_userrole` FOREIGN KEY (`user_id`) REFERENCES `cdp_user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=66 DEFAULT CHARSET=utf8mb4 COMMENT='系统用户角色表';
+  ) ENGINE=InnoDB AUTO_INCREMENT=66 DEFAULT CHARSET=utf8mb4 COMMENT='系统用户角色表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -588,7 +588,7 @@ CREATE TABLE `cdp_version` (
   `update_by` int(11) unsigned NOT NULL DEFAULT '1' COMMENT '修改人',
   `update_time` datetime NOT NULL COMMENT '修改日期',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COMMENT='系统版本表';
+  ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COMMENT='系统版本表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -619,7 +619,7 @@ CREATE TABLE `cdp_version_permission` (
   KEY `fk_cdp_version_versionpermission` (`version_id`),
   CONSTRAINT `fk_cdp_permission_versionpermission` FOREIGN KEY (`permission_id`) REFERENCES `cdp_permission` (`id`),
   CONSTRAINT `fk_cdp_version_versionpermission` FOREIGN KEY (`version_id`) REFERENCES `cdp_version` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=667 DEFAULT CHARSET=utf8mb4 COMMENT='系统版本权限表';
+  ) ENGINE=InnoDB AUTO_INCREMENT=667 DEFAULT CHARSET=utf8mb4 COMMENT='系统版本权限表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -654,7 +654,7 @@ CREATE TABLE `cdp_version_role` (
   UNIQUE KEY `uk_cdp_role_versionid_value` (`value`,`version_id`),
   KEY `fk_cdp_version_role` (`version_id`),
   CONSTRAINT `fk_cdp_version_role` FOREIGN KEY (`version_id`) REFERENCES `cdp_version` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COMMENT='系统版本角色表';
+  ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COMMENT='系统版本角色表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -685,7 +685,7 @@ CREATE TABLE `cdp_version_role_permission` (
   KEY `fk_cdp_version_role_permission` (`role_id`),
   CONSTRAINT `fk_cdp_permission_versionrolepermission` FOREIGN KEY (`permission_id`) REFERENCES `cdp_permission` (`id`),
   CONSTRAINT `fk_cdp_version_role_permission` FOREIGN KEY (`role_id`) REFERENCES `cdp_version_role` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8mb4 COMMENT='系统版本角色权限表';
+  ) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8mb4 COMMENT='系统版本角色权限表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -718,7 +718,7 @@ CREATE TABLE `clientdetails` (
   `additionalInformation` varchar(4096) DEFAULT NULL,
   `autoApproveScopes` varchar(256) DEFAULT NULL,
   PRIMARY KEY (`appId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -746,7 +746,7 @@ CREATE TABLE `oauth_access_token` (
   `authentication` blob,
   `refresh_token` varchar(256) DEFAULT NULL,
   PRIMARY KEY (`authentication_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -772,7 +772,7 @@ CREATE TABLE `oauth_approvals` (
   `status` varchar(10) DEFAULT NULL,
   `expiresAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `lastModifiedAt` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -804,7 +804,7 @@ CREATE TABLE `oauth_client_details` (
   `additional_information` varchar(4096) DEFAULT NULL,
   `autoapprove` varchar(256) DEFAULT NULL,
   PRIMARY KEY (`client_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -813,8 +813,7 @@ CREATE TABLE `oauth_client_details` (
 
 LOCK TABLES `oauth_client_details` WRITE;
 /*!40000 ALTER TABLE `oauth_client_details` DISABLE KEYS */;
-INSERT INTO `oauth_client_details` VALUES ('appServer',NULL,'appServer','all','client_credentials','','',NULL,NULL,NULL,'true'),('mobileApp',NULL,'mobileApp','app','password,refresh_token,client_credentials',NULL,'12,14,27,85',NULL,NULL,NULL,'true'),('webApp',NULL,'webApp','webApp','password,refresh_token',NULL,'',NULL,NULL,NULL,'true');
-/*!40000 ALTER TABLE `oauth_client_details` ENABLE KEYS */;
+INSERT INTO `oauth_client_details` VALUES ('appServer',NULL,'appServer','all','client_credentials','','',NULL,NULL,NULL,'true'),('mobileApp',NULL,'mobileApp','app','password,refresh_token,client_credentials',NULL,'12,14,27,85',NULL,NULL,NULL,'true'),('webApp',NULL,'webApp','webApp','password,refresh_token',NULL,'',NULL,NULL,NULL,'true');/*!40000 ALTER TABLE `oauth_client_details` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -831,7 +830,7 @@ CREATE TABLE `oauth_client_token` (
   `user_name` varchar(256) DEFAULT NULL,
   `client_id` varchar(256) DEFAULT NULL,
   PRIMARY KEY (`authentication_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -853,7 +852,7 @@ DROP TABLE IF EXISTS `oauth_code`;
 CREATE TABLE `oauth_code` (
   `code` varchar(256) DEFAULT NULL,
   `authentication` blob
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -876,7 +875,7 @@ CREATE TABLE `oauth_refresh_token` (
   `token_id` varchar(256) DEFAULT NULL,
   `token` blob,
   `authentication` blob
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -901,7 +900,7 @@ CREATE TABLE `persistent_logins` (
   `token` varchar(64) NOT NULL,
   `last_used` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`series`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -922,4 +921,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-03-19  7:40:17
+-- Dump completed on 2019-03-19  7:40:37

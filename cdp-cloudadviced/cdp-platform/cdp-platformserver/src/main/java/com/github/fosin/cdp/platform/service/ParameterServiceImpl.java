@@ -1,41 +1,44 @@
-package com.github.fosin.cdp.platformapi.service;
+package com.github.fosin.cdp.platform.service;
 
 
-import com.github.fosin.cdp.jpa.repository.IJpaRepository;
-import com.github.fosin.cdp.platformapi.dto.request.CdpParameterCreateDto;
-import com.github.fosin.cdp.platformapi.dto.request.CdpParameterUpdateDto;
-import com.github.fosin.cdp.platformapi.repository.ParameterRepository;
+import com.github.fosin.cdp.cache.util.CacheUtil;
 import com.github.fosin.cdp.core.exception.CdpServiceException;
+import com.github.fosin.cdp.jpa.repository.IJpaRepository;
 import com.github.fosin.cdp.mvc.module.PageModule;
 import com.github.fosin.cdp.mvc.result.Result;
 import com.github.fosin.cdp.mvc.result.ResultUtils;
+import com.github.fosin.cdp.platform.repository.OrganizationRepository;
+import com.github.fosin.cdp.platform.repository.ParameterRepository;
+import com.github.fosin.cdp.platform.service.inter.IParameterService;
 import com.github.fosin.cdp.platformapi.constant.TableNameConstant;
+import com.github.fosin.cdp.platformapi.dto.request.CdpParameterCreateDto;
+import com.github.fosin.cdp.platformapi.dto.request.CdpParameterUpdateDto;
+import com.github.fosin.cdp.platformapi.entity.CdpOrganizationEntity;
 import com.github.fosin.cdp.platformapi.entity.CdpParameterEntity;
 import com.github.fosin.cdp.platformapi.entity.CdpUserEntity;
-import com.github.fosin.cdp.platformapi.service.inter.IParameterService;
+import com.github.fosin.cdp.platformapi.parameter.ParameterType;
 import com.github.fosin.cdp.platformapi.util.LoginUserUtil;
-import com.github.fosin.cdp.cache.util.CacheUtil;
-import com.github.fosin.cdp.util.ClassUtil;
 import com.github.fosin.cdp.util.StringUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
-import javax.persistence.criteria.*;
-import java.util.Collection;
+import javax.persistence.criteria.Path;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 字典表服务
@@ -170,7 +173,7 @@ public class ParameterServiceImpl implements IParameterService {
         if (!finded) {
             if (type == ParameterType.Organization.getTypeValue()) {
                 Long id = Long.parseLong(scope);
-                CdpOrganizationEntity entity = organizationRepository.findOne(id);
+                CdpOrganizationEntity entity = organizationRepository.findById(id).orElse(null);
                 if (entity == null || entity.getLevel() == 0) {
                     parameter = getNearestParameter(type, null, name);
                 } else {
@@ -210,7 +213,7 @@ public class ParameterServiceImpl implements IParameterService {
 
     @Override
     @Transactional(rollbackFor = CdpServiceException.class)
-    public boolean applyChange(Long id) {
+    public Boolean applyChange(Long id) {
         CdpParameterEntity entity = parameterRepository.findById(id).orElse(null);
         Assert.notNull(entity, "该参数已经不存在!");
         String cacheKey = getCacheKey(entity);
@@ -247,7 +250,7 @@ public class ParameterServiceImpl implements IParameterService {
 
     @Override
     @Transactional(rollbackFor = CdpServiceException.class)
-    public boolean applyChanges() {
+    public Boolean applyChanges() {
         List<CdpParameterEntity> entities = parameterRepository.findByStatusNot(0);
         Assert.isTrue(entities != null && entities.size() != 0, "没有更改过任何参数，不需要发布!");
         for (CdpParameterEntity entity : entities) {

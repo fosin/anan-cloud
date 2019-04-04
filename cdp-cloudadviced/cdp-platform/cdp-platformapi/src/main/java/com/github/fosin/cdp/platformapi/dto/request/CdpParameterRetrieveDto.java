@@ -3,8 +3,8 @@ package com.github.fosin.cdp.platformapi.dto.request;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import org.hibernate.validator.constraints.NotBlank;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
@@ -24,7 +24,7 @@ public class CdpParameterRetrieveDto implements Serializable {
     private Long id;
 
     @ApiModelProperty(value = "参数键", example = "String")
-    @NotBlank(message = "参数键{org.hibernate.validator.constraints.NotBlank.message}")
+    @NotBlank(message = "参数键{javax.validation.constraints.NotBlank.message}")
     private String name;
 
     @ApiModelProperty(value = "参数值", example = "String")

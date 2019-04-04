@@ -9,6 +9,7 @@ eureka:
       gated-launch: false #灰度发布标志，默认为false，设置为true表示灰度发布的点
     prefer-ip-address: true
 #    instance-id: http://${spring.cloud.client.ipAddress}:${server.port}
+
 spring:
   profiles:
     active: @profileActive@
@@ -42,6 +43,8 @@ spring:
     user:
       name: @eureka.username@
       password: @eureka.password@
+  main:
+    allow-bean-definition-overriding: true
 encrypt:
   key-store:
     location: @encrypt.key-store.location@

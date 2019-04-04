@@ -1,16 +1,15 @@
-package com.github.fosin.cdp.platformapi.service;
-
+package com.github.fosin.cdp.platform.service;
 
 import com.github.fosin.cdp.jpa.repository.IJpaRepository;
 import com.github.fosin.cdp.mvc.module.PageModule;
 import com.github.fosin.cdp.mvc.result.Result;
 import com.github.fosin.cdp.mvc.result.ResultUtils;
+import com.github.fosin.cdp.platform.repository.OrganizationRepository;
+import com.github.fosin.cdp.platform.service.inter.IOrganizationService;
 import com.github.fosin.cdp.platformapi.constant.TableNameConstant;
 import com.github.fosin.cdp.platformapi.dto.request.CdpOrganizationCreateDto;
 import com.github.fosin.cdp.platformapi.dto.request.CdpOrganizationUpdateDto;
 import com.github.fosin.cdp.platformapi.entity.CdpOrganizationEntity;
-import com.github.fosin.cdp.platformapi.repository.OrganizationRepository;
-import com.github.fosin.cdp.platformapi.service.inter.IOrganizationService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;

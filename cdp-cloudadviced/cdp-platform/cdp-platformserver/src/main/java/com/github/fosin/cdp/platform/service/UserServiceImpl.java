@@ -1,49 +1,52 @@
-package com.github.fosin.cdp.platformapi.service;
+package com.github.fosin.cdp.platform.service;
 
 import com.github.fosin.cdp.cache.util.CacheUtil;
-import com.github.fosin.cdp.core.exception.CdpServiceException;
 import com.github.fosin.cdp.jpa.repository.IJpaRepository;
 import com.github.fosin.cdp.mvc.module.PageModule;
 import com.github.fosin.cdp.mvc.result.Result;
 import com.github.fosin.cdp.mvc.result.ResultUtils;
+import com.github.fosin.cdp.platform.repository.OrganizationRepository;
+import com.github.fosin.cdp.platform.repository.UserRoleRepository;
+import com.github.fosin.cdp.platform.service.inter.IUserService;
+import com.github.fosin.cdp.platform.util.LocalParameterUtil;
 import com.github.fosin.cdp.platformapi.constant.SystemConstant;
 import com.github.fosin.cdp.platformapi.constant.TableNameConstant;
 import com.github.fosin.cdp.platformapi.dto.request.CdpUserCreateDto;
-import com.github.fosin.cdp.platformapi.dto.request.CdpUserRetrieveDto;
 import com.github.fosin.cdp.platformapi.dto.request.CdpUserUpdateDto;
 import com.github.fosin.cdp.platformapi.entity.CdpOrganizationEntity;
 import com.github.fosin.cdp.platformapi.entity.CdpUserEntity;
 import com.github.fosin.cdp.platformapi.entity.CdpUserRoleEntity;
 import com.github.fosin.cdp.platformapi.parameter.OrganizParameterUtil;
-import com.github.fosin.cdp.platformapi.repository.OrganizationRepository;
+import com.github.fosin.cdp.platformapi.parameter.ParameterType;
 import com.github.fosin.cdp.platformapi.repository.UserRepository;
-import com.github.fosin.cdp.platformapi.repository.UserRoleRepository;
-import com.github.fosin.cdp.platformapi.service.inter.IUserService;
 import com.github.fosin.cdp.platformapi.util.LoginUserUtil;
+import com.github.fosin.cdp.util.NumberUtil;
 import com.github.fosin.cdp.util.RegexUtil;
 import com.github.fosin.cdp.util.StringUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import javax.persistence.criteria.*;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
 /**
@@ -67,7 +70,7 @@ public class UserServiceImpl implements IUserService {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
     @Override

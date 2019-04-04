@@ -145,9 +145,6 @@ public class CdpOrganizationAuthServiceImpl implements ICdpOrganizationAuthServi
         return true;
     }
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
     private String getAuthCode(CdpOrganizationAuthCreateDto auth) {
         return passwordEncoder.encode(auth.toString());
     }

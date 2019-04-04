@@ -1,8 +1,7 @@
 package com.github.fosin.cdp.platformapi.config;
 
-import org.springframework.cloud.netflix.feign.EnableFeignClients;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Import;
-import org.springframework.security.oauth2.config.annotation.web.configuration.EnableOAuth2Client;
 
 import java.lang.annotation.*;
 

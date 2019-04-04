@@ -15,10 +15,10 @@ zuul:
       path: /auth/**
       serviceId: cdp-authserver
       retryable: true
-    cdp-zuulgateway:
-      path: /gateway/**
-      serviceId: cdp-zuulgateway
-      retryable: true
+#    cdp-zuulgateway:
+#      path: /gateway/**
+#      serviceId: cdp-zuulgateway
+#      retryable: true
     cdp-mpi:
       path: /mpi/**
       serviceId: cdp-mpi

@@ -5,11 +5,11 @@ import feign.codec.Decoder;
 import feign.codec.ErrorDecoder;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpStatus;
-import org.slf4j.LoggerFactory;
+import org.jboss.logging.Logger;
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.web.HttpMessageConverters;
-import org.springframework.cloud.netflix.feign.support.SpringDecoder;
+import org.springframework.boot.autoconfigure.http.HttpMessageConverters;
+import org.springframework.cloud.openfeign.support.SpringDecoder;
 import org.springframework.cloud.security.oauth2.client.feign.OAuth2FeignRequestInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpEntity;
@@ -28,7 +28,6 @@ import java.lang.reflect.Type;
 import java.util.Date;
 import java.util.LinkedList;
 
-import static feign.FeignException.errorStatus;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 /**
@@ -59,7 +58,7 @@ public class OAuth2FeignConfigure {
 
     @Bean
     public Logger.Level feignLoggerLevel() {
-        return Logger.Level.FULL;
+        return Logger.Level.INFO;
     }
 
 
@@ -125,7 +124,7 @@ public class OAuth2FeignConfigure {
         private void clearTokenAndRetry(Response response, String body) throws FeignException {
             log.error("接收到Feign请求资源响应,响应内容:{}", body);
             context.setAccessToken(null);
-            throw new RetryableException("access_token过期，即将进行重试", new Date());
+            throw new RetryableException("access_token过期，即将进行重试", Request.HttpMethod.CONNECT, new Date());
         }
 
         private boolean isParameterizeHttpEntity(Type type) {
@@ -181,9 +180,9 @@ public class OAuth2FeignConfigure {
             if (HttpStatus.SC_UNAUTHORIZED == response.status()) {
                 log.error("接收到Feign请求资源响应401，access_token已经过期，重置access_token为null待重新获取。");
                 context.setAccessToken(null);
-                return new RetryableException("疑似access_token过期，即将进行重试", new Date());
+                return new RetryableException("疑似access_token过期，即将进行重试", Request.HttpMethod.CONNECT, new Date());
             }
-            return errorStatus(methodKey, response);
+            return FeignException.errorStatus(methodKey, response);
         }
     }
 }

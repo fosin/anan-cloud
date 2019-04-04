@@ -5,12 +5,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.RememberMeServices;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
@@ -33,20 +35,24 @@ public class CdpWebSecurityConfigurer extends WebSecurityConfigurerAdapter {
     @Autowired
     private DataSource dataSource;
 
+    @Bean(name = BeanIds.AUTHENTICATION_MANAGER)
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
+    }
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.cors().and()
-                .requestMatchers().anyRequest()
-                .and()
-                .authorizeRequests()
+        http.requestMatchers()
+                .antMatchers("/login", "/oauth/authorize")
+                .and().authorizeRequests()
+//                .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
                 .antMatchers("/**/oauth/**").permitAll()
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
+//                .antMatchers("/index").authenticated()
+                //除以上路径都需要验证
                 .anyRequest().authenticated()
-//                .authorizeRequests()
-//                .antMatchers("/**/oauth/*").permitAll()
-//                .antMatchers(HttpMethod.OPTIONS).permitAll()
-//                //除以上路径都需要验证
-//                .anyRequest().authenticated()
+
 //                .and()
 //                .exceptionHandling()
 //                .accessDeniedPage("/login?authorization_error=true")
@@ -54,7 +60,7 @@ public class CdpWebSecurityConfigurer extends WebSecurityConfigurerAdapter {
                 .logout()
                 .clearAuthentication(true)
                 .logoutUrl("/logout")
-                .logoutSuccessUrl("/login?logout").permitAll()
+                .logoutSuccessUrl("/login?logout")
                 .and()
                 //http参数中包含一个名为“remember-me”的参数，不管session是否过期，用户记录将会被记保存下来
                 .rememberMe()
@@ -69,8 +75,8 @@ public class CdpWebSecurityConfigurer extends WebSecurityConfigurerAdapter {
                 .loginPage("/login")
                 .loginProcessingUrl("/login")
                 .defaultSuccessUrl("/index")
-                .failureUrl("/login?error").permitAll()
-//                .and().httpBasic().disable()
+                .failureUrl("/login?error")
+                .and().httpBasic()
         ;
     }
 
@@ -84,13 +90,13 @@ public class CdpWebSecurityConfigurer extends WebSecurityConfigurerAdapter {
     public void configure(WebSecurity web) throws Exception {
         web.ignoring().antMatchers("/**/*.html",
                 "/**/*.css", "/**/*.js", "/**/webjars/**",
-                "/**/images/**", "/**/*.jpg","/**/swagger-resources/**",
+                "/**/images/**", "/**/*.jpg", "/**/swagger-resources/**",
                 "/**/v2/api-docs");
     }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
     /**

@@ -24,8 +24,8 @@ public class PermissionServiceImpl implements IPermissionService {
 
     @Override
     @Cacheable(value = TableNameConstant.CDP_PERMISSION, key = "#id")
-    public CdpPermissionEntity findOne(Long id) {
-        return permissionRepository.findOne(id);
+    public CdpPermissionEntity findById(Long id) {
+        return permissionRepository.findById(id).orElse(null);
     }
 
     @Override
