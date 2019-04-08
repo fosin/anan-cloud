@@ -2,7 +2,7 @@ package com.github.fosin.cdp.platformapi.service;
 
 
 import com.github.fosin.cdp.platformapi.entity.CdpOrganizationEntity;
-import com.github.fosin.cdp.platformapi.service.inter.IFeignOrganizationService;
+import com.github.fosin.cdp.platformapi.service.inter.OrganizationFeignService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 
@@ -16,7 +16,7 @@ import java.util.List;
  */
 @Slf4j
 //@Service
-public class FeignOrganizationFallbackServiceImpl implements IFeignOrganizationService {
+public class OrganizationFeignFallbackServiceImpl implements OrganizationFeignService {
 
     @Override
     public ResponseEntity<List<CdpOrganizationEntity>> listChild(Long pId) {

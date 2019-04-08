@@ -9,7 +9,7 @@ import com.github.fosin.cdp.mvc.result.Result;
 import com.github.fosin.cdp.mvc.result.ResultUtils;
 import com.github.fosin.cdp.platform.repository.OrganizationRepository;
 import com.github.fosin.cdp.platform.repository.ParameterRepository;
-import com.github.fosin.cdp.platform.service.inter.IParameterService;
+import com.github.fosin.cdp.platform.service.inter.ParameterService;
 import com.github.fosin.cdp.platformapi.constant.TableNameConstant;
 import com.github.fosin.cdp.platformapi.dto.request.CdpParameterCreateDto;
 import com.github.fosin.cdp.platformapi.dto.request.CdpParameterUpdateDto;
@@ -49,7 +49,7 @@ import java.util.Objects;
 @Service
 @Lazy
 @Slf4j
-public class ParameterServiceImpl implements IParameterService {
+public class ParameterServiceImpl implements ParameterService {
     @Autowired
     private ParameterRepository parameterRepository;
 
@@ -171,23 +171,22 @@ public class ParameterServiceImpl implements IParameterService {
 
         //parameter为空表示没有参数记录，则依次向上找父机构的参数
         if (!finded) {
-            if (type == ParameterType.Organization.getTypeValue()) {
-                Long id = Long.parseLong(scope);
-                CdpOrganizationEntity entity = organizationRepository.findById(id).orElse(null);
-                if (entity == null || entity.getLevel() == 0) {
-                    parameter = getNearestParameter(type, null, name);
-                } else {
-                    parameter = getNearestParameter(type, entity.getPId() + "", name);
-                }
-            } else if (type == ParameterType.User.getTypeValue()) {
-                parameter = getNearestParameter(type, null, name);
-                String info = "没有从参数[" + "type:" + type + " scope:" + scope + " name:" + name + "]中查询到参数";
-                log.debug(info);
-                Assert.isTrue(parameter != null && parameter.getId() != null, info);
-            }
+            parameter = getNearestParameter(type, getNearestScope(type, scope), name);
         }
 
         return parameter;
+    }
+
+    public String getNearestScope(int type, String scope) {
+        String rc = null;
+        if (type == ParameterType.Organization.getTypeValue()) {
+            Long id = Long.parseLong(scope);
+            CdpOrganizationEntity entity = organizationRepository.findById(id).orElse(null);
+            if (entity != null && entity.getLevel() != 0) {
+                rc = entity.getPId() + "";
+            }
+        }
+        return rc;
     }
 
     @Override
@@ -263,26 +262,4 @@ public class ParameterServiceImpl implements IParameterService {
     public IJpaRepository<CdpParameterEntity, Long> getRepository() {
         return parameterRepository;
     }
-
-//    protected synchronized void addCacheEvict(CdpParameterEntity entity) {
-//        Set<CdpParameterEntity> set = CacheUtil.get(CDP_PARAMETER_EVICTCACHE, CDP_PARAMETER_EVICTCACHE, Set.class);
-//        if (set == null) {
-//            set = new HashSet<>();
-//        }
-//        set.add(entity);
-//        CacheUtil.put(CDP_PARAMETER_EVICTCACHE, CDP_PARAMETER_EVICTCACHE, set);
-//    }
-//
-//    protected void removeCacheEvict(CdpParameterEntity entity) {
-//        Set<CdpParameterEntity> set = CacheUtil.get(CDP_PARAMETER_EVICTCACHE, CDP_PARAMETER_EVICTCACHE, Set.class);
-//        if (set == null || set.size() == 0) {
-//            return;
-//        }
-//        for (CdpParameterEntity e : set) {
-//            if (e.getId().equals(entity.getId())) {
-//                set.remove(e);
-//            }
-//        }
-//        CacheUtil.put(CDP_PARAMETER_EVICTCACHE, CDP_PARAMETER_EVICTCACHE, set);
-//    }
 }

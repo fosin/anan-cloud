@@ -16,7 +16,7 @@ import java.util.List;
  *
  * @author fosin
  */
-public interface IRolePermissionService extends ICrudBatchJpaService<CdpRolePermissionEntity, Long, Long, CdpRolePermissionCreateDto, CdpRolePermissionRetrieveDto, CdpRolePermissionUpdateDto> {
+public interface RolePermissionService extends ICrudBatchJpaService<CdpRolePermissionEntity, Long, Long, CdpRolePermissionCreateDto, CdpRolePermissionRetrieveDto, CdpRolePermissionUpdateDto> {
     List<CdpRolePermissionEntity> findByRoleId(Long roleId);
 
     long countByPermissionId(Long permissionId);

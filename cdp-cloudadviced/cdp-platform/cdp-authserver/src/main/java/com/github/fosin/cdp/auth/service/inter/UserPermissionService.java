@@ -11,6 +11,6 @@ import java.util.List;
  *
  * @author fosin
  */
-public interface IUserPermissionService {
+public interface UserPermissionService {
     List<CdpUserPermissionEntity> findByUserId(Long userId);
 }

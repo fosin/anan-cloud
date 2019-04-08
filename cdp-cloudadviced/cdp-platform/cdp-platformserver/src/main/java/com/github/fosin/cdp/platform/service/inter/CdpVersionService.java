@@ -12,5 +12,5 @@ import com.github.fosin.cdp.platform.entity.CdpVersionEntity;
  * @author fosin
  * @date 2018-11-18 17:26:40
  */
-public interface ICdpVersionService extends ISimpleJpaService<CdpVersionEntity, Long, CdpVersionCreateDto, CdpVersionRetrieveDto, CdpVersionUpdateDto> {
+public interface CdpVersionService extends ISimpleJpaService<CdpVersionEntity, Long, CdpVersionCreateDto, CdpVersionRetrieveDto, CdpVersionUpdateDto> {
 }

@@ -11,7 +11,7 @@ import com.github.fosin.cdp.platformapi.dto.request.CdpDictionaryDetailCreateDto
 import com.github.fosin.cdp.platformapi.dto.request.CdpDictionaryDetailRetrieveDto;
 import com.github.fosin.cdp.platformapi.dto.request.CdpDictionaryDetailUpdateDto;
 import com.github.fosin.cdp.platformapi.entity.CdpDictionaryDetailEntity;
-import com.github.fosin.cdp.platform.service.inter.IDictionaryDetailService;
+import com.github.fosin.cdp.platform.service.inter.DictionaryDetailService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -35,7 +35,7 @@ import java.util.List;
 @Api(value = "v1/dictionaryDetail", tags = "通用字典明细管理", description = "通用字典明细管理(增删改查)")
 public class DictionaryDetailController implements ISimpleController<CdpDictionaryDetailEntity, Long, CdpDictionaryDetailCreateDto, CdpDictionaryDetailRetrieveDto, CdpDictionaryDetailUpdateDto> {
     @Autowired
-    private IDictionaryDetailService dictionaryDetailService;
+    private DictionaryDetailService dictionaryDetailService;
 
     @Override
     public ISimpleService<CdpDictionaryDetailEntity, Long, CdpDictionaryDetailCreateDto, CdpDictionaryDetailRetrieveDto, CdpDictionaryDetailUpdateDto> getService() {

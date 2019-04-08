@@ -1,7 +1,7 @@
 package com.github.fosin.cdp.platform.service;
 
 import com.github.fosin.cdp.platform.repository.CdpPayDetailRepository;
-import com.github.fosin.cdp.platform.service.inter.ICdpPayDetailService;
+import com.github.fosin.cdp.platform.service.inter.CdpPayDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.context.annotation.Lazy;
@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Lazy;
  */
 @Service
 @Lazy
-public class CdpPayDetailServiceImpl implements ICdpPayDetailService {
+public class CdpPayDetailServiceImpl implements CdpPayDetailService {
     @Autowired
     private CdpPayDetailRepository cdpSysPayDetailRepository;
 

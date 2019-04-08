@@ -5,7 +5,7 @@ import com.github.fosin.cdp.platformapi.dto.request.CdpParameterCreateDto;
 import com.github.fosin.cdp.platformapi.dto.request.CdpParameterRetrieveDto;
 import com.github.fosin.cdp.platformapi.dto.request.CdpParameterUpdateDto;
 import com.github.fosin.cdp.platformapi.entity.CdpParameterEntity;
-import com.github.fosin.cdp.platformapi.service.inter.IFeignParameterService;
+import com.github.fosin.cdp.platformapi.service.inter.ParameterFeignService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
  */
 @Slf4j
 @Service
-public class FeignParameterFallbackServiceImpl implements IFeignParameterService {
+public class ParameterFeignFallbackServiceImpl implements ParameterFeignService {
 
     @Override
     public ResponseEntity<CdpParameterEntity> create(CdpParameterCreateDto cdpParameterCreateDto) {

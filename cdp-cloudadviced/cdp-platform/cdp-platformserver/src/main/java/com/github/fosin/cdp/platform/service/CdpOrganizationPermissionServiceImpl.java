@@ -4,7 +4,7 @@ import com.github.fosin.cdp.jpa.service.batch.IUpdateInBatchJpaService;
 import com.github.fosin.cdp.platform.dto.request.CdpOrganizationPermissionUpdateDto;
 import com.github.fosin.cdp.platform.entity.CdpOrganizationPermissionEntity;
 import com.github.fosin.cdp.platform.repository.CdpOrganizationPermissionRepository;
-import com.github.fosin.cdp.platform.service.inter.ICdpOrganizationPermissionService;
+import com.github.fosin.cdp.platform.service.inter.CdpOrganizationPermissionService;
 import com.github.fosin.cdp.util.BeanUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -23,7 +23,7 @@ import java.util.List;
  */
 @Service
 @Lazy
-public class CdpOrganizationPermissionServiceImpl implements ICdpOrganizationPermissionService {
+public class CdpOrganizationPermissionServiceImpl implements CdpOrganizationPermissionService {
     @Autowired
     private CdpOrganizationPermissionRepository cdpSysOrganizationPermissionRepository;
 

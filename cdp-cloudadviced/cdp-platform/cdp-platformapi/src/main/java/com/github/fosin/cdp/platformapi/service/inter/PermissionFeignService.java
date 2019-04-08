@@ -2,7 +2,7 @@ package com.github.fosin.cdp.platformapi.service.inter;
 
 import com.github.fosin.cdp.platformapi.constant.ServiceConstant;
 import com.github.fosin.cdp.platformapi.constant.UrlPrefixConstant;
-import com.github.fosin.cdp.platformapi.service.FeignPermissionFallbackServiceImpl;
+import com.github.fosin.cdp.platformapi.service.PermissionFeignFallbackServiceImpl;
 import com.github.fosin.cdp.platformapi.entity.CdpPermissionEntity;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
@@ -17,8 +17,8 @@ import java.util.List;
  * @author fosin
  * @date 2019-3-26
  */
-@FeignClient(value = ServiceConstant.CDP_AUTHSERVER, path = UrlPrefixConstant.PERMISSION, fallback = FeignPermissionFallbackServiceImpl.class)
-public interface IFeignPermissionService {
+@FeignClient(value = ServiceConstant.CDP_AUTHSERVER, path = UrlPrefixConstant.PERMISSION, fallback = PermissionFeignFallbackServiceImpl.class)
+public interface PermissionFeignService {
 
     /**
      * 远程查询应用权限

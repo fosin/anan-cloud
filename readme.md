@@ -53,7 +53,7 @@ Vuejs、Nodejs、Webpack | 前段开发框架
            127.0.0.1 cdp-eurekaserver
            127.0.0.1 cdp-authserver
            127.0.0.1 cdp-redis
-           127.0.0.1 cdp-mysql-platform
+           127.0.0.1 cdp-platform-mysql
            127.0.0.1 cdp-rabbitmq
 ####1.3、按顺序启动项目
        1.3.1、启动cdp-eurekaserver服务注册中心
@@ -73,5 +73,5 @@ Vuejs、Nodejs、Webpack | 前段开发框架
            1.2.3.3、生产环境中将cdp-configserver配置中心替换实际地址并建议修改当前连接用户(cdp)和密码(local)为较安全复杂的用户和密码,
                然后启动cdp-configserver项目后，通过以下命令生成密码：
                 curl -u cdp:local http://localhost:51100/encrypt -d cdp
-           1.2.3.4、替换各yml配置文件中的eureka.password中的密码参数，密码前缀必须有{cipher}并以单引号包含，例如:
+           1.2.3.4、替换各yml配置文件中的spring.security.user.password中的密码参数，密码前缀必须有{cipher}并以单引号包含，例如:
                 '{cipher}AQApsg6Qzq9bdXcH2BntfbquV9CD2arg9bP9HFGuvww5EppMU1fsUqzFPtjXH5Gblkj7tE5N4/p1zIp5KpTZwDAM8wxLNrK8m9626Rb1eAlEG4Cfs8aJqoYi8LItfTo/QA1u8zoJKdcFZ4xe77CQBDhUiJ36m+Q8s2ItFMZHsM1dC2NsiuCB9D8f74a2DFeoLSyvkSeSE9jQr2tv8COy0NtpLChmgFL4dM4ffTwiPx7cMsdoabL/C2CD9YqQLfk6TChrNq9xjvfXUhiRcekzXd2ccHqnZ9trEtKzaRfmEOWUNsmnlwMjY/Lz8I9wnWo8ZHB+hxoP2uyqw4twx2NnILERVLKFO1ZqhVsrMxOBEjX8ccAqeYbnEDYTXqYl4b3o='

@@ -1,12 +1,11 @@
 package com.github.fosin.cdp.auth.controller;
 
-import com.github.fosin.cdp.auth.service.inter.IPermissionService;
+import com.github.fosin.cdp.auth.service.inter.PermissionService;
 import com.github.fosin.cdp.platformapi.entity.CdpPermissionEntity;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
@@ -23,7 +22,7 @@ import java.util.List;
 @RequestMapping("v1/permission")
 public class PermissionController {
     @Autowired
-    private IPermissionService permissionService;
+    private PermissionService permissionService;
 
     @PostMapping("/findByAppName/{appName}")
     @ApiImplicitParam(name = "appName", value = "应用名称,spring.application.name")

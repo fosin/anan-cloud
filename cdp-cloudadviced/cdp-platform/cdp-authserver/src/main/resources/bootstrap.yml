@@ -9,8 +9,8 @@ spring:
     name: @project.artifactId@
   security:
     user:
-      name: @eureka.username@
-      password: @eureka.password@
+      name: @spring.security.user.name@
+      password: @spring.security.user.password@
   cloud:
     inetutils:
       preferred-networks: @spring.cloud.inetutils.preferred-networks@

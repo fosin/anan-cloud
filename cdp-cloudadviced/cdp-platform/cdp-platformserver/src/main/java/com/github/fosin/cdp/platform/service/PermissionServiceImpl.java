@@ -4,9 +4,9 @@ import com.github.fosin.cdp.jpa.repository.IJpaRepository;
 import com.github.fosin.cdp.mvc.module.PageModule;
 import com.github.fosin.cdp.mvc.result.Result;
 import com.github.fosin.cdp.mvc.result.ResultUtils;
-import com.github.fosin.cdp.platform.service.inter.IPermissionService;
-import com.github.fosin.cdp.platform.service.inter.IRolePermissionService;
-import com.github.fosin.cdp.platform.service.inter.IUserPermissionService;
+import com.github.fosin.cdp.platform.service.inter.PermissionService;
+import com.github.fosin.cdp.platform.service.inter.RolePermissionService;
+import com.github.fosin.cdp.platform.service.inter.UserPermissionService;
 import com.github.fosin.cdp.platformapi.constant.TableNameConstant;
 import com.github.fosin.cdp.platformapi.dto.request.CdpPermissionCreateDto;
 import com.github.fosin.cdp.platformapi.dto.request.CdpPermissionUpdateDto;
@@ -38,15 +38,15 @@ import java.util.Objects;
  */
 @Service
 @Lazy
-public class PermissionServiceImpl implements IPermissionService {
+public class PermissionServiceImpl implements PermissionService {
     @Autowired
     private PermissionRepository permissionRepository;
 
     @Autowired
-    private IUserPermissionService userPermissionService;
+    private UserPermissionService userPermissionService;
 
     @Autowired
-    private IRolePermissionService rolePermissionService;
+    private RolePermissionService rolePermissionService;
 
     @Override
     @CachePut(value = TableNameConstant.CDP_PERMISSION, key = "#result.id")

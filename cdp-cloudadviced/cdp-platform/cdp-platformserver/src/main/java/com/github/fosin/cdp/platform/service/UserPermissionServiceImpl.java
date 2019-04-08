@@ -4,7 +4,7 @@ import com.github.fosin.cdp.cache.util.CacheUtil;
 import com.github.fosin.cdp.core.exception.CdpServiceException;
 import com.github.fosin.cdp.jpa.repository.IJpaRepository;
 import com.github.fosin.cdp.jpa.service.batch.IUpdateInBatchJpaService;
-import com.github.fosin.cdp.platform.service.inter.IUserPermissionService;
+import com.github.fosin.cdp.platform.service.inter.UserPermissionService;
 import com.github.fosin.cdp.platformapi.constant.TableNameConstant;
 import com.github.fosin.cdp.platformapi.dto.request.CdpUserPermissionUpdateDto;
 import com.github.fosin.cdp.platformapi.entity.CdpUserPermissionEntity;
@@ -32,7 +32,7 @@ import java.util.Set;
  */
 @Service
 @Lazy
-public class UserPermissionServiceImpl implements IUserPermissionService {
+public class UserPermissionServiceImpl implements UserPermissionService {
     @Autowired
     private UserPermissionRepository userPermissionRepository;
 

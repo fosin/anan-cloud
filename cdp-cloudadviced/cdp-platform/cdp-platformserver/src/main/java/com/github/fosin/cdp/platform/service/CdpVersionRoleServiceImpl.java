@@ -7,7 +7,7 @@ import com.github.fosin.cdp.platform.dto.request.CdpVersionRoleCreateDto;
 import com.github.fosin.cdp.platform.dto.request.CdpVersionRoleUpdateDto;
 import com.github.fosin.cdp.platform.entity.CdpVersionRoleEntity;
 import com.github.fosin.cdp.platform.repository.CdpVersionRoleRepository;
-import com.github.fosin.cdp.platform.service.inter.ICdpVersionRoleService;
+import com.github.fosin.cdp.platform.service.inter.CdpVersionRoleService;
 import com.github.fosin.cdp.platformapi.constant.SystemConstant;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -30,7 +30,7 @@ import javax.persistence.criteria.Path;
  */
 @Service
 @Lazy
-public class CdpVersionRoleServiceImpl implements ICdpVersionRoleService {
+public class CdpVersionRoleServiceImpl implements CdpVersionRoleService {
     @Autowired
     private CdpVersionRoleRepository cdpSysVersionRoleRepository;
 

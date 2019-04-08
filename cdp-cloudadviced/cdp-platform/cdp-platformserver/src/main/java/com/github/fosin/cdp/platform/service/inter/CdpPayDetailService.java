@@ -12,5 +12,5 @@ import com.github.fosin.cdp.jpa.service.ISimpleJpaService;
  * @author fosin
  * @date 2018-11-18 17:26:40
  */
-public interface ICdpPayDetailService extends ISimpleJpaService<CdpPayDetailEntity, Long, CdpPayDetailCreateDto, CdpPayDetailRetrieveDto, CdpPayDetailUpdateDto> {
+public interface CdpPayDetailService extends ISimpleJpaService<CdpPayDetailEntity, Long, CdpPayDetailCreateDto, CdpPayDetailRetrieveDto, CdpPayDetailUpdateDto> {
 }

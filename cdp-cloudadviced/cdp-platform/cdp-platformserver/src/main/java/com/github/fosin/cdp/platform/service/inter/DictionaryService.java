@@ -12,5 +12,5 @@ import com.github.fosin.cdp.platformapi.entity.CdpDictionaryEntity;
  *
  * @author fosin
  */
-public interface IDictionaryService extends ISimpleJpaService<CdpDictionaryEntity, Long, CdpDictionaryCreateDto, CdpDictionaryRetrieveDto, CdpDictionaryUpdateDto> {
+public interface DictionaryService extends ISimpleJpaService<CdpDictionaryEntity, Long, CdpDictionaryCreateDto, CdpDictionaryRetrieveDto, CdpDictionaryUpdateDto> {
 }

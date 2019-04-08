@@ -17,7 +17,7 @@ import java.util.List;
  *
  * @author fosin
  */
-public interface IDictionaryDetailService extends ISimpleJpaService<CdpDictionaryDetailEntity, Long, CdpDictionaryDetailCreateDto, CdpDictionaryDetailRetrieveDto, CdpDictionaryDetailUpdateDto> {
+public interface DictionaryDetailService extends ISimpleJpaService<CdpDictionaryDetailEntity, Long, CdpDictionaryDetailCreateDto, CdpDictionaryDetailRetrieveDto, CdpDictionaryDetailUpdateDto> {
     Page<CdpDictionaryDetailEntity> findAll(String searchCondition, Pageable pageable, Long code);
 
     List<CdpDictionaryDetailEntity> findByDictionaryId(Long dictionaryId);

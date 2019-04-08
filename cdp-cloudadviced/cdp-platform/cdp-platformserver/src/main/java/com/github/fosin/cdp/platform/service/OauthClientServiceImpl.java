@@ -7,7 +7,7 @@ import com.github.fosin.cdp.mvc.result.Result;
 import com.github.fosin.cdp.mvc.result.ResultUtils;
 import com.github.fosin.cdp.platform.entity.OauthClientDetailsEntity;
 import com.github.fosin.cdp.platform.repository.OauthClientRepository;
-import com.github.fosin.cdp.platform.service.inter.IOauthClientService;
+import com.github.fosin.cdp.platform.service.inter.OauthClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
@@ -31,7 +31,7 @@ import java.util.Optional;
  */
 @Service
 @Lazy
-public class OauthClientServiceImpl implements IOauthClientService {
+public class OauthClientServiceImpl implements OauthClientService {
 
     @Autowired
     private OauthClientRepository oauthClientRepository;

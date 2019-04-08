@@ -7,8 +7,8 @@ import com.github.fosin.cdp.jpa.repository.IJpaRepository;
 import com.github.fosin.cdp.mvc.module.PageModule;
 import com.github.fosin.cdp.mvc.result.Result;
 import com.github.fosin.cdp.mvc.result.ResultUtils;
-import com.github.fosin.cdp.platform.service.inter.IDictionaryDetailService;
-import com.github.fosin.cdp.platform.service.inter.IUserService;
+import com.github.fosin.cdp.platform.service.inter.DictionaryDetailService;
+import com.github.fosin.cdp.platform.service.inter.UserService;
 import com.github.fosin.cdp.platformapi.constant.SystemConstant;
 import com.github.fosin.cdp.platformapi.constant.TableNameConstant;
 import com.github.fosin.cdp.platformapi.dto.request.CdpDictionaryDetailCreateDto;
@@ -44,13 +44,13 @@ import java.util.Objects;
  */
 @Service
 @Lazy
-public class DictionaryDetailServiceImpl implements IDictionaryDetailService {
+public class DictionaryDetailServiceImpl implements DictionaryDetailService {
 
     @Autowired
     private DictionaryDetailRepository dictionaryDetailRepository;
 
     @Autowired
-    private IUserService userService;
+    private UserService userService;
 
     @Override
     @CacheEvict(value = TableNameConstant.CDP_DICTIONARY_DETAIL, key = "#result.dictionaryId")

@@ -6,9 +6,9 @@ import com.github.fosin.cdp.platform.entity.CdpOrganizationAuthEntity;
 import com.github.fosin.cdp.platform.entity.CdpPayOrderEntity;
 import com.github.fosin.cdp.platform.entity.CdpVersionEntity;
 import com.github.fosin.cdp.platform.repository.CdpOrganizationAuthRepository;
-import com.github.fosin.cdp.platform.service.inter.ICdpOrganizationAuthService;
-import com.github.fosin.cdp.platform.service.inter.ICdpPayOrderService;
-import com.github.fosin.cdp.platform.service.inter.ICdpVersionService;
+import com.github.fosin.cdp.platform.service.inter.CdpOrganizationAuthService;
+import com.github.fosin.cdp.platform.service.inter.CdpPayOrderService;
+import com.github.fosin.cdp.platform.service.inter.CdpVersionService;
 import com.github.fosin.cdp.platformapi.dto.RegisterDto;
 import com.github.fosin.cdp.platformapi.dto.request.CdpOrganizationCreateDto;
 import com.github.fosin.cdp.platformapi.dto.request.CdpOrganizationUpdateDto;
@@ -16,8 +16,8 @@ import com.github.fosin.cdp.platformapi.dto.request.CdpUserCreateDto;
 import com.github.fosin.cdp.platformapi.dto.request.CdpUserRegisterDto;
 import com.github.fosin.cdp.platformapi.entity.CdpOrganizationEntity;
 import com.github.fosin.cdp.platformapi.entity.CdpUserEntity;
-import com.github.fosin.cdp.platform.service.inter.IOrganizationService;
-import com.github.fosin.cdp.platform.service.inter.IUserService;
+import com.github.fosin.cdp.platform.service.inter.OrganizationService;
+import com.github.fosin.cdp.platform.service.inter.UserService;
 import com.github.fosin.cdp.util.DateTimeUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +39,7 @@ import java.util.List;
  */
 @Service
 @Lazy
-public class CdpOrganizationAuthServiceImpl implements ICdpOrganizationAuthService {
+public class CdpOrganizationAuthServiceImpl implements CdpOrganizationAuthService {
     @Autowired
     private CdpOrganizationAuthRepository cdpSysOrganizationAuthRepository;
 
@@ -62,18 +62,18 @@ public class CdpOrganizationAuthServiceImpl implements ICdpOrganizationAuthServi
     }
 
     @Autowired
-    private ICdpOrganizationAuthService organizationAuthService;
+    private CdpOrganizationAuthService organizationAuthService;
 
     @Autowired
-    private IUserService userService;
+    private UserService userService;
 
     @Autowired
-    private ICdpPayOrderService payOrderService;
+    private CdpPayOrderService payOrderService;
 
     @Autowired
-    private ICdpVersionService versionService;
+    private CdpVersionService versionService;
     @Autowired
-    private IOrganizationService organizationService;
+    private OrganizationService organizationService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;

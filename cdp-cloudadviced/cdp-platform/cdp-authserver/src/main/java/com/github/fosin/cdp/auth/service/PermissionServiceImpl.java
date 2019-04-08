@@ -1,6 +1,6 @@
 package com.github.fosin.cdp.auth.service;
 
-import com.github.fosin.cdp.auth.service.inter.IPermissionService;
+import com.github.fosin.cdp.auth.service.inter.PermissionService;
 import com.github.fosin.cdp.jpa.repository.IJpaRepository;
 import com.github.fosin.cdp.platformapi.constant.TableNameConstant;
 import com.github.fosin.cdp.platformapi.entity.CdpPermissionEntity;
@@ -18,7 +18,7 @@ import java.util.List;
  * @author fosin
  */
 @Service
-public class PermissionServiceImpl implements IPermissionService {
+public class PermissionServiceImpl implements PermissionService {
     @Autowired
     private PermissionRepository permissionRepository;
 

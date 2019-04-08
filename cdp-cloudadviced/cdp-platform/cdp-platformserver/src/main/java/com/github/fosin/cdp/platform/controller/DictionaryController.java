@@ -6,7 +6,7 @@ import com.github.fosin.cdp.platformapi.dto.request.CdpDictionaryCreateDto;
 import com.github.fosin.cdp.platformapi.dto.request.CdpDictionaryRetrieveDto;
 import com.github.fosin.cdp.platformapi.dto.request.CdpDictionaryUpdateDto;
 import com.github.fosin.cdp.platformapi.entity.CdpDictionaryEntity;
-import com.github.fosin.cdp.platform.service.inter.IDictionaryService;
+import com.github.fosin.cdp.platform.service.inter.DictionaryService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(value = "v1/dictionary", tags = "通用字典管理", description = "通用字典管理(增删改查)")
 public class DictionaryController implements ISimpleController<CdpDictionaryEntity, Long, CdpDictionaryCreateDto, CdpDictionaryRetrieveDto, CdpDictionaryUpdateDto> {
     @Autowired
-    private IDictionaryService dictionaryService;
+    private DictionaryService dictionaryService;
 
     @Override
     public ISimpleService<CdpDictionaryEntity, Long, CdpDictionaryCreateDto, CdpDictionaryRetrieveDto, CdpDictionaryUpdateDto> getService() {

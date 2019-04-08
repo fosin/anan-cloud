@@ -2,7 +2,7 @@ package com.github.fosin.cdp.platformapi.service;
 
 
 import com.github.fosin.cdp.platformapi.entity.CdpPermissionEntity;
-import com.github.fosin.cdp.platformapi.service.inter.IFeignPermissionService;
+import com.github.fosin.cdp.platformapi.service.inter.PermissionFeignService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -17,7 +17,7 @@ import java.util.List;
  */
 @Slf4j
 @Service
-public class FeignPermissionFallbackServiceImpl implements IFeignPermissionService {
+public class PermissionFeignFallbackServiceImpl implements PermissionFeignService {
 
     @Override
     public ResponseEntity<List<CdpPermissionEntity>> findByAppName(String appName) {

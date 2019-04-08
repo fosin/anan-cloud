@@ -11,6 +11,6 @@ import java.util.List;
  *
  * @author fosin
  */
-public interface IRolePermissionService {
+public interface RolePermissionService {
     List<CdpRolePermissionEntity> findByRoleId(Long roleId);
 }

@@ -36,19 +36,19 @@ public class CdpVersionController implements ISimpleController<CdpVersionEntity,
      * 服务对象
      */
     @Autowired
-    private ICdpVersionService cdpSysVersionService;
+    private CdpVersionService cdpSysVersionService;
 
     @Autowired
-    private ICdpVersionPermissionService versionPermissionService;
+    private CdpVersionPermissionService versionPermissionService;
 
     @Autowired
-    private ICdpOrganizationPermissionService organizationPermissionService;
+    private CdpOrganizationPermissionService organizationPermissionService;
 
     @Autowired
-    private ICdpOrganizationAuthService organizationAuthService;
+    private CdpOrganizationAuthService organizationAuthService;
 
     @Autowired
-    private IPermissionService permissionService;
+    private PermissionService permissionService;
 
     @ApiOperation(value = "根据父权限ID获取其孩子数据列表")
     @ApiImplicitParam(name = "pId", value = "父权限ID,CdpVersionPermissionEntity.id")

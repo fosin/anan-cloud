@@ -16,7 +16,7 @@ import java.util.List;
  *
  * @author fosin
  */
-public interface IRoleService extends ISimpleJpaService<CdpRoleEntity, Long, CdpRoleCreateDto, CdpRoleRetrieveDto, CdpRoleUpdateDto> {
+public interface RoleService extends ISimpleJpaService<CdpRoleEntity, Long, CdpRoleCreateDto, CdpRoleRetrieveDto, CdpRoleUpdateDto> {
 
     List<CdpRoleEntity> findOtherUsersByRoleId(Long userId);
 

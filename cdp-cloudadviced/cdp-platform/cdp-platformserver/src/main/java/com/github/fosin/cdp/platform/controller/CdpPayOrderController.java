@@ -6,7 +6,7 @@ import com.github.fosin.cdp.platform.dto.request.CdpPayOrderCreateDto;
 import com.github.fosin.cdp.platform.dto.request.CdpPayOrderRetrieveDto;
 import com.github.fosin.cdp.platform.dto.request.CdpPayOrderUpdateDto;
 import com.github.fosin.cdp.platform.entity.CdpPayOrderEntity;
-import com.github.fosin.cdp.platform.service.inter.ICdpPayOrderService;
+import com.github.fosin.cdp.platform.service.inter.CdpPayOrderService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,7 +26,7 @@ public class CdpPayOrderController implements ISimpleController<CdpPayOrderEntit
      * 服务对象
      */
     @Autowired
-    private ICdpPayOrderService cdpSysPayOrderService;
+    private CdpPayOrderService cdpSysPayOrderService;
 
     @Override
     public ISimpleService<CdpPayOrderEntity, Long, CdpPayOrderCreateDto, CdpPayOrderRetrieveDto, CdpPayOrderUpdateDto> getService() {

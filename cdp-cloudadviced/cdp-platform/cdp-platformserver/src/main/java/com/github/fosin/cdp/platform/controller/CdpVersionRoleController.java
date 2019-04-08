@@ -9,8 +9,8 @@ import com.github.fosin.cdp.platform.dto.request.CdpVersionRoleRetrieveDto;
 import com.github.fosin.cdp.platform.dto.request.CdpVersionRoleUpdateDto;
 import com.github.fosin.cdp.platform.entity.CdpVersionRoleEntity;
 import com.github.fosin.cdp.platform.entity.CdpVersionRolePermissionEntity;
-import com.github.fosin.cdp.platform.service.inter.ICdpVersionRolePermissionService;
-import com.github.fosin.cdp.platform.service.inter.ICdpVersionRoleService;
+import com.github.fosin.cdp.platform.service.inter.CdpVersionRolePermissionService;
+import com.github.fosin.cdp.platform.service.inter.CdpVersionRoleService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -35,10 +35,10 @@ public class CdpVersionRoleController implements ISimpleController<CdpVersionRol
      * 服务对象
      */
     @Autowired
-    private ICdpVersionRoleService cdpSysVersionRoleService;
+    private CdpVersionRoleService cdpSysVersionRoleService;
 
     @Autowired
-    private ICdpVersionRolePermissionService versionRolePermissionService;
+    private CdpVersionRolePermissionService versionRolePermissionService;
 
     @ApiOperation("根据角色ID获取版本权限")
     @ApiImplicitParam(name = "roleId", value = "版本ID,取值于CdpVersionRoleEntity.id")

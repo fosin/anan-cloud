@@ -1,6 +1,6 @@
 package com.github.fosin.cdp.platform.util;
 
-import com.github.fosin.cdp.platform.service.inter.IParameterService;
+import com.github.fosin.cdp.platform.service.inter.ParameterService;
 import com.github.fosin.cdp.platformapi.entity.CdpParameterEntity;
 import com.github.fosin.cdp.platformapi.parameter.AbstractParameterUtil;
 import com.github.fosin.cdp.platformapi.parameter.ParameterType;
@@ -17,10 +17,10 @@ import org.springframework.stereotype.Component;
 @Component
 @Slf4j
 public class LocalParameterUtil extends AbstractParameterUtil {
-    private static IParameterService parameterService;
+    private static ParameterService parameterService;
 
     @Autowired
-    public LocalParameterUtil(IParameterService parameterService) {
+    public LocalParameterUtil(ParameterService parameterService) {
         LocalParameterUtil.parameterService = parameterService;
     }
 
@@ -44,7 +44,7 @@ public class LocalParameterUtil extends AbstractParameterUtil {
         return com.github.fosin.cdp.platformapi.parameter.ParameterUtil.getScope(type);
     }
 
-    public static IParameterService getParameterService() {
+    public static ParameterService getParameterService() {
         return parameterService;
     }
 }

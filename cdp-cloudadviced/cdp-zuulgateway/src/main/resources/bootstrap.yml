@@ -41,8 +41,8 @@ spring:
     time-zone: GMT+8
   security:
     user:
-      name: @eureka.username@
-      password: @eureka.password@
+      name: @spring.security.user.name@
+      password: @spring.security.user.password@
 encrypt:
   key-store:
     location: @encrypt.key-store.location@

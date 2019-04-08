@@ -66,6 +66,4 @@ public interface IParameterUtil {
      * @return 参数值
      */
     String getOrCreateParameter(String scope, String name, String defaultValue, String description);
-
-
 }

@@ -7,7 +7,7 @@ import com.github.fosin.cdp.mvc.result.Result;
 import com.github.fosin.cdp.mvc.result.ResultUtils;
 import com.github.fosin.cdp.platform.repository.OrganizationRepository;
 import com.github.fosin.cdp.platform.repository.UserRoleRepository;
-import com.github.fosin.cdp.platform.service.inter.IUserService;
+import com.github.fosin.cdp.platform.service.inter.UserService;
 import com.github.fosin.cdp.platform.util.LocalParameterUtil;
 import com.github.fosin.cdp.platformapi.constant.SystemConstant;
 import com.github.fosin.cdp.platformapi.constant.TableNameConstant;
@@ -58,7 +58,7 @@ import java.util.Random;
 @Service
 @Lazy
 @Slf4j
-public class UserServiceImpl implements IUserService {
+public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
     @Autowired

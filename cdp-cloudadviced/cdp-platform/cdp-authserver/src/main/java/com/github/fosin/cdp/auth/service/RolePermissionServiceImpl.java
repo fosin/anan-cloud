@@ -1,6 +1,6 @@
 package com.github.fosin.cdp.auth.service;
 
-import com.github.fosin.cdp.auth.service.inter.IRolePermissionService;
+import com.github.fosin.cdp.auth.service.inter.RolePermissionService;
 import com.github.fosin.cdp.platformapi.constant.TableNameConstant;
 import com.github.fosin.cdp.platformapi.entity.CdpRolePermissionEntity;
 import com.github.fosin.cdp.platformapi.repository.RolePermissionRepository;
@@ -17,7 +17,7 @@ import java.util.List;
  * @author fosin
  */
 @Service
-public class RolePermissionServiceImpl implements IRolePermissionService {
+public class RolePermissionServiceImpl implements RolePermissionService {
     @Autowired
     private RolePermissionRepository rolePermissionRepository;
 

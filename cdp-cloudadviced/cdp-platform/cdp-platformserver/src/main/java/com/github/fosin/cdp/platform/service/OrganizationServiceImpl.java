@@ -5,7 +5,7 @@ import com.github.fosin.cdp.mvc.module.PageModule;
 import com.github.fosin.cdp.mvc.result.Result;
 import com.github.fosin.cdp.mvc.result.ResultUtils;
 import com.github.fosin.cdp.platform.repository.OrganizationRepository;
-import com.github.fosin.cdp.platform.service.inter.IOrganizationService;
+import com.github.fosin.cdp.platform.service.inter.OrganizationService;
 import com.github.fosin.cdp.platformapi.constant.TableNameConstant;
 import com.github.fosin.cdp.platformapi.dto.request.CdpOrganizationCreateDto;
 import com.github.fosin.cdp.platformapi.dto.request.CdpOrganizationUpdateDto;
@@ -36,7 +36,7 @@ import java.util.Objects;
  */
 @Service
 @Lazy
-public class OrganizationServiceImpl implements IOrganizationService {
+public class OrganizationServiceImpl implements OrganizationService {
     @Autowired
     private OrganizationRepository organizationRepository;
 

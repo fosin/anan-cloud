@@ -9,6 +9,6 @@ import com.github.fosin.cdp.platform.entity.OauthClientDetailsEntity;
  *
  * @author fosin
  */
-public interface IOauthClientService extends ISimpleJpaService<OauthClientDetailsEntity, String, OauthClientDetailsEntity, OauthClientDetailsEntity, OauthClientDetailsEntity> {
+public interface OauthClientService extends ISimpleJpaService<OauthClientDetailsEntity, String, OauthClientDetailsEntity, OauthClientDetailsEntity, OauthClientDetailsEntity> {
 
 }

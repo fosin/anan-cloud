@@ -3,7 +3,7 @@ package com.github.fosin.cdp.platformapi.service.inter;
 import com.github.fosin.cdp.platformapi.constant.ServiceConstant;
 import com.github.fosin.cdp.platformapi.constant.UrlPrefixConstant;
 import com.github.fosin.cdp.platformapi.dto.request.CdpParameterRetrieveDto;
-import com.github.fosin.cdp.platformapi.service.FeignParameterFallbackServiceImpl;
+import com.github.fosin.cdp.platformapi.service.ParameterFeignFallbackServiceImpl;
 import com.github.fosin.cdp.platformapi.dto.request.CdpParameterCreateDto;
 import com.github.fosin.cdp.platformapi.dto.request.CdpParameterUpdateDto;
 import com.github.fosin.cdp.platformapi.entity.CdpParameterEntity;
@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.*;
  * @author fosin
  * @date 2019-3-26
  */
-@FeignClient(name = ServiceConstant.CDP_PLATFORMSERVER, path = UrlPrefixConstant.PARAMETER, fallback = FeignParameterFallbackServiceImpl.class)
-public interface IFeignParameterService {
+@FeignClient(name = ServiceConstant.CDP_PLATFORMSERVER, path = UrlPrefixConstant.PARAMETER, fallback = ParameterFeignFallbackServiceImpl.class)
+public interface ParameterFeignService {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)

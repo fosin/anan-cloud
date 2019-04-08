@@ -12,7 +12,7 @@ import com.github.fosin.cdp.jpa.service.ISimpleJpaService;
  *
  * @author fosin
  */
-public interface IParameterService extends ISimpleJpaService<CdpParameterEntity, Long, CdpParameterCreateDto, CdpParameterRetrieveDto, CdpParameterUpdateDto> {
+public interface ParameterService extends ISimpleJpaService<CdpParameterEntity, Long, CdpParameterCreateDto, CdpParameterRetrieveDto, CdpParameterUpdateDto> {
     CdpParameterEntity findByTypeAndScopeAndName(Integer type, String scope, String name);
 
     CdpParameterEntity getNearestParameter(int type, String scope, String name);

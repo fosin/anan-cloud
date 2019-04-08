@@ -2,7 +2,7 @@ package com.github.fosin.cdp.platform.service;
 
 
 import com.github.fosin.cdp.jpa.repository.IJpaRepository;
-import com.github.fosin.cdp.platform.service.inter.IDictionaryService;
+import com.github.fosin.cdp.platform.service.inter.DictionaryService;
 import com.github.fosin.cdp.platformapi.dto.request.CdpDictionaryCreateDto;
 import com.github.fosin.cdp.platformapi.dto.request.CdpDictionaryUpdateDto;
 import com.github.fosin.cdp.platform.repository.DictionaryDetailRepository;
@@ -39,7 +39,7 @@ import java.util.Objects;
  */
 @Service
 @Lazy
-public class DictionaryServiceImpl implements IDictionaryService {
+public class DictionaryServiceImpl implements DictionaryService {
     @Autowired
     private DictionaryRepository dictionaryRepository;
     @Autowired

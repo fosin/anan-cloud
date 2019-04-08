@@ -1,9 +1,9 @@
 package com.github.fosin.cdp.auth.security;
 
-import com.github.fosin.cdp.auth.service.inter.IPermissionService;
-import com.github.fosin.cdp.auth.service.inter.IRolePermissionService;
-import com.github.fosin.cdp.auth.service.inter.IUserPermissionService;
-import com.github.fosin.cdp.auth.service.inter.IUserService;
+import com.github.fosin.cdp.auth.service.inter.PermissionService;
+import com.github.fosin.cdp.auth.service.inter.RolePermissionService;
+import com.github.fosin.cdp.auth.service.inter.UserPermissionService;
+import com.github.fosin.cdp.auth.service.inter.UserService;
 import com.github.fosin.cdp.platformapi.constant.SystemConstant;
 import com.github.fosin.cdp.platformapi.dto.CdpUserDetail;
 import com.github.fosin.cdp.platformapi.entity.*;
@@ -31,13 +31,13 @@ import java.util.*;
 @Slf4j
 public class CdpUserDetailsServiceImpl implements UserDetailsService {
     @Autowired
-    private IUserService userService;
+    private UserService userService;
     @Autowired
-    private IRolePermissionService rolePermissionService;
+    private RolePermissionService rolePermissionService;
     @Autowired
-    private IUserPermissionService userPermissionService;
+    private UserPermissionService userPermissionService;
     @Autowired
-    private IPermissionService permissionService;
+    private PermissionService permissionService;
 
     @Override
     public User loadUserByUsername(String username) throws UsernameNotFoundException {

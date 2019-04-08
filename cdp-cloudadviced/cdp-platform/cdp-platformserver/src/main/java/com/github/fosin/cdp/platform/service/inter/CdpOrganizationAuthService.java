@@ -15,7 +15,7 @@ import java.util.List;
  * @author fosin
  * @date 2018-11-18 17:26:40
  */
-public interface ICdpOrganizationAuthService extends ISimpleJpaService<CdpOrganizationAuthEntity, Long, CdpOrganizationAuthCreateDto, CdpOrganizationAuthRetrieveDto, CdpOrganizationAuthUpdateDto> {
+public interface CdpOrganizationAuthService extends ISimpleJpaService<CdpOrganizationAuthEntity, Long, CdpOrganizationAuthCreateDto, CdpOrganizationAuthRetrieveDto, CdpOrganizationAuthUpdateDto> {
     List<CdpOrganizationAuthEntity> findAllByVersionId(Long versionId);
 
     List<CdpOrganizationAuthEntity> findAllByOrganizId(Long organizId);

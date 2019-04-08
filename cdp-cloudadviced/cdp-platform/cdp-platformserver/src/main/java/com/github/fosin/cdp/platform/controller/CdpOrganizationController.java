@@ -4,9 +4,9 @@ import com.github.fosin.cdp.core.exception.CdpControllerException;
 import com.github.fosin.cdp.mvc.controller.AbstractBaseController;
 import com.github.fosin.cdp.mvc.controller.ISimpleController;
 import com.github.fosin.cdp.mvc.service.ISimpleService;
-import com.github.fosin.cdp.platform.service.inter.ICdpOrganizationAuthService;
-import com.github.fosin.cdp.platform.service.inter.ICdpOrganizationPermissionService;
-import com.github.fosin.cdp.platform.service.inter.IOrganizationService;
+import com.github.fosin.cdp.platform.service.inter.CdpOrganizationAuthService;
+import com.github.fosin.cdp.platform.service.inter.CdpOrganizationPermissionService;
+import com.github.fosin.cdp.platform.service.inter.OrganizationService;
 import com.github.fosin.cdp.platformapi.constant.UrlPrefixConstant;
 import com.github.fosin.cdp.platformapi.dto.RegisterDto;
 import com.github.fosin.cdp.platformapi.dto.request.CdpOrganizationCreateDto;
@@ -42,13 +42,13 @@ import java.util.List;
 public class CdpOrganizationController extends AbstractBaseController
         implements ISimpleController<CdpOrganizationEntity, Long, CdpOrganizationCreateDto, CdpOrganizationRetrieveDto, CdpOrganizationUpdateDto> {
     @Autowired
-    private IOrganizationService organizationService;
+    private OrganizationService organizationService;
 
     @Autowired
-    private ICdpOrganizationAuthService organizationAuthService;
+    private CdpOrganizationAuthService organizationAuthService;
 
     @Autowired
-    private ICdpOrganizationPermissionService organizationPermissionService;
+    private CdpOrganizationPermissionService organizationPermissionService;
 
     @ApiOperation("根据机构ID获取机构权限")
     @ApiImplicitParam(name = "organizId", value = "机构ID,取值于CdpOrganizationEntity.id")

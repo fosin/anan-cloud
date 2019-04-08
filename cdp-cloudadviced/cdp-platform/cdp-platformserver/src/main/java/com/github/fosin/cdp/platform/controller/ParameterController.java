@@ -2,16 +2,12 @@ package com.github.fosin.cdp.platform.controller;
 
 import com.github.fosin.cdp.mvc.controller.ISimpleController;
 import com.github.fosin.cdp.mvc.service.ISimpleService;
-import com.github.fosin.cdp.platform.service.inter.IParameterService;
+import com.github.fosin.cdp.platform.service.inter.ParameterService;
 import com.github.fosin.cdp.platformapi.constant.UrlPrefixConstant;
 import com.github.fosin.cdp.platformapi.dto.request.CdpParameterCreateDto;
 import com.github.fosin.cdp.platformapi.dto.request.CdpParameterRetrieveDto;
 import com.github.fosin.cdp.platformapi.dto.request.CdpParameterUpdateDto;
 import com.github.fosin.cdp.platformapi.entity.CdpParameterEntity;
-import com.github.fosin.cdp.platformapi.parameter.OrganizParameterUtil;
-import com.github.fosin.cdp.platformapi.parameter.ParameterUtil;
-import com.github.fosin.cdp.platformapi.parameter.UserParameterUtil;
-import com.github.fosin.cdp.util.StringUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -29,7 +25,7 @@ import org.springframework.web.bind.annotation.*;
 @Api(value = UrlPrefixConstant.PARAMETER, tags = "通用参数管理", description = "通用参数管理相关操作(参数获取、自动创建)")
 public class ParameterController implements ISimpleController<CdpParameterEntity, Long, CdpParameterCreateDto, CdpParameterRetrieveDto, CdpParameterUpdateDto> {
     @Autowired
-    private IParameterService parameterService;
+    private ParameterService parameterService;
 
     @ApiOperation(value = "获取指定机构或指定用户的参数整条数据", notes = "type=1则是机构参数(机构参数系统会从当前机构向逐级上级机构查找该参数),type=2则是用户参数,如果缓存和数据库中都没有找到参数，返回null值")
     @RequestMapping(value = "/entity", method = {RequestMethod.POST, RequestMethod.GET})

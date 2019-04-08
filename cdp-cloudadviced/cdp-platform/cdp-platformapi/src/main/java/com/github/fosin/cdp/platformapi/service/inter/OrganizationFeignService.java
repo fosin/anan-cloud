@@ -4,7 +4,7 @@ package com.github.fosin.cdp.platformapi.service.inter;
 import com.github.fosin.cdp.platformapi.constant.ServiceConstant;
 import com.github.fosin.cdp.platformapi.constant.UrlPrefixConstant;
 import com.github.fosin.cdp.platformapi.entity.CdpOrganizationEntity;
-import com.github.fosin.cdp.platformapi.service.FeignParameterFallbackServiceImpl;
+import com.github.fosin.cdp.platformapi.service.ParameterFeignFallbackServiceImpl;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
@@ -19,8 +19,8 @@ import java.util.List;
  *
  * @author fosin
  */
-@FeignClient(value = ServiceConstant.CDP_PLATFORMSERVER, path = UrlPrefixConstant.ORGANIZATION, fallback = FeignParameterFallbackServiceImpl.class)
-public interface IFeignOrganizationService {
+@FeignClient(value = ServiceConstant.CDP_PLATFORMSERVER, path = UrlPrefixConstant.ORGANIZATION, fallback = ParameterFeignFallbackServiceImpl.class)
+public interface OrganizationFeignService {
     @PostMapping({"/{id}"})
     @ApiOperation("根据主键ID查询一条数据")
     ResponseEntity<CdpOrganizationEntity> findOne(@PathVariable("id") Long id);

@@ -1,12 +1,11 @@
 package com.github.fosin.cdp.auth.service;
 
-import com.github.fosin.cdp.auth.service.inter.IUserPermissionService;
+import com.github.fosin.cdp.auth.service.inter.UserPermissionService;
 import com.github.fosin.cdp.platformapi.constant.TableNameConstant;
 import com.github.fosin.cdp.platformapi.entity.CdpUserPermissionEntity;
 import com.github.fosin.cdp.platformapi.repository.UserPermissionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,7 +17,7 @@ import java.util.List;
  * @author fosin
  */
 @Service
-public class UserPermissionServiceImpl implements IUserPermissionService {
+public class UserPermissionServiceImpl implements UserPermissionService {
     @Autowired
     private UserPermissionRepository userPermissionRepository;
 

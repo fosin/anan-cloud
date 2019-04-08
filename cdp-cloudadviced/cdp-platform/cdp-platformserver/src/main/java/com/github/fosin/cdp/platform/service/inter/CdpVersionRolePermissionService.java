@@ -14,7 +14,7 @@ import java.util.List;
  * @author fosin
  * @date 2018-11-18 17:26:40
  */
-public interface ICdpVersionRolePermissionService extends ICrudBatchJpaService<CdpVersionRolePermissionEntity,
+public interface CdpVersionRolePermissionService extends ICrudBatchJpaService<CdpVersionRolePermissionEntity,
         Long, Long, CdpVersionRolePermissionCreateDto, CdpVersionRolePermissionRetrieveDto, CdpVersionRolePermissionUpdateDto> {
     List<CdpVersionRolePermissionEntity> findByRoleId(Long roleId);
 }

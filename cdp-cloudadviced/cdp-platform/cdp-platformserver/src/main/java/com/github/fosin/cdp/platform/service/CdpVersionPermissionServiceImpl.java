@@ -4,7 +4,7 @@ import com.github.fosin.cdp.jpa.service.batch.IUpdateInBatchJpaService;
 import com.github.fosin.cdp.platform.dto.request.CdpVersionPermissionUpdateDto;
 import com.github.fosin.cdp.platform.entity.CdpVersionPermissionEntity;
 import com.github.fosin.cdp.platform.repository.CdpVersionPermissionRepository;
-import com.github.fosin.cdp.platform.service.inter.ICdpVersionPermissionService;
+import com.github.fosin.cdp.platform.service.inter.CdpVersionPermissionService;
 import com.github.fosin.cdp.util.BeanUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -23,7 +23,7 @@ import java.util.List;
  */
 @Service
 @Lazy
-public class CdpVersionPermissionServiceImpl implements ICdpVersionPermissionService {
+public class CdpVersionPermissionServiceImpl implements CdpVersionPermissionService {
     @Autowired
     private CdpVersionPermissionRepository cdpSysVersionPermissionRepository;
 

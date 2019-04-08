@@ -5,7 +5,7 @@ import com.github.fosin.cdp.jpa.repository.IJpaRepository;
 import com.github.fosin.cdp.platform.repository.OrganizationRepository;
 import com.github.fosin.cdp.platform.repository.RoleRepository;
 import com.github.fosin.cdp.platform.repository.UserRoleRepository;
-import com.github.fosin.cdp.platform.service.inter.IRoleService;
+import com.github.fosin.cdp.platform.service.inter.RoleService;
 import com.github.fosin.cdp.platformapi.dto.request.CdpRoleCreateDto;
 import com.github.fosin.cdp.platformapi.dto.request.CdpRoleUpdateDto;
 import com.github.fosin.cdp.platformapi.entity.*;
@@ -36,7 +36,7 @@ import java.util.*;
  */
 @Service
 @Lazy
-public class RoleServiceImpl implements IRoleService {
+public class RoleServiceImpl implements RoleService {
 
     @Autowired
     private RoleRepository roleRepository;

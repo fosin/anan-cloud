@@ -10,7 +10,7 @@ import com.github.fosin.cdp.platformapi.dto.request.CdpPermissionCreateDto;
 import com.github.fosin.cdp.platformapi.dto.request.CdpPermissionRetrieveDto;
 import com.github.fosin.cdp.platformapi.dto.request.CdpPermissionUpdateDto;
 import com.github.fosin.cdp.platformapi.entity.CdpPermissionEntity;
-import com.github.fosin.cdp.platform.service.inter.IPermissionService;
+import com.github.fosin.cdp.platform.service.inter.PermissionService;
 import com.github.fosin.cdp.util.TreeUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -34,7 +34,7 @@ import java.util.List;
 public class PermissionController extends AbstractBaseController
         implements ISimpleController<CdpPermissionEntity, Long, CdpPermissionCreateDto, CdpPermissionRetrieveDto, CdpPermissionUpdateDto> {
     @Autowired
-    private IPermissionService permissionService;
+    private PermissionService permissionService;
 
     @ApiOperation(value = "根据权限类型type获取权限树", notes = "如果权限类型type在0-4之内的任意值则返回对应的权限树，否则返回所有权限树")
     @ApiImplicitParam(name = "type", value = "权限类型type,CdpPermissionEntity.type")

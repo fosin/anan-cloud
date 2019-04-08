@@ -4,7 +4,7 @@ spring:
 #    hibernate:
 #      ddl-auto: update
   datasource:
-    url: jdbc:mysql://cdp-mysql-platform:3306/mpi?useUnicode=true&characterEncoding=utf-8&useSSL=false
+    url: jdbc:mysql://cdp-platform-mysql:3306/mpi?useUnicode=true&characterEncoding=utf-8&useSSL=false
     username: '{cipher}AQBK+yZdW+vCx8SMVNfmosh89xRkD2n13drLn1U10Q1n7vm7G025YjhbGXqrDNi0VLfK90LqWvEQs9ZA4C4kAk4TOWV6r1LfJHz0rbrhtXs8+cnEnHjMcHliuTvmPPn4/37mCcandERkFiWdNumXJyvH+Nnw6SWciYymIsmlTi61h1I3H8vpKCkxlttwjkwsUFLdMmYGeCb7/FZ0hjXlgsj6CkqsAiZ3EUqcE+kbrwPq/uivPJt7tn8xm/5u2tO8Lt2vWH0pjyCIqNxDcrsDQd+6OWj1Sp15NzDYaX2scZcWWJDxTNP3h4iIGan1Sts2/2lUJCFcVA/kqVjt8618x4FUAtHemVvp+dhiZbtLXX/Ezcb+xjvvMv/PzbIunYzWP/s='
     password: '{cipher}AQAf9K0s8zLVaIk44+wqpHGuHsHEK5G4KKu1vk0HwxlojaYQHRkNsFhdQwmcrnkayWpGmNZezJCVb56JJTYL0wOus7L+zUIRWG0YIBzZBzG0iAX/6fQ0l7EVc6JyYmksGi6czSWhhAYvaJ2zupxU5pMou+k48ILP1MSZ+2n/mmM2OA/msXzum7hhSbuHKHkazorFlYLem2efeU0M61xWGRgzHAJ6pOxWGJx2NepgFDGLSTpDiqRTXD98AabHa28X8TpBbFynDONrU3mueuW/TSrXOlzp2LOO/cDbYGpZXAc/jypbH8SWfkSQlQrWaKBg2FJ8DYg/hUnxfSy+QbzyeGkPfJAcrDZ+9lhluKJ2RplT9bAedAWmvzPu2cJCQuf/RmM='
     druid:

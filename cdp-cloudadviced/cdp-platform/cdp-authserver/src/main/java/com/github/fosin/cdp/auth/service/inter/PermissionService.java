@@ -18,6 +18,6 @@ import java.util.List;
  *
  * @author fosin
  */
-public interface IPermissionService extends IRetrieveOneJpaService<CdpPermissionEntity, Long> {
+public interface PermissionService extends IRetrieveOneJpaService<CdpPermissionEntity, Long> {
     List<CdpPermissionEntity> findByAppName(String appName);
 }

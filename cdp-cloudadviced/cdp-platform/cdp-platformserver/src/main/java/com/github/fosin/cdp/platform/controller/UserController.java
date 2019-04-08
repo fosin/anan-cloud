@@ -10,10 +10,10 @@ import com.github.fosin.cdp.platformapi.entity.CdpRoleEntity;
 import com.github.fosin.cdp.platformapi.entity.CdpUserEntity;
 import com.github.fosin.cdp.platformapi.entity.CdpUserPermissionEntity;
 import com.github.fosin.cdp.platformapi.entity.CdpUserRoleEntity;
-import com.github.fosin.cdp.platform.service.inter.IRoleService;
-import com.github.fosin.cdp.platform.service.inter.IUserPermissionService;
-import com.github.fosin.cdp.platform.service.inter.IUserRoleService;
-import com.github.fosin.cdp.platform.service.inter.IUserService;
+import com.github.fosin.cdp.platform.service.inter.RoleService;
+import com.github.fosin.cdp.platform.service.inter.UserPermissionService;
+import com.github.fosin.cdp.platform.service.inter.UserRoleService;
+import com.github.fosin.cdp.platform.service.inter.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -36,16 +36,16 @@ import java.util.List;
 public class UserController extends AbstractBaseController implements ISimpleController<CdpUserEntity, Long, CdpUserCreateDto, CdpUserRetrieveDto, CdpUserUpdateDto> {
 
     @Autowired
-    private IUserService userService;
+    private UserService userService;
 
     @Autowired
-    private IUserRoleService userRoleService;
+    private UserRoleService userRoleService;
 
     @Autowired
-    private IRoleService roleService;
+    private RoleService roleService;
 
     @Autowired
-    private IUserPermissionService userPermissionService;
+    private UserPermissionService userPermissionService;
 
     @PostMapping("/usercode/{usercode}")
     @ApiImplicitParam(name = "usercode", value = "用户工号,取值于CdpUserEntity.usercode")

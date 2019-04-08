@@ -1,10 +1,9 @@
 package com.github.fosin.cdp.platformapi.parameter;
 
+import com.github.fosin.cdp.platformapi.dto.request.CdpParameterCreateDto;
 import com.github.fosin.cdp.platformapi.dto.request.CdpParameterRetrieveDto;
-import com.github.fosin.cdp.platformapi.dto.request.CdpParameterUpdateDto;
 import com.github.fosin.cdp.platformapi.entity.CdpParameterEntity;
-import com.github.fosin.cdp.platformapi.entity.CdpUserEntity;
-import com.github.fosin.cdp.platformapi.service.inter.IFeignParameterService;
+import com.github.fosin.cdp.platformapi.service.inter.ParameterFeignService;
 import com.github.fosin.cdp.platformapi.util.LoginUserUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +18,10 @@ import org.springframework.stereotype.Component;
 @Component
 @Slf4j
 public class ParameterUtil extends AbstractParameterUtil {
-    private static IFeignParameterService parameterService;
+    private static ParameterFeignService parameterService;
 
     @Autowired
-    public ParameterUtil(IFeignParameterService parameterService) {
+    public ParameterUtil(ParameterFeignService parameterService) {
         ParameterUtil.parameterService = parameterService;
     }
 
@@ -54,13 +53,13 @@ public class ParameterUtil extends AbstractParameterUtil {
     }
 
     public static synchronized CdpParameterEntity setParameter(ParameterType type, String scope, String name, String value, String description) {
-        CdpParameterUpdateDto updateEntity = new CdpParameterUpdateDto();
-        updateEntity.setValue(value);
-        updateEntity.setType(type.getTypeValue());
-        updateEntity.setScope(scope);
-        updateEntity.setName(name);
-        updateEntity.setDescription(description);
-        return parameterService.update(updateEntity).getBody();
+        CdpParameterCreateDto createDto = new CdpParameterCreateDto();
+        createDto.setValue(value);
+        createDto.setType(type.getTypeValue());
+        createDto.setScope(scope);
+        createDto.setName(name);
+        createDto.setDescription(description);
+        return parameterService.create(createDto).getBody();
 
     }
 
@@ -75,7 +74,7 @@ public class ParameterUtil extends AbstractParameterUtil {
         return null;
     }
 
-    public static IFeignParameterService getParameterService() {
+    public static ParameterFeignService getParameterService() {
         return parameterService;
     }
 }

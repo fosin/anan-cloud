@@ -15,7 +15,7 @@ import java.util.List;
  *
  * @author fosin
  */
-public interface IOrganizationService extends ISimpleJpaService<CdpOrganizationEntity, Long, CdpOrganizationCreateDto, CdpOrganizationRetrieveDto, CdpOrganizationUpdateDto> {
+public interface OrganizationService extends ISimpleJpaService<CdpOrganizationEntity, Long, CdpOrganizationCreateDto, CdpOrganizationRetrieveDto, CdpOrganizationUpdateDto> {
     List<CdpOrganizationEntity> findAllByTopId(Long topId);
 
     List<CdpOrganizationEntity> findByPid(Long pid);

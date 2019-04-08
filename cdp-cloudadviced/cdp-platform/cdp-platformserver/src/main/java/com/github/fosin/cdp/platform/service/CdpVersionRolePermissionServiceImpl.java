@@ -1,11 +1,10 @@
 package com.github.fosin.cdp.platform.service;
 
 import com.github.fosin.cdp.jpa.service.batch.IUpdateInBatchJpaService;
-import com.github.fosin.cdp.jpa.util.JpaUtil;
 import com.github.fosin.cdp.platform.dto.request.CdpVersionRolePermissionUpdateDto;
 import com.github.fosin.cdp.platform.entity.CdpVersionRolePermissionEntity;
 import com.github.fosin.cdp.platform.repository.CdpVersionRolePermissionRepository;
-import com.github.fosin.cdp.platform.service.inter.ICdpVersionRolePermissionService;
+import com.github.fosin.cdp.platform.service.inter.CdpVersionRolePermissionService;
 import com.github.fosin.cdp.util.BeanUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -24,7 +23,7 @@ import java.util.List;
  */
 @Service
 @Lazy
-public class CdpVersionRolePermissionServiceImpl implements ICdpVersionRolePermissionService {
+public class CdpVersionRolePermissionServiceImpl implements CdpVersionRolePermissionService {
     @Autowired
     private CdpVersionRolePermissionRepository versionRolePermissionRepository;
 

@@ -15,7 +15,7 @@ import java.util.List;
  *
  * @author fosin
  */
-public interface IUserPermissionService extends ICrudBatchJpaService<CdpUserPermissionEntity, Long, Long, CdpUserPermissionCreateDto, CdpUserPermissionRetrieveDto, CdpUserPermissionUpdateDto> {
+public interface UserPermissionService extends ICrudBatchJpaService<CdpUserPermissionEntity, Long, Long, CdpUserPermissionCreateDto, CdpUserPermissionRetrieveDto, CdpUserPermissionUpdateDto> {
     List<CdpUserPermissionEntity> findByUserIdAndOrganizId(Long userId, Long organizId);
 
     List<CdpUserPermissionEntity> findByUserId(Long userId);

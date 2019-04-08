@@ -14,7 +14,7 @@ import java.util.List;
  *
  * @author fosin
  */
-public interface IUserService extends ISimpleJpaService<CdpUserEntity, Long, CdpUserCreateDto, CdpUserRetrieveDto, CdpUserUpdateDto> {
+public interface UserService extends ISimpleJpaService<CdpUserEntity, Long, CdpUserCreateDto, CdpUserRetrieveDto, CdpUserUpdateDto> {
     CdpUserEntity findByUsercode(String usercode);
 
     CdpUserEntity changePassword(Long id, String password, String confirmPassword1, String confirmPassword2);

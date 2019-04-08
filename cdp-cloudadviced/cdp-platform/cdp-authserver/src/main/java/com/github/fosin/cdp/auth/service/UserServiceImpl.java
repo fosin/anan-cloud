@@ -1,7 +1,6 @@
 package com.github.fosin.cdp.auth.service;
 
-import com.github.fosin.cdp.auth.service.inter.IUserService;
-import com.github.fosin.cdp.jpa.repository.IJpaRepository;
+import com.github.fosin.cdp.auth.service.inter.UserService;
 import com.github.fosin.cdp.platformapi.constant.TableNameConstant;
 import com.github.fosin.cdp.platformapi.entity.CdpUserEntity;
 import com.github.fosin.cdp.platformapi.entity.CdpUserRoleEntity;
@@ -9,7 +8,6 @@ import com.github.fosin.cdp.platformapi.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -24,7 +22,7 @@ import java.util.List;
  */
 @Service
 @Slf4j
-public class UserServiceImpl implements IUserService {
+public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
 

@@ -8,7 +8,7 @@ import com.github.fosin.cdp.platformapi.entity.CdpUserEntity;
  *
  * @author fosin
  */
-public interface IUserService {
+public interface UserService {
     CdpUserEntity findByUsercode(String usercode);
 
 }

@@ -7,10 +7,10 @@ import com.github.fosin.cdp.mvc.result.Result;
 import com.github.fosin.cdp.mvc.service.ISimpleService;
 import com.github.fosin.cdp.platformapi.dto.request.*;
 import com.github.fosin.cdp.platformapi.entity.*;
-import com.github.fosin.cdp.platform.service.inter.IRolePermissionService;
-import com.github.fosin.cdp.platform.service.inter.IRoleService;
-import com.github.fosin.cdp.platform.service.inter.IUserRoleService;
-import com.github.fosin.cdp.platform.service.inter.IUserService;
+import com.github.fosin.cdp.platform.service.inter.RolePermissionService;
+import com.github.fosin.cdp.platform.service.inter.RoleService;
+import com.github.fosin.cdp.platform.service.inter.UserRoleService;
+import com.github.fosin.cdp.platform.service.inter.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -32,13 +32,13 @@ import java.util.List;
 @Api(value = "v1/role", tags = "角色管理", description = "角色管理相关操作")
 public class RoleController implements ISimpleController<CdpRoleEntity, Long, CdpRoleCreateDto, CdpRoleRetrieveDto, CdpRoleUpdateDto> {
     @Autowired
-    private IRoleService roleService;
+    private RoleService roleService;
     @Autowired
-    private IRolePermissionService rolePermissionService;
+    private RolePermissionService rolePermissionService;
     @Autowired
-    private IUserRoleService userRoleService;
+    private UserRoleService userRoleService;
     @Autowired
-    private IUserService userService;
+    private UserService userService;
 
     @ApiOperation("根据角色ID获取角色权限")
     @ApiImplicitParam(name = "roleId", value = "角色ID,取值于CdpRoleEntity.id")

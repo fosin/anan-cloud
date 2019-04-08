@@ -5,8 +5,8 @@ import com.github.fosin.cdp.cache.util.CacheUtil;
 import com.github.fosin.cdp.core.exception.CdpUserOrPassInvalidException;
 import com.github.fosin.cdp.jpa.repository.IJpaRepository;
 import com.github.fosin.cdp.platform.repository.UserRoleRepository;
-import com.github.fosin.cdp.platform.service.inter.IUserRoleService;
-import com.github.fosin.cdp.platform.service.inter.IUserService;
+import com.github.fosin.cdp.platform.service.inter.UserRoleService;
+import com.github.fosin.cdp.platform.service.inter.UserService;
 import com.github.fosin.cdp.platformapi.constant.TableNameConstant;
 import com.github.fosin.cdp.platformapi.dto.request.CdpUserRoleCreateDto;
 import com.github.fosin.cdp.platformapi.entity.CdpRoleEntity;
@@ -32,11 +32,11 @@ import java.util.List;
  */
 @Service
 @Lazy
-public class UserRoleServiceImpl implements IUserRoleService {
+public class UserRoleServiceImpl implements UserRoleService {
     @Autowired
     private UserRoleRepository userRoleRepository;
     @Autowired
-    private IUserService userService;
+    private UserService userService;
     @Autowired
     private PasswordEncoder passwordEncoder;
 

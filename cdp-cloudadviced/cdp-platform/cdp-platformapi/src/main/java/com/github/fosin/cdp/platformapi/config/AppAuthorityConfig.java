@@ -3,7 +3,7 @@ package com.github.fosin.cdp.platformapi.config;
 import com.github.fosin.cdp.oauth2.config.CdpAuthorityConfig;
 import com.github.fosin.cdp.oauth2.dto.CdpAuthorityDto;
 import com.github.fosin.cdp.platformapi.constant.ServiceConstant;
-import com.github.fosin.cdp.platformapi.service.inter.IFeignPermissionService;
+import com.github.fosin.cdp.platformapi.service.inter.PermissionFeignService;
 import com.github.fosin.cdp.platformapi.entity.CdpPermissionEntity;
 import com.github.fosin.cdp.util.StringUtil;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,8 +29,8 @@ public class AppAuthorityConfig {
     private String appName;
 
     @Bean
-    @ConditionalOnBean(IFeignPermissionService.class)
-    public CdpAuthorityConfig authorityConfiggs(IFeignPermissionService permissionService) {
+    @ConditionalOnBean(PermissionFeignService.class)
+    public CdpAuthorityConfig authorityConfiggs(PermissionFeignService permissionService) {
         List<CdpAuthorityDto> authorityDtos = new ArrayList<>();
         List<CdpPermissionEntity> entities;
         if (StringUtil.hasText(appName) && !ServiceConstant.CDP_AUTHSERVER.equals(appName)) {
