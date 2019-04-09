@@ -1,3 +1,10 @@
+logging:
+  file: logs/${spring.application.name}.log
+  file.max-size: 50mb
+  file.max-history: 365
+  level:
+    root: info
+    zipkin2: debug
 eureka:
   client:
     healthcheck:
@@ -13,27 +20,21 @@ security:
       prefer-token-info: false
 spring:
   zipkin:
-    baseUrl: http://cdp-sleuthserver/
+#    baseUrl: http://cdp-zipkin:9411/ #http方式提交到zipkin,这里不用这种方式，使用rabbitmq
     sender:
-      type: rabbit
-    locator:
-      discovery:
-        enabled: true
-    discovery-client-enabled: true
-  #禁用sleuth，改用rabbitmq
+      type: rabbit #使用rabbitmq来传送数据
+#    locator:
+#      discovery:
+#        enabled: true
+#    discovery-client-enabled: true
   sleuth:
-    enabled: false
-zipkin:
-  storage:
-    type: mysql
-  collector:
-    rabbitmq:
-      addresses: ${spring.rabbitmq.addresses}
-      username: ${spring.rabbitmq.username}
-      password: ${spring.rabbitmq.password}
-      queue: zipkin
-  query:
-    allowed-origins: '*'
+#    enabled: false #禁用sleuth
+    sampler:
+      probability: 1.0  #应采样的请求的概率。 例如。 应该对1.0  -  100％的请求进行抽样。 精度仅为整数（即不支持0.1％的迹线）。
+#    feign:
+#      enabled: false
+#      processor:
+#        enabled: false
 management:
   endpoints:
     web:

@@ -15,9 +15,6 @@ spring:
     active: @spring.cloud.config.profileActive@ #native属性表示config使用本地文件配置，系统将从classpath目录下查找配置文件
   application:
     name: @project.artifactId@
-  zipkin:
-    rabbitmq:
-      queue: zipkin
   cloud:
     inetutils:
       preferred-networks: @spring.cloud.inetutils.preferred-networks@
@@ -68,3 +65,7 @@ encrypt:
 info: #定义各种额外的详情给服务端显示
   description: "@project.description@"
   version: "@project.version@"
+logging:
+  file: logs/${spring.application.name}.log
+  file.max-size: 50mb
+  file.max-history: 365
