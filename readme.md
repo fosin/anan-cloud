@@ -55,6 +55,14 @@ Vuejs、Nodejs、Webpack | 前段开发框架
            127.0.0.1 cdp-redis
            127.0.0.1 cdp-platform-mysql
            127.0.0.1 cdp-rabbitmq
+       1.2.3、  配置 log4j.skipJansi使log4j2的日志支持颜色字体
+            IDEA中，点击右上角->Edit Configurations，在VM options中添加
+            -Dlog4j.skipJansi=false
+            
+            MYECLIPSE中，Run Configurations->Arguments-> VM arguments 中添加
+            -Dlog4j.skipJansi=false
+            
+            MYECLIPSE 需要ansi 插件的支持
 ####1.3、按顺序启动项目
        1.3.1、启动cdp-eurekaserver服务注册中心
        1.3.2、启动cdp-configserver配置中心

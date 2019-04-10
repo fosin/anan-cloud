@@ -1,10 +1,10 @@
-logging:
-  file: logs/${spring.application.name}.log
-  file.max-size: 50mb
-  file.max-history: 365
-  level:
-    root: info
-    zipkin2: debug
+#logging:
+#  file: logs/${spring.application.name}.log
+#  file.max-size: 50mb
+#  file.max-history: 365
+#  level:
+#    root: info
+#    zipkin2: debug
 eureka:
   client:
     healthcheck:

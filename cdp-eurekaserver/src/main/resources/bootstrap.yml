@@ -1,7 +1,3 @@
-logging:
-  file: logs/${spring.application.name}.log
-  file.max-size: 50mb
-  file.max-history: 365
 server:
   port: 51000
 eureka:
