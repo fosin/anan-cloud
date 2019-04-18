@@ -25,7 +25,7 @@
                 <pattern>${pattern}</pattern>
             </PatternLayout>
             <Policies>
-                <TimeBasedTriggeringPolicy/>
+                <TimeBasedTriggeringPolicy interval="24" modulate="true"/>
                 <SizeBasedTriggeringPolicy size="50MB"/>
             </Policies>
         </RollingFile>
