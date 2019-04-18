@@ -20,7 +20,7 @@ security:
       prefer-token-info: false
 spring:
   zipkin:
-#    baseUrl: http://cdp-zipkin:9411/ #http方式提交到zipkin,这里不用这种方式，使用rabbitmq
+#    baseUrl: http://zipkin:9411/ #http方式提交到zipkin,这里不用这种方式，使用rabbitmq
     sender:
       type: rabbit #使用rabbitmq来传送数据
 #    locator:

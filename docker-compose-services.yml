@@ -1,0 +1,96 @@
+version: "3"
+services:
+  cdp-eurekaserver:
+    image: registry.cn-hangzhou.aliyuncs.com/fosin/cdp-eurekaserver:2.0.0-SNAPSHOT
+    container_name: cdp-eurekaserver
+    hostname: cdp-eurekaserver
+    restart: on-failure
+    networks:
+      - cdp-network
+    volumes:
+      - /root/docker/logs/cdp:/logs
+    ports:
+      - 51000:51000
+
+  cdp-configserver:
+    image: registry.cn-hangzhou.aliyuncs.com/fosin/cdp-configserver:2.0.0-SNAPSHOT
+    container_name: cdp-configserver
+    hostname: cdp-configserver
+    restart: on-failure
+    ports:
+      - 51100:51100
+    environment:
+      spring.cloud.config.server.native.search-locations: file:/cdp-config
+    volumes:
+      - /root/docker/logs/cdp:/logs
+      - D:/Source/myproject/cdp/cdp-cloud/cdp-config:/cdp-config
+    networks:
+      - cdp-network
+    depends_on:
+      - cdp-eurekaserver
+      - rabbitmq
+
+  cdp-zuulgateway:
+    image: registry.cn-hangzhou.aliyuncs.com/fosin/cdp-zuulgateway:2.0.0-SNAPSHOT
+    container_name: cdp-zuulgateway
+    hostname: cdp-zuulgateway
+    restart: on-failure
+    ports:
+      - 9000:9000
+    volumes:
+      - /root/docker/logs/cdp:/logs
+    networks:
+      - cdp-network
+    depends_on:
+      - cdp-configserver
+      - cdp-platform-mysql
+
+  cdp-authserver:
+    image: registry.cn-hangzhou.aliyuncs.com/fosin/cdp-authserver:2.0.0-SNAPSHOT
+    container_name: cdp-authserver
+    hostname: cdp-authserver
+    restart: on-failure
+    ports:
+      - 51400:51400
+    volumes:
+      - /root/docker/logs/cdp:/logs
+    networks:
+      - cdp-network
+    depends_on:
+      - cdp-configserver
+      - redis
+      - cdp-platform-mysql
+
+  cdp-platformserver:
+    image: registry.cn-hangzhou.aliyuncs.com/fosin/cdp-platformserver:2.0.0-SNAPSHOT
+    container_name: cdp-platformserver
+    hostname: cdp-platformserver
+    restart: on-failure
+    volumes:
+      - /root/docker/logs/cdp:/logs
+    ports:
+      - 51500:51500
+    networks:
+      - cdp-network
+    depends_on:
+      - cdp-configserver
+      - redis
+      - cdp-platform-mysql
+
+  cdp-adminserver:
+    image: registry.cn-hangzhou.aliyuncs.com/fosin/cdp-adminserver:2.0.0-SNAPSHOT
+    container_name: cdp-adminserver
+    hostname: cdp-adminserver
+    restart: on-failure
+    volumes:
+      - /root/docker/logs/cdp:/logs
+    ports:
+      - 51700:51700
+    networks:
+      - cdp-network
+    depends_on:
+      - cdp-zuulgateway
+
+networks:
+  cdp-network:
+    external: true

@@ -1,0 +1,122 @@
+version: "3"
+services:
+  elasticsearch:
+    image: elasticsearch:6.7.0
+    container_name: elasticsearch
+    hostname: elasticsearch
+    restart: on-failure
+    environment:
+#      - cluster.name=docker-cluster
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+#    volumes:
+#      - /root/docker/elasticsearch/data:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+    networks:
+      - cdp-network
+
+  zipkin:
+    image: openzipkin/zipkin
+    container_name: zipkin
+    hostname: zipkin
+    restart: on-failure
+    environment:
+      - STORAGE_TYPE=elasticsearch
+      # Point the zipkin at the storage backend
+      - ES_HOSTS=elasticsearch
+#      - RABBIT_CONNECTION_TIMEOUT=60000
+#      - RABBIT_VIRTUAL_HOST=/
+#      - RABBIT_USE_SSL=false
+#      - RABBIT_QUEUE=zipkin
+      # Uncomment to see requests to and from elasticsearch
+      # - ES_HTTP_LOGGING=BODY
+      - RABBIT_ADDRESSES=rabbitmq:5672
+      - RABBIT_USER=cdp
+      - RABBIT_PASSWORD=local
+    networks:
+      - cdp-network
+    depends_on:
+      - elasticsearch
+      - rabbitmq
+    ports:
+      # Port used for the Zipkin UI and HTTP Api
+      - 9411:9411
+      # Uncomment if you set SCRIBE_ENABLED=true
+      # - 9410:9410
+
+  cdp-platform-mysql:
+    container_name: cdp-platform-mysql
+    hostname: cdp-platform-mysql
+    image: registry.cn-hangzhou.aliyuncs.com/fosin/cdp-platform-mysql:2.0.0-SNAPSHOT
+    build:
+      context: ./docs/mysql
+      dockerfile: Dockerfile
+    environment:
+      - MYSQL_ROOT_PASSWORD=local
+      - TZ=Asia/Shanghai
+    volumes:
+      - /root/docker/mysql/cdp_platform/data:/var/lib/mysql
+      - /root/docker/mysql/cdp_platform/mysqld.cnf:/etc/mysql/conf.d/mysqld.cnf
+      - /root/docker/mysql/cdp_platform/logs:/var/log/mysql
+    restart: on-failure
+    ports:
+      - 3306:3306
+    networks:
+      - cdp-network
+
+  rabbitmq:
+    container_name: rabbitmq
+    hostname: rabbitmq
+    image: rabbitmq:3-management
+    environment:
+      - RABBITMQ_ERLANG_COOKIE=SWQOKODSQALRPCLNMEQG
+      - RABBITMQ_DEFAULT_USER=cdp
+      - RABBITMQ_DEFAULT_PASS=local
+      - RABBITMQ_DEFAULT_VHOST=/
+      - TZ=Asia/Shanghai
+    #    volumes: TODO 启动后报错cookie file /var/lib/rabbitmq/.erlang.cookie must be accessible by owner only
+    #      - /root/docker/rabbitmq:/var/lib/rabbitmq
+    restart: on-failure
+    ports:
+      - 15672:15672
+      - 5672:5672
+    networks:
+      - cdp-network
+
+  nginx:
+    container_name: nginx
+    image: nginx:1.15
+    hostname: nginx
+    environment:
+      - TZ=Asia/Shanghai
+    volumes:
+      - /root/docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - /root/docker/nginx/html:/usr/share/nginx/html
+    ports:
+      - 80:80
+    networks:
+      - cdp-network
+
+  redis:
+    image: redis:4.0
+    container_name: redis
+    hostname: redis
+    environment:
+      - TZ=Asia/Shanghai
+    volumes:
+      - /root/docker/redis:/data
+    restart: on-failure
+    ports:
+      - 6379:6379
+    command: redis-server --appendonly yes --requirepass local
+    networks:
+      - cdp-network
+
+networks:
+  cdp-network:
+    external: true
