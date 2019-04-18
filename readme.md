@@ -37,7 +37,7 @@ Vuejs、Nodejs、Webpack | 前段开发框架
 
 #搭建环境
 ##1、本地开发环境local设置
-###1.1、安装mysql、Redis、RabbitMQ
+###1.1、安装mysql、Redis、RabbitMQ、ElasticSearch
        1.1.1、安装Mysql
             建议安装5.7及以上版本，设置root密码为local
             根据源码相对路径./docs/mysql/cdp_platform.sql创建数据库cdp_platform，并导入相关sql语句和基础数据
@@ -46,7 +46,20 @@ Vuejs、Nodejs、Webpack | 前段开发框架
        1.1.3、安装Rabbitmq(只测试过3.x)
             用户：cdp
             密码：local
-       1.1.4、如果mysql、redis、rabbitmq等密码不是local，则需要修改cdp-cloud下面的pom.xml中的profile local 的配置信息 ，还有cdp-config目录下的配置文件    
+       1.1.4、安装ElasticSearch
+             启动时报错：max virtual memory areas vm.max_map_count [65530] is too low, increase to at least [262144] 
+             原因：最大虚拟内存太小 
+             解决方案：切换到root用户下，修改配置文件sysctl.conf
+             
+             sudo vim /etc/sysctl.conf
+             
+             添加下面配置： 
+             vm.max_map_count=655360
+             
+             并执行命令： 
+             sysctl -p
+       
+       1.1.5、如果mysql、redis、rabbitmq等密码不是local，则需要修改cdp-cloud下面的pom.xml中的profile local 的配置信息 ，还有cdp-config目录下的配置文件    
 ###1.2、配置环境
        1.2.1、安装jdk1.8及以上、lombok插件、ignore插件（非必须），开发工具推荐使用Idea
        1.2.2、Windows下修改c:/windows/system32/drives/etc/hosts文件增加以下信息，IP地址根据实际情况设定
