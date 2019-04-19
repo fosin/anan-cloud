@@ -78,7 +78,7 @@ Vuejs、Nodejs、Webpack | 前段开发框架
 ###1.4、服务安装篇，使用文件docker-compose-services.yml(cdp-eurekaserver、cdp-configserver、cdp-authserver等)
             本地开发环境基本上不需要启动这个docker-compose文件，主要还是使用源码跑
 ###1.5、配置环境
-       1.5.1、安装jdk1.8及以上、lombok插件、ignore插件（非必须），开发工具推荐使用Idea
+       1.5.1、安装jdk1.8及以上、lombok插件、ignore插件，开发工具推荐使用Idea
        1.5.2、Windows下修改c:/windows/system32/drives/etc/hosts文件增加以下信息，IP地址根据实际情况设定
             127.0.0.1 cdp-eurekaserver
             127.0.0.1 cdp-authserver

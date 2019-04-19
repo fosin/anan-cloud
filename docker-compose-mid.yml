@@ -96,6 +96,7 @@ services:
       - TZ=Asia/Shanghai
     volumes:
       - /root/docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+#      - /root/docker/nginx/monitor.conf:/etc/nginx/conf.d/monitor.conf
       - /root/docker/nginx/html:/usr/share/nginx/html
     ports:
       - 80:80
