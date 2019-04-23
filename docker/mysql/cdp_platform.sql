@@ -813,7 +813,7 @@ CREATE TABLE `oauth_client_details` (
 
 LOCK TABLES `oauth_client_details` WRITE;
 /*!40000 ALTER TABLE `oauth_client_details` DISABLE KEYS */;
-INSERT INTO `oauth_client_details` VALUES ('appServer',NULL,'appServer','all','client_credentials','','',NULL,NULL,NULL,'true'),('mobileApp',NULL,'mobileApp','app','password,refresh_token,client_credentials',NULL,'12,14,27,85',NULL,NULL,NULL,'true'),('webApp',NULL,'webApp','webApp','password,refresh_token',NULL,'',NULL,NULL,NULL,'true');/*!40000 ALTER TABLE `oauth_client_details` ENABLE KEYS */;
+INSERT INTO `oauth_client_details` VALUES ('appServer',NULL,'{bcrypt}$2a$10$JlQ0ryJ/x5YMvR/LO/h4dumxZZXPbXHXkODtC0Ge0bM8pGbYuHp5S','all','client_credentials','','',NULL,NULL,NULL,'true'),('mobileApp',NULL,'{bcrypt}$2a$10$aDdHJHfzuQ8F6gfQwPxwUuHrNg7P6GSeJM6ScLz5EmrsI9/TodSqK','app','password,refresh_token,client_credentials',NULL,'12,14,27,85',NULL,NULL,NULL,'true'),('webApp',NULL,'{bcrypt}$2a$10$xKfDcbOc1Ibh0VRWRIsQ4O3Vk9JxbF/30Wdz.e2hBNAAQKR5UziIK','webApp','password,refresh_token',NULL,'',NULL,NULL,NULL,'true');/*!40000 ALTER TABLE `oauth_client_details` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
