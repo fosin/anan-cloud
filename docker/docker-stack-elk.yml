@@ -1,0 +1,69 @@
+version: "3"
+services:
+  filebeat:
+    image: elastic/filebeat:6.7.1
+    user: root
+    volumes:
+      - ./filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./logs:/logs:ro
+    #    environment:
+    #      - output.elasticsearch.hosts=["elasticsearch:9200"]
+    #      - output.logstash.enabled=false
+    #      - setup.kibana.host=kibana:5601
+    # disable strict permission checks
+    command: ["--strict.perms=false"]
+    #    ports:
+    #      - 5601:5601
+    networks:
+      - cdp-overlay
+    depends_on:
+      - elasticsearch
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        max_attempts: 999
+      update_config:
+        parallelism: 1 # 每次更新1个副本
+        delay: 5s # 每次更新间隔
+        monitor: 10s # 单次更新多长时间后没有结束则判定更新失败
+        max_failure_ratio: 0.1 # 更新时能容忍的最大失败率
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 32M
+
+  kibana:
+    image: kibana:6.7.1
+    environment:
+      - I18N_LOCALE=zh-CN
+      #      -SERVER_NAME=kibana.example.org
+      - ELASTICSEARCH_URL=http://elasticsearch:9200
+    ports:
+      - 5601:5601
+    networks:
+      - cdp-overlay
+    depends_on:
+      - elasticsearch
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        max_attempts: 999
+      update_config:
+        parallelism: 1 # 每次更新1个副本
+        delay: 5s # 每次更新间隔
+        monitor: 10s # 单次更新多长时间后没有结束则判定更新失败
+        max_failure_ratio: 0.1 # 更新时能容忍的最大失败率
+      resources:
+        limits:
+          memory: 512M
+        reservations:
+          memory: 128M
+
+networks:
+  cdp-overlay:
+    external: true

@@ -7,7 +7,7 @@ eureka:
   instance:
     prefer-ip-address: true
 #    metadata-map: #用于SBA认证
-#    instance-id: http://${spring.cloud.client.ipAddress}:${server.port}
+
 spring:
   profiles:
     active: @profileActive@

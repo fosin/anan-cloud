@@ -9,7 +9,7 @@ eureka:
       defaultZone: @eureka.client.service-url.defaultZone@
   instance:
     prefer-ip-address: true
-#    instance-id: http://${spring.cloud.client.ipAddress}:${server.port}
+
 spring:
   profiles:
     active: @profileActive@

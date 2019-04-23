@@ -9,7 +9,7 @@ eureka:
   instance:
     prefer-ip-address: true #可以实现ip地址作为主机地址
 #    hostname: localhost
-    #    instance-id: http://${spring.cloud.client.ipAddress}:${server.port} #启用就报错The request was rejected because the URL was not normalized.
+     #启用就报错The request was rejected because the URL was not normalized.
     metadata-map: #用于SBA认证
       user.name: ${spring.security.user.name}
       user.password: ${spring.security.user.password}
