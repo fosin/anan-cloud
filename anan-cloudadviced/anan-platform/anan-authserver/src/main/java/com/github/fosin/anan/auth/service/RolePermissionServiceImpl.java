@@ -1,0 +1,29 @@
+package com.github.fosin.anan.auth.service;
+
+import com.github.fosin.anan.auth.service.inter.RolePermissionService;
+import com.github.fosin.anan.platformapi.constant.TableNameConstant;
+import com.github.fosin.anan.platformapi.entity.AnanRolePermissionEntity;
+import com.github.fosin.anan.platformapi.repository.RolePermissionRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+/**
+ * 2017/12/29.
+ * Time:12:38
+ *
+ * @author fosin
+ */
+@Service
+public class RolePermissionServiceImpl implements RolePermissionService {
+    @Autowired
+    private RolePermissionRepository rolePermissionRepository;
+
+    @Override
+    @Cacheable(value = TableNameConstant.ANAN_ROLE_PERMISSION, key = "#roleId")
+    public List<AnanRolePermissionEntity> findByRoleId(Long roleId) {
+        return rolePermissionRepository.findByRoleId(roleId);
+    }
+}

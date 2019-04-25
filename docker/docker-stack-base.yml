@@ -1,18 +1,18 @@
 version: "3"
 services:
-  cdp-platform-mysql:
-    image: registry.cn-hangzhou.aliyuncs.com/fosin/cdp-platform-mysql:2.0.0-SNAPSHOT
+  anan-platform-mysql:
+    image: registry.cn-hangzhou.aliyuncs.com/fosin/anan-platform-mysql:2.0.0-SNAPSHOT
     networks:
-      - cdp-overlay
+      - anan-overlay
     depends_on:
-      - cdp-overlay
+      - anan-overlay
     environment:
       - TZ=Asia/Shanghai
       - MYSQL_ROOT_PASSWORD=local
     volumes:
-      - ./mysql/cdp_platform/data:/var/lib/mysql
-      - ./mysql/cdp_platform/mysqld.cnf:/etc/mysql/conf.d/mysqld.cnf
-      - ./mysql/cdp_platform/logs:/var/log/mysql
+      - ./mysql/anan_platform/data:/var/lib/mysql
+      - ./mysql/anan_platform/mysqld.cnf:/etc/mysql/conf.d/mysqld.cnf
+      - ./mysql/anan_platform/logs:/var/log/mysql
     ports:
       - 3306:3306
     deploy:
@@ -35,11 +35,11 @@ services:
     environment:
       - TZ=Asia/Shanghai
       - RABBITMQ_ERLANG_COOKIE=SWQOKODSQALRPCLNMEQG
-      - RABBITMQ_DEFAULT_USER=cdp
+      - RABBITMQ_DEFAULT_USER=anan
       - RABBITMQ_DEFAULT_PASS=local
       - RABBITMQ_DEFAULT_VHOST=/
     networks:
-      - cdp-overlay
+      - anan-overlay
     ports:
       - 15672:15672
       - 5672:5672
@@ -82,12 +82,12 @@ services:
         reservations:
           memory: 32M
     networks:
-      - cdp-overlay
+      - anan-overlay
 
   nginx:
     image: nginx:1.15
     networks:
-      - cdp-overlay
+      - anan-overlay
     environment:
       - TZ=Asia/Shanghai
     volumes:
@@ -106,5 +106,5 @@ services:
         constraints: [node.role == manager]
 
 networks:
-  cdp-overlay:
+  anan-overlay:
     external: true

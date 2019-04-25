@@ -1,0 +1,53 @@
+spring:
+  datasource:
+    url: jdbc:mysql://anan-platform-mysql:3306/anan_zipkin
+    username: root
+    password: '{cipher}AQAf9K0s8zLVaIk44+wqpHGuHsHEK5G4KKu1vk0HwxlojaYQHRkNsFhdQwmcrnkayWpGmNZezJCVb56JJTYL0wOus7L+zUIRWG0YIBzZBzG0iAX/6fQ0l7EVc6JyYmksGi6czSWhhAYvaJ2zupxU5pMou+k48ILP1MSZ+2n/mmM2OA/msXzum7hhSbuHKHkazorFlYLem2efeU0M61xWGRgzHAJ6pOxWGJx2NepgFDGLSTpDiqRTXD98AabHa28X8TpBbFynDONrU3mueuW/TSrXOlzp2LOO/cDbYGpZXAc/jypbH8SWfkSQlQrWaKBg2FJ8DYg/hUnxfSy+QbzyeGkPfJAcrDZ+9lhluKJ2RplT9bAedAWmvzPu2cJCQuf/RmM='
+#    platform: mysql #指定schema要使用的Platform(schema-${platform}.sql)，默认为: all
+    schema: classpath:/mysql.sql
+#    data: #指定Data (DML)脚本
+    initialize: false #指定初始化数据源，是否用data.sql来初始化，默认: true
+#    continue-on-error: true #在初始化数据库时，遇到错误是否继续，默认false
+  druid:
+    initial-size: 20 #初始化大小
+    min-idle: 20 #最小
+    maxActive: 50 # 最大
+    maxWait: 60000 #配置获取连接等待超时的时间
+    timeBetweenEvictionRunsMillis: 60000 # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+    minEvictableIdleTimeMillis: 300000 # 配置一个连接在池中最小生存的时间，单位是毫秒
+    #      validationQuery: SELECT 1 FROM DUAL
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+  #      poolPreparedStatements: true # 打开PSCache，并且指定每个连接上PSCache的大小
+  #      maxPoolPreparedStatementPerConnectionSize: 20
+  #      filters: stat,wall,log4j # 配置监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙
+  #      connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000 # 通过connectProperties属性来打开mergeSql功能；慢SQL记录
+  #      useGlobalDataSourceStat: true # 合并多个DruidDataSource的监控数据
+anan:
+  oauth2:
+    disablecsrf: true
+    disableHttpBasic: true
+    cors:
+      allowedOrigins: '*'
+      allowedMethods: '*'
+      allowedHeaders: '*'
+      allowCredentials: true
+    blackWhiteList:
+      - path: /**/*.html
+      - path: /**/*.css
+      - path: /img/**
+      - path: /**/*.js
+      - path: /zipkin/**
+      - method: OPTIONS
+#zipkin:
+#  storage:
+#    type: elasticsearch
+#  collector:
+#    rabbitmq:
+#      addresses: ${spring.rabbitmq.addresses}
+#      username: ${spring.rabbitmq.username}
+#      password: ${spring.rabbitmq.password}
+#      queue: zipkin
+#  query:
+#    allowed-origins: '*'

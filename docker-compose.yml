@@ -20,7 +20,7 @@ services:
 #    ports:
 #      - 5601:5601
     networks:
-      - cdp-network
+      - anan-bridge
     depends_on:
       - elasticsearch
 
@@ -36,7 +36,7 @@ services:
     ports:
       - 5601:5601
     networks:
-      - cdp-network
+      - anan-bridge
     depends_on:
       - elasticsearch
 
@@ -58,7 +58,7 @@ services:
     ports:
       - 9200:9200
     networks:
-      - cdp-network
+      - anan-bridge
 
   zipkin:
     image: openzipkin/zipkin
@@ -76,10 +76,10 @@ services:
       # Uncomment to see requests to and from elasticsearch
       # - ES_HTTP_LOGGING=BODY
       - RABBIT_ADDRESSES=rabbitmq:5672
-      - RABBIT_USER=cdp
+      - RABBIT_USER=anan
       - RABBIT_PASSWORD=local
     networks:
-      - cdp-network
+      - anan-bridge
     depends_on:
       - elasticsearch
       - rabbitmq
@@ -89,24 +89,24 @@ services:
       # Uncomment if you set SCRIBE_ENABLED=true
       # - 9410:9410
 
-  cdp-platform-mysql:
-    container_name: cdp-platform-mysql
-    hostname: cdp-platform-mysql
-    image: registry.cn-hangzhou.aliyuncs.com/fosin/cdp-platform-mysql:2.0.0-SNAPSHOT
+  anan-platform-mysql:
+    container_name: anan-platform-mysql
+    hostname: anan-platform-mysql
+    image: registry.cn-hangzhou.aliyuncs.com/fosin/anan-platform-mysql:2.0.0-SNAPSHOT
     build:
       context:  docker/mysql/
     environment:
       - MYSQL_ROOT_PASSWORD=local
       - TZ=Asia/Shanghai
     volumes:
-      - /root/docker/mysql/cdp_platform/data:/var/lib/mysql
-      - /root/docker/mysql/cdp_platform/mysqld.cnf:/etc/mysql/conf.d/mysqld.cnf
-      - /root/docker/mysql/cdp_platform/logs:/var/log/mysql
+      - /root/docker/mysql/anan_platform/data:/var/lib/mysql
+      - /root/docker/mysql/anan_platform/mysqld.cnf:/etc/mysql/conf.d/mysqld.cnf
+      - /root/docker/mysql/anan_platform/logs:/var/log/mysql
     restart: on-failure
     ports:
       - 3306:3306
     networks:
-      - cdp-network
+      - anan-bridge
 
   rabbitmq:
     container_name: rabbitmq
@@ -114,7 +114,7 @@ services:
     image: rabbitmq:3-management
     environment:
       - RABBITMQ_ERLANG_COOKIE=SWQOKODSQALRPCLNMEQG
-      - RABBITMQ_DEFAULT_USER=cdp
+      - RABBITMQ_DEFAULT_USER=anan
       - RABBITMQ_DEFAULT_PASS=local
       - RABBITMQ_DEFAULT_VHOST=/
       - TZ=Asia/Shanghai
@@ -125,7 +125,7 @@ services:
       - 15672:15672
       - 5672:5672
     networks:
-      - cdp-network
+      - anan-bridge
 
   nginx:
     container_name: nginx
@@ -140,7 +140,7 @@ services:
     ports:
       - 80:80
     networks:
-      - cdp-network
+      - anan-bridge
 
   redis:
     image: redis:4.0
@@ -155,7 +155,7 @@ services:
       - 6379:6379
     command: redis-server --appendonly yes --requirepass local
     networks:
-      - cdp-network
+      - anan-bridge
 
   prometheus:
     image: prom/prometheus
@@ -173,7 +173,7 @@ services:
     ports:
       - 9090:9090
     networks:
-      - cdp-network
+      - anan-bridge
 
   node-exporter:
     container_name: node-exporter
@@ -198,7 +198,7 @@ services:
       - '--collector.filesystem.ignored-mount-points=^/(sys|proc|dev|host|etc)($$|/)'
       - '--no-collector.ipvs'
     networks:
-      - cdp-network
+      - anan-bridge
 
   grafana:
     image: grafana/grafana:6.1.3
@@ -214,7 +214,7 @@ services:
     ports:
       - 3000:3000
     networks:
-      - cdp-network
+      - anan-bridge
 
   cadvisor:
     image: google/cadvisor
@@ -235,7 +235,7 @@ services:
     ports:
       - 8080:8080
     networks:
-      - cdp-network
+      - anan-bridge
 
   alertmanager:
     image: prom/alertmanager
@@ -245,7 +245,7 @@ services:
     ports:
       - 9093:9093
     networks:
-      - cdp-network
+      - anan-bridge
     environment:
       - SLACK_URL=${SLACK_URL:-https://hooks.slack.com/services/TOKEN}
       - SLACK_CHANNEL=${SLACK_CHANNEL:-devops-alerts}
@@ -263,106 +263,102 @@ services:
     image: cloudflare/unsee:v0.8.0
     restart: on-failure
     networks:
-      - cdp-network
+      - anan-bridge
     environment:
       - TZ=Asia/Shanghai
       - "ALERTMANAGER_URIS=default:http://alertmanager:9093"
 
-  cdp-eurekaserver:
-    image: registry.cn-hangzhou.aliyuncs.com/fosin/cdp-eurekaserver:2.0.0-SNAPSHOT
-    container_name: cdp-eurekaserver
-    hostname: cdp-eurekaserver
+  anan-eurekaserver:
+    image: registry.cn-hangzhou.aliyuncs.com/fosin/anan-eurekaserver:2.0.0-SNAPSHOT
+    container_name: anan-eurekaserver
+    hostname: anan-eurekaserver
     restart: on-failure
     networks:
-      - cdp-network
+      - anan-bridge
     volumes:
-      - /root/docker/logs/cdp:/logs
+      - /root/docker/logs/anan:/logs
     ports:
       - 51000:51000
 
-  cdp-configserver:
-    image: registry.cn-hangzhou.aliyuncs.com/fosin/cdp-configserver:2.0.0-SNAPSHOT
-    container_name: cdp-configserver
-    hostname: cdp-configserver
+  anan-configserver:
+    image: registry.cn-hangzhou.aliyuncs.com/fosin/anan-configserver:2.0.0-SNAPSHOT
+    container_name: anan-configserver
+    hostname: anan-configserver
     restart: on-failure
     ports:
       - 51100:51100
     environment:
-      - spring.cloud.config.server.native.search-locations=file:/cdp-config
+      - spring.cloud.config.server.native.search-locations=file:/anan-config
     volumes:
-      - /root/docker/logs/cdp:/logs
-      - /root/docker/cdp-config:/cdp-config
+      - /root/docker/logs/anan:/logs
+      - /root/docker/anan-config:/anan-config
     networks:
-      - cdp-network
+      - anan-bridge
     depends_on:
-      - cdp-eurekaserver
+      - anan-eurekaserver
       - rabbitmq
 
-  cdp-zuulgateway:
-    image: registry.cn-hangzhou.aliyuncs.com/fosin/cdp-zuulgateway:2.0.0-SNAPSHOT
-    container_name: cdp-zuulgateway
-    hostname: cdp-zuulgateway
+  anan-zuulgateway:
+    image: registry.cn-hangzhou.aliyuncs.com/fosin/anan-zuulgateway:2.0.0-SNAPSHOT
+    container_name: anan-zuulgateway
+    hostname: anan-zuulgateway
     restart: on-failure
     ports:
       - 9000:9000
     volumes:
-      - /root/docker/logs/cdp:/logs
+      - /root/docker/logs/anan:/logs
     networks:
-      - cdp-network
+      - anan-bridge
     depends_on:
-      - cdp-configserver
-      - cdp-platform-mysql
+      - anan-configserver
+      - anan-platform-mysql
 
-  cdp-authserver:
-    image: registry.cn-hangzhou.aliyuncs.com/fosin/cdp-authserver:2.0.0-SNAPSHOT
-    container_name: cdp-authserver
-    hostname: cdp-authserver
+  anan-authserver:
+    image: registry.cn-hangzhou.aliyuncs.com/fosin/anan-authserver:2.0.0-SNAPSHOT
+    container_name: anan-authserver
+    hostname: anan-authserver
     restart: on-failure
     ports:
       - 51400:51400
     volumes:
-      - /root/docker/logs/cdp:/logs
+      - /root/docker/logs/anan:/logs
     networks:
-      - cdp-network
+      - anan-bridge
     depends_on:
-      - cdp-configserver
+      - anan-configserver
       - redis
-      - cdp-platform-mysql
+      - anan-platform-mysql
 
-  cdp-platformserver:
-    image: registry.cn-hangzhou.aliyuncs.com/fosin/cdp-platformserver:2.0.0-SNAPSHOT
-    container_name: cdp-platformserver
-    hostname: cdp-platformserver
+  anan-platformserver:
+    image: registry.cn-hangzhou.aliyuncs.com/fosin/anan-platformserver:2.0.0-SNAPSHOT
+    container_name: anan-platformserver
+    hostname: anan-platformserver
     restart: on-failure
     volumes:
-      - /root/docker/logs/cdp:/logs
+      - /root/docker/logs/anan:/logs
     ports:
       - 51500:51500
     networks:
-      - cdp-network
+      - anan-bridge
     depends_on:
-      - cdp-configserver
+      - anan-configserver
       - redis
-      - cdp-platform-mysql
+      - anan-platform-mysql
 
-  cdp-adminserver:
-    image: registry.cn-hangzhou.aliyuncs.com/fosin/cdp-adminserver:2.0.0-SNAPSHOT
-    container_name: cdp-adminserver
-    hostname: cdp-adminserver
+  anan-adminserver:
+    image: registry.cn-hangzhou.aliyuncs.com/fosin/anan-adminserver:2.0.0-SNAPSHOT
+    container_name: anan-adminserver
+    hostname: anan-adminserver
     restart: on-failure
     volumes:
-      - /root/docker/logs/cdp:/logs
+      - /root/docker/logs/anan:/logs
     ports:
       - 51700:51700
     networks:
-      - cdp-network
+      - anan-bridge
     depends_on:
-      - cdp-zuulgateway
+      - anan-zuulgateway
 
 networks:
-  cdp-network:
-    driver: bridge
-    ipam:
-      driver: default
-      config:
-        - subnet: 172.28.0.0/16
+  anan-bridge:
+    external: true

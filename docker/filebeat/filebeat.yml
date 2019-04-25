@@ -7,12 +7,12 @@ filebeat:
 
 output:
   elasticsearch:  # 我这里是输出到elasticsearch，也可以输出到logstash
-    index: "cdp-%{+yyyy.MM.dd}"  #  kibana中的索引
+    index: "anan-%{+yyyy.MM.dd}"  #  kibana中的索引
     hosts: ["elasticsearch:9200"] # elasticsearch地址
   logstash:
     enabled: false
-setup.template.name: "cdp"
-setup.template.pattern: "cdp-*"
+setup.template.name: "anan"
+setup.template.pattern: "anan-*"
 #setup:
 #  kibana:
 #    host: kibana:5601

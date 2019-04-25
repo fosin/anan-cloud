@@ -12,9 +12,9 @@ services:
       - prometheus:/prometheus
       - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
     networks:
-      - cdp-overlay
+      - anan-overlay
     depends_on:
-      - cdp-overlay
+      - anan-overlay
       - cadvisor
     ports:
       - 9090:9090
@@ -40,7 +40,7 @@ services:
     ports:
       - 9093:9093
     networks:
-      - cdp-overlay
+      - anan-overlay
     environment:
       - SLACK_URL=${SLACK_URL:-https://hooks.slack.com/services/TOKEN}
       - SLACK_CHANNEL=${SLACK_CHANNEL:-devops-alerts}
@@ -62,7 +62,7 @@ services:
   unsee:
     image: cloudflare/unsee:v0.8.0
     networks:
-      - cdp-overlay
+      - anan-overlay
     environment:
       - "ALERTMANAGER_URIS=default:http://alertmanager:9093"
     deploy:
@@ -76,7 +76,7 @@ services:
   grafana:
     image: grafana/grafana:latest
     volumes:
-      -./grafana:/var/lib/grafana
+      - ./grafana:/var/lib/grafana
     environment:
       - GF_SERVER_ROOT_URL=http://grafana.server.name
       - GF_SECURITY_ADMIN_PASSWORD=local
@@ -84,9 +84,9 @@ services:
     ports:
       - 3000:3000
     networks:
-      - cdp-overlay
+      - anan-overlay
     depends_on:
-      - cdp-overlay
+      - anan-overlay
     deploy:
       replicas: 1
       restart_policy:
@@ -118,9 +118,9 @@ services:
       - /:/rootfs:ro
       - /etc/hostname:/etc/nodename
     networks:
-      - cdp-overlay
+      - anan-overlay
     depends_on:
-      - cdp-overlay
+      - anan-overlay
     deploy:
       mode: global
       restart_policy:
@@ -149,9 +149,9 @@ services:
     ports:
       - 8080:8080
     networks:
-      - cdp-overlay
+      - anan-overlay
     depends_on:
-      - cdp-overlay
+      - anan-overlay
     deploy:
       mode: global
       restart_policy:
@@ -172,5 +172,5 @@ volumes:
   alertmanager: {}
 
 networks:
-  cdp-overlay:
+  anan-overlay:
     external: true

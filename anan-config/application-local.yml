@@ -1,0 +1,49 @@
+#logging:
+#  file: logs/${spring.application.name}.log
+#  file.max-size: 50mb
+#  file.max-history: 365
+#  level:
+#    root: info
+#    zipkin2: debug
+eureka:
+  client:
+    healthcheck:
+      enabled: true # 开启健康检查（需要spring-boot-starter-actuator依赖）
+  instance:
+    lease-expiration-duration-in-seconds: 10 # 续约到期时间（默认90秒）
+    lease-renewal-interval-in-seconds: 5 # 续约更新时间间隔（默认30秒）
+security:
+  oauth2:
+    resource:
+      loadBalanced: true #这个参数在OAuth2LoadBalancerClientAutoConfiguration可以找到，设置这个才可以使用eureka的服务名，配合loadBalancerInterceptor bean。
+      user-info-uri: http://anan-authserver/oauth/principal
+      prefer-token-info: false
+spring:
+  zipkin:
+#    baseUrl: http://zipkin:9411/ #http方式提交到zipkin,这里不用这种方式，使用rabbitmq
+    sender:
+      type: rabbit #使用rabbitmq来传送数据
+#    locator:
+#      discovery:
+#        enabled: true
+#    discovery-client-enabled: true
+  sleuth:
+#    enabled: false #禁用sleuth
+    sampler:
+      probability: 1.0  #应采样的请求的概率。 例如。 应该对1.0  -  100％的请求进行抽样。 精度仅为整数（即不支持0.1％的迹线）。
+#    feign:
+#      enabled: false
+#      processor:
+#        enabled: false
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      show-details: ALWAYS
+  metrics:
+    web:
+      server:
+        auto-time-requests: false #解决zipkin异常：Prometheus requires that all meters with the same name have the same set of tag keys

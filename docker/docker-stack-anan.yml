@@ -1,0 +1,166 @@
+version: "3"
+services:
+  anan-eurekaserver:
+    image: registry.cn-hangzhou.aliyuncs.com/fosin/anan-eurekaserver:2.0.0-SNAPSHOT
+    networks:
+      - anan-overlay
+    volumes:
+      - ./logs/anan-eurekaserver:/logs
+    ports:
+      - 51000:51000
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        max_attempts: 999
+      update_config:
+        delay: 5s
+      placement:
+        constraints: [node.role == manager]
+      resources:
+        limits:
+          memory: 400M
+        reservations:
+          memory: 256M
+
+  anan-configserver:
+    image: registry.cn-hangzhou.aliyuncs.com/fosin/anan-configserver:2.0.0-SNAPSHOT
+    entrypoint: "sh /wait-for.sh anan-eurekaserver:51000 -t 3600 -- java -jar /app.jar"
+    networks:
+      - anan-overlay
+    environment:
+      - spring.cloud.config.server.native.search-locations=file:/anan-config
+    volumes:
+      - ./logs/anan-configserver:/logs
+      - ./anan-config:/anan-config
+      - ./cmd/wait-for.sh:/wait-for.sh
+    ports:
+      - 51100:51100
+    depends_on:
+      - anan-eurekaserver
+      - rabbitmq
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        max_attempts: 999
+      update_config:
+        delay: 5s
+      placement:
+        constraints: [node.role == manager]
+      resources:
+        limits:
+          memory: 512M
+        reservations:
+          memory: 256M
+
+  anan-authserver:
+    image: registry.cn-hangzhou.aliyuncs.com/fosin/anan-authserver:2.0.0-SNAPSHOT
+    entrypoint: "sh /wait-for.sh anan-configserver:51100 -t 3600 -- java -jar /app.jar"
+    networks:
+      - anan-overlay
+    volumes:
+      - ./logs/anan-authserver:/logs
+      - ./cmd/wait-for.sh:/wait-for.sh
+    ports:
+      - 51400:51400
+    depends_on:
+      - anan-configserver
+      - redis
+      - anan-platform-mysql
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        max_attempts: 999
+      update_config:
+        delay: 5s
+      resources:
+        limits:
+          memory: 512M
+        reservations:
+          memory: 256M
+
+  anan-platformserver:
+    image: registry.cn-hangzhou.aliyuncs.com/fosin/anan-platformserver:2.0.0-SNAPSHOT
+    entrypoint: "sh /wait-for.sh anan-authserver:51400 -t 3600 -- java -jar /app.jar"
+    networks:
+      - anan-overlay
+    volumes:
+      - ./logs/anan-platformserver:/logs
+      - ./cmd/wait-for.sh:/wait-for.sh
+    ports:
+      - 51500:51500
+    depends_on:
+      - anan-configserver
+      - redis
+      - anan-platform-mysql
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        max_attempts: 999
+      update_config:
+        delay: 5s
+      resources:
+        limits:
+          memory: 512M
+        reservations:
+          memory: 256M
+
+  anan-zuulgateway:
+    image: registry.cn-hangzhou.aliyuncs.com/fosin/anan-zuulgateway:2.0.0-SNAPSHOT
+    entrypoint: "sh /wait-for.sh anan-platformserver:51500 -t 3600 -- java -jar /app.jar"
+    volumes:
+      - ./logs/anan-zuulgateway:/logs
+      - ./cmd/wait-for.sh:/wait-for.sh
+    ports:
+      - 9000:9000
+    networks:
+      - anan-overlay
+    depends_on:
+      - anan-configserver
+      - anan-platform-mysql
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        max_attempts: 999
+      update_config:
+        delay: 5s
+      placement:
+        constraints: [node.role == manager]
+      resources:
+        limits:
+          memory: 512M
+        reservations:
+          memory: 256M
+
+  anan-adminserver:
+    image: registry.cn-hangzhou.aliyuncs.com/fosin/anan-adminserver:2.0.0-SNAPSHOT
+    entrypoint: "sh /wait-for.sh anan-zuulgateway:9000 -t 3600 -- java -jar /app.jar"
+    networks:
+      - anan-overlay
+    volumes:
+      - ./logs/anan-adminserver:/logs
+      - ./cmd/wait-for.sh:/wait-for.sh
+    ports:
+      - 51700:51700
+    depends_on:
+      - anan-zuulgateway
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        max_attempts: 999
+      update_config:
+        delay: 5s
+      resources:
+        limits:
+          memory: 512M
+        reservations:
+          memory: 256M
+
+networks:
+  anan-overlay:
+    external: true

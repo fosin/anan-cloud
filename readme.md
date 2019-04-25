@@ -1,5 +1,5 @@
 #设计定位
-cdp基于spring boot和spring cloud生态体系技术，采用微服务架构，为个人及企业微服务架构提供一种解决方案，供开发人员学习和交流。
+anan基于spring boot和spring cloud生态体系技术，采用微服务架构，为个人及企业微服务架构提供一种解决方案，供开发人员学习和交流。
 其中包括服务注册与发现、服务监控、服务管理、服务治理、服务网关、服务熔断、配置管理等常见微服务组件。
 
 #技术选型
@@ -39,16 +39,16 @@ Vuejs、Nodejs、Webpack | 前段开发框架
 ##1、本地开发环境local设置
 ###1.1、安装docker
      安装docker没有什么特殊要求，自行百度安装即可
-     创建外部网络，名称必须为cdp-network
-     docker network create -d bridge --subnet=172.28.0.0/16 cdp-network
+     创建外部网络，名称必须为anan-network
+     docker network create -d bridge --subnet=172.28.0.0/16 anan-network
 ###1.2、中间件安装篇，使用docker-compose文件docker-compose-mid.yml(mysql、Redis、RabbitMQ、ElasticSearch、zipkin)
        1.2.1、安装Mysql
             建议安装5.7及以上版本，设置root密码为local
-            根据源码相对路径./docs/mysql/cdp_platform.sql创建数据库cdp_platform，并导入相关sql语句和基础数据
+            根据源码相对路径./docs/mysql/anan_platform.sql创建数据库anan_platform，并导入相关sql语句和基础数据
        1.2.2、安装Redis(3.x、4.x、5.x都支持)
             密码设置为local
        1.2.3、安装Rabbitmq(只测试过3.x)
-            用户：cdp
+            用户：anan
             密码：local
        1.2.4、安装ElasticSearch
             启动时报错：max virtual memory areas vm.max_map_count [65530] is too low, increase to at least [262144] 
@@ -64,9 +64,13 @@ Vuejs、Nodejs、Webpack | 前段开发框架
             sysctl -p
        
        1.2.5、如果mysql、redis、rabbitmq等密码不是local，则需要修改以下地方：
-            cdp-cloud下面的pom.xml中的profile local 的配置信息
-            cdp-config目录下的配置文件
-            docker-compose-mid.yml中的相关内容
+            anan-cloud下面的pom.xml中的profile local 的配置信息
+            anan-config目录下的配置文件
+            docker-compose-base.yml中的相关内容
+       1.2.6、使用docker-compose开启开发必须中间件
+            创建docker网络
+            docker network create -d bridge --subnet=172.28.0.0/16 anan-bridge
+            docker-compose.yml中redis、rabbitmq、anan-platform-mysql三个是开发环境必须启动的
 ###1.3、监控安装篇，使用文件docker-compose-monitor.yml(prometheus、node-exporter、cadvisor、alertmanager、grafana等)
        1.3.1、安装cadvisor版本:v0.33.0及以上
             发现容器没有正常启动，查看日志，有如下报错内容：
@@ -75,15 +79,15 @@ Vuejs、Nodejs、Webpack | 前段开发框架
             临时解决方法，但是doker主机重启后又要修改，执行：
             mount -o remount,rw '/sys/fs/cgroup'
             ln -s /sys/fs/cgroup/cpu,cpuacct /sys/fs/cgroup/cpuacct,cpu
-###1.4、服务安装篇，使用文件docker-compose-services.yml(cdp-eurekaserver、cdp-configserver、cdp-authserver等)
+###1.4、服务安装篇，使用文件docker-compose-services.yml(anan-eurekaserver、anan-configserver、anan-authserver等)
             本地开发环境基本上不需要启动这个docker-compose文件，主要还是使用源码跑
 ###1.5、配置环境
        1.5.1、安装jdk1.8及以上、lombok插件、ignore插件，开发工具推荐使用Idea
        1.5.2、Windows下修改c:/windows/system32/drives/etc/hosts文件增加以下信息，IP地址根据实际情况设定
-            127.0.0.1 cdp-eurekaserver
-            127.0.0.1 cdp-authserver
+            127.0.0.1 anan-eurekaserver
+            127.0.0.1 anan-authserver
             127.0.0.1 redis
-            127.0.0.1 cdp-platform-mysql
+            127.0.0.1 anan-platform-mysql
             127.0.0.1 rabbitmq
        1.5.3、 配置 log4j.skipJansi使log4j2的日志支持颜色字体
             IDEA中，点击右上角->Edit Configurations，在VM options中添加
@@ -94,21 +98,21 @@ Vuejs、Nodejs、Webpack | 前段开发框架
             
             MYECLIPSE 需要ansi 插件的支持
 
-       1.5.4、如果需要密码加密，则需要生成Spring Config配置中心非对称加密证书（非必须,如果不做这步，则使用源码中自带的证书cdp.jks）
+       1.5.4、如果需要密码加密，则需要生成Spring Config配置中心非对称加密证书（非必须,如果不做这步，则使用源码中自带的证书anan.jks）
             1.5.4.1、生成加密证书
-              keytool -genkeypair -alias cdp -keyalg RSA -dname "CN=cdp, OU=starlight, O=startlight, L=gy, ST=gz, C=cn" -keypass 123456 -keystore /cdp.jks -storepass 123456 -validity 365
-            1.5.4.2、将/cdp.jks分别放到各个项目的src/main/resources目录下
-            1.5.4.3、生产环境中将cdp-configserver配置中心替换实际地址并建议修改当前连接用户(cdp)和密码(local)为较安全复杂的用户和密码,
-               然后启动cdp-configserver项目后，通过以下命令生成密码：
-                curl -u cdp:local http://localhost:51100/encrypt -d cdp
+              keytool -genkeypair -alias anan -keyalg RSA -dname "CN=anan, OU=starlight, O=startlight, L=gy, ST=gz, C=cn" -keypass 123456 -keystore /anan.jks -storepass 123456 -validity 365
+            1.5.4.2、将/anan.jks分别放到各个项目的src/main/resources目录下
+            1.5.4.3、生产环境中将anan-configserver配置中心替换实际地址并建议修改当前连接用户(anan)和密码(local)为较安全复杂的用户和密码,
+               然后启动anan-configserver项目后，通过以下命令生成密码：
+                curl -u anan:local http://localhost:51100/encrypt -d anan
             1.5.4.4、替换各yml配置文件中的spring.security.user.password中的密码参数，密码前缀必须有{cipher}并以单引号包含，例如:
                 '{cipher}AQApsg6Qzq9bdXcH2BntfbquV9CD2arg9bP9HFGuvww5EppMU1fsUqzFPtjXH5Gblkj7tE5N4/p1zIp5KpTZwDAM8wxLNrK8m9626Rb1eAlEG4Cfs8aJqoYi8LItfTo/QA1u8zoJKdcFZ4xe77CQBDhUiJ36m+Q8s2ItFMZHsM1dC2NsiuCB9D8f74a2DFeoLSyvkSeSE9jQr2tv8COy0NtpLChmgFL4dM4ffTwiPx7cMsdoabL/C2CD9YqQLfk6TChrNq9xjvfXUhiRcekzXd2ccHqnZ9trEtKzaRfmEOWUNsmnlwMjY/Lz8I9wnWo8ZHB+hxoP2uyqw4twx2NnILERVLKFO1ZqhVsrMxOBEjX8ccAqeYbnEDYTXqYl4b3o='
 ####1.6、按顺序启动项目
-       1.6.1、启动cdp-eurekaserver服务注册中心
-       1.6.2、启动cdp-configserver配置中心
-       1.6.3、启动cdp-authserver授权认证中心、cdp-platformserver平台服务中心、cdp-zuulgateway服务路由网关
-       1.6.4、启动cdp-adminmonitor服务监控、cdp-sleuthserver分布式链路追踪
-####1.7、打开前端项目cdp-vue,移步cdp-vue下面的README.md查看前端项目的开发环境搭建过程
+       1.6.1、启动anan-eurekaserver服务注册中心
+       1.6.2、启动anan-configserver配置中心
+       1.6.3、启动anan-authserver授权认证中心、anan-platformserver平台服务中心、anan-zuulgateway服务路由网关
+       1.6.4、启动anan-adminmonitor服务监控、anan-sleuthserver分布式链路追踪
+####1.7、打开前端项目anan-vue,移步anan-vue下面的README.md查看前端项目的开发环境搭建过程
 
 ##2、部署生产环境
 ###2.1、Docker Swarm集群环境部署
@@ -138,18 +142,18 @@ Vuejs、Nodejs、Webpack | 前段开发框架
 
 #### 2.1.3、使用yml启动swarm集群
 #####创建swarm网络
-    docker network create -d overlay --subnet=172.29.0.0/16 cdp-overlay
+    docker network create -d overlay --subnet=172.29.0.0/16 anan-overlay
 #####启动基础中间件(mysql、redis、rabbitmq、elasticsearch)
     docker stack deploy -c docker-swarm-base.yml base
-#####启动服务(cdp相关服务)
-    docker stack deploy -c docker-swarm-cdp.yml cdp
+#####启动服务(anan相关服务)
+    docker stack deploy -c docker-swarm-anan.yml anan
 #####启动elk日志收集分析
     docker stack deploy -c docker-swarm-elk.yml elk
 #####启动Prometheus监控(cadvisor、node-exporter、grafana、prometheus)
     docker stack deploy -c docker-swarm-prometheus.yml prom
 
 #### 2.1.4、停止集群中所有服务并删除容器
-    docker stack rm cdp
+    docker stack rm anan
     docker stack rm prom
     docker stack rm elk
     docker stack rm base
