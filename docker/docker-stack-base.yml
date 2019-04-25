@@ -40,8 +40,6 @@ services:
       - RABBITMQ_DEFAULT_VHOST=/
     networks:
       - cdp-overlay
-    depends_on:
-      - cdp-overlay
     ports:
       - 15672:15672
       - 5672:5672
@@ -85,14 +83,10 @@ services:
           memory: 32M
     networks:
       - cdp-overlay
-    depends_on:
-      - cdp-overlay
 
   nginx:
     image: nginx:1.15
     networks:
-      - cdp-overlay
-    depends_on:
       - cdp-overlay
     environment:
       - TZ=Asia/Shanghai
@@ -110,79 +104,6 @@ services:
         delay: 5s
       placement:
         constraints: [node.role == manager]
-
-  elasticsearch:
-    image: elasticsearch:6.7.1
-    environment:
-      #      - cluster.name=docker-cluster
-      - bootstrap.memory_lock=false
-      - ES_JAVA_OPTS=-Xms512m -Xmx512m
-    #    ulimits:
-    #      memlock:
-    #        soft: -1
-    #        hard: -1
-    #    volumes:
-    #      - ./elasticsearch/data:/usr/share/elasticsearch/data
-    ports:
-      - 9200:9200
-    networks:
-      - cdp-overlay
-    deploy:
-      replicas: 1
-      restart_policy:
-        condition: on-failure
-        max_attempts: 999
-      update_config:
-        parallelism: 1 # 每次更新1个副本
-        delay: 5s # 每次更新间隔
-        monitor: 10s # 单次更新多长时间后没有结束则判定更新失败
-        max_failure_ratio: 0.1 # 更新时能容忍的最大失败率
-      resources:
-        limits:
-          memory: 520M
-        reservations:
-          memory: 256M
-
-  zipkin:
-    image: openzipkin/zipkin
-    environment:
-      - STORAGE_TYPE=elasticsearch
-      # Point the zipkin at the storage backend
-      - ES_HOSTS=elasticsearch
-      #      - RABBIT_CONNECTION_TIMEOUT=60000
-      #      - RABBIT_VIRTUAL_HOST=/
-      #      - RABBIT_USE_SSL=false
-      #      - RABBIT_QUEUE=zipkin
-      # Uncomment to see requests to and from elasticsearch
-      # - ES_HTTP_LOGGING=BODY
-      - RABBIT_ADDRESSES=rabbitmq:5672
-      - RABBIT_USER=cdp
-      - RABBIT_PASSWORD=local
-    networks:
-      - cdp-overlay
-    depends_on:
-      - elasticsearch
-      - rabbitmq
-    ports:
-      # Port used for the Zipkin UI and HTTP Api
-      - 9411:9411
-      # Uncomment if you set SCRIBE_ENABLED=true
-      # - 9410:9410
-    deploy:
-      replicas: 1
-      restart_policy:
-        condition: on-failure
-        max_attempts: 999
-      update_config:
-        parallelism: 1 # 每次更新1个副本
-        delay: 5s # 每次更新间隔
-        monitor: 10s # 单次更新多长时间后没有结束则判定更新失败
-        max_failure_ratio: 0.1 # 更新时能容忍的最大失败率
-      resources:
-        limits:
-          memory: 400M
-        reservations:
-          memory: 256M
 
 networks:
   cdp-overlay:
