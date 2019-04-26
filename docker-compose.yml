@@ -10,7 +10,7 @@ services:
       - /root/docker/filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
       - /var/lib/docker/containers:/var/lib/docker/containers:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - /root/docker/logs:/logs:ro
+      - /root/docker/filebeat/logs/filebeat:/logs:ro
 #    environment:
 #      - output.elasticsearch.hosts=["elasticsearch:9200"]
 #      - output.logstash.enabled=false
@@ -53,8 +53,8 @@ services:
       memlock:
         soft: -1
         hard: -1
-#    volumes:
-#      - /root/docker/elasticsearch/data:/usr/share/elasticsearch/data
+    volumes:
+      - /root/docker/elasticsearch/data:/usr/share/elasticsearch/data
     ports:
       - 9200:9200
     networks:
@@ -253,9 +253,9 @@ services:
     command:
       - '--config.file=/etc/alertmanager/alertmanager.yml'
       - '--storage.path=/alertmanager'
-  #    volumes:
-  #      - /root/docker/alertmanager/data:/alertmanager
-  #      - /root/docker/alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml
+#    volumes:
+#      - /root/docker/alertmanager/data:/alertmanager
+  #    - /root/docker/alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml
 
   unsee:
     container_name: unsee

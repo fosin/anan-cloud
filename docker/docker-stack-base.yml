@@ -84,27 +84,6 @@ services:
     networks:
       - anan-overlay
 
-  nginx:
-    image: nginx:1.15
-    networks:
-      - anan-overlay
-    environment:
-      - TZ=Asia/Shanghai
-    volumes:
-      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
-      - ./nginx/html:/usr/share/nginx/html
-    ports:
-      - 80:80
-    deploy:
-      replicas: 1
-      restart_policy:
-        condition: on-failure
-        max_attempts: 999
-      update_config:
-        delay: 5s
-      placement:
-        constraints: [node.role == manager]
-
 networks:
   anan-overlay:
     external: true

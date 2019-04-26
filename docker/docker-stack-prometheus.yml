@@ -9,7 +9,7 @@ services:
       - '--storage.tsdb.path=/prometheus'
       - '--storage.tsdb.retention=24h'
     volumes:
-      - prometheus:/prometheus
+      - ./prometheus/data:/prometheus
       - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
     networks:
       - anan-overlay
@@ -49,8 +49,8 @@ services:
       - '--config.file=/etc/alertmanager/alertmanager.yml'
       - '--storage.path=/alertmanager'
     volumes:
-      - alertmanager:/alertmanager
-#      -./alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml
+      - ./alertmanager/data:/alertmanager
+      - ./alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml
     deploy:
       replicas: 1
       resources:
@@ -166,10 +166,6 @@ services:
           memory: 128M
         reservations:
           memory: 64M
-
-volumes:
-  prometheus: {}
-  alertmanager: {}
 
 networks:
   anan-overlay:
