@@ -1,47 +1,50 @@
-#设计定位
-anan基于spring boot和spring cloud生态体系技术，采用微服务架构，为个人及企业微服务架构提供一种解决方案，供开发人员学习和交流。
-其中包括服务注册与发现、服务监控、服务管理、服务治理、服务网关、服务熔断、配置管理等常见微服务组件。
+# 设计定位
+    anan基于spring boot和spring cloud生态体系技术，采用微服务前后端分离架构，
+        为个人及企业微服务架构提供一种解决方案，供开发人员学习和交流。
+    其中包括服务注册与发现、服务监控、服务管理、服务治理、服务网关、服务熔断、
+        配置管理、认证授权中心等常见微服务组件。
+    支持swarm集群部署、Kubernetes集群部署、jar包集群部署、war包集群部署
 
-#技术选型
-技术 | 简介 
----- | ------
-Spring Boot | 基础构建框架，用于快速整合各资源 
-Spring Framework | 底层容器 
-SpringMVC | 分层框架 
-Spring Cloud | 微服务框架 
-Spring Cloud Config | 配置管理中心 
-Spring Cloud Eureka | 服务注册中心 
-Spring Cloud Zuul | 服务网关 
-Spring Cloud Hystrix | 服务容错框架 
-Spring Cloud Feign | 微服务声明式调用框架 
-Spring Cloud Sleuth Zipkin| 分布式链路追踪
-Spring Boot Admin | 服务管理中心 
-Spring Data Jpa | 持久化框架 
-Spring Data Redis | 缓存框架 
-Spring Security| 安全框架 
-Spring Validator | 后端验证框架 
-Hibernate Validator | Hibernate验证框架 
-lombok | 一个通过注解自动生成get/set方法的类库 
-Thymeleaf | HTML5模板引擎  
-Maven | 项目构建管理  
-Redis | 分布式缓存数据库 
-Mysql | 对象关系数据库 
-RabbitMQ | 消息中间件
-MongoDB | 文档数据库
-Slf4j Log4j2 | 日志框架
-OAuth2.0 | 单点登录、鉴权、认证框架
-Vuejs、Nodejs、Webpack | 前段开发框架
-#架构设计
+# 技术选型
+     技术     |   简介 
+    ------   |  ------
+    Spring Boot | 基础构建框架，用于快速整合各资源 
+    SpringMVC | MVC分层框架 
+    Spring Cloud Config | 配置管理中心 
+    Spring Cloud Eureka | 服务注册中心 
+    Spring Cloud Zuul | 服务网关 
+    Spring Cloud Hystrix | 服务熔断框架 
+    Spring Cloud Feign | 微服务声明式调用框架 
+    Spring Cloud Sleuth Zipkin| 分布式链路追踪
+    Spring Boot Admin | 服务管理中心 
+    Spring Data Jpa | 持久化框架 
+    Spring Data Redis | 缓存框架 
+    Spring Security| 安全框架 
+    Spring Cloud OAuth2.0 | 单点登录、鉴权、认证框架
+    Slf4j Log4j2 | 日志框架
+    Spring Validator | 后端验证框架 
+    Hibernate Validator | Hibernate验证框架 
+    lombok | 一个通过注解自动生成get/set方法的类库 
+    Swagger | API文档
+    Thymeleaf | HTML5模板引擎  
+    Maven | 项目构建管理  
+    Redis | 缓存内存数据库 
+    Elasticsearch | 搜索内存数据库 
+    Mysql | 对象关系数据库 
+    RabbitMQ | 消息中间件
+    EFK | 日志收集、分析组合框架
+    Vuejs、Nodejs、Webpack、ElementUI | 前段开发框架
+# 架构设计
 
-#原理介绍
+# 原理介绍
 
-#搭建环境
-##1、本地开发环境local设置
-###1.1、安装docker
+# 搭建环境
+## 1、本地开发环境local设置
+### 1.1、安装docker
      安装docker没有什么特殊要求，自行百度安装即可
      创建外部网络，名称必须为anan-network
-     docker network create -d bridge --subnet=172.28.0.0/16 anan-network
-###1.2、中间件安装篇，使用docker-compose文件docker-compose-mid.yml(mysql、Redis、RabbitMQ、ElasticSearch、zipkin)
+     docker network create -d bridge --subnet=172.28.0.0/16 anan-bridge
+### 1.2、中间件安装篇，使用docker-compose文件docker-compose-mid.yml(mysql、Redis、RabbitMQ、ElasticSearch、zipkin)
        1.2.1、安装Mysql
             建议安装5.7及以上版本，设置root密码为local
             根据源码相对路径./docs/mysql/anan_platform.sql创建数据库anan_platform，并导入相关sql语句和基础数据
@@ -71,7 +74,7 @@ Vuejs、Nodejs、Webpack | 前段开发框架
             创建docker网络
             docker network create -d bridge --subnet=172.28.0.0/16 anan-bridge
             docker-compose.yml中redis、rabbitmq、anan-platform-mysql三个是开发环境必须启动的
-###1.3、监控安装篇，使用文件docker-compose-monitor.yml(prometheus、node-exporter、cadvisor、alertmanager、grafana等)
+### 1.3、监控安装篇，使用文件docker-compose-monitor.yml(prometheus、node-exporter、cadvisor、alertmanager、grafana等)
        1.3.1、安装cadvisor版本:v0.33.0及以上
             发现容器没有正常启动，查看日志，有如下报错内容：
             Failed to start container manager: inotify_add_watch 
@@ -79,9 +82,9 @@ Vuejs、Nodejs、Webpack | 前段开发框架
             临时解决方法，但是doker主机重启后又要修改，执行：
             mount -o remount,rw '/sys/fs/cgroup'
             ln -s /sys/fs/cgroup/cpu,cpuacct /sys/fs/cgroup/cpuacct,cpu
-###1.4、服务安装篇，使用文件docker-compose-services.yml(anan-eurekaserver、anan-configserver、anan-authserver等)
+### 1.4、服务安装篇，使用文件docker-compose-services.yml(anan-eurekaserver、anan-configserver、anan-authserver等)
             本地开发环境基本上不需要启动这个docker-compose文件，主要还是使用源码跑
-###1.5、配置环境
+### 1.5、配置环境
        1.5.1、安装jdk1.8及以上、lombok插件、ignore插件，开发工具推荐使用Idea
        1.5.2、Windows下修改c:/windows/system32/drives/etc/hosts文件增加以下信息，IP地址根据实际情况设定
             127.0.0.1 anan-eurekaserver
@@ -107,15 +110,15 @@ Vuejs、Nodejs、Webpack | 前段开发框架
                 curl -u anan:local http://localhost:51100/encrypt -d anan
             1.5.4.4、替换各yml配置文件中的spring.security.user.password中的密码参数，密码前缀必须有{cipher}并以单引号包含，例如:
                 '{cipher}AQApsg6Qzq9bdXcH2BntfbquV9CD2arg9bP9HFGuvww5EppMU1fsUqzFPtjXH5Gblkj7tE5N4/p1zIp5KpTZwDAM8wxLNrK8m9626Rb1eAlEG4Cfs8aJqoYi8LItfTo/QA1u8zoJKdcFZ4xe77CQBDhUiJ36m+Q8s2ItFMZHsM1dC2NsiuCB9D8f74a2DFeoLSyvkSeSE9jQr2tv8COy0NtpLChmgFL4dM4ffTwiPx7cMsdoabL/C2CD9YqQLfk6TChrNq9xjvfXUhiRcekzXd2ccHqnZ9trEtKzaRfmEOWUNsmnlwMjY/Lz8I9wnWo8ZHB+hxoP2uyqw4twx2NnILERVLKFO1ZqhVsrMxOBEjX8ccAqeYbnEDYTXqYl4b3o='
-####1.6、按顺序启动项目
+#### 1.6、按顺序启动项目
        1.6.1、启动anan-eurekaserver服务注册中心
        1.6.2、启动anan-configserver配置中心
        1.6.3、启动anan-authserver授权认证中心、anan-platformserver平台服务中心、anan-zuulgateway服务路由网关
-       1.6.4、启动anan-adminmonitor服务监控、anan-sleuthserver分布式链路追踪
-####1.7、打开前端项目anan-vue,移步anan-vue下面的README.md查看前端项目的开发环境搭建过程
+       1.6.4、启动anan-adminserver服务监控
+#### 1.7、打开前端项目anan-vue,移步anan-vue下面的README.md查看前端项目的开发环境搭建过程
 
-##2、部署生产环境
-###2.1、Docker Swarm集群环境部署
+## 2、部署生产环境
+### 2.1、Docker Swarm集群环境部署
 #### 2.1.1、创建集群管理节点(当主机上存在多个ip时，需要指定MANAGER-IP)
     $ docker swarm init --advertise-addr 192.168.137.8
     
@@ -140,22 +143,30 @@ Vuejs、Nodejs、Webpack | 前段开发框架
 
 #### 2.1.2、使用创建管理节点时返回的命令在worker节点上都执行一遍加入swarm集群
 
-#### 2.1.3、使用yml启动swarm集群
-#####创建swarm网络
+#### 2.1.3、创建swarm网络
     docker network create -d overlay --subnet=172.29.0.0/16 anan-overlay
-#####启动基础中间件(mysql、redis、rabbitmq、elasticsearch)
-    docker stack deploy -c docker-swarm-base.yml base
-#####启动服务(anan相关服务)
-    docker stack deploy -c docker-swarm-anan.yml anan
-#####启动elk日志收集分析
-    docker stack deploy -c docker-swarm-elk.yml elk
-#####启动Prometheus监控(cadvisor、node-exporter、grafana、prometheus)
-    docker stack deploy -c docker-swarm-prometheus.yml prom
+
+#### 2.1.3、环境部署
+    拷贝docker文件夹到Linux服务器上，每个节点都要拷贝
+    分配权限
+        chmod 755 docker/ -R
+    
+#### 2.1.4、使用yml启动swarm集群
+##### 启动基础中间件(mysql、redis、rabbitmq)
+    docker stack deploy -c docker-stack-base.yml b
+##### 启动服务(应用相关服务和nginx)
+    docker stack deploy -c docker-stack-services.yml s
+##### 启动elk日志收集分析(elasticsearch、logstash、kibana、filebeat)、分布式链路追踪zipkin
+    docker stack deploy -c docker-stack-elk.yml e
+##### 启动Prometheus监控(cadvisor、node-exporter、grafana、prometheus)
+    docker stack deploy -c docker-stack-prometheus.yml p
 
 #### 2.1.4、停止集群中所有服务并删除容器
-    docker stack rm anan
-    docker stack rm prom
-    docker stack rm elk
-    docker stack rm base
+    docker stack rm s
+    docker stack rm p
+    docker stack rm e
+    docker stack rm b
 
-###2.2、传统部署
+### 2.2、Kubernetes部署
+### 2.3、jar包部署
+### 2.4、war部署
