@@ -2,7 +2,7 @@ filebeat:
   prospectors:
     - input_type: log
       paths:  # 这里是容器内的path
-        - /logs
+        - /logs/**
   registry_file: /usr/share/filebeat/data/registry/registry  # 这个文件记录日志读取的位置，如果容器重启，可以从记录的位置开始取日志
 
 output:

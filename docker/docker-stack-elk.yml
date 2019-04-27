@@ -6,10 +6,6 @@ services:
       #      - cluster.name=docker-cluster
       - bootstrap.memory_lock=false
       - ES_JAVA_OPTS=-Xms512m -Xmx512m
-    #    ulimits:
-    #      memlock:
-    #        soft: -1
-    #        hard: -1
     volumes:
       - ./elasticsearch/data:/usr/share/elasticsearch/data
     ports:
@@ -26,12 +22,21 @@ services:
         delay: 5s # 每次更新间隔
         monitor: 10s # 单次更新多长时间后没有结束则判定更新失败
         max_failure_ratio: 0.1 # 更新时能容忍的最大失败率
-      resources:
-        limits:
-          memory: 520M
-        reservations:
-          memory: 256M
-
+#      resources:
+#        limits:
+#          memory: 520M
+#        reservations:
+#          memory: 256M
+#        ulimits:
+#          memlock:
+#            soft: -1
+#            hard: -1
+#          nofile:
+#            soft: 65536
+#            hard: 65536
+#          nproc:
+#            soft: 65536
+#            hard: 65536
   filebeat:
     image: elastic/filebeat:6.7.1
     user: root

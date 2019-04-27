@@ -59,7 +59,7 @@
             sudo vim /etc/sysctl.conf
              
             添加下面配置： 
-            vm.max_map_count=655360
+            vm.max_map_count=262144
              
             并执行命令： 
             sysctl -p
