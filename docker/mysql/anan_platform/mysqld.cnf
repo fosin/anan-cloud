@@ -35,11 +35,10 @@ lower_case_table_names=1
 #skip-grant-tables
 #skip-name-resolve
 #服务器端和客户端字符集
-character_set_server=utf8
-#character_set_client=utf8
+character_set_server=utf8mb4
 
 [client]
-default-character-set = utf8
+default-character-set = utf8mb4
 
 [mysql]
-default-character-set = utf8
+default-character-set = utf8mb4

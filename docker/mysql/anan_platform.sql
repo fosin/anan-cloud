@@ -19,7 +19,7 @@
 -- Current Database: `anan_platform2`
 --
 
-CREATE DATABASE /*!32312 IF NOT EXISTS*/ `anan_platform2` /*!40100 DEFAULT CHARACTER SET utf8 */;
+CREATE DATABASE /*!32312 IF NOT EXISTS*/ `anan_platform2` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci */;
 
 USE `anan_platform2`;
 
@@ -31,19 +31,19 @@ DROP TABLE IF EXISTS `anan_dictionary`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `anan_dictionary` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '字典代码',
-  `name` varchar(64) NOT NULL COMMENT '字典名称',
-  `type` tinyint(4) NOT NULL COMMENT '字典类别，区别字典的大分类，取值于表anan_dictionary.code = 1数据',
-  `scope` varchar(64) DEFAULT NULL COMMENT '字典作用域，以字典类别为前提，在字典类别基础上再次细化分类字典',
-  `delete_by` int(11) unsigned DEFAULT NULL COMMENT '删除人',
-  `delete_time` datetime DEFAULT NULL COMMENT '删除日期',
-  `deleted` tinyint(4) NOT NULL DEFAULT '0' COMMENT '删除标志(0=未删除 1=已删除)，该值由后台维护，默认为0',
-  `create_by` int(11) unsigned NOT NULL COMMENT '创建人',
-  `create_time` datetime NOT NULL COMMENT '创建日期',
-  `update_by` int(11) unsigned NOT NULL COMMENT '修改人',
-  `update_time` datetime NOT NULL COMMENT '修改日期',
-  PRIMARY KEY (`id`)
-  ) ENGINE=InnoDB AUTO_INCREMENT=140 DEFAULT CHARSET=utf8mb4 COMMENT='系统通用字典表';
+    `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '字典代码',
+    `name` varchar(64) NOT NULL COMMENT '字典名称',
+    `type` tinyint(4) NOT NULL COMMENT '字典类别，区别字典的大分类，取值于表anan_dictionary.code = 1数据',
+    `scope` varchar(64) DEFAULT NULL COMMENT '字典作用域，以字典类别为前提，在字典类别基础上再次细化分类字典',
+    `delete_by` int(11) unsigned DEFAULT NULL COMMENT '删除人',
+    `delete_time` datetime DEFAULT NULL COMMENT '删除日期',
+    `deleted` tinyint(4) NOT NULL DEFAULT '0' COMMENT '删除标志(0=未删除 1=已删除)，该值由后台维护，默认为0',
+    `create_by` int(11) unsigned NOT NULL COMMENT '创建人',
+    `create_time` datetime NOT NULL COMMENT '创建日期',
+    `update_by` int(11) unsigned NOT NULL COMMENT '修改人',
+    `update_time` datetime NOT NULL COMMENT '修改日期',
+    PRIMARY KEY (`id`)
+    ) ENGINE=InnoDB AUTO_INCREMENT=140 DEFAULT CHARSET=utf8mb4 COMMENT='系统通用字典表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -64,27 +64,27 @@ DROP TABLE IF EXISTS `anan_dictionary_detail`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `anan_dictionary_detail` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '字典明细ID',
-  `name` int(11) unsigned NOT NULL COMMENT '字典明细键，不能重复，字典内明细项唯一代码',
-  `value` varchar(64) DEFAULT NULL COMMENT '字典明细值表示字面意义',
-  `dictionary_id` int(11) unsigned NOT NULL COMMENT '取值于字典明细表AnanDictionaryDetailEntity.code',
-  `sort` smallint(5) unsigned NOT NULL COMMENT '顺序，用于显示数据时的顺序，数值越小越靠前',
-  `status` tinyint(3) unsigned NOT NULL COMMENT '使用状态：0=启用，1=禁用，具体取值于字典表anan_dictionary.code=11',
-  `scode` varchar(64) DEFAULT NULL COMMENT '标准代码，该字段通常用于对接标准字典',
-  `scope` varchar(12) DEFAULT NULL COMMENT '作用域，用于字典明细项的作用域',
-  `used` tinyint(4) NOT NULL DEFAULT '0' COMMENT '使用标志：0=未使用，1=已使用，已使用的字典就不能再修改name属性',
-  `create_by` int(11) unsigned NOT NULL COMMENT '创建人',
-  `create_time` datetime NOT NULL COMMENT '创建日期',
-  `update_by` int(11) unsigned NOT NULL COMMENT '修改人',
-  `update_time` datetime NOT NULL COMMENT '修改日期',
-  `delete_by` int(11) unsigned DEFAULT NULL COMMENT '删除人',
-  `delete_time` datetime DEFAULT NULL COMMENT '删除日期',
-  `deleted` tinyint(4) NOT NULL DEFAULT '0' COMMENT '删除标志(0=未删除 1=已删除)，该值由后台维护，默认为0',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `idx_anan_dictionarydetail_dictionaryid_name` (`name`,`dictionary_id`),
-  KEY `fk_anan_dictionary_ref_detail` (`dictionary_id`),
-  CONSTRAINT `fk_anan_dictionary_ref_detail` FOREIGN KEY (`dictionary_id`) REFERENCES `anan_dictionary` (`id`)
-  ) ENGINE=InnoDB AUTO_INCREMENT=4545 DEFAULT CHARSET=utf8mb4 COMMENT='系统通用字典明细表';
+    `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '字典明细ID',
+    `name` int(11) unsigned NOT NULL COMMENT '字典明细键，不能重复，字典内明细项唯一代码',
+    `value` varchar(64) DEFAULT NULL COMMENT '字典明细值表示字面意义',
+    `dictionary_id` int(11) unsigned NOT NULL COMMENT '取值于字典明细表AnanDictionaryDetailEntity.code',
+    `sort` smallint(5) unsigned NOT NULL COMMENT '顺序，用于显示数据时的顺序，数值越小越靠前',
+    `status` tinyint(3) unsigned NOT NULL COMMENT '使用状态：0=启用，1=禁用，具体取值于字典表anan_dictionary.code=11',
+    `scode` varchar(64) DEFAULT NULL COMMENT '标准代码，该字段通常用于对接标准字典',
+    `scope` varchar(12) DEFAULT NULL COMMENT '作用域，用于字典明细项的作用域',
+    `used` tinyint(4) NOT NULL DEFAULT '0' COMMENT '使用标志：0=未使用，1=已使用，已使用的字典就不能再修改name属性',
+    `create_by` int(11) unsigned NOT NULL COMMENT '创建人',
+    `create_time` datetime NOT NULL COMMENT '创建日期',
+    `update_by` int(11) unsigned NOT NULL COMMENT '修改人',
+    `update_time` datetime NOT NULL COMMENT '修改日期',
+    `delete_by` int(11) unsigned DEFAULT NULL COMMENT '删除人',
+    `delete_time` datetime DEFAULT NULL COMMENT '删除日期',
+    `deleted` tinyint(4) NOT NULL DEFAULT '0' COMMENT '删除标志(0=未删除 1=已删除)，该值由后台维护，默认为0',
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `idx_anan_dictionarydetail_dictionaryid_name` (`name`,`dictionary_id`),
+    KEY `fk_anan_dictionary_ref_detail` (`dictionary_id`),
+    CONSTRAINT `fk_anan_dictionary_ref_detail` FOREIGN KEY (`dictionary_id`) REFERENCES `anan_dictionary` (`id`)
+    ) ENGINE=InnoDB AUTO_INCREMENT=4545 DEFAULT CHARSET=utf8mb4 COMMENT='系统通用字典明细表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -105,23 +105,23 @@ DROP TABLE IF EXISTS `anan_organization`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `anan_organization` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '机构ID',
-  `p_id` int(11) unsigned NOT NULL COMMENT '父机构编码，取值于id，表示当前数据所属的父类机构',
-  `top_id` int(11) unsigned NOT NULL COMMENT '顶级机构编码：一般指用户注册的机构，通常是一个集团组的最高级别机构，取值于id',
-  `code` varchar(64) NOT NULL COMMENT '机构编码，自定义机构编码，下级机构必须以上级机构编码为前缀',
-  `name` varchar(64) NOT NULL COMMENT '机构名称',
-  `level` tinyint(3) unsigned NOT NULL COMMENT '深度',
-  `fullname` varchar(128) DEFAULT NULL COMMENT '机构全名',
-  `address` varchar(128) DEFAULT NULL COMMENT '机构地址',
-  `telphone` varchar(24) DEFAULT NULL COMMENT '机构电话',
-  `status` tinyint(3) unsigned NOT NULL COMMENT '使用状态：0=启用，1=禁用，具体取值于字典表anan_dictionary.code=11',
-  `create_time` datetime NOT NULL COMMENT '创建日期',
-  `create_by` int(11) unsigned NOT NULL COMMENT '创建人',
-  `update_time` datetime NOT NULL COMMENT '修改日期',
-  `update_by` int(11) unsigned NOT NULL COMMENT '修改人',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `idx_anan_organization_code` (`code`)
-  ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COMMENT='系统机构表';
+    `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '机构ID',
+    `p_id` int(11) unsigned NOT NULL COMMENT '父机构编码，取值于id，表示当前数据所属的父类机构',
+    `top_id` int(11) unsigned NOT NULL COMMENT '顶级机构编码：一般指用户注册的机构，通常是一个集团组的最高级别机构，取值于id',
+    `code` varchar(64) NOT NULL COMMENT '机构编码，自定义机构编码，下级机构必须以上级机构编码为前缀',
+    `name` varchar(64) NOT NULL COMMENT '机构名称',
+    `level` tinyint(3) unsigned NOT NULL COMMENT '深度',
+    `fullname` varchar(128) DEFAULT NULL COMMENT '机构全名',
+    `address` varchar(128) DEFAULT NULL COMMENT '机构地址',
+    `telphone` varchar(24) DEFAULT NULL COMMENT '机构电话',
+    `status` tinyint(3) unsigned NOT NULL COMMENT '使用状态：0=启用，1=禁用，具体取值于字典表anan_dictionary.code=11',
+    `create_time` datetime NOT NULL COMMENT '创建日期',
+    `create_by` int(11) unsigned NOT NULL COMMENT '创建人',
+    `update_time` datetime NOT NULL COMMENT '修改日期',
+    `update_by` int(11) unsigned NOT NULL COMMENT '修改人',
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `idx_anan_organization_code` (`code`)
+    ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COMMENT='系统机构表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -142,21 +142,21 @@ DROP TABLE IF EXISTS `anan_organization_auth`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `anan_organization_auth` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '机构授权ID',
-  `organiz_id` int(10) unsigned NOT NULL COMMENT '机构ID',
-  `version_id` int(10) unsigned NOT NULL COMMENT '版本ID',
-  `order_id` int(10) unsigned NOT NULL COMMENT '订单ID',
-  `authorization_code` varchar(256) NOT NULL COMMENT '授权码',
-  `create_time` datetime NOT NULL COMMENT '创建日期',
-  `create_by` int(11) unsigned NOT NULL COMMENT '创建人',
-  `validity` int(11) NOT NULL COMMENT '有效期：一般按天计算',
-  `protect_days` tinyint(4) NOT NULL COMMENT '到期后保护期',
-  `max_organizs` int(11) NOT NULL COMMENT '最大机构数：0=无限制 n=限制数',
-  `max_users` int(11) NOT NULL COMMENT '最大机构数：0=无限制 n=限制数',
-  `tryout` tinyint(4) NOT NULL COMMENT '是否试用：0=不试用 1=试用',
-  `tryout_days` tinyint(4) NOT NULL COMMENT '试用天数',
-  PRIMARY KEY (`id`)
-  ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COMMENT='系统机构授权表';
+    `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '机构授权ID',
+    `organiz_id` int(10) unsigned NOT NULL COMMENT '机构ID',
+    `version_id` int(10) unsigned NOT NULL COMMENT '版本ID',
+    `order_id` int(10) unsigned NOT NULL COMMENT '订单ID',
+    `authorization_code` varchar(256) NOT NULL COMMENT '授权码',
+    `create_time` datetime NOT NULL COMMENT '创建日期',
+    `create_by` int(11) unsigned NOT NULL COMMENT '创建人',
+    `validity` int(11) NOT NULL COMMENT '有效期：一般按天计算',
+    `protect_days` tinyint(4) NOT NULL COMMENT '到期后保护期',
+    `max_organizs` int(11) NOT NULL COMMENT '最大机构数：0=无限制 n=限制数',
+    `max_users` int(11) NOT NULL COMMENT '最大机构数：0=无限制 n=限制数',
+    `tryout` tinyint(4) NOT NULL COMMENT '是否试用：0=不试用 1=试用',
+    `tryout_days` tinyint(4) NOT NULL COMMENT '试用天数',
+    PRIMARY KEY (`id`)
+    ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COMMENT='系统机构授权表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -177,17 +177,17 @@ DROP TABLE IF EXISTS `anan_organization_permission`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `anan_organization_permission` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '机构权限ID',
-  `organiz_id` int(11) unsigned NOT NULL COMMENT '机构ID',
-  `permission_id` int(11) unsigned NOT NULL COMMENT '权限ID',
-  `create_time` datetime NOT NULL COMMENT '创建时间',
-  `create_by` int(11) unsigned NOT NULL COMMENT '创建人',
-  PRIMARY KEY (`id`),
-  KEY `fk_anan_organization_permission` (`organiz_id`),
-  KEY `fk_anan_permission_organization` (`permission_id`),
-  CONSTRAINT `fk_anan_organization_permission` FOREIGN KEY (`organiz_id`) REFERENCES `anan_organization` (`id`),
-  CONSTRAINT `fk_anan_permission_organization` FOREIGN KEY (`permission_id`) REFERENCES `anan_permission` (`id`)
-  ) ENGINE=InnoDB AUTO_INCREMENT=438 DEFAULT CHARSET=utf8mb4 COMMENT='系统机构权限表';
+    `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '机构权限ID',
+    `organiz_id` int(11) unsigned NOT NULL COMMENT '机构ID',
+    `permission_id` int(11) unsigned NOT NULL COMMENT '权限ID',
+    `create_time` datetime NOT NULL COMMENT '创建时间',
+    `create_by` int(11) unsigned NOT NULL COMMENT '创建人',
+    PRIMARY KEY (`id`),
+    KEY `fk_anan_organization_permission` (`organiz_id`),
+    KEY `fk_anan_permission_organization` (`permission_id`),
+    CONSTRAINT `fk_anan_organization_permission` FOREIGN KEY (`organiz_id`) REFERENCES `anan_organization` (`id`),
+    CONSTRAINT `fk_anan_permission_organization` FOREIGN KEY (`permission_id`) REFERENCES `anan_permission` (`id`)
+    ) ENGINE=InnoDB AUTO_INCREMENT=438 DEFAULT CHARSET=utf8mb4 COMMENT='系统机构权限表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -208,26 +208,26 @@ DROP TABLE IF EXISTS `anan_parameter`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `anan_parameter` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '参数ID',
-  `name` varchar(64) NOT NULL COMMENT '参数键',
-  `value` varchar(256) DEFAULT NULL COMMENT '参数值',
-  `type` tinyint(3) unsigned NOT NULL COMMENT '参数分类：具体取值于字典表anan_dictionary.code=10',
-  `scope` varchar(64) DEFAULT NULL COMMENT '参数作用域',
-  `default_value` varchar(256) DEFAULT NULL COMMENT '默认值',
-  `description` varchar(256) DEFAULT NULL COMMENT '参数描述',
-  `create_time` datetime NOT NULL COMMENT '创建日期',
-  `create_by` int(11) unsigned NOT NULL COMMENT '创建人',
-  `update_time` datetime NOT NULL COMMENT '修改日期',
-  `update_by` int(11) unsigned NOT NULL COMMENT '修改人',
-  `apply_time` datetime DEFAULT NULL COMMENT '生效日期',
-  `apply_by` int(11) unsigned DEFAULT NULL COMMENT '创建人',
-  `status` tinyint(3) unsigned NOT NULL COMMENT '参数状态：0=正常状态、1=修改状态、2=删除状态',
-  `delete_by` int(11) unsigned DEFAULT NULL COMMENT '删除人',
-  `delete_time` datetime DEFAULT NULL COMMENT '删除日期',
-  `deleted` tinyint(4) NOT NULL DEFAULT '0' COMMENT '删除标志(0=未删除 1=已删除)，该值由后台维护，默认为0',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `idx_anan_parameter_type_code_key` (`name`,`type`,`scope`)
-  ) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COMMENT='用于存放各种分类分组的个性化参数';
+    `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '参数ID',
+    `name` varchar(64) NOT NULL COMMENT '参数键',
+    `value` varchar(256) DEFAULT NULL COMMENT '参数值',
+    `type` tinyint(3) unsigned NOT NULL COMMENT '参数分类：具体取值于字典表anan_dictionary.code=10',
+    `scope` varchar(64) DEFAULT NULL COMMENT '参数作用域',
+    `default_value` varchar(256) DEFAULT NULL COMMENT '默认值',
+    `description` varchar(256) DEFAULT NULL COMMENT '参数描述',
+    `create_time` datetime NOT NULL COMMENT '创建日期',
+    `create_by` int(11) unsigned NOT NULL COMMENT '创建人',
+    `update_time` datetime NOT NULL COMMENT '修改日期',
+    `update_by` int(11) unsigned NOT NULL COMMENT '修改人',
+    `apply_time` datetime DEFAULT NULL COMMENT '生效日期',
+    `apply_by` int(11) unsigned DEFAULT NULL COMMENT '创建人',
+    `status` tinyint(3) unsigned NOT NULL COMMENT '参数状态：0=正常状态、1=修改状态、2=删除状态',
+    `delete_by` int(11) unsigned DEFAULT NULL COMMENT '删除人',
+    `delete_time` datetime DEFAULT NULL COMMENT '删除日期',
+    `deleted` tinyint(4) NOT NULL DEFAULT '0' COMMENT '删除标志(0=未删除 1=已删除)，该值由后台维护，默认为0',
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `idx_anan_parameter_type_code_key` (`name`,`type`,`scope`)
+    ) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COMMENT='用于存放各种分类分组的个性化参数';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -236,7 +236,7 @@ CREATE TABLE `anan_parameter` (
 
 LOCK TABLES `anan_parameter` WRITE;
 /*!40000 ALTER TABLE `anan_parameter` DISABLE KEYS */;
-INSERT INTO `anan_parameter` VALUES (5,'UserResetPasswordType','1',1,'2','2','重置用户密码时密码的生成规则(1、重置成系统参数中的固定密码  2、设置成随机4位密码)','2018-08-07 12:23:28',1,'2018-12-20 16:24:51',2,'2019-01-13 16:37:17',1,0,NULL,NULL,0),(7,'UserDefaultPassword','123456',1,'','1234561','用户的默认密码','2018-08-08 16:57:57',1,'2019-01-25 17:53:35',2,'2019-01-25 17:53:35',2,0,NULL,NULL,0),(8,'DefaultPageSize','10',1,'','10','表格默认每页记录数','2018-08-10 14:06:19',1,'2019-01-25 15:43:21',1,'2018-08-10 14:06:19',1,0,NULL,NULL,0),(9,'DefaultPageSizes','5,10,25,50,100',1,'','5,10,25,50,100','表格默认每页记录数可选择项','2018-08-10 14:22:11',1,'2019-01-25 15:19:02',1,'2018-10-29 11:23:15',1,0,NULL,NULL,0),(10,'DefaultDictionaryDetailNameAndSort','1',1,'','1','新增字典明细时是否按当前数据总量自动生成字典key和字典Sort，0=不自动 1=自动，默认为自动','2018-10-29 17:49:51',1,'2018-10-29 17:49:51',1,'2018-10-29 17:49:51',1,0,NULL,NULL,0),(13,'UserResetPasswordType','2',1,'','2','重置用户密码时密码的生成规则(1、重置成系统参数中的固定密码 2、设置成随机4位密码)','2018-11-26 10:57:46',2,'2018-11-26 10:57:46',2,'2018-11-26 10:57:46',2,0,NULL,NULL,0),(16,'DefaultPasswordStrength','.*(?=.{6,})(?=.*\\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*? ]).*',1,'','.*(?=.{6,})(?=.*\\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*? ]).*','用户密码强度正则表达式，密码最少6位，包括至少1个大写字母，1个小写字母，1个数字，1个特殊字符','2018-12-02 11:17:01',1,'2018-12-02 18:17:33',1,'2018-12-02 18:17:37',1,0,NULL,NULL,0);
+INSERT INTO `anan_parameter` VALUES (5,'UserResetPasswordType','1',1,'2','2','重置用户密码时密码的生成规则(1、重置成系统参数中的固定密码  2、设置成随机4位密码)','2018-08-07 12:23:28',1,'2018-12-20 16:24:51',2,'2019-01-13 16:37:17',1,0,NULL,NULL,0),(7,'UserDefaultPassword','123456',1,'','1234561','用户的默认密码','2018-08-08 16:57:57',1,'2019-01-25 17:53:35',2,'2019-01-25 17:53:35',2,0,NULL,NULL,0),(8,'DefaultPageSize','10',1,'','10','表格默认每页记录数','2018-08-10 14:06:19',1,'2019-01-25 15:43:21',1,'2018-08-10 14:06:19',1,0,NULL,NULL,0),(9,'DefaultPageSizes','5,10,25,50,100',1,'','5,10,25,50,100','表格默认每页记录数可选择项','2018-08-10 14:22:11',1,'2019-01-25 15:19:02',1,'2018-10-29 11:23:15',1,0,NULL,NULL,0),(10,'DefaultDictionaryDetailNameAndSort','1',1,'','1','新增字典明细时是否按当前数据总量自动生成字典key和字典Sort，0=不自动 1=自动，默认为自动','2018-10-29 17:49:51',1,'2018-10-29 17:49:51',1,'2018-10-29 17:49:51',1,0,NULL,NULL,0),(13,'UserResetPasswordType','2',1,'','2','重置用户密码时密码的生成规则(1、重置成系统参数中的固定密码 2、设置成随机4位密码)','2018-11-26 10:57:46',2,'2018-11-26 10:57:46',2,'2018-11-26 10:57:46',2,0,NULL,NULL,0),(16,'DefaultPasswordStrength','.*(?=.{6,})(?=.*\\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*? ]).*',1,'','.*(?=.{6,})(?=.*\\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*? ]).*','用户密码强度正则表达式，密码最少6位，包括至少1个大写字母，1个小写字母，1个数字，1个特殊字符','2018-12-02 11:17:01',1,'2018-12-02 18:17:33',1,'2018-12-02 18:17:37',1,0,NULL,NULL,0),(17,'DefaultPageSize','10',1,NULL,'10','表格默认每页记录数','2019-04-25 03:35:45',1,'2019-04-25 03:35:45',1,NULL,NULL,0,NULL,NULL,0),(18,'DefaultPageSizes','5,10,25,50,100',1,NULL,'5,10,25,50,100','表格默认每页记录数可选择项','2019-04-25 03:35:45',1,'2019-04-25 03:35:45',1,NULL,NULL,0,NULL,NULL,0),(19,'DefaultDictionaryDetailNameAndSort','1',1,NULL,'1','新增字典明细时是否按当前数据总量自动生成字典key和字典Sort，0=不自动 1=自动，默认为自动','2019-04-25 03:35:48',1,'2019-04-25 03:35:48',1,NULL,NULL,0,NULL,NULL,0);
 /*!40000 ALTER TABLE `anan_parameter` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -248,20 +248,20 @@ DROP TABLE IF EXISTS `anan_pay`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `anan_pay` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '支付ID',
-  `organiz_id` int(10) unsigned NOT NULL COMMENT '付款机构',
-  `user_id` int(10) unsigned NOT NULL COMMENT '付款用户',
-  `order_id` int(10) unsigned NOT NULL COMMENT '订单ID',
-  `invoice_id` int(10) unsigned NOT NULL COMMENT '发票ID',
-  `pay_type` tinyint(4) NOT NULL COMMENT '交易类型：0=正交易 1：负交易',
-  `total_money` decimal(12,2) NOT NULL COMMENT '应收金额',
-  `pay_money` decimal(12,2) NOT NULL COMMENT '支付金额',
-  `discount_monery` decimal(12,2) NOT NULL COMMENT '优惠金额',
-  `uncollect_money` decimal(12,2) NOT NULL COMMENT '待收金额',
-  `pay_time` datetime NOT NULL COMMENT '付款日期',
-  `pay_flag` tinyint(4) NOT NULL COMMENT '付款标志：0=未付款，1=分期，2=付全款',
-  PRIMARY KEY (`id`)
-  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='系统支付表';
+    `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '支付ID',
+    `organiz_id` int(10) unsigned NOT NULL COMMENT '付款机构',
+    `user_id` int(10) unsigned NOT NULL COMMENT '付款用户',
+    `order_id` int(10) unsigned NOT NULL COMMENT '订单ID',
+    `invoice_id` int(10) unsigned NOT NULL COMMENT '发票ID',
+    `pay_type` tinyint(4) NOT NULL COMMENT '交易类型：0=正交易 1：负交易',
+    `total_money` decimal(12,2) NOT NULL COMMENT '应收金额',
+    `pay_money` decimal(12,2) NOT NULL COMMENT '支付金额',
+    `discount_monery` decimal(12,2) NOT NULL COMMENT '优惠金额',
+    `uncollect_money` decimal(12,2) NOT NULL COMMENT '待收金额',
+    `pay_time` datetime NOT NULL COMMENT '付款日期',
+    `pay_flag` tinyint(4) NOT NULL COMMENT '付款标志：0=未付款，1=分期，2=付全款',
+    PRIMARY KEY (`id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='系统支付表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -281,12 +281,12 @@ DROP TABLE IF EXISTS `anan_pay_detail`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `anan_pay_detail` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '付款明细ID',
-  `pay_id` int(10) unsigned NOT NULL COMMENT '支付ID',
-  `payway` tinyint(4) NOT NULL COMMENT '付款方式',
-  `money` decimal(12,2) NOT NULL COMMENT '付款金额',
-  PRIMARY KEY (`id`)
-  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='系统支付明细表';
+    `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '付款明细ID',
+    `pay_id` int(10) unsigned NOT NULL COMMENT '支付ID',
+    `payway` tinyint(4) NOT NULL COMMENT '付款方式',
+    `money` decimal(12,2) NOT NULL COMMENT '付款金额',
+    PRIMARY KEY (`id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='系统支付明细表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -306,13 +306,13 @@ DROP TABLE IF EXISTS `anan_pay_invoice`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `anan_pay_invoice` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '发票ID',
-  `pay_id` int(10) unsigned NOT NULL COMMENT '支付ID',
-  `invoce_no` varchar(40) NOT NULL COMMENT '发票号码',
-  `invoce_time` datetime NOT NULL COMMENT '出票时间',
-  `crreate_by` int(10) unsigned NOT NULL COMMENT '操作人',
-  PRIMARY KEY (`id`)
-  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='系统支付发票表';
+    `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '发票ID',
+    `pay_id` int(10) unsigned NOT NULL COMMENT '支付ID',
+    `invoce_no` varchar(40) NOT NULL COMMENT '发票号码',
+    `invoce_time` datetime NOT NULL COMMENT '出票时间',
+    `crreate_by` int(10) unsigned NOT NULL COMMENT '操作人',
+    PRIMARY KEY (`id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='系统支付发票表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -332,18 +332,18 @@ DROP TABLE IF EXISTS `anan_pay_order`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `anan_pay_order` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '订单ID',
-  `organiz_id` int(10) unsigned NOT NULL COMMENT '订单机构',
-  `user_id` int(10) unsigned NOT NULL COMMENT '订单用户',
-  `version_id` int(10) unsigned NOT NULL COMMENT '版本ID',
-  `money` decimal(12,2) NOT NULL COMMENT '版本金额',
-  `order_time` datetime NOT NULL COMMENT '订单日期',
-  `status` tinyint(4) NOT NULL COMMENT '订单状态：0=新建，1=支付，2=取消，3=作废',
-  `pay_time` datetime DEFAULT NULL COMMENT '支付日期',
-  `cancle_time` datetime DEFAULT NULL COMMENT '取消日期',
-  `invalid_time` datetime DEFAULT NULL COMMENT '作废日期',
-  PRIMARY KEY (`id`)
-  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='系统支付订单表';
+    `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '订单ID',
+    `organiz_id` int(10) unsigned NOT NULL COMMENT '订单机构',
+    `user_id` int(10) unsigned NOT NULL COMMENT '订单用户',
+    `version_id` int(10) unsigned NOT NULL COMMENT '版本ID',
+    `money` decimal(12,2) NOT NULL COMMENT '版本金额',
+    `order_time` datetime NOT NULL COMMENT '订单日期',
+    `status` tinyint(4) NOT NULL COMMENT '订单状态：0=新建，1=支付，2=取消，3=作废',
+    `pay_time` datetime DEFAULT NULL COMMENT '支付日期',
+    `cancle_time` datetime DEFAULT NULL COMMENT '取消日期',
+    `invalid_time` datetime DEFAULT NULL COMMENT '作废日期',
+    PRIMARY KEY (`id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='系统支付订单表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -363,26 +363,26 @@ DROP TABLE IF EXISTS `anan_permission`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `anan_permission` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '权限ID',
-  `code` varchar(64) NOT NULL COMMENT '权限编码，不能重复 不能为空',
-  `p_id` int(11) unsigned NOT NULL COMMENT '父权限ID，取值于id，表示当前数据的父类权限',
-  `name` varchar(64) NOT NULL COMMENT '权限名称',
-  `url` varchar(255) DEFAULT NULL COMMENT '该字段必须和type字段共同使用，详情请看type字段',
-  `type` tinyint(3) unsigned NOT NULL COMMENT '权限类型：0=按钮、1=组件菜单，对应ur是前端组件l、2=链接菜单，对应url是http(s)链接地址、3=目录菜单，对应是目录菜单，具体取值于字典表anan_dictionary.code=13，当权限类型是1：组件菜单 3：目录菜单时表示该节点不是一个叶子节点',
-  `level` tinyint(3) unsigned NOT NULL COMMENT '菜单层级',
-  `sort` smallint(5) unsigned DEFAULT NULL COMMENT '排序，用于显示数据时的顺序，数值越小越靠前',
-  `status` tinyint(3) unsigned NOT NULL COMMENT '使用状态：0=启用，1=禁用，具体取值于字典表anan_dictionary.code=11',
-  `app_name` varchar(64) NOT NULL COMMENT '所属应用名称,等同于配置文件中的spring.application.name',
-  `path` varchar(64) DEFAULT NULL COMMENT '后台请求权限地址，权限路径ant风格表达式，用于动态验证HTTP后台请求的权限标识',
-  `method` varchar(64) DEFAULT NULL COMMENT 'http请求方法：GET、POST、DELETE、OPTIONS、PUT、PATCH，具体取值于字典表anan_dictionary.code=12',
-  `icon` varchar(64) DEFAULT NULL COMMENT '一般用于前端菜单选项前的图标',
-  `create_time` datetime NOT NULL COMMENT '创建日期',
-  `create_by` int(11) unsigned NOT NULL COMMENT '创建人',
-  `update_time` datetime NOT NULL COMMENT '修改日期',
-  `update_by` int(11) unsigned NOT NULL COMMENT '修改人',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `unique_anan_perimission_code` (`code`)
-  ) ENGINE=InnoDB AUTO_INCREMENT=134 DEFAULT CHARSET=utf8mb4 COMMENT='包含菜单、按钮两种权限';
+    `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '权限ID',
+    `code` varchar(64) NOT NULL COMMENT '权限编码，不能重复 不能为空',
+    `p_id` int(11) unsigned NOT NULL COMMENT '父权限ID，取值于id，表示当前数据的父类权限',
+    `name` varchar(64) NOT NULL COMMENT '权限名称',
+    `url` varchar(255) DEFAULT NULL COMMENT '该字段必须和type字段共同使用，详情请看type字段',
+    `type` tinyint(3) unsigned NOT NULL COMMENT '权限类型：0=按钮、1=组件菜单，对应ur是前端组件l、2=链接菜单，对应url是http(s)链接地址、3=目录菜单，对应是目录菜单，具体取值于字典表anan_dictionary.code=13，当权限类型是1：组件菜单 3：目录菜单时表示该节点不是一个叶子节点',
+    `level` tinyint(3) unsigned NOT NULL COMMENT '菜单层级',
+    `sort` smallint(5) unsigned DEFAULT NULL COMMENT '排序，用于显示数据时的顺序，数值越小越靠前',
+    `status` tinyint(3) unsigned NOT NULL COMMENT '使用状态：0=启用，1=禁用，具体取值于字典表anan_dictionary.code=11',
+    `app_name` varchar(64) NOT NULL COMMENT '所属应用名称,等同于配置文件中的spring.application.name',
+    `path` varchar(64) DEFAULT NULL COMMENT '后台请求权限地址，权限路径ant风格表达式，用于动态验证HTTP后台请求的权限标识',
+    `method` varchar(64) DEFAULT NULL COMMENT 'http请求方法：GET、POST、DELETE、OPTIONS、PUT、PATCH，具体取值于字典表anan_dictionary.code=12',
+    `icon` varchar(64) DEFAULT NULL COMMENT '一般用于前端菜单选项前的图标',
+    `create_time` datetime NOT NULL COMMENT '创建日期',
+    `create_by` int(11) unsigned NOT NULL COMMENT '创建人',
+    `update_time` datetime NOT NULL COMMENT '修改日期',
+    `update_by` int(11) unsigned NOT NULL COMMENT '修改人',
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `unique_anan_perimission_code` (`code`)
+    ) ENGINE=InnoDB AUTO_INCREMENT=135 DEFAULT CHARSET=utf8mb4 COMMENT='包含菜单、按钮两种权限';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -403,20 +403,20 @@ DROP TABLE IF EXISTS `anan_role`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `anan_role` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '角色ID',
-  `organiz_id` int(11) unsigned NOT NULL COMMENT '机构ID',
-  `name` varchar(64) NOT NULL COMMENT '角色名称',
-  `value` varchar(64) NOT NULL COMMENT '角色标识',
-  `tips` varchar(255) DEFAULT NULL COMMENT '角色说明',
-  `status` tinyint(3) unsigned NOT NULL COMMENT '使用状态：0=启用，1=禁用，具体取值于字典表anan_dictionary.code=11',
-  `create_time` datetime NOT NULL COMMENT '创建时间',
-  `create_by` int(11) unsigned NOT NULL COMMENT '创建人',
-  `update_time` datetime NOT NULL COMMENT '修改时间',
-  `update_by` int(11) unsigned NOT NULL COMMENT '修改人',
-  `built_in` tinyint(4) NOT NULL DEFAULT '0' COMMENT '内置标志：是否是系统内置角色，内置角色不能被用户删除和修改，0=不是 1=是',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_anan_role_organizid_value` (`value`,`organiz_id`)
-  ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COMMENT='系统角色表';
+    `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '角色ID',
+    `organiz_id` int(11) unsigned NOT NULL COMMENT '机构ID',
+    `name` varchar(64) NOT NULL COMMENT '角色名称',
+    `value` varchar(64) NOT NULL COMMENT '角色标识',
+    `tips` varchar(255) DEFAULT NULL COMMENT '角色说明',
+    `status` tinyint(3) unsigned NOT NULL COMMENT '使用状态：0=启用，1=禁用，具体取值于字典表anan_dictionary.code=11',
+    `create_time` datetime NOT NULL COMMENT '创建时间',
+    `create_by` int(11) unsigned NOT NULL COMMENT '创建人',
+    `update_time` datetime NOT NULL COMMENT '修改时间',
+    `update_by` int(11) unsigned NOT NULL COMMENT '修改人',
+    `built_in` tinyint(4) NOT NULL DEFAULT '0' COMMENT '内置标志：是否是系统内置角色，内置角色不能被用户删除和修改，0=不是 1=是',
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `uk_anan_role_organizid_value` (`value`,`organiz_id`)
+    ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COMMENT='系统角色表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -437,17 +437,17 @@ DROP TABLE IF EXISTS `anan_role_permission`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `anan_role_permission` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '角色权限ID',
-  `role_id` int(11) unsigned NOT NULL COMMENT '角色ID',
-  `permission_id` int(11) unsigned NOT NULL COMMENT '权限ID',
-  `create_time` datetime NOT NULL COMMENT '创建时间',
-  `create_by` int(11) unsigned NOT NULL COMMENT '创建人',
-  PRIMARY KEY (`id`),
-  KEY `fk_anan_permission_rolepermission` (`permission_id`),
-  KEY `fk_anan_role_rolepermission` (`role_id`),
-  CONSTRAINT `fk_anan_permission_rolepermission` FOREIGN KEY (`permission_id`) REFERENCES `anan_permission` (`id`),
-  CONSTRAINT `fk_anan_role_rolepermission` FOREIGN KEY (`role_id`) REFERENCES `anan_role` (`id`)
-  ) ENGINE=InnoDB AUTO_INCREMENT=3604 DEFAULT CHARSET=utf8mb4 COMMENT='系统角色权限表';
+    `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '角色权限ID',
+    `role_id` int(11) unsigned NOT NULL COMMENT '角色ID',
+    `permission_id` int(11) unsigned NOT NULL COMMENT '权限ID',
+    `create_time` datetime NOT NULL COMMENT '创建时间',
+    `create_by` int(11) unsigned NOT NULL COMMENT '创建人',
+    PRIMARY KEY (`id`),
+    KEY `fk_anan_permission_rolepermission` (`permission_id`),
+    KEY `fk_anan_role_rolepermission` (`role_id`),
+    CONSTRAINT `fk_anan_permission_rolepermission` FOREIGN KEY (`permission_id`) REFERENCES `anan_permission` (`id`),
+    CONSTRAINT `fk_anan_role_rolepermission` FOREIGN KEY (`role_id`) REFERENCES `anan_role` (`id`)
+    ) ENGINE=InnoDB AUTO_INCREMENT=3691 DEFAULT CHARSET=utf8mb4 COMMENT='系统角色权限表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -468,25 +468,25 @@ DROP TABLE IF EXISTS `anan_user`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `anan_user` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '用户ID',
-  `organiz_id` int(11) unsigned NOT NULL COMMENT '机构ID',
-  `usercode` varchar(45) NOT NULL COMMENT '用户工号',
-  `username` varchar(45) NOT NULL COMMENT '用户姓名',
-  `password` varchar(96) NOT NULL COMMENT '传入原始密码，后台会对原始密码进行加密后再存储',
-  `birthday` date NOT NULL COMMENT '生日',
-  `sex` tinyint(3) unsigned NOT NULL COMMENT '使用状态：具体取值于字典表anan_dictionary.code=15',
-  `email` varchar(45) DEFAULT NULL COMMENT '电子邮箱',
-  `phone` varchar(45) DEFAULT NULL COMMENT '手机号码',
-  `status` tinyint(3) unsigned NOT NULL COMMENT '使用状态：0=启用，1=禁用，具体取值于字典表anan_dictionary.code=11',
-  `avatar` varchar(150) DEFAULT NULL COMMENT '头像',
-  `create_time` datetime NOT NULL COMMENT '创建日期',
-  `create_by` int(11) unsigned NOT NULL COMMENT '创建人',
-  `update_time` datetime NOT NULL COMMENT '修改日期',
-  `update_by` int(11) unsigned NOT NULL COMMENT '修改人',
-  `expire_time` datetime NOT NULL COMMENT '过期时间，账户过期后用户被锁定切不能登录系统',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_anan_user_usercode` (`usercode`)
-  ) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COMMENT='系统用户表';
+    `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '用户ID',
+    `organiz_id` int(11) unsigned NOT NULL COMMENT '机构ID',
+    `usercode` varchar(45) NOT NULL COMMENT '用户工号',
+    `username` varchar(45) NOT NULL COMMENT '用户姓名',
+    `password` varchar(96) NOT NULL COMMENT '传入原始密码，后台会对原始密码进行加密后再存储',
+    `birthday` date NOT NULL COMMENT '生日',
+    `sex` tinyint(3) unsigned NOT NULL COMMENT '使用状态：具体取值于字典表anan_dictionary.code=15',
+    `email` varchar(45) DEFAULT NULL COMMENT '电子邮箱',
+    `phone` varchar(45) DEFAULT NULL COMMENT '手机号码',
+    `status` tinyint(3) unsigned NOT NULL COMMENT '使用状态：0=启用，1=禁用，具体取值于字典表anan_dictionary.code=11',
+    `avatar` varchar(150) DEFAULT NULL COMMENT '头像',
+    `create_time` datetime NOT NULL COMMENT '创建日期',
+    `create_by` int(11) unsigned NOT NULL COMMENT '创建人',
+    `update_time` datetime NOT NULL COMMENT '修改日期',
+    `update_by` int(11) unsigned NOT NULL COMMENT '修改人',
+    `expire_time` datetime NOT NULL COMMENT '过期时间，账户过期后用户被锁定切不能登录系统',
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `uk_anan_user_usercode` (`usercode`)
+    ) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COMMENT='系统用户表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -507,15 +507,15 @@ DROP TABLE IF EXISTS `anan_user_permission`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `anan_user_permission` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '用户权限ID',
-  `organiz_id` int(11) unsigned NOT NULL COMMENT '机构ID',
-  `user_id` int(11) unsigned NOT NULL COMMENT '用户ID',
-  `permission_id` int(11) unsigned NOT NULL COMMENT '权限ID',
-  `create_time` datetime NOT NULL COMMENT '创建日期',
-  `create_by` int(11) unsigned NOT NULL COMMENT '创建人',
-  `add_mode` tinyint(3) unsigned NOT NULL COMMENT '补充方式：0=增加权限、1=删除权限',
-  PRIMARY KEY (`id`)
-  ) ENGINE=InnoDB AUTO_INCREMENT=123 DEFAULT CHARSET=utf8mb4 COMMENT='用于增减用户的单项权限，通常实在角色的基础上增减单项权限';
+    `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '用户权限ID',
+    `organiz_id` int(11) unsigned NOT NULL COMMENT '机构ID',
+    `user_id` int(11) unsigned NOT NULL COMMENT '用户ID',
+    `permission_id` int(11) unsigned NOT NULL COMMENT '权限ID',
+    `create_time` datetime NOT NULL COMMENT '创建日期',
+    `create_by` int(11) unsigned NOT NULL COMMENT '创建人',
+    `add_mode` tinyint(3) unsigned NOT NULL COMMENT '补充方式：0=增加权限、1=删除权限',
+    PRIMARY KEY (`id`)
+    ) ENGINE=InnoDB AUTO_INCREMENT=123 DEFAULT CHARSET=utf8mb4 COMMENT='用于增减用户的单项权限，通常实在角色的基础上增减单项权限';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -536,19 +536,19 @@ DROP TABLE IF EXISTS `anan_user_role`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `anan_user_role` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '用户角色ID',
-  `organiz_id` int(11) unsigned NOT NULL COMMENT '机构ID',
-  `user_id` int(11) unsigned NOT NULL COMMENT '用户ID',
-  `role_id` int(11) unsigned NOT NULL COMMENT '角色ID',
-  `create_time` datetime NOT NULL COMMENT '创建日期',
-  `create_by` int(11) unsigned NOT NULL COMMENT '创建人',
-  PRIMARY KEY (`id`),
-  KEY `fk_anan_role_roleuser` (`role_id`),
-  KEY `fk_anan_user_userrole` (`user_id`),
-  CONSTRAINT `fk_anan_role_roleuser` FOREIGN KEY (`role_id`) REFERENCES `anan_role` (`id`),
-  CONSTRAINT `fk_anan_use_userpermission` FOREIGN KEY (`user_id`) REFERENCES `anan_user` (`id`),
-  CONSTRAINT `fk_anan_user_userrole` FOREIGN KEY (`user_id`) REFERENCES `anan_user` (`id`)
-  ) ENGINE=InnoDB AUTO_INCREMENT=66 DEFAULT CHARSET=utf8mb4 COMMENT='系统用户角色表';
+    `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '用户角色ID',
+    `organiz_id` int(11) unsigned NOT NULL COMMENT '机构ID',
+    `user_id` int(11) unsigned NOT NULL COMMENT '用户ID',
+    `role_id` int(11) unsigned NOT NULL COMMENT '角色ID',
+    `create_time` datetime NOT NULL COMMENT '创建日期',
+    `create_by` int(11) unsigned NOT NULL COMMENT '创建人',
+    PRIMARY KEY (`id`),
+    KEY `fk_anan_role_roleuser` (`role_id`),
+    KEY `fk_anan_user_userrole` (`user_id`),
+    CONSTRAINT `fk_anan_role_roleuser` FOREIGN KEY (`role_id`) REFERENCES `anan_role` (`id`),
+    CONSTRAINT `fk_anan_use_userpermission` FOREIGN KEY (`user_id`) REFERENCES `anan_user` (`id`),
+    CONSTRAINT `fk_anan_user_userrole` FOREIGN KEY (`user_id`) REFERENCES `anan_user` (`id`)
+    ) ENGINE=InnoDB AUTO_INCREMENT=66 DEFAULT CHARSET=utf8mb4 COMMENT='系统用户角色表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -569,26 +569,26 @@ DROP TABLE IF EXISTS `anan_version`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `anan_version` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '版本ID',
-  `name` varchar(30) NOT NULL COMMENT '版本名称',
-  `type` tinyint(4) NOT NULL COMMENT '版本类型：0=收费版 1=免费版 2=开发版',
-  `price` decimal(8,2) NOT NULL COMMENT '版本价格',
-  `begin_time` datetime NOT NULL COMMENT '活动开始日期',
-  `end_time` datetime NOT NULL COMMENT '活动结束日期',
-  `validity` int(11) NOT NULL COMMENT '有效期：一般按天计算',
-  `protect_days` tinyint(4) NOT NULL COMMENT '到期后保护期',
-  `max_organizs` int(11) NOT NULL COMMENT '最大机构数：0=无限制 n=限制数',
-  `max_users` int(11) NOT NULL COMMENT '最大机构数：0=无限制 n=限制数',
-  `tryout` tinyint(4) NOT NULL COMMENT '是否试用：0=不试用 1=试用',
-  `tryout_days` tinyint(4) NOT NULL COMMENT '试用天数',
-  `status` tinyint(4) NOT NULL COMMENT '启用状态：0=启用，1=禁用',
-  `description` varchar(512) DEFAULT NULL COMMENT '版本描述',
-  `create_by` int(11) unsigned NOT NULL DEFAULT '1' COMMENT '创建人',
-  `create_time` datetime NOT NULL COMMENT '创建日期',
-  `update_by` int(11) unsigned NOT NULL DEFAULT '1' COMMENT '修改人',
-  `update_time` datetime NOT NULL COMMENT '修改日期',
-  PRIMARY KEY (`id`)
-  ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COMMENT='系统版本表';
+    `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '版本ID',
+    `name` varchar(30) NOT NULL COMMENT '版本名称',
+    `type` tinyint(4) NOT NULL COMMENT '版本类型：0=收费版 1=免费版 2=开发版',
+    `price` decimal(8,2) NOT NULL COMMENT '版本价格',
+    `begin_time` datetime NOT NULL COMMENT '活动开始日期',
+    `end_time` datetime NOT NULL COMMENT '活动结束日期',
+    `validity` int(11) NOT NULL COMMENT '有效期：一般按天计算',
+    `protect_days` tinyint(4) NOT NULL COMMENT '到期后保护期',
+    `max_organizs` int(11) NOT NULL COMMENT '最大机构数：0=无限制 n=限制数',
+    `max_users` int(11) NOT NULL COMMENT '最大机构数：0=无限制 n=限制数',
+    `tryout` tinyint(4) NOT NULL COMMENT '是否试用：0=不试用 1=试用',
+    `tryout_days` tinyint(4) NOT NULL COMMENT '试用天数',
+    `status` tinyint(4) NOT NULL COMMENT '启用状态：0=启用，1=禁用',
+    `description` varchar(512) DEFAULT NULL COMMENT '版本描述',
+    `create_by` int(11) unsigned NOT NULL DEFAULT '1' COMMENT '创建人',
+    `create_time` datetime NOT NULL COMMENT '创建日期',
+    `update_by` int(11) unsigned NOT NULL DEFAULT '1' COMMENT '修改人',
+    `update_time` datetime NOT NULL COMMENT '修改日期',
+    PRIMARY KEY (`id`)
+    ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COMMENT='系统版本表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -609,17 +609,17 @@ DROP TABLE IF EXISTS `anan_version_permission`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `anan_version_permission` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '版本权限ID',
-  `version_id` int(11) unsigned NOT NULL COMMENT '版本ID',
-  `permission_id` int(11) unsigned NOT NULL COMMENT '权限ID',
-  `create_time` datetime NOT NULL COMMENT '创建时间',
-  `create_by` int(11) unsigned NOT NULL COMMENT '创建人',
-  PRIMARY KEY (`id`),
-  KEY `fk_anan_permission_versionpermission` (`permission_id`),
-  KEY `fk_anan_version_versionpermission` (`version_id`),
-  CONSTRAINT `fk_anan_permission_versionpermission` FOREIGN KEY (`permission_id`) REFERENCES `anan_permission` (`id`),
-  CONSTRAINT `fk_anan_version_versionpermission` FOREIGN KEY (`version_id`) REFERENCES `anan_version` (`id`)
-  ) ENGINE=InnoDB AUTO_INCREMENT=667 DEFAULT CHARSET=utf8mb4 COMMENT='系统版本权限表';
+    `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '版本权限ID',
+    `version_id` int(11) unsigned NOT NULL COMMENT '版本ID',
+    `permission_id` int(11) unsigned NOT NULL COMMENT '权限ID',
+    `create_time` datetime NOT NULL COMMENT '创建时间',
+    `create_by` int(11) unsigned NOT NULL COMMENT '创建人',
+    PRIMARY KEY (`id`),
+    KEY `fk_anan_permission_versionpermission` (`permission_id`),
+    KEY `fk_anan_version_versionpermission` (`version_id`),
+    CONSTRAINT `fk_anan_permission_versionpermission` FOREIGN KEY (`permission_id`) REFERENCES `anan_permission` (`id`),
+    CONSTRAINT `fk_anan_version_versionpermission` FOREIGN KEY (`version_id`) REFERENCES `anan_version` (`id`)
+    ) ENGINE=InnoDB AUTO_INCREMENT=754 DEFAULT CHARSET=utf8mb4 COMMENT='系统版本权限表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -640,21 +640,21 @@ DROP TABLE IF EXISTS `anan_version_role`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `anan_version_role` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '角色ID',
-  `version_id` int(11) unsigned NOT NULL COMMENT '版本ID',
-  `name` varchar(64) NOT NULL COMMENT '角色名称',
-  `value` varchar(64) NOT NULL COMMENT '角色标识',
-  `tips` varchar(255) DEFAULT NULL COMMENT '角色说明',
-  `status` tinyint(3) unsigned NOT NULL COMMENT '使用状态：0=启用，1=禁用，具体取值于字典表anan_dictionary.code=11',
-  `create_time` datetime NOT NULL COMMENT '创建时间',
-  `create_by` int(11) unsigned NOT NULL COMMENT '创建人',
-  `update_time` datetime NOT NULL COMMENT '修改时间',
-  `update_by` int(11) unsigned NOT NULL COMMENT '修改人',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_anan_role_versionid_value` (`value`,`version_id`),
-  KEY `fk_anan_version_role` (`version_id`),
-  CONSTRAINT `fk_anan_version_role` FOREIGN KEY (`version_id`) REFERENCES `anan_version` (`id`)
-  ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COMMENT='系统版本角色表';
+    `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '角色ID',
+    `version_id` int(11) unsigned NOT NULL COMMENT '版本ID',
+    `name` varchar(64) NOT NULL COMMENT '角色名称',
+    `value` varchar(64) NOT NULL COMMENT '角色标识',
+    `tips` varchar(255) DEFAULT NULL COMMENT '角色说明',
+    `status` tinyint(3) unsigned NOT NULL COMMENT '使用状态：0=启用，1=禁用，具体取值于字典表anan_dictionary.code=11',
+    `create_time` datetime NOT NULL COMMENT '创建时间',
+    `create_by` int(11) unsigned NOT NULL COMMENT '创建人',
+    `update_time` datetime NOT NULL COMMENT '修改时间',
+    `update_by` int(11) unsigned NOT NULL COMMENT '修改人',
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `uk_anan_role_versionid_value` (`value`,`version_id`),
+    KEY `fk_anan_version_role` (`version_id`),
+    CONSTRAINT `fk_anan_version_role` FOREIGN KEY (`version_id`) REFERENCES `anan_version` (`id`)
+    ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COMMENT='系统版本角色表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -675,17 +675,17 @@ DROP TABLE IF EXISTS `anan_version_role_permission`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `anan_version_role_permission` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '角色权限ID',
-  `role_id` int(11) unsigned NOT NULL COMMENT '角色ID',
-  `permission_id` int(11) unsigned NOT NULL COMMENT '权限ID',
-  `create_time` datetime NOT NULL COMMENT '创建时间',
-  `create_by` int(11) unsigned NOT NULL COMMENT '创建人',
-  PRIMARY KEY (`id`),
-  KEY `fk_anan_permission_versionrolepermission` (`permission_id`),
-  KEY `fk_anan_version_role_permission` (`role_id`),
-  CONSTRAINT `fk_anan_permission_versionrolepermission` FOREIGN KEY (`permission_id`) REFERENCES `anan_permission` (`id`),
-  CONSTRAINT `fk_anan_version_role_permission` FOREIGN KEY (`role_id`) REFERENCES `anan_version_role` (`id`)
-  ) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8mb4 COMMENT='系统版本角色权限表';
+    `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '角色权限ID',
+    `role_id` int(11) unsigned NOT NULL COMMENT '角色ID',
+    `permission_id` int(11) unsigned NOT NULL COMMENT '权限ID',
+    `create_time` datetime NOT NULL COMMENT '创建时间',
+    `create_by` int(11) unsigned NOT NULL COMMENT '创建人',
+    PRIMARY KEY (`id`),
+    KEY `fk_anan_permission_versionrolepermission` (`permission_id`),
+    KEY `fk_anan_version_role_permission` (`role_id`),
+    CONSTRAINT `fk_anan_permission_versionrolepermission` FOREIGN KEY (`permission_id`) REFERENCES `anan_permission` (`id`),
+    CONSTRAINT `fk_anan_version_role_permission` FOREIGN KEY (`role_id`) REFERENCES `anan_version_role` (`id`)
+    ) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8mb4 COMMENT='系统版本角色权限表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -706,19 +706,19 @@ DROP TABLE IF EXISTS `clientdetails`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `clientdetails` (
-  `appId` varchar(48) NOT NULL,
-  `resourceIds` varchar(256) DEFAULT NULL,
-  `appSecret` varchar(256) DEFAULT NULL,
-  `scope` varchar(256) DEFAULT NULL,
-  `grantTypes` varchar(256) DEFAULT NULL,
-  `redirectUrl` varchar(256) DEFAULT NULL,
-  `authorities` varchar(256) DEFAULT NULL,
-  `access_token_validity` int(11) DEFAULT NULL,
-  `refresh_token_validity` int(11) DEFAULT NULL,
-  `additionalInformation` varchar(4096) DEFAULT NULL,
-  `autoApproveScopes` varchar(256) DEFAULT NULL,
-  PRIMARY KEY (`appId`)
-  ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+    `appId` varchar(48) COLLATE utf8mb4_unicode_ci NOT NULL,
+    `resourceIds` varchar(256) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+    `appSecret` varchar(256) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+    `scope` varchar(256) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+    `grantTypes` varchar(256) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+    `redirectUrl` varchar(256) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+    `authorities` varchar(256) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+    `access_token_validity` int(11) DEFAULT NULL,
+    `refresh_token_validity` int(11) DEFAULT NULL,
+    `additionalInformation` varchar(4096) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+    `autoApproveScopes` varchar(256) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+    PRIMARY KEY (`appId`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -738,15 +738,15 @@ DROP TABLE IF EXISTS `oauth_access_token`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `oauth_access_token` (
-  `token_id` varchar(256) DEFAULT NULL,
-  `token` blob,
-  `authentication_id` varchar(48) NOT NULL,
-  `user_name` varchar(256) DEFAULT NULL,
-  `client_id` varchar(256) DEFAULT NULL,
-  `authentication` blob,
-  `refresh_token` varchar(256) DEFAULT NULL,
-  PRIMARY KEY (`authentication_id`)
-  ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+    `token_id` varchar(256) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+    `token` blob,
+    `authentication_id` varchar(48) COLLATE utf8mb4_unicode_ci NOT NULL,
+    `user_name` varchar(256) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+    `client_id` varchar(256) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+    `authentication` blob,
+    `refresh_token` varchar(256) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+    PRIMARY KEY (`authentication_id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -766,13 +766,13 @@ DROP TABLE IF EXISTS `oauth_approvals`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `oauth_approvals` (
-  `userId` varchar(256) DEFAULT NULL,
-  `clientId` varchar(256) DEFAULT NULL,
-  `scope` varchar(256) DEFAULT NULL,
-  `status` varchar(10) DEFAULT NULL,
-  `expiresAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `lastModifiedAt` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
-  ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+    `userId` varchar(256) DEFAULT NULL,
+    `clientId` varchar(256) DEFAULT NULL,
+    `scope` varchar(256) DEFAULT NULL,
+    `status` varchar(10) DEFAULT NULL,
+    `expiresAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    `lastModifiedAt` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -792,19 +792,19 @@ DROP TABLE IF EXISTS `oauth_client_details`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `oauth_client_details` (
-  `client_id` varchar(48) NOT NULL,
-  `resource_ids` varchar(256) DEFAULT NULL,
-  `client_secret` varchar(256) DEFAULT NULL,
-  `scope` varchar(256) DEFAULT NULL,
-  `authorized_grant_types` varchar(256) DEFAULT NULL,
-  `web_server_redirect_uri` varchar(256) DEFAULT NULL,
-  `authorities` varchar(256) DEFAULT NULL,
-  `access_token_validity` int(11) DEFAULT NULL,
-  `refresh_token_validity` int(11) DEFAULT NULL,
-  `additional_information` varchar(4096) DEFAULT NULL,
-  `autoapprove` varchar(256) DEFAULT NULL,
-  PRIMARY KEY (`client_id`)
-  ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+    `client_id` varchar(48) COLLATE utf8mb4_unicode_ci NOT NULL,
+    `resource_ids` varchar(256) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+    `client_secret` varchar(256) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+    `scope` varchar(256) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+    `authorized_grant_types` varchar(256) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+    `web_server_redirect_uri` varchar(256) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+    `authorities` varchar(256) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+    `access_token_validity` int(11) DEFAULT NULL,
+    `refresh_token_validity` int(11) DEFAULT NULL,
+    `additional_information` varchar(4096) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+    `autoapprove` varchar(256) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+    PRIMARY KEY (`client_id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -814,6 +814,7 @@ CREATE TABLE `oauth_client_details` (
 LOCK TABLES `oauth_client_details` WRITE;
 /*!40000 ALTER TABLE `oauth_client_details` DISABLE KEYS */;
 INSERT INTO `oauth_client_details` VALUES ('appServer',NULL,'{bcrypt}$2a$10$JlQ0ryJ/x5YMvR/LO/h4dumxZZXPbXHXkODtC0Ge0bM8pGbYuHp5S','all','client_credentials','','',NULL,NULL,NULL,'true'),('dih',NULL,'{bcrypt}$2a$10$3mI0u6jd2wFQde7TR31SJenxizDTxSxmnZOfJpQNF/bqCzwhAQoxa','all','client_credentials',NULL,NULL,259200,NULL,'碟和包药机','true'),('jingyi',NULL,'{bcrypt}$2a$10$gpwCmCvHkkESkqKDqKX4xOGYiOXHKuobF8d2NC/Xv3czjYWSo9fpm','all','client_credentials',NULL,NULL,259200,NULL,'京颐便民服务专用','true'),('mobileApp',NULL,'{bcrypt}$2a$10$aDdHJHfzuQ8F6gfQwPxwUuHrNg7P6GSeJM6ScLz5EmrsI9/TodSqK','app','password,refresh_token,client_credentials',NULL,'12,14,27,85',NULL,NULL,NULL,'true'),('webApp',NULL,'{bcrypt}$2a$10$xKfDcbOc1Ibh0VRWRIsQ4O3Vk9JxbF/30Wdz.e2hBNAAQKR5UziIK','webApp','password,refresh_token',NULL,'',NULL,NULL,NULL,'true'),('yongyou',NULL,'{bcrypt}$2a$10$.C/ayEIjbF640p5UxMRT7ewbcAapD7ilktqCq29qwrWqgUpo.4Shi','all','client_credentials',NULL,NULL,259200,NULL,'用友接口专用','true');
+/*!40000 ALTER TABLE `oauth_client_details` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -824,13 +825,13 @@ DROP TABLE IF EXISTS `oauth_client_token`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `oauth_client_token` (
-  `token_id` varchar(256) DEFAULT NULL,
-  `token` blob,
-  `authentication_id` varchar(48) NOT NULL,
-  `user_name` varchar(256) DEFAULT NULL,
-  `client_id` varchar(256) DEFAULT NULL,
-  PRIMARY KEY (`authentication_id`)
-  ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+    `token_id` varchar(256) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+    `token` blob,
+    `authentication_id` varchar(48) COLLATE utf8mb4_unicode_ci NOT NULL,
+    `user_name` varchar(256) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+    `client_id` varchar(256) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+    PRIMARY KEY (`authentication_id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -850,9 +851,9 @@ DROP TABLE IF EXISTS `oauth_code`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `oauth_code` (
-  `code` varchar(256) DEFAULT NULL,
-  `authentication` blob
-  ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+    `code` varchar(256) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+    `authentication` blob
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -872,10 +873,10 @@ DROP TABLE IF EXISTS `oauth_refresh_token`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `oauth_refresh_token` (
-  `token_id` varchar(256) DEFAULT NULL,
-  `token` blob,
-  `authentication` blob
-  ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+    `token_id` varchar(256) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+    `token` blob,
+    `authentication` blob
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -895,12 +896,12 @@ DROP TABLE IF EXISTS `persistent_logins`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `persistent_logins` (
-  `username` varchar(64) NOT NULL,
-  `series` varchar(64) NOT NULL,
-  `token` varchar(64) NOT NULL,
-  `last_used` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`series`)
-  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+    `username` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL,
+    `series` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL,
+    `token` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL,
+    `last_used` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (`series`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -921,4 +922,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-03-19  7:40:37
+-- Dump completed on 2019-04-27 16:43:44
