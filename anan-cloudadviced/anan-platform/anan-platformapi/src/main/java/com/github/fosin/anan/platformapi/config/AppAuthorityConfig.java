@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Description:
@@ -37,7 +38,7 @@ public class AppAuthorityConfig {
             ResponseEntity<List<AnanPermissionEntity>> responseEntity = permissionService.findByAppName(appName);
             entities = responseEntity.getBody();
 
-            entities.forEach(entity -> {
+            Objects.requireNonNull(entities).forEach(entity -> {
                 if (StringUtil.hasText(entity.getPath())) {
                     String method = entity.getMethod();
                     HttpMethod[] httpMethods = new HttpMethod[0];

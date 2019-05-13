@@ -13,7 +13,7 @@ import com.github.fosin.anan.jpa.service.ISimpleJpaService;
  * @author fosin
  */
 public interface ParameterService extends ISimpleJpaService<AnanParameterEntity, Long, AnanParameterCreateDto, AnanParameterRetrieveDto, AnanParameterUpdateDto> {
-    AnanParameterEntity findByTypeAndScopeAndName(Integer type, String scope, String name);
+    AnanParameterEntity getParameter(Integer type, String scope, String name);
 
     AnanParameterEntity getNearestParameter(int type, String scope, String name);
 

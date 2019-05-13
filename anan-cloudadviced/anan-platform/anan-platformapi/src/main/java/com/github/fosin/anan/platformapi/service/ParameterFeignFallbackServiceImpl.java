@@ -34,7 +34,13 @@ public class ParameterFeignFallbackServiceImpl implements ParameterFeignService 
 
     @Override
     public ResponseEntity<AnanParameterEntity> getParameter(Integer type, String scope, String name) {
-        log.error("feign 远程查询通用系统参数失败:{}", type, scope, name);
+        log.error("feign 远程查询通用系统参数失败:{}{}{}", type, scope, name);
+        return null;
+    }
+
+    @Override
+    public ResponseEntity<AnanParameterEntity> getNearestParameter(Integer type, String scope, String name) {
+        log.error("feign 远程查询通用系统参数失败:{}{}{}", type, scope, name);
         return null;
     }
 

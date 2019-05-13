@@ -29,6 +29,9 @@ public interface ParameterFeignService {
     @PostMapping("/entity")
     ResponseEntity<AnanParameterEntity> getParameter(@RequestParam("type") Integer type,
                                                     @RequestParam("scope") String scope, @RequestParam("name") String name);
+
+    ResponseEntity<AnanParameterEntity> getNearestParameter(Integer type, String scope, String name);
+
     @PostMapping("/value")
     ResponseEntity<String> getOrCreateParameter(@RequestBody AnanParameterRetrieveDto retrieveDto);
 

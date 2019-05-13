@@ -8,7 +8,6 @@ import com.github.fosin.anan.mvc.result.ResultUtils;
 import com.github.fosin.anan.platform.repository.OrganizationRepository;
 import com.github.fosin.anan.platform.repository.UserRoleRepository;
 import com.github.fosin.anan.platform.service.inter.UserService;
-import com.github.fosin.anan.platform.util.LocalParameterUtil;
 import com.github.fosin.anan.platformapi.constant.SystemConstant;
 import com.github.fosin.anan.platformapi.constant.TableNameConstant;
 import com.github.fosin.anan.platformapi.dto.request.AnanUserCreateDto;
@@ -16,8 +15,6 @@ import com.github.fosin.anan.platformapi.dto.request.AnanUserUpdateDto;
 import com.github.fosin.anan.platformapi.entity.AnanOrganizationEntity;
 import com.github.fosin.anan.platformapi.entity.AnanUserEntity;
 import com.github.fosin.anan.platformapi.entity.AnanUserRoleEntity;
-import com.github.fosin.anan.platformapi.parameter.OrganizParameterUtil;
-import com.github.fosin.anan.platformapi.parameter.ParameterType;
 import com.github.fosin.anan.platformapi.repository.UserRepository;
 import com.github.fosin.anan.platformapi.util.LoginUserUtil;
 import com.github.fosin.anan.util.NumberUtil;
@@ -67,6 +64,8 @@ public class UserServiceImpl implements UserService {
     private OrganizationRepository organizationRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private LocalOrganParameter localOrganParameterUtil;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -108,7 +107,7 @@ public class UserServiceImpl implements UserService {
         AnanUserEntity createUser = new AnanUserEntity();
         BeanUtils.copyProperties(entity, createUser);
 
-        String passwordStrength = LocalParameterUtil.getOrCreateParameter(ParameterType.Organization, "DefaultPasswordStrength", RegexUtil.PASSWORD_STRONG, "用户密码强度正则表达式,密码最少6位，包括至少1个大写字母，1个小写字母，1个数字，1个特殊字符");
+        String passwordStrength = localOrganParameterUtil.getOrCreateParameter("DefaultPasswordStrength", RegexUtil.PASSWORD_STRONG, "用户密码强度正则表达式,密码最少6位，包括至少1个大写字母，1个小写字母，1个数字，1个特殊字符");
         Assert.isTrue(RegexUtil.matcher(createUser.getPassword(), passwordStrength), "密码强度不符合强度要求!");
         String password = encryptBeforeSave(createUser);
         AnanUserEntity savedEntity = userRepository.save(createUser);
@@ -284,7 +283,7 @@ public class UserServiceImpl implements UserService {
         Assert.isTrue(!StringUtil.isEmpty(confirmPassword1) &&
                 !StringUtil.isEmpty(confirmPassword1) && confirmPassword1.equals(confirmPassword2), "新密码和确认新密码不能为空且必须一致!");
         Assert.isTrue(confirmPassword1.equals(password), "新密码和原密码不能相同!");
-        String passwordStrength = LocalParameterUtil.getOrCreateParameter(ParameterType.Organization, "DefaultPasswordStrength", RegexUtil.PASSWORD_STRONG, "用户密码强度正则表达式,密码最少6位，包括至少1个大写字母，1个小写字母，1个数字，1个特殊字符");
+        String passwordStrength = localOrganParameterUtil.getOrCreateParameter("DefaultPasswordStrength", RegexUtil.PASSWORD_STRONG, "用户密码强度正则表达式,密码最少6位，包括至少1个大写字母，1个小写字母，1个数字，1个特殊字符");
         Assert.isTrue(RegexUtil.matcher(confirmPassword1, passwordStrength), "新密码强度不符合强度要求!");
 
         AnanUserEntity user = userRepository.findById(id).orElse(null);
@@ -320,11 +319,11 @@ public class UserServiceImpl implements UserService {
 
     public String getPassword() {
         String password;
-        String resetUserPasswordType = LocalParameterUtil.getOrCreateParameter(ParameterType.Organization, "UserResetPasswordType", "2", "重置用户密码时密码的生成规则(1、重置成系统参数中的固定密码 2、设置成随机4位密码)");
+        String resetUserPasswordType = localOrganParameterUtil.getOrCreateParameter("UserResetPasswordType", "2", "重置用户密码时密码的生成规则(1、重置成系统参数中的固定密码 2、设置成随机4位密码)");
         if ("1".equals(resetUserPasswordType)) {
-            password = LocalParameterUtil.getOrCreateParameter(ParameterType.Organization, "UserDefaultPassword", "123456", "用户的默认密码");
+            password = localOrganParameterUtil.getOrCreateParameter("UserDefaultPassword", "123456", "用户的默认密码");
         } else {
-            String length = OrganizParameterUtil.getOrCreateParameter("UserResetPasswordLength", "4", "重置用户密码时密码长度,只支持1-9位,否则将默认取4位");
+            String length = localOrganParameterUtil.getOrCreateParameter("UserResetPasswordLength", "4", "重置用户密码时密码长度,只支持1-9位,否则将默认取4位");
             int random = 9999;
             if (NumberUtil.isInteger(length)) {
                 int i = Integer.parseInt(length);

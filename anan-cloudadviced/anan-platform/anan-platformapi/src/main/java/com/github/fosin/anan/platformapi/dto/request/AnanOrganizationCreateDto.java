@@ -1,18 +1,14 @@
 package com.github.fosin.anan.platformapi.dto.request;
 
-import java.util.Date;
-
 import com.github.fosin.anan.util.RegexUtil;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.io.Serializable;
-import lombok.Data;
-import org.springframework.format.annotation.DateTimeFormat;
-import com.github.fosin.anan.util.DateTimeUtil;
 
 /**
  * 系统机构表(AnanOrganization)创建DTO

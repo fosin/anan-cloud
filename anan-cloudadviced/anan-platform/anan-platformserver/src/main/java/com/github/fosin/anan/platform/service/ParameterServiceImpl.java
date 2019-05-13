@@ -16,7 +16,7 @@ import com.github.fosin.anan.platformapi.dto.request.AnanParameterUpdateDto;
 import com.github.fosin.anan.platformapi.entity.AnanOrganizationEntity;
 import com.github.fosin.anan.platformapi.entity.AnanParameterEntity;
 import com.github.fosin.anan.platformapi.entity.AnanUserEntity;
-import com.github.fosin.anan.platformapi.parameter.ParameterType;
+import com.github.fosin.anan.platformapi.parameter.OrganStrategy;
 import com.github.fosin.anan.platformapi.util.LoginUserUtil;
 import com.github.fosin.anan.util.StringUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -133,7 +133,7 @@ public class ParameterServiceImpl implements ParameterService {
         return getCacheKey(entity.getType(), entity.getScope(), entity.getName());
     }
 
-    public String getCacheKey(Integer type, String scope, String name) {
+    private String getCacheKey(Integer type, String scope, String name) {
         if (StringUtil.isEmpty(scope)) {
             scope = "";
         }
@@ -142,7 +142,7 @@ public class ParameterServiceImpl implements ParameterService {
 
     @Override
     @Cacheable(value = TableNameConstant.ANAN_PARAMETER, key = "#root.target.getCacheKey(#type,#scope,#name)")
-    public AnanParameterEntity findByTypeAndScopeAndName(Integer type, String scope, String name) {
+    public AnanParameterEntity getParameter(Integer type, String scope, String name) {
         AnanParameterEntity entity = parameterRepository.findByTypeAndScopeAndName(type, scope, name);
         //因为参数会逐级上上级机构查找，为减少没有必要的查询，该代码为解决Spring Cache默认不缓存null值问题
         if (entity == null) {
@@ -177,9 +177,10 @@ public class ParameterServiceImpl implements ParameterService {
         return parameter;
     }
 
-    public String getNearestScope(int type, String scope) {
+    private String getNearestScope(int type, String scope) {
         String rc = null;
-        if (type == ParameterType.Organization.getTypeValue()) {
+        OrganStrategy organStrategy = new OrganStrategy();
+        if (type == organStrategy.getType()) {
             Long id = Long.parseLong(scope);
             AnanOrganizationEntity entity = organizationRepository.findById(id).orElse(null);
             if (entity != null && entity.getLevel() != 0) {
