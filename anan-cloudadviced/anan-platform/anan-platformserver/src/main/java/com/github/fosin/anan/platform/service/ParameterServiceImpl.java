@@ -133,7 +133,7 @@ public class ParameterServiceImpl implements ParameterService {
         return getCacheKey(entity.getType(), entity.getScope(), entity.getName());
     }
 
-    private String getCacheKey(Integer type, String scope, String name) {
+    public String getCacheKey(Integer type, String scope, String name) {
         if (StringUtil.isEmpty(scope)) {
             scope = "";
         }

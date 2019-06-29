@@ -22,7 +22,7 @@ import java.util.Objects;
 @Lazy
 public class LocalOrganParameter implements IParameter {
     @Autowired
-    private static ParameterService parameterService;
+    private ParameterService parameterService;
 
     @Override
     public AnanParameterEntity setParameter(String scope, String name, String value, String description) {
