@@ -13,7 +13,7 @@
     <properties>
         <anan-placeholder1>${</anan-placeholder1>
         <anan-placeholder2>}</anan-placeholder2>
-        <anan-spring-cloud.version>Greenwich.SR1</anan-spring-cloud.version>
+        <anan-spring-cloud.version>Greenwich.SR3</anan-spring-cloud.version>
         <anan-spring-boot-admin.version>2.1.3</anan-spring-boot-admin.version>
         <anan-spring-cloud-zipkin.version>2.12.5</anan-spring-cloud-zipkin.version>
         <anan-druid.version>1.1.9</anan-druid.version>
@@ -56,6 +56,7 @@
                 <encrypt.key-store.alias>cdp</encrypt.key-store.alias>
                 <encrypt.key-store.secret>123456</encrypt.key-store.secret>
                 <docker.register.url>registry.cn-hangzhou.aliyuncs.com</docker.register.url>
+               <!-- <docker.register.url>ccr.ccs.tencentyun.com</docker.register.url>-->
                 <docker.register.ns>fosin</docker.register.ns>
                 <docker.host>http://192.168.137.8:2375</docker.host>
             </properties>
