@@ -70,24 +70,24 @@ public class AnanOrganizationController extends AbstractBaseController
 
 
     @ApiOperation("根据父机构ID获取其孩子节点数据")
-    @ApiImplicitParam(name = "pId", value = "父节点ID,AnanOrganizationEntity.pid")
-    @PostMapping("/listChild/{pId}")
-    public ResponseEntity<List<AnanOrganizationEntity>> listChild(@PathVariable("pId") Long pId) {
-        return ResponseEntity.ok(organizationService.findByPid(pId));
+    @ApiImplicitParam(name = "pid", value = "父节点ID,AnanOrganizationEntity.pid")
+    @PostMapping("/listChild/{pid}")
+    public ResponseEntity<List<AnanOrganizationEntity>> listChild(@PathVariable("pid") Long pid) {
+        return ResponseEntity.ok(organizationService.findByPid(pid));
     }
 
     @ApiOperation("根据父机构ID获取其所有后代节点数据")
-    @ApiImplicitParam(name = "pId", value = "父节点ID,AnanOrganizationEntity.pid")
-    @PostMapping("/listAllChild/{pId}")
-    public ResponseEntity<List<AnanOrganizationEntity>> listAllChild(@PathVariable("pId") Long pId) {
+    @ApiImplicitParam(name = "pid", value = "父节点ID,AnanOrganizationEntity.pid")
+    @PostMapping("/listAllChild/{pid}")
+    public ResponseEntity<List<AnanOrganizationEntity>> listAllChild(@PathVariable("pid") Long pid) {
         List<String> codes = new ArrayList<>();
-        if (pId == 0) {
-            List<AnanOrganizationEntity> list = organizationService.findByPid(pId);
+        if (pid == 0) {
+            List<AnanOrganizationEntity> list = organizationService.findByPid(pid);
             for (AnanOrganizationEntity organizationEntity : list) {
                 codes.add(organizationEntity.getCode());
             }
         } else {
-            AnanOrganizationEntity organizationEntity = organizationService.findById(pId);
+            AnanOrganizationEntity organizationEntity = organizationService.findById(pid);
             if (organizationEntity != null) {
                 codes.add(organizationEntity.getCode());
             }
@@ -108,7 +108,7 @@ public class AnanOrganizationController extends AbstractBaseController
 
         AnanOrganizationEntity root = null;
         for (AnanOrganizationEntity entity : list) {
-            if (0 == entity.getPId()) {
+            if (0 == entity.getPid()) {
                 root = entity;
                 break;
             }
@@ -120,7 +120,7 @@ public class AnanOrganizationController extends AbstractBaseController
             throw new AnanControllerException("未找到根节点数据!");
         }
 
-        TreeUtil.createTree(list, root, "id", "pId", "children");
+        TreeUtil.createTree(list, root, "id", "pid", "children");
         List<AnanOrganizationEntity> result = new ArrayList<>();
         result.add(root);
         return ResponseEntity.ok(result);

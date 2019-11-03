@@ -46,10 +46,10 @@ public class OrganizationServiceImpl implements OrganizationService {
         Assert.notNull(entity, "传入的创建数据实体对象不能为空!");
         AnanOrganizationEntity createEntity = new AnanOrganizationEntity();
         BeanUtils.copyProperties(entity, createEntity);
-        Long pId = entity.getPId();
+        Long pid = entity.getPid();
         int level = 1;
-        if (pId != 0) {
-            AnanOrganizationEntity parentEntity = organizationRepository.findById(pId).orElse(null);
+        if (pid != 0) {
+            AnanOrganizationEntity parentEntity = organizationRepository.findById(pid).orElse(null);
             Assert.notNull(parentEntity, "传入的创建数据实体找不到对于的父节点数据!");
             level = parentEntity.getLevel() + 1;
         }
@@ -66,9 +66,9 @@ public class OrganizationServiceImpl implements OrganizationService {
         AnanOrganizationEntity updateEntity = organizationRepository.findById(id).orElse(null);
         BeanUtils.copyProperties(entity, Objects.requireNonNull(updateEntity, "根据传入的机构ID" + id + "在数据库中未能找到对于数据!"));
 
-        Long pId = entity.getPId();
-        if (!updateEntity.getPId().equals(pId)) {
-            AnanOrganizationEntity parentEntity = organizationRepository.findById(pId).orElse(null);
+        Long pid = entity.getPid();
+        if (!updateEntity.getPid().equals(pid)) {
+            AnanOrganizationEntity parentEntity = organizationRepository.findById(pid).orElse(null);
             updateEntity.setLevel(Objects.requireNonNull(parentEntity,
                     "传入的创建数据实体找不到对于的父节点数据!").getLevel() + 1);
         }
@@ -135,7 +135,7 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     @Override
     public List<AnanOrganizationEntity> findByPid(Long pid) {
-        return organizationRepository.findByPIdOrderByCodeAsc(pid);
+        return organizationRepository.findByPidOrderByCodeAsc(pid);
     }
 
     @Override

@@ -33,7 +33,7 @@ public class AnanPermissionUpdateDto implements Serializable {
 
     @NotNull(message = "父权限ID" + "{javax.validation.constraints.NotNull.message}")
     @ApiModelProperty(value = "父权限ID，取值于id，表示当前数据的父类权限", example = "Long", required = true)
-    private Long pId;
+    private Long pid;
 
     @NotBlank(message = "权限名称" + "{javax.validation.constraints.NotBlank.message}")
     @ApiModelProperty(value = "权限名称", example = "String", required = true)

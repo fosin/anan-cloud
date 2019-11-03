@@ -184,7 +184,7 @@ public class ParameterServiceImpl implements ParameterService {
             Long id = Long.parseLong(scope);
             AnanOrganizationEntity entity = organizationRepository.findById(id).orElse(null);
             if (entity != null && entity.getLevel() != 0) {
-                rc = entity.getPId() + "";
+                rc = entity.getPid() + "";
             }
         }
         return rc;

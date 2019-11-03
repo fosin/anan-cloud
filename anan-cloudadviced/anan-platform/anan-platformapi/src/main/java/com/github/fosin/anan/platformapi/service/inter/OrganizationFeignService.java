@@ -25,11 +25,11 @@ public interface OrganizationFeignService {
     @ApiOperation("根据主键ID查询一条数据")
     ResponseEntity<AnanOrganizationEntity> findOne(@PathVariable("id") Long id);
 
-    @PostMapping("/listChild/{pId}")
-    ResponseEntity<List<AnanOrganizationEntity>> listChild(@PathVariable("pId") Long pId);
+    @PostMapping("/listChild/{pid}")
+    ResponseEntity<List<AnanOrganizationEntity>> listChild(@PathVariable("pid") Long pid);
 
-    @PostMapping("/listAllChild/{pId}")
-    ResponseEntity<List<AnanOrganizationEntity>> listAllChild(@PathVariable("pId") Long pId);
+    @PostMapping("/listAllChild/{pid}")
+    ResponseEntity<List<AnanOrganizationEntity>> listAllChild(@PathVariable("pid") Long pid);
 
     @PostMapping("/tree/{topId}")
     ResponseEntity<List<AnanOrganizationEntity>> tree(@PathVariable("topId") Long topId);

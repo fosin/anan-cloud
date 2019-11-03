@@ -124,7 +124,7 @@ public class OAuth2FeignConfigure {
         private void clearTokenAndRetry(Response response, String body) throws FeignException {
             log.error("接收到Feign请求资源响应,响应内容:{}", body);
             context.setAccessToken(null);
-            throw new RetryableException("access_token过期，即将进行重试", Request.HttpMethod.CONNECT, new Date());
+            throw new RetryableException(HttpStatus.SC_INTERNAL_SERVER_ERROR, "access_token过期，即将进行重试", Request.HttpMethod.CONNECT, new Date());
         }
 
         private boolean isParameterizeHttpEntity(Type type) {
@@ -180,7 +180,7 @@ public class OAuth2FeignConfigure {
             if (HttpStatus.SC_UNAUTHORIZED == response.status()) {
                 log.error("接收到Feign请求资源响应401，access_token已经过期，重置access_token为null待重新获取。");
                 context.setAccessToken(null);
-                return new RetryableException("疑似access_token过期，即将进行重试", Request.HttpMethod.CONNECT, new Date());
+                return new RetryableException(HttpStatus.SC_INTERNAL_SERVER_ERROR, "疑似access_token过期，即将进行重试", Request.HttpMethod.CONNECT, new Date());
             }
             return FeignException.errorStatus(methodKey, response);
         }

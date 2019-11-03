@@ -86,7 +86,7 @@ public class AnanOrganizationAuthServiceImpl implements AnanOrganizationAuthServ
         //创建机构
         AnanOrganizationCreateDto organization = new AnanOrganizationCreateDto();
         BeanUtils.copyProperties(registerDto.getOrganization(), organization);
-        organization.setPId(0L);
+        organization.setPid(0L);
         organization.setTopId(0L);
         organization.setStatus(0);
         AnanOrganizationEntity organizationEntity = organizationService.create(organization);

@@ -24,7 +24,7 @@ public class AnanOrganizationRetrieveDto implements Serializable {
     private Long id;
 
     @ApiModelProperty(value = "父机构编码，取值于id，表示当前数据所属的父类机构", example = "Long")
-    private Long pId;
+    private Long pid;
 
     @ApiModelProperty(value = "顶级机构编码：一般指用户注册的机构，通常是一个集团组的最高级别机构，取值于id", example = "Long")
     private Long topId;

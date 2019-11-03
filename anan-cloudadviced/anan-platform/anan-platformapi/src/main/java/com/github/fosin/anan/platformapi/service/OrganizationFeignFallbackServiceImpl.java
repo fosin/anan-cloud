@@ -19,14 +19,14 @@ import java.util.List;
 public class OrganizationFeignFallbackServiceImpl implements OrganizationFeignService {
 
     @Override
-    public ResponseEntity<List<AnanOrganizationEntity>> listChild(Long pId) {
-        log.error("feign 远程获取组织机构权限失败:{}", pId);
+    public ResponseEntity<List<AnanOrganizationEntity>> listChild(Long pid) {
+        log.error("feign 远程获取组织机构权限失败:{}", pid);
         return null;
     }
 
     @Override
-    public ResponseEntity<List<AnanOrganizationEntity>> listAllChild(Long pId) {
-        log.error("feign 远程获取组织机构权限失败:{}", pId);
+    public ResponseEntity<List<AnanOrganizationEntity>> listAllChild(Long pid) {
+        log.error("feign 远程获取组织机构权限失败:{}", pid);
         return null;
     }
 

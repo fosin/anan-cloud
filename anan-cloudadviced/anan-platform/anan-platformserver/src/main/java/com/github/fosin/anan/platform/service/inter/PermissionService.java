@@ -7,7 +7,6 @@ import com.github.fosin.anan.platformapi.dto.request.AnanPermissionRetrieveDto;
 import com.github.fosin.anan.platformapi.dto.request.AnanPermissionUpdateDto;
 import com.github.fosin.anan.platformapi.entity.AnanPermissionEntity;
 
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -17,11 +16,11 @@ import java.util.List;
  * @author fosin
  */
 public interface PermissionService extends ISimpleJpaService<AnanPermissionEntity, Long, AnanPermissionCreateDto, AnanPermissionRetrieveDto, AnanPermissionUpdateDto> {
-    List<AnanPermissionEntity> findByPId(Long pId);
+    List<AnanPermissionEntity> findByPid(Long pid);
 
     List<AnanPermissionEntity> findByType(Integer type);
 
     List<AnanPermissionEntity> findByAppName(String appName);
 
-    List<AnanPermissionEntity> findByPId(Long pId, Long versionId);
+    List<AnanPermissionEntity> findByPid(Long pid, Long versionId);
 }

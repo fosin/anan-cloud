@@ -55,11 +55,11 @@ public class PermissionServiceImpl implements PermissionService {
 
         AnanPermissionEntity createEntity = new AnanPermissionEntity();
         BeanUtils.copyProperties(entity, createEntity);
-        Long pId = entity.getPId();
+        Long pid = entity.getPid();
 
         int level = 1;
-        if (pId != 0) {
-            AnanPermissionEntity parentEntity = permissionRepository.findById(pId).orElse(null);
+        if (pid != 0) {
+            AnanPermissionEntity parentEntity = permissionRepository.findById(pid).orElse(null);
             Assert.notNull(parentEntity, "传入的创建数据实体找不到对于的父节点数据!");
             level = parentEntity.getLevel() + 1;
         }
@@ -76,9 +76,9 @@ public class PermissionServiceImpl implements PermissionService {
 
         AnanPermissionEntity updateEntity = permissionRepository.findById(id).orElse(null);
         BeanUtils.copyProperties(entity, Objects.requireNonNull(updateEntity, "通过ID：" + id + "未能找到对应的数据!"));
-        Long pId = entity.getPId();
-        if (!updateEntity.getPId().equals(pId)) {
-            AnanPermissionEntity parentEntity = permissionRepository.findById(pId).orElse(null);
+        Long pid = entity.getPid();
+        if (!updateEntity.getPid().equals(pid)) {
+            AnanPermissionEntity parentEntity = permissionRepository.findById(pid).orElse(null);
             Assert.notNull(parentEntity, "传入的创建数据实体找不到对于的父节点数据!");
             updateEntity.setLevel(parentEntity.getLevel() + 1);
         }
@@ -101,7 +101,7 @@ public class PermissionServiceImpl implements PermissionService {
         Assert.isTrue(countByPermissionId == 0, "还有角色在使用该权限，不能直接删除!");
         countByPermissionId = userPermissionService.countByPermissionId(id);
         Assert.isTrue(countByPermissionId == 0, "还有用户在使用该权限，不能直接删除!");
-        List<AnanPermissionEntity> entities = findByPId(id);
+        List<AnanPermissionEntity> entities = findByPid(id);
         Assert.isTrue(entities == null || entities.size() == 0, "该节点还存在子节点不能直接删除!");
         permissionRepository.delete(entity);
     }
@@ -144,14 +144,14 @@ public class PermissionServiceImpl implements PermissionService {
     }
 
     @Override
-    public List<AnanPermissionEntity> findByPId(Long pId) {
+    public List<AnanPermissionEntity> findByPid(Long pid) {
         Sort sort = new Sort(Sort.Direction.fromString("ASC"), "sort");
-        return permissionRepository.findByPId(pId, sort);
+        return permissionRepository.findByPid(pid, sort);
     }
 
     @Override
-    public List<AnanPermissionEntity> findByPId(Long pId, Long versionId) {
-        return permissionRepository.findByPId(pId, versionId);
+    public List<AnanPermissionEntity> findByPid(Long pid, Long versionId) {
+        return permissionRepository.findByPid(pid, versionId);
     }
 
     @Override

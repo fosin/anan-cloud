@@ -105,7 +105,7 @@ public class AnanUserDetailsServiceImpl implements UserDetailsService {
             }
         }
 
-        AnanPermissionEntity permissionTree = TreeUtil.createTree(userPermissions, SystemConstant.ROOT_PERMISSION_ID, "id", "pId", "children");
+        AnanPermissionEntity permissionTree = TreeUtil.createTree(userPermissions, SystemConstant.ROOT_PERMISSION_ID, "id", "pid", "children");
 
         AnanUserDetail user = new AnanUserDetail(userEntity, permissionTree, grantedAuthoritySet);
         log.debug("UserDetailsServiceImpl User:" + user.toString());

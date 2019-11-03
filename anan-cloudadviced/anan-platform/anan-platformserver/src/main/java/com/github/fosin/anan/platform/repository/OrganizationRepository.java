@@ -15,7 +15,7 @@ import java.util.List;
 @Repository
 @Lazy
 public interface OrganizationRepository extends IJpaRepository<AnanOrganizationEntity, Long> {
-    List<AnanOrganizationEntity> findByPIdOrderByCodeAsc(Long pId);
+    List<AnanOrganizationEntity> findByPidOrderByCodeAsc(Long pid);
 
     List<AnanOrganizationEntity> findByCodeStartingWithOrderByCodeAsc(String code);
 

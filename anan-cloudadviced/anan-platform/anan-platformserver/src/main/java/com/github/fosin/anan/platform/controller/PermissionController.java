@@ -56,7 +56,7 @@ public class PermissionController extends AbstractBaseController
 
         AnanPermissionEntity root = null;
         for (AnanPermissionEntity entity : list) {
-            if (SystemConstant.ROOT_PERMISSION_PID.equals(entity.getPId())) {
+            if (SystemConstant.ROOT_PERMISSION_PID.equals(entity.getPid())) {
                 root = entity;
                 break;
             }
@@ -64,17 +64,17 @@ public class PermissionController extends AbstractBaseController
         if (root == null) {
             throw new AnanControllerException("未找到根节点数据!");
         }
-        TreeUtil.createTree(list, root, "id", "pId", "children");
+        TreeUtil.createTree(list, root, "id", "pid", "children");
         List<AnanPermissionEntity> resultList = new ArrayList<>();
         resultList.add(root);
         return ResponseEntity.ok(resultList);
     }
 
     @ApiOperation(value = "根据父权限ID获取其孩子数据列表")
-    @ApiImplicitParam(name = "pId", value = "父权限ID,AnanPermissionEntity.pId")
-    @PostMapping("/listChild/{pId}")
-    public ResponseEntity<Object> getListChild(@PathVariable Long pId) {
-        List<AnanPermissionEntity> list = permissionService.findByPId(pId);
+    @ApiImplicitParam(name = "pid", value = "父权限ID,AnanPermissionEntity.pid")
+    @PostMapping("/listChild/{pid}")
+    public ResponseEntity<Object> getListChild(@PathVariable Long pid) {
+        List<AnanPermissionEntity> list = permissionService.findByPid(pid);
         return ResponseEntity.ok(list);
     }
 

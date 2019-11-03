@@ -51,10 +51,10 @@ public class AnanVersionController implements ISimpleController<AnanVersionEntit
     private PermissionService permissionService;
 
     @ApiOperation(value = "根据父权限ID获取其孩子数据列表")
-    @ApiImplicitParam(name = "pId", value = "父权限ID,AnanVersionPermissionEntity.id")
-    @RequestMapping(value = "/listChild/{pId}", method = {RequestMethod.POST})
-    public ResponseEntity<List<AnanPermissionEntity>> getListChild(@PathVariable Long pId, @RequestParam Long versionId) {
-        List<AnanPermissionEntity> list = permissionService.findByPId(pId, versionId);
+    @ApiImplicitParam(name = "pid", value = "父权限ID,AnanVersionPermissionEntity.id")
+    @RequestMapping(value = "/listChild/{pid}", method = {RequestMethod.POST})
+    public ResponseEntity<List<AnanPermissionEntity>> getListChild(@PathVariable Long pid, @RequestParam Long versionId) {
+        List<AnanPermissionEntity> list = permissionService.findByPid(pid, versionId);
         return ResponseEntity.ok(list);
     }
 

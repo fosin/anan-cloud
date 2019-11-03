@@ -27,7 +27,7 @@ public class AnanPermissionRetrieveDto implements Serializable {
     private String code;
 
     @ApiModelProperty(value = "父权限ID，取值于id，表示当前数据的父类权限", example = "Long")
-    private Long pId;
+    private Long pid;
 
     @ApiModelProperty(value = "权限名称", example = "String")
     private String name;

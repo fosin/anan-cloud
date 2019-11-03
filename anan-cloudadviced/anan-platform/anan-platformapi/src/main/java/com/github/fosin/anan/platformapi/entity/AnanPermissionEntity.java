@@ -58,7 +58,7 @@ public class AnanPermissionEntity extends AbstractCreateUpdateJpaEntity<Long, Lo
     @Basic
     @ApiModelProperty(value = "父权限ID，取值于id，表示当前数据的父类权限", required = true)
     @Column(name = "p_id", nullable = false)
-    private Long pId;
+    private Long pid;
 
     @Basic
     @ApiModelProperty(value = "权限名称", required = true)
