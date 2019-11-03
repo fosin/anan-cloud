@@ -157,6 +157,22 @@ services:
     networks:
       - anan-bridge
 
+  mongodb:
+    image: mongo:3.4
+    container_name: mongodb
+    hostname: mongodb
+    environment:
+      - TZ=Asia/Shanghai
+      - MONGO_INITDB_ROOT_USERNAME=anan
+      - MONGO_INITDB_ROOT_PASSWORD=local
+    volumes:
+      - /root/docker/mongodb/db:/data/db
+    restart: on-failure
+    ports:
+      - 27017:27017
+    networks:
+      - anan-bridge
+
   prometheus:
     image: prom/prometheus
     container_name: prometheus

@@ -23,6 +23,10 @@ zuul:
       path: /mpi/**
       serviceId: anan-mpi
       retryable: true
+    anan-vhr:
+      path: /vhr/**
+      serviceId: anan-vhr
+      retryable: true
 #  semaphore:
 #    max-semaphores: 100
 #  ribbon-isolation-strategy: THREAD
