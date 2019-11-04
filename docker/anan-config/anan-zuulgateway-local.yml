@@ -75,25 +75,27 @@ zuul:
 #      max-wait: -1
 #      max-idle: 8
 #      min-idle: 0
+#
 ribbon:
   OkToRetryOnAllOperations: false #对所有操作请求都进行重试,默认false
-  ReadTimeout: 5000   #负载均衡超时时间，默认值5000
-  ConnectTimeout: 2000 #ribbon请求连接的超时时间，默认值2000
   MaxAutoRetries: 0     #对当前实例的重试次数，默认0
   MaxAutoRetriesNextServer: 1 #对切换实例的重试次数，默认1
+  ReadTimeout: 30000   #负载均衡超时时间，默认值5000，单位ms
+  ConnectTimeout: 30000 #ribbon请求连接的超时时间，默认值2000，单位ms
+  ServerListRefreshInterval: 15000 # 从注册中心刷新servelist的时间 默认30秒，单位ms
 hystrix:
-  #  threadpool:
-  #    default:
-  #      coreSize: 50
-  #      maximumSize: 10000
-  #      allowMaximumSizeToDivergeFromCoreSize: true
-  #      maxQueueSize: -1
+  threadpool:
+    default:
+      coreSize: 100
+      maximumSize: 2000
+      allowMaximumSizeToDivergeFromCoreSize: true #允许maximumSize起作用
+      maxQueueSize: -1 #如该值为-1，那么使用的是SynchronousQueue，否则使用的是LinkedBlockingQueue
   command:
     default:
       execution:
         isolation:
           thread:
-            timeoutInMilliseconds: 60000
+            timeoutInMilliseconds: 60000 #断路器的超时时间；如果ribbon配置了重试那么该值必需大于ribbonTimeout，重试才能生效
       timeout:
         enabled: false
       circuitBreaker:

@@ -8,8 +8,6 @@ eureka:
     metadata-map:
       gated-launch: false #灰度发布标志，默认为false，设置为true表示灰度发布的点
     prefer-ip-address: true
-
-
 spring:
   profiles:
     active: @profileActive@

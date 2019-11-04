@@ -9,7 +9,6 @@ eureka:
       defaultZone: @eureka.client.service-url.defaultZone@
   instance:
     prefer-ip-address: true
-
 spring:
   profiles:
     active: @profileActive@

@@ -5,6 +5,12 @@
 #  level:
 #    root: info
 #    zipkin2: debug
+#server:
+#  undertow:
+#    io-threads: 16 #设置IO线程数，它主要执行非阻塞的任务，默认会取值cpu核心
+#    worker-threads: 256 # 阻塞任务线程池，当执行类似servlet请求阻塞IO操作会从这个线程池中取得线程，默认值是IO线程数*8
+#    buffer-size: 1024 #设置buffer大小，这些buffer会用于服务器连接的IO操作，有点类似netty的池化内存管理
+#    direct-buffers: true #是否分配的直接内存(NIO直接分配的堆外内存)
 eureka:
   client:
     healthcheck:
