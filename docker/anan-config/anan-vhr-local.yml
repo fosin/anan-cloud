@@ -2,10 +2,23 @@ spring:
   mail:
     host: smtp.qq.com
     port: 465
-    username: 1510161612@qq.com
-    password: fhmvfkwxjwmzhhjd
+    username: 1186340749@qq.com
+    password: ghkmjtncgemsbaae
     default-encoding: UTF-8
-    properties.mail.debug: true
+    properties:
+      mail:
+        debug: false
+        smtp:
+          user: ${spring.mail.username}
+          host: ${spring.mail.host}
+          auth: true
+          port: ${spring.mail.port}
+          starttls:
+            enable: true
+          socketFactory:
+            class: javax.net.ssl.SSLSocketFactory
+            fallback: false
+            port: ${spring.mail.port}
   jpa:
     show-sql: true
 #    hibernate:
