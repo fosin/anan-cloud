@@ -157,6 +157,22 @@ services:
     networks:
       - anan-bridge
 
+  phpredisadmin:
+    image: erikdubbelboer/phpredisadmin
+    environment:
+      - TZ=Asia/Shanghai
+      - ADMIN_USER=admin
+      - ADMIN_PASS=local
+      - REDIS_1_AUTH=local
+      - REDIS_1_HOST=redis
+      - REDIS_1_PORT=6379
+    links:
+      - redis
+    ports:
+      - 6380:80
+    networks:
+      - anan-bridge
+
   mongodb:
     image: mongo:3.4
     container_name: mongodb
