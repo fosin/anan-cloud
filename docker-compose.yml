@@ -1,5 +1,55 @@
 version: "3"
 services:
+  nacos-server1:
+    image: nacos/nacos-server:latest
+    container_name: nacos-server1
+    environment:
+      - PREFER_HOST_MODE=hostname
+      - MODE=standalone
+      - SPRING_DATASOURCE_PLATFORM=mysql
+      - MYSQL_MASTER_SERVICE_HOST=nacos-mysql-master
+      - MYSQL_MASTER_SERVICE_PORT=3306
+      - MYSQL_MASTER_SERVICE_DB_NAME=nacos
+      - MYSQL_MASTER_SERVICE_USER=nacos
+      - MYSQL_MASTER_SERVICE_PASSWORD=nacos
+      - MYSQL_SLAVE_SERVICE_HOST=nacos-mysql-slave
+      - MYSQL_SLAVE_SERVICE_PORT=3305
+    volumes:
+      -  /root/docker/nacos/logs/:/home/nacos/logs
+      -  /root/docker/nacos/custom.properties:/home/nacos/init.d/custom.properties
+    ports:
+      - "8848:8848"
+      - "9555:9555"
+    depends_on:
+      - nacos-mysql-slave
+  nacos-mysql-master:
+    container_name: nacos-mysql-master
+    image: nacos/nacos-mysql-master:latest
+    environment:
+      - MYSQL_ROOT_PASSWORD=local
+      - MYSQL_REPLICATION_USER=nacos_ru
+      - MYSQL_REPLICATION_PASSWORD=nacos_ru
+      - MYSQL_DATABASE=nacos
+      - MYSQL_USER=nacos
+      - MYSQL_PASSWORD=nacos
+    volumes:
+      - /root/docker/nacos/mysql-master:/var/lib/mysql
+    ports:
+      - "3306:3306"
+  nacos-mysql-slave:
+    container_name: nacos-mysql-slave
+    image: nacos/nacos-mysql-slave:latest
+    environment:
+      - MYSQL_ROOT_PASSWORD=local
+      - MYSQL_REPLICATION_USER=nacos_ru
+      - MYSQL_REPLICATION_PASSWORD=nacos_ru
+      - MYSQL_MASTER_SERVICE_HOST=nacos-mysql-master
+    volumes:
+      - /root/docker/nacos/mysql-slave:/var/lib/mysql
+    ports:
+      - "3305:3306"
+    depends_on:
+      - nacos-mysql-master
   filebeat:
     image: elastic/filebeat:6.7.1
     container_name: filebeat
@@ -104,7 +154,7 @@ services:
       - /root/docker/mysql/anan_platform/logs:/var/log/mysql
     restart: on-failure
     ports:
-      - 3306:3306
+      - 3310:3306
     networks:
       - anan-bridge
 

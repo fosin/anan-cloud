@@ -1,56 +1,27 @@
 server:
   port: 51700
-eureka:
-  client:
-    service-url:
-      defaultZone: @eureka.client.service-url.defaultZone@
-  instance:
-    prefer-ip-address: true
-#    metadata-map: #用于SBA认证
-
 spring:
+  main:
+    allow-bean-definition-overriding: true
   profiles:
     active: @profileActive@
   application:
     name: @project.artifactId@
   cloud:
+    nacos:
+      config:
+        namespace: @spring.cloud.nacos.config.namespace@
+        shared-dataids: @spring.cloud.nacos.config.shared-dataids@
+        file-extension: yaml
+        server-addr: @spring.cloud.nacos.config.server-addr@
+      discovery:
+        namespace: @spring.cloud.nacos.config.namespace@
+        server-addr: @spring.cloud.nacos.config.server-addr@
     inetutils:
       preferred-networks: @spring.cloud.inetutils.preferred-networks@
-    config:
-      username: ${spring.security.user.name}
-      password: ${spring.security.user.password}
-      discovery:
-        enabled: true
-        service-id: anan-configserver
-      fail-fast: true
-      retry:
-        initial-interval: 2000
-        max-attempts: 6
-        max-interval: 2000
-        multiplier: 1.1
-      profile: @profileActive@
-      enabled: true
-  rabbitmq:
-    addresses: @spring.rabbitmq.addresses@
-    username: @spring.rabbitmq.username@
-    password: @spring.rabbitmq.password@
   jackson: #该参数一定要放bootstrap中，而放application.yml或者后面的配置文件都不能生效
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
-  security:
-    user:
-      name: @spring.security.user.name@
-      password: @spring.security.user.password@
-encrypt:
-  key-store:
-    location: @encrypt.key-store.location@
-    password: @encrypt.key-store.password@
-    alias: @encrypt.key-store.alias@
-    secret: @encrypt.key-store.secret@
-  rsa:
-    algorithm: default
-    strong: false
-    salt: deadbeaf
 info: #定义各种额外的详情给服务端显示
   description: "@project.description@"
   version: "@project.version@"

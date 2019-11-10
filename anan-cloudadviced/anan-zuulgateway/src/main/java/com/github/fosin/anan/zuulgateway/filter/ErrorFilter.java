@@ -65,11 +65,7 @@ public class ErrorFilter extends SendErrorFilter {
     private Throwable getRealCause(Throwable throwable) {
         Throwable cause = throwable.getCause();
         if (cause != null) {
-            Throwable realCause = getRealCause(cause);
-            if (realCause == null) {
-                return cause;
-            }
-            return realCause;
+            return getRealCause(cause);
         }
         return throwable;
     }

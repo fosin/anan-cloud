@@ -1,20 +1,21 @@
-package com.github.fosin.anan.zuulgateway.config;
+package com.github.fosin.anan.cloudgateway.config;
 
+import com.github.fosin.anan.cloudgateway.filter.ChangePasswordGatewayFilter;
+import com.github.fosin.anan.cloudgateway.filter.LoginGatewayFilter;
 import com.github.fosin.anan.swagger.config.AnanSwaggerResourcesProvider;
 import com.github.fosin.anan.swagger.spring4all.SwaggerProperties;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerInterceptor;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
-import org.springframework.cloud.netflix.zuul.filters.Route;
-import org.springframework.cloud.netflix.zuul.filters.RouteLocator;
-import org.springframework.cloud.netflix.zuul.filters.ZuulProperties;
+import org.springframework.cloud.gateway.config.GatewayProperties;
+import org.springframework.cloud.gateway.route.Route;
+import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
-import org.springframework.web.client.RestTemplate;
+import reactor.core.publisher.Flux;
 import springfox.documentation.swagger.web.SwaggerResource;
 
 import java.util.ArrayList;
@@ -27,20 +28,24 @@ import java.util.List;
  * @date 2018.12.17
  */
 @Configuration
-public class AnanZuulAutoConfiger {
+public class AnanGatewayAutoConfiger {
 
     @Bean
     @RefreshScope
-    @ConfigurationProperties("zuul")
+    @ConfigurationProperties("spring.cloud.gateway")
     @Primary
-    public ZuulProperties zuulProperties() {
-        return new ZuulProperties();
+    public GatewayProperties gatewayProperties() {
+        return new GatewayProperties();
     }
 
-    @LoadBalanced
     @Bean
-    public RestTemplate restTemplate() {
-        return new RestTemplate();
+    public LoginGatewayFilter loginGatewayFilter() {
+        return new LoginGatewayFilter();
+    }
+
+    @Bean
+    public ChangePasswordGatewayFilter changePasswordGatewayFilter() {
+        return new ChangePasswordGatewayFilter();
     }
 
     @Bean
@@ -52,12 +57,12 @@ public class AnanZuulAutoConfiger {
     @Primary
     @ConditionalOnMissingBean
     public AnanSwaggerResourcesProvider ananSwaggerResourcesProvider(RouteLocator routeLocator, SwaggerProperties swaggerProperties) {
-        List<Route> routes = routeLocator.getRoutes();
+        Flux<Route> routes = routeLocator.getRoutes();
         List<SwaggerResource> swaggerResources = new ArrayList<>();
-        routes.forEach(route -> {
+        routes.toIterable().forEach(route -> {
             SwaggerResource swaggerResource = new SwaggerResource();
             swaggerResource.setName(route.getId());
-            swaggerResource.setLocation(route.getFullPath().replace("**", "v2/api-docs"));
+            swaggerResource.setLocation(route.getPredicate().toString().replace("**", "v2/api-docs"));
             swaggerResource.setSwaggerVersion("2.0");
             swaggerResources.add(swaggerResource);
         });

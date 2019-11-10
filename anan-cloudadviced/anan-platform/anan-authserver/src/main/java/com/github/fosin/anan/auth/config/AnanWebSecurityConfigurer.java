@@ -52,7 +52,6 @@ public class AnanWebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 //                .antMatchers("/index").authenticated()
                 //除以上路径都需要验证
                 .anyRequest().authenticated()
-
 //                .and()
 //                .exceptionHandling()
 //                .accessDeniedPage("/login?authorization_error=true")
