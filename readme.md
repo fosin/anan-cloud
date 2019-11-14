@@ -1,10 +1,9 @@
 # 设计定位
-    anan基于spring boot和spring cloud生态体系技术，采用微服务前后端分离架构，
-        为个人及企业微服务架构提供一种解决方案，供开发人员学习和交流。
-    其中包括服务注册与发现、服务监控、服务管理、服务治理、服务网关、服务熔断、
-        配置管理、认证授权中心等常见微服务组件。
+    anan基于spring boot和spring cloud生态体系技术，采用微服务前后端分离架构，为个人及企业微
+    服务架构提供一种解决方案，供开发人员学习和交流。其中包括服务注册与发现、服务监控、服务管理、
+    服务治理、服务网关、服务熔断、配置管理、认证授权中心等常见微服务组件。
     支持swarm集群部署、Kubernetes集群部署、jar包集群部署、war包集群部署
-
+    对应前端项目地址: https://github.com/fosin/anan-vue
 # 技术选型
      技术     |   简介 
     ------   |  ------
@@ -71,7 +70,9 @@
        1.2.6、使用docker-compose开启开发必须中间件
             创建docker网络
             docker network create -d bridge --subnet=172.28.0.0/16 anan-bridge
-            docker-compose.yml中redis、rabbitmq、anan-platform-mysql三个是开发环境必须启动的
+            
+            docker-compose.yml中redis、rabbitmq、anan-platform-mysql、nacos-server1、nacos-mysql-master, 
+            nacos-mysql-slave六个是开发环境必须启动的
 ### 1.3、监控安装篇，使用文件docker-compose.yml(prometheus、node-exporter、cadvisor、alertmanager、grafana等)
        1.3.1、安装cadvisor版本:v0.33.0及以上
             发现容器没有正常启动，查看日志，有如下报错内容：    
@@ -85,7 +86,7 @@
 ### 1.5、配置环境
        1.5.1、安装jdk1.8及以上、lombok插件、ignore插件，开发工具推荐使用Idea
        1.5.2、Windows下修改c:/windows/system32/drives/etc/hosts文件增加以下信息，IP地址根据实际情况设定
-            127.0.0.1 anan-eurekaserver
+            127.0.0.1 nacos-server1
             127.0.0.1 anan-authserver
             127.0.0.1 redis
             127.0.0.1 anan-platform-mysql
@@ -99,21 +100,11 @@
             
             MYECLIPSE 需要ansi 插件的支持
 
-       1.5.4、如果需要密码加密，则需要生成Spring Config配置中心非对称加密证书（非必须,如果不做这步，则使用源码中自带的证书anan.jks）
-            1.5.4.1、生成加密证书
-              keytool -genkeypair -alias anan -keyalg RSA -dname "CN=anan, OU=starlight, O=startlight, L=gy, ST=gz, C=cn" -keypass 123456 -keystore /anan.jks -storepass 123456 -validity 365
-            1.5.4.2、将/anan.jks分别放到各个项目的src/main/resources目录下
-            1.5.4.3、生产环境中将anan-configserver配置中心替换实际地址并建议修改当前连接用户(anan)和密码(local)为较安全复杂的用户和密码,
-               然后启动anan-configserver项目后，通过以下命令生成密码：
-                curl -u anan:local http://localhost:51100/encrypt -d anan
-            1.5.4.4、替换各yml配置文件中的spring.security.user.password中的密码参数，密码前缀必须有{cipher}并以单引号包含，例如:
-                '{cipher}AQApsg6Qzq9bdXcH2BntfbquV9CD2arg9bP9HFGuvww5EppMU1fsUqzFPtjXH5Gblkj7tE5N4/p1zIp5KpTZwDAM8wxLNrK8m9626Rb1eAlEG4Cfs8aJqoYi8LItfTo/QA1u8zoJKdcFZ4xe77CQBDhUiJ36m+Q8s2ItFMZHsM1dC2NsiuCB9D8f74a2DFeoLSyvkSeSE9jQr2tv8COy0NtpLChmgFL4dM4ffTwiPx7cMsdoabL/C2CD9YqQLfk6TChrNq9xjvfXUhiRcekzXd2ccHqnZ9trEtKzaRfmEOWUNsmnlwMjY/Lz8I9wnWo8ZHB+hxoP2uyqw4twx2NnILERVLKFO1ZqhVsrMxOBEjX8ccAqeYbnEDYTXqYl4b3o='
 ### 1.6、按顺序启动服务
-       1.6.1、启动anan-eurekaserver服务注册中心
-       1.6.2、启动anan-configserver配置中心
-       1.6.3、启动anan-authserver授权认证中心、anan-platformserver平台服务中心、anan-zuulgateway服务路由网关
+       1.6.1、启动anan-authserver授权认证中心
+       1.6.2、启动anan-platformserver平台服务中心、anan-zuulgateway服务路由网关
        1.6.4、启动anan-adminserver服务监控
-### 1.7、打开前端项目anan-vue,移步anan-vue下面的README.md查看前端项目的开发环境搭建过程
+### 1.7、打开前端项目anan-vue,移步https://github.com/fosin/anan-vue下面的README.md查看前端项目的开发环境搭建过程
 
 ## 2、部署生产环境
 ### 2.1、Docker Swarm集群环境部署
