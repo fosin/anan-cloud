@@ -26,6 +26,7 @@ services:
     container_name: nacos-mysql-master
     image: nacos/nacos-mysql-master:latest
     environment:
+      - TZ=Asia/Shanghai
       - MYSQL_ROOT_PASSWORD=local
       - MYSQL_REPLICATION_USER=nacos_ru
       - MYSQL_REPLICATION_PASSWORD=nacos_ru
@@ -40,6 +41,7 @@ services:
     container_name: nacos-mysql-slave
     image: nacos/nacos-mysql-slave:latest
     environment:
+      - TZ=Asia/Shanghai
       - MYSQL_ROOT_PASSWORD=local
       - MYSQL_REPLICATION_USER=nacos_ru
       - MYSQL_REPLICATION_PASSWORD=nacos_ru
