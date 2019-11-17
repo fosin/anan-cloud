@@ -2,10 +2,6 @@ package com.github.fosin.anan.cloudgateway.controller;
 
 import com.github.fosin.anan.cloudgateway.dto.PageURI;
 import com.github.fosin.anan.util.StringUtil;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.client.ServiceInstance;
@@ -31,7 +27,7 @@ import java.util.Random;
  */
 @RestController
 @RequestMapping("v1/application")
-@Api(value = "v1/application", tags = "应用集群相关信息获取", description = "用于应用集群相关的信息获取")
+//@Api(value = "v1/application", tags = "应用集群相关信息获取", description = "用于应用集群相关的信息获取")
 public class ApplicationController {
     @Autowired
     private DiscoveryClient discoveryClient;
@@ -42,7 +38,7 @@ public class ApplicationController {
 //    @Autowired
 //    private IRule iRule;
 
-    @ApiOperation(value = "获取服务名称列表", notes = "获取当前注册到Eureka注册中心的所有节点服务名称")
+//    @ApiOperation(value = "获取服务名称列表", notes = "获取当前注册到Eureka注册中心的所有节点服务名称")
     @RequestMapping(value = "/serviceNames", method = {RequestMethod.POST})
     public ResponseEntity<List<String>> getServiceNames() {
         Assert.notNull(discoveryClient, "discoveryClient不能为空!");
@@ -50,13 +46,13 @@ public class ApplicationController {
         return ResponseEntity.ok(services);
     }
 
-    @ApiOperation(value = "根据服务名称获取对应实例管理web地址", notes = "获取当前注册到Eureka注册中心的实例地址")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "serviceId",
-                    value = "注册Eureka注册中心的服务名称，一般等于spring.application.name"),
-            @ApiImplicitParam(name = "path",
-                    value = "当前服务节点管理端点的url")
-    })
+//    @ApiOperation(value = "根据服务名称获取对应实例管理web地址", notes = "获取当前注册到Eureka注册中心的实例地址")
+//    @ApiImplicitParams({
+//            @ApiImplicitParam(name = "serviceId",
+//                    value = "注册Eureka注册中心的服务名称，一般等于spring.application.name"),
+//            @ApiImplicitParam(name = "path",
+//                    value = "当前服务节点管理端点的url")
+//    })
     @RequestMapping(value = "/ui/url", method = {RequestMethod.POST})
     public ResponseEntity<PageURI> uiUrl(@RequestParam String serviceId, @RequestParam(value = "path", required = false) String path) {
         Assert.isTrue(StringUtil.hasText(serviceId), "serviceId不能为空!");

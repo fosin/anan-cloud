@@ -2,24 +2,14 @@ package com.github.fosin.anan.cloudgateway.config;
 
 import com.github.fosin.anan.cloudgateway.filter.ChangePasswordGatewayFilter;
 import com.github.fosin.anan.cloudgateway.filter.LoginGatewayFilter;
-import com.github.fosin.anan.swagger.config.AnanSwaggerResourcesProvider;
-import com.github.fosin.anan.swagger.spring4all.SwaggerProperties;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerInterceptor;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.cloud.gateway.config.GatewayProperties;
-import org.springframework.cloud.gateway.route.Route;
-import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
-import reactor.core.publisher.Flux;
-import springfox.documentation.swagger.web.SwaggerResource;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Description:
@@ -53,21 +43,21 @@ public class AnanGatewayAutoConfiger {
         return new LoadBalancerInterceptor(loadBalance);
     }
 
-    @Bean
-    @Primary
-    @ConditionalOnMissingBean
-    public AnanSwaggerResourcesProvider ananSwaggerResourcesProvider(RouteLocator routeLocator, SwaggerProperties swaggerProperties) {
-        Flux<Route> routes = routeLocator.getRoutes();
-        List<SwaggerResource> swaggerResources = new ArrayList<>();
-        routes.toIterable().forEach(route -> {
-            SwaggerResource swaggerResource = new SwaggerResource();
-            swaggerResource.setName(route.getId());
-            swaggerResource.setLocation(route.getPredicate().toString().replace("**", "v2/api-docs"));
-            swaggerResource.setSwaggerVersion("2.0");
-            swaggerResources.add(swaggerResource);
-        });
-        return new AnanSwaggerResourcesProvider(swaggerResources, swaggerProperties);
-    }
+//    @Bean
+//    @Primary
+//    @ConditionalOnMissingBean
+//    public AnanSwaggerResourcesProvider ananSwaggerResourcesProvider(RouteLocator routeLocator, SwaggerProperties swaggerProperties) {
+//        Flux<Route> routes = routeLocator.getRoutes();
+//        List<SwaggerResource> swaggerResources = new ArrayList<>();
+//        routes.toIterable().forEach(route -> {
+//            SwaggerResource swaggerResource = new SwaggerResource();
+//            swaggerResource.setName(route.getId());
+//            swaggerResource.setLocation(route.getPredicate().toString().replace("**", "v2/api-docs"));
+//            swaggerResource.setSwaggerVersion("2.0");
+//            swaggerResources.add(swaggerResource);
+//        });
+//        return new AnanSwaggerResourcesProvider(swaggerResources, swaggerProperties);
+//    }
 
     //    @Bean
 //    @ConditionalOnProperty(prefix = "spring.profiles", name = "active", havingValue = "local")

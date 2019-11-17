@@ -104,7 +104,7 @@
        1.6.1、启动anan-authserver授权认证中心
        1.6.2、启动anan-platformserver平台服务中心、anan-zuulgateway服务路由网关
        1.6.4、启动anan-adminserver服务监控
-### 1.7、打开前端项目anan-vue,移步https://github.com/fosin/anan-vue下面的README.md查看前端项目的开发环境搭建过程
+### 1.7、打开前端项目anan-vue,移步 https://github.com/fosin/anan-vue 下面的README.md查看前端项目的开发环境搭建过程
 
 ## 2、部署生产环境
 ### 2.1、Docker Swarm集群环境部署
