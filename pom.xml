@@ -18,7 +18,7 @@
         <anan-spring-cloud-alibaba.version>2.1.0.RELEASE</anan-spring-cloud-alibaba.version>
         <anan-spring-boot-admin.version>2.1.3</anan-spring-boot-admin.version>
         <anan-spring-cloud-zipkin.version>2.12.5</anan-spring-cloud-zipkin.version>
-        <anan-druid.version>1.1.21</anan-druid.version>
+        <anan-druid.version>1.1.10</anan-druid.version>
         <anan-platformapi.version>2.1.0-SNAPSHOT</anan-platformapi.version>
         <anan-platform.version>2.10-SNAPSHOT</anan-platform.version>
         <anan-platformserver.version>2.1.0-SNAPSHOT</anan-platformserver.version>
