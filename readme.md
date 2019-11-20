@@ -37,6 +37,13 @@
 
 # 原理介绍
 
+# 框架版本对照
+       anan-cloud    |     anan-boot     |     anan-vue
+    -------------------------------------------------------
+    1.0.0-SNAPSHOT      1.0.0-SNAPSHOT       1.0.0-SNAPSHOT
+    2.0.0-SNAPSHOT      2.0.0-SNAPSHOT       2.0.0-SNAPSHOT
+    3.0.0-SNAPSHOT      2.0.0-SNAPSHOT       2.0.0-SNAPSHOT 
+
 # 搭建环境
 ## 1、本地开发环境local设置
 ### 1.1、安装docker
