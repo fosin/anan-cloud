@@ -1,12 +1,12 @@
 package com.github.fosin.anan.zuulgateway.balance;
 
+import com.github.fosin.anan.util.IpAddressUtil;
 import com.netflix.client.config.IClientConfig;
 import com.netflix.loadbalancer.AbstractLoadBalancerRule;
 import com.netflix.loadbalancer.ILoadBalancer;
 import com.netflix.loadbalancer.Server;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import sun.net.util.IPAddressUtil;
 
 import java.util.List;
 
@@ -61,7 +61,7 @@ public class LocalLoadBalanceRule extends AbstractLoadBalancerRule {
                     }
 
                     //IPv4
-                    if (IPAddressUtil.isIPv4LiteralAddress(host)) {
+                    if (IpAddressUtil.isIPv4LiteralAddress(host)) {
                         //找同IP地址的
                         if (ip.equals(host)) {
                             return (server);
@@ -72,7 +72,7 @@ public class LocalLoadBalanceRule extends AbstractLoadBalancerRule {
                         }
                     }
                     //IPv6
-                    if (IPAddressUtil.isIPv6LiteralAddress(host)) {
+                    if (IpAddressUtil.isIPv6LiteralAddress(host)) {
                         //找同IP地址的
                         if (ip.equals(host)) {
                             return (server);
