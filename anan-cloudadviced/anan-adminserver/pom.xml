@@ -10,7 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
     <packaging>jar</packaging>
     <artifactId>anan-adminserver</artifactId>
-    <description>Anan Admin Server</description>
+    <description>AnAn Admin Server</description>
     <dependencies>
         <dependency>
             <groupId>${anan.groupId}</groupId>

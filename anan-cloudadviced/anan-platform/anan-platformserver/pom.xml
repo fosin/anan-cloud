@@ -11,7 +11,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>anan-platformserver</artifactId>
     <packaging>jar</packaging>
-    <description>Anan Platform Server</description>
+    <description>AnAn Platform Server</description>
     <dependencies>
         <dependency>
             <groupId>com.github.fosin.anan</groupId>

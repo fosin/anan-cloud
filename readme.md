@@ -169,3 +169,15 @@
 ### 2.2、Kubernetes部署
 ### 2.3、jar包部署
 ### 2.4、war包部署
+### 2.5、实用小技巧
+#### 2.5.1、停止删除当前容器和镜像
+##### 一条命令实现停用并删除容器
+    docker stop $(docker ps -q) && docker rm $(docker ps -aq)
+
+##### 删除所有异常退出的容器
+    docker rm $(docker ps -a| grep Exited | awk '{print $1}')
+
+#### 2.5.2、删除指定的镜像
+    docker rmi $(docker images | grep registry.cn-hangzhou.aliyuncs.com/fosin/anan | awk '{print $3}')
+
+    docker rmi $(docker images | grep none | awk '{print $3}')

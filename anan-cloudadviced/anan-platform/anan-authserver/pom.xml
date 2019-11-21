@@ -10,7 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>anan-authserver</artifactId>
     <packaging>jar</packaging>
-    <description>Anan Auth Server</description>
+    <description>AnAn Auth Server</description>
     <dependencies>
         <!--spring boot 项目引入了 spring的devtools 经常会产生java.lang.ClassCastException 两个一样的类不能强转-->
         <!--<dependency>

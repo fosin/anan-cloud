@@ -1,4 +1,4 @@
-version: "3"
+version: "3.4"
 services:
   nacos-server1:
     image: nacos/nacos-server:latest
@@ -25,6 +25,9 @@ services:
     depends_on:
       - nacos-mysql-master
       - nacos-mysql-slave
+    networks:
+      - anan-bridge
+
   nacos-mysql-master:
     container_name: nacos-mysql-master
     hostname: nacos-mysql-master
@@ -41,6 +44,8 @@ services:
       - /root/docker/nacos/mysql-master:/var/lib/mysql
     ports:
       - "3306:3306"
+    networks:
+      - anan-bridge
   nacos-mysql-slave:
     container_name: nacos-mysql-slave
     hostname: nacos-mysql-slave
@@ -57,6 +62,8 @@ services:
       - "3305:3306"
     depends_on:
       - nacos-mysql-master
+    networks:
+      - anan-bridge
   filebeat:
     image: elastic/filebeat:6.7.1
     container_name: filebeat
@@ -223,8 +230,6 @@ services:
       - REDIS_1_AUTH=local
       - REDIS_1_HOST=redis
       - REDIS_1_PORT=6379
-    links:
-      - redis
     ports:
       - 6380:80
     networks:
@@ -359,7 +364,7 @@ services:
 
   anan-zuulgateway:
     image: registry.cn-hangzhou.aliyuncs.com/fosin/anan-zuulgateway:3.0.0-SNAPSHOT
-    entrypoint: "sh /wait-for.sh anan-platformserver:51500 -t 3600 -- java -jar /app.jar"
+#    entrypoint: "sh /wait-for.sh anan-platformserver:51500 -t 3600 -- java -jar /app.jar"
     container_name: anan-zuulgateway
     hostname: anan-zuulgateway
     restart: on-failure
@@ -372,7 +377,6 @@ services:
       - anan-bridge
     depends_on:
       - rabbitmq
-      - redis
       - nacos-server1
 
   anan-authserver:
@@ -390,7 +394,7 @@ services:
     depends_on:
       - rabbitmq
       - redis
-      - anan-platform-mysql
+      - nacos-mysql-master
       - nacos-server1
 
   anan-platformserver:
@@ -409,7 +413,7 @@ services:
     depends_on:
       - rabbitmq
       - redis
-      - anan-platform-mysql
+      - nacos-mysql-master
       - nacos-server1
 
   anan-adminserver:
@@ -427,7 +431,6 @@ services:
     depends_on:
       - rabbitmq
       - redis
-      - anan-platform-mysql
       - nacos-server1
 
 networks:

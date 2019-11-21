@@ -10,7 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>anan-cloudgateway</artifactId>
-    <description>Anan Cloud Gateway</description>
+    <description>AnAn Cloud Gateway</description>
     <dependencies>
         <dependency>
             <groupId>${anan.groupId}</groupId>

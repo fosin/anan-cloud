@@ -20,7 +20,7 @@
         <anan-spring-cloud-zipkin.version>2.12.5</anan-spring-cloud-zipkin.version>
         <anan-druid.version>1.1.21</anan-druid.version>
         <anan-platformapi.version>3.0.0-SNAPSHOT</anan-platformapi.version>
-        <anan-platform.version>2.10-SNAPSHOT</anan-platform.version>
+        <anan-platform.version>3.0.0-SNAPSHOT</anan-platform.version>
         <anan-platformserver.version>3.0.0-SNAPSHOT</anan-platformserver.version>
         <anan-authserver.version>3.0.0-SNAPSHOT</anan-authserver.version>
         <anan-adminserver.version>3.0.0-SNAPSHOT</anan-adminserver.version>
