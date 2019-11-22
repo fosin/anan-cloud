@@ -363,7 +363,7 @@ services:
       - "ALERTMANAGER_URIS=default:http://alertmanager:9093"
 
   anan-zuulgateway:
-    image: registry.cn-hangzhou.aliyuncs.com/fosin/anan-zuulgateway:3.0.0-SNAPSHOT
+    image: registry.cn-hangzhou.aliyuncs.com/fosin/anan-zuulgateway:2.0.0-SNAPSHOT
     entrypoint: "sh /wait-for.sh anan-platformserver:51500 -t 3600 -- java -jar /app.jar"
     container_name: anan-zuulgateway
     hostname: anan-zuulgateway
@@ -380,7 +380,7 @@ services:
       - nacos-server1
 
   anan-authserver:
-    image: registry.cn-hangzhou.aliyuncs.com/fosin/anan-authserver:3.0.0-SNAPSHOT
+    image: registry.cn-hangzhou.aliyuncs.com/fosin/anan-authserver:2.0.0-SNAPSHOT
     entrypoint: "sh /wait-for.sh nacos-server1:8848 -t 3600 -- java -jar /app.jar"
     container_name: anan-authserver
     hostname: anan-authserver
@@ -399,7 +399,7 @@ services:
       - nacos-server1
 
   anan-platformserver:
-    image: registry.cn-hangzhou.aliyuncs.com/fosin/anan-platformserver:3.0.0-SNAPSHOT
+    image: registry.cn-hangzhou.aliyuncs.com/fosin/anan-platformserver:2.0.0-SNAPSHOT
     entrypoint: "sh /wait-for.sh anan-authserver:51400 -t 3600 -- java -jar /app.jar"
     container_name: anan-platformserver
     hostname: anan-platformserver
@@ -418,7 +418,7 @@ services:
       - nacos-server1
 
   anan-adminserver:
-    image: registry.cn-hangzhou.aliyuncs.com/fosin/anan-adminserver:3.0.0-SNAPSHOT
+    image: registry.cn-hangzhou.aliyuncs.com/fosin/anan-adminserver:2.0.0-SNAPSHOT
     entrypoint: "sh /wait-for.sh anan-zuulgateway:9000 -t 3600 -- java -jar /app.jar"
     container_name: anan-adminserver
     hostname: anan-adminserver
@@ -434,6 +434,38 @@ services:
       - rabbitmq
       - redis
       - nacos-server1
+
+  anan-eurekaserver:
+    image: registry.cn-hangzhou.aliyuncs.com/fosin/anan-eurekaserver:2.0.0-SNAPSHOT
+    container_name: anan-eurekaserver
+    hostname: anan-eurekaserver
+    restart: on-failure
+    networks:
+      - anan-bridge
+    volumes:
+      - /root/docker/logs/anan:/logs
+    ports:
+      - 51000:51000
+
+  anan-configserver:
+    image: registry.cn-hangzhou.aliyuncs.com/fosin/anan-configserver:2.0.0-SNAPSHOT
+    entrypoint: "sh /wait-for.sh anan-eurekaserver:51000 -t 3600 -- java -jar /app.jar"
+    container_name: anan-configserver
+    hostname: anan-configserver
+    restart: on-failure
+    ports:
+      - 51100:51100
+    environment:
+      - spring.cloud.config.server.native.search-locations=file:/anan-config
+    volumes:
+      - /root/docker/logs/anan:/logs
+      - /root/docker/anan-config:/anan-config
+      - /root/docker/cmd/wait-for.sh:/wait-for.sh
+    networks:
+      - anan-bridge
+    depends_on:
+      - anan-eurekaserver
+      - rabbitmq
 
   8-jre-alpine:
     image: registry.cn-hangzhou.aliyuncs.com/fosin/openjdk:8-jre-alpine

@@ -1,0 +1,51 @@
+server:
+  port: 51000
+eureka:
+  client:
+    fetch-registry: false
+    service-url:
+      defaultZone: @eureka.client.service-url.defaultZone@
+    register-with-eureka: true
+  instance:
+    prefer-ip-address: true #可以实现ip地址作为主机地址
+#    hostname: localhost
+     #启用就报错The request was rejected because the URL was not normalized.
+    metadata-map: #用于SBA认证
+      user.name: ${spring.security.user.name}
+      user.password: ${spring.security.user.password}
+spring:
+  profiles:
+    active: @profileActive@
+  application:
+    name: @project.artifactId@
+  cloud:
+    inetutils:
+      preferred-networks: @spring.cloud.inetutils.preferred-networks@
+  jackson: #该参数一定要放bootstrap中，而放application.yml或者后面的配置文件都不能生效
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+  security:
+    user:
+      name: @spring.security.user.name@
+      password: @spring.security.user.password@
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      show-details: ALWAYS
+encrypt:
+  key-store:
+    location: @encrypt.key-store.location@
+    password: @encrypt.key-store.password@
+    alias: @encrypt.key-store.alias@
+    secret: @encrypt.key-store.secret@
+  rsa:
+    algorithm: default
+    strong: false
+    salt: deadbeaf
+info: #定义各种额外的详情给服务端显示
+  description: "@project.description@"
+  version: "@project.version@"
