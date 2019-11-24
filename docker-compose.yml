@@ -372,7 +372,6 @@ services:
       - 9000:9000
     volumes:
       - /root/docker/logs/anan:/logs
-      - /root/docker/cmd/wait-for.sh:/wait-for.sh
     networks:
       - anan-bridge
     depends_on:
@@ -389,7 +388,6 @@ services:
       - 51400:51400
     volumes:
       - /root/docker/logs/anan:/logs
-      - /root/docker/cmd/wait-for.sh:/wait-for.sh
     networks:
       - anan-bridge
     depends_on:
@@ -406,7 +404,6 @@ services:
     restart: on-failure
     volumes:
       - /root/docker/logs/anan:/logs
-      - /root/docker/cmd/wait-for.sh:/wait-for.sh
     ports:
       - 51500:51500
     networks:
@@ -425,7 +422,6 @@ services:
     restart: on-failure
     volumes:
       - /root/docker/logs/anan:/logs
-      - /root/docker/cmd/wait-for.sh:/wait-for.sh
     ports:
       - 51700:51700
     networks:
@@ -460,7 +456,6 @@ services:
     volumes:
       - /root/docker/logs/anan:/logs
       - /root/docker/anan-config:/anan-config
-      - /root/docker/cmd/wait-for.sh:/wait-for.sh
     networks:
       - anan-bridge
     depends_on:
