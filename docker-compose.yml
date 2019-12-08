@@ -15,7 +15,7 @@ services:
       - MYSQL_MASTER_SERVICE_USER=nacos
       - MYSQL_MASTER_SERVICE_PASSWORD=nacos
       - MYSQL_SLAVE_SERVICE_HOST=nacos-mysql-slave
-      - MYSQL_SLAVE_SERVICE_PORT=3305
+      - MYSQL_SLAVE_SERVICE_PORT=3306
     volumes:
       -  /root/docker/nacos/logs/:/home/nacos/logs
       -  /root/docker/nacos/custom.properties:/home/nacos/init.d/custom.properties
@@ -41,6 +41,7 @@ services:
       - MYSQL_USER=nacos
       - MYSQL_PASSWORD=nacos
     volumes:
+      - /root/docker/nacos/mysqld.cnf:/etc/mysql/conf.d/mysqld.cnf
       - /root/docker/nacos/mysql-master:/var/lib/mysql
     ports:
       - "3306:3306"
@@ -57,6 +58,7 @@ services:
       - MYSQL_REPLICATION_PASSWORD=nacos_ru
       - MYSQL_MASTER_SERVICE_HOST=nacos-mysql-master
     volumes:
+      - /root/docker/nacos/mysqld.cnf:/etc/mysql/conf.d/mysqld.cnf
       - /root/docker/nacos/mysql-slave:/var/lib/mysql
     ports:
       - "3305:3306"
@@ -461,6 +463,33 @@ services:
     depends_on:
       - anan-eurekaserver
       - rabbitmq
+
+  postgresql:
+    image: postgres
+    container_name: postgresql
+    hostname: postgresql
+    restart: on-failure
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=sonar
+      - POSTGRES_PASSWORD=sonar
+    networks:
+      - anan-bridge
+
+  sonarqube:
+    image: sonarqube
+    container_name: sonarqube
+    hostname: sonarqube
+    restart: on-failure
+    ports:
+      - 9001:9000
+    environment:
+      - SONARQUBE_JDBC_URL=jdbc:postgresql://postgresql:5432/sonar
+    networks:
+      - anan-bridge
+    depends_on:
+      - postgresql
 
   8-jre-alpine:
     image: registry.cn-hangzhou.aliyuncs.com/fosin/openjdk:8-jre-alpine
