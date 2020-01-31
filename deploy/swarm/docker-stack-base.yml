@@ -10,9 +10,9 @@ services:
       - TZ=Asia/Shanghai
       - MYSQL_ROOT_PASSWORD=local
     volumes:
-      - ./mysql/anan_platform/data:/var/lib/mysql
-      - ./mysql/anan_platform/mysqld.cnf:/etc/mysql/conf.d/mysqld.cnf
-      - ./mysql/anan_platform/logs:/var/log/mysql
+      - ../mysql/anan_platform/data:/var/lib/mysql
+      - ../mysql/anan_platform/mysqld.cnf:/etc/mysql/conf.d/mysqld.cnf
+      - ../mysql/anan_platform/logs:/var/log/mysql
     ports:
       - 3306:3306
     deploy:
@@ -44,9 +44,9 @@ services:
       - MYSQL_USER=nacos
       - MYSQL_PASSWORD=nacos
     volumes:
-      - ./mysql/nacos-mysql-master/data:/var/lib/mysql
-      - ./mysql/nacos-mysql-master/mysqld.cnf:/etc/mysql/conf.d/mysqld.cnf
-      - ./mysql/nacos-mysql-master/logs:/var/log/mysql
+      - ../mysql/nacos-mysql-master/data:/var/lib/mysql
+      - ../mysql/nacos-mysql-master/mysqld.cnf:/etc/mysql/conf.d/mysqld.cnf
+      - ../mysql/nacos-mysql-master/logs:/var/log/mysql
     ports:
       - 3306:3306
     deploy:
@@ -76,9 +76,9 @@ services:
       - MYSQL_REPLICATION_PASSWORD=nacos_ru
       - MYSQL_MASTER_SERVICE_HOST=nacos-mysql-master
     volumes:
-      - ./mysql/nacos-mysql-slave/data:/var/lib/mysql
-      - ./mysql/nacos-mysql-slave/mysqld.cnf:/etc/mysql/conf.d/mysqld.cnf
-      - ./mysql/nacos-mysql-slave/logs:/var/log/mysql
+      - ../mysql/nacos-mysql-slave/data:/var/lib/mysql
+      - ../mysql/nacos-mysql-slave/mysqld.cnf:/etc/mysql/conf.d/mysqld.cnf
+      - ../mysql/nacos-mysql-slave/logs:/var/log/mysql
     ports:
       - 3305:3306
     deploy:
@@ -131,8 +131,8 @@ services:
       - MYSQL_SLAVE_SERVICE_HOST=nacos-mysql-slave
       - MYSQL_SLAVE_SERVICE_PORT=3305
     volumes:
-      -  ./nacos/logs/nacos-server2/:/home/nacos/logs
-      -  ./nacos/custom.properties:/home/nacos/init.d/custom.properties
+      - ../nacos/logs/nacos-server2/:/home/nacos/logs
+      - ../nacos/custom.properties:/home/nacos/init.d/custom.properties
     ports:
       - "8848:8848"
     depends_on:
@@ -171,7 +171,7 @@ services:
     environment:
       - TZ=Asia/Shanghai
     volumes:
-      - ./redis:/data
+      - ../redis:/data
     ports:
       - 6379:6379
     command: redis-server --appendonly yes --requirepass local

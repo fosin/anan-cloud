@@ -79,7 +79,7 @@
             docker network create -d bridge --subnet=172.28.0.0/16 anan-bridge
             
             docker-compose.yml中redis、rabbitmq、nacos-server1、nacos-mysql-master、nacos-mysql-slave六个是开发环境必须启动的
-            需要导入docker/mysql/anan_platform.sql到nacos-mysql-master中创建anan_platform2数据库
+            需要导入deploy/mysql/anan_platform.sql到nacos-mysql-master中创建anan_platform2数据库
 ### 1.3、监控安装篇，使用文件docker-compose.yml(prometheus、node-exporter、cadvisor、alertmanager、grafana等)
        1.3.1、安装cadvisor版本:v0.33.0及以上
             发现容器没有正常启动，查看日志，有如下报错内容：    
@@ -149,7 +149,7 @@
             <spring.cloud.config.server.svn.uri></spring.cloud.config.server.svn.uri>
             <spring.cloud.config.server.svn.username></spring.cloud.config.server.svn.username>
             <spring.cloud.config.server.svn.password></spring.cloud.config.server.svn.password>
-            <spring.cloud.config.server.native.search-locations>file:docker/anan-config</spring.cloud.config.server.native.search-locations>
+            <spring.cloud.config.server.native.search-locations>file:deploy/anan-config</spring.cloud.config.server.native.search-locations>
             <spring.cloud.config.server.git.uri>https://github.com/fosin/anan-cloud/docker</spring.cloud.config.server.git.uri>
             <spring.cloud.config.server.git.search-paths>anan-config</spring.cloud.config.server.git.search-paths>
             <spring.cloud.inetutils.preferred-networks>192.168.137.</spring.cloud.inetutils.preferred-networks>
@@ -202,7 +202,7 @@
 #### 2.1.4、环境部署
     拷贝docker文件夹到Linux服务器上，每个节点都要拷贝
     分配权限
-        chmod 755 docker/ -R
+        chmod 755 deploy/ -R
     
 #### 2.1.5、使用yml启动swarm集群
     启动基础中间件(mysql、redis、rabbitmq)
@@ -224,17 +224,20 @@
     docker stack rm b
 
 ### 2.2、Kubernetes部署
+	移步看 deploy/k8s/readme-k8s.md
 ### 2.3、jar包部署
+
 ### 2.4、war包部署
-### 2.5、实用小技巧
-#### 2.5.1、停止删除当前容器和镜像
+
+### 3、实用小技巧
+#### 3.1、停止删除当前容器和镜像
 ##### 一条命令实现停用并删除容器
     docker stop $(docker ps -q) && docker rm $(docker ps -aq)
 
 ##### 删除所有异常退出的容器
     docker rm $(docker ps -a| grep Exited | awk '{print $1}')
 
-#### 2.5.2、删除指定的镜像
+#### 3.2、删除指定的镜像
     docker rmi $(docker images | grep registry.cn-hangzhou.aliyuncs.com/fosin/anan | awk '{print $3}')
 
     docker rmi $(docker images | grep none | awk '{print $3}')

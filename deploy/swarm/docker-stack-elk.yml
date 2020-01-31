@@ -7,7 +7,7 @@ services:
       - bootstrap.memory_lock=false
       - ES_JAVA_OPTS=-Xms512m -Xmx512m
     volumes:
-      - ./elasticsearch/data:/usr/share/elasticsearch/data
+      - ../elasticsearch/data:/usr/share/elasticsearch/data
     ports:
       - 9200:9200
     networks:
@@ -41,10 +41,10 @@ services:
     image: elastic/filebeat:6.7.1
     user: root
     volumes:
-      - ./filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
+      - ../filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
       - /var/lib/docker/containers:/var/lib/docker/containers:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - ./logs:/logs:ro
+      - ../logs:/logs:ro
     #    environment:
     #      - output.elasticsearch.hosts=["elasticsearch:9200"]
     #      - output.logstash.enabled=false

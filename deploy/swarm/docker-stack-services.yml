@@ -6,7 +6,7 @@ services:
     networks:
       - anan-overlay
     volumes:
-      - ./logs:/logs
+      - ../logs:/logs
     ports:
       - 51400:51400
     depends_on:
@@ -31,7 +31,7 @@ services:
     networks:
       - anan-overlay
     volumes:
-      - ./logs:/logs
+      - ../logs:/logs
     ports:
       - 51500:51500
     depends_on:
@@ -55,7 +55,7 @@ services:
     image: registry.cn-hangzhou.aliyuncs.com/fosin/anan-zuulgateway:2.0.0-SNAPSHOT
     entrypoint: "sh /wait-for.sh anan-platformserver:51500 -t 3600 -- java -jar /app.jar"
     volumes:
-      - ./logs:/logs
+      - ../logs:/logs
     ports:
       - 9000:9000
     networks:
@@ -84,7 +84,7 @@ services:
     networks:
       - anan-overlay
     volumes:
-      - ./logs:/logs
+      - ../logs:/logs
     ports:
       - 51700:51700
     depends_on:
@@ -109,8 +109,8 @@ services:
     environment:
       - TZ=Asia/Shanghai
     volumes:
-      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
-      - ./nginx/html:/usr/share/nginx/html
+      - ../nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - ../nginx/html:/usr/share/nginx/html
     ports:
       - 80:80
     deploy:

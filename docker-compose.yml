@@ -17,8 +17,8 @@ services:
       - MYSQL_SLAVE_SERVICE_HOST=nacos-mysql-slave
       - MYSQL_SLAVE_SERVICE_PORT=3306
     volumes:
-      -  /root/docker/nacos/logs/:/home/nacos/logs
-      -  /root/docker/nacos/custom.properties:/home/nacos/init.d/custom.properties
+      -  /root/deploy/nacos/logs/:/home/nacos/logs
+      -  /root/deploy/nacos/custom.properties:/home/nacos/init.d/custom.properties
     ports:
       - "8848:8848"
       - "9555:9555"
@@ -41,8 +41,8 @@ services:
       - MYSQL_USER=nacos
       - MYSQL_PASSWORD=nacos
     volumes:
-      - /root/docker/nacos/mysqld.cnf:/etc/mysql/conf.d/mysqld.cnf
-      - /root/docker/nacos/mysql-master:/var/lib/mysql
+      - /root/deploy/nacos/mysqld.cnf:/etc/mysql/conf.d/mysqld.cnf
+      - /root/deploy/nacos/mysql-master:/var/lib/mysql
     ports:
       - "3306:3306"
     networks:
@@ -58,8 +58,8 @@ services:
       - MYSQL_REPLICATION_PASSWORD=nacos_ru
       - MYSQL_MASTER_SERVICE_HOST=nacos-mysql-master
     volumes:
-      - /root/docker/nacos/mysqld.cnf:/etc/mysql/conf.d/mysqld.cnf
-      - /root/docker/nacos/mysql-slave:/var/lib/mysql
+      - /root/deploy/nacos/mysqld.cnf:/etc/mysql/conf.d/mysqld.cnf
+      - /root/deploy/nacos/mysql-slave:/var/lib/mysql
     ports:
       - "3305:3306"
     depends_on:
@@ -73,10 +73,10 @@ services:
     restart: on-failure
     user: root
     volumes:
-      - /root/docker/filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
+      - /root/deploy/filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
       - /var/lib/docker/containers:/var/lib/docker/containers:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - /root/docker/filebeat/logs/filebeat:/logs:ro
+      - /root/deploy/filebeat/logs/filebeat:/logs:ro
 #    environment:
 #      - output.elasticsearch.hosts=["elasticsearch:9200"]
 #      - output.logstash.enabled=false
@@ -120,7 +120,7 @@ services:
         soft: -1
         hard: -1
     volumes:
-      - /root/docker/elasticsearch/data:/usr/share/elasticsearch/data
+      - /root/deploy/elasticsearch/data:/usr/share/elasticsearch/data
     ports:
       - 9200:9200
     networks:
@@ -165,9 +165,9 @@ services:
       - MYSQL_ROOT_PASSWORD=local
       - TZ=Asia/Shanghai
     volumes:
-      - /root/docker/mysql/anan_platform/data:/var/lib/mysql
-      - /root/docker/mysql/anan_platform/mysqld.cnf:/etc/mysql/conf.d/mysqld.cnf
-      - /root/docker/mysql/anan_platform/logs:/var/log/mysql
+      - /root/deploy/mysql/anan_platform/data:/var/lib/mysql
+      - /root/deploy/mysql/anan_platform/mysqld.cnf:/etc/mysql/conf.d/mysqld.cnf
+      - /root/deploy/mysql/anan_platform/logs:/var/log/mysql
     restart: on-failure
     ports:
       - 3310:3306
@@ -185,7 +185,7 @@ services:
       - RABBITMQ_DEFAULT_VHOST=/
       - TZ=Asia/Shanghai
     #    volumes: TODO 启动后报错cookie file /var/lib/rabbitmq/.erlang.cookie must be accessible by owner only
-    #      - /root/docker/rabbitmq:/var/lib/rabbitmq
+    #      - /root/deploy/rabbitmq:/var/lib/rabbitmq
     restart: on-failure
     ports:
       - 15672:15672
@@ -200,9 +200,9 @@ services:
     environment:
       - TZ=Asia/Shanghai
     volumes:
-      - /root/docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
-#      - /root/docker/nginx/monitor.conf:/etc/nginx/conf.d/monitor.conf
-      - /root/docker/nginx/html:/usr/share/nginx/html
+      - /root/deploy/nginx/default.conf:/etc/nginx/conf.d/default.conf
+#      - /root/deploy/nginx/monitor.conf:/etc/nginx/conf.d/monitor.conf
+      - /root/deploy/nginx/html:/usr/share/nginx/html
     ports:
       - 80:80
     networks:
@@ -215,7 +215,7 @@ services:
     environment:
       - TZ=Asia/Shanghai
     volumes:
-      - /root/docker/redis:/data
+      - /root/deploy/redis:/data
     restart: on-failure
     ports:
       - 6379:6379
@@ -246,7 +246,7 @@ services:
       - MONGO_INITDB_ROOT_USERNAME=anan
       - MONGO_INITDB_ROOT_PASSWORD=local
     volumes:
-      - /root/docker/mongodb/db:/data/db
+      - /root/deploy/mongodb/db:/data/db
     restart: on-failure
     ports:
       - 27017:27017
@@ -259,8 +259,8 @@ services:
     environment:
       - TZ=Asia/Shanghai
     volumes:
-      - /root/docker/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
-    #      - /root/docker/prometheus/data:/prometheus TODO 不能挂载外部目录，报错
+      - /root/deploy/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    #      - /root/deploy/prometheus/data:/prometheus TODO 不能挂载外部目录，报错
     restart: on-failure
     privileged: true
     depends_on:
@@ -301,7 +301,7 @@ services:
     container_name: grafana
     hostname: grafana
     volumes:
-      - /root/docker/grafana:/var/lib/grafana
+      - /root/deploy/grafana:/var/lib/grafana
     environment:
       - GF_SERVER_ROOT_URL=http://grafana.server.name
       - GF_SECURITY_ADMIN_PASSWORD=local
@@ -350,8 +350,8 @@ services:
       - '--config.file=/etc/alertmanager/alertmanager.yml'
       - '--storage.path=/alertmanager'
 #    volumes:
-#      - /root/docker/alertmanager/data:/alertmanager
-  #    - /root/docker/alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml
+#      - /root/deploy/alertmanager/data:/alertmanager
+  #    - /root/deploy/alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml
 
   unsee:
     container_name: unsee
@@ -373,7 +373,7 @@ services:
     ports:
       - 9000:9000
     volumes:
-      - /root/docker/logs/anan:/logs
+      - /root/deploy/logs/anan:/logs
     networks:
       - anan-bridge
     depends_on:
@@ -389,7 +389,7 @@ services:
     ports:
       - 51400:51400
     volumes:
-      - /root/docker/logs/anan:/logs
+      - /root/deploy/logs/anan:/logs
     networks:
       - anan-bridge
     depends_on:
@@ -405,7 +405,7 @@ services:
     hostname: anan-platformserver
     restart: on-failure
     volumes:
-      - /root/docker/logs/anan:/logs
+      - /root/deploy/logs/anan:/logs
     ports:
       - 51500:51500
     networks:
@@ -423,7 +423,7 @@ services:
     hostname: anan-adminserver
     restart: on-failure
     volumes:
-      - /root/docker/logs/anan:/logs
+      - /root/deploy/logs/anan:/logs
     ports:
       - 51700:51700
     networks:
@@ -441,7 +441,7 @@ services:
     networks:
       - anan-bridge
     volumes:
-      - /root/docker/logs/anan:/logs
+      - /root/deploy/logs/anan:/logs
     ports:
       - 51000:51000
 
@@ -456,8 +456,8 @@ services:
     environment:
       - spring.cloud.config.server.native.search-locations=file:/anan-config
     volumes:
-      - /root/docker/logs/anan:/logs
-      - /root/docker/anan-config:/anan-config
+      - /root/deploy/logs/anan:/logs
+      - /root/deploy/anan-config:/anan-config
     networks:
       - anan-bridge
     depends_on:

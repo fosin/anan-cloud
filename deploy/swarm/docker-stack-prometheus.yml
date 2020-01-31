@@ -9,8 +9,8 @@ services:
       - '--storage.tsdb.path=/prometheus'
       - '--storage.tsdb.retention=24h'
     volumes:
-      - ./prometheus/data:/prometheus
-      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ../prometheus/data:/prometheus
+      - ../prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
     networks:
       - anan-overlay
     depends_on:
@@ -49,8 +49,8 @@ services:
       - '--config.file=/etc/alertmanager/alertmanager.yml'
       - '--storage.path=/alertmanager'
     volumes:
-      - ./alertmanager/data:/alertmanager
-      - ./alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml
+      - ../alertmanager/data:/alertmanager
+      - ../alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml
     deploy:
       replicas: 1
       resources:
@@ -76,7 +76,7 @@ services:
   grafana:
     image: grafana/grafana:latest
     volumes:
-      - ./grafana:/var/lib/grafana
+      - ../grafana:/var/lib/grafana
     environment:
       - GF_SERVER_ROOT_URL=http://grafana.server.name
       - GF_SECURITY_ADMIN_PASSWORD=local
