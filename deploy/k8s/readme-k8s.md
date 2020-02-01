@@ -1,5 +1,4 @@
 # 1、操作系统初始化
-
 ## 1.1、安装依赖包
 	yum install -y conntrack ntp ipvsadm ipset jq iptables curl sysstat libseccomp wget vim net-tools git
 ## 1.2、设置防火墙为Iptables并清空规则
