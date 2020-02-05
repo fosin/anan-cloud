@@ -37,7 +37,7 @@ public class AnanPermissionCreateDto implements Serializable {
     private String name;
 
     @ApiModelProperty(value = "资源路径必须和type字段共同使用，详情请看type字段", example = "String")
-    @Pattern(regexp = "[A-Za-z0-9/:.@?=& -]*", message = "资源路径只支持大小写字母 数字 & / : . @ - ? =")
+    @Pattern(regexp = "[A-Za-z0-9/:.@#?=& -]*", message = "资源路径只支持大小写字母 数字 & / : . @ - ? = #")
     private String url;
 
     @NotNull(message = "权限类型" + "{javax.validation.constraints.NotNull.message}")

@@ -41,7 +41,7 @@ public class AnanPermissionUpdateDto implements Serializable {
     private String name;
 
     @ApiModelProperty(value = "该字段必须和type字段共同使用，详情请看type字段", example = "String")
-    @Pattern(regexp = "[A-Za-z0-9/:.@?=& -]*", message = "资源路径只支持大小写字母 数字 & / : . @ - ? =")
+    @Pattern(regexp = "[A-Za-z0-9/:.@#?=& -]*", message = "资源路径只支持大小写字母 数字 & / : . @ - ? = #")
     private String url;
 
     @NotNull(message = "权限类型：0=按钮、1=组件菜单，对应ur是前端组件l、2=链接菜单，对应url是http(s)链接地址、3=目录菜单，对应是目录菜单，具体取值于字典表anan_dictionary.code=13，当权限类型是1：组件菜单 3：目录菜单时表示该节点不是一个叶子节点" + "{javax.validation.constraints.NotNull.message}")
