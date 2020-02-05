@@ -65,6 +65,7 @@ public class AnanPermissionUpdateDto implements Serializable {
     private String appName;
 
     @ApiModelProperty(value = "后台请求权限地址，权限路径ant风格表达式，用于动态验证HTTP后台请求的权限标识", example = "String")
+    @Pattern(regexp = "[A-Za-z0-9/?*. \\\\-]", message = "匹配路径只支持大小写字母 数字 / . * - ?")
     private String path;
 
     @ApiModelProperty(value = "http请求方法：GET、POST、DELETE、OPTIONS、PUT、PATCH，具体取值于字典表anan_dictionary.id=12", example = "String")
