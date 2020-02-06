@@ -55,7 +55,7 @@ public class RoleServiceImpl implements RoleService {
                 !SystemConstant.ADMIN_ROLE_NAME.equals(entity.getValue().toUpperCase())) {
             throw new IllegalArgumentException("不能创建角色标识" + SystemConstant.ADMIN_ROLE_NAME + "!");
         }
-        Assert.isTrue(!SystemConstant.SUPER_ROLE_NAME.equals(entity.getValue().toUpperCase()),
+        Assert.isTrue(!SystemConstant.ANAN_ROLE_NAME.equals(entity.getValue().toUpperCase()),
                 "不能创建超级管理员角色帐号信息!");
         AnanRoleEntity saveEntity = new AnanRoleEntity();
         BeanUtils.copyProperties(entity, saveEntity);
@@ -74,7 +74,7 @@ public class RoleServiceImpl implements RoleService {
                 !SystemConstant.ADMIN_ROLE_NAME.equals(entity.getValue().toUpperCase())) {
             throw new IllegalArgumentException("不能修改角色标识" + SystemConstant.ADMIN_ROLE_NAME + "!");
         }
-        Assert.isTrue(!SystemConstant.SUPER_ROLE_NAME.equals(oldEntity.getValue().toUpperCase()),
+        Assert.isTrue(!SystemConstant.ANAN_ROLE_NAME.equals(oldEntity.getValue().toUpperCase()),
                 "不能修改超级管理员角色帐号信息!");
         AnanRoleEntity saveEntity = new AnanRoleEntity();
         BeanUtils.copyProperties(entity, saveEntity);
@@ -86,7 +86,7 @@ public class RoleServiceImpl implements RoleService {
         Assert.isTrue(id != null && id > 0, "传入的角色ID无效！");
         AnanRoleEntity entity = roleRepository.findById(id).orElse(null);
         Assert.notNull(entity, "根据角色ID未能找到角色数据!");
-        Assert.isTrue(!SystemConstant.SUPER_ROLE_NAME.equals(entity.getValue())
+        Assert.isTrue(!SystemConstant.ANAN_ROLE_NAME.equals(entity.getValue())
                         && !SystemConstant.ADMIN_ROLE_NAME.equals(entity.getValue()),
                 "不能删除(超级)管理员角色帐号信息!");
 
@@ -100,7 +100,7 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public AnanRoleEntity deleteByEntity(AnanRoleEntity entity) {
         Assert.notNull(entity, "传入了空对象!");
-        Assert.isTrue(!SystemConstant.SUPER_ROLE_NAME.equals(entity.getValue())
+        Assert.isTrue(!SystemConstant.ANAN_ROLE_NAME.equals(entity.getValue())
                         && !SystemConstant.ADMIN_ROLE_NAME.equals(entity.getValue()),
                 "不能删除(超级)管理员角色信息!");
         List<AnanUserRoleEntity> roleUsers = userRoleRepository.findByRoleId(entity.getId());
@@ -121,17 +121,17 @@ public class RoleServiceImpl implements RoleService {
             Path<String> roleValue = root.get("value");
 
             if (StringUtils.isBlank(searchCondition)) {
-                if (loginUser.getUsercode().equals(SystemConstant.SUPER_USER_CODE)) {
+                if (loginUser.getUsercode().equals(SystemConstant.ANAN_USER_CODE)) {
                     return query.getRestriction();
                 } else {
-                    return cb.and(cb.notEqual(roleValue, SystemConstant.SUPER_ROLE_NAME));
+                    return cb.and(cb.notEqual(roleValue, SystemConstant.ANAN_ROLE_NAME));
                 }
             }
             Predicate predicate = cb.or(cb.like(roleName, "%" + searchCondition + "%"), cb.like(roleValue, "%" + searchCondition + "%"));
-            if (loginUser.getUsercode().equals(SystemConstant.SUPER_USER_CODE)) {
+            if (loginUser.getUsercode().equals(SystemConstant.ANAN_USER_CODE)) {
                 return predicate;
             } else {
-                return cb.and(cb.notEqual(roleValue, SystemConstant.SUPER_ROLE_NAME), predicate);
+                return cb.and(cb.notEqual(roleValue, SystemConstant.ANAN_ROLE_NAME), predicate);
             }
         };
         //分页查找
@@ -159,7 +159,7 @@ public class RoleServiceImpl implements RoleService {
         PageRequest pageable = PageRequest.of(pageModule.getPageNumber() - 1, pageModule.getPageSize(), Sort.Direction.fromString(pageModule.getSortOrder()), pageModule.getSortName());
 
         Page<AnanRoleEntity> page;
-        if (loginUser.getUsercode().equals(SystemConstant.SUPER_USER_CODE)) {
+        if (loginUser.getUsercode().equals(SystemConstant.ANAN_USER_CODE)) {
             Specification<AnanRoleEntity> condition = (root, query, cb) -> {
                 Path<String> roleName = root.get("name");
                 Path<String> roleValue = root.get("value");
@@ -184,7 +184,7 @@ public class RoleServiceImpl implements RoleService {
                     in.value(entity.getId());
                 }
 
-                Predicate predicate = cb.and(in, cb.notEqual(roleValue, SystemConstant.SUPER_ROLE_NAME));
+                Predicate predicate = cb.and(in, cb.notEqual(roleValue, SystemConstant.ANAN_ROLE_NAME));
                 if (StringUtils.isBlank(searchCondition)) {
                     return predicate;
                 }
@@ -203,7 +203,7 @@ public class RoleServiceImpl implements RoleService {
     public List<AnanRoleEntity> findAllByOrganizId(Long organizId) {
         Assert.notNull(organizId, "机构ID不能为空!");
         AnanUserEntity loginUser = LoginUserUtil.getUser();
-        if (loginUser.getUsercode().equals(SystemConstant.SUPER_USER_CODE)) {
+        if (loginUser.getUsercode().equals(SystemConstant.ANAN_USER_CODE)) {
             return roleRepository.findAll();
         } else {
             AnanOrganizationEntity organiz = organizationRepository.findById(organizId).orElse(null);
@@ -219,7 +219,7 @@ public class RoleServiceImpl implements RoleService {
                 for (AnanOrganizationEntity entity : organizs) {
                     in.value(entity.getId());
                 }
-                return cb.and(in, cb.notEqual(roleValue, SystemConstant.SUPER_ROLE_NAME));
+                return cb.and(in, cb.notEqual(roleValue, SystemConstant.ANAN_ROLE_NAME));
             };
             return roleRepository.findAll(condition);
         }

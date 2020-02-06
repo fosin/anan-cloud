@@ -137,7 +137,7 @@ public class UserServiceImpl implements UserService {
                 !SystemConstant.ADMIN_USER_CODE.equals(entity.getUsercode().toLowerCase())) {
             throw new IllegalArgumentException("不能修改管理员" + SystemConstant.ADMIN_USER_CODE + "的帐号名称!");
         }
-        Assert.isTrue(!SystemConstant.SUPER_USER_CODE.equals(usercode),
+        Assert.isTrue(!SystemConstant.ANAN_USER_CODE.equals(usercode),
                 "不能修改超级管理员帐号信息!");
         BeanUtils.copyProperties(entity, createUser);
         return userRepository.save(createUser);
@@ -177,7 +177,7 @@ public class UserServiceImpl implements UserService {
             entity = userRepository.findById(id).orElse(null);
         }
         Assert.notNull(entity, "通过该ID没有找到相应的用户数据!");
-        Assert.isTrue(!SystemConstant.SUPER_USER_CODE.equals(entity.getUsercode())
+        Assert.isTrue(!SystemConstant.ANAN_USER_CODE.equals(entity.getUsercode())
                 && !SystemConstant.ADMIN_USER_CODE.equals(entity.getUsercode()), "不能删除管理员帐号!");
 //        List<AnanUserRoleEntity> userRoles = userRoleRepository.findByUserId(id);
 //        Assert.isTrue(userRoles.size() == 0, "该用户下还存在角色信息,不能直接删除用户!");
@@ -207,7 +207,7 @@ public class UserServiceImpl implements UserService {
     )
     public AnanUserEntity deleteByEntity(AnanUserEntity entity) {
         Assert.notNull(entity, "不能删除空的用户对象!");
-        Assert.isTrue(!SystemConstant.SUPER_USER_CODE.equals(entity.getUsercode())
+        Assert.isTrue(!SystemConstant.ANAN_USER_CODE.equals(entity.getUsercode())
                 && !SystemConstant.ADMIN_USER_CODE.equals(entity.getUsercode()), "不能删除管理员帐号!");
         List<AnanUserRoleEntity> userRoles = userRoleRepository.findByUserId(entity.getId());
         Assert.isTrue(userRoles.size() == 0, "该用户下还存在角色信息,不能直接删除用户!");
@@ -228,7 +228,7 @@ public class UserServiceImpl implements UserService {
             Path<String> email = root.get("email");
 
             CriteriaBuilder.In<Object> organizId1 = null;
-            if (loginUser != null && !loginUser.getUsercode().equals(SystemConstant.SUPER_USER_CODE)) {
+            if (loginUser != null && !loginUser.getUsercode().equals(SystemConstant.ANAN_USER_CODE)) {
                 Long organizId = loginUser.getOrganizId();
                 AnanOrganizationEntity organizationEntity = organizationRepository.findById(organizId).orElse(null);
 
@@ -245,20 +245,20 @@ public class UserServiceImpl implements UserService {
             }
 
             if (StringUtils.isBlank(searchCondition)) {
-                if (loginUser != null && loginUser.getUsercode().equals(SystemConstant.SUPER_USER_CODE)) {
+                if (loginUser != null && loginUser.getUsercode().equals(SystemConstant.ANAN_USER_CODE)) {
                     return query.getRestriction();
                 } else {
-                    return cb.and(cb.notEqual(usercode, SystemConstant.SUPER_USER_CODE), organizId1);
+                    return cb.and(cb.notEqual(usercode, SystemConstant.ANAN_USER_CODE), organizId1);
                 }
             }
             Predicate predicate = cb.or(cb.like(username, "%" + searchCondition + "%"),
                     cb.like(usercode, "%" + searchCondition + "%"),
                     cb.like(phone, "%" + searchCondition + "%"),
                     cb.like(email, "%" + searchCondition + "%"));
-            if (loginUser != null && loginUser.getUsercode().equals(SystemConstant.SUPER_USER_CODE)) {
+            if (loginUser != null && loginUser.getUsercode().equals(SystemConstant.ANAN_USER_CODE)) {
                 return predicate;
             } else {
-                return cb.and(cb.notEqual(usercode, SystemConstant.SUPER_USER_CODE), predicate, organizId1);
+                return cb.and(cb.notEqual(usercode, SystemConstant.ANAN_USER_CODE), predicate, organizId1);
             }
         };
         //分页查找
@@ -351,7 +351,7 @@ public class UserServiceImpl implements UserService {
     public List<AnanUserEntity> findAllByOrganizId(Long organizId) {
         Assert.notNull(organizId, "机构ID不能为空!");
         AnanUserEntity loginUser = LoginUserUtil.getUser();
-        if (loginUser.getUsercode().equals(SystemConstant.SUPER_USER_CODE)) {
+        if (loginUser.getUsercode().equals(SystemConstant.ANAN_USER_CODE)) {
             return userRepository.findAll();
         } else {
             AnanOrganizationEntity organiz = organizationRepository.findById(organizId).orElse(null);
@@ -368,7 +368,7 @@ public class UserServiceImpl implements UserService {
                 for (AnanOrganizationEntity entity : organizs) {
                     in.value(entity.getId());
                 }
-                return cb.and(in, cb.notEqual(usercodePath, SystemConstant.SUPER_USER_CODE));
+                return cb.and(in, cb.notEqual(usercodePath, SystemConstant.ANAN_USER_CODE));
             };
             return userRepository.findAll(condition);
         }

@@ -77,8 +77,8 @@ public class DictionaryDetailServiceImpl implements DictionaryDetailService {
     private void isSuperUser(AnanDictionaryDetailEntity findEntity) {
         AnanUserEntity loginUser = LoginUserUtil.getUser();
         //不是超级管理员
-        if (!SystemConstant.SUPER_USER_CODE.equals(loginUser.getUsercode())) {
-            AnanUserEntity superUser = userService.findByUsercode(SystemConstant.SUPER_USER_CODE);
+        if (!SystemConstant.ANAN_USER_CODE.equals(loginUser.getUsercode())) {
+            AnanUserEntity superUser = userService.findByUsercode(SystemConstant.ANAN_USER_CODE);
             //是超级管理员创建的数据则不需要非超级管理员修改
             if (Objects.equals(superUser.getId(), findEntity.getCreateBy())) {
                 throw new AnanServiceException("没有权限修改系统创建的字典明细项!");

@@ -51,7 +51,7 @@ public class AnanVersionRoleServiceImpl implements AnanVersionRoleService {
     @Override
     public AnanVersionRoleEntity create(AnanVersionRoleCreateDto entity) {
         Assert.notNull(entity, "创建数据的实体对象不能为空!");
-        Assert.isTrue(!entity.getValue().equals(SystemConstant.SUPER_USER_CODE), "角色标识不能为:" + SystemConstant.SUPER_USER_CODE);
+        Assert.isTrue(!entity.getValue().equals(SystemConstant.ANAN_USER_CODE), "角色标识不能为:" + SystemConstant.ANAN_USER_CODE);
         AnanVersionRoleEntity createEntity = new AnanVersionRoleEntity();
         BeanUtils.copyProperties(entity, createEntity);
         return getRepository().save(createEntity);
@@ -68,7 +68,7 @@ public class AnanVersionRoleServiceImpl implements AnanVersionRoleService {
         Assert.notNull(entity, "更新数据的实体对象不能为空!");
         Long id = entity.getId();
         Assert.isTrue(id != null && id > 0, "传入的主键无效!");
-        Assert.isTrue(!entity.getValue().equals(SystemConstant.SUPER_USER_CODE), "角色标识不能为:" + SystemConstant.SUPER_USER_CODE);
+        Assert.isTrue(!entity.getValue().equals(SystemConstant.ANAN_USER_CODE), "角色标识不能为:" + SystemConstant.ANAN_USER_CODE);
         AnanVersionRoleEntity createEntity = getRepository().findById(id).orElse(null);
         Assert.notNull(createEntity, "更新数据的实体对象不能为空!");
         BeanUtils.copyProperties(entity, createEntity);
