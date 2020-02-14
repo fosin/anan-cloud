@@ -2,6 +2,7 @@ eureka:
   client:
     service-url:
       defaultZone: @eureka.client.service-url.defaultZone@
+    enabled: false
   instance:
     prefer-ip-address: true
 spring:
@@ -18,7 +19,7 @@ spring:
       username: ${spring.security.user.name}
       password: ${spring.security.user.password}
       discovery:
-        enabled: true
+        enabled: false
         service-id: anan-configserver
       fail-fast: true
       retry:
@@ -27,16 +28,18 @@ spring:
         max-interval: 2000
         multiplier: 1.1
       profile: @profileActive@
-      enabled: true
+      enabled: false
     nacos:
       config:
         namespace: @spring.cloud.nacos.config.namespace@
         shared-dataids: @spring.cloud.nacos.config.shared-dataids@
         file-extension: yaml
         server-addr: @spring.cloud.nacos.config.server-addr@
+        enabled: true
       discovery:
         namespace: @spring.cloud.nacos.config.namespace@
         server-addr: @spring.cloud.nacos.config.server-addr@
+        enabled: true
   rabbitmq:
     addresses: @spring.rabbitmq.addresses@
     username: @spring.rabbitmq.username@
