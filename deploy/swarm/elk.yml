@@ -1,11 +1,11 @@
 version: "3"
 services:
   elasticsearch:
-    image: elasticsearch:6.7.1
+    image: elasticsearch:6.8.6
     environment:
       #      - cluster.name=docker-cluster
       - bootstrap.memory_lock=false
-      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+      - ES_JAVA_OPTS=-Xms1g -Xmx1g
     volumes:
       - ../elasticsearch/data:/usr/share/elasticsearch/data
     ports:
@@ -38,21 +38,18 @@ services:
 #            soft: 65536
 #            hard: 65536
   filebeat:
-    image: elastic/filebeat:6.7.1
+    image: elastic/filebeat:6.8.6
     user: root
     volumes:
       - ../filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
       - /var/lib/docker/containers:/var/lib/docker/containers:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - ../logs:/logs:ro
     #    environment:
     #      - output.elasticsearch.hosts=["elasticsearch:9200"]
     #      - output.logstash.enabled=false
     #      - setup.kibana.host=kibana:5601
     # disable strict permission checks
     command: ["--strict.perms=false"]
-    #    ports:
-    #      - 5601:5601
     networks:
       - anan-overlay
     depends_on:
@@ -74,7 +71,7 @@ services:
           memory: 32M
 
   kibana:
-    image: kibana:6.7.1
+    image: kibana:6.8.6
     environment:
       - I18N_LOCALE=zh-CN
       #      -SERVER_NAME=kibana.example.org

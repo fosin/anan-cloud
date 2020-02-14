@@ -46,18 +46,81 @@
 
 # 搭建环境
 ## 1、本地开发环境local设置
-### 1.1、安装docker
-     安装docker没有什么特殊要求，自行百度安装即可
-### 1.2、中间件安装篇，使用docker-compose文件docker-compose.yml(mysql、Redis、RabbitMQ、ElasticSearch、zipkin)
-       1.2.1、安装Mysql
-            建议安装5.7及以上版本，设置root密码为local
-            根据源码相对路径./docs/mysql/anan_platform.sql创建数据库anan_platform，并导入相关sql语句和基础数据
-       1.2.2、安装Redis(3.x、4.x、5.x都支持)
-            密码设置为local
-       1.2.3、安装Rabbitmq(只测试过3.x)
-            用户：anan
+    基于docker的运行环境都是在CentOS7上部署得，如果是其他操作系统需要自行研究，理论上也是没有问题得。
+### 1.1、安装docker、docker-compose并配置镜像加速
+#### 1.1.1、安装docker
+    # step 1: 安装必要的一些系统工具
+    sudo yum install -y yum-utils device-mapper-persistent-data lvm2
+    # Step 2: 添加软件源信息
+    sudo yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
+    # Step 3: 更新并安装 Docker-CE
+    sudo yum makecache fast
+    sudo yum -y install docker-ce
+    # Step 4: 开启Docker服务
+    sudo systemctl start docker
+    # Step 5: 开启开机Docker服务自动启动
+    sudo systemctl enable docker    
+    
+    # 注意：
+    # 官方软件源默认启用了最新的软件，您可以通过编辑软件源的方式获取各个版本的软件包。例如官方并没有将测试版本的软件源置为可用，你可以通过以下方式开启。同理可以开启各种测试版本等。
+    # vim /etc/yum.repos.d/docker-ce.repo
+    #   将 [docker-ce-test] 下方的 enabled=0 修改为 enabled=1
+    #
+    # 安装指定版本的Docker-CE:
+    # Step 1: 安装指定版本的docker-ce-selinux
+    # yum install https://download.docker.com/linux/centos/7/x86_64/stable/Packages/docker-ce-selinux-17.03.2.ce-1.el7.centos.noarch.rpm
+    # Step 2: 查找Docker-CE的版本:
+    # yum list docker-ce.x86_64 --showduplicates | sort -r
+    #   Loading mirror speeds from cached hostfile
+    #   Loaded plugins: branch, fastestmirror, langpacks
+    #   docker-ce.x86_64            17.03.1.ce-1.el7.centos            docker-ce-stable
+    #   docker-ce.x86_64            17.03.1.ce-1.el7.centos            @docker-ce-stable
+    #   docker-ce.x86_64            17.03.0.ce-1.el7.centos            docker-ce-stable
+    #   Available Packages
+    # Step 3: 安装指定版本的Docker-CE: (VERSION 例如上面的 17.03.0.ce.1-1.el7.centos)
+    # sudo yum -y install docker-ce-[VERSION]
+#### 1.1.2、安装docker-compose(按需安装注意版本更新和匹配)
+    sudo curl -L "https://github.com/docker/compose/releases/download/1.24.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+    sudo chmod +x /usr/local/bin/docker-compose
+#### 1.1.3、配置参数（阿里云镜像加速、开启实验性功能）
+    sudo mkdir -p /etc/docker
+    sudo tee /etc/docker/daemon.json <<-'EOF'
+    {
+      "registry-mirrors": ["https://c70a1b9z.mirror.aliyuncs.com"],
+      "experimental": true
+    }
+    
+    EOF
+
+    sudo systemctl daemon-reload
+    sudo systemctl restart docker
+
+### 1.2、基础运行环境安装篇，使用docker-compose.yml文件(mysql、Redis、RabbitMQ、nacos)
+       所有涉及帐号和密码的地方默认帐号都是anan，默认密码都是local，如果不是账户不是anan得地方，下面会单独说明。
+       如果需要修改密码，则需要修改以下地方：
+           docker-compose.yml（中间件帐号和密码）
+           nacos配置中心（anan服务相关帐号密码）
+           anan-cloud下面的pom.xml中的profile local 的配置信息（spring security帐号密码）
+       docker-compose.yml中redis、rabbitmq、nacos-server1、mysql-master、mysql-slave5个是后台开发环境必须启动的
+       1.2.1、创建docker网络     
+            docker network create -d bridge --subnet=172.28.0.0/16 anan-bridge
+       1.2.2、启动mysql主从同步模式和nacos服务发现和配置管理
+            docker-compose -f anan-cloud\docker-compose.yml up -d mysql-master mysql-slave nacos-server1
+            
+            启动完成后，可以访问http://容器主机IP:8848/nacos/来查看nacos服务发现和配置中心。
+            账户：nacos
             密码：local
-       1.2.4、安装ElasticSearch6.7及以上(6.7及以上kibana有中文版，不要中文版安装低版本也可以)
+       1.2.3、安装Redis(3.x、4.x、5.x都支持)
+            docker-compose -f anan-cloud\docker-compose.yml up -d redis
+       1.2.4、安装Rabbitmq(只测试过3.x)
+            docker-compose -f anan-cloud\docker-compose.yml up -d rabbitmq
+       1.2.5、如果对机器性能有信息，以上组件也可以使用一个命令启动
+            docker-compose -f D:\myproject\anan\anan-cloud\docker-compose.yml up -d redis rabbitmq mysql-master mysql-slave nacos-server1
+
+### 1.3、日志安装篇，使用文件docker-compose.yml(elsaticsearch、filebeat、kibana等) -非必须
+       1.3.1、安装ElasticSearch6.7及以上(6.7及以上kibana有中文版，不要中文版安装低版本也可以)
+            docker-compose -f anan-cloud\docker-compose.yml up -d elasticsearch
+            
             启动时报错：max virtual memory areas vm.max_map_count [65530] is too low, increase to at least [262144] 
             原因：最大虚拟内存太小 
             解决方案：切换到root用户下，修改配置文件sysctl.conf
@@ -69,39 +132,49 @@
              
             并执行命令： 
             sysctl -p
-       
-       1.2.5、如果mysql、redis、rabbitmq等密码不是local，则需要修改以下地方：
-            anan-cloud下面的pom.xml中的profile local 的配置信息
-            anan-config目录下的配置文件
-            docker-compose-base.yml中的相关内容
-       1.2.6、使用docker-compose开启开发必须中间件
-            创建docker网络
-            docker network create -d bridge --subnet=172.28.0.0/16 anan-bridge
             
-            docker-compose.yml中redis、rabbitmq、nacos-server1、nacos-mysql-master、nacos-mysql-slave六个是开发环境必须启动的
-            需要导入deploy/mysql/anan_platform.sql到nacos-mysql-master中创建anan_platform2数据库
-### 1.3、监控安装篇，使用文件docker-compose.yml(prometheus、node-exporter、cadvisor、alertmanager、grafana等)
-       1.3.1、安装cadvisor版本:v0.33.0及以上
+       1.3.2、安装filebeat、kibana
+            docker-compose -f anan-cloud\docker-compose.yml up -d filebeat kibana    
+       1.3.3、启动完成后，可以访问以下站点：
+            Kibana: http://容器主机IP:5601/app/kibana
+
+### 1.4、监控安装篇，使用文件docker-compose.yml(prometheus、node-exporter、cadvisor、alertmanager、grafana等) -非必须
+
+       docker-compose -f anan-cloud\docker-compose.yml up -d cadvisor alertmanager node-exporter prometheus grafana
+       
+       1.4.1、安装cadvisor版本:v0.33.0及以上
+            docker-compose -f anan-cloud\docker-compose.yml up -d cadvisor
+       
             发现容器没有正常启动，查看日志，有如下报错内容：    
             Failed to start container manager: inotify_add_watch 
             /sys/fs/cgroup/cpuacct,cpu: no such file or directory
             临时解决方法，但是doker主机重启后又要修改，执行：
             mount -o remount,rw '/sys/fs/cgroup'
             ln -s /sys/fs/cgroup/cpu,cpuacct /sys/fs/cgroup/cpuacct,cpu
-### 1.4、服务安装篇，使用文件docker-compose.yml(anan-eurekaserver、anan-configserver、anan-authserver等)
-            本地开发环境基本上不需要启动这个docker-compose文件，主要还是使用源码跑
-### 1.5、配置环境
+       1.4.2、启动完成后，可以访问以下站点：
+            Promethus: http://容器主机IP:9090
+            grafana: http://容器主机IP:3000/
+### 1.5、服务安装篇，使用文件docker-compose.yml(anan-eurekaserver、anan-configserver、anan-authserver等) -非必须
+        本地开发环境基本上不需要启动这些服务，主要还是使用源码跑
+            anan-eurekaserver
+            anan-configserver
+            anan-authserver
+            anan-platformserver
+            anan-zuulgateway
+            anan-adminserver
+### 1.5、配置开发环境
        1.5.1、安装jdk1.8及以上、lombok插件、ignore插件，开发工具推荐使用Idea
        1.5.2、Windows下修改c:/windows/system32/drives/etc/hosts文件增加以下信息，IP地址根据实际情况设定
-              192.168.137.1是本机IP，192.168.137.8是虚拟机中的主机IP
-            192.168.137.1 nacos-server1
+            192.168.137.1是本机IP，192.168.137.8是Docker容器的主机IP
+
+            192.168.137.8 nacos-server1
+            192.168.137.8 redis
+            192.168.137.8 rabbitmq
+            192.168.137.8 mysql-master
+            192.168.137.8 mysql-slave
             192.168.137.1 anan-eurekaserver
             192.168.137.1 anan-authserver
-            192.168.137.8 redis
-            192.168.137.8 anan-platform-mysql
-            192.168.137.8 rabbitmq
-            192.168.137.8 nacos-mysql-master
- 
+            
        1.5.3、 配置 log4j.skipJansi使log4j2的日志支持颜色字体
             IDEA中，点击右上角->Edit Configurations，在VM options中添加
             -Dlog4j.skipJansi=false
@@ -114,32 +187,24 @@
 ### 1.6、按顺序启动服务
        1.6.1、启动anan-authserver授权认证中心
        1.6.2、启动anan-platformserver平台服务中心、anan-zuulgateway服务路由网关
-       1.6.4、启动anan-adminserver服务监控
+       1.6.3、启动anan-adminserver服务监控
+       
 ### 1.7、打开前端项目anan-vue,移步 https://github.com/fosin/anan-vue 下面的README.md查看前端项目的开发环境搭建过程
-### 1.8、如果使用Spring Cloud Eureka作为服务注册和发现组件、Config作为配置中心
-       1.8.1、注释Nacos组件
-            注释anan-cloud的pom.xml中的nacos
-            <dependency>
-                <groupId>com.alibaba.cloud</groupId>
-                <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
-                <version>${anan-spring-cloud-alibaba.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.alibaba.cloud</groupId>
-                <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
-                <version>${anan-spring-cloud-alibaba.version}</version>
-            </dependency>
-       1.8.2、启用Eureka和Config
-            启用anan-cloud的pom.xml中的Eureka
-            <!-- <dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
-            </dependency>-->
-            启用anan-cloudadviced的pom.xml中的Config
-            <!--<dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-starter-config</artifactId>
-            </dependency>-->
+### 1.8、如果使用Spring Cloud Eureka作为服务注册和发现组件、Config作为配置中心()
+       1.8.1、修改在以下模块的源码目录下的启动配置文件src/main/resources/bootstrap.yml
+            anan-authserver
+            anan-platformserver
+            anan-zuulgateway
+            anan-adminserver
+            anan-cloudgateway
+       1.8.1、关闭Nacos的作为服务发现和配置中心的设置
+            spring.cloud.nacos.config.enabled=false
+            spring.cloud.nacos.discovery.enabled=false
+        
+       1.8.2、启用Eureka和Config作为服务发现和配置中心的设置
+           euerka.client.enabled=true
+           spring.cloud.config.discovery.enabled=true
+           spring.cloud.config.enabled=true
        1.8.3、设置启动配置
             修改anan-cloud的pom.xml中的相关配置，local环境可以不用修改，一般需要修改生产环境
             <eureka.client.service-url.defaultZone>
@@ -150,7 +215,7 @@
             <spring.cloud.config.server.svn.username></spring.cloud.config.server.svn.username>
             <spring.cloud.config.server.svn.password></spring.cloud.config.server.svn.password>
             <spring.cloud.config.server.native.search-locations>file:deploy/anan-config</spring.cloud.config.server.native.search-locations>
-            <spring.cloud.config.server.git.uri>https://github.com/fosin/anan-cloud/docker</spring.cloud.config.server.git.uri>
+            <spring.cloud.config.server.git.uri>https://github.com/fosin/anan-cloud/deploy</spring.cloud.config.server.git.uri>
             <spring.cloud.config.server.git.search-paths>anan-config</spring.cloud.config.server.git.search-paths>
             <spring.cloud.inetutils.preferred-networks>192.168.137.</spring.cloud.inetutils.preferred-networks>
             <spring.rabbitmq.addresses>rabbitmq:5672</spring.rabbitmq.addresses>
@@ -176,7 +241,7 @@
 ### 2.2、Kubernetes部署
 	移步看 deploy/k8s/readme-k8s.md
 ### 2.3、jar包部署
-
+    移步看 deploy/jar/readme-jar.md
 ### 2.4、war包部署
 
 ### 3、实用小技巧

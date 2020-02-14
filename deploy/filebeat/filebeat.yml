@@ -1,18 +1,28 @@
-filebeat:
-  prospectors:
-    - input_type: log
-      paths:  # 这里是容器内的path
-        - /logs/**
-  registry_file: /usr/share/filebeat/data/registry/registry  # 这个文件记录日志读取的位置，如果容器重启，可以从记录的位置开始取日志
+filebeat.config:
+  inputs:
+    # Mounted `filebeat-inputs` configmap:
+    - type: docker
+      containers.ids:
+        - "*"
+    # Reload inputs configs as they change:
+    reload.enabled: false
+  modules:
+    path: ${path.config}/modules.d/*.yml
+    # Reload module configs as they change:
+    reload.enabled: false
 
-output:
-  elasticsearch:  # 我这里是输出到elasticsearch，也可以输出到logstash
-    index: "anan-%{+yyyy.MM.dd}"  #  kibana中的索引
-    hosts: ["elasticsearch:9200"] # elasticsearch地址
-  logstash:
-    enabled: false
-setup.template.name: "anan"
-setup.template.pattern: "anan-*"
-#setup:
-#  kibana:
-#    host: kibana:5601
+# To enable hints based autodiscover, remove `filebeat.config.inputs` configuration and uncomment this:
+#filebeat.autodiscover:
+#  providers:
+#    - type: kubernetes
+#      hints.enabled: true
+processors:
+  - add_cloud_metadata:
+
+cloud.id: ${ELASTIC_CLOUD_ID}
+cloud.auth: ${ELASTIC_CLOUD_AUTH}
+
+output.elasticsearch:
+  hosts: ['${ELASTICSEARCH_HOST:elasticsearch}:${ELASTICSEARCH_PORT:9200}']
+  #username: ${ELASTICSEARCH_USERNAME}
+  #password: ${ELASTICSEARCH_PASSWORD}

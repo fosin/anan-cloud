@@ -1,0 +1,16 @@
+FROM mysql:5.7
+
+MAINTAINER fosin 28860823@qq.com
+
+COPY ./slave.cnf /etc/mysql/conf.d
+COPY ./docker-entrypoint.sh /usr/local/bin/
+
+ENV MYSQL_REPLICATION_USER anan_ru
+ENV MYSQL_REPLICATION_PASSWORD anan_ru
+ENV MYSQL_MASTER_SERVICE_HOST mysql-master
+ENV MYSQL_MASTER_SERVICE_PORT 3306
+
+RUN ln -s -f usr/local/bin/docker-entrypoint.sh /entrypoint.sh # backwards compat
+ENTRYPOINT ["docker-entrypoint.sh"]
+
+CMD ["mysqld"]

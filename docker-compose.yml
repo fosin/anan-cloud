@@ -9,12 +9,12 @@ services:
       - PREFER_HOST_MODE=hostname
       - MODE=standalone
       - SPRING_DATASOURCE_PLATFORM=mysql
-      - MYSQL_MASTER_SERVICE_HOST=nacos-mysql-master
+      - MYSQL_MASTER_SERVICE_HOST=mysql-master
       - MYSQL_MASTER_SERVICE_PORT=3306
       - MYSQL_MASTER_SERVICE_DB_NAME=nacos
       - MYSQL_MASTER_SERVICE_USER=nacos
-      - MYSQL_MASTER_SERVICE_PASSWORD=nacos
-      - MYSQL_SLAVE_SERVICE_HOST=nacos-mysql-slave
+      - MYSQL_MASTER_SERVICE_PASSWORD=local
+      - MYSQL_SLAVE_SERVICE_HOST=mysql-slave
       - MYSQL_SLAVE_SERVICE_PORT=3306
     volumes:
       -  /root/deploy/nacos/logs/:/home/nacos/logs
@@ -23,51 +23,58 @@ services:
       - "8848:8848"
       - "9555:9555"
     depends_on:
-      - nacos-mysql-master
-      - nacos-mysql-slave
+      - mysql-master
+      - mysql-slave
     networks:
       - anan-bridge
 
-  nacos-mysql-master:
-    container_name: nacos-mysql-master
-    hostname: nacos-mysql-master
-    image: nacos/nacos-mysql-master:latest
+  mysql-master:
+    container_name: mysql-master
+    hostname: mysql-master
+    image: registry.cn-hangzhou.aliyuncs.com/fosin/mysql-master:2.1.0-SNAPSHOT
+    build:
+      context: deploy/mysql/master
     environment:
       - TZ=Asia/Shanghai
       - MYSQL_ROOT_PASSWORD=local
-      - MYSQL_REPLICATION_USER=nacos_ru
-      - MYSQL_REPLICATION_PASSWORD=nacos_ru
+      - MYSQL_REPLICATION_USER=anan_ru
+      - MYSQL_REPLICATION_PASSWORD=local
       - MYSQL_DATABASE=nacos
       - MYSQL_USER=nacos
-      - MYSQL_PASSWORD=nacos
+      - MYSQL_PASSWORD=local
+      - MYSQL_DATABASE2=anan_platform
+      - MYSQL_USER2=anan
+      - MYSQL_PASSWORD2=local
     volumes:
-      - /root/deploy/nacos/mysqld.cnf:/etc/mysql/conf.d/mysqld.cnf
-      - /root/deploy/nacos/mysql-master:/var/lib/mysql
+#      - /root/deploy/mysql/mysqld.cnf:/etc/mysql/conf.d/mysqld.cnf
+      - /root/deploy/mysql/master:/var/lib/mysql
     ports:
       - "3306:3306"
     networks:
       - anan-bridge
-  nacos-mysql-slave:
-    container_name: nacos-mysql-slave
-    hostname: nacos-mysql-slave
-    image: nacos/nacos-mysql-slave:latest
+  mysql-slave:
+    container_name: mysql-slave
+    hostname: mysql-slave
+    image: registry.cn-hangzhou.aliyuncs.com/fosin/mysql-slave:2.1.0-SNAPSHOT
+    build:
+      context: deploy/mysql/slave
     environment:
       - TZ=Asia/Shanghai
       - MYSQL_ROOT_PASSWORD=local
-      - MYSQL_REPLICATION_USER=nacos_ru
-      - MYSQL_REPLICATION_PASSWORD=nacos_ru
-      - MYSQL_MASTER_SERVICE_HOST=nacos-mysql-master
+      - MYSQL_REPLICATION_USER=anan_ru
+      - MYSQL_REPLICATION_PASSWORD=local
+      - MYSQL_MASTER_SERVICE_HOST=mysql-master
     volumes:
-      - /root/deploy/nacos/mysqld.cnf:/etc/mysql/conf.d/mysqld.cnf
-      - /root/deploy/nacos/mysql-slave:/var/lib/mysql
+#      - /root/deploy/mysql/mysqld.cnf:/etc/mysql/conf.d/mysqld.cnf
+      - /root/deploy/mysql/slave:/var/lib/mysql
     ports:
       - "3305:3306"
     depends_on:
-      - nacos-mysql-master
+      - mysql-master
     networks:
       - anan-bridge
   filebeat:
-    image: elastic/filebeat:6.7.1
+    image: elastic/filebeat:6.8.6
     container_name: filebeat
     hostname: filebeat
     restart: on-failure
@@ -91,7 +98,7 @@ services:
       - elasticsearch
 
   kibana:
-    image: kibana:6.7.1
+    image: kibana:6.8.6
     container_name: kibana
     hostname: kibana
     restart: on-failure
@@ -107,7 +114,7 @@ services:
       - elasticsearch
 
   elasticsearch:
-    image: elasticsearch:6.7.1
+    image: elasticsearch:6.8.6
     container_name: elasticsearch
     hostname: elasticsearch
     restart: on-failure
@@ -154,25 +161,6 @@ services:
       - 9411:9411
       # Uncomment if you set SCRIBE_ENABLED=true
       # - 9410:9410
-
-  anan-platform-mysql:
-    container_name: anan-platform-mysql
-    hostname: anan-platform-mysql
-    image: registry.cn-hangzhou.aliyuncs.com/fosin/anan-platform-mysql:2.0.0-SNAPSHOT
-    build:
-      context:  docker/mysql/
-    environment:
-      - MYSQL_ROOT_PASSWORD=local
-      - TZ=Asia/Shanghai
-    volumes:
-      - /root/deploy/mysql/anan_platform/data:/var/lib/mysql
-      - /root/deploy/mysql/anan_platform/mysqld.cnf:/etc/mysql/conf.d/mysqld.cnf
-      - /root/deploy/mysql/anan_platform/logs:/var/log/mysql
-    restart: on-failure
-    ports:
-      - 3310:3306
-    networks:
-      - anan-bridge
 
   rabbitmq:
     container_name: rabbitmq
@@ -395,7 +383,7 @@ services:
     depends_on:
       - rabbitmq
       - redis
-      - nacos-mysql-master
+      - mysql-master
       - nacos-server1
 
   anan-platformserver:
@@ -413,7 +401,7 @@ services:
     depends_on:
       - rabbitmq
       - redis
-      - nacos-mysql-master
+      - mysql-master
       - nacos-server1
 
   anan-adminserver:
@@ -494,7 +482,7 @@ services:
   8-jre-alpine:
     image: registry.cn-hangzhou.aliyuncs.com/fosin/openjdk:8-jre-alpine
     build:
-      context: docker/openjdk
+      context: deploy/openjdk
       dockerfile: Dockerfile
 networks:
   anan-bridge:

@@ -26,6 +26,17 @@
 
 	sysctl -p /etc/sysctl.d/kubernetes.conf
 
+    #如果执行sysctl -p 时出现：
+    #[root@localhost ~]# sysctl -p
+    #sysctl: cannot stat /proc/sys/net/bridge/bridge-nf-call-ip6tables: No such file or directory
+    #sysctl: cannot stat /proc/sys/net/bridge/bridge-nf-call-iptables: No such file or directory
+    
+    解决方法：
+    [root@localhost ~]# modprobe br_netfilter
+    [root@localhost ~]# sysctl -p
+    net.bridge.bridge-nf-call-ip6tables = 1
+    net.bridge.bridge-nf-call-iptables = 1
+    
 ## 1.5、调整系统时区
 	# 设置系统时区为 中国/上海
 	timedatectl set-timezone Asia/Shanghai
@@ -67,8 +78,8 @@
 	rpm -Uvh http://www.elrepo.org/elrepo-release-7.0-3.el7.elrepo.noarch.rpm
 	# 安装完成后检查 /boot/grub2/grub.cfg 中对应内核 menuentry 中是否包含 initrd16 配置，如果没有，再安装一次！
 	yum --enablerepo=elrepo-kernel install -y kernel-lt
-	# 设置开机从新内核启动并重启生效
-	grub2-set-default "CentOS Linux (4.4.206-1.el7.elrepo.x86_64) 7 (Core)" && reboot
+	# 设置开机从新内核启动并重启生效（注意在线安装的内核版本是不是4.4.212-1）
+	grub2-set-default "CentOS Linux (4.4.212-1.el7.elrepo.x86_64) 7 (Core)" && reboot
 	# 重启后安装内核源文件（这步可以不做）
 	yum --enablerepo=elrepo-kernel install kernel-lt-devel-$(uname -r) kernel-lt-headers-$(uname -r)
 
@@ -153,47 +164,50 @@
 ## 2.5、初始化主节点
 	# 初始化主节点时kubeadm会从google k8s仓库中拉取镜像，需要科学上网才能访问，可以使用load本地镜像来提前加载docker镜像
 	# 上传镜像包kubeadm-basic.images.tar.gz和load-images.sh脚本
-	tar -zxvf kubeadm-basic.images.tar.gz -C /root/
+	mkdir -p /root/deploy/k8s 
+	tar -zxvf kubeadm-basic.images.tar.gz -C /root/deploy/k8s
 	chmod +x load-images.sh
 	./load-images.sh
 	
-	# 生成配置文件
-	kubeadm config print init-defaults > kubeadm-config.yaml
-	
-	# 修改kubeadm-config.yml配置文件
-	localAPIEndpoint:
-	advertiseAddress: 192.168.137.8 修改IP为本机IP 
-	kubernetesVersion: v1.15.1 修改kubernetesVersion: v1.15.1
-	networking:
-	podSubnet: "10.244.0.0/16"  增加podSubnet: "10.244.0.0/16"
-	serviceSubnet: 10.96.0.0/12
-	
-	## 增加以下子段
-	---
-	apiVersion: kubeproxy.config.k8s.io/v1alpha1
-	kind: KubeProxyConfiguration
-	featureGates:
-	  SupportIPVSProxyMode: true
-	mode: ipvs
-
-	kubeadm init --config=kubeadm-config.yaml --experimental-upload-certs | tee kubeadm-init.log
+	# 生成配置文件(只需要在主安装节点操作)
+        kubeadm config print init-defaults > kubeadm-config.yaml
+        
+        # 修改kubeadm-config.yml配置文件
+        localAPIEndpoint:
+        advertiseAddress: 192.168.0.3 修改IP为本机IP 
+        kubernetesVersion: v1.15.1 修改kubernetesVersion: v1.15.1
+        networking:
+        podSubnet: "10.244.0.0/16"  增加podSubnet: "10.244.0.0/16"
+        serviceSubnet: 10.96.0.0/12
+        
+        ## 增加以下子段
+        ---
+        apiVersion: kubeproxy.config.k8s.io/v1alpha1
+        kind: KubeProxyConfiguration
+        featureGates:
+          SupportIPVSProxyMode: true
+        mode: ipvs
+        
+        ## 初始化
+	    kubeadm init --config=kubeadm-config.yaml --experimental-upload-certs | tee kubeadm-init.log
 ## 2.6、加入主节点以及其余工作节点
 	执行安装日志中的加入命令即可
 
-## 2.7、Etcd 集群状态查看
-	kubectl -n kube-system exec etcd-k8s-master01 -- etcdctl \
-	--endpoints=https://192.168.137.8:2379 \
+## 2.7、Etcd 集群状态查看（只需安装节点操作）
+	kubectl -n kube-system exec etcd-local1 -- etcdctl \
+	--endpoints=https://192.168.0.3:2379 \
 	--ca-file=/etc/kubernetes/pki/etcd/ca.crt \
 	--cert-file=/etc/kubernetes/pki/etcd/server.crt \
 	--key-file=/etc/kubernetes/pki/etcd/server.key cluster-health
+	
 	kubectl get endpoints kube-controller-manager --namespace=kube-system -o yaml
+	
 	kubectl get endpoints kube-scheduler --namespace=kube-system -o yaml
-## 2.8、部署网络
+## 2.8、部署网络（只需安装节点操作）
 	mkdir flannel
 	cd flannel
 	wget https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
 	
 	kubectl create -f kube-flannel.yml
-	
-	kubectl apply -f kube-flannel.yml
+
 # 3、anan服务部署

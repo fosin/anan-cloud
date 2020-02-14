@@ -177,7 +177,7 @@ spec:
               value: "rabbit@$(HOSTNAME).rabbitmq-headless.default.svc.cluster.local"
           volumeMounts:
             - name: rabbitmq-data
-              mountPath: /var/lib/rabbitmq
+              mountPath: /var/lib/rabbitmq/mnesia
             - name: config
               mountPath: /etc/rabbitmq
       initContainers:

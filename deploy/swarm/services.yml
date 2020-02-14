@@ -109,7 +109,7 @@ services:
     environment:
       - TZ=Asia/Shanghai
     volumes:
-      - ../nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
       - ../nginx/html:/usr/share/nginx/html
     ports:
       - 80:80
