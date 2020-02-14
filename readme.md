@@ -84,12 +84,14 @@
     sudo chmod +x /usr/local/bin/docker-compose
 #### 1.1.3、配置参数（阿里云镜像加速、开启实验性功能）
     sudo mkdir -p /etc/docker
-    sudo tee /etc/docker/daemon.json <<-'EOF'
+    cat > /etc/docker/daemon.json <<EOF
     {
+      "exec-opts": ["native.cgroupdriver=systemd"],
+      "log-driver": "json-file",
+      "log-opts": {"max-size":"50m", "max-file":"3"}
       "registry-mirrors": ["https://c70a1b9z.mirror.aliyuncs.com"],
       "experimental": true
     }
-    
     EOF
 
     sudo systemctl daemon-reload
