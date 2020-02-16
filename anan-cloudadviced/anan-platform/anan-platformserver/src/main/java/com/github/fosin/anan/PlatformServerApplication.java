@@ -15,6 +15,8 @@ import org.springframework.cloud.client.loadbalancer.LoadBalancerInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.client.RestTemplate;
@@ -46,6 +48,11 @@ public class PlatformServerApplication {
     @ConditionalOnMissingBean(LoadBalancerInterceptor.class)
     public LoadBalancerInterceptor loadBalancerInterceptor(LoadBalancerClient loadBalance) {
         return new LoadBalancerInterceptor(loadBalance);
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
     @LoadBalanced
