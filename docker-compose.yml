@@ -16,6 +16,9 @@ services:
       - MYSQL_MASTER_SERVICE_PASSWORD=local
       - MYSQL_SLAVE_SERVICE_HOST=mysql-slave
       - MYSQL_SLAVE_SERVICE_PORT=3306
+      - JVM_XMS=512M
+      - JVM_XMX=512M
+      - JVM_XMN=256M
     volumes:
       -  /root/deploy/nacos/logs/:/home/nacos/logs
       -  /root/deploy/nacos/custom.properties:/home/nacos/init.d/custom.properties
@@ -46,7 +49,6 @@ services:
       - MYSQL_USER2=anan
       - MYSQL_PASSWORD2=local
     volumes:
-#      - /root/deploy/mysql/mysqld.cnf:/etc/mysql/conf.d/mysqld.cnf
       - /root/deploy/mysql/master:/var/lib/mysql
     ports:
       - "3306:3306"
@@ -65,7 +67,6 @@ services:
       - MYSQL_REPLICATION_PASSWORD=local
       - MYSQL_MASTER_SERVICE_HOST=mysql-master
     volumes:
-#      - /root/deploy/mysql/mysqld.cnf:/etc/mysql/conf.d/mysqld.cnf
       - /root/deploy/mysql/slave:/var/lib/mysql
     ports:
       - "3305:3306"
@@ -354,10 +355,12 @@ services:
 
   anan-zuulgateway:
     image: registry.cn-hangzhou.aliyuncs.com/fosin/anan-zuulgateway:2.1.0-SNAPSHOT
-    entrypoint: "sh /wait-for.sh anan-platformserver:51500 -t 3600 -- java -jar /app.jar"
+    entrypoint: "sh /bin/wait-for.sh anan-platformserver:51500 -t 3600 -- /bin/entrypoint.sh"
     container_name: anan-zuulgateway
     hostname: anan-zuulgateway
     restart: on-failure
+    environment:
+      - JAVA_OPTS=-Xmx512M -Xms512M -Xmn256M -XX:MaxMetaspaceSize=128M -XX:MetaspaceSize=128M
     ports:
       - 9000:9000
     volumes:
@@ -370,10 +373,12 @@ services:
 
   anan-authserver:
     image: registry.cn-hangzhou.aliyuncs.com/fosin/anan-authserver:2.1.0-SNAPSHOT
-    entrypoint: "sh /wait-for.sh nacos-server1:8848 -t 3600 -- java -jar /app.jar"
+    entrypoint: "sh /bin/wait-for.sh nacos-server1:8848 -t 3600 -- /bin/entrypoint.sh"
     container_name: anan-authserver
     hostname: anan-authserver
     restart: on-failure
+    environment:
+      - JAVA_TOOL_OPTIONS=-Xmx512M -Xms512M -Xmn256M -XX:MaxMetaspaceSize=128M -XX:MetaspaceSize=128M -XX:+DisableExplicitGC -XX:+HeapDumpOnOutOfMemoryError -XX:ErrorFile=/logs/hs_err_pid%p.log -XX:HeapDumpPath=/logs -Xlog:gc* -Xlog:gc:/logs/gc%t.log
     ports:
       - 51400:51400
     volumes:
@@ -388,10 +393,12 @@ services:
 
   anan-platformserver:
     image: registry.cn-hangzhou.aliyuncs.com/fosin/anan-platformserver:2.1.0-SNAPSHOT
-    entrypoint: "sh /wait-for.sh anan-authserver:51400 -t 3600 -- java -jar /app.jar"
+    entrypoint: "sh /bin/wait-for.sh anan-authserver:51400 -t 3600 -- /bin/entrypoint.sh"
     container_name: anan-platformserver
     hostname: anan-platformserver
     restart: on-failure
+    environment:
+      - JAVA_TOOL_OPTIONS=-Xmx512M -Xms512M -Xmn256M -XX:MaxMetaspaceSize=128M -XX:MetaspaceSize=128M
     volumes:
       - /root/deploy/logs/anan:/logs
     ports:
@@ -406,10 +413,12 @@ services:
 
   anan-adminserver:
     image: registry.cn-hangzhou.aliyuncs.com/fosin/anan-adminserver:2.1.0-SNAPSHOT
-    entrypoint: "sh /wait-for.sh anan-zuulgateway:9000 -t 3600 -- java -jar /app.jar"
+    entrypoint: "sh /bin/wait-for.sh anan-zuulgateway:9000 -t 3600 -- /bin/entrypoint.sh"
     container_name: anan-adminserver
     hostname: anan-adminserver
     restart: on-failure
+    environment:
+      - JAVA_TOOL_OPTIONS=-Xmx512M -Xms512M -Xmn256M -XX:MaxMetaspaceSize=128M -XX:MetaspaceSize=128M
     volumes:
       - /root/deploy/logs/anan:/logs
     ports:
@@ -426,6 +435,8 @@ services:
     container_name: anan-eurekaserver
     hostname: anan-eurekaserver
     restart: on-failure
+    environment:
+      - JAVA_TOOL_OPTIONS=-Xmx512M -Xms512M -Xmn256M -XX:MaxMetaspaceSize=128M -XX:MetaspaceSize=128M
     networks:
       - anan-bridge
     volumes:
@@ -435,13 +446,14 @@ services:
 
   anan-configserver:
     image: registry.cn-hangzhou.aliyuncs.com/fosin/anan-configserver:2.1.0-SNAPSHOT
-    entrypoint: "sh /wait-for.sh anan-eurekaserver:51000 -t 3600 -- java -jar /app.jar"
+    entrypoint: "sh /bin/wait-for.sh anan-eurekaserver:51000 -t 3600 -- /bin/entrypoint.sh"
     container_name: anan-configserver
     hostname: anan-configserver
     restart: on-failure
     ports:
       - 51100:51100
     environment:
+      - JAVA_TOOL_OPTIONS=-Xmx512M -Xms512M -Xmn256M -XX:MaxMetaspaceSize=128M -XX:MetaspaceSize=128M
       - spring.cloud.config.server.native.search-locations=file:/anan-config
     volumes:
       - /root/deploy/logs/anan:/logs
@@ -484,6 +496,16 @@ services:
     build:
       context: deploy/openjdk
       dockerfile: Dockerfile
+  8-jre:
+    image: registry.cn-hangzhou.aliyuncs.com/fosin/openjdk:8-jre
+    build:
+      context: deploy/openjdk
+      dockerfile: Dockerfile8
+  11-jre:
+    image: registry.cn-hangzhou.aliyuncs.com/fosin/openjdk:11-jre
+    build:
+      context: deploy/openjdk
+      dockerfile: Dockerfile11
 networks:
   anan-bridge:
     external: true
