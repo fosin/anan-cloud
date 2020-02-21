@@ -25,7 +25,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 public class ZuulGatewayApplication {
     public static void main(String[] args) {
         new SpringApplicationBuilder(ZuulGatewayApplication.class)
-                .banner(new AnanBanner("ANAN Zuul Gateway"))
+                .banner(new AnanBanner("AnAn Zuul Gateway"))
                 .logStartupInfo(true)
                 .run(args);
     }

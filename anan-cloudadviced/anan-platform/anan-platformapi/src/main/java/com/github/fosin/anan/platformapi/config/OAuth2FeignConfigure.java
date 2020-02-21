@@ -38,7 +38,7 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 public class OAuth2FeignConfigure {
 
     // feign的OAuth2ClientContext
-    private OAuth2ClientContext feignOAuth2ClientContext = new DefaultOAuth2ClientContext();
+    private OAuth2ClientContext feignOauth2ClientContext = new DefaultOAuth2ClientContext();
 
     @Resource
     private ClientCredentialsResourceDetails clientCredentialsResourceDetails;
@@ -53,7 +53,7 @@ public class OAuth2FeignConfigure {
 
     @Bean
     public RequestInterceptor oauth2FeignRequestInterceptor() {
-        return new OAuth2FeignRequestInterceptor(feignOAuth2ClientContext, clientCredentialsResourceDetails);
+        return new OAuth2FeignRequestInterceptor(feignOauth2ClientContext, clientCredentialsResourceDetails);
     }
 
     @Bean
@@ -72,7 +72,7 @@ public class OAuth2FeignConfigure {
 
     @Bean
     public Decoder feignDecoder() {
-        return new CustomResponseEntityDecoder(new SpringDecoder(this.messageConverters), feignOAuth2ClientContext);
+        return new CustomResponseEntityDecoder(new SpringDecoder(this.messageConverters), feignOauth2ClientContext);
     }
 
 
@@ -157,7 +157,7 @@ public class OAuth2FeignConfigure {
 
     @Bean
     public ErrorDecoder errorDecoder() {
-        return new RestClientErrorDecoder(feignOAuth2ClientContext);
+        return new RestClientErrorDecoder(feignOauth2ClientContext);
     }
 
     /**

@@ -25,7 +25,7 @@ import org.springframework.web.client.RestTemplate;
 public class AuthServerApplication {
     public static void main(String[] args) {
         new SpringApplicationBuilder(AuthServerApplication.class)
-                .banner(new AnanBanner("ANAN Auth Server"))
+                .banner(new AnanBanner("AnAn Auth Server"))
                 .logStartupInfo(true)
                 .run(args);
     }

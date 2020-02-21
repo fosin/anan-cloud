@@ -26,7 +26,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 public class AdminServerApplication {
     public static void main(String[] args) {
         new SpringApplicationBuilder(AdminServerApplication.class)
-                .banner(new AnanBanner("ANAN Admin Server"))
+                .banner(new AnanBanner("AnAn Admin Server"))
                 .logStartupInfo(true)
                 .run(args);
     }

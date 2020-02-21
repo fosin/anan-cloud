@@ -39,7 +39,7 @@ import org.springframework.web.client.RestTemplate;
 public class PlatformServerApplication {
     public static void main(String[] args) {
         new SpringApplicationBuilder(PlatformServerApplication.class)
-                .banner(new AnanBanner("ANAN Platform Server"))
+                .banner(new AnanBanner("AnAn Platform Server"))
                 .logStartupInfo(true)
                 .run(args);
     }
