@@ -1,18 +1,16 @@
 FROM openjdk:11-jdk
-MAINTAINER fosin 28860823@qq.com
-VOLUME /tmp
-VOLUME /logs
-COPY bin/wait-for.sh bin/wait-for.sh
-COPY bin/entrypoint.sh bin/entrypoint.sh
-COPY debian/sources.list /etc/apt/
-RUN chmod +x bin/entrypoint.sh
-RUN chmod +x bin/wait-for.sh
-#使用G1回收器，堆内存默认使用容器内存的70%
-ENV JAVA_TOOL_OPTIONS="-XX:+UseG1GC -XX:MaxGCPauseMillis=200 -XX:MaxRAMPercentage=70 -XX:MaxMetaspaceSize=160M -XX:+DisableExplicitGC -XX:ErrorFile=/logs/hs_err_pid%p.log -Xlog:gc* -Xlog:gc:/logs/gc%t.log"
 
-RUN echo "Asia/Shanghai" > /etc/timezone
-RUN apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 40976EAF437D05B5 3B4FE6ACC0B21F32
-RUN set -eux \
+MAINTAINER fosin 28860823@qq.com
+
+VOLUME ["/tmp","/logs"]
+
+COPY ./bin/ /bin/
+COPY ./debian/sources.list /etc/apt/
+
+RUN chmod +x bin/entrypoint.sh bin/wait-for.sh \
+    && echo "Asia/Shanghai" > /etc/timezone \
+    && apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 40976EAF437D05B5 3B4FE6ACC0B21F32 \
+    && set -eux \
     && apt update \
     && apt -y install netcat \
     && apt -y install net-tools \
