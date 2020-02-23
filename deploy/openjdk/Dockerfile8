@@ -9,7 +9,7 @@ RUN chmod +x /entrypoint.sh
 RUN chmod +x /wait-for.sh
 
 #设置堆内存，默认2G的设置
-ENV JAVA_TOOL_OPTIONS="-Xmx1792M -Xms1792M -Xmn512M -XX:MaxMetaspaceSize=256M -XX:MetaspaceSize=256M -XX:+DisableExplicitGC -XX:+UseParNewGC -XX:+UseConcMarkSweepGC -XX:+UseCMSInitiatingOccupancyOnly -XX:CMSInitiatingOccupancyFraction=70 -XX:+ExplicitGCInvokesConcurrentAndUnloadsClasses -XX:+CMSClassUnloadingEnabled -XX:+ParallelRefProcEnabled -XX:+CMSScavengeBeforeRemark -XX:+HeapDumpOnOutOfMemoryError -XX:+PrintGCDetails -XX:+PrintGCTimeStamps -XX:+PrintHeapAtGC -XX:+PrintGCApplicationStoppedTime -XX:+PrintGCDateStamps -XX:ErrorFile=/logs/hs_err_pid%p.log -XX:HeapDumpPath=/logs -Xloggc:/logs/gc%t.log"
+ENV JAVA_TOOL_OPTIONS="-XX:+UseG1GC -XX:MaxGCPauseMillis=200 -XX:MaxRAMPercentage=70 -XX:MaxMetaspaceSize=256M -XX:MetaspaceSize=256M -XX:+DisableExplicitGC -XX:+UseParNewGC -XX:+UseConcMarkSweepGC -XX:+UseCMSInitiatingOccupancyOnly -XX:CMSInitiatingOccupancyFraction=70 -XX:+ExplicitGCInvokesConcurrentAndUnloadsClasses -XX:+CMSClassUnloadingEnabled -XX:+ParallelRefProcEnabled -XX:+CMSScavengeBeforeRemark -XX:+HeapDumpOnOutOfMemoryError -XX:+PrintGCDetails -XX:+PrintGCTimeStamps -XX:+PrintHeapAtGC -XX:+PrintGCApplicationStoppedTime -XX:+PrintGCDateStamps -XX:ErrorFile=/logs/hs_err_pid%p.log -XX:HeapDumpPath=/logs -Xloggc:/logs/gc%t.log"
 
 RUN echo "Asia/Shanghai" > /etc/timezone
 RUN apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 40976EAF437D05B5 3B4FE6ACC0B21F32
