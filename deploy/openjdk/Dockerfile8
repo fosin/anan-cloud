@@ -1,47 +1,17 @@
 FROM openjdk:8-jdk
 MAINTAINER fosin 28860823@qq.com
-VOLUME /tmp
-VOLUME /logs
-COPY wait-for.sh /
-COPY entrypoint.sh /
-COPY sources.list /etc/apt/
-RUN chmod +x /entrypoint.sh
-RUN chmod +x /wait-for.sh
 
-#设置堆内存，默认2G的设置
-ENV JAVA_TOOL_OPTIONS="-XX:+UseG1GC -XX:MaxGCPauseMillis=200 -XX:MaxRAMPercentage=70 -XX:MaxMetaspaceSize=256M -XX:MetaspaceSize=256M -XX:+DisableExplicitGC -XX:+UseParNewGC -XX:+UseConcMarkSweepGC -XX:+UseCMSInitiatingOccupancyOnly -XX:CMSInitiatingOccupancyFraction=70 -XX:+ExplicitGCInvokesConcurrentAndUnloadsClasses -XX:+CMSClassUnloadingEnabled -XX:+ParallelRefProcEnabled -XX:+CMSScavengeBeforeRemark -XX:+HeapDumpOnOutOfMemoryError -XX:+PrintGCDetails -XX:+PrintGCTimeStamps -XX:+PrintHeapAtGC -XX:+PrintGCApplicationStoppedTime -XX:+PrintGCDateStamps -XX:ErrorFile=/logs/hs_err_pid%p.log -XX:HeapDumpPath=/logs -Xloggc:/logs/gc%t.log"
+VOLUME ["/tmp","/logs"]
 
-RUN echo "Asia/Shanghai" > /etc/timezone
-RUN apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 40976EAF437D05B5 3B4FE6ACC0B21F32
-RUN set -eux \
+COPY bin/ /bin/
+COPY debian/sources.list /etc/apt/
+
+RUN chmod +x bin/entrypoint.sh bin/wait-for.sh \
+    && echo "Asia/Shanghai" > /etc/timezone \
+    && apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 40976EAF437D05B5 3B4FE6ACC0B21F32 \
+    && set -eux \
     && apt update \
     && apt -y install netcat \
     && apt -y install net-tools \
     && apt -y install vim \
     && rm -rf /var/lib/apt/lists/*
-
-#-XX:CMSInitiatingPermOccupancyFraction：当永久区占用率达到这一百分比时，启动CMS回收
-#-XX:CMSInitiatingOccupancyFraction：设置CMS收集器在老年代空间被使用多少后触发
-#-XX:+CMSClassUnloadingEnabled：允许对类元数据进行回收
-#-XX:CMSFullGCsBeforeCompaction：设定进行多少次CMS垃圾回收后，进行一次内存压缩
-#-XX:NewRatio:新生代和老年代的比
-#-XX:ParallelCMSThreads：设定CMS的线程数量
-#-XX:ParallelGCThreads：设置用于垃圾回收的线程数
-#-XX:SurvivorRatio：设置eden区大小和survivior区大小的比例
-#-XX:+UseParNewGC：在新生代使用并行收集器
-#-XX:+UseParallelGC ：新生代使用并行回收收集器
-#-XX:+UseParallelOldGC：老年代使用并行回收收集器
-#-XX:+UseSerialGC：在新生代和老年代使用串行收集器
-#-XX:+UseConcMarkSweepGC：新生代使用并行收集器，老年代使用CMS+串行收集器
-#-XX:+UseCMSCompactAtFullCollection：设置CMS收集器在完成垃圾收集后是否要进行一次内存碎片的整理
-#-XX:UseCMSInitiatingOccupancyOnly：表示只在到达阀值的时候，才进行CMS回收
-#-Xms:设置堆的最小空间大小。
-#-Xmx:设置堆的最大空间大小。
-#-XX:NewSize设置新生代最小空间大小。
-#-XX:MaxNewSize设置新生代最大空间大小。
-#-XX:MetaspaceSize设置永久代最小空间大小。
-#-XX:MaxMetaspaceSize设置永久代最大空间大小。
-#-Xss:设置每个线程的堆栈大小
-#-XX:NewRatio设置年轻代和年老代的比值。如:为3，表示年轻代与年老代比值为1：3，年轻代占整个年轻代年老代和的1/4
-#-XX:SurvivorRatio年轻代中Eden区与两个Survivor区的比值。注意Survivor区有两个。
-#如：3，表示Eden：Survivor=3：2，一个Survivor区占整个年轻代的1/5
