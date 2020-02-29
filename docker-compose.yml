@@ -182,16 +182,15 @@ services:
     networks:
       - anan-bridge
 
-  nginx:
-    container_name: nginx
-    image: nginx:1.15
-    hostname: nginx
+  anan-vue:
+    container_name: anan-vue
+    image: registry.cn-hangzhou.aliyuncs.com/fosin/anan-vue:3.0.0
+    hostname: anan-vue
     environment:
       - TZ=Asia/Shanghai
     volumes:
-      - /root/deploy/nginx/default.conf:/etc/nginx/conf.d/default.conf
-#      - /root/deploy/nginx/monitor.conf:/etc/nginx/conf.d/monitor.conf
-      - /root/deploy/nginx/html:/usr/share/nginx/html
+      - /root/deploy/nginx/conf:/etc/nginx/conf.d/
+#      - /root/deploy/nginx/html:/usr/share/nginx/html
     ports:
       - 80:80
     networks:
@@ -413,7 +412,7 @@ services:
 
   anan-adminserver:
     image: registry.cn-hangzhou.aliyuncs.com/fosin/anan-adminserver:2.1.0-SNAPSHOT
-    entrypoint: "sh /bin/wait-for.sh anan-zuulgateway:9000 -t 3600 -- /bin/entrypoint.sh"
+#    entrypoint: "sh /bin/wait-for.sh anan-zuulgateway:9000 -t 3600 -- /bin/entrypoint.sh"
     container_name: anan-adminserver
     hostname: anan-adminserver
     restart: on-failure
@@ -490,22 +489,6 @@ services:
       - anan-bridge
     depends_on:
       - postgresql
-
-  8-jre-alpine:
-    image: registry.cn-hangzhou.aliyuncs.com/fosin/openjdk:8-jre-alpine
-    build:
-      context: deploy/openjdk
-      dockerfile: Dockerfile
-  8-jre:
-    image: registry.cn-hangzhou.aliyuncs.com/fosin/openjdk:8-jre
-    build:
-      context: deploy/openjdk
-      dockerfile: Dockerfile8
-  11-jre:
-    image: registry.cn-hangzhou.aliyuncs.com/fosin/openjdk:11-jre
-    build:
-      context: deploy/openjdk
-      dockerfile: Dockerfile11
 networks:
   anan-bridge:
     external: true
