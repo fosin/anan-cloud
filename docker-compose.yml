@@ -1,7 +1,7 @@
 version: "3"
 services:
   nacos-server1:
-    image: nacos/nacos-server:latest
+    image: nacos/nacos-server:1.1.4
     container_name: nacos-server1
     hostname: nacos-server1
     environment:
@@ -362,8 +362,8 @@ services:
       - JAVA_OPTS=-Xmx512M -Xms512M -Xmn256M -XX:MaxMetaspaceSize=128M -XX:MetaspaceSize=128M
     ports:
       - 9000:9000
-    volumes:
-      - /root/deploy/logs/anan:/logs
+#    volumes:
+      #- /root/deploy/logs/anan:/logs
     networks:
       - anan-bridge
     depends_on:
@@ -380,8 +380,8 @@ services:
       - JAVA_TOOL_OPTIONS=-Xmx512M -Xms512M -Xmn256M -XX:MaxMetaspaceSize=128M -XX:MetaspaceSize=128M -XX:+DisableExplicitGC -XX:+HeapDumpOnOutOfMemoryError -XX:ErrorFile=/logs/hs_err_pid%p.log -XX:HeapDumpPath=/logs -Xlog:gc* -Xlog:gc:/logs/gc%t.log
     ports:
       - 51400:51400
-    volumes:
-      - /root/deploy/logs/anan:/logs
+#    volumes:
+      #- /root/deploy/logs/anan:/logs
     networks:
       - anan-bridge
     depends_on:
@@ -398,8 +398,8 @@ services:
     restart: on-failure
     environment:
       - JAVA_TOOL_OPTIONS=-Xmx512M -Xms512M -Xmn256M -XX:MaxMetaspaceSize=128M -XX:MetaspaceSize=128M
-    volumes:
-      - /root/deploy/logs/anan:/logs
+#    volumes:
+      #- /root/deploy/logs/anan:/logs
     ports:
       - 51500:51500
     networks:
@@ -418,8 +418,8 @@ services:
     restart: on-failure
     environment:
       - JAVA_TOOL_OPTIONS=-Xmx512M -Xms512M -Xmn256M -XX:MaxMetaspaceSize=128M -XX:MetaspaceSize=128M
-    volumes:
-      - /root/deploy/logs/anan:/logs
+#    volumes:
+      #- /root/deploy/logs/anan:/logs
     ports:
       - 51700:51700
     networks:
@@ -438,8 +438,8 @@ services:
       - JAVA_TOOL_OPTIONS=-Xmx512M -Xms512M -Xmn256M -XX:MaxMetaspaceSize=128M -XX:MetaspaceSize=128M
     networks:
       - anan-bridge
-    volumes:
-      - /root/deploy/logs/anan:/logs
+#    volumes:
+      #- /root/deploy/logs/anan:/logs
     ports:
       - 51000:51000
 
@@ -454,8 +454,8 @@ services:
     environment:
       - JAVA_TOOL_OPTIONS=-Xmx512M -Xms512M -Xmn256M -XX:MaxMetaspaceSize=128M -XX:MetaspaceSize=128M
       - spring.cloud.config.server.native.search-locations=file:/anan-config
-    volumes:
-      - /root/deploy/logs/anan:/logs
+#    volumes:
+      #- /root/deploy/logs/anan:/logs
       - /root/deploy/anan-config:/anan-config
     networks:
       - anan-bridge
