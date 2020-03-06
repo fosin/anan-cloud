@@ -77,9 +77,17 @@ public class AnanWebMvcConfigurer implements WebMvcConfigurer {
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/").setViewName("/login");
-        registry.addViewController("/login");
-        registry.addViewController("/index");
+        registry.addViewController("/").setViewName("/auth/login");
+        registry.addViewController("/auth").setViewName("/auth/login");
+        registry.addViewController("/auth/login").setViewName("login");
+        registry.addViewController("/auth/index").setViewName("index");
+
+//        registry.addViewController("/auth/webjars/bootstrap/3.2.0/css/bootstrap.min.css").setViewName("webjars/bootstrap/3.2.0/css/bootstrap.min.css");
+//        registry.addViewController("/auth/webjars/font-awesome/4.5.0/css/font-awesome.min.css").setViewName("webjars/font-awesome/4.5.0/css/font-awesome.min.css");
+//        registry.addViewController("/auth/webjars/jquery/1.11.1/jquery.min.js").setViewName("webjars/jquery/1.11.1/jquery.min.js");
+//        registry.addViewController("/auth/webjars/jquery-blockui/2.70/jquery.blockUI.js").setViewName("webjars/jquery-blockui/2.70/jquery.blockUI.js");
+//        registry.addViewController("/auth/js/login.js").setViewName("js/login.js");
+//        registry.addViewController("/auth/css/login.css").setViewName("css/login.css");
     }
 
     @Override

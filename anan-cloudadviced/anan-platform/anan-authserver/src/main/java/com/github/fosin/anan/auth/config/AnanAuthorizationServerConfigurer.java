@@ -2,7 +2,10 @@ package com.github.fosin.anan.auth.config;
 
 import com.github.fosin.anan.auth.security.AnanTokenServices;
 import com.github.fosin.anan.auth.security.AnanUserDetailsServiceImpl;
+import com.github.fosin.anan.oauth2.config.AnanOauth2Properties;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -140,6 +143,14 @@ public class AnanAuthorizationServerConfigurer extends AuthorizationServerConfig
         JdbcClientDetailsService clientDetailsService = new JdbcClientDetailsService(dataSource);
         clientDetailsService.setPasswordEncoder(passwordEncoder);
         return clientDetailsService;
+    }
+
+    @Bean
+    @RefreshScope
+    @ConfigurationProperties("anan.oauth2")
+    @Primary
+    public AnanOauth2Properties ananOauth2Properties() {
+        return new AnanOauth2Properties();
     }
 
 //    @Bean

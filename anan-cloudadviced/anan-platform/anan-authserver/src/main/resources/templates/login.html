@@ -9,13 +9,13 @@
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <meta name="description" content=""/>
     <meta name="author" content=""/>
-    <title th:text="#{login.title.text}">ANAN认证中心</title>
-    <link href="webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
+    <title th:text="#{login.title.text}">AnAn认证中心</title>
+    <link href="webjars/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet"/>
     <link href="css/login.css" rel="stylesheet"/>
-    <link href="webjars/font-awesome/css/font-awesome.min.css" rel="stylesheet"/>
+    <link href="webjars/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet"/>
     <!--<script type="text/javascript" src="webjars/bootstrap/js/bootstrap.min.js"></script>-->
-    <script type="text/javascript" src="webjars/jquery/jquery.min.js"></script>
-    <script type="text/javascript" src="webjars/jquery-blockui/jquery.blockUI.js"></script>
+    <script type="text/javascript" src="webjars/jquery/1.11.1/jquery.min.js"></script>
+    <script type="text/javascript" src="webjars/jquery-blockui/2.70/jquery.blockUI.js"></script>
     <script type="text/javascript" src="js/login.js"></script>
 </head>
 
@@ -25,7 +25,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-offset-3 col-md-6">
-                <form class="form-horizontal" method="post" role="form" th:action="@{login}">
+                <form class="form-horizontal" method="post" role="form" th:action="@{loginAction}">
                     <h2 class="heading" th:text="#{login.title.text}"></h2>
                     <div th:if="${param.error}">
                         <div class="alert alert-danger" th:text="#{login.error.text}">

@@ -4,6 +4,7 @@ import com.github.fosin.anan.auth.security.AnanUserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.BeanIds;
@@ -25,9 +26,7 @@ import javax.sql.DataSource;
  */
 @Configuration
 @EnableWebSecurity
-//@Order(1) TODO 这里有bug，无论怎么配置都不能使用自定义登录界面，这个官方例子不符，这里获取是Spring Security Oauth2低版本的bug，等升级到高版本会许能解决这个问题
-//@Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
-//@Order(ManagementServerProperties.ACCESS_OVERRIDE_ORDER)
+@Order(1)
 public class AnanWebSecurityConfigurer extends WebSecurityConfigurerAdapter {
     private static final String INTERNAL_SECRET_KEY = "INTERNAL_SECRET_KEY";
     @Autowired
@@ -43,14 +42,12 @@ public class AnanWebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.requestMatchers()
-                .antMatchers("/login", "/oauth/authorize")
-                .and().authorizeRequests()
-//                .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
-                .antMatchers("/**/oauth/**").permitAll()
+        http
+                .antMatcher("/auth/**")
+                .authorizeRequests()
+                .antMatchers("/auth/login","/auth/logout","/auth/loginAction").permitAll()
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
-//                .antMatchers("/index").authenticated()
-                //除以上路径都需要验证
+//                //除以上路径都需要验证
                 .anyRequest().authenticated()
 //                .and()
 //                .exceptionHandling()
@@ -58,8 +55,8 @@ public class AnanWebSecurityConfigurer extends WebSecurityConfigurerAdapter {
                 .and().csrf().disable()
                 .logout()
                 .clearAuthentication(true)
-                .logoutUrl("/logout")
-                .logoutSuccessUrl("/login?logout")
+                .logoutUrl("/auth/logout")
+                .logoutSuccessUrl("/auth/login?logout")
                 .and()
                 //http参数中包含一个名为“remember-me”的参数，不管session是否过期，用户记录将会被记保存下来
                 .rememberMe()
@@ -71,11 +68,11 @@ public class AnanWebSecurityConfigurer extends WebSecurityConfigurerAdapter {
                 .usernameParameter("usercode")
                 //form表单用户名参数名
                 .passwordParameter("password")
-                .loginPage("/login")
-                .loginProcessingUrl("/login")
-                .defaultSuccessUrl("/index")
-                .failureUrl("/login?error")
-                .and().httpBasic()
+                .loginPage("/login.html")
+                .loginProcessingUrl("/auth/loginAction")
+                .defaultSuccessUrl("/auth/index")
+                .failureUrl("/auth/login?error")
+//                .and().httpBasic()
         ;
     }
 

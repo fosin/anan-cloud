@@ -55,11 +55,11 @@
             <artifactId>font-awesome</artifactId>
             <version>4.5.0</version>
         </dependency>
-        <dependency>
+ <!--       <dependency>
             <groupId>org.webjars</groupId>
             <artifactId>webjars-locator</artifactId>
-            <version>0.36</version>
-        </dependency>
+            <version>0.39</version>
+        </dependency>-->
         <dependency>
             <groupId>org.webjars</groupId>
             <artifactId>jquery-blockui</artifactId>

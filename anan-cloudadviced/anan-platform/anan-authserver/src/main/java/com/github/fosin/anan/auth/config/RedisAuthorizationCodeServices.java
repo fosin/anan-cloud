@@ -9,6 +9,7 @@ import org.springframework.security.oauth2.provider.code.RandomValueAuthorizatio
 import org.springframework.util.Assert;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 
 /**
  * Description
@@ -32,7 +33,7 @@ public class RedisAuthorizationCodeServices extends RandomValueAuthorizationCode
 
             try {
                 authentication = SerializationUtils
-                        .deserialize(conn.hGet(AUTH_CODE_KEY.getBytes(StandardCharsets.UTF_8), code.getBytes(StandardCharsets.UTF_8)));
+                        .deserialize(Objects.requireNonNull(conn.hGet(AUTH_CODE_KEY.getBytes(StandardCharsets.UTF_8), code.getBytes(StandardCharsets.UTF_8))));
             } catch (Exception e) {
                 return null;
             }

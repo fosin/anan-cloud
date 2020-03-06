@@ -29,7 +29,7 @@ import java.util.Map;
 @RestController
 @Slf4j
 @RequestMapping("/oauth")
-@Api(value = "/oauth", tags = "OAuth认证相关", description = "获取令牌、刷新令牌、注销令牌")
+@Api(value = "/oauth", tags = "OAuth认证相关,获取令牌、刷新令牌、注销令牌")
 public class OauthController {
     @Autowired
     TokenEndpoint tokenEndpoint;

@@ -19,7 +19,7 @@ import org.springframework.web.client.RestTemplate;
  */
 @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
 @EnableCaching
-@EnableRedisHttpSession(maxInactiveIntervalInSeconds = 3600)
+@EnableRedisHttpSession
 @EnableAnanSwagger2
 @EnableAnanOauth2
 public class AuthServerApplication {
