@@ -13,7 +13,7 @@ import org.springframework.cloud.client.SpringCloudApplication;
 //@EnableAnanSwagger2 TODO 因为Swagger暂不支持webflux项目，所以Gateway里不能配置SwaggerConfig，也就是说Gateway无法提供自身API。
 //@EnableAnanOauth2 TODO 由于Oauth2依赖Webmvc模块，这和webflux冲突
 //@EnableWebSecurity
-//@EnableRedisHttpSession(maxInactiveIntervalInSeconds = 3600)
+//@EnableRedisHttpSession
 public class CloudGatewayApplication {
     public static void main(String[] args) {
         new SpringApplicationBuilder(CloudGatewayApplication.class)

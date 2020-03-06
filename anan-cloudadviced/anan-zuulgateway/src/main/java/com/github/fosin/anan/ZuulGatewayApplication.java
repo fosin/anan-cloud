@@ -16,13 +16,13 @@ import org.springframework.session.data.redis.config.annotation.web.http.EnableR
  * @author fosin
  */
 @SpringCloudApplication
-@EnableZuulProxy
+@EnableZuulProxy //启用RateLimit
 @EnableHystrixDashboard
 @EnableAnanSwagger2
 @EnableAnanOauth2
 @EnableWebSecurity
 //@EnableTurbineStream
-@EnableRedisHttpSession(maxInactiveIntervalInSeconds = 3600)
+@EnableRedisHttpSession
 public class ZuulGatewayApplication {
     public static void main(String[] args) {
         new SpringApplicationBuilder(ZuulGatewayApplication.class)

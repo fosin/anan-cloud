@@ -1,5 +1,6 @@
 package com.github.fosin.anan.zuulgateway.config;
 
+import com.github.fosin.anan.oauth2.config.AnanOauth2Properties;
 import com.github.fosin.anan.swagger.config.AnanSwaggerResourcesProvider;
 import com.github.fosin.anan.swagger.spring4all.SwaggerProperties;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -36,6 +37,15 @@ public class AnanZuulAutoConfiger {
     public ZuulProperties zuulProperties() {
         return new ZuulProperties();
     }
+
+    @Bean
+    @RefreshScope
+    @ConfigurationProperties("anan.oauth2")
+    @Primary
+    public AnanOauth2Properties ananOauth2Properties() {
+        return new AnanOauth2Properties();
+    }
+
 
     @LoadBalanced
     @Bean

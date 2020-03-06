@@ -2,17 +2,21 @@ package com.github.fosin.anan;
 
 import com.github.fosin.anan.core.banner.AnanBanner;
 import com.github.fosin.anan.oauth2.annotation.EnableAnanOauth2;
+import com.github.fosin.anan.oauth2.config.AnanOauth2Properties;
 import com.github.fosin.anan.platformapi.config.EnableFeignOAuth2Client;
 import com.github.fosin.anan.swagger.annotation.EnableAnanSwagger2;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerInterceptor;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Primary;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
@@ -28,7 +32,7 @@ import org.springframework.web.client.RestTemplate;
  */
 @SpringBootApplication
 @EnableCaching
-@EnableRedisHttpSession(maxInactiveIntervalInSeconds = 3600)
+@EnableRedisHttpSession
 @EnableAnanSwagger2
 @EnableAnanOauth2
 @EnableWebSecurity
@@ -59,5 +63,13 @@ public class PlatformServerApplication {
     @Bean
     public RestTemplate restTemplate() {
         return new RestTemplate();
+    }
+
+    @Bean
+    @RefreshScope
+    @ConfigurationProperties("anan.oauth2")
+    @Primary
+    public AnanOauth2Properties ananOauth2Properties() {
+        return new AnanOauth2Properties();
     }
 }
