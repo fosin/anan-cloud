@@ -43,9 +43,9 @@ public class AnanWebSecurityConfigurer extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .antMatcher("/auth/**")
+                .antMatcher("/sso/**")
                 .authorizeRequests()
-                .antMatchers("/auth/login","/auth/logout","/auth/loginAction").permitAll()
+                .antMatchers("/sso/login","/sso/logout","/sso/loginAction").permitAll()
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
 //                //除以上路径都需要验证
                 .anyRequest().authenticated()
@@ -55,8 +55,8 @@ public class AnanWebSecurityConfigurer extends WebSecurityConfigurerAdapter {
                 .and().csrf().disable()
                 .logout()
                 .clearAuthentication(true)
-                .logoutUrl("/auth/logout")
-                .logoutSuccessUrl("/auth/login?logout")
+                .logoutUrl("/sso/logout")
+                .logoutSuccessUrl("/sso/login?logout")
                 .and()
                 //http参数中包含一个名为“remember-me”的参数，不管session是否过期，用户记录将会被记保存下来
                 .rememberMe()
@@ -68,10 +68,10 @@ public class AnanWebSecurityConfigurer extends WebSecurityConfigurerAdapter {
                 .usernameParameter("usercode")
                 //form表单用户名参数名
                 .passwordParameter("password")
-                .loginPage("/login.html")
-                .loginProcessingUrl("/auth/loginAction")
-                .defaultSuccessUrl("/auth/index")
-                .failureUrl("/auth/login?error")
+                .loginPage("/sso/login")
+                .loginProcessingUrl("/sso/loginAction")
+                .defaultSuccessUrl("/sso/index")
+                .failureUrl("/sso/login?error")
 //                .and().httpBasic()
         ;
     }
@@ -84,9 +84,20 @@ public class AnanWebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/**/*.html",
-                "/**/*.css", "/**/*.js", "/**/webjars/**",
-                "/**/images/**", "/**/*.jpg", "/**/swagger-resources/**",
+        web.ignoring().antMatchers(
+                "/**/*.html",
+                "/**/*.css",
+                "/**/*.js",
+                "/**/*.woff",
+                "/**/*.woff2",
+                "/**/*.ttf",
+                "/**/*.map",
+                "/**/*.ico",
+                "/**/*.swf",
+                "/**/webjars/**",
+                "/**/images/**",
+                "/**/*.jpg",
+                "/**/swagger-resources/**",
                 "/**/v2/api-docs");
     }
 

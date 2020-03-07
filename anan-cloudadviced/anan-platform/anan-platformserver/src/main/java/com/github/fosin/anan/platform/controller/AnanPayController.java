@@ -7,6 +7,7 @@ import com.github.fosin.anan.platform.dto.request.AnanPayRetrieveDto;
 import com.github.fosin.anan.platform.dto.request.AnanPayUpdateDto;
 import com.github.fosin.anan.platform.entity.AnanPayEntity;
 import com.github.fosin.anan.platform.service.inter.AnanPayService;
+import com.github.fosin.anan.platformapi.constant.UrlPrefixConstant;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,8 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
  * @date 2018-11-18 17:50:28
  */
 @RestController
-@RequestMapping("v1/pay")
-@Api(value = "v1/pay", tags = "系统支付表接入层API", description = "系统支付表(anan_pay)接入层API")
+@RequestMapping(UrlPrefixConstant.PAY)
+@Api(value = UrlPrefixConstant.PAY, tags = "系统支付表接入层API", description = "系统支付表(anan_pay)接入层API")
 public class AnanPayController implements ISimpleController<AnanPayEntity, Long, AnanPayCreateDto, AnanPayRetrieveDto, AnanPayUpdateDto> {
     /**
      * 服务对象

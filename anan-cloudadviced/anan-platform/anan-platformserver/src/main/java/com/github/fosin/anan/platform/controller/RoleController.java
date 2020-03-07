@@ -5,6 +5,7 @@ import com.github.fosin.anan.mvc.controller.ISimpleController;
 import com.github.fosin.anan.mvc.module.PageModule;
 import com.github.fosin.anan.mvc.result.Result;
 import com.github.fosin.anan.mvc.service.ISimpleService;
+import com.github.fosin.anan.platformapi.constant.UrlPrefixConstant;
 import com.github.fosin.anan.platformapi.dto.request.*;
 import com.github.fosin.anan.platformapi.entity.*;
 import com.github.fosin.anan.platform.service.inter.RolePermissionService;
@@ -28,8 +29,8 @@ import java.util.List;
  * @author fosin
  */
 @RestController
-@RequestMapping("v1/role")
-@Api(value = "v1/role", tags = "角色管理", description = "角色管理相关操作")
+@RequestMapping(UrlPrefixConstant.ROLE)
+@Api(value = UrlPrefixConstant.ROLE, tags = "角色管理相关操作")
 public class RoleController implements ISimpleController<AnanRoleEntity, Long, AnanRoleCreateDto, AnanRoleRetrieveDto, AnanRoleUpdateDto> {
     @Autowired
     private RoleService roleService;
@@ -54,7 +55,7 @@ public class RoleController implements ISimpleController<AnanRoleEntity, Long, A
     })
     @PutMapping(value = "/permissions/{roleId}")
     public ResponseEntity<Collection<AnanRolePermissionEntity>> permissions(@RequestBody List<AnanRolePermissionUpdateDto> entities,
-                                                                              @PathVariable("roleId") Long roleId) {
+                                                                            @PathVariable("roleId") Long roleId) {
         return ResponseEntity.ok(rolePermissionService.updateInBatch(roleId, entities));
     }
 
@@ -73,7 +74,7 @@ public class RoleController implements ISimpleController<AnanRoleEntity, Long, A
     })
     @PutMapping(value = "/users/{roleId}")
     public ResponseEntity<List<AnanUserRoleEntity>> putUsers(@RequestBody List<AnanUserRoleCreateDto> entities,
-                                                               @PathVariable("roleId") Long roleId) {
+                                                             @PathVariable("roleId") Long roleId) {
         return ResponseEntity.ok(userRoleService.updateInBatchByRoleId(roleId, entities));
     }
 

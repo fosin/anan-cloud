@@ -5,15 +5,16 @@ import com.github.fosin.anan.core.exception.AnanServiceException;
 import com.github.fosin.anan.mvc.controller.AbstractBaseController;
 import com.github.fosin.anan.mvc.controller.ISimpleController;
 import com.github.fosin.anan.mvc.service.ISimpleService;
+import com.github.fosin.anan.platform.service.inter.RoleService;
+import com.github.fosin.anan.platform.service.inter.UserPermissionService;
+import com.github.fosin.anan.platform.service.inter.UserRoleService;
+import com.github.fosin.anan.platform.service.inter.UserService;
+import com.github.fosin.anan.platformapi.constant.UrlPrefixConstant;
 import com.github.fosin.anan.platformapi.dto.request.*;
 import com.github.fosin.anan.platformapi.entity.AnanRoleEntity;
 import com.github.fosin.anan.platformapi.entity.AnanUserEntity;
 import com.github.fosin.anan.platformapi.entity.AnanUserPermissionEntity;
 import com.github.fosin.anan.platformapi.entity.AnanUserRoleEntity;
-import com.github.fosin.anan.platform.service.inter.RoleService;
-import com.github.fosin.anan.platform.service.inter.UserPermissionService;
-import com.github.fosin.anan.platform.service.inter.UserRoleService;
-import com.github.fosin.anan.platform.service.inter.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -31,8 +32,8 @@ import java.util.List;
  * @author fosin
  */
 @RestController
-@RequestMapping("v1/user")
-@Api(value = "v1/user", tags = "用户管理", description = "用户管理相关操作")
+@RequestMapping(UrlPrefixConstant.USER)
+@Api(value = UrlPrefixConstant.USER, tags = "用户管理")
 public class UserController extends AbstractBaseController implements ISimpleController<AnanUserEntity, Long, AnanUserCreateDto, AnanUserRetrieveDto, AnanUserUpdateDto> {
 
     @Autowired
