@@ -1,10 +1,9 @@
 package com.github.fosin.anan.platform.service.inter;
 
-import com.github.fosin.anan.platformapi.dto.request.AnanDictionaryDetailCreateDto;
-import com.github.fosin.anan.platformapi.dto.request.AnanDictionaryDetailRetrieveDto;
-import com.github.fosin.anan.platformapi.dto.request.AnanDictionaryDetailUpdateDto;
+import com.github.fosin.anan.pojo.dto.request.AnanDictionaryDetailCreateDto;
+import com.github.fosin.anan.pojo.dto.request.AnanDictionaryDetailRetrieveDto;
+import com.github.fosin.anan.pojo.dto.request.AnanDictionaryDetailUpdateDto;
 import com.github.fosin.anan.platformapi.entity.AnanDictionaryDetailEntity;
-import com.github.fosin.anan.core.exception.AnanServiceException;
 import com.github.fosin.anan.jpa.service.ISimpleJpaService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

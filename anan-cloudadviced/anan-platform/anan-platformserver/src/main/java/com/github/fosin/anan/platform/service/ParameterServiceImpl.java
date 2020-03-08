@@ -11,13 +11,13 @@ import com.github.fosin.anan.platform.repository.OrganizationRepository;
 import com.github.fosin.anan.platform.repository.ParameterRepository;
 import com.github.fosin.anan.platform.service.inter.ParameterService;
 import com.github.fosin.anan.platformapi.constant.TableNameConstant;
-import com.github.fosin.anan.platformapi.dto.request.AnanParameterCreateDto;
-import com.github.fosin.anan.platformapi.dto.request.AnanParameterUpdateDto;
 import com.github.fosin.anan.platformapi.entity.AnanOrganizationEntity;
 import com.github.fosin.anan.platformapi.entity.AnanParameterEntity;
-import com.github.fosin.anan.platformapi.entity.AnanUserEntity;
 import com.github.fosin.anan.platformapi.parameter.OrganStrategy;
 import com.github.fosin.anan.platformapi.util.LoginUserUtil;
+import com.github.fosin.anan.pojo.dto.AnanUserDto;
+import com.github.fosin.anan.pojo.dto.request.AnanParameterCreateDto;
+import com.github.fosin.anan.pojo.dto.request.AnanParameterUpdateDto;
 import com.github.fosin.anan.util.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -217,7 +217,7 @@ public class ParameterServiceImpl implements ParameterService {
         AnanParameterEntity entity = parameterRepository.findById(id).orElse(null);
         Assert.notNull(entity, "该参数已经不存在!");
         String cacheKey = getCacheKey(entity);
-        AnanUserEntity loginUser;
+        AnanUserDto loginUser;
         boolean success;
         switch (entity.getStatus()) {
             case 1:

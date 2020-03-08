@@ -6,7 +6,7 @@ import com.github.fosin.anan.jpa.repository.IJpaRepository;
 import com.github.fosin.anan.jpa.service.batch.IUpdateInBatchJpaService;
 import com.github.fosin.anan.platform.service.inter.UserPermissionService;
 import com.github.fosin.anan.platformapi.constant.TableNameConstant;
-import com.github.fosin.anan.platformapi.dto.request.AnanUserPermissionUpdateDto;
+import com.github.fosin.anan.pojo.dto.request.AnanUserPermissionUpdateDto;
 import com.github.fosin.anan.platformapi.entity.AnanUserPermissionEntity;
 import com.github.fosin.anan.platformapi.repository.UserPermissionRepository;
 import com.github.fosin.anan.util.BeanUtil;

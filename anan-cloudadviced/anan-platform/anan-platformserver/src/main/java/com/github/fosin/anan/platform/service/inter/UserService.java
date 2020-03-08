@@ -1,9 +1,9 @@
 package com.github.fosin.anan.platform.service.inter;
 
 import com.github.fosin.anan.jpa.service.ISimpleJpaService;
-import com.github.fosin.anan.platformapi.dto.request.AnanUserCreateDto;
-import com.github.fosin.anan.platformapi.dto.request.AnanUserRetrieveDto;
-import com.github.fosin.anan.platformapi.dto.request.AnanUserUpdateDto;
+import com.github.fosin.anan.pojo.dto.request.AnanUserCreateDto;
+import com.github.fosin.anan.pojo.dto.request.AnanUserRetrieveDto;
+import com.github.fosin.anan.pojo.dto.request.AnanUserUpdateDto;
 import com.github.fosin.anan.platformapi.entity.AnanUserEntity;
 
 import java.util.List;

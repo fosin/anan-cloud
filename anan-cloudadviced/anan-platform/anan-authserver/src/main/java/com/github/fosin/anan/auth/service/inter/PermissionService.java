@@ -3,6 +3,7 @@ package com.github.fosin.anan.auth.service.inter;
 
 import com.github.fosin.anan.jpa.service.IRetrieveOneJpaService;
 import com.github.fosin.anan.platformapi.entity.AnanPermissionEntity;
+import com.github.fosin.anan.pojo.dto.AnanUserAllPermissionDto;
 
 import java.util.List;
 
@@ -14,4 +15,6 @@ import java.util.List;
  */
 public interface PermissionService extends IRetrieveOneJpaService<AnanPermissionEntity, Long> {
     List<AnanPermissionEntity> findByAppName(String appName);
+
+    AnanUserAllPermissionDto copyPermissionData(AnanPermissionEntity entity);
 }

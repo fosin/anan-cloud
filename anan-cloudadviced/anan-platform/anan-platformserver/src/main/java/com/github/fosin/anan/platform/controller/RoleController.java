@@ -6,7 +6,7 @@ import com.github.fosin.anan.mvc.module.PageModule;
 import com.github.fosin.anan.mvc.result.Result;
 import com.github.fosin.anan.mvc.service.ISimpleService;
 import com.github.fosin.anan.platformapi.constant.UrlPrefixConstant;
-import com.github.fosin.anan.platformapi.dto.request.*;
+import com.github.fosin.anan.pojo.dto.request.*;
 import com.github.fosin.anan.platformapi.entity.*;
 import com.github.fosin.anan.platform.service.inter.RolePermissionService;
 import com.github.fosin.anan.platform.service.inter.RoleService;

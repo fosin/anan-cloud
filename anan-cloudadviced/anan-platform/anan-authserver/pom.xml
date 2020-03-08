@@ -12,13 +12,6 @@
     <packaging>jar</packaging>
     <description>AnAn Auth Server</description>
     <dependencies>
-        <!--spring boot 项目引入了 spring的devtools 经常会产生java.lang.ClassCastException 两个一样的类不能强转-->
-        <!--<dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-devtools</artifactId>
-            <optional>true</optional>&lt;!&ndash; 这个需要为 true 热部署才有效 &ndash;&gt;
-        </dependency>-->
-        <!--以下是前端ui的jar-->
         <dependency>
             <groupId>com.github.fosin.anan</groupId>
             <artifactId>anan-platformapi</artifactId>
@@ -45,6 +38,13 @@
             <groupId>org.thymeleaf.extras</groupId>
             <artifactId>thymeleaf-extras-springsecurity5</artifactId>
         </dependency>
+        <!--spring boot 项目引入了 spring的devtools 经常会产生java.lang.ClassCastException 两个一样的类不能强转-->
+        <!--<dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <optional>true</optional>&lt;!&ndash; 这个需要为 true 热部署才有效 &ndash;&gt;
+        </dependency>-->
+        <!--以下是前端ui的jar-->
         <!-- <dependency>
            <groupId>org.webjars</groupId>
            <artifactId>bootstrap</artifactId>

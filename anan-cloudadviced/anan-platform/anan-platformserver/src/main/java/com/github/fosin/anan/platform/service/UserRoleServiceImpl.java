@@ -8,11 +8,12 @@ import com.github.fosin.anan.platform.repository.UserRoleRepository;
 import com.github.fosin.anan.platform.service.inter.UserRoleService;
 import com.github.fosin.anan.platform.service.inter.UserService;
 import com.github.fosin.anan.platformapi.constant.TableNameConstant;
-import com.github.fosin.anan.platformapi.dto.request.AnanUserRoleCreateDto;
 import com.github.fosin.anan.platformapi.entity.AnanRoleEntity;
 import com.github.fosin.anan.platformapi.entity.AnanUserEntity;
 import com.github.fosin.anan.platformapi.entity.AnanUserRoleEntity;
 import com.github.fosin.anan.platformapi.util.LoginUserUtil;
+import com.github.fosin.anan.pojo.dto.AnanUserDto;
+import com.github.fosin.anan.pojo.dto.request.AnanUserRoleCreateDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -86,7 +87,7 @@ public class UserRoleServiceImpl implements UserRoleService {
 
     private List<AnanUserRoleEntity> getAnanUserRoleEntities(Collection<AnanUserRoleCreateDto> entities) {
         List<AnanUserRoleEntity> saveEntities = new ArrayList<>();
-        AnanUserEntity loginUser = LoginUserUtil.getUser();
+        AnanUserDto loginUser = LoginUserUtil.getUser();
         for (AnanUserRoleCreateDto entity : entities) {
             AnanUserRoleEntity ananUserRoleEntity = new AnanUserRoleEntity();
             ananUserRoleEntity.setUserId(entity.getUserId());

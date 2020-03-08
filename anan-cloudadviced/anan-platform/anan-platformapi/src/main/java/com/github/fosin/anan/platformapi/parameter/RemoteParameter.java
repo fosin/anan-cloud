@@ -1,7 +1,7 @@
 package com.github.fosin.anan.platformapi.parameter;
 
-import com.github.fosin.anan.platformapi.dto.request.AnanParameterCreateDto;
-import com.github.fosin.anan.platformapi.dto.request.AnanParameterRetrieveDto;
+import com.github.fosin.anan.pojo.dto.request.AnanParameterCreateDto;
+import com.github.fosin.anan.pojo.dto.request.AnanParameterRetrieveDto;
 import com.github.fosin.anan.platformapi.entity.AnanParameterEntity;
 import com.github.fosin.anan.platformapi.service.inter.ParameterFeignService;
 import org.springframework.beans.factory.annotation.Autowired;

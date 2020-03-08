@@ -7,32 +7,34 @@ import com.github.fosin.anan.jpa.repository.IJpaRepository;
 import com.github.fosin.anan.mvc.module.PageModule;
 import com.github.fosin.anan.mvc.result.Result;
 import com.github.fosin.anan.mvc.result.ResultUtils;
+import com.github.fosin.anan.platform.repository.DictionaryDetailRepository;
 import com.github.fosin.anan.platform.service.inter.DictionaryDetailService;
 import com.github.fosin.anan.platform.service.inter.UserService;
 import com.github.fosin.anan.platformapi.constant.SystemConstant;
 import com.github.fosin.anan.platformapi.constant.TableNameConstant;
-import com.github.fosin.anan.platformapi.dto.request.AnanDictionaryDetailCreateDto;
-import com.github.fosin.anan.platformapi.dto.request.AnanDictionaryDetailUpdateDto;
 import com.github.fosin.anan.platformapi.entity.AnanDictionaryDetailEntity;
 import com.github.fosin.anan.platformapi.entity.AnanUserEntity;
-import com.github.fosin.anan.platform.repository.DictionaryDetailRepository;
 import com.github.fosin.anan.platformapi.util.LoginUserUtil;
+import com.github.fosin.anan.pojo.dto.AnanUserDto;
+import com.github.fosin.anan.pojo.dto.request.AnanDictionaryDetailCreateDto;
+import com.github.fosin.anan.pojo.dto.request.AnanDictionaryDetailUpdateDto;
 import com.github.fosin.anan.util.NumberUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.util.Assert;
 
-import javax.persistence.criteria.*;
+import javax.persistence.criteria.Path;
+import javax.persistence.criteria.Predicate;
 import java.util.List;
 import java.util.Objects;
 
@@ -75,7 +77,7 @@ public class DictionaryDetailServiceImpl implements DictionaryDetailService {
     }
 
     private void isSuperUser(AnanDictionaryDetailEntity findEntity) {
-        AnanUserEntity loginUser = LoginUserUtil.getUser();
+        AnanUserDto loginUser = LoginUserUtil.getUser();
         //不是超级管理员
         if (!SystemConstant.ANAN_USER_CODE.equals(loginUser.getUsercode())) {
             AnanUserEntity superUser = userService.findByUsercode(SystemConstant.ANAN_USER_CODE);

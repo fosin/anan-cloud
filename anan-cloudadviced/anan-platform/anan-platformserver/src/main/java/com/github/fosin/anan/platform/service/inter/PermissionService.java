@@ -2,9 +2,9 @@ package com.github.fosin.anan.platform.service.inter;
 
 
 import com.github.fosin.anan.jpa.service.ISimpleJpaService;
-import com.github.fosin.anan.platformapi.dto.request.AnanPermissionCreateDto;
-import com.github.fosin.anan.platformapi.dto.request.AnanPermissionRetrieveDto;
-import com.github.fosin.anan.platformapi.dto.request.AnanPermissionUpdateDto;
+import com.github.fosin.anan.pojo.dto.request.AnanPermissionCreateDto;
+import com.github.fosin.anan.pojo.dto.request.AnanPermissionRetrieveDto;
+import com.github.fosin.anan.pojo.dto.request.AnanPermissionUpdateDto;
 import com.github.fosin.anan.platformapi.entity.AnanPermissionEntity;
 
 import java.util.List;

@@ -5,7 +5,7 @@ import com.github.fosin.anan.platform.dto.request.AnanOrganizationAuthCreateDto;
 import com.github.fosin.anan.platform.dto.request.AnanOrganizationAuthRetrieveDto;
 import com.github.fosin.anan.platform.dto.request.AnanOrganizationAuthUpdateDto;
 import com.github.fosin.anan.platform.entity.AnanOrganizationAuthEntity;
-import com.github.fosin.anan.platformapi.dto.RegisterDto;
+import com.github.fosin.anan.pojo.dto.RegisterDto;
 
 import java.util.List;
 

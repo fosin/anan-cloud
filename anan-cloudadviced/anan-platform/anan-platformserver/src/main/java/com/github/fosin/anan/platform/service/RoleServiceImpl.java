@@ -2,31 +2,37 @@ package com.github.fosin.anan.platform.service;
 
 
 import com.github.fosin.anan.jpa.repository.IJpaRepository;
+import com.github.fosin.anan.mvc.module.PageModule;
+import com.github.fosin.anan.mvc.result.Result;
+import com.github.fosin.anan.mvc.result.ResultUtils;
 import com.github.fosin.anan.platform.repository.OrganizationRepository;
 import com.github.fosin.anan.platform.repository.RoleRepository;
 import com.github.fosin.anan.platform.repository.UserRoleRepository;
 import com.github.fosin.anan.platform.service.inter.RoleService;
-import com.github.fosin.anan.platformapi.dto.request.AnanRoleCreateDto;
-import com.github.fosin.anan.platformapi.dto.request.AnanRoleUpdateDto;
-import com.github.fosin.anan.platformapi.entity.*;
-import com.github.fosin.anan.mvc.module.PageModule;
-import com.github.fosin.anan.mvc.result.Result;
-import com.github.fosin.anan.mvc.result.ResultUtils;
 import com.github.fosin.anan.platformapi.constant.SystemConstant;
+import com.github.fosin.anan.platformapi.entity.AnanOrganizationEntity;
+import com.github.fosin.anan.platformapi.entity.AnanRoleEntity;
+import com.github.fosin.anan.platformapi.entity.AnanUserRoleEntity;
 import com.github.fosin.anan.platformapi.util.LoginUserUtil;
+import com.github.fosin.anan.pojo.dto.AnanUserDto;
+import com.github.fosin.anan.pojo.dto.request.AnanRoleCreateDto;
+import com.github.fosin.anan.pojo.dto.request.AnanRoleUpdateDto;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.util.Assert;
 
-import javax.persistence.criteria.*;
-import java.util.*;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.Path;
+import javax.persistence.criteria.Predicate;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * 2017/12/29.
@@ -115,7 +121,7 @@ public class RoleServiceImpl implements RoleService {
         PageRequest pageable = PageRequest.of(pageModule.getPageNumber() - 1, pageModule.getPageSize(), Sort.Direction.fromString(pageModule.getSortOrder()), pageModule.getSortName());
         String searchCondition = pageModule.getSearchText();
 
-        AnanUserEntity loginUser = LoginUserUtil.getUser();
+        AnanUserDto loginUser = LoginUserUtil.getUser();
         Specification<AnanRoleEntity> condition = (Specification<AnanRoleEntity>) (root, query, cb) -> {
             Path<String> roleName = root.get("name");
             Path<String> roleValue = root.get("value");
@@ -155,7 +161,7 @@ public class RoleServiceImpl implements RoleService {
         Assert.notNull(pageModule, "传入的分页信息不能为空!");
         Assert.notNull(organizId, "机构ID不能为空!");
         String searchCondition = pageModule.getSearchText();
-        AnanUserEntity loginUser = LoginUserUtil.getUser();
+        AnanUserDto loginUser = LoginUserUtil.getUser();
         PageRequest pageable = PageRequest.of(pageModule.getPageNumber() - 1, pageModule.getPageSize(), Sort.Direction.fromString(pageModule.getSortOrder()), pageModule.getSortName());
 
         Page<AnanRoleEntity> page;
@@ -202,7 +208,7 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public List<AnanRoleEntity> findAllByOrganizId(Long organizId) {
         Assert.notNull(organizId, "机构ID不能为空!");
-        AnanUserEntity loginUser = LoginUserUtil.getUser();
+        AnanUserDto loginUser = LoginUserUtil.getUser();
         if (loginUser.getUsercode().equals(SystemConstant.ANAN_USER_CODE)) {
             return roleRepository.findAll();
         } else {

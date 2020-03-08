@@ -1,12 +1,10 @@
 package com.github.fosin.anan.platformapi.util;
 
-import com.github.fosin.anan.platformapi.dto.AnanUserDetail;
-import com.github.fosin.anan.platformapi.dto.Client;
-import com.github.fosin.anan.platformapi.entity.AnanPermissionEntity;
-import com.github.fosin.anan.platformapi.entity.AnanUserEntity;
+import com.github.fosin.anan.pojo.dto.AnanUserAllPermissionDto;
+import com.github.fosin.anan.pojo.dto.AnanUserDetail;
+import com.github.fosin.anan.pojo.dto.AnanUserDto;
+import com.github.fosin.anan.pojo.dto.Client;
 import com.github.fosin.anan.util.BeanUtil;
-import com.github.fosin.anan.util.ClassUtil;
-import com.github.fosin.anan.util.DateTimeUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.Authentication;
@@ -17,12 +15,11 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.Serializable;
-import java.lang.reflect.*;
 import java.security.Principal;
-import java.util.*;
-
-import static com.github.fosin.anan.util.ClientUtil.PATTERN;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Description:
@@ -128,10 +125,10 @@ public class LoginUserUtil {
 
     private static void removeOldUserDetail(AnanUserDetail userDetail) {
         Assert.notNull(userDetail, "用户信息不能为空!");
-        AnanUserEntity user = userDetail.getUser();
+        AnanUserDto user = userDetail.getUser();
         Set<String> needDelKeys = new HashSet<>();
         for (String key : userDetailMap.keySet()) {
-            AnanUserEntity userEntity = userDetailMap.get(key).getUser();
+            AnanUserDto userEntity = userDetailMap.get(key).getUser();
             if (user.getId().equals(userEntity.getId())) {
                 needDelKeys.add(key);
             }
@@ -151,7 +148,7 @@ public class LoginUserUtil {
      * @return AnanUserDetail
      */
 
-    public static AnanUserEntity getUser() {
+    public static AnanUserDto getUser() {
         return getUserDetail().getUser();
     }
 
@@ -160,7 +157,7 @@ public class LoginUserUtil {
      *
      * @return AnanPermissionEntity
      */
-    public static AnanPermissionEntity getPermissionTree() {
+    public static AnanUserAllPermissionDto getPermissionTree() {
         return getUserDetail().getPermissionTree();
     }
 
