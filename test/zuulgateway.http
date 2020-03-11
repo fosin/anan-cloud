@@ -1,0 +1,43 @@
+### 获取token
+POST {{host}}:{{port}}/gateway/auth/oauth/token?username={{username}}&password={{password}}&grant_type=password
+Accept: */*
+Cache-Control: no-cache
+Authorization: Basic {{secerityId}} {{secerityPass}}
+
+> {% client.global.set("access_token", response.body.access_token); %}
+
+### 获取当前用户的登录信息、权限信息、角色信息
+POST {{host}}:{{port}}/gateway/auth/oauth/principal
+Authorization: Bearer {{access_token}}
+
+### 获取字典明细，字典id=7
+POST {{host}}:{{port}}/gateway/platform/v1/dictionaryDetail/byCode/7
+Authorization: Bearer {{access_token}}
+
+### 获取系统参数
+POST {{host}}:{{port}}/gateway/platform/v1/parameter/value
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+  "defaultValue": "5,10,25,50,100",
+  "description": "表格默认每页记录数可选择项",
+  "name": "DefaultPageSizes",
+  "type": 1
+}
+
+### 重置密码，用户id=3
+POST {{host}}:{{port}}/gateway/platform/v1/user/resetPassword/3
+Authorization: Bearer {{access_token}}
+
+### 获取用户admin信息
+POST {{host}}:{{port}}/gateway/platform/v1/user/usercode/admin
+Authorization: Bearer {{access_token}}
+
+###
+
+
+
+
+
+

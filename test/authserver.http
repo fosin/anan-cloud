@@ -1,0 +1,22 @@
+### 获取token
+POST {{host}}:51400/oauth/token?username={{username}}&password={{password}}&grant_type=password
+Accept: */*
+Cache-Control: no-cache
+Authorization: Basic {{secerityId}} {{secerityPass}}
+
+> {% client.global.set("access_token", response.body.access_token); %}
+
+### 获取当前用户的登录信息、权限信息、角色信息
+POST {{host}}:51400/oauth/principal
+Authorization: Bearer {{access_token}}
+
+### 移除Token
+POST {{host}}:51400/oauth/removeToken
+Authorization: Bearer {{access_token}}
+
+
+
+
+
+
+

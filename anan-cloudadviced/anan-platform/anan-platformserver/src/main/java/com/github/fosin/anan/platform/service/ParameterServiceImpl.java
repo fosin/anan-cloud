@@ -196,7 +196,7 @@ public class ParameterServiceImpl implements ParameterService {
         AnanParameterEntity entity;
         try {
             entity = getNearestParameter(type, scope, name);
-        } catch (Exception e) {// 报异常说明没有找到任何相关参数，则需要创建一个无域参数，这样默认所有机构共享这一个参数，如果需要设置机构个性化参数则需要在前端手动创建
+        } catch (IllegalArgumentException e) {
             log.debug("报异常说明没有找到任何相关参数，则需要创建一个无域参数，这样默认所有机构共享这一个参数，如果需要设置机构个性化参数则需要在前端手动创建");
             AnanParameterCreateDto createDto = new AnanParameterCreateDto();
             createDto.setValue(defaultValue);
