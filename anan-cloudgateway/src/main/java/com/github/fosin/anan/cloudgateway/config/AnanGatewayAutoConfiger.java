@@ -44,6 +44,11 @@ public class AnanGatewayAutoConfiger {
     }
 
 //    @Bean
+//    RedisRateLimiter redisRateLimiter() {
+//        return new RedisRateLimiter(1, 2);
+//    }
+
+//    @Bean
 //    @Primary
 //    @ConditionalOnMissingBean
 //    public AnanSwaggerResourcesProvider ananSwaggerResourcesProvider(RouteLocator routeLocator, SwaggerProperties swaggerProperties) {
