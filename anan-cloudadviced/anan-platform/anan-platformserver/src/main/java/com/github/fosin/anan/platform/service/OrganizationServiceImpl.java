@@ -37,8 +37,11 @@ import java.util.Objects;
 @Service
 @Lazy
 public class OrganizationServiceImpl implements OrganizationService {
-    @Autowired
-    private OrganizationRepository organizationRepository;
+    private final OrganizationRepository organizationRepository;
+
+    public OrganizationServiceImpl(OrganizationRepository organizationRepository) {
+        this.organizationRepository = organizationRepository;
+    }
 
     @Override
     @CachePut(value = TableNameConstant.ANAN_ORGANIZATION, key = "#result.id")

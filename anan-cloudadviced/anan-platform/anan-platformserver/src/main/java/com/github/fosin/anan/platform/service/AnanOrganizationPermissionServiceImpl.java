@@ -24,8 +24,11 @@ import java.util.List;
 @Service
 @Lazy
 public class AnanOrganizationPermissionServiceImpl implements AnanOrganizationPermissionService {
-    @Autowired
-    private AnanOrganizationPermissionRepository ananSysOrganizationPermissionRepository;
+    private final AnanOrganizationPermissionRepository ananSysOrganizationPermissionRepository;
+
+    public AnanOrganizationPermissionServiceImpl(AnanOrganizationPermissionRepository ananSysOrganizationPermissionRepository) {
+        this.ananSysOrganizationPermissionRepository = ananSysOrganizationPermissionRepository;
+    }
 
     /**
      * 获取DAO

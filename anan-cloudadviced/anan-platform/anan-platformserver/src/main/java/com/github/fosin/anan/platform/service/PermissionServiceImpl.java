@@ -39,14 +39,17 @@ import java.util.Objects;
 @Service
 @Lazy
 public class PermissionServiceImpl implements PermissionService {
-    @Autowired
-    private PermissionRepository permissionRepository;
+    private final PermissionRepository permissionRepository;
 
-    @Autowired
-    private UserPermissionService userPermissionService;
+    private final UserPermissionService userPermissionService;
 
-    @Autowired
-    private RolePermissionService rolePermissionService;
+    private final RolePermissionService rolePermissionService;
+
+    public PermissionServiceImpl(PermissionRepository permissionRepository, UserPermissionService userPermissionService, RolePermissionService rolePermissionService) {
+        this.permissionRepository = permissionRepository;
+        this.userPermissionService = userPermissionService;
+        this.rolePermissionService = rolePermissionService;
+    }
 
     @Override
     @CachePut(value = TableNameConstant.ANAN_PERMISSION, key = "#result.id")

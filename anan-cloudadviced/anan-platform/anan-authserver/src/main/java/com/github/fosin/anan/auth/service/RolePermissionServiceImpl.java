@@ -18,8 +18,11 @@ import java.util.List;
  */
 @Service
 public class RolePermissionServiceImpl implements RolePermissionService {
-    @Autowired
-    private RolePermissionRepository rolePermissionRepository;
+    private final RolePermissionRepository rolePermissionRepository;
+
+    public RolePermissionServiceImpl(RolePermissionRepository rolePermissionRepository) {
+        this.rolePermissionRepository = rolePermissionRepository;
+    }
 
     @Override
     @Cacheable(value = TableNameConstant.ANAN_ROLE_PERMISSION, key = "#roleId")

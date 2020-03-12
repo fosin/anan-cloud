@@ -15,8 +15,11 @@ import org.springframework.stereotype.Service;
 @Service
 @Lazy
 public class AnanVersionServiceImpl implements AnanVersionService {
-    @Autowired
-    private AnanVersionRepository ananSysVersionRepository;
+    private final AnanVersionRepository ananSysVersionRepository;
+
+    public AnanVersionServiceImpl(AnanVersionRepository ananSysVersionRepository) {
+        this.ananSysVersionRepository = ananSysVersionRepository;
+    }
 
     /**
      * 获取DAO

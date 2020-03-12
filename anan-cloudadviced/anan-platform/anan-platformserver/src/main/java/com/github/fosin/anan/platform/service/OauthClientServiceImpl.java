@@ -33,10 +33,13 @@ import java.util.Optional;
 @Lazy
 public class OauthClientServiceImpl implements OauthClientService {
 
-    @Autowired
-    private OauthClientRepository oauthClientRepository;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final OauthClientRepository oauthClientRepository;
+    private final PasswordEncoder passwordEncoder;
+
+    public OauthClientServiceImpl(OauthClientRepository oauthClientRepository, PasswordEncoder passwordEncoder) {
+        this.oauthClientRepository = oauthClientRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Override
     public OauthClientDetailsEntity create(OauthClientDetailsEntity entity) {

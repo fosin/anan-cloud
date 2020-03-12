@@ -21,8 +21,11 @@ import java.util.List;
  */
 @Service
 public class PermissionServiceImpl implements PermissionService {
-    @Autowired
     private PermissionRepository permissionRepository;
+
+    public PermissionServiceImpl(PermissionRepository permissionRepository) {
+        this.permissionRepository = permissionRepository;
+    }
 
     @Override
     @Cacheable(value = TableNameConstant.ANAN_PERMISSION, key = "#id")

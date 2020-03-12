@@ -15,8 +15,11 @@ import org.springframework.context.annotation.Lazy;
 @Service
 @Lazy
 public class AnanPayDetailServiceImpl implements AnanPayDetailService {
-    @Autowired
-    private AnanPayDetailRepository ananSysPayDetailRepository;
+    private final AnanPayDetailRepository ananSysPayDetailRepository;
+
+    public AnanPayDetailServiceImpl(AnanPayDetailRepository ananSysPayDetailRepository) {
+        this.ananSysPayDetailRepository = ananSysPayDetailRepository;
+    }
 
     /**
      * 获取DAO

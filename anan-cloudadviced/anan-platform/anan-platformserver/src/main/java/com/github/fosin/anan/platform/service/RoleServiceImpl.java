@@ -44,14 +44,17 @@ import java.util.Objects;
 @Lazy
 public class RoleServiceImpl implements RoleService {
 
-    @Autowired
-    private RoleRepository roleRepository;
+    private final RoleRepository roleRepository;
 
-    @Autowired
-    private UserRoleRepository userRoleRepository;
+    private final UserRoleRepository userRoleRepository;
 
-    @Autowired
-    private OrganizationRepository organizationRepository;
+    private final OrganizationRepository organizationRepository;
+
+    public RoleServiceImpl(RoleRepository roleRepository, UserRoleRepository userRoleRepository, OrganizationRepository organizationRepository) {
+        this.roleRepository = roleRepository;
+        this.userRoleRepository = userRoleRepository;
+        this.organizationRepository = organizationRepository;
+    }
 
     @Override
     public AnanRoleEntity create(AnanRoleCreateDto entity) {

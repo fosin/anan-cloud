@@ -31,8 +31,11 @@ import javax.persistence.criteria.Path;
 @Service
 @Lazy
 public class AnanVersionRoleServiceImpl implements AnanVersionRoleService {
-    @Autowired
-    private AnanVersionRoleRepository ananSysVersionRoleRepository;
+    private final AnanVersionRoleRepository ananSysVersionRoleRepository;
+
+    public AnanVersionRoleServiceImpl(AnanVersionRoleRepository ananSysVersionRoleRepository) {
+        this.ananSysVersionRoleRepository = ananSysVersionRoleRepository;
+    }
 
     /**
      * 获取DAO

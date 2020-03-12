@@ -40,8 +40,25 @@ import java.util.List;
 @Service
 @Lazy
 public class AnanOrganizationAuthServiceImpl implements AnanOrganizationAuthService {
-    @Autowired
-    private AnanOrganizationAuthRepository ananSysOrganizationAuthRepository;
+    private final AnanOrganizationAuthRepository ananSysOrganizationAuthRepository;
+
+    private final UserService userService;
+
+    private final AnanPayOrderService payOrderService;
+
+    private final AnanVersionService versionService;
+    private final OrganizationService organizationService;
+
+    private final PasswordEncoder passwordEncoder;
+
+    public AnanOrganizationAuthServiceImpl(AnanOrganizationAuthRepository ananSysOrganizationAuthRepository, UserService userService, AnanPayOrderService payOrderService, AnanVersionService versionService, OrganizationService organizationService, PasswordEncoder passwordEncoder) {
+        this.ananSysOrganizationAuthRepository = ananSysOrganizationAuthRepository;
+        this.userService = userService;
+        this.payOrderService = payOrderService;
+        this.versionService = versionService;
+        this.organizationService = organizationService;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     /**
      * 获取DAO
@@ -60,23 +77,6 @@ public class AnanOrganizationAuthServiceImpl implements AnanOrganizationAuthServ
     public List<AnanOrganizationAuthEntity> findAllByOrganizId(Long organizId) {
         return getRepository().findAllByOrganizId(organizId);
     }
-
-    @Autowired
-    private AnanOrganizationAuthService organizationAuthService;
-
-    @Autowired
-    private UserService userService;
-
-    @Autowired
-    private AnanPayOrderService payOrderService;
-
-    @Autowired
-    private AnanVersionService versionService;
-    @Autowired
-    private OrganizationService organizationService;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
 
     @Override
     @Transactional
@@ -140,7 +140,7 @@ public class AnanOrganizationAuthServiceImpl implements AnanOrganizationAuthServ
         auth.setTryoutDays(versionEntity.getTryoutDays());
         auth.setValidity(versionEntity.getValidity());
         auth.setAuthorizationCode(getAuthCode(auth));
-        organizationAuthService.create(auth);
+        this.create(auth);
 
         return true;
     }

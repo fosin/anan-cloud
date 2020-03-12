@@ -34,12 +34,15 @@ import java.util.List;
 @Service
 @Lazy
 public class UserRoleServiceImpl implements UserRoleService {
-    @Autowired
-    private UserRoleRepository userRoleRepository;
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final UserRoleRepository userRoleRepository;
+    private final UserService userService;
+    private final PasswordEncoder passwordEncoder;
+
+    public UserRoleServiceImpl(UserRoleRepository userRoleRepository, UserService userService, PasswordEncoder passwordEncoder) {
+        this.userRoleRepository = userRoleRepository;
+        this.userService = userService;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Override
     public List<AnanUserRoleEntity> findByUserId(Long userId) {

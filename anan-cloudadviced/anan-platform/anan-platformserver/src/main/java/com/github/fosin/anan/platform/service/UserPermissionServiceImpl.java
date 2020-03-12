@@ -33,8 +33,11 @@ import java.util.Set;
 @Service
 @Lazy
 public class UserPermissionServiceImpl implements UserPermissionService {
-    @Autowired
-    private UserPermissionRepository userPermissionRepository;
+    private final UserPermissionRepository userPermissionRepository;
+
+    public UserPermissionServiceImpl(UserPermissionRepository userPermissionRepository) {
+        this.userPermissionRepository = userPermissionRepository;
+    }
 
     @Override
     @Cacheable(value = TableNameConstant.ANAN_USER_PERMISSION, key = "T(String).valueOf(#userId).concat('-').concat(T(String).valueOf(#organizId))")

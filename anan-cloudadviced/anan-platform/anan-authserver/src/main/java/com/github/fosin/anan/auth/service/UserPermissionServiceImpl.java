@@ -18,8 +18,11 @@ import java.util.List;
  */
 @Service
 public class UserPermissionServiceImpl implements UserPermissionService {
-    @Autowired
-    private UserPermissionRepository userPermissionRepository;
+    private final UserPermissionRepository userPermissionRepository;
+
+    public UserPermissionServiceImpl(UserPermissionRepository userPermissionRepository) {
+        this.userPermissionRepository = userPermissionRepository;
+    }
 
     @Override
     @Cacheable(value = TableNameConstant.ANAN_USER_PERMISSION, key = "#userId")

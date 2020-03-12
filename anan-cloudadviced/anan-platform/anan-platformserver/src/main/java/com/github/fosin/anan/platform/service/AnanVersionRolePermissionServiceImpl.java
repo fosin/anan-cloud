@@ -24,8 +24,11 @@ import java.util.List;
 @Service
 @Lazy
 public class AnanVersionRolePermissionServiceImpl implements AnanVersionRolePermissionService {
-    @Autowired
-    private AnanVersionRolePermissionRepository versionRolePermissionRepository;
+    private final AnanVersionRolePermissionRepository versionRolePermissionRepository;
+
+    public AnanVersionRolePermissionServiceImpl(AnanVersionRolePermissionRepository versionRolePermissionRepository) {
+        this.versionRolePermissionRepository = versionRolePermissionRepository;
+    }
 
     /**
      * 获取DAOs

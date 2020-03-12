@@ -26,8 +26,11 @@ import java.util.List;
 @Service
 @Slf4j
 public class UserServiceImpl implements UserService {
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+
+    public UserServiceImpl(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @Override
     @Cacheable(value = TableNameConstant.ANAN_USER, key = "#usercode")

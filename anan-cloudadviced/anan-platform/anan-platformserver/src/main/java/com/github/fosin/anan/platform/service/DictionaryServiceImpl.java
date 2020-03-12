@@ -41,10 +41,13 @@ import java.util.Objects;
 @Service
 @Lazy
 public class DictionaryServiceImpl implements DictionaryService {
-    @Autowired
-    private DictionaryRepository dictionaryRepository;
-    @Autowired
-    private DictionaryDetailRepository dictionaryDetailRepository;
+    private final DictionaryRepository dictionaryRepository;
+    private final DictionaryDetailRepository dictionaryDetailRepository;
+
+    public DictionaryServiceImpl(DictionaryRepository dictionaryRepository, DictionaryDetailRepository dictionaryDetailRepository) {
+        this.dictionaryRepository = dictionaryRepository;
+        this.dictionaryDetailRepository = dictionaryDetailRepository;
+    }
 
     @Override
     public AnanDictionaryEntity create(AnanDictionaryCreateDto entity) {

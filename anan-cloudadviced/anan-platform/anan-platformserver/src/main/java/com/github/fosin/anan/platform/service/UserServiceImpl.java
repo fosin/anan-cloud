@@ -55,16 +55,19 @@ import java.util.Random;
 @Lazy
 @Slf4j
 public class UserServiceImpl implements UserService {
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private UserRoleRepository userRoleRepository;
-    @Autowired
-    private OrganizationRepository organizationRepository;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-    @Autowired
-    private LocalOrganParameter localOrganParameterUtil;
+    private final UserRepository userRepository;
+    private final UserRoleRepository userRoleRepository;
+    private final OrganizationRepository organizationRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final LocalOrganParameter localOrganParameterUtil;
+
+    public UserServiceImpl(UserRepository userRepository, UserRoleRepository userRoleRepository, OrganizationRepository organizationRepository, PasswordEncoder passwordEncoder, LocalOrganParameter localOrganParameterUtil) {
+        this.userRepository = userRepository;
+        this.userRoleRepository = userRoleRepository;
+        this.organizationRepository = organizationRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.localOrganParameterUtil = localOrganParameterUtil;
+    }
 
     @Override
     @Cacheable(value = TableNameConstant.ANAN_USER, key = "#usercode")

@@ -50,11 +50,14 @@ import java.util.Objects;
 @Lazy
 @Slf4j
 public class ParameterServiceImpl implements ParameterService {
-    @Autowired
-    private ParameterRepository parameterRepository;
+    private final ParameterRepository parameterRepository;
 
-    @Autowired
-    private OrganizationRepository organizationRepository;
+    private final OrganizationRepository organizationRepository;
+
+    public ParameterServiceImpl(ParameterRepository parameterRepository, OrganizationRepository organizationRepository) {
+        this.parameterRepository = parameterRepository;
+        this.organizationRepository = organizationRepository;
+    }
 
     @Override
     @CachePut(value = TableNameConstant.ANAN_PARAMETER, key = "#root.target.getCacheKey(#result)")

@@ -15,8 +15,11 @@ import org.springframework.stereotype.Service;
 @Service
 @Lazy
 public class AnanPayServiceImpl implements AnanPayService {
-    @Autowired
-    private AnanPayRepository ananSysPayRepository;
+    private final AnanPayRepository ananSysPayRepository;
+
+    public AnanPayServiceImpl(AnanPayRepository ananSysPayRepository) {
+        this.ananSysPayRepository = ananSysPayRepository;
+    }
 
     /**
      * 获取DAO

@@ -48,11 +48,14 @@ import java.util.Objects;
 @Lazy
 public class DictionaryDetailServiceImpl implements DictionaryDetailService {
 
-    @Autowired
-    private DictionaryDetailRepository dictionaryDetailRepository;
+    private final DictionaryDetailRepository dictionaryDetailRepository;
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
+
+    public DictionaryDetailServiceImpl(DictionaryDetailRepository dictionaryDetailRepository, UserService userService) {
+        this.dictionaryDetailRepository = dictionaryDetailRepository;
+        this.userService = userService;
+    }
 
     @Override
     @CacheEvict(value = TableNameConstant.ANAN_DICTIONARY_DETAIL, key = "#result.dictionaryId")

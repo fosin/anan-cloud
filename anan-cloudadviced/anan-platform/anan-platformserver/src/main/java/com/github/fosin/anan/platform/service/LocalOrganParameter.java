@@ -21,8 +21,11 @@ import java.util.Objects;
 @Service
 @Lazy
 public class LocalOrganParameter implements IParameter {
-    @Autowired
-    private ParameterService parameterService;
+    private final ParameterService parameterService;
+
+    public LocalOrganParameter(ParameterService parameterService) {
+        this.parameterService = parameterService;
+    }
 
     @Override
     public AnanParameterEntity setParameter(String scope, String name, String value, String description) {
