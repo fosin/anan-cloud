@@ -12,6 +12,9 @@
     <artifactId>anan-zuulgateway</artifactId>
     <description>AnAn Zuul Gateway</description>
     <name>anan-zuulgateway</name>
+    <properties>
+        <maven.deploy.skip>true</maven.deploy.skip>
+    </properties>
     <dependencies>
         <dependency>
             <groupId>${anan.groupId}</groupId>

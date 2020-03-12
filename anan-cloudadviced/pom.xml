@@ -10,6 +10,11 @@
     <modelVersion>4.0.0</modelVersion>
     <packaging>pom</packaging>
     <artifactId>anan-cloudadviced</artifactId>
+    <modules>
+        <module>anan-adminserver</module>
+        <module>anan-platform</module>
+        <module>anan-zuulgateway</module>
+    </modules>
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>

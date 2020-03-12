@@ -11,6 +11,9 @@
     <packaging>jar</packaging>
     <artifactId>anan-eurekaserver</artifactId>
     <description>AnAn Eureka Server</description>
+    <properties>
+        <maven.deploy.skip>true</maven.deploy.skip>
+    </properties>
     <dependencies>
         <dependency>
             <groupId>${anan.groupId}</groupId>

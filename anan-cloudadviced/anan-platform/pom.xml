@@ -10,6 +10,12 @@
     <modelVersion>4.0.0</modelVersion>
     <packaging>pom</packaging>
     <artifactId>anan-platform</artifactId>
+    <modules>
+        <module>anan-authserver</module>
+        <module>anan-platformapi</module>
+        <module>anan-platformpojo</module>
+        <module>anan-platformserver</module>
+    </modules>
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>

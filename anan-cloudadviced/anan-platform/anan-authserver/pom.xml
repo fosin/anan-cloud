@@ -11,6 +11,9 @@
     <artifactId>anan-authserver</artifactId>
     <packaging>jar</packaging>
     <description>AnAn Auth Server</description>
+    <properties>
+        <maven.deploy.skip>true</maven.deploy.skip>
+    </properties>
     <dependencies>
         <dependency>
             <groupId>com.github.fosin.anan</groupId>

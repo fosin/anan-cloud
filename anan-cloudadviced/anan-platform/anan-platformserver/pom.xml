@@ -12,6 +12,9 @@
     <artifactId>anan-platformserver</artifactId>
     <packaging>jar</packaging>
     <description>AnAn Platform Server</description>
+    <properties>
+        <maven.deploy.skip>true</maven.deploy.skip>
+    </properties>
     <dependencies>
         <dependency>
             <groupId>com.github.fosin.anan</groupId>

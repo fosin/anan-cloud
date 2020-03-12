@@ -11,6 +11,9 @@
     <packaging>jar</packaging>
     <artifactId>anan-configserver</artifactId>
     <description>AnAn Config Server</description>
+    <properties>
+        <maven.deploy.skip>true</maven.deploy.skip>
+    </properties>
     <dependencies>
         <dependency>
             <groupId>com.github.fosin.anan</groupId>
