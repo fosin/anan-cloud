@@ -25,8 +25,11 @@ import java.util.List;
 @ApiIgnore
 @RequestMapping(UrlPrefixConstant.PERMISSION)
 public class PermissionController {
-    @Autowired
-    private PermissionService permissionService;
+    private final PermissionService permissionService;
+
+    public PermissionController(PermissionService permissionService) {
+        this.permissionService = permissionService;
+    }
 
     @PostMapping("/findByAppName/{appName}")
     @ApiImplicitParam(name = "appName", value = "应用名称,spring.application.name")

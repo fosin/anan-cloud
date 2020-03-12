@@ -29,11 +29,14 @@ import java.util.Random;
 @RequestMapping("v1/application")
 //@Api(value = "v1/application", tags = "应用集群相关信息获取", description = "用于应用集群相关的信息获取")
 public class ApplicationController {
-    @Autowired
-    private DiscoveryClient discoveryClient;
+    private final DiscoveryClient discoveryClient;
 
     @Value("${spring.application.name}")
     private String appName;
+
+    public ApplicationController(DiscoveryClient discoveryClient) {
+        this.discoveryClient = discoveryClient;
+    }
 
 //    @Autowired
 //    private IRule iRule;

@@ -38,17 +38,18 @@ import java.util.List;
 @RestController
 @Slf4j
 @RequestMapping(UrlPrefixConstant.ORGANIZATION)
-@Api(value = UrlPrefixConstant.ORGANIZATION, tags = "机构管理", description = "机构管理相关操作(增删改查)")
+@Api(value = UrlPrefixConstant.ORGANIZATION, tags = "机构管理相关操作(增删改查)")
 public class AnanOrganizationController extends AbstractBaseController
         implements ISimpleController<AnanOrganizationEntity, Long, AnanOrganizationCreateDto, AnanOrganizationRetrieveDto, AnanOrganizationUpdateDto> {
-    @Autowired
-    private OrganizationService organizationService;
+    private final OrganizationService organizationService;
+    private final AnanOrganizationAuthService organizationAuthService;
+    private final AnanOrganizationPermissionService organizationPermissionService;
 
-    @Autowired
-    private AnanOrganizationAuthService organizationAuthService;
-
-    @Autowired
-    private AnanOrganizationPermissionService organizationPermissionService;
+    public AnanOrganizationController(OrganizationService organizationService, AnanOrganizationAuthService organizationAuthService, AnanOrganizationPermissionService organizationPermissionService) {
+        this.organizationService = organizationService;
+        this.organizationAuthService = organizationAuthService;
+        this.organizationPermissionService = organizationPermissionService;
+    }
 
     @ApiOperation("根据机构ID获取机构权限")
     @ApiImplicitParam(name = "organizId", value = "机构ID,取值于AnanOrganizationEntity.id")

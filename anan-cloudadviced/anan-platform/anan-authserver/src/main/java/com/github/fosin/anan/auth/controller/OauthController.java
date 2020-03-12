@@ -31,11 +31,14 @@ import java.util.Map;
 @RequestMapping("/oauth")
 @Api(value = "/oauth", tags = "OAuth认证相关,获取令牌、刷新令牌、注销令牌")
 public class OauthController {
-    @Autowired
-    TokenEndpoint tokenEndpoint;
+    final TokenEndpoint tokenEndpoint;
 
-    @Autowired
-    private ConsumerTokenServices consumerTokenServices;
+    private final ConsumerTokenServices consumerTokenServices;
+
+    public OauthController(TokenEndpoint tokenEndpoint, ConsumerTokenServices consumerTokenServices) {
+        this.tokenEndpoint = tokenEndpoint;
+        this.consumerTokenServices = consumerTokenServices;
+    }
 
     @RequestMapping(value = "/token", method = {RequestMethod.POST})
     @ApiOperation(value = "获取令牌", notes = "获取Oauth2.0令牌，通常用于前端的认证、登录操作")

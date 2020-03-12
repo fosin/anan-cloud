@@ -16,12 +16,11 @@ import java.util.Objects;
  */
 public class RemoteParameter implements IParameter {
     private IParameterStrategy parameterStrategy;
-
-    @Autowired
     private ParameterFeignService parameterService;
 
-    public RemoteParameter(IParameterStrategy parameterStrategy) {
+    public RemoteParameter(IParameterStrategy parameterStrategy, ParameterFeignService parameterService) {
         this.parameterStrategy = parameterStrategy;
+        this.parameterService = parameterService;
     }
 
     @Override

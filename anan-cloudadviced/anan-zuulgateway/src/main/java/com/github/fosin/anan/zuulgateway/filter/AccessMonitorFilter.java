@@ -31,14 +31,16 @@ import org.springframework.web.util.UrlPathHelper;
 //@Component
 @Slf4j
 public class AccessMonitorFilter extends ZuulFilter {
-    @Autowired
-    private DiscoveryClient discoveryClient;
-
-    @Autowired
-    private ZuulProperties zuulProperties;
+    private final DiscoveryClient discoveryClient;
+    private final ZuulProperties zuulProperties;
 
     private final UrlPathHelper urlPathHelper = new UrlPathHelper();
     private PathMatcher pathMatcher = new AntPathMatcher();
+
+    public AccessMonitorFilter(DiscoveryClient discoveryClient, ZuulProperties zuulProperties) {
+        this.discoveryClient = discoveryClient;
+        this.zuulProperties = zuulProperties;
+    }
 
     @Override
     public String filterType() {

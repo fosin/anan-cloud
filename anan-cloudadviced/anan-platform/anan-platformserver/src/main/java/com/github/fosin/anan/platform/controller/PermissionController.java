@@ -33,8 +33,11 @@ import java.util.List;
 @Api(value = UrlPrefixConstant.PERMISSION, tags = "权限管理", description = "权限管理相关操作")
 public class PermissionController extends AbstractBaseController
         implements ISimpleController<AnanPermissionEntity, Long, AnanPermissionCreateDto, AnanPermissionRetrieveDto, AnanPermissionUpdateDto> {
-    @Autowired
-    private PermissionService permissionService;
+    private final PermissionService permissionService;
+
+    public PermissionController(PermissionService permissionService) {
+        this.permissionService = permissionService;
+    }
 
     @ApiOperation(value = "根据权限类型type获取权限树", notes = "如果权限类型type在0-4之内的任意值则返回对应的权限树，否则返回所有权限树")
     @ApiImplicitParam(name = "type", value = "权限类型type,AnanPermissionEntity.type")

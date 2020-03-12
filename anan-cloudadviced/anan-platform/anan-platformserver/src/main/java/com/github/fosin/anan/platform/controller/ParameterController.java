@@ -24,8 +24,11 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(UrlPrefixConstant.PARAMETER)
 @Api(value = UrlPrefixConstant.PARAMETER, tags = "通用参数管理相关操作(参数获取、自动创建)")
 public class ParameterController implements ISimpleController<AnanParameterEntity, Long, AnanParameterCreateDto, AnanParameterRetrieveDto, AnanParameterUpdateDto> {
-    @Autowired
-    private ParameterService parameterService;
+    private final ParameterService parameterService;
+
+    public ParameterController(ParameterService parameterService) {
+        this.parameterService = parameterService;
+    }
 
     @ApiOperation(value = "获取指定机构或指定用户的参数整条数据", notes = "type=1则是机构参数(机构参数系统会从当前机构向逐级上级机构查找该参数),type=2则是用户参数,如果缓存和数据库中都没有找到参数，返回null值")
     @RequestMapping(value = "/entity/nearest", method = {RequestMethod.POST, RequestMethod.GET})

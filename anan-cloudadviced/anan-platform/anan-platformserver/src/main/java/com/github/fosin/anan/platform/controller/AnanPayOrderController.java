@@ -25,8 +25,10 @@ public class AnanPayOrderController implements ISimpleController<AnanPayOrderEnt
     /**
      * 服务对象
      */
-    @Autowired
-    private AnanPayOrderService ananSysPayOrderService;
+    private final AnanPayOrderService ananSysPayOrderService;
+    public AnanPayOrderController(AnanPayOrderService ananSysPayOrderService) {
+        this.ananSysPayOrderService = ananSysPayOrderService;
+    }
 
     @Override
     public ISimpleService<AnanPayOrderEntity, Long, AnanPayOrderCreateDto, AnanPayOrderRetrieveDto, AnanPayOrderUpdateDto> getService() {

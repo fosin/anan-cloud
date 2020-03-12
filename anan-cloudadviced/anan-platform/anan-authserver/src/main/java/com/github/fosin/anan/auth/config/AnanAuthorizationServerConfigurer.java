@@ -37,17 +37,19 @@ import java.util.Map;
 @Configuration
 @EnableAuthorizationServer
 public class AnanAuthorizationServerConfigurer extends AuthorizationServerConfigurerAdapter {
-    @Autowired
-    private AuthenticationManager authenticationManager;
-    @Autowired
-    private DataSource dataSource;
-    @Autowired
-    private AnanUserDetailsServiceImpl userDetailsService;
-    @Autowired
-    private RedisConnectionFactory redisConnectionFactory;
+    private final AuthenticationManager authenticationManager;
+    private final DataSource dataSource;
+    private final AnanUserDetailsServiceImpl userDetailsService;
+    private final RedisConnectionFactory redisConnectionFactory;
+    private final PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    public AnanAuthorizationServerConfigurer(AuthenticationManager authenticationManager, DataSource dataSource, AnanUserDetailsServiceImpl userDetailsService, RedisConnectionFactory redisConnectionFactory, PasswordEncoder passwordEncoder) {
+        this.authenticationManager = authenticationManager;
+        this.dataSource = dataSource;
+        this.userDetailsService = userDetailsService;
+        this.redisConnectionFactory = redisConnectionFactory;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     /**
      * 用来配置客户端详情服务（ClientDetailsService），

@@ -25,8 +25,10 @@ public class AnanPayInvoiceController implements ISimpleController<AnanPayInvoic
     /**
      * 服务对象
      */
-    @Autowired
-    private AnanPayInvoiceService ananSysPayInvoiceService;
+    private final AnanPayInvoiceService ananSysPayInvoiceService;
+    public AnanPayInvoiceController(AnanPayInvoiceService ananSysPayInvoiceService) {
+        this.ananSysPayInvoiceService = ananSysPayInvoiceService;
+    }
 
     @Override
     public ISimpleService<AnanPayInvoiceEntity, Long, AnanPayInvoiceCreateDto, AnanPayInvoiceRetrieveDto, AnanPayInvoiceUpdateDto> getService() {

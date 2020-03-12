@@ -26,7 +26,6 @@ import java.util.List;
  */
 @Configuration
 @EnableWebMvc
-
 public class AnanWebMvcConfigurer implements WebMvcConfigurer {
 //    @Bean
 //    public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {

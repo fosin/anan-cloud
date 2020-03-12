@@ -34,14 +34,17 @@ import java.util.TreeSet;
 @Lazy
 @Slf4j
 public class AnanUserDetailsServiceImpl implements UserDetailsService {
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private RolePermissionService rolePermissionService;
-    @Autowired
-    private UserPermissionService userPermissionService;
-    @Autowired
-    private PermissionService permissionService;
+    private final UserService userService;
+    private final RolePermissionService rolePermissionService;
+    private final UserPermissionService userPermissionService;
+    private final PermissionService permissionService;
+
+    public AnanUserDetailsServiceImpl(UserService userService, RolePermissionService rolePermissionService, UserPermissionService userPermissionService, PermissionService permissionService) {
+        this.userService = userService;
+        this.rolePermissionService = rolePermissionService;
+        this.userPermissionService = userPermissionService;
+        this.permissionService = permissionService;
+    }
 
     @Override
     public User loadUserByUsername(String username) throws UsernameNotFoundException {

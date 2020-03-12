@@ -34,8 +34,11 @@ import java.util.List;
 @RequestMapping("v1/dictionaryDetail")
 @Api(value = "v1/dictionaryDetail", tags = "通用字典明细管理", description = "通用字典明细管理(增删改查)")
 public class DictionaryDetailController implements ISimpleController<AnanDictionaryDetailEntity, Long, AnanDictionaryDetailCreateDto, AnanDictionaryDetailRetrieveDto, AnanDictionaryDetailUpdateDto> {
-    @Autowired
-    private DictionaryDetailService dictionaryDetailService;
+    private final DictionaryDetailService dictionaryDetailService;
+
+    public DictionaryDetailController(DictionaryDetailService dictionaryDetailService) {
+        this.dictionaryDetailService = dictionaryDetailService;
+    }
 
     @Override
     public ISimpleService<AnanDictionaryDetailEntity, Long, AnanDictionaryDetailCreateDto, AnanDictionaryDetailRetrieveDto, AnanDictionaryDetailUpdateDto> getService() {

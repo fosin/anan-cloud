@@ -35,18 +35,17 @@ import java.util.List;
 @RequestMapping(UrlPrefixConstant.USER)
 @Api(value = UrlPrefixConstant.USER, tags = "用户管理")
 public class UserController extends AbstractBaseController implements ISimpleController<AnanUserEntity, Long, AnanUserCreateDto, AnanUserRetrieveDto, AnanUserUpdateDto> {
+    private final UserService userService;
+    private final UserRoleService userRoleService;
+    private final RoleService roleService;
+    private final UserPermissionService userPermissionService;
 
-    @Autowired
-    private UserService userService;
-
-    @Autowired
-    private UserRoleService userRoleService;
-
-    @Autowired
-    private RoleService roleService;
-
-    @Autowired
-    private UserPermissionService userPermissionService;
+    public UserController(UserService userService, UserRoleService userRoleService, RoleService roleService, UserPermissionService userPermissionService) {
+        this.userService = userService;
+        this.userRoleService = userRoleService;
+        this.roleService = roleService;
+        this.userPermissionService = userPermissionService;
+    }
 
     @PostMapping("/usercode/{usercode}")
     @ApiImplicitParam(name = "usercode", value = "用户工号,取值于AnanUserEntity.usercode")

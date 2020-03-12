@@ -21,8 +21,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("v1/dictionary")
 @Api(value = "v1/dictionary", tags = "通用字典管理", description = "通用字典管理(增删改查)")
 public class DictionaryController implements ISimpleController<AnanDictionaryEntity, Long, AnanDictionaryCreateDto, AnanDictionaryRetrieveDto, AnanDictionaryUpdateDto> {
-    @Autowired
-    private DictionaryService dictionaryService;
+    private final DictionaryService dictionaryService;
+
+    public DictionaryController(DictionaryService dictionaryService) {
+        this.dictionaryService = dictionaryService;
+    }
 
     @Override
     public ISimpleService<AnanDictionaryEntity, Long, AnanDictionaryCreateDto, AnanDictionaryRetrieveDto, AnanDictionaryUpdateDto> getService() {

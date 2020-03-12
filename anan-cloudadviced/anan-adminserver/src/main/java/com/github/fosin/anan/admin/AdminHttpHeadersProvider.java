@@ -23,8 +23,11 @@ import javax.servlet.http.HttpServletRequest;
  */
 @Component
 public class AdminHttpHeadersProvider implements HttpHeadersProvider {
-    @Autowired
-    private OAuth2RestTemplate oAuth2RestTemplate;
+    private final OAuth2RestTemplate oAuth2RestTemplate;
+
+    public AdminHttpHeadersProvider(OAuth2RestTemplate oAuth2RestTemplate) {
+        this.oAuth2RestTemplate = oAuth2RestTemplate;
+    }
 
     @Override
     public HttpHeaders getHeaders(Instance instance) {

@@ -35,20 +35,19 @@ public class AnanVersionController implements ISimpleController<AnanVersionEntit
     /**
      * 服务对象
      */
-    @Autowired
-    private AnanVersionService ananSysVersionService;
+    private final AnanVersionService ananSysVersionService;
+    private final AnanVersionPermissionService versionPermissionService;
+    private final AnanOrganizationPermissionService organizationPermissionService;
+    private final AnanOrganizationAuthService organizationAuthService;
+    private final PermissionService permissionService;
 
-    @Autowired
-    private AnanVersionPermissionService versionPermissionService;
-
-    @Autowired
-    private AnanOrganizationPermissionService organizationPermissionService;
-
-    @Autowired
-    private AnanOrganizationAuthService organizationAuthService;
-
-    @Autowired
-    private PermissionService permissionService;
+    public AnanVersionController(AnanVersionService ananSysVersionService, AnanVersionPermissionService versionPermissionService, AnanOrganizationPermissionService organizationPermissionService, AnanOrganizationAuthService organizationAuthService, PermissionService permissionService) {
+        this.ananSysVersionService = ananSysVersionService;
+        this.versionPermissionService = versionPermissionService;
+        this.organizationPermissionService = organizationPermissionService;
+        this.organizationAuthService = organizationAuthService;
+        this.permissionService = permissionService;
+    }
 
     @ApiOperation(value = "根据父权限ID获取其孩子数据列表")
     @ApiImplicitParam(name = "pid", value = "父权限ID,AnanVersionPermissionEntity.id")

@@ -29,10 +29,13 @@ import javax.sql.DataSource;
 @Order(1)
 public class AnanWebSecurityConfigurer extends WebSecurityConfigurerAdapter {
     private static final String INTERNAL_SECRET_KEY = "INTERNAL_SECRET_KEY";
-    @Autowired
-    private AnanUserDetailsServiceImpl userDetailsService;
-    @Autowired
-    private DataSource dataSource;
+    private final AnanUserDetailsServiceImpl userDetailsService;
+    private final DataSource dataSource;
+
+    public AnanWebSecurityConfigurer(AnanUserDetailsServiceImpl userDetailsService, DataSource dataSource) {
+        this.userDetailsService = userDetailsService;
+        this.dataSource = dataSource;
+    }
 
     @Bean(name = BeanIds.AUTHENTICATION_MANAGER)
     @Override

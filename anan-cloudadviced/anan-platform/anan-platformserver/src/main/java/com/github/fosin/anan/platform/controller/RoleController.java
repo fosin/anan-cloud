@@ -32,14 +32,17 @@ import java.util.List;
 @RequestMapping(UrlPrefixConstant.ROLE)
 @Api(value = UrlPrefixConstant.ROLE, tags = "角色管理相关操作")
 public class RoleController implements ISimpleController<AnanRoleEntity, Long, AnanRoleCreateDto, AnanRoleRetrieveDto, AnanRoleUpdateDto> {
-    @Autowired
-    private RoleService roleService;
-    @Autowired
-    private RolePermissionService rolePermissionService;
-    @Autowired
-    private UserRoleService userRoleService;
-    @Autowired
-    private UserService userService;
+    private final RoleService roleService;
+    private final RolePermissionService rolePermissionService;
+    private final UserRoleService userRoleService;
+    private final UserService userService;
+
+    public RoleController(RoleService roleService, RolePermissionService rolePermissionService, UserRoleService userRoleService, UserService userService) {
+        this.roleService = roleService;
+        this.rolePermissionService = rolePermissionService;
+        this.userRoleService = userRoleService;
+        this.userService = userService;
+    }
 
     @ApiOperation("根据角色ID获取角色权限")
     @ApiImplicitParam(name = "roleId", value = "角色ID,取值于AnanRoleEntity.id")

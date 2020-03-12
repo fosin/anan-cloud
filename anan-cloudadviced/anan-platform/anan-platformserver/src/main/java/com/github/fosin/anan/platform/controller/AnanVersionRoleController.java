@@ -34,11 +34,12 @@ public class AnanVersionRoleController implements ISimpleController<AnanVersionR
     /**
      * 服务对象
      */
-    @Autowired
-    private AnanVersionRoleService ananSysVersionRoleService;
-
-    @Autowired
-    private AnanVersionRolePermissionService versionRolePermissionService;
+    private final AnanVersionRoleService ananSysVersionRoleService;
+    private final AnanVersionRolePermissionService versionRolePermissionService;
+    public AnanVersionRoleController(AnanVersionRoleService ananSysVersionRoleService, AnanVersionRolePermissionService versionRolePermissionService) {
+        this.ananSysVersionRoleService = ananSysVersionRoleService;
+        this.versionRolePermissionService = versionRolePermissionService;
+    }
 
     @ApiOperation("根据角色ID获取版本权限")
     @ApiImplicitParam(name = "roleId", value = "版本ID,取值于AnanVersionRoleEntity.id")

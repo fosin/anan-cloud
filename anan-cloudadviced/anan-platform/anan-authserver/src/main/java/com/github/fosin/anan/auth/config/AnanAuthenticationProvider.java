@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
 
 /**
  * DescriptionThe type Custom authentication provider.
@@ -19,12 +20,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 //@Component
 @Slf4j
 public class AnanAuthenticationProvider implements AuthenticationProvider {
+    private final PasswordEncoder passwordEncoder;
+    private final UserDetailsService userDetailsService;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @Autowired
-    private UserDetailsService userDetailsService;
+    public AnanAuthenticationProvider(PasswordEncoder passwordEncoder, UserDetailsService userDetailsService) {
+        this.passwordEncoder = passwordEncoder;
+        this.userDetailsService = userDetailsService;
+    }
 
     /**
      * Validate user info is correct form database
