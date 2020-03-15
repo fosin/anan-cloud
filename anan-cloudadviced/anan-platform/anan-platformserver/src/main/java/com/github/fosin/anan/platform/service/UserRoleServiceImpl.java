@@ -1,7 +1,6 @@
 package com.github.fosin.anan.platform.service;
 
 
-import com.github.fosin.anan.cache.util.CacheUtil;
 import com.github.fosin.anan.core.exception.AnanUserOrPassInvalidException;
 import com.github.fosin.anan.jpa.repository.IJpaRepository;
 import com.github.fosin.anan.platform.repository.UserRoleRepository;
@@ -14,7 +13,7 @@ import com.github.fosin.anan.platformapi.entity.AnanUserRoleEntity;
 import com.github.fosin.anan.platformapi.util.LoginUserUtil;
 import com.github.fosin.anan.pojo.dto.AnanUserDto;
 import com.github.fosin.anan.pojo.dto.request.AnanUserRoleCreateDto;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.github.fosin.anan.redis.cache.AnanCacheManger;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -37,11 +36,13 @@ public class UserRoleServiceImpl implements UserRoleService {
     private final UserRoleRepository userRoleRepository;
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
+    private final AnanCacheManger ananCacheManger;
 
-    public UserRoleServiceImpl(UserRoleRepository userRoleRepository, UserService userService, PasswordEncoder passwordEncoder) {
+    public UserRoleServiceImpl(UserRoleRepository userRoleRepository, UserService userService, PasswordEncoder passwordEncoder, AnanCacheManger ananCacheManger) {
         this.userRoleRepository = userRoleRepository;
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
+        this.ananCacheManger = ananCacheManger;
     }
 
     @Override
@@ -82,8 +83,8 @@ public class UserRoleServiceImpl implements UserRoleService {
 
         userRoleRepository.deleteByUserId(userId);
         //如果是用户角色，则只需要删除一个用户的缓存
-        CacheUtil.evict(TableNameConstant.ANAN_USER, userId + "");
-        CacheUtil.evict(TableNameConstant.ANAN_USER, userService.findById(userId).getUsercode());
+        ananCacheManger.evict(TableNameConstant.ANAN_USER, userId + "");
+        ananCacheManger.evict(TableNameConstant.ANAN_USER, userService.findById(userId).getUsercode());
 
         return getAnanUserRoleEntities(entities);
     }
@@ -123,8 +124,8 @@ public class UserRoleServiceImpl implements UserRoleService {
         //如果是角色用户，则需要删除所有角色相关用户的缓存
         for (AnanUserRoleCreateDto entity : entities) {
             Long userId = entity.getUserId();
-            CacheUtil.evict(TableNameConstant.ANAN_USER, userId + "");
-            CacheUtil.evict(TableNameConstant.ANAN_USER, userService.findById(userId).getUsercode());
+            ananCacheManger.evict(TableNameConstant.ANAN_USER, userId + "");
+            ananCacheManger.evict(TableNameConstant.ANAN_USER, userService.findById(userId).getUsercode());
         }
 
         return getAnanUserRoleEntities(entities);

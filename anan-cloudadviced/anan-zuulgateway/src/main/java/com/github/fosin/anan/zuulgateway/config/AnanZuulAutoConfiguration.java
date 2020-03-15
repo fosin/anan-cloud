@@ -28,7 +28,7 @@ import java.util.List;
  * @date 2018.12.17
  */
 @Configuration
-public class AnanZuulAutoConfiger {
+public class AnanZuulAutoConfiguration {
 
     @Bean
     @RefreshScope

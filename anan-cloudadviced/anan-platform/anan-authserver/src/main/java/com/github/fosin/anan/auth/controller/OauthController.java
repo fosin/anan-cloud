@@ -91,12 +91,12 @@ public class OauthController {
 //    @RequestMapping("/onlineUsers")
 //    public ResponseEntity<List<Map<String,Object>>> onlineUsers() {
 //        List<Map<String,Object>> result = new ArrayList<>();
-//        Collection<String> cacheNames = CacheUtil.getCacheNames();
+//        Collection<String> cacheNames = ananCacheManger.getCacheNames();
 //        for (String name : cacheNames) {
-//            Object cacheObject = CacheUtil.get("auth", name);
+//            Object cacheObject = ananCacheManger.get("auth", name);
 //
 //        }
-//        Cache auth = CacheUtil.getCache("auth");
+//        Cache auth = ananCacheManger.getCache("auth");
 //        RedisTemplate nativeCache = (RedisTemplate)auth.getNativeCache();
 //        return ResponseEntity.ok(result);
 //    }

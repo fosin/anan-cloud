@@ -21,13 +21,8 @@
             <version>2.1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-redis</artifactId>
-        </dependency>
-        <!--集群模式下使用redis共享session-->
-        <dependency>
-            <groupId>org.springframework.session</groupId>
-            <artifactId>spring-session-data-redis</artifactId>
+            <groupId>${anan.groupId}</groupId>
+            <artifactId>anan-redis</artifactId>
         </dependency>
         <dependency>
             <groupId>mysql</groupId>

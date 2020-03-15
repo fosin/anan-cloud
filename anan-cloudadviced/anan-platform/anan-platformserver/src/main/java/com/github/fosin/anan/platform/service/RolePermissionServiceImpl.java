@@ -1,16 +1,15 @@
 package com.github.fosin.anan.platform.service;
 
-import com.github.fosin.anan.cache.util.CacheUtil;
 import com.github.fosin.anan.core.exception.AnanServiceException;
 import com.github.fosin.anan.jpa.repository.IJpaRepository;
 import com.github.fosin.anan.jpa.service.batch.IUpdateInBatchJpaService;
 import com.github.fosin.anan.platform.service.inter.RolePermissionService;
 import com.github.fosin.anan.platformapi.constant.TableNameConstant;
-import com.github.fosin.anan.pojo.dto.request.AnanRolePermissionUpdateDto;
 import com.github.fosin.anan.platformapi.entity.AnanRolePermissionEntity;
 import com.github.fosin.anan.platformapi.repository.RolePermissionRepository;
+import com.github.fosin.anan.pojo.dto.request.AnanRolePermissionUpdateDto;
+import com.github.fosin.anan.redis.cache.AnanCacheManger;
 import com.github.fosin.anan.util.BeanUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
@@ -34,9 +33,11 @@ import java.util.Set;
 @Lazy
 public class RolePermissionServiceImpl implements RolePermissionService {
     private final RolePermissionRepository rolePermissionRepository;
+    private final AnanCacheManger ananCacheManger;
 
-    public RolePermissionServiceImpl(RolePermissionRepository rolePermissionRepository) {
+    public RolePermissionServiceImpl(RolePermissionRepository rolePermissionRepository, AnanCacheManger ananCacheManger) {
         this.rolePermissionRepository = rolePermissionRepository;
+        this.ananCacheManger = ananCacheManger;
     }
 
     @Override
@@ -59,7 +60,7 @@ public class RolePermissionServiceImpl implements RolePermissionService {
         }
         Assert.notEmpty(needDelRoles, "没有找到需要删除数据!");
         for (Long roleId : needDelRoles) {
-            CacheUtil.evict(TableNameConstant.ANAN_ROLE_PERMISSION, roleId + "");
+            ananCacheManger.evict(TableNameConstant.ANAN_ROLE_PERMISSION, roleId + "");
         }
         rolePermissionRepository.deleteInBatch(entities);
         try {
@@ -68,7 +69,7 @@ public class RolePermissionServiceImpl implements RolePermissionService {
             throw new AnanServiceException(e);
         }
         for (Long roleId : needDelRoles) {
-            CacheUtil.evict(TableNameConstant.ANAN_ROLE_PERMISSION, roleId + "");
+            ananCacheManger.evict(TableNameConstant.ANAN_ROLE_PERMISSION, roleId + "");
         }
     }
 

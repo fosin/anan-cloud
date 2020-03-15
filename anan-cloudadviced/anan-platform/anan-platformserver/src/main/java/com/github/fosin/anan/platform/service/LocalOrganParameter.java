@@ -1,12 +1,11 @@
 package com.github.fosin.anan.platform.service;
 
 import com.github.fosin.anan.platform.service.inter.ParameterService;
-import com.github.fosin.anan.pojo.dto.request.AnanParameterCreateDto;
 import com.github.fosin.anan.platformapi.entity.AnanParameterEntity;
 import com.github.fosin.anan.platformapi.parameter.IParameter;
 import com.github.fosin.anan.platformapi.parameter.IParameterStrategy;
 import com.github.fosin.anan.platformapi.parameter.OrganStrategy;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.github.fosin.anan.pojo.dto.request.AnanParameterCreateDto;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 

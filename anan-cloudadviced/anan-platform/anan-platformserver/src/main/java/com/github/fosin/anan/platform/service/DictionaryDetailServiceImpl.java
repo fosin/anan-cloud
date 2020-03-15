@@ -1,7 +1,5 @@
 package com.github.fosin.anan.platform.service;
 
-
-import com.github.fosin.anan.cache.util.CacheUtil;
 import com.github.fosin.anan.core.exception.AnanServiceException;
 import com.github.fosin.anan.jpa.repository.IJpaRepository;
 import com.github.fosin.anan.mvc.module.PageModule;
@@ -18,10 +16,10 @@ import com.github.fosin.anan.platformapi.util.LoginUserUtil;
 import com.github.fosin.anan.pojo.dto.AnanUserDto;
 import com.github.fosin.anan.pojo.dto.request.AnanDictionaryDetailCreateDto;
 import com.github.fosin.anan.pojo.dto.request.AnanDictionaryDetailUpdateDto;
+import com.github.fosin.anan.redis.cache.AnanCacheManger;
 import com.github.fosin.anan.util.NumberUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Lazy;
@@ -49,12 +47,13 @@ import java.util.Objects;
 public class DictionaryDetailServiceImpl implements DictionaryDetailService {
 
     private final DictionaryDetailRepository dictionaryDetailRepository;
-
     private final UserService userService;
+    private final AnanCacheManger ananCacheManger;
 
-    public DictionaryDetailServiceImpl(DictionaryDetailRepository dictionaryDetailRepository, UserService userService) {
+    public DictionaryDetailServiceImpl(DictionaryDetailRepository dictionaryDetailRepository, UserService userService, AnanCacheManger ananCacheManger) {
         this.dictionaryDetailRepository = dictionaryDetailRepository;
         this.userService = userService;
+        this.ananCacheManger = ananCacheManger;
     }
 
     @Override
@@ -98,14 +97,14 @@ public class DictionaryDetailServiceImpl implements DictionaryDetailService {
         Assert.notNull(entity, "传入的ID找不到数据!");
         isSuperUser(entity);
 
-        CacheUtil.evict(TableNameConstant.ANAN_DICTIONARY_DETAIL, entity.getDictionaryId() + "");
+        ananCacheManger.evict(TableNameConstant.ANAN_DICTIONARY_DETAIL, entity.getDictionaryId() + "");
         dictionaryDetailRepository.deleteById(id);
         try {
             Thread.sleep(500);
         } catch (InterruptedException e) {
             throw new AnanServiceException(e);
         }
-        CacheUtil.evict(TableNameConstant.ANAN_DICTIONARY_DETAIL, entity.getDictionaryId() + "");
+        ananCacheManger.evict(TableNameConstant.ANAN_DICTIONARY_DETAIL, entity.getDictionaryId() + "");
         return null;
     }
 

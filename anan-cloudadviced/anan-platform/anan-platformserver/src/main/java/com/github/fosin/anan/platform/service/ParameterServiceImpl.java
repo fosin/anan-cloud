@@ -1,7 +1,6 @@
 package com.github.fosin.anan.platform.service;
 
 
-import com.github.fosin.anan.cache.util.CacheUtil;
 import com.github.fosin.anan.core.exception.AnanServiceException;
 import com.github.fosin.anan.jpa.repository.IJpaRepository;
 import com.github.fosin.anan.mvc.module.PageModule;
@@ -18,11 +17,11 @@ import com.github.fosin.anan.platformapi.util.LoginUserUtil;
 import com.github.fosin.anan.pojo.dto.AnanUserDto;
 import com.github.fosin.anan.pojo.dto.request.AnanParameterCreateDto;
 import com.github.fosin.anan.pojo.dto.request.AnanParameterUpdateDto;
+import com.github.fosin.anan.redis.cache.AnanCacheManger;
 import com.github.fosin.anan.util.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
@@ -53,10 +52,12 @@ public class ParameterServiceImpl implements ParameterService {
     private final ParameterRepository parameterRepository;
 
     private final OrganizationRepository organizationRepository;
+    private final AnanCacheManger ananCacheManger;
 
-    public ParameterServiceImpl(ParameterRepository parameterRepository, OrganizationRepository organizationRepository) {
+    public ParameterServiceImpl(ParameterRepository parameterRepository, OrganizationRepository organizationRepository, AnanCacheManger ananCacheManger) {
         this.parameterRepository = parameterRepository;
         this.organizationRepository = organizationRepository;
+        this.ananCacheManger = ananCacheManger;
     }
 
     @Override
@@ -81,8 +82,8 @@ public class ParameterServiceImpl implements ParameterService {
         //如果修改了type、scope、name则需要删除以前的缓存并设置新缓存
         if (!cCacheKey.equals(cacheKey)) {
             //新key设置旧值，需要发布以后才刷新缓存换成本次更新的新值
-            CacheUtil.put(TableNameConstant.ANAN_PARAMETER, cacheKey, cEntity);
-            CacheUtil.evict(TableNameConstant.ANAN_PARAMETER, cCacheKey);
+            ananCacheManger.put(TableNameConstant.ANAN_PARAMETER, cacheKey, cEntity);
+            ananCacheManger.evict(TableNameConstant.ANAN_PARAMETER, cCacheKey);
         }
         return save;
     }
@@ -92,14 +93,14 @@ public class ParameterServiceImpl implements ParameterService {
         AnanParameterEntity entity = parameterRepository.findById(id).orElse(null);
         Assert.notNull(entity, "通过ID没有能找到参数数据,删除被取消!");
         String cacheKey = getCacheKey(entity);
-        CacheUtil.evict(TableNameConstant.ANAN_PARAMETER, cacheKey);
+        ananCacheManger.evict(TableNameConstant.ANAN_PARAMETER, cacheKey);
         parameterRepository.deleteById(id);
         try {
             Thread.sleep(500);
         } catch (InterruptedException e) {
             throw new AnanServiceException(e);
         }
-        CacheUtil.evict(TableNameConstant.ANAN_PARAMETER, cacheKey);
+        ananCacheManger.evict(TableNameConstant.ANAN_PARAMETER, cacheKey);
         return null;
     }
 
@@ -228,13 +229,13 @@ public class ParameterServiceImpl implements ParameterService {
                 entity.setApplyBy(loginUser.getId());
                 entity.setApplyTime(new Date());
                 entity.setStatus(0);
-                success = CacheUtil.put(TableNameConstant.ANAN_PARAMETER, cacheKey, entity);
+                success = ananCacheManger.put(TableNameConstant.ANAN_PARAMETER, cacheKey, entity);
                 if (success) {
                     parameterRepository.save(entity);
                 }
                 break;
             case 2:
-                success = CacheUtil.evict(TableNameConstant.ANAN_PARAMETER, cacheKey);
+                success = ananCacheManger.evict(TableNameConstant.ANAN_PARAMETER, cacheKey);
                 if (success) {
                     parameterRepository.deleteById(id);
                     try {
@@ -242,11 +243,11 @@ public class ParameterServiceImpl implements ParameterService {
                     } catch (InterruptedException e) {
                         throw new AnanServiceException(e);
                     }
-                    success = CacheUtil.evict(TableNameConstant.ANAN_PARAMETER, cacheKey);
+                    success = ananCacheManger.evict(TableNameConstant.ANAN_PARAMETER, cacheKey);
                 }
                 break;
             default:
-                success = CacheUtil.put(TableNameConstant.ANAN_PARAMETER, cacheKey, entity);
+                success = ananCacheManger.put(TableNameConstant.ANAN_PARAMETER, cacheKey, entity);
         }
         return success;
     }

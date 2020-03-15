@@ -33,7 +33,10 @@
             <groupId>${anan.groupId}</groupId>
             <artifactId>anan-oauth2</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>${anan.groupId}</groupId>
+            <artifactId>anan-redis</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-zuul</artifactId>
@@ -59,15 +62,6 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-netflix-hystrix-amqp</artifactId>
         </dependency>-->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-redis</artifactId>
-        </dependency>
-        <!--集群模式下使用redis共享session-->
-        <dependency>
-            <groupId>org.springframework.session</groupId>
-            <artifactId>spring-session-data-redis</artifactId>
-        </dependency>
         <!--ribbon的Rule
         <dependency>
             <groupId>io.jmnarloch</groupId>

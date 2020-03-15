@@ -2,6 +2,7 @@ package com.github.fosin.anan;
 
 import com.github.fosin.anan.core.banner.AnanBanner;
 import com.github.fosin.anan.oauth2.annotation.EnableAnanOauth2;
+import com.github.fosin.anan.redis.annotation.EnableAnanRedis;
 import com.github.fosin.anan.swagger.annotation.EnableAnanSwagger2;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.cloud.client.SpringCloudApplication;
@@ -22,7 +23,7 @@ import org.springframework.session.data.redis.config.annotation.web.http.EnableR
 @EnableAnanOauth2
 @EnableWebSecurity
 //@EnableTurbineStream
-@EnableRedisHttpSession
+@EnableAnanRedis
 public class ZuulGatewayApplication {
     public static void main(String[] args) {
         new SpringApplicationBuilder(ZuulGatewayApplication.class)

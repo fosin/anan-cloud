@@ -1,6 +1,5 @@
 package com.github.fosin.anan.platform.service;
 
-import com.github.fosin.anan.cache.util.CacheUtil;
 import com.github.fosin.anan.jpa.repository.IJpaRepository;
 import com.github.fosin.anan.mvc.module.PageModule;
 import com.github.fosin.anan.mvc.result.Result;
@@ -18,13 +17,13 @@ import com.github.fosin.anan.platformapi.util.LoginUserUtil;
 import com.github.fosin.anan.pojo.dto.AnanUserDto;
 import com.github.fosin.anan.pojo.dto.request.AnanUserCreateDto;
 import com.github.fosin.anan.pojo.dto.request.AnanUserUpdateDto;
+import com.github.fosin.anan.redis.cache.AnanCacheManger;
 import com.github.fosin.anan.util.NumberUtil;
 import com.github.fosin.anan.util.RegexUtil;
 import com.github.fosin.anan.util.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
@@ -59,14 +58,16 @@ public class UserServiceImpl implements UserService {
     private final UserRoleRepository userRoleRepository;
     private final OrganizationRepository organizationRepository;
     private final PasswordEncoder passwordEncoder;
-    private final LocalOrganParameter localOrganParameterUtil;
+    private final LocalOrganParameter localOrganParameter;
+    private final AnanCacheManger ananCacheManger;
 
-    public UserServiceImpl(UserRepository userRepository, UserRoleRepository userRoleRepository, OrganizationRepository organizationRepository, PasswordEncoder passwordEncoder, LocalOrganParameter localOrganParameterUtil) {
+    public UserServiceImpl(UserRepository userRepository, UserRoleRepository userRoleRepository, OrganizationRepository organizationRepository, PasswordEncoder passwordEncoder, LocalOrganParameter localOrganParameter, AnanCacheManger ananCacheManger) {
         this.userRepository = userRepository;
         this.userRoleRepository = userRoleRepository;
         this.organizationRepository = organizationRepository;
         this.passwordEncoder = passwordEncoder;
-        this.localOrganParameterUtil = localOrganParameterUtil;
+        this.localOrganParameter = localOrganParameter;
+        this.ananCacheManger = ananCacheManger;
     }
 
     @Override
@@ -104,7 +105,7 @@ public class UserServiceImpl implements UserService {
         AnanUserEntity createUser = new AnanUserEntity();
         BeanUtils.copyProperties(entity, createUser);
 
-        String passwordStrength = localOrganParameterUtil.getOrCreateParameter("DefaultPasswordStrength", RegexUtil.PASSWORD_STRONG, "用户密码强度正则表达式,密码最少6位，包括至少1个大写字母，1个小写字母，1个数字，1个特殊字符");
+        String passwordStrength = localOrganParameter.getOrCreateParameter("DefaultPasswordStrength", RegexUtil.PASSWORD_STRONG, "用户密码强度正则表达式,密码最少6位，包括至少1个大写字母，1个小写字母，1个数字，1个特殊字符");
         Assert.isTrue(RegexUtil.matcher(createUser.getPassword(), passwordStrength), "密码强度不符合强度要求!");
         String password = encryptBeforeSave(createUser);
         AnanUserEntity savedEntity = userRepository.save(createUser);
@@ -144,7 +145,7 @@ public class UserServiceImpl implements UserService {
         List<AnanUserEntity> rcList = new ArrayList<>();
         List<Long> needQueryIds = new ArrayList<>();
         for (Long id : ids) {
-            AnanUserEntity userEntity = CacheUtil.get(TableNameConstant.ANAN_USER, id + "", AnanUserEntity.class);
+            AnanUserEntity userEntity = ananCacheManger.get(TableNameConstant.ANAN_USER, id + "", AnanUserEntity.class);
             if (userEntity != null) {
                 rcList.add(userEntity);
             } else {
@@ -169,7 +170,7 @@ public class UserServiceImpl implements UserService {
     )
     public AnanUserEntity deleteById(Long id) {
         Assert.isTrue(id != null && id > 0, "传入的用户ID无效！");
-        AnanUserEntity entity = CacheUtil.get(TableNameConstant.ANAN_USER, id + "", AnanUserEntity.class);
+        AnanUserEntity entity = ananCacheManger.get(TableNameConstant.ANAN_USER, id + "", AnanUserEntity.class);
         if (entity == null) {
             entity = userRepository.findById(id).orElse(null);
         }
@@ -280,7 +281,7 @@ public class UserServiceImpl implements UserService {
         Assert.isTrue(!StringUtil.isEmpty(confirmPassword1) &&
                 !StringUtil.isEmpty(confirmPassword1) && confirmPassword1.equals(confirmPassword2), "新密码和确认新密码不能为空且必须一致!");
         Assert.isTrue(confirmPassword1.equals(password), "新密码和原密码不能相同!");
-        String passwordStrength = localOrganParameterUtil.getOrCreateParameter("DefaultPasswordStrength", RegexUtil.PASSWORD_STRONG, "用户密码强度正则表达式,密码最少6位，包括至少1个大写字母，1个小写字母，1个数字，1个特殊字符");
+        String passwordStrength = localOrganParameter.getOrCreateParameter("DefaultPasswordStrength", RegexUtil.PASSWORD_STRONG, "用户密码强度正则表达式,密码最少6位，包括至少1个大写字母，1个小写字母，1个数字，1个特殊字符");
         Assert.isTrue(RegexUtil.matcher(confirmPassword1, passwordStrength), "新密码强度不符合强度要求!");
 
         AnanUserEntity user = userRepository.findById(id).orElse(null);
@@ -316,11 +317,11 @@ public class UserServiceImpl implements UserService {
 
     public String getPassword() {
         String password;
-        String resetUserPasswordType = localOrganParameterUtil.getOrCreateParameter("UserResetPasswordType", "2", "重置用户密码时密码的生成规则(1、重置成系统参数中的固定密码 2、设置成随机4位密码)");
+        String resetUserPasswordType = localOrganParameter.getOrCreateParameter("UserResetPasswordType", "2", "重置用户密码时密码的生成规则(1、重置成系统参数中的固定密码 2、设置成随机4位密码)");
         if ("1".equals(resetUserPasswordType)) {
-            password = localOrganParameterUtil.getOrCreateParameter("UserDefaultPassword", "123456", "用户的默认密码");
+            password = localOrganParameter.getOrCreateParameter("UserDefaultPassword", "123456", "用户的默认密码");
         } else {
-            String length = localOrganParameterUtil.getOrCreateParameter("UserResetPasswordLength", "4", "重置用户密码时密码长度,只支持1-9位,否则将默认取4位");
+            String length = localOrganParameter.getOrCreateParameter("UserResetPasswordLength", "4", "重置用户密码时密码长度,只支持1-9位,否则将默认取4位");
             int random = 9999;
             if (NumberUtil.isInteger(length)) {
                 int i = Integer.parseInt(length);

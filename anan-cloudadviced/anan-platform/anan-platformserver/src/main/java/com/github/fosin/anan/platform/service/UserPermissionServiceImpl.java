@@ -1,16 +1,15 @@
 package com.github.fosin.anan.platform.service;
 
-import com.github.fosin.anan.cache.util.CacheUtil;
 import com.github.fosin.anan.core.exception.AnanServiceException;
 import com.github.fosin.anan.jpa.repository.IJpaRepository;
 import com.github.fosin.anan.jpa.service.batch.IUpdateInBatchJpaService;
 import com.github.fosin.anan.platform.service.inter.UserPermissionService;
 import com.github.fosin.anan.platformapi.constant.TableNameConstant;
-import com.github.fosin.anan.pojo.dto.request.AnanUserPermissionUpdateDto;
 import com.github.fosin.anan.platformapi.entity.AnanUserPermissionEntity;
 import com.github.fosin.anan.platformapi.repository.UserPermissionRepository;
+import com.github.fosin.anan.pojo.dto.request.AnanUserPermissionUpdateDto;
+import com.github.fosin.anan.redis.cache.AnanCacheManger;
 import com.github.fosin.anan.util.BeanUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
@@ -34,9 +33,11 @@ import java.util.Set;
 @Lazy
 public class UserPermissionServiceImpl implements UserPermissionService {
     private final UserPermissionRepository userPermissionRepository;
+    private final AnanCacheManger ananCacheManger;
 
-    public UserPermissionServiceImpl(UserPermissionRepository userPermissionRepository) {
+    public UserPermissionServiceImpl(UserPermissionRepository userPermissionRepository, AnanCacheManger ananCacheManger) {
         this.userPermissionRepository = userPermissionRepository;
+        this.ananCacheManger = ananCacheManger;
     }
 
     @Override
@@ -64,7 +65,7 @@ public class UserPermissionServiceImpl implements UserPermissionService {
         }
         Assert.isTrue(needDelUsers.size() != 0, "没有找到需要删除数据!");
         for (Long userId : needDelUsers) {
-            CacheUtil.evict(TableNameConstant.ANAN_USER_PERMISSION, userId + "");
+            ananCacheManger.evict(TableNameConstant.ANAN_USER_PERMISSION, userId + "");
         }
         userPermissionRepository.deleteInBatch(entities);
         try {
@@ -73,7 +74,7 @@ public class UserPermissionServiceImpl implements UserPermissionService {
             throw new AnanServiceException(e);
         }
         for (Long userId : needDelUsers) {
-            CacheUtil.evict(TableNameConstant.ANAN_USER_PERMISSION, userId + "");
+            ananCacheManger.evict(TableNameConstant.ANAN_USER_PERMISSION, userId + "");
         }
     }
 

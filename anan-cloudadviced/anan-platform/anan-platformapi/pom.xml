@@ -21,10 +21,6 @@
         </dependency>
         <dependency>
             <groupId>${anan.groupId}</groupId>
-            <artifactId>anan-cache</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>${anan.groupId}</groupId>
             <artifactId>anan-oauth2</artifactId>
         </dependency>
         <dependency>
