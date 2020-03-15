@@ -3,7 +3,7 @@ package com.github.fosin.anan.auth.config;
 import com.github.fosin.anan.auth.security.AnanTokenServices;
 import com.github.fosin.anan.auth.security.AnanUserDetailsServiceImpl;
 import com.github.fosin.anan.oauth2.config.AnanOauth2Properties;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.annotation.Bean;

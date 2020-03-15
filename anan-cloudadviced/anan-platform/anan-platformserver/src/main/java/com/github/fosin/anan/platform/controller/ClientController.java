@@ -1,11 +1,11 @@
 package com.github.fosin.anan.platform.controller;
 
-import com.github.fosin.anan.mvc.controller.ISimpleController;
-import com.github.fosin.anan.mvc.service.ISimpleService;
+import com.github.fosin.anan.model.controller.ISimpleController;
+import com.github.fosin.anan.model.service.ISimpleService;
 import com.github.fosin.anan.platform.entity.OauthClientDetailsEntity;
 import com.github.fosin.anan.platform.service.inter.OauthClientService;
 import io.swagger.annotations.Api;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 

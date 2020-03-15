@@ -2,9 +2,9 @@ package com.github.fosin.anan.platform.service;
 
 import com.github.fosin.anan.core.exception.AnanServiceException;
 import com.github.fosin.anan.jpa.repository.IJpaRepository;
-import com.github.fosin.anan.mvc.module.PageModule;
-import com.github.fosin.anan.mvc.result.Result;
-import com.github.fosin.anan.mvc.result.ResultUtils;
+import com.github.fosin.anan.model.module.PageModule;
+import com.github.fosin.anan.model.result.Result;
+import com.github.fosin.anan.model.result.ResultUtils;
 import com.github.fosin.anan.platform.repository.DictionaryDetailRepository;
 import com.github.fosin.anan.platform.service.inter.DictionaryDetailService;
 import com.github.fosin.anan.platform.service.inter.UserService;

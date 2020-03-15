@@ -1,7 +1,7 @@
 package com.github.fosin.anan.platform.controller;
 
-import com.github.fosin.anan.mvc.controller.ISimpleController;
-import com.github.fosin.anan.mvc.service.ISimpleService;
+import com.github.fosin.anan.model.controller.ISimpleController;
+import com.github.fosin.anan.model.service.ISimpleService;
 import com.github.fosin.anan.platform.dto.request.AnanPayDetailCreateDto;
 import com.github.fosin.anan.platform.dto.request.AnanPayDetailRetrieveDto;
 import com.github.fosin.anan.platform.dto.request.AnanPayDetailUpdateDto;
@@ -9,7 +9,7 @@ import com.github.fosin.anan.platform.entity.AnanPayDetailEntity;
 import com.github.fosin.anan.platform.service.inter.AnanPayDetailService;
 import com.github.fosin.anan.platformapi.constant.UrlPrefixConstant;
 import io.swagger.annotations.Api;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 

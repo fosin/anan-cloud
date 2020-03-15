@@ -4,24 +4,21 @@ package com.github.fosin.anan.zuulgateway.filter;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.cloud.netflix.zuul.filters.ZuulProperties;
 import org.springframework.cloud.netflix.zuul.filters.support.FilterConstants;
-import org.springframework.stereotype.Component;
+import org.springframework.http.HttpHeaders;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.util.Base64Utils;
 import org.springframework.util.PathMatcher;
 import org.springframework.util.StringUtils;
+import org.springframework.web.util.UrlPathHelper;
 
 import javax.servlet.http.HttpServletRequest;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
-
-import org.springframework.http.HttpHeaders;
-import org.springframework.web.util.UrlPathHelper;
 
 /**
  * Description

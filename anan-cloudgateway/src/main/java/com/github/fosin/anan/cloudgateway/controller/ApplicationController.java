@@ -2,7 +2,7 @@ package com.github.fosin.anan.cloudgateway.controller;
 
 import com.github.fosin.anan.cloudgateway.dto.PageURI;
 import com.github.fosin.anan.util.StringUtil;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;

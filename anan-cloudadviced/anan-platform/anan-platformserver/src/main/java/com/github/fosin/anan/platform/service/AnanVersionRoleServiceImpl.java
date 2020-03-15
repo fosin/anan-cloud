@@ -1,8 +1,8 @@
 package com.github.fosin.anan.platform.service;
 
-import com.github.fosin.anan.mvc.module.PageModule;
-import com.github.fosin.anan.mvc.result.Result;
-import com.github.fosin.anan.mvc.result.ResultUtils;
+import com.github.fosin.anan.model.module.PageModule;
+import com.github.fosin.anan.model.result.Result;
+import com.github.fosin.anan.model.result.ResultUtils;
 import com.github.fosin.anan.platform.dto.request.AnanVersionRoleCreateDto;
 import com.github.fosin.anan.platform.dto.request.AnanVersionRoleUpdateDto;
 import com.github.fosin.anan.platform.entity.AnanVersionRoleEntity;
@@ -11,7 +11,6 @@ import com.github.fosin.anan.platform.service.inter.AnanVersionRoleService;
 import com.github.fosin.anan.platformapi.constant.SystemConstant;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

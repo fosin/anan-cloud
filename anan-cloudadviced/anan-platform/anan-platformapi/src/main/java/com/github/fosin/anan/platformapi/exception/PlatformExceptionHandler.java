@@ -1,6 +1,7 @@
 package com.github.fosin.anan.platformapi.exception;
 
-import com.github.fosin.anan.mvc.exception.AnanExceptionHandler;
+import com.github.fosin.anan.model.exception.AnanExceptionHandler;
+import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -17,6 +18,11 @@ import java.util.Set;
  */
 @RestControllerAdvice
 public class PlatformExceptionHandler extends AnanExceptionHandler {
+    public PlatformExceptionHandler(ApplicationContext applicationContext) {
+        super(applicationContext);
+    }
+
+    @Override
     @ExceptionHandler({ConstraintViolationException.class})
     public ResponseEntity<String> validationException(ConstraintViolationException e) {
         if (isDev()) {

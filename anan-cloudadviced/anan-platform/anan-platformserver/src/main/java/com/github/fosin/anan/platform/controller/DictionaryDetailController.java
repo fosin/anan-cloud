@@ -1,12 +1,12 @@
 package com.github.fosin.anan.platform.controller;
 
 import com.github.fosin.anan.core.exception.AnanControllerException;
-import com.github.fosin.anan.mvc.constant.MvcConstant;
-import com.github.fosin.anan.mvc.controller.ISimpleController;
-import com.github.fosin.anan.mvc.module.PageModule;
-import com.github.fosin.anan.mvc.result.ListResult;
-import com.github.fosin.anan.mvc.result.ResultUtils;
-import com.github.fosin.anan.mvc.service.ISimpleService;
+import com.github.fosin.anan.model.constant.PathConstant;
+import com.github.fosin.anan.model.controller.ISimpleController;
+import com.github.fosin.anan.model.module.PageModule;
+import com.github.fosin.anan.model.result.ListResult;
+import com.github.fosin.anan.model.result.ResultUtils;
+import com.github.fosin.anan.model.service.ISimpleService;
 import com.github.fosin.anan.pojo.dto.request.AnanDictionaryDetailCreateDto;
 import com.github.fosin.anan.pojo.dto.request.AnanDictionaryDetailRetrieveDto;
 import com.github.fosin.anan.pojo.dto.request.AnanDictionaryDetailUpdateDto;
@@ -16,7 +16,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -32,7 +32,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("v1/dictionaryDetail")
-@Api(value = "v1/dictionaryDetail", tags = "通用字典明细管理", description = "通用字典明细管理(增删改查)")
+@Api(value = "v1/dictionaryDetail", tags = "通用字典明细管理(增删改查)")
 public class DictionaryDetailController implements ISimpleController<AnanDictionaryDetailEntity, Long, AnanDictionaryDetailCreateDto, AnanDictionaryDetailRetrieveDto, AnanDictionaryDetailUpdateDto> {
     private final DictionaryDetailService dictionaryDetailService;
 
@@ -50,7 +50,7 @@ public class DictionaryDetailController implements ISimpleController<AnanDiction
 //            @ApiImplicitParam(name = "pageModule", value = "分页排序实体类"),
             @ApiImplicitParam(name = "dictionaryId", value = "字典代码,取值于AnanDictionaryEntity.id"),
     })
-    @RequestMapping(value = MvcConstant.PATH_PAGE_LIST + "/{dictionaryId}", method = {RequestMethod.POST, RequestMethod.GET})
+    @RequestMapping(value = PathConstant.PATH_PAGE_LIST + "/{dictionaryId}", method = {RequestMethod.POST, RequestMethod.GET})
     public ResponseEntity<ListResult<AnanDictionaryDetailEntity>> pageList(@RequestBody PageModule pageModule, @PathVariable Long dictionaryId) {
         PageRequest pageRequest = PageRequest.of(pageModule.getPageNumber() - 1, pageModule.getPageSize(), Sort.Direction.fromString(pageModule.getSortOrder()), pageModule.getSortName());
         //分页查找

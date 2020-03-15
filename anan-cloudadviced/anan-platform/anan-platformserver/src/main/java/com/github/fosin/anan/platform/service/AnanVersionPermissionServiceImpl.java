@@ -6,7 +6,7 @@ import com.github.fosin.anan.platform.entity.AnanVersionPermissionEntity;
 import com.github.fosin.anan.platform.repository.AnanVersionPermissionRepository;
 import com.github.fosin.anan.platform.service.inter.AnanVersionPermissionService;
 import com.github.fosin.anan.util.BeanUtil;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

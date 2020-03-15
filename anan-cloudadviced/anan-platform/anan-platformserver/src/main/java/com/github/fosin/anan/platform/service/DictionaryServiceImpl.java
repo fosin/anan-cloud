@@ -3,9 +3,9 @@ package com.github.fosin.anan.platform.service;
 
 import com.github.fosin.anan.core.exception.AnanServiceException;
 import com.github.fosin.anan.jpa.repository.IJpaRepository;
-import com.github.fosin.anan.mvc.module.PageModule;
-import com.github.fosin.anan.mvc.result.Result;
-import com.github.fosin.anan.mvc.result.ResultUtils;
+import com.github.fosin.anan.model.module.PageModule;
+import com.github.fosin.anan.model.result.Result;
+import com.github.fosin.anan.model.result.ResultUtils;
 import com.github.fosin.anan.platform.repository.DictionaryDetailRepository;
 import com.github.fosin.anan.platform.repository.DictionaryRepository;
 import com.github.fosin.anan.platform.service.inter.DictionaryService;
@@ -18,7 +18,7 @@ import com.github.fosin.anan.pojo.dto.request.AnanDictionaryUpdateDto;
 import com.github.fosin.anan.util.NumberUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

@@ -4,7 +4,7 @@ import com.github.fosin.anan.auth.service.inter.UserPermissionService;
 import com.github.fosin.anan.platformapi.constant.TableNameConstant;
 import com.github.fosin.anan.platformapi.entity.AnanUserPermissionEntity;
 import com.github.fosin.anan.platformapi.repository.UserPermissionRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 

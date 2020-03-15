@@ -1,9 +1,9 @@
 package com.github.fosin.anan.platform.controller;
 
 import com.github.fosin.anan.core.exception.AnanControllerException;
-import com.github.fosin.anan.mvc.controller.AbstractBaseController;
-import com.github.fosin.anan.mvc.controller.ISimpleController;
-import com.github.fosin.anan.mvc.service.ISimpleService;
+import com.github.fosin.anan.model.controller.AbstractBaseController;
+import com.github.fosin.anan.model.controller.ISimpleController;
+import com.github.fosin.anan.model.service.ISimpleService;
 import com.github.fosin.anan.platform.service.inter.AnanOrganizationAuthService;
 import com.github.fosin.anan.platform.service.inter.AnanOrganizationPermissionService;
 import com.github.fosin.anan.platform.service.inter.OrganizationService;
@@ -22,7 +22,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

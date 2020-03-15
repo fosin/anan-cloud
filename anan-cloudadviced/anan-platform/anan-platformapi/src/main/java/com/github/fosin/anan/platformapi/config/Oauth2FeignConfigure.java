@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpStatus;
 import org.jboss.logging.Logger;
 import org.springframework.beans.factory.ObjectFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.http.HttpMessageConverters;
 import org.springframework.cloud.openfeign.support.SpringDecoder;
@@ -18,6 +19,7 @@ import org.springframework.security.oauth2.client.DefaultOAuth2ClientContext;
 import org.springframework.security.oauth2.client.OAuth2ClientContext;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.security.oauth2.client.token.grant.client.ClientCredentialsResourceDetails;
+import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
@@ -35,16 +37,16 @@ import static java.util.concurrent.TimeUnit.SECONDS;
  * @date 2019/3/27
  */
 @Slf4j
-public class OAuth2FeignConfigure {
-
+public class Oauth2FeignConfigure {
     // feign的OAuth2ClientContext
     private OAuth2ClientContext feignOauth2ClientContext = new DefaultOAuth2ClientContext();
+    private final ClientCredentialsResourceDetails clientCredentialsResourceDetails;
+    private final ObjectFactory<HttpMessageConverters> messageConverters;
 
-    @Resource
-    private ClientCredentialsResourceDetails clientCredentialsResourceDetails;
-
-    @Autowired
-    private ObjectFactory<HttpMessageConverters> messageConverters;
+    public Oauth2FeignConfigure(ClientCredentialsResourceDetails clientCredentialsResourceDetails, ObjectFactory<HttpMessageConverters> messageConverters) {
+        this.clientCredentialsResourceDetails = clientCredentialsResourceDetails;
+        this.messageConverters = messageConverters;
+    }
 
     @Bean
     public OAuth2RestTemplate clientCredentialsRestTemplate() {

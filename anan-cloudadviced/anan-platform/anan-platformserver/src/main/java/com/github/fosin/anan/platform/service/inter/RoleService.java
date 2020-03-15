@@ -1,7 +1,7 @@
 package com.github.fosin.anan.platform.service.inter;
 
-import com.github.fosin.anan.mvc.module.PageModule;
-import com.github.fosin.anan.mvc.result.Result;
+import com.github.fosin.anan.model.module.PageModule;
+import com.github.fosin.anan.model.result.Result;
 import com.github.fosin.anan.jpa.service.ISimpleJpaService;
 import com.github.fosin.anan.pojo.dto.request.AnanRoleCreateDto;
 import com.github.fosin.anan.pojo.dto.request.AnanRoleRetrieveDto;

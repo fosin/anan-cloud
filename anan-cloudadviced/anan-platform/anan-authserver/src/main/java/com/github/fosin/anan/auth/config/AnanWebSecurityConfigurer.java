@@ -1,7 +1,7 @@
 package com.github.fosin.anan.auth.config;
 
 import com.github.fosin.anan.auth.security.AnanUserDetailsServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;

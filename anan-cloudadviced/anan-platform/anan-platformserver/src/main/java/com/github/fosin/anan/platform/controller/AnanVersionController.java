@@ -1,8 +1,8 @@
 package com.github.fosin.anan.platform.controller;
 
 
-import com.github.fosin.anan.mvc.controller.ISimpleController;
-import com.github.fosin.anan.mvc.service.ISimpleService;
+import com.github.fosin.anan.model.controller.ISimpleController;
+import com.github.fosin.anan.model.service.ISimpleService;
 import com.github.fosin.anan.platform.dto.request.*;
 import com.github.fosin.anan.platform.dto.request.AnanOrganizationPermissionUpdateDto;
 import com.github.fosin.anan.platform.entity.AnanOrganizationAuthEntity;
@@ -14,7 +14,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

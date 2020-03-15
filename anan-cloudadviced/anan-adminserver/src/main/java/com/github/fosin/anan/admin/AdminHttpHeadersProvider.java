@@ -3,7 +3,7 @@ package com.github.fosin.anan.admin;
 import de.codecentric.boot.admin.server.domain.entities.Instance;
 import de.codecentric.boot.admin.server.web.client.BasicAuthHttpHeaderProvider;
 import de.codecentric.boot.admin.server.web.client.HttpHeadersProvider;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;

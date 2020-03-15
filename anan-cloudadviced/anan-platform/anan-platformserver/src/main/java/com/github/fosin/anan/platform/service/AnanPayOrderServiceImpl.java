@@ -2,7 +2,7 @@ package com.github.fosin.anan.platform.service;
 
 import com.github.fosin.anan.platform.repository.AnanPayOrderRepository;
 import com.github.fosin.anan.platform.service.inter.AnanPayOrderService;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
