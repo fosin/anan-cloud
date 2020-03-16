@@ -29,6 +29,6 @@ jobs:
     - name: 11-jdk
       run: |
         docker login --username=${{ secrets.aliyun_user }} registry.cn-hangzhou.aliyuncs.com --password=${{ secrets.aliyun_pass }}
-        docker build -t registry.cn-hangzhou.aliyuncs.com/fosin/openjdk:11-jdk -f ./deploy/openjdk/Dockerfile ./deploy/openjdk
+        docker build ./deploy/openjdk -t registry.cn-hangzhou.aliyuncs.com/fosin/openjdk:11-jdk -f ./deploy/openjdk/Dockerfile
         docker push registry.cn-hangzhou.aliyuncs.com/fosin/openjdk:11-jdk
 

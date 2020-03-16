@@ -4,8 +4,8 @@ MAINTAINER fosin 28860823@qq.com
 
 VOLUME ["/tmp","/logs"]
 
-COPY deploy/openjdk/bin/ /bin/
-COPY deploy/openjdk/debian/sources.list /etc/apt/
+COPY bin/ /bin/
+COPY debian/sources.list /etc/apt/
 #COPY ./bin/ /bin/
 #COPY ./debian/sources.list /etc/apt/
 
