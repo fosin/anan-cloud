@@ -2,7 +2,7 @@
 
 name: Master Dockerfile CI
 
-# Controls when the action will run. Triggers the workflow on push or pull request 
+# Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the master branch
 on:
   push:
@@ -29,6 +29,6 @@ jobs:
     - name: 11-jdk
       run: |
         docker login --username=${{ secrets.aliyun_user }} registry.cn-hangzhou.aliyuncs.com --password=${{ secrets.aliyun_pass }}
-        docker build -t registry.cn-hangzhou.aliyuncs.com/fosin/openjdk:11-jdk -f deploy/openjdk/Dockerfile deploy/openjdk 
+        docker build -t registry.cn-hangzhou.aliyuncs.com/fosin/openjdk:11-jdk -f ./deploy/openjdk/Dockerfile ./deploy/openjdk
         docker push registry.cn-hangzhou.aliyuncs.com/fosin/openjdk:11-jdk
 
