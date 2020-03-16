@@ -28,7 +28,6 @@ jobs:
     # 创建jdk11镜像
     - name: 11-jdk
       run: |
-        docker login --username=${{ secrets.aliyun_user }} registry.cn-hangzhou.aliyuncs.com --password=${{ secrets.aliyun_pass }}
-        docker build ./deploy/openjdk -t registry.cn-hangzhou.aliyuncs.com/fosin/openjdk:11-jdk -f ./deploy/openjdk/Dockerfile
-        docker push registry.cn-hangzhou.aliyuncs.com/fosin/openjdk:11-jdk
-
+        docker login --username=${{ secrets.dockerhub_user }} --password=${{ secrets.dockerhub_pass }}
+        docker build ./deploy/openjdk -t openjdk:11-jdk -f ./deploy/openjdk/Dockerfile11.github
+        docker push openjdk:11-jdk
