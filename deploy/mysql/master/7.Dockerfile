@@ -2,10 +2,10 @@ FROM mysql:5.7
 
 MAINTAINER fosin 28860823@qq.com
 
-COPY ./anan-platform-init.sql /docker-entrypoint-initdb.d
-COPY ./nacos-init.sql /docker-entrypoint-initdb.d
-COPY ./master.cnf /etc/mysql/conf.d
-COPY ./docker-entrypoint.sh /usr/local/bin/
+COPY anan-platform-init.sql /docker-entrypoint-initdb.d
+COPY nacos-init.sql /docker-entrypoint-initdb.d
+COPY master.cnf /etc/mysql/conf.d
+COPY docker-entrypoint.sh /usr/local/bin/
 
 ENV MYSQL_REPLICATION_USER anan_ru
 ENV MYSQL_REPLICATION_PASSWORD anan_ru

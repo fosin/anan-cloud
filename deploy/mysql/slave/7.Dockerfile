@@ -2,8 +2,8 @@ FROM mysql:5.7
 
 MAINTAINER fosin 28860823@qq.com
 
-COPY ./slave.cnf /etc/mysql/conf.d
-COPY ./docker-entrypoint.sh /usr/local/bin/
+COPY slave.cnf /etc/mysql/conf.d
+COPY docker-entrypoint.sh /usr/local/bin/
 
 ENV MYSQL_REPLICATION_USER anan_ru
 ENV MYSQL_REPLICATION_PASSWORD anan_ru

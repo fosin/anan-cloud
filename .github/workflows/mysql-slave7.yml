@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: Master Dockerfile CI
+name: Mysql5.7 Slave Dockerfile CI
 
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the master branch
@@ -8,11 +8,11 @@ on:
   push:
     branches: [ master ]
     paths:
-    - 'deploy/openjdk/**'
+    - 'deploy/mysql/master/**'
   pull_request:
     branches: [ master ]
     paths:
-    - 'deploy/openjdk/**'
+    - 'deploy/mysql/master/**'
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
@@ -26,8 +26,8 @@ jobs:
     - uses: actions/checkout@master
 
     # 创建jdk11镜像
-    - name: 11-jdk
+    - name: mysql-master5.7
       run: |
         docker login --username=${{ secrets.dockerhub_user }} --password=${{ secrets.dockerhub_pass }}
-        docker build ./deploy/openjdk -t fosin/openjdk:11-jdk -f ./deploy/openjdk/11.github.Dockerfile
-        docker push fosin/openjdk:11-jdk
+        docker build ./deploy/mysql/slave -t fosin/mysql-slave:5.7 -f ./deploy/mysql/slave/7.Dockerfile
+        docker push fosin/mysql-slave:5.7
