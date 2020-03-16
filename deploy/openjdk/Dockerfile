@@ -4,8 +4,8 @@ MAINTAINER fosin 28860823@qq.com
 
 VOLUME ["/tmp","/logs"]
 
-COPY bin/ /bin/
-COPY debian/sources.list /etc/apt/
+COPY entrypoint.sh wait-for.sh /bin/
+COPY sources.list /etc/apt/
 #COPY ./bin/ /bin/
 #COPY ./debian/sources.list /etc/apt/
 
