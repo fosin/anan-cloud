@@ -29,5 +29,5 @@ jobs:
     - name: 11-jdk
       run: |
         docker login --username=${{ secrets.dockerhub_user }} --password=${{ secrets.dockerhub_pass }}
-        docker build ./deploy/openjdk -t openjdk:11-jdk -f ./deploy/openjdk/Dockerfile11.github
-        docker push openjdk:11-jdk
+        docker build ./deploy/openjdk -t fosin/openjdk:11-jdk -f ./deploy/openjdk/Dockerfile11.github
+        docker push fosin/openjdk:11-jdk
