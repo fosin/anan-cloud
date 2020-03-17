@@ -40,8 +40,9 @@ jobs:
 
     - name: Build with Maven
       run: |
-        mvn compile jar:jar spring-boot:repackage --file $MODULE_PATH/pom.xml
+        mvn --batch-mode --errors --file $MODULE_PATH/pom.xml clean compile jar:jar spring-boot:repackage
         ls target/
+
     - name: build and push image
       run: |
         docker login --username=${{ secrets.dockerhub_user }} --password=${{ secrets.dockerhub_pass }}
