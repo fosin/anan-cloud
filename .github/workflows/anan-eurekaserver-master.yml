@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: AuthServer Master Dockerfile CI
+name: EurekaServer Master Dockerfile CI
 
 env:
   MODULE_NAME: anan-eurekaserver
@@ -38,15 +38,13 @@ jobs:
         java-version: '11.0.6'
         architecture: x64
 
-    - name: Show all files
-      run: |
-        ls -R
-
     - name: Build with Maven
       run: |
         mvn --batch-mode --errors --file $MODULE_PATH/pom.xml clean compile jar:jar spring-boot:repackage
-        ls target/
-
+#        ls target/
+    - name: Show all files
+      run: |
+        ls -R
     - name: build and push image
       run: |
         docker login --username=${{ secrets.dockerhub_user }} --password=${{ secrets.dockerhub_pass }}
