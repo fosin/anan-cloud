@@ -14,7 +14,7 @@ on:
     paths:
       - '$MODULE_PATH/**'
 jobs:
-build:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout master branche
