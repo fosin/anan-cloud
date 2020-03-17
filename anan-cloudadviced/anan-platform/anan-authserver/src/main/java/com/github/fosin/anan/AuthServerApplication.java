@@ -16,7 +16,7 @@ import org.springframework.web.client.RestTemplate;
  *
  * @author fosin
  */
-@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
+@SpringBootApplication
 @EnableAnanRedis
 @EnableAnanSwagger2
 @EnableAnanOauth2
