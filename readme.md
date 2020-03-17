@@ -88,7 +88,7 @@ cat > /etc/docker/daemon.json <<EOF
 {
   "exec-opts": ["native.cgroupdriver=systemd"],
   "log-driver": "json-file",
-  "log-opts": {"max-size":"50m", "max-file":"3"}
+  "log-opts": {"max-size":"50m", "max-file":"3"},
   "registry-mirrors": ["https://c70a1b9z.mirror.aliyuncs.com","https://registry.docker-cn.com"],
   "experimental": true
 }
@@ -251,10 +251,28 @@ EOF
 ##### 一条命令实现停用并删除容器
     docker stop $(docker ps -q) && docker rm $(docker ps -aq)
 
-##### 删除所有异常退出的容器
+##### 修剪容器
+    #默认情况下，所有停止状态的容器会被删除。可以使用 --filter 标志来限制范围。
+    docker container prune -f
     docker rm $(docker ps -a| grep Exited | awk '{print $1}')
 
 #### 3.2、删除指定的镜像
-    docker rmi $(docker images | grep registry.cn-hangzhou.aliyuncs.com/fosin/anan | awk '{print $3}')
+    #删除所有包含关键字fosin的镜像
+    docker rmi $(docker images | grep fosin | awk '{print $3}')
+    #删除所有未被tag标记（none）和未被容器使用的镜像(虚悬镜像)
+    docker image prune -f
+    #清理无容器使用的镜像
+    docker image prune -a
+    
+### 3.3、修剪容器、数据卷、网络、镜像
+    # 命令是修剪镜像、容器和网络的快捷方式，指定--volumes标志才会修剪卷
+    # 在 Docker 17.06.0 及以前版本中，还好修剪卷。在 Docker 17.06.1 及更高版本中必须为 docker system prune 命令明确指定 --volumes 标志才会修剪卷。
+    docker system prune --volumes -f
+### 3.4、修剪volumn
+    # 卷可以被一个或多个容器使用，并占用 Docker 主机上的空间。卷永远不会被自动删除，因为这么做会破坏数据。
+    docker volume prune -f
+### 3.5、修剪网络
+    # Docker 网络不会占用太多磁盘空间，但是它们会创建 iptables 规则，桥接网络设备和路由表条目。
+    # 要清理这些东西，可以使用 docker network prune 来清理没有被容器未使用的网络。
+    docker network prune -f
 
-    docker rmi $(docker images | grep none | awk '{print $3}')
