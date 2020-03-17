@@ -1,6 +1,11 @@
 # This is a basic workflow to help you get started with Actions
 
-name: Master Dockerfile CI
+name: OpenJDK11 Master Dockerfile CI
+
+env:
+  MODULE_NAME: openjdk
+  MODULE_VERSION: 11-jdk
+  MODULE_PATH: deploy/openjdk
 
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the master branch
@@ -8,11 +13,11 @@ on:
   push:
     branches: [ master ]
     paths:
-    - 'deploy/openjdk/**'
+      - '$MODULE_PATH/**'
   pull_request:
     branches: [ master ]
     paths:
-    - 'deploy/openjdk/**'
+      - '$MODULE_PATH/**'
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
@@ -23,11 +28,11 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-    - uses: actions/checkout@master
+    - uses: actions/checkout@v2
 
     # 创建jdk11镜像
     - name: 11-jdk
       run: |
         docker login --username=${{ secrets.dockerhub_user }} --password=${{ secrets.dockerhub_pass }}
-        docker build ./deploy/openjdk -t fosin/openjdk:11-jdk -f ./deploy/openjdk/11.github.Dockerfile
-        docker push fosin/openjdk:11-jdk
+        docker build ./$MODULE_PATH -t fosin/$MODULE_NAME:$MODULE_VERSION -f ./$MODULE_PATH/11.github.Dockerfile
+        docker push fosin/$MODULE_NAME:$MODULE_VERSION

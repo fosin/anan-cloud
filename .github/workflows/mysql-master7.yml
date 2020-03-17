@@ -2,17 +2,22 @@
 
 name: Mysql5.7 Master Dockerfile CI
 
+env:
+  MODULE_NAME: mysql-master
+  MODULE_VERSION: 5.7
+  MODULE_PATH: deploy/mysql/master
+
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the master branch
 on:
   push:
     branches: [ master ]
     paths:
-    - 'deploy/mysql/master/**'
+      - '$MODULE_PATH/**'
   pull_request:
     branches: [ master ]
     paths:
-    - 'deploy/mysql/master/**'
+      - '$MODULE_PATH/**'
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
@@ -23,11 +28,11 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-    - uses: actions/checkout@master
+    - uses: actions/checkout@v2
 
-    # 创建jdk11镜像
-    - name: mysql-master5.7
+      # 创建镜像并推送
+    - name: $MODULE_NAME:$MODULE_VERSION
       run: |
         docker login --username=${{ secrets.dockerhub_user }} --password=${{ secrets.dockerhub_pass }}
-        docker build ./deploy/mysql/master -t fosin/mysql-master:5.7 -f ./deploy/mysql/master/7.Dockerfile
-        docker push fosin/mysql-master:5.7
+        docker build ./$MODULE_PATH -t fosin/$MODULE_NAME:$MODULE_VERSION -f ./$MODULE_PATH/7.Dockerfile
+        docker push fosin/$MODULE_NAME:$MODULE_VERSION
