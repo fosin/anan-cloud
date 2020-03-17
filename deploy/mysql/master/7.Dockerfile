@@ -13,7 +13,8 @@ ENV MYSQL_DATABASE2 anan_platform
 ENV MYSQL_USER2 anan
 ENV MYSQL_PASSWORD2 anan
 
-RUN ln -s -f usr/local/bin/docker-entrypoint.sh /entrypoint.sh # backwards compat
+RUN chmod +x usr/local/bin/docker-entrypoint.sh \
+    && ln -s -f usr/local/bin/docker-entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["docker-entrypoint.sh"]
 
 CMD ["mysqld"]

@@ -10,7 +10,8 @@ ENV MYSQL_REPLICATION_PASSWORD anan_ru
 ENV MYSQL_MASTER_SERVICE_HOST mysql-master
 ENV MYSQL_MASTER_SERVICE_PORT 3306
 
-RUN ln -s -f usr/local/bin/docker-entrypoint.sh /entrypoint.sh # backwards compat
+RUN chmod +x usr/local/bin/docker-entrypoint.sh \
+    && ln -s -f usr/local/bin/docker-entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["docker-entrypoint.sh"]
 
 CMD ["mysqld"]
