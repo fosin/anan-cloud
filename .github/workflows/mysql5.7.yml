@@ -1,0 +1,31 @@
+name: Mysql5.7 Dockerfile CI
+env:
+  MODULE_MASTER_NAME: mysql-master
+  MODULE_SLAVE_NAME: mysql-slave
+  MODULE_VERSION: 5.7
+  MODULE_PATH: deploy/mysql
+on:
+  push:
+    branches: [ master ]
+    paths:
+      - '$MODULE_PATH/**'
+  pull_request:
+    branches: [ master ]
+    paths:
+      - '$MODULE_PATH/**'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        # 创建master镜像并推送
+      - name: Docker build and push master image
+        run: |
+          docker login --username=${{ secrets.dockerhub_user }} --password=${{ secrets.dockerhub_pass }}
+          docker build ./$MODULE_PATH/master -t fosin/$MODULE_MASTER_NAME:$MODULE_VERSION -f ./$MODULE_PATH/master/7.Dockerfile
+          docker push fosin/$MODULE_MASTER_NAME:$MODULE_VERSION
+      - name: Docker build and push slave image
+        run: |
+          docker login --username=${{ secrets.dockerhub_user }} --password=${{ secrets.dockerhub_pass }}
+          docker build ./$MODULE_PATH/slave -t fosin/$MODULE_SLAVE_NAME:$MODULE_VERSION -f ./$MODULE_PATH/slave/7.Dockerfile
+          docker push fosin/$MODULE_SLAVE_NAME:$MODULE_VERSION
