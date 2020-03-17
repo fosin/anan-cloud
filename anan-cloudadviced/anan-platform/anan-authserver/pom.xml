@@ -36,38 +36,5 @@
             <groupId>org.thymeleaf.extras</groupId>
             <artifactId>thymeleaf-extras-springsecurity5</artifactId>
         </dependency>
-        <!--spring boot 项目引入了 spring的devtools 经常会产生java.lang.ClassCastException 两个一样的类不能强转-->
-        <!--<dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-devtools</artifactId>
-            <optional>true</optional>&lt;!&ndash; 这个需要为 true 热部署才有效 &ndash;&gt;
-        </dependency>-->
-        <!--以下是前端ui的jar-->
-        <!-- <dependency>
-           <groupId>org.webjars</groupId>
-           <artifactId>bootstrap</artifactId>
-           <version>3.2.0</version>
-       </dependency>
-       <dependency>
-           <groupId>org.webjars</groupId>
-           <artifactId>font-awesome</artifactId>
-           <version>4.5.0</version>
-       </dependency>
-     <dependency>
-           <groupId>org.webjars</groupId>
-           <artifactId>webjars-locator</artifactId>
-           <version>0.39</version>
-       </dependency>
-       <dependency>
-           <groupId>org.webjars</groupId>
-           <artifactId>jquery-blockui</artifactId>
-           <version>2.70</version>
-           <exclusions>
-               <exclusion>
-                   <artifactId>jquery</artifactId>
-                   <groupId>org.webjars</groupId>
-               </exclusion>
-           </exclusions>
-       </dependency>-->
     </dependencies>
 </project>
