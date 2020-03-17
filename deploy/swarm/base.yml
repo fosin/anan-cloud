@@ -1,7 +1,7 @@
 version: "3"
 services:
   mysql-master:
-    image: registry.cn-hangzhou.aliyuncs.com/fosin/mysql-master:2.1.0-SNAPSHOT
+    image: fosin/mysql-master:5.7
     networks:
       - anan-overlay
     depends_on:
@@ -36,7 +36,7 @@ services:
         reservations:
           memory: 64M
   mysql-slave:
-    image: registry.cn-hangzhou.aliyuncs.com/fosin/mysql-slave:2.1.0-SNAPSHOT
+    image: fosin/mysql-slave:5.7
     networks:
       - anan-overlay
     depends_on:

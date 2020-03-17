@@ -1,4 +1,4 @@
-FROM registry.cn-hangzhou.aliyuncs.com/fosin/openjdk:11-jdk
+FROM fosin/openjdk:11-jdk
 MAINTAINER fosin 28860823@qq.com
 VOLUME /anan-config
 COPY target/*.jar app.jar

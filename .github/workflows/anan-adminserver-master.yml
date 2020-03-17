@@ -1,9 +1,9 @@
-name: AuthServer Master Dockerfile CI
+name: AdminServer Master Dockerfile CI
 env:
-  MODULE_NAME: anan-authserver
+  MODULE_NAME: anan-adminserver
   MODULE_VERSION: 2.1.0-SNAPSHOT
   MODULE_PROFILE: local
-  MODULE_PATH: anan-cloudadviced/anan-platform/anan-authserver
+  MODULE_PATH: anan-cloudadviced/anan-adminserver
 on:
   push:
     branches: [ master ]
@@ -14,7 +14,7 @@ on:
     paths:
       - '$MODULE_PATH/**'
 jobs:
-build:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout master branche
@@ -34,19 +34,3 @@ build:
           docker login --username=${{ secrets.dockerhub_user }} --password=${{ secrets.dockerhub_pass }}
           docker build ./$MODULE_PATH -t fosin/$MODULE_NAME:$MODULE_VERSION -f ./$MODULE_PATH/Dockerfile
           docker push fosin/$MODULE_NAME:$MODULE_VERSION
-#    - name: Upload fatjar
-#      uses: actions/upload-artifact@v1
-#      with:
-#        name: $MODULE_NAME-$MODULE_VERSION-$MODULE_PROFILE.jar
-#        path: target/
-#
-#  deploy:
-#    name: Deploy
-#    needs: [build]
-#    runs-on: ubuntu-latest
-#    steps:
-#      - uses: actions/download-artifact@v1
-#        with:
-#          name: $MODULE_NAME-$MODULE_VERSION-$MODULE_PROFILE.jar
-#          path: target/
-

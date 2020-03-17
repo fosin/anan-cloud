@@ -34,9 +34,9 @@ services:
   mysql-master:
     container_name: mysql-master
     hostname: mysql-master
-    image: registry.cn-hangzhou.aliyuncs.com/fosin/mysql-master:2.1.0-SNAPSHOT
-    build:
-      context: deploy/mysql/master
+    image: fosin/mysql-master:5.7
+#    build:
+#      context: deploy/mysql/master
     environment:
       - TZ=Asia/Shanghai
       - MYSQL_ROOT_PASSWORD=local
@@ -57,9 +57,9 @@ services:
   mysql-slave:
     container_name: mysql-slave
     hostname: mysql-slave
-    image: registry.cn-hangzhou.aliyuncs.com/fosin/mysql-slave:2.1.0-SNAPSHOT
-    build:
-      context: deploy/mysql/slave
+    image: fosin/mysql-slave:5.7
+#    build:
+#      context: deploy/mysql/slave
     environment:
       - TZ=Asia/Shanghai
       - MYSQL_ROOT_PASSWORD=local
@@ -184,7 +184,7 @@ services:
 
   anan-vue:
     container_name: anan-vue
-    image: registry.cn-hangzhou.aliyuncs.com/fosin/anan-vue:3.0.0
+    image: fosin/anan-vue:3.0.0
     hostname: anan-vue
     environment:
       - TZ=Asia/Shanghai
@@ -353,7 +353,7 @@ services:
       - "ALERTMANAGER_URIS=default:http://alertmanager:9093"
 
   anan-zuulgateway:
-    image: registry.cn-hangzhou.aliyuncs.com/fosin/anan-zuulgateway:2.1.0-SNAPSHOT
+    image: fosin/anan-zuulgateway:2.1.0-SNAPSHOT
     entrypoint: "sh /bin/wait-for.sh anan-platformserver:51500 -t 3600 -- /bin/entrypoint.sh"
     container_name: anan-zuulgateway
     hostname: anan-zuulgateway
@@ -371,7 +371,7 @@ services:
       - nacos-server1
 
   anan-authserver:
-    image: registry.cn-hangzhou.aliyuncs.com/fosin/anan-authserver:2.1.0-SNAPSHOT
+    image: fosin/anan-authserver:2.1.0-SNAPSHOT
     entrypoint: "sh /bin/wait-for.sh nacos-server1:8848 -t 3600 -- /bin/entrypoint.sh"
     container_name: anan-authserver
     hostname: anan-authserver
@@ -391,7 +391,7 @@ services:
       - nacos-server1
 
   anan-platformserver:
-    image: registry.cn-hangzhou.aliyuncs.com/fosin/anan-platformserver:2.1.0-SNAPSHOT
+    image: fosin/anan-platformserver:2.1.0-SNAPSHOT
     entrypoint: "sh /bin/wait-for.sh anan-authserver:51400 -t 3600 -- /bin/entrypoint.sh"
     container_name: anan-platformserver
     hostname: anan-platformserver
@@ -411,7 +411,7 @@ services:
       - nacos-server1
 
   anan-adminserver:
-    image: registry.cn-hangzhou.aliyuncs.com/fosin/anan-adminserver:2.1.0-SNAPSHOT
+    image: fosin/anan-adminserver:2.1.0-SNAPSHOT
 #    entrypoint: "sh /bin/wait-for.sh anan-zuulgateway:9000 -t 3600 -- /bin/entrypoint.sh"
     container_name: anan-adminserver
     hostname: anan-adminserver
@@ -430,7 +430,7 @@ services:
       - nacos-server1
 
   anan-eurekaserver:
-    image: registry.cn-hangzhou.aliyuncs.com/fosin/anan-eurekaserver:2.1.0-SNAPSHOT
+    image: fosin/anan-eurekaserver:2.1.0-SNAPSHOT
     container_name: anan-eurekaserver
     hostname: anan-eurekaserver
     restart: on-failure
@@ -444,7 +444,7 @@ services:
       - 51000:51000
 
   anan-configserver:
-    image: registry.cn-hangzhou.aliyuncs.com/fosin/anan-configserver:2.1.0-SNAPSHOT
+    image: fosin/anan-configserver:2.1.0-SNAPSHOT
     entrypoint: "sh /bin/wait-for.sh anan-eurekaserver:51000 -t 3600 -- /bin/entrypoint.sh"
     container_name: anan-configserver
     hostname: anan-configserver

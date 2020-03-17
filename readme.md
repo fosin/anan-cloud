@@ -260,7 +260,7 @@ EOF
     #删除所有包含关键字fosin的镜像
     docker rmi $(docker images | grep fosin | awk '{print $3}')
     #删除所有未被tag标记（none）和未被容器使用的镜像(虚悬镜像)
-    docker image prune -f
+   
     #清理无容器使用的镜像
     docker image prune -a
     
