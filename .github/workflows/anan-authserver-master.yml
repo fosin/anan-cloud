@@ -12,8 +12,8 @@ env:
 on:
   push:
     branches: [ master ]
-    paths:
-      - '$MODULE_PATH/**'
+#     paths:
+#       - '$MODULE_PATH/**'
   pull_request:
     branches: [ master ]
     paths:
