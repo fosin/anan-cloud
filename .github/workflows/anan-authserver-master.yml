@@ -6,13 +6,15 @@ env:
   MODULE_PATH: anan-cloudadviced/anan-platform/anan-authserver
 on:
   push:
-    branches: [ master ]
-#     paths:
-#       - '$MODULE_PATH/**'
-  pull_request:
-    branches: [ master ]
+    branches:
+      - master
     paths:
-      - '$MODULE_PATH/**'
+      - $MODULE_PATH/**
+  pull_request:
+    branches:
+      - master
+    paths:
+      - $MODULE_PATH/**
 jobs:
   build:
     runs-on: ubuntu-latest
