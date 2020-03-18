@@ -13,5 +13,3 @@ RUN chmod +x bin/entrypoint.sh bin/wait-for.sh \
     && apt -y install netcat \
     && apt -y install net-tools \
     && rm -rf /var/lib/apt/lists/*
-#    && apt -y install aptitude \
-#    && apt -y install vim \
