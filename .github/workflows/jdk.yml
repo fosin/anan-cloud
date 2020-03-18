@@ -1,7 +1,8 @@
-name: OpenJDK11 Master Dockerfile CI
+name: OpenJDK Master Dockerfile CI
 env:
   MODULE_NAME: openjdk
   MODULE_VERSION: 11-jdk
+  MODULE_VERSION8: 8-jdk
   MODULE_PATH: deploy/openjdk
 on:
   push:
@@ -18,8 +19,14 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       # 创建jdk11镜像
-      - name: Docker build and push image
+      - name: Docker build and push $MODULE_VERSION
         run: |
           docker login --username=${{ secrets.dockerhub_user }} --password=${{ secrets.dockerhub_pass }}
-          docker build ./$MODULE_PATH -t fosin/$MODULE_NAME:$MODULE_VERSION -f ./$MODULE_PATH/11.github.Dockerfile
+          docker build $MODULE_PATH -t fosin/$MODULE_NAME:$MODULE_VERSION -f $MODULE_PATH/11.github.Dockerfile
           docker push fosin/$MODULE_NAME:$MODULE_VERSION
+      # 创建jdk8镜像
+      - name: Docker build and push $MODULE_VERSION8
+        run: |
+          docker build $MODULE_PATH -t fosin/$MODULE_NAME:MODULE_VERSION8 -f $MODULE_PATH/8.github.Dockerfile
+          docker push fosin/$MODULE_NAME:MODULE_VERSION8
+          docker logout
