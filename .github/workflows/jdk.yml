@@ -6,11 +6,13 @@ env:
   MODULE_PATH: deploy/openjdk
 on:
   push:
-    branches: [ master ]
+    branches:
+      - master
     paths:
       - '$MODULE_PATH/**'
   pull_request:
-    branches: [ master ]
+    branches:
+      - master
     paths:
       - '$MODULE_PATH/**'
 jobs:
