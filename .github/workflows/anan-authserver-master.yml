@@ -9,12 +9,12 @@ on:
     branches:
       - master
     paths:
-      - $MODULE_PATH/**
+      - anan-cloudadviced/anan-platform/anan-authserver/**
   pull_request:
     branches:
       - master
     paths:
-      - $MODULE_PATH/**
+      - anan-cloudadviced/anan-platform/anan-authserver/**
 jobs:
   build:
     runs-on: ubuntu-latest

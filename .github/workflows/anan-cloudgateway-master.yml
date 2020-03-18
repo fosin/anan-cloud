@@ -6,13 +6,15 @@ env:
   MODULE_PATH: anan-cloudgateway
 on:
   push:
-    branches: [ master ]
+    branches:
+      - master
     paths:
-      - '$MODULE_PATH/**'
+      - anan-cloudgateway/**
   pull_request:
-    branches: [ master ]
+    branches:
+      - master
     paths:
-      - '$MODULE_PATH/**'
+      - anan-cloudgateway/**
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -34,3 +36,4 @@ jobs:
           docker login --username=${{ secrets.dockerhub_user }} --password=${{ secrets.dockerhub_pass }}
           docker build ./$MODULE_PATH -t fosin/$MODULE_NAME:$MODULE_VERSION -f ./$MODULE_PATH/Dockerfile
           docker push fosin/$MODULE_NAME:$MODULE_VERSION
+          docker logout
