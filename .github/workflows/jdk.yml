@@ -9,12 +9,12 @@ on:
     branches:
       - master
     paths:
-      - '$MODULE_PATH/**'
+      - $MODULE_PATH/**
   pull_request:
     branches:
       - master
     paths:
-      - '$MODULE_PATH/**'
+      - $MODULE_PATH/**
 jobs:
   build:
     runs-on: ubuntu-latest
