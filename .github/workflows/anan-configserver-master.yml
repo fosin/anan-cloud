@@ -9,8 +9,9 @@ on:
   push:
     branches:
       - master
-#    paths:
-#      - anan-configserver/**
+    paths:
+      - pom.xml
+      - anan-configserver/**
   pull_request:
     branches:
       - master

@@ -8,13 +8,19 @@ on:
   push:
     branches:
       - master
-#    paths:
-#      - anan-cloudadviced/anan-zuulgateway/**
+    paths:
+      - pom.xml
+      - anan-cloudadviced/pom.xml
+      - anan-cloudadviced/anan-zuulgateway/**
+      - anan-cloudadviced/anan-platform/anan-platformpojo/**
   pull_request:
     branches:
       - master
     paths:
+      - pom.xml
+      - anan-cloudadviced/pom.xml
       - anan-cloudadviced/anan-zuulgateway/**
+      - anan-cloudadviced/anan-platform/anan-platformpojo/**
 jobs:
   build:
     runs-on: ubuntu-latest

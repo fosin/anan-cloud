@@ -9,11 +9,13 @@ on:
     branches:
       - master
     paths:
+      - pom.xml
       - anan-eurekaserver/**
   pull_request:
     branches:
       - master
     paths:
+      - pom.xml
       - anan-eurekaserver/**
 jobs:
   build:

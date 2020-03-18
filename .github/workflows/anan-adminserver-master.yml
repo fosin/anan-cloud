@@ -8,12 +8,16 @@ on:
   push:
     branches:
       - master
-#    paths:
-#      - anan-cloudadviced/anan-adminserver/**
+    paths:
+      - pom.xml
+      - anan-cloudadviced/pom.xml
+      - anan-cloudadviced/anan-adminserver/**
   pull_request:
     branches:
       - master
     paths:
+      - pom.xml
+      - anan-cloudadviced/pom.xml
       - anan-cloudadviced/anan-adminserver/**
 jobs:
   build:
