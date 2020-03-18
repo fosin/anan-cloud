@@ -10,11 +10,13 @@ on:
       - master
     paths:
       - anan-cloudadviced/anan-platform/anan-platformserver/**
+      - .github/workflows/anan-platformserver-master.yml
   pull_request:
     branches:
       - master
     paths:
       - anan-cloudadviced/anan-platform/anan-platformserver/**
+      - .github/workflows/anan-platformserver-master.yml
 jobs:
   build:
     runs-on: ubuntu-latest
