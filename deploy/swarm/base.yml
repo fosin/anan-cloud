@@ -12,11 +12,8 @@ services:
       - MYSQL_REPLICATION_USER=anan_ru
       - MYSQL_REPLICATION_PASSWORD=local
       - MYSQL_DATABASE=nacos
-      - MYSQL_USER=nacos
+      - MYSQL_USER=anan
       - MYSQL_PASSWORD=local
-      - MYSQL_DATABASE2=anan_platform
-      - MYSQL_USER2=anan
-      - MYSQL_PASSWORD2=local
     volumes:
       - ../mysql/master:/var/lib/mysql
     ports:

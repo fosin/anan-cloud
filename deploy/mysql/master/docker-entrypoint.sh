@@ -175,9 +175,6 @@ docker_setup_env() {
 	file_env 'MYSQL_USER'
 	file_env 'MYSQL_PASSWORD'
 	file_env 'MYSQL_ROOT_PASSWORD'
-	file_env 'MYSQL_DATABASE2'
-	file_env 'MYSQL_USER2'
-	file_env 'MYSQL_PASSWORD2'
 	file_env 'MYSQL_REPLICATION_USER'
 	file_env 'MYSQL_REPLICATION_PASSWORD'
 
@@ -326,23 +323,7 @@ mysql_grant_privilges() {
 			docker_process_sql --database=mysql <<<"GRANT REPLICATION SLAVE ON *.* TO '$MYSQL_REPLICATION_USER'@'%' identified by '$MYSQL_REPLICATION_PASSWORD' ;"
 	fi
 
-  if [ -n "$MYSQL_DATABASE2" ]; then
-    if [ -z "$MYSQL_USER2" -o -z "$MYSQL_PASSWORD2" ]; then
-      mysql_error $'MYSQL_DATABASE2、MYSQL_USER2、MYSQL_PASSWORD2 must be all set!'
-    fi
-    # Creates a custom database and user if specified
-    mysql_note "Creating database ${MYSQL_DATABASE2}"
-    docker_process_sql --database=mysql <<<"CREATE DATABASE IF NOT EXISTS \`$MYSQL_DATABASE2\` ;"
-
-    mysql_note "Creating user ${MYSQL_USER2}"
-    docker_process_sql --database=mysql <<<"CREATE USER '$MYSQL_USER2'@'%' IDENTIFIED BY '$MYSQL_PASSWORD2' ;"
-
-    mysql_note "Giving user ${MYSQL_USER2} access to schema ${MYSQL_DATABASE2}"
-    docker_process_sql --database=mysql <<<"GRANT ALL ON \`$MYSQL_DATABASE2\`.* TO '$MYSQL_USER2'@'%' ;"
-
-	fi
 	docker_process_sql --database=mysql <<<"FLUSH PRIVILEGES ;"
-
 }
 
 _main() {

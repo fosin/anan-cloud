@@ -89,7 +89,7 @@ cat > /etc/docker/daemon.json <<EOF
   "exec-opts": ["native.cgroupdriver=systemd"],
   "log-driver": "json-file",
   "log-opts": {"max-size":"50m", "max-file":"3"},
-  "registry-mirrors": ["https://c70a1b9z.mirror.aliyuncs.com","https://registry.docker-cn.com"],
+  "registry-mirrors": ["https://c70a1b9z.mirror.aliyuncs.com","https://docker.mirrors.ustc.edu.cn/","https://hub-mirror.c.163.com","https://registry.docker-cn.com"],
   "experimental": true
 }
 EOF
