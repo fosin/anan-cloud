@@ -58,7 +58,762 @@ CREATE TABLE `config_info` (
 
 LOCK TABLES `config_info` WRITE;
 /*!40000 ALTER TABLE `config_info` DISABLE KEYS */;
-INSERT INTO `config_info` VALUES (4,'anan-authserver.yaml','DEFAULT_GROUP','server:\r\n  port: 51400\r\nspring:\r\n  jpa:\r\n    show-sql: true\r\n  datasource:\r\n    url: jdbc:mysql://mysql-master:3306/anan_platform?useUnicode=true&characterEncoding=utf-8&useSSL=false\r\n    username: anan\r\n    password: local\r\n#    type: com.alibaba.druid.pool.DruidDataSource\r\n    druid:\r\n      initial-size: 5\r\n      min-idle: 5\r\n      maxActive: 10\r\n      maxWait: 60000\r\n      timeBetweenEvictionRunsMillis: 60000\r\n      minEvictableIdleTimeMillis: 300000\r\n      #      validationQuery: SELECT 1 FROM DUAL\r\n      testWhileIdle: true\r\n      testOnBorrow: false\r\n      testOnReturn: false\r\n  #      poolPreparedStatements: true\r\n  #      maxPoolPreparedStatementPerConnectionSize: 20\r\n  #      filters: stat,wall,log4j\r\n  #      connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000\r\n  #      useGlobalDataSourceStat: true \r\n  #    platform: mysql\r\n  #    continue-on-error: true\r\n  redis:\r\n    #database: 10\r\n#    cluster:\r\n#      max-redirects:  \r\n#      nodes: redis:6379\r\n    host: redis\r\n    port: 6379\r\n    password: local\r\n  session:\r\n    store-type: redis\r\n  thymeleaf:\r\n    cache: false\r\nanan:\r\n  swagger:\r\n    enabled: true\r\n    title: ${spring.application.name}\r\n    description: ${info.description}\r\n    version: ${info.version}\r\n    base-package: com.github.fosin.anan.auth\r\n    authorization:\r\n      name: Oauth2.0 Authorization\r\n      keyName: Authorization\r\n#      authRegex: ^[^/oauth/token]$\r\n    contact:\r\n      name: fosin\r\n      email: 28860823@qq.com\r\n  oauth2:\r\n    enabled: true\r\n    disablecsrf: true\r\n    disableHttpBasic: true\r\n    blackWhiteList:\r\n    - path: /**/v2/api-docs\r\n    - path: /login\r\n    - path: /logout','fd2c2b316162ad80d2bc3d8f401da311','2019-11-10 17:23:05','2019-11-22 17:45:05',NULL,'192.168.137.1','','6138f451-2d5b-42fe-a793-df3744d7257c','null','null','null','yaml','null'),(7,'application.yaml','DEFAULT_GROUP','spring:\r\n  zipkin:\r\n#    baseUrl: http://zipkin:9411/\r\n    sender:\r\n      type: rabbit\r\n#    locator:\r\n#      discovery:\r\n#        enabled: true\r\n#    discovery-client-enabled: true\r\n  sleuth:\r\n#    enabled: false\r\n    sampler:\r\n      probability: 1.0\r\n#    feign:\r\n#      enabled: false\r\n#      processor:\r\n#        enabled: false\r\nsecurity:\r\n  oauth2:\r\n    resource:\r\n      loadBalanced: true\r\n      user-info-uri: http://anan-authserver/oauth/principal\r\n      prefer-token-info: false\r\nmanagement:\r\n  endpoints:\r\n    web:\r\n      exposure:\r\n        include: \'*\'\r\n  endpoint:\r\n    health:\r\n      show-details: ALWAYS\r\n  metrics:\r\n    web:\r\n      server:\r\n        auto-time-requests: false\r\nlogging:\r\n#  file: logs/${spring.application.name}.log\r\n#  file.max-size: 50mb\r\n#  file.max-history: 365\r\n  level:\r\n    com.alibaba.nacos.naming.log.level: warn\r\n    com.alibaba.nacos.client.naming: warn\r\n#    root: info\r\n#    zipkin2: debug\r\n#server:\r\n#  undertow:\r\n#    io-threads: 16\r\n#    worker-threads: 256\r\n#    buffer-size: 1024\r\n#    direct-buffers: true\r\neureka:\r\n  client:\r\n    healthcheck:\r\n      enabled: true # 开启健康检查（需要spring-boot-starter-actuator依赖）\r\n  instance:\r\n    lease-expiration-duration-in-seconds: 10 # 续约到期时间（默认90秒）\r\n    lease-renewal-interval-in-seconds: 5 # 续约更新时间间隔（默认30秒）','626830ef58e9b827b03feeda3492d01f','2019-11-10 17:39:32','2019-11-22 21:28:31',NULL,'192.168.137.1','','6138f451-2d5b-42fe-a793-df3744d7257c','服务公用设置','null','null','yaml','null'),(13,'anan-adminserver.yaml','DEFAULT_GROUP','server:\r\n  port: 51700\r\nturbine:\r\n  cluster-name-expression: new String(\'default\')\r\n  app-config: anan-zuulgateway\r\nanan:\r\n  oauth2:\r\n    disablecsrf: true\r\n    disableHttpBasic: true\r\n    cors:\r\n      allowedOrigins: \'*\'\r\n      allowedMethods: \'*\'\r\n      allowedHeaders: \'*\'\r\n      allowCredentials: true\r\n    blackWhiteList:\r\n      - path: /**/*.html\r\n      - path: /**/*.css\r\n      - path: /**/*.js\r\n      - path: /**/img/**\r\n      - path: /third-party/**\r\n      - path: /**/api/**\r\n      - path: /**/login/**\r\n      - path: /**/logout/**\r\n      - path: /**/applications/**\r\n      - path: /**/instances/**\r\n      - method: OPTIONS\r\nsecurity:\r\n  oauth2:\r\n    client:\r\n      client-id: appServer\r\n      client-secret: appServer\r\n      access-token-uri: http://anan-authserver:51400/oauth/token\r\n      grant-type: client_credentials','47be296696afd9a5ce345ab81f30fff2','2019-11-10 18:17:25','2019-11-22 17:45:18',NULL,'192.168.137.1','','6138f451-2d5b-42fe-a793-df3744d7257c','null','null','null','yaml','null'),(14,'anan-cloudgateway.yaml','DEFAULT_GROUP','server:\r\n  port: 9000\r\nspring:\r\n  cloud:\r\n    gateway:\r\n      enabled: true #If you include the starter, but, for some reason, you do not want the gateway to be enabled\r\n    routes:\r\n      - id: anan-platformserver\r\n        uri: lb://anan-platformserver\r\n        predicates:\r\n          - path=/platform/{segment}\r\n        filters:\r\n          - SetPath=/{segment}\r\n          # - StripPrefix=1\r\n          #   # 限流\r\n          # - name: RequestRateLimiter\r\n          #   args:\r\n          #     # 限流策略\r\n          #     key-resolver: \'#{@remoteAddrKeyResolver}\'\r\n          #     # 令牌桶每秒填充率\r\n          #     redis-rate-limiter.replenishRate: 1\r\n          #     # 令牌桶容量\r\n          #     redis-rate-limiter.burstCapacity: 2\r\n          #   # 熔断\r\n          # - name: Hystrix\r\n          #   args:\r\n          #     name: appService1EchoCmd\r\n\r\n      - id: anan-authserver\r\n        uri: lb://anan-authserver\r\n        predicates:\r\n          - path=/auth/**\r\n        filters:\r\n          - StripPrefix=1\r\n      - id: anan-mpi\r\n        uri: lb://anan-mpi\r\n        predicates:\r\n          - path=/mpi/**\r\n        filters:\r\n          - RewritePath=/mpi/(?<segment>.*), /$\\{segment}\r\n      - id: anan-vhr\r\n        uri: lb://anan-vhr\r\n        predicates:\r\n          - path=/vhr/**\r\n        filters:\r\n          - StripPrefix=1\r\nribbon:\r\n  OkToRetryOnAllOperations: false #对所有操作请求都进行重试,默认false\r\n  MaxAutoRetries: 0     #对当前实例的重试次数，默认0\r\n  MaxAutoRetriesNextServer: 1 #对切换实例的重试次数，默认1\r\n  ReadTimeout: 15000   #负载均衡超时时间，默认值5000，单位ms\r\n  ConnectTimeout: 15000 #ribbon请求连接的超时时间，默认值2000，单位ms\r\n  ServerListRefreshInterval: 15000 # 从注册中心刷新servelist的时间 默认30秒，单位ms\r\nhystrix:\r\n  threadpool:\r\n    default:\r\n      coreSize: 100\r\n      maximumSize: 2000\r\n      allowMaximumSizeToDivergeFromCoreSize: true #允许maximumSize起作用\r\n      maxQueueSize: -1 #如该值为-1，那么使用的是SynchronousQueue，否则使用的是LinkedBlockingQueue\r\n  command:\r\n    default:\r\n      execution:\r\n        isolation:\r\n          thread:\r\n            timeoutInMilliseconds: 60000 #断路器的超时时间；如果ribbon配置了重试那么该值必需大于ribbonTimeout，重试才能生效\r\n      timeout:\r\n        enabled: false\r\n      metrics:\r\n        rollingStats:\r\n          timeInMilliseconds: 10000 #判断健康度的滚动时间窗长度（10000）\r\n      circuitBreaker:\r\n        requestVolumeThreshold: 20 #当在配置时间窗口内达到此数量的失败后，进行短路。默认20个\r\n        sleepWindowInMilliseconds: 5 #短路多久以后开始尝试是否恢复，默认5s\r\n        errorThresholdPercentage: 50% #出错百分比阈值，当达到此阈值后，开始短路。默认50%\r\n      threadPool:\r\n        coreSize: 10  #命令线程池执行最大并发量（10）\r\n##禁用自定义过滤器ThrowExceptionFilter\r\n#zuul.ThrowExceptionFilter.pre.disable=true\r\n#security:\r\n#  sessions: stateless\r\n#  oauth2:\r\n#    client:\r\n#      client-id: anan\r\n#      client-secret: local\r\n##      access-token-uri: http://localhost:9000/auth/oauth/token\r\n##      user-authorization-uri: http://localhost:9000/auth/oauth/authorize\r\n#      access-token-uri: http://localhost:51400/oauth/token\r\n#      user-authorization-uri: http://localhost:51400/oauth/authorize\r\n##      auto-approve-scopes:\r\n##      pre-established-redirect-uri: http://${security.user.name}:${security.user.password}@${eureka.instance.hostname}:${server.port}/\r\n##      token-name:\r\n##      refresh-token-validity-seconds:\r\n##      access-token-validity-seconds:\r\n##      scope:\r\n#      authorized-grant-types: authorization_code\r\n##      use-current-uri: false\r\n##      registered-redirect-uri: http://localhost:9000/platform/login\r\n##      client-authentication-scheme: form\r\nanan:\r\n  swagger:\r\n    enabled: true\r\n    title: ${spring.application.name}\r\n    description: ${info.description}\r\n    version: ${info.version}\r\n    base-package: com.github.fosin.anan.cloudgateway\r\n    authorization:\r\n      name: Oauth2.0 Authorization\r\n      keyName: Authorization\r\n    #      authRegex: ^[^/oauth/token]$\r\n    contact:\r\n      name: fosin\r\n      email: 28860823@qq.com\r\n    ignoreResourceNames:\r\n      - anan-zuulgateway\r\n      - anan-cloudgateway\r\n  oauth2:\r\n    disablecsrf: true\r\n    disableHttpBasic: true\r\n    cors:\r\n      allowedOrigins: \'*\'\r\n      allowedMethods: \'*\'\r\n      allowedHeaders: \'*\'\r\n      allowCredentials: true\r\n    blackWhiteList:\r\n    - path: /**/oauth/**\r\n    - path: /**/*.js\r\n    - path: /**/*.html\r\n    - path: /**/*.css\r\n    - path: /hystrix\r\n    - path: /hystrix.stream\r\n    - path: /hystrix/**\r\n    - path: /**/webjars/**\r\n#    - path: /**/springfox-swagger-ui/**\r\n    - path: /**/swagger-resources/**\r\n    - path: /**/v2/api-docs\r\n    - path: /**/third-party/**\r\n    - path: /**/api/**\r\n    - path: /**/images/**\r\n','1c66a44111b7c35812489c7b2f112e83','2019-11-10 18:17:51','2019-11-22 17:45:29',NULL,'192.168.137.1','','6138f451-2d5b-42fe-a793-df3744d7257c','null','null','null','yaml','null'),(15,'anan-mpi.yaml','DEFAULT_GROUP','server:\r\n  port: 53000\r\nspring:\r\n  jpa:\r\n    show-sql: true\r\n#    hibernate:\r\n#      ddl-auto: update\r\n  datasource:\r\n    url: jdbc:mysql://192.168.137.8:3307/mpi?useUnicode=true&characterEncoding=utf-8&useSSL=false\r\n    username: anan\r\n    password: local\r\n    druid:\r\n      initial-size: 5 #初始化大小\r\n      min-idle: 5 #最小\r\n      maxActive: 10 # 最大\r\n      maxWait: 60000 #配置获取连接等待超时的时间\r\n      timeBetweenEvictionRunsMillis: 60000 # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒\r\n      minEvictableIdleTimeMillis: 300000 # 配置一个连接在池中最小生存的时间，单位是毫秒\r\n      #      validationQuery: SELECT 1 FROM DUAL\r\n      testWhileIdle: true\r\n      testOnBorrow: false\r\n      testOnReturn: false\r\n  #      poolPreparedStatements: true # 打开PSCache，并且指定每个连接上PSCache的大小\r\n  #      maxPoolPreparedStatementPerConnectionSize: 20\r\n  #      filters: stat,wall,log4j # 配置监控统计拦截的filters，去掉后监控界面sql无法统计，\'wall\'用于防火墙\r\n  #      connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000 # 通过connectProperties属性来打开mergeSql功能；慢SQL记录\r\n  #      useGlobalDataSourceStat: true # 合并多个DruidDataSource的监控数据\r\n#    platform: mysql\r\n#    continue-on-error: true\r\n  redis:\r\n    #database: 10\r\n    #    cluster:\r\n    #      max-redirects:  # （普通集群，不使用则不用开启）在群集中执行命令时要遵循的最大重定向数目。\r\n    #      nodes: redis:6379 # （普通集群，不使用则不用开启）以逗号分隔的“主机：端口”对列表进行引导。\r\n    host: redis\r\n    port: 6379\r\n    password: local\r\n  session:\r\n    store-type: redis\r\nanan:\r\n  swagger:\r\n    enabled: true\r\n    title: ${spring.application.name}\r\n    description: ${info.description}\r\n    version: ${info.version}\r\n    base-package: com.github.fosin.mpi\r\n    authorization:\r\n      name: Oauth2.0 Authorization\r\n      keyName: Authorization\r\n    contact:\r\n      name: fosin\r\n      email: 28860823@qq.com\r\n  oauth2:\r\n    disablecsrf: true\r\n    disableHttpBasic: true\r\n    blackWhiteList:\r\n    - path: /**/v2/api-docs\r\nsecurity:\r\n  oauth2:\r\n    client:\r\n      client-id: appServer\r\n      client-secret: appServer\r\n      access-token-uri: http://anan-authserver:51400/oauth/token\r\n      grant-type: client_credentials\r\n','fff7f006580a8152e328173afacc7f51','2019-11-10 18:18:19','2019-11-23 15:08:51',NULL,'192.168.137.1','','6138f451-2d5b-42fe-a793-df3744d7257c','null','null','null','yaml','null'),(16,'anan-vhr.yaml','DEFAULT_GROUP','server:\r\n  port: 53001\r\nspring:\r\n  mail:\r\n    host: smtp.qq.com\r\n    port: 465\r\n    username: 1186340749@qq.com\r\n    password: ghkmjtncgemsbaae\r\n    default-encoding: UTF-8\r\n    properties:\r\n      mail:\r\n        debug: false\r\n        smtp:\r\n          user: ${spring.mail.username}\r\n          host: ${spring.mail.host}\r\n          auth: true\r\n          port: ${spring.mail.port}\r\n          starttls:\r\n            enable: true\r\n          socketFactory:\r\n            class: javax.net.ssl.SSLSocketFactory\r\n            fallback: false\r\n            port: ${spring.mail.port}\r\n  jpa:\r\n    show-sql: true\r\n#    hibernate:\r\n#      ddl-auto: update\r\n  datasource:\r\n    url: jdbc:mysql://192.168.137.8:3308/vhr?useUnicode=true&characterEncoding=utf-8&useSSL=false\r\n    username: anan\r\n    password: local\r\n    druid:\r\n      initial-size: 5 #初始化大小\r\n      min-idle: 5 #最小\r\n      maxActive: 10 # 最大\r\n      maxWait: 60000 #配置获取连接等待超时的时间\r\n      timeBetweenEvictionRunsMillis: 60000 # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒\r\n      minEvictableIdleTimeMillis: 300000 # 配置一个连接在池中最小生存的时间，单位是毫秒\r\n      #      validationQuery: SELECT 1 FROM DUAL\r\n      testWhileIdle: true\r\n      testOnBorrow: false\r\n      testOnReturn: false\r\n  #      poolPreparedStatements: true # 打开PSCache，并且指定每个连接上PSCache的大小\r\n  #      maxPoolPreparedStatementPerConnectionSize: 20\r\n  #      filters: stat,wall,log4j # 配置监控统计拦截的filters，去掉后监控界面sql无法统计，\'wall\'用于防火墙\r\n  #      connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000 # 通过connectProperties属性来打开mergeSql功能；慢SQL记录\r\n  #      useGlobalDataSourceStat: true # 合并多个DruidDataSource的监控数据\r\n#    platform: mysql\r\n#    continue-on-error: true\r\n  redis:\r\n    #database: 10\r\n    #    cluster:\r\n    #      max-redirects:  # （普通集群，不使用则不用开启）在群集中执行命令时要遵循的最大重定向数目。\r\n    #      nodes: redis:6379 # （普通集群，不使用则不用开启）以逗号分隔的“主机：端口”对列表进行引导。\r\n    host: redis\r\n    port: 6379\r\n    password: local\r\n  session:\r\n    store-type: redis\r\n#MyBatis\r\nmybatis:\r\n  config-location: classpath:/mybatis-config.xml\r\nanan:\r\n  swagger:\r\n    enabled: true\r\n    title: ${spring.application.name}\r\n    description: ${info.description}\r\n    version: ${info.version}\r\n    base-package: com.github.fosin.vhr\r\n    authorization:\r\n      name: Oauth2.0 Authorization\r\n      keyName: Authorization\r\n    contact:\r\n      name: fosin\r\n      email: 28860823@qq.com\r\n  oauth2:\r\n    disablecsrf: true\r\n    disableHttpBasic: true\r\n    blackWhiteList:\r\n    - path: /**/v2/api-docs\r\nsecurity:\r\n  oauth2:\r\n    client:\r\n      client-id: appServer\r\n      client-secret: appServer\r\n      access-token-uri: http://anan-authserver:51400/oauth/token\r\n      grant-type: client_credentials\r\n','fe25c854cf8aea2dae399c89bd31a98e','2019-11-10 18:18:43','2019-11-23 15:25:25',NULL,'192.168.137.1','','6138f451-2d5b-42fe-a793-df3744d7257c','null','null','null','yaml','null'),(18,'anan-zuulgateway.yaml','DEFAULT_GROUP','server:\r\n  port: 9000\r\nzuul:\r\n  add-host-header: true\r\n  add-proxy-headers: true\r\n  sensitiveHeaders:   #Cookie,Set-Cookie,Authorization   blacklist，如果不过滤，则须显式设为空。\r\n  retryable: true #默认启用重试\r\n  ignored-services: \'*\'\r\n#  strip-prefix: true #是否移除代理前缀\r\n  prefix: /gateway #为所有http请求前增加/zuul前缀\r\n  routes:\r\n    anan-platformserver:\r\n      path: /platform/**\r\n      serviceId: anan-platformserver\r\n      retryable: true\r\n    anan-authserver:\r\n      path: /auth/**\r\n      serviceId: anan-authserver\r\n      retryable: true\r\n    anan-zuulgateway:\r\n      path: /**\r\n      serviceId: anan-zuulgateway\r\n      retryable: true\r\n    anan-mpi:\r\n      path: /mpi/**\r\n      serviceId: anan-mpi\r\n      retryable: true\r\n    anan-vhr:\r\n      path: /vhr/**\r\n      serviceId: anan-vhr\r\n      retryable: true\r\n#  semaphore:\r\n#    max-semaphores: 100\r\n#  ribbon-isolation-strategy: THREAD\r\n#  thread-pool:\r\n#    use-separate-thread-pools: true\r\n#    thread-pool-key-prefix: zuulgw\r\n  ratelimit:\r\n    key-prefix: zuulgateway #对应用来标识请求的key的前缀\r\n    enabled: true\r\n#    repository: IN_MEMORY #对应存储类型（用来存储统计信息）,可选值REDIS、IN_MEMORY、JPA、CONSUL,默认IN_MEMORY\r\n    behind-proxy: true #代理之后\r\n    default-policy: #可选 - 针对所有的路由配置的策略，除非特别配置了policies\r\n      limit: 60 #可选 - 每个刷新时间窗口对应的请求数量限制\r\n      quota: 60 #可选-  每个刷新时间窗口对应的请求时间限制（秒）\r\n      refresh-interval: 3 # 刷新时间窗口的时间，默认值 (秒)\r\n      type: #可选 限流方式\r\n#        - user #用户粒度\r\n#        - origin #ORIGIN粒度 (用户请求的origin作为粒度控制)\r\n        - url #接口粒度 (请求接口的地址作为粒度控制)\r\n    policies:\r\n      anan-platformserver: #特定的路由\r\n        limit: 10 #可选- 每个刷新时间窗口对应的请求数量限制\r\n        quota: 10 #可选-  每个刷新时间窗口对应的请求时间限制（秒）\r\n        refresh-interval: 1 # 刷新时间窗口的时间，默认值 (秒)\r\n        type: #可选 限流方式\r\n#          - user\r\n#          - origin\r\n          - url\r\n      anan-mpi: #特定的路由\r\n        limit: 15 #可选- 每个刷新时间窗口对应的请求数量限制\r\n        quota: 15 #可选-  每个刷新时间窗口对应的请求时间限制（秒）\r\n        refresh-interval: 1 # 刷新时间窗口的时间，默认值 (秒)\r\n        type: #可选 限流方式\r\n        - url\r\n  host:\r\n    connect-timeout-millis: 60000\r\n    socket-timeout-millis: 60000\r\n#spring:\r\n#  redis:\r\n#    host: 192.168.137.155\r\n#    port: 6379\r\n#    password: local\r\n#    timeout: 10000\r\n#    pool:\r\n#      max-active: -1\r\n#      max-wait: -1\r\n#      max-idle: 8\r\n#      min-idle: 0\r\n#\r\nribbon:\r\n  OkToRetryOnAllOperations: false #对所有操作请求都进行重试,默认false\r\n  MaxAutoRetries: 0     #对当前实例的重试次数，默认0\r\n  MaxAutoRetriesNextServer: 1 #对切换实例的重试次数，默认1\r\n  ReadTimeout: 15000   #负载均衡超时时间，默认值1000，单位ms\r\n  ConnectTimeout: 15000 #ribbon请求连接的超时时间，默认值1000，单位ms\r\n  ServerListRefreshInterval: 15000 # 从注册中心刷新servelist的时间 默认30秒，单位ms\r\nhystrix:\r\n  threadpool:\r\n    default:\r\n      coreSize: 100\r\n      maximumSize: 2000\r\n      allowMaximumSizeToDivergeFromCoreSize: true #允许maximumSize起作用\r\n      maxQueueSize: -1 #如该值为-1，那么使用的是SynchronousQueue，否则使用的是LinkedBlockingQueue\r\n  command:\r\n    default:\r\n      execution:\r\n        isolation:\r\n          thread:\r\n            timeoutInMilliseconds: 60000 #断路器的超时时间；如果ribbon配置了重试那么该值必需大于ribbonTimeout = (ribbonReadTimeout + ribbonConnectTimeout) * (maxAutoRetries + 1) * (maxAutoRetriesNextServer + 1)，重试才能生效\r\n      timeout:\r\n        enabled: false\r\n      circuitBreaker:\r\n        requestVolumeThreshold: 20 #当在配置时间窗口内达到此数量的失败后，进行短路。默认20个\r\n        sleepWindowInMilliseconds: 5 #短路多久以后开始尝试是否恢复，默认5s\r\n        errorThresholdPercentage: 50% #出错百分比阈值，当达到此阈值后，开始短路。默认50%\r\n\r\n##禁用自定义过滤器ThrowExceptionFilter\r\n#zuul.ThrowExceptionFilter.pre.disable=true\r\n#security:\r\n#  sessions: stateless\r\n#  oauth2:\r\n#    client:\r\n#      client-id: anan\r\n#      client-secret: local\r\n##      access-token-uri: http://localhost:9000/auth/oauth/token\r\n##      user-authorization-uri: http://localhost:9000/auth/oauth/authorize\r\n#      access-token-uri: http://localhost:51400/oauth/token\r\n#      user-authorization-uri: http://localhost:51400/oauth/authorize\r\n##      auto-approve-scopes:\r\n##      pre-established-redirect-uri: http://${security.user.name}:${security.user.password}@${eureka.instance.hostname}:${server.port}/\r\n##      token-name:\r\n##      refresh-token-validity-seconds:\r\n##      access-token-validity-seconds:\r\n##      scope:\r\n#      authorized-grant-types: authorization_code\r\n##      use-current-uri: false\r\n##      registered-redirect-uri: http://localhost:9000/platform/login\r\n##      client-authentication-scheme: form\r\nanan:\r\n  swagger:\r\n    enabled: true\r\n    title: ${spring.application.name}\r\n    description: ${info.description}\r\n    version: ${info.version}\r\n    base-package: com.github.fosin.anan.zuulgateway\r\n    authorization:\r\n      name: Oauth2.0 Authorization\r\n      keyName: Authorization\r\n    #      authRegex: ^[^/oauth/token]$\r\n    contact:\r\n      name: fosin\r\n      email: 28860823@qq.com\r\n    ignoreResourceNames:\r\n      - anan-zuulgateway\r\n  oauth2:\r\n    disablecsrf: true\r\n    disableHttpBasic: true\r\n    cors:\r\n      allowedOrigins: \'*\'\r\n      allowedMethods: \'*\'\r\n      allowedHeaders: \'*\'\r\n      allowCredentials: true\r\n    blackWhiteList:\r\n    - path: /**/oauth/**\r\n    - path: /**/*.js\r\n    - path: /**/*.html\r\n    - path: /**/*.css\r\n    - path: /hystrix\r\n    - path: /hystrix.stream\r\n    - path: /hystrix/**\r\n    - path: /**/webjars/**\r\n#    - path: /**/springfox-swagger-ui/**\r\n    - path: /**/swagger-resources/**\r\n    - path: /**/v2/api-docs\r\n    - path: /**/third-party/**\r\n    - path: /**/api/**\r\n    - path: /**/images/**\r\n','8609a414a382dfa4234cb75c76ab71e2','2019-11-10 20:04:04','2020-02-14 13:53:12',NULL,'192.168.137.1','','6138f451-2d5b-42fe-a793-df3744d7257c','null','null','null','yaml','null'),(20,'anan-platformserver.yaml','DEFAULT_GROUP','server:\r\n  port: 51500\r\nspring:\r\n  jpa:\r\n    show-sql: true\r\n  datasource:\r\n    url: jdbc:mysql://mysql-master:3306/anan_platform?useUnicode=true&characterEncoding=utf-8&useSSL=false\r\n    username: anan\r\n    password: local\r\n    druid:\r\n      initial-size: 5 #初始化大小\r\n      min-idle: 5 #最小\r\n      maxActive: 10 # 最大\r\n      maxWait: 60000 #配置获取连接等待超时的时间\r\n      timeBetweenEvictionRunsMillis: 60000 # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒\r\n      minEvictableIdleTimeMillis: 300000 # 配置一个连接在池中最小生存的时间，单位是毫秒\r\n      #      validationQuery: SELECT 1 FROM DUAL\r\n      testWhileIdle: true\r\n      testOnBorrow: false\r\n      testOnReturn: false\r\n  #      poolPreparedStatements: true # 打开PSCache，并且指定每个连接上PSCache的大小\r\n  #      maxPoolPreparedStatementPerConnectionSize: 20\r\n  #      filters: stat,wall,log4j # 配置监控统计拦截的filters，去掉后监控界面sql无法统计，\'wall\'用于防火墙\r\n  #      connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000 # 通过connectProperties属性来打开mergeSql功能；慢SQL记录\r\n  #      useGlobalDataSourceStat: true # 合并多个DruidDataSource的监控数据\r\n  #    platform: mysql\r\n  #    continue-on-error: true\r\n  redis:\r\n    #database: 10\r\n    #    cluster:\r\n    #      max-redirects:  # （普通集群，不使用则不用开启）在群集中执行命令时要遵循的最大重定向数目。\r\n    #      nodes: redis:6379 # （普通集群，不使用则不用开启）以逗号分隔的“主机：端口”对列表进行引导。\r\n    host: redis\r\n    port: 6379\r\n    password: local\r\n  session:\r\n    store-type: redis\r\n\r\nfeign:\r\n#  compression: #开启这个设置比较耗CPU\r\n#    request:\r\n#      enabled: true #开启Feign请求压缩\r\n#      mime-types: text/xml,application/xml,application/json # 配置压缩文档类型\r\n#    response:\r\n#      enabled: true #开启Feign响应压缩\r\n#      min-request-size: 2048 # 配置最小压缩的文档大小\r\n  okhttp:\r\n    enabled: true\r\n  httpclient:\r\n    enabled: false\r\n    max-connections: 1000 #最大连接数\r\n    max-connections-per-route: 100 #每个url的连接数\r\nsecurity:\r\n  oauth2:\r\n    client:\r\n      client-id: appServer\r\n      client-secret: appServer\r\n      access-token-uri: http://anan-authserver:51400/oauth/token\r\n      grant-type: client_credentials\r\nanan:\r\n  swagger:\r\n    enabled: true\r\n    title: ${spring.application.name}\r\n    description: ${info.description}\r\n    version: ${info.version}\r\n    base-package: com.github.fosin.anan.platform\r\n    authorization:\r\n      name: Oauth2.0 Authorization\r\n      keyName: Authorization\r\n    contact:\r\n      name: fosin\r\n      email: 28860823@qq.com\r\n#  global-operation-parameters:\r\n#  - name: Authorization\r\n#    description: Oauth2.0令牌信息,格式例如：Bearer 58cb49cd-be59-4706-bbc5-9c41fc3cbef4\r\n#    modelRef: string\r\n#    parameterType: header\r\n#    required: true\r\n  oauth2:\r\n    disablecsrf: true\r\n    disableHttpBasic: true\r\n    blackWhiteList:\r\n    - path: /**/v2/api-docs\r\n','290fe9e55a3f35a264a55c0dd94b6725','2019-11-10 20:16:42','2019-11-22 17:46:24',NULL,'192.168.137.1','','6138f451-2d5b-42fe-a793-df3744d7257c','null','null','null','yaml','null');
+INSERT INTO `config_info` (`id`, `data_id`, `group_id`, `content`, `md5`, `gmt_create`, `gmt_modified`, `src_user`, `src_ip`, `app_name`, `tenant_id`, `c_desc`, `c_use`, `effect`, `type`, `c_schema`)
+VALUES (4, 'anan-authserver.yaml', 'DEFAULT_GROUP', 'server:
+  port: 51400
+spring:
+  jpa:
+    show-sql: true
+  datasource:
+    url: jdbc:mysql://mysql-master:3306/anan_platform?useUnicode=true&characterEncoding=utf-8&useSSL=false
+    username: anan
+    password: local
+#    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      initial-size: 5
+      min-idle: 5
+      maxActive: 10
+      maxWait: 60000
+      timeBetweenEvictionRunsMillis: 60000
+      minEvictableIdleTimeMillis: 300000
+      #      validationQuery: SELECT 1 FROM DUAL
+      testWhileIdle: true
+      testOnBorrow: false
+      testOnReturn: false
+  #      poolPreparedStatements: true
+  #      maxPoolPreparedStatementPerConnectionSize: 20
+  #      filters: stat,wall,log4j
+  #      connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+  #      useGlobalDataSourceStat: true
+  #    platform: mysql
+  #    continue-on-error: true
+  redis:
+    #database: 10
+#    cluster:
+#      max-redirects:
+#      nodes: redis:6379
+    host: redis
+    port: 6379
+    password: local
+  session:
+    store-type: redis
+  thymeleaf:
+    cache: false
+  # mvc:
+  #   static-path-pattern: /auth/**
+anan:
+  swagger:
+    enabled: true
+    title: ${spring.application.name}
+    description: ${info.description}
+    version: ${info.version}
+    base-package: com.github.fosin.anan.auth
+    authorization:
+      name: Oauth2.0 Authorization
+      keyName: Authorization
+#      authRegex: ^[^/oauth/token]$
+    contact:
+      name: fosin
+      email: 28860823@qq.com
+  oauth2:
+    enabled: true
+    disablecsrf: true
+    disableHttpBasic: true
+    blackWhiteList:
+    - path: /**/v2/api-docs
+  redis:
+    idempotent:
+      enabled: false
+    cache:
+      manager: false
+    session:
+      manager: true', 'eca38d64f1ee85c0eb52633d48e80dbc', '2019-11-10 17:23:05', '2020-03-15 18:35:10', null, '192.168.137.1', '', '6138f451-2d5b-42fe-a793-df3744d7257c', 'null', 'null', 'null', 'yaml', 'null');
+INSERT INTO `config_info` (`id`, `data_id`, `group_id`, `content`, `md5`, `gmt_create`, `gmt_modified`, `src_user`, `src_ip`, `app_name`, `tenant_id`, `c_desc`, `c_use`, `effect`, `type`, `c_schema`) VALUES (7, 'application.yaml', 'DEFAULT_GROUP', 'spring:
+  zipkin:
+#    baseUrl: http://zipkin:9411/
+    sender:
+      type: rabbit
+#    locator:
+#      discovery:
+#        enabled: true
+#    discovery-client-enabled: true
+  sleuth:
+#    enabled: false
+    sampler:
+      probability: 1.0
+#    feign:
+#      enabled: false
+#      processor:
+#        enabled: false
+security:
+  oauth2:
+    resource:
+      loadBalanced: true
+      user-info-uri: http://anan-authserver/oauth/principal
+      prefer-token-info: false
+management:
+  endpoints:
+    web:
+      exposure:
+        include: ''*''
+  endpoint:
+    health:
+      show-details: ALWAYS
+  metrics:
+    web:
+      server:
+        auto-time-requests: false
+logging:
+#  file: logs/${spring.application.name}.log
+#  file.max-size: 50mb
+#  file.max-history: 365
+  level:
+    com.alibaba.nacos.naming.log.level: warn
+    com.alibaba.nacos.client.naming: warn
+#    root: info
+#    zipkin2: debug
+#server:
+#  undertow:
+#    io-threads: 16
+#    worker-threads: 256
+#    buffer-size: 1024
+#    direct-buffers: true
+eureka:
+  client:
+    healthcheck:
+      enabled: true # 开启健康检查（需要spring-boot-starter-actuator依赖）
+  instance:
+    lease-expiration-duration-in-seconds: 10 # 续约到期时间（默认90秒）
+    lease-renewal-interval-in-seconds: 5 # 续约更新时间间隔（默认30秒）', '626830ef58e9b827b03feeda3492d01f', '2019-11-10 17:39:32', '2019-11-22 21:28:31', null, '192.168.137.1', '', '6138f451-2d5b-42fe-a793-df3744d7257c', '服务公用设置', 'null', 'null', 'yaml', 'null');
+INSERT INTO `config_info` (`id`, `data_id`, `group_id`, `content`, `md5`, `gmt_create`, `gmt_modified`, `src_user`, `src_ip`, `app_name`, `tenant_id`, `c_desc`, `c_use`, `effect`, `type`, `c_schema`) VALUES (13, 'anan-adminserver.yaml', 'DEFAULT_GROUP', 'server:
+  port: 51700
+turbine:
+  cluster-name-expression: new String(''default'')
+  app-config: anan-zuulgateway
+anan:
+  oauth2:
+    disablecsrf: true
+    disableHttpBasic: true
+    cors:
+      allowedOrigins: ''*''
+      allowedMethods: ''*''
+      allowedHeaders: ''*''
+      allowCredentials: true
+    blackWhiteList:
+      - path: /**/*.html
+      - path: /**/*.css
+      - path: /**/*.js
+      - path: /**/img/**
+      - path: /third-party/**
+      - path: /**/api/**
+      - path: /**/login/**
+      - path: /**/logout/**
+      - path: /**/applications/**
+      - path: /**/instances/**
+      - method: OPTIONS
+security:
+  oauth2:
+    client:
+      client-id: appServer
+      client-secret: appServer
+      access-token-uri: http://anan-authserver:51400/oauth/token
+      grant-type: client_credentials
+spring:
+  boot:
+    admin:
+      ui:
+#        favicon-danger: "assets/img/favicon-danger.png"
+#        favicon: "assets/img/favicon.png"
+        title: "服务指标监控"
+#        public-url:
+#      instance-proxy:
+#        ignored-headers: "Cookie", "Set-Cookie", "Authorization"
+#      probed-endpoints: "health", "env", "metrics", "httptrace:trace", "threaddump:dump", "jolokia", "info", "logfile", "refresh", "flyway", "liquibase", "heapdump", "loggers", "auditevents"
+      notify:
+        mail:
+          additional-properties:
+          from: "Spring Boot Admin <noreply@localhost>"
+          cc:
+          to: "28860823@qq.com"
+          template: "classpath:/META-INF/spring-boot-admin-server/mail/status-changed.html"
+          ignore-changes: "UNKNOWN:UP"
+          enabled: true', 'e21f85d17b34ccfdbc9bf544af884e61', '2019-11-10 18:17:25', '2020-02-26 22:12:50', null, '192.168.137.1', '', '6138f451-2d5b-42fe-a793-df3744d7257c', 'null', 'null', 'null', 'yaml', 'null');
+INSERT INTO `config_info` (`id`, `data_id`, `group_id`, `content`, `md5`, `gmt_create`, `gmt_modified`, `src_user`, `src_ip`, `app_name`, `tenant_id`, `c_desc`, `c_use`, `effect`, `type`, `c_schema`) VALUES (14, 'anan-cloudgateway.yaml', 'DEFAULT_GROUP', 'server:
+  port: 9000
+spring:
+  cloud:
+    gateway:
+      enabled: true #If you include the starter, but, for some reason, you do not want the gateway to be enabled
+    routes:
+      - id: anan-platformserver
+        uri: lb://anan-platformserver
+        predicates:
+          - path=/platform/{segment}
+        filters:
+          - SetPath=/{segment}
+          # - StripPrefix=1
+          #   # 限流
+          # - name: RequestRateLimiter
+          #   args:
+          #     # 限流策略
+          #     key-resolver: ''#{@remoteAddrKeyResolver}''
+          #     # 令牌桶每秒填充率
+          #     redis-rate-limiter.replenishRate: 1
+          #     # 令牌桶容量
+          #     redis-rate-limiter.burstCapacity: 2
+          #   # 熔断
+          # - name: Hystrix
+          #   args:
+          #     name: appService1EchoCmd
+
+      - id: anan-authserver
+        uri: lb://anan-authserver
+        predicates:
+          - path=/auth/**
+        filters:
+          - StripPrefix=1
+      - id: anan-mpi
+        uri: lb://anan-mpi
+        predicates:
+          - path=/mpi/**
+        filters:
+          - RewritePath=/mpi/(?<segment>.*), /$\\{segment}
+      - id: anan-vhr
+        uri: lb://anan-vhr
+        predicates:
+          - path=/vhr/**
+        filters:
+          - StripPrefix=1
+ribbon:
+  OkToRetryOnAllOperations: false #对所有操作请求都进行重试,默认false
+  MaxAutoRetries: 0     #对当前实例的重试次数，默认0
+  MaxAutoRetriesNextServer: 1 #对切换实例的重试次数，默认1
+  ReadTimeout: 5000   #负载均衡超时时间，默认值5000，单位ms
+  ConnectTimeout: 5000 #ribbon请求连接的超时时间，默认值2000，单位ms
+  ServerListRefreshInterval: 15000 # 从注册中心刷新servelist的时间 默认30秒，单位ms
+hystrix:
+  threadpool:
+    default:
+      coreSize: 100
+      maximumSize: 2000
+      allowMaximumSizeToDivergeFromCoreSize: true #允许maximumSize起作用
+      maxQueueSize: -1 #如该值为-1，那么使用的是SynchronousQueue，否则使用的是LinkedBlockingQueue
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 20001 #断路器的超时时间；如果ribbon配置了重试那么该值必需大于ribbonTimeout，重试才能生效
+      timeout:
+        enabled: false
+      metrics:
+        rollingStats:
+          timeInMilliseconds: 10000 #判断健康度的滚动时间窗长度（10000）
+      circuitBreaker:
+        requestVolumeThreshold: 20 #当在配置时间窗口内达到此数量的失败后，进行短路。默认20个
+        sleepWindowInMilliseconds: 5 #短路多久以后开始尝试是否恢复，默认5s
+        errorThresholdPercentage: 50% #出错百分比阈值，当达到此阈值后，开始短路。默认50%
+      threadPool:
+        coreSize: 10  #命令线程池执行最大并发量（10）
+##禁用自定义过滤器ThrowExceptionFilter
+#zuul.ThrowExceptionFilter.pre.disable=true
+#security:
+#  sessions: stateless
+#  oauth2:
+#    client:
+#      client-id: anan
+#      client-secret: local
+##      access-token-uri: http://localhost:9000/auth/oauth/token
+##      user-authorization-uri: http://localhost:9000/auth/oauth/authorize
+#      access-token-uri: http://localhost:51400/oauth/token
+#      user-authorization-uri: http://localhost:51400/oauth/authorize
+##      auto-approve-scopes:
+##      pre-established-redirect-uri: http://${security.user.name}:${security.user.password}@${eureka.instance.hostname}:${server.port}/
+##      token-name:
+##      refresh-token-validity-seconds:
+##      access-token-validity-seconds:
+##      scope:
+#      authorized-grant-types: authorization_code
+##      use-current-uri: false
+##      registered-redirect-uri: http://localhost:9000/platform/login
+##      client-authentication-scheme: form
+anan:
+  swagger:
+    enabled: true
+    title: ${spring.application.name}
+    description: ${info.description}
+    version: ${info.version}
+    base-package: com.github.fosin.anan.cloudgateway
+    authorization:
+      name: Oauth2.0 Authorization
+      keyName: Authorization
+    #      authRegex: ^[^/oauth/token]$
+    contact:
+      name: fosin
+      email: 28860823@qq.com
+    ignoreResourceNames:
+      - anan-zuulgateway
+      - anan-cloudgateway
+  redis:
+    idempotent:
+      enabled: false
+    cache:
+      manager: false
+    session:
+      manager: true
+  oauth2:
+    disablecsrf: true
+    disableHttpBasic: true
+    cors:
+      allowedOrigins: ''*''
+      allowedMethods: ''*''
+      allowedHeaders: ''*''
+      allowCredentials: true
+    blackWhiteList:
+    - path: /**/auth/oauth/**
+    - path: /**/auth/sso/**
+    - path: /**/*.js
+    - path: /**/*.html
+    - path: /**/*.css
+    - path: /**/*.gif
+    - path: /**/*.png
+    - path: /**/*.jpg
+    - path: /**/*.jpeg
+    - path: /**/*.svg
+    - path: /**/*.bmp
+    - path: /**/*.ico
+    - path: /**/*.swf
+    - path: /**/*.woff
+    - path: /**/*.woff2
+    - path: /**/*.ttf
+    - path: /**/*.map
+    - path: /hystrix
+    - path: /hystrix.stream
+    - path: /hystrix/**
+    - path: /**/webjars/**
+#    - path: /**/springfox-swagger-ui/**
+    - path: /**/swagger-resources/**
+    - path: /**/v2/api-docs
+    - path: /**/third-party/**
+    - path: /**/api/**
+    - path: /**/images/**', '55b6239e5aed6a522b16d48872a0eedb', '2019-11-10 18:17:51', '2020-03-15 18:36:42', null, '192.168.137.1', '', '6138f451-2d5b-42fe-a793-df3744d7257c', 'null', 'null', 'null', 'yaml', 'null');
+INSERT INTO `config_info` (`id`, `data_id`, `group_id`, `content`, `md5`, `gmt_create`, `gmt_modified`, `src_user`, `src_ip`, `app_name`, `tenant_id`, `c_desc`, `c_use`, `effect`, `type`, `c_schema`) VALUES (15, 'anan-mpi.yaml', 'DEFAULT_GROUP', 'server:
+  port: 53000
+spring:
+  jpa:
+    show-sql: true
+#    hibernate:
+#      ddl-auto: update
+  datasource:
+    url: jdbc:mysql://mysql-master:3306/mpi?useUnicode=true&characterEncoding=utf-8&useSSL=false
+    username: anan
+    password: local
+    druid:
+      initial-size: 5 #初始化大小
+      min-idle: 5 #最小
+      maxActive: 10 # 最大
+      maxWait: 60000 #配置获取连接等待超时的时间
+      timeBetweenEvictionRunsMillis: 60000 # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+      minEvictableIdleTimeMillis: 300000 # 配置一个连接在池中最小生存的时间，单位是毫秒
+      #      validationQuery: SELECT 1 FROM DUAL
+      testWhileIdle: true
+      testOnBorrow: false
+      testOnReturn: false
+  #      poolPreparedStatements: true # 打开PSCache，并且指定每个连接上PSCache的大小
+  #      maxPoolPreparedStatementPerConnectionSize: 20
+  #      filters: stat,wall,log4j # 配置监控统计拦截的filters，去掉后监控界面sql无法统计，''wall''用于防火墙
+  #      connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000 # 通过connectProperties属性来打开mergeSql功能；慢SQL记录
+  #      useGlobalDataSourceStat: true # 合并多个DruidDataSource的监控数据
+#    platform: mysql
+#    continue-on-error: true
+  redis:
+    #database: 10
+    #    cluster:
+    #      max-redirects:  # （普通集群，不使用则不用开启）在群集中执行命令时要遵循的最大重定向数目。
+    #      nodes: redis:6379 # （普通集群，不使用则不用开启）以逗号分隔的“主机：端口”对列表进行引导。
+    host: redis
+    port: 6379
+    password: local
+  session:
+    store-type: redis
+anan:
+  swagger:
+    enabled: true
+    title: ${spring.application.name}
+    description: ${info.description}
+    version: ${info.version}
+    base-package: com.github.fosin.mpi
+    authorization:
+      name: Oauth2.0 Authorization
+      keyName: Authorization
+    contact:
+      name: fosin
+      email: 28860823@qq.com
+  oauth2:
+    disablecsrf: true
+    disableHttpBasic: true
+    blackWhiteList:
+    - path: /**/v2/api-docs
+security:
+  oauth2:
+    client:
+      client-id: appServer
+      client-secret: appServer
+      access-token-uri: http://anan-authserver:51400/oauth/token
+      grant-type: client_credentials
+', 'd8eb297dfc893ce8f9ab939bbe264c36', '2019-11-10 18:18:19', '2020-02-18 15:41:38', null, '192.168.137.1', '', '6138f451-2d5b-42fe-a793-df3744d7257c', 'null', 'null', 'null', 'yaml', 'null');
+INSERT INTO `config_info` (`id`, `data_id`, `group_id`, `content`, `md5`, `gmt_create`, `gmt_modified`, `src_user`, `src_ip`, `app_name`, `tenant_id`, `c_desc`, `c_use`, `effect`, `type`, `c_schema`) VALUES (16, 'anan-vhr.yaml', 'DEFAULT_GROUP', 'server:
+  port: 53001
+spring:
+  mail:
+    host: smtp.qq.com
+    port: 25
+    username: 1186340749@qq.com
+    password: ghkmjtncgemsbaae
+    default-encoding: UTF-8
+    properties:
+      mail:
+        debug: false
+        smtp:
+          user: ${spring.mail.username}
+          host: ${spring.mail.host}
+          auth: true
+          port: ${spring.mail.port}
+          starttls:
+            enable: true
+          socketFactory:
+            class: javax.net.ssl.SSLSocketFactory
+            fallback: false
+            port: ${spring.mail.port}
+  jpa:
+    show-sql: true
+#    hibernate:
+#      ddl-auto: update
+  datasource:
+    url: jdbc:mysql://mysql-master:3306/vhr?useUnicode=true&characterEncoding=utf-8&useSSL=false
+    username: anan
+    password: local
+    druid:
+      initial-size: 5 #初始化大小
+      min-idle: 5 #最小
+      maxActive: 10 # 最大
+      maxWait: 60000 #配置获取连接等待超时的时间
+      timeBetweenEvictionRunsMillis: 60000 # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+      minEvictableIdleTimeMillis: 300000 # 配置一个连接在池中最小生存的时间，单位是毫秒
+      #      validationQuery: SELECT 1 FROM DUAL
+      testWhileIdle: true
+      testOnBorrow: false
+      testOnReturn: false
+  #      poolPreparedStatements: true # 打开PSCache，并且指定每个连接上PSCache的大小
+  #      maxPoolPreparedStatementPerConnectionSize: 20
+  #      filters: stat,wall,log4j # 配置监控统计拦截的filters，去掉后监控界面sql无法统计，''wall''用于防火墙
+  #      connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000 # 通过connectProperties属性来打开mergeSql功能；慢SQL记录
+  #      useGlobalDataSourceStat: true # 合并多个DruidDataSource的监控数据
+#    platform: mysql
+#    continue-on-error: true
+  redis:
+    #database: 10
+    #    cluster:
+    #      max-redirects:  # （普通集群，不使用则不用开启）在群集中执行命令时要遵循的最大重定向数目。
+    #      nodes: redis:6379 # （普通集群，不使用则不用开启）以逗号分隔的“主机：端口”对列表进行引导。
+    host: redis
+    port: 6379
+    password: local
+  session:
+    store-type: redis
+#MyBatis
+mybatis:
+  config-location: classpath:/mybatis-config.xml
+anan:
+  swagger:
+    enabled: true
+    title: ${spring.application.name}
+    description: ${info.description}
+    version: ${info.version}
+    base-package: com.github.fosin.vhr
+    authorization:
+      name: Oauth2.0 Authorization
+      keyName: Authorization
+    contact:
+      name: fosin
+      email: 28860823@qq.com
+  oauth2:
+    disablecsrf: true
+    disableHttpBasic: true
+    blackWhiteList:
+    - path: /**/v2/api-docs
+security:
+  oauth2:
+    client:
+      client-id: appServer
+      client-secret: appServer
+      access-token-uri: http://anan-authserver:51400/oauth/token
+      grant-type: client_credentials
+', '53b35f158b1d4642813e78335940a2d9', '2019-11-10 18:18:43', '2020-03-13 15:33:29', null, '192.168.137.1', '', '6138f451-2d5b-42fe-a793-df3744d7257c', 'null', 'null', 'null', 'yaml', 'null');
+INSERT INTO `config_info` (`id`, `data_id`, `group_id`, `content`, `md5`, `gmt_create`, `gmt_modified`, `src_user`, `src_ip`, `app_name`, `tenant_id`, `c_desc`, `c_use`, `effect`, `type`, `c_schema`) VALUES (18, 'anan-zuulgateway.yaml', 'DEFAULT_GROUP', 'server:
+  port: 9000
+zuul:
+  add-host-header: true
+  add-proxy-headers: true
+  sensitiveHeaders:   #Cookie,Set-Cookie,Authorization   blacklist，如果不过滤，则须显式设为空。
+  retryable: true #默认启用重试
+  ignored-services: ''*''
+#  strip-prefix: true #是否移除代理前缀
+  prefix: /gateway #为所有http请求前增加/zuul前缀
+  routes:
+    anan-platformserver:
+      path: /platform/**
+      serviceId: anan-platformserver
+      retryable: true
+    anan-authserver:
+      path: /auth/**
+      serviceId: anan-authserver
+      retryable: true
+    anan-zuulgateway:
+      path: /**
+      serviceId: anan-zuulgateway
+      retryable: true
+    anan-mpi:
+      path: /mpi/**
+      serviceId: anan-mpi
+      retryable: true
+    anan-vhr:
+      path: /vhr/**
+      serviceId: anan-vhr
+      retryable: true
+#  semaphore:
+#    max-semaphores: 100
+#  ribbon-isolation-strategy: THREAD
+#  thread-pool:
+#    use-separate-thread-pools: true
+#    thread-pool-key-prefix: zuulgw
+  ratelimit:
+    key-prefix: zuulgateway #对应用来标识请求的key的前缀
+    enabled: true
+    repository: REDIS #对应存储类型（用来存储统计信息）,可选值REDIS、IN_MEMORY、JPA、CONSUL,默认IN_MEMORY
+    behind-proxy: true #代理之后
+    add-response-headers: true
+    default-policy-list: #可选 - 针对所有的路由配置的策略，除非特别配置了policies
+      - limit: 1200 #可选 - 每个刷新时间窗口对应的请求数量限制
+        quota: 1000 #可选-  每个刷新时间窗口对应的请求时间限制（秒）
+        refresh-interval: 60 # 刷新时间窗口的时间，默认值 60(秒)
+        type: #可选 限流方式
+  #        - user #用户粒度
+  #        - origin #ORIGIN粒度 (用户请求的origin作为粒度控制)
+          - url #接口粒度 (请求接口的地址作为粒度控制)
+    policy-list:
+      anan-mpi:
+        - limit: 900
+          quota: 1000
+          refresh-interval: 60
+          type:
+          - url
+  host:
+    connect-timeout-millis: 10000
+    socket-timeout-millis: 10000
+spring:
+ redis:
+   host: 192.168.137.8
+   port: 6379
+   password: local
+   timeout: 10000
+   lettuce:
+     max-active: 3
+     max-wait: -1
+     max-idle: 1
+     min-idle: 1
+ribbon:
+  OkToRetryOnAllOperations: false #对所有操作请求都进行重试,默认false
+  MaxAutoRetries: 0     #对当前实例的重试次数，默认0
+  MaxAutoRetriesNextServer: 1 #对切换实例的重试次数，默认1
+  ReadTimeout: 5000   #负载均衡超时时间，默认值1000，单位ms
+  ConnectTimeout: 5000 #ribbon请求连接的超时时间，默认值1000，单位ms
+  ServerListRefreshInterval: 15000 # 从注册中心刷新servelist的时间 默认30秒，单位ms
+hystrix:
+  threadpool:
+    default:
+      coreSize: 100
+      maximumSize: 2000
+      allowMaximumSizeToDivergeFromCoreSize: true #允许maximumSize起作用
+      maxQueueSize: -1 #如该值为-1，那么使用的是SynchronousQueue，否则使用的是LinkedBlockingQueue
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 20001 #断路器的超时时间；如果ribbon配置了重试那么该值必需大于ribbonTimeout = (ribbonReadTimeout + ribbonConnectTimeout) * (maxAutoRetries + 1) * (maxAutoRetriesNextServer + 1)，重试才能生效
+      timeout:
+        enabled: false
+      circuitBreaker:
+        requestVolumeThreshold: 20 #当在配置时间窗口内达到此数量的失败后，进行短路。默认20个
+        sleepWindowInMilliseconds: 5 #短路多久以后开始尝试是否恢复，默认5s
+        errorThresholdPercentage: 50% #出错百分比阈值，当达到此阈值后，开始短路。默认50%
+
+##禁用自定义过滤器ThrowExceptionFilter
+#zuul.ThrowExceptionFilter.pre.disable=true
+#security:
+#  sessions: stateless
+#  oauth2:
+#    client:
+#      client-id: anan
+#      client-secret: local
+##      access-token-uri: http://localhost:9000/auth/oauth/token
+##      user-authorization-uri: http://localhost:9000/auth/oauth/authorize
+#      access-token-uri: http://localhost:51400/oauth/token
+#      user-authorization-uri: http://localhost:51400/oauth/authorize
+##      auto-approve-scopes:
+##      pre-established-redirect-uri: http://${security.user.name}:${security.user.password}@${eureka.instance.hostname}:${server.port}/
+##      token-name:
+##      refresh-token-validity-seconds:
+##      access-token-validity-seconds:
+##      scope:
+#      authorized-grant-types: authorization_code
+##      use-current-uri: false
+##      registered-redirect-uri: http://localhost:9000/platform/login
+##      client-authentication-scheme: form
+anan:
+  swagger:
+    enabled: true
+    title: ${spring.application.name}
+    description: ${info.description}
+    version: ${info.version}
+    base-package: com.github.fosin.anan.zuulgateway
+    authorization:
+      name: Oauth2.0 Authorization
+      keyName: Authorization
+    #      authRegex: ^[^/oauth/token]$
+    contact:
+      name: fosin
+      email: 28860823@qq.com
+    ignoreResourceNames:
+      - anan-zuulgateway
+  redis:
+    idempotent:
+      enabled: false
+    cache:
+      manager: false
+    session:
+      manager: true
+  oauth2:
+    disablecsrf: true
+    disableHttpBasic: true
+    cors:
+      allowedOrigins: ''*''
+      allowedMethods: ''*''
+      allowedHeaders: ''*''
+      allowCredentials: true
+    blackWhiteList:
+    - path: /**/auth/oauth/**
+    - path: /**/auth/sso/**
+    - path: /**/*.js
+    - path: /**/*.html
+    - path: /**/*.css
+    - path: /**/*.gif
+    - path: /**/*.png
+    - path: /**/*.jpg
+    - path: /**/*.jpeg
+    - path: /**/*.svg
+    - path: /**/*.bmp
+    - path: /**/*.ico
+    - path: /**/*.swf
+    - path: /**/*.woff
+    - path: /**/*.woff2
+    - path: /**/*.ttf
+    - path: /**/*.map
+    - path: /hystrix
+    - path: /hystrix.stream
+    - path: /hystrix/**
+    - path: /**/webjars/**
+#    - path: /**/springfox-swagger-ui/**
+    - path: /**/swagger-resources/**
+    - path: /**/v2/api-docs
+    - path: /**/third-party/**
+    - path: /**/api/**
+    - path: /**/images/**
+', 'b7353d61807d909009a90b70e0a7114e', '2019-11-10 20:04:04', '2020-03-15 18:36:23', null, '192.168.137.1', '', '6138f451-2d5b-42fe-a793-df3744d7257c', 'null', 'null', 'null', 'yaml', 'null');
+INSERT INTO `config_info` (`id`, `data_id`, `group_id`, `content`, `md5`, `gmt_create`, `gmt_modified`, `src_user`, `src_ip`, `app_name`, `tenant_id`, `c_desc`, `c_use`, `effect`, `type`, `c_schema`) VALUES (20, 'anan-platformserver.yaml', 'DEFAULT_GROUP', 'server:
+  port: 51500
+spring:
+  jpa:
+    show-sql: true
+  datasource:
+    url: jdbc:mysql://mysql-master:3306/anan_platform?useUnicode=true&characterEncoding=utf-8&useSSL=false
+    username: anan
+    password: local
+    druid:
+      initial-size: 5 #初始化大小
+      min-idle: 5 #最小
+      maxActive: 10 # 最大
+      maxWait: 60000 #配置获取连接等待超时的时间
+      timeBetweenEvictionRunsMillis: 60000 # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+      minEvictableIdleTimeMillis: 300000 # 配置一个连接在池中最小生存的时间，单位是毫秒
+      #      validationQuery: SELECT 1 FROM DUAL
+      testWhileIdle: true
+      testOnBorrow: false
+      testOnReturn: false
+  #      poolPreparedStatements: true # 打开PSCache，并且指定每个连接上PSCache的大小
+  #      maxPoolPreparedStatementPerConnectionSize: 20
+  #      filters: stat,wall,log4j # 配置监控统计拦截的filters，去掉后监控界面sql无法统计，''wall''用于防火墙
+  #      connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000 # 通过connectProperties属性来打开mergeSql功能；慢SQL记录
+  #      useGlobalDataSourceStat: true # 合并多个DruidDataSource的监控数据
+  #    platform: mysql
+  #    continue-on-error: true
+  redis:
+    #database: 10
+    #    cluster:
+    #      max-redirects:  # （普通集群，不使用则不用开启）在群集中执行命令时要遵循的最大重定向数目。
+    #      nodes: redis:6379 # （普通集群，不使用则不用开启）以逗号分隔的“主机：端口”对列表进行引导。
+    host: redis
+    port: 6379
+    password: local
+  session:
+    store-type: redis
+
+feign:
+#  compression: #开启这个设置比较耗CPU
+#    request:
+#      enabled: true #开启Feign请求压缩
+#      mime-types: text/xml,application/xml,application/json # 配置压缩文档类型
+#    response:
+#      enabled: true #开启Feign响应压缩
+#      min-request-size: 2048 # 配置最小压缩的文档大小
+  okhttp:
+    enabled: true
+  httpclient:
+    enabled: false
+    max-connections: 1000 #最大连接数
+    max-connections-per-route: 100 #每个url的连接数
+security:
+  oauth2:
+    client:
+      client-id: appServer
+      client-secret: appServer
+      access-token-uri: http://anan-authserver:51400/oauth/token
+      grant-type: client_credentials
+anan:
+  swagger:
+    enabled: true
+    title: ${spring.application.name}
+    description: ${info.description}
+    version: ${info.version}
+    base-package: com.github.fosin.anan.platform
+    authorization:
+      name: Oauth2.0 Authorization
+      keyName: Authorization
+    contact:
+      name: fosin
+      email: 28860823@qq.com
+#  global-operation-parameters:
+#  - name: Authorization
+#    description: Oauth2.0令牌信息,格式例如：Bearer 58cb49cd-be59-4706-bbc5-9c41fc3cbef4
+#    modelRef: string
+#    parameterType: header
+#    required: true
+  oauth2:
+    disablecsrf: true
+    disableHttpBasic: true
+    blackWhiteList:
+    - path: /**/v2/api-docs', 'c859d1296638e9cd9795a0bb74220ee2', '2019-11-10 20:16:42', '2020-03-15 18:35:53', null, '192.168.137.1', '', '6138f451-2d5b-42fe-a793-df3744d7257c', 'null', 'null', 'null', 'yaml', 'null');
 /*!40000 ALTER TABLE `config_info` ENABLE KEYS */;
 UNLOCK TABLES;
 
