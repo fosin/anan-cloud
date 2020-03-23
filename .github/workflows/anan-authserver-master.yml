@@ -9,18 +9,18 @@ on:
     branches:
       - master
     paths:
-      - pom.xml
-      - anan-cloudadviced/pom.xml
-      - anan-cloudadviced/anan-platform/**
-      - !anan-cloudadviced/anan-platform/anan-platformserver/**
+      - 'pom.xml'
+      - 'anan-cloudadviced/pom.xml'
+      - 'anan-cloudadviced/anan-platform/**'
+      - '!anan-cloudadviced/anan-platform/anan-platformserver/**'
   pull_request:
     branches:
       - master
     paths:
-      - pom.xml
-      - anan-cloudadviced/pom.xml
-      - anan-cloudadviced/anan-platform/**
-      - !anan-cloudadviced/anan-platform/anan-platformserver/**
+      - 'pom.xml'
+      - 'anan-cloudadviced/pom.xml'
+      - 'anan-cloudadviced/anan-platform/**'
+      - '!anan-cloudadviced/anan-platform/anan-platformserver/**'
 jobs:
   build:
     runs-on: ubuntu-latest
