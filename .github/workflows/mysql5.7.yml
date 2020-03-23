@@ -9,12 +9,12 @@ on:
     branches:
       - master
     paths:
-      - deploy/mysql/**
+      - 'deploy/mysql/**'
   pull_request:
     branches:
       - master
     paths:
-      - deploy/mysql/**
+      - 'deploy/mysql/**'
 jobs:
   build:
     runs-on: ubuntu-latest

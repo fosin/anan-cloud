@@ -9,14 +9,14 @@ on:
     branches:
       - master
     paths:
-      - pom.xml
-      - anan-cloudgateway/**
+      - 'pom.xml'
+      - 'anan-cloudgateway/**'
   pull_request:
     branches:
       - master
     paths:
-      - pom.xml
-      - anan-cloudgateway/**
+      - 'pom.xml'
+      - 'anan-cloudgateway/**'
 jobs:
   build:
     runs-on: ubuntu-latest

@@ -9,12 +9,12 @@ on:
     branches:
       - master
     paths:
-      - deploy/openjdk/**
+      - 'deploy/openjdk/**'
   pull_request:
     branches:
       - master
     paths:
-      - deploy/openjdk/**
+      - 'deploy/openjdk/**'
 jobs:
   build:
     runs-on: ubuntu-latest

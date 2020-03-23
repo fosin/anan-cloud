@@ -3,13 +3,11 @@ package com.github.fosin.anan.pojo.dto.request;
 import com.github.fosin.anan.util.RegexUtil;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
+import lombok.Data;
+
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.io.Serializable;
-import lombok.Data;
-import com.github.fosin.anan.util.DateTimeUtil;
 
 /**
  * 系统通用字典明细表(AnanDictionaryDetail)更新DTO

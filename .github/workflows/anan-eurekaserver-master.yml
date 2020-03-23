@@ -9,14 +9,14 @@ on:
     branches:
       - master
     paths:
-      - pom.xml
-      - anan-eurekaserver/**
+      - 'pom.xml'
+      - 'anan-eurekaserver/**'
   pull_request:
     branches:
       - master
     paths:
-      - pom.xml
-      - anan-eurekaserver/**
+      - 'pom.xml'
+      - 'anan-eurekaserver/**'
 jobs:
   build:
     runs-on: ubuntu-latest

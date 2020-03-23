@@ -9,16 +9,16 @@ on:
     branches:
       - master
     paths:
-      - pom.xml
-      - anan-cloudadviced/pom.xml
-      - anan-cloudadviced/anan-adminserver/**
+      - 'pom.xml'
+      - 'anan-cloudadviced/pom.xml'
+      - 'anan-cloudadviced/anan-adminserver/**'
   pull_request:
     branches:
       - master
     paths:
-      - pom.xml
-      - anan-cloudadviced/pom.xml
-      - anan-cloudadviced/anan-adminserver/**
+      - 'pom.xml'
+      - 'anan-cloudadviced/pom.xml'
+      - 'anan-cloudadviced/anan-adminserver/**'
 jobs:
   build:
     runs-on: ubuntu-latest

@@ -10,13 +10,13 @@ on:
     branches:
       - master
     paths:
-      - pom.xml
-      - anan-configserver/**
+      - 'pom.xml'
+      - 'anan-configserver/**'
   pull_request:
     branches:
       - master
     paths:
-      - anan-configserver/**
+      - 'anan-configserver/**'
 jobs:
   build:
     runs-on: ubuntu-latest

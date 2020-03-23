@@ -9,12 +9,12 @@ on:
     branches:
       - master
     paths:
-      - xxx.xml
+      - 'xxx.xml'
   pull_request:
     branches:
       - master
     paths:
-      - xxx.xml
+      - 'xxx.xml'
 jobs:
   build:
     runs-on: ubuntu-latest
