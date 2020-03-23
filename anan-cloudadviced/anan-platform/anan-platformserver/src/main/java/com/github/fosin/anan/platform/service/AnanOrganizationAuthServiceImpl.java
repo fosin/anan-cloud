@@ -16,7 +16,6 @@ import com.github.fosin.anan.pojo.dto.request.AnanUserCreateDto;
 import com.github.fosin.anan.pojo.dto.request.AnanUserRegisterDto;
 import com.github.fosin.anan.util.DateTimeUtil;
 import org.springframework.beans.BeanUtils;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

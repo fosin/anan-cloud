@@ -4,7 +4,6 @@ package com.github.fosin.anan.platform.controller;
 import com.github.fosin.anan.model.controller.ISimpleController;
 import com.github.fosin.anan.model.service.ISimpleService;
 import com.github.fosin.anan.platform.dto.request.*;
-import com.github.fosin.anan.platform.dto.request.AnanOrganizationPermissionUpdateDto;
 import com.github.fosin.anan.platform.entity.AnanOrganizationAuthEntity;
 import com.github.fosin.anan.platform.entity.AnanVersionEntity;
 import com.github.fosin.anan.platform.entity.AnanVersionPermissionEntity;
@@ -30,7 +29,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("v1/version")
-@Api(value = "v1/version", tags = "系统版本表接入层API", description = "系统版本表(anan_version)接入层API")
+@Api(value = "v1/version", tags = "系统版本表(anan_version)接入层API")
 public class AnanVersionController implements ISimpleController<AnanVersionEntity, Long, AnanVersionCreateDto, AnanVersionRetrieveDto, AnanVersionUpdateDto> {
     /**
      * 服务对象

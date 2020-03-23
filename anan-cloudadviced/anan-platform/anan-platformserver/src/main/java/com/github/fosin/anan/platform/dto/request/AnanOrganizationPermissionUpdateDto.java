@@ -1,15 +1,11 @@
 package com.github.fosin.anan.platform.dto.request;
 
-import java.util.Date;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
+import lombok.Data;
+
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import lombok.Data;
-import org.springframework.format.annotation.DateTimeFormat;
-import com.github.fosin.anan.util.DateTimeUtil;
 
 /**
  * 系统机构权限表(AnanOrganizationPermission)更新DTO

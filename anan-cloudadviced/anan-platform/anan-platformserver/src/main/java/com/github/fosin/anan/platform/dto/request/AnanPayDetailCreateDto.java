@@ -2,13 +2,10 @@ package com.github.fosin.anan.platform.dto.request;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
+
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import lombok.Data;
-import org.springframework.format.annotation.DateTimeFormat;
-import com.github.fosin.anan.util.DateTimeUtil;
 
 /**
  * 系统支付明细表(AnanPayDetail)创建DTO

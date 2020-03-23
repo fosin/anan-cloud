@@ -3,7 +3,6 @@ package com.github.fosin.anan.platform.service.inter;
 import com.github.fosin.anan.platform.dto.request.AnanPayOrderCreateDto;
 import com.github.fosin.anan.platform.dto.request.AnanPayOrderRetrieveDto;
 import com.github.fosin.anan.platform.dto.request.AnanPayOrderUpdateDto;
-import com.github.fosin.anan.platform.entity.AnanPayInvoiceEntity;
 import com.github.fosin.anan.platform.entity.AnanPayOrderEntity;
 import com.github.fosin.anan.jpa.service.ISimpleJpaService;
 
