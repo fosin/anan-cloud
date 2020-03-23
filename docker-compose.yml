@@ -16,6 +16,12 @@ services:
       - MYSQL_MASTER_SERVICE_PASSWORD=local
       - MYSQL_SLAVE_SERVICE_HOST=mysql-slave
       - MYSQL_SLAVE_SERVICE_PORT=3306
+#      - MYSQL_SERVICE_HOST=nacos-mysql
+#      - MYSQL_SERVICE_PORT=3308
+#      - MYSQL_SERVICE_DB_NAME=nacos
+#      - MYSQL_SERVICE_USER=nacos
+#      - MYSQL_SERVICE_PASSWORD=local
+#      - MYSQL_DATABASE_NUM=1
       - JVM_XMS=512M
       - JVM_XMX=512M
       - JVM_XMN=256M
@@ -30,7 +36,22 @@ services:
       - mysql-slave
     networks:
       - anan-bridge
-
+  nacos-mysql:
+    container_name: nacos-mysql
+    hostname: nacos-mysql
+    image: nacos/nacos-mysql:5.7
+    environment:
+      - TZ=Asia/Shanghai
+      - MYSQL_ROOT_PASSWORD=local
+      - MYSQL_DATABASE=nacos
+      - MYSQL_USER=nacos
+      - MYSQL_PASSWORD=local
+    volumes:
+      - /root/deploy/mysql/nacos:/var/lib/mysql
+    ports:
+      - "3308:3306"
+    networks:
+      - anan-bridge
   mysql-master:
     container_name: mysql-master
     hostname: mysql-master
@@ -65,7 +86,7 @@ services:
       - MYSQL_ROOT_PASSWORD=local
       - MYSQL_REPLICATION_USER=anan_ru
       - MYSQL_REPLICATION_PASSWORD=local
-      - MYSQL_MASTER_SERVICE_HOST=mysql-master
+      - MYSQL_SERVICE_HOST=mysql-master
     volumes:
       - /root/deploy/mysql/slave:/var/lib/mysql
     ports:

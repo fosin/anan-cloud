@@ -19,24 +19,11 @@
         <module>anan-cloudgateway</module>
         <module>anan-configserver</module>
     </modules>
-    <repositories>
-        <repository>
-            <id>sonatype-nexus-snapshots</id>
-            <name>Sonatype Nexus Snapshots</name>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
     <properties>
         <anan-placeholder1>${</anan-placeholder1>
         <anan-placeholder2>}</anan-placeholder2>
         <anan-spring-cloud.version>Greenwich.SR5</anan-spring-cloud.version>
-        <anan-spring-cloud-alibaba.version>2.1.0.RELEASE</anan-spring-cloud-alibaba.version>
+        <anan-spring-cloud-alibaba.version>2.1.1.RELEASE</anan-spring-cloud-alibaba.version>
         <anan-spring-boot-admin.version>2.1.6</anan-spring-boot-admin.version>
         <anan-druid.version>1.1.21</anan-druid.version>
         <sonar.host.url>http://192.168.137.8:9001/</sonar.host.url>
@@ -202,16 +189,7 @@
              <groupId>org.springframework.cloud</groupId>
              <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
          </dependency>
-        <dependency>
-            <groupId>com.alibaba.cloud</groupId>
-            <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
-            <version>${anan-spring-cloud-alibaba.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.alibaba.cloud</groupId>
-            <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
-            <version>${anan-spring-cloud-alibaba.version}</version>
-        </dependency>
+
         <dependency>
             <groupId>de.codecentric</groupId>
             <artifactId>spring-boot-admin-starter-client</artifactId>
@@ -251,6 +229,19 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+    <repositories>
+        <repository>
+            <id>sonatype-nexus-snapshots</id>
+            <name>Sonatype Nexus Snapshots</name>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
     <build>
         <resources>
             <resource>
