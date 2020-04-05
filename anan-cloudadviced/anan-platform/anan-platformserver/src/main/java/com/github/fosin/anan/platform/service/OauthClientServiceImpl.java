@@ -46,7 +46,7 @@ public class OauthClientServiceImpl implements OauthClientService {
         Assert.notNull(entity, "传入了空对象!");
         String id = entity.getClientId();
         Optional<OauthClientDetailsEntity> entityOptional = oauthClientRepository.findById(id);
-        Assert.isTrue(entityOptional.isPresent(), "该数据已存在，请重新设置客户端标识以区分");
+        Assert.isTrue(entityOptional.isEmpty(), "该数据已存在，请重新设置客户端标识以区分");
         entity.setClientSecret(passwordEncoder.encode(entity.getClientSecret()));
         return oauthClientRepository.save(entity);
     }
@@ -57,6 +57,7 @@ public class OauthClientServiceImpl implements OauthClientService {
         String id = entity.getClientId();
         Assert.isTrue(StringUtils.hasText(id), "更新数据时ClientId不能为空!");
         OauthClientDetailsEntity existsEntity = oauthClientRepository.findById(id).orElse(null);
+        Assert.isTrue(existsEntity != null, "没有找到对应的数据!");
         //如果密码与数据库中的不一致则需要加密
         if (!Objects.equals(entity.getClientSecret(), existsEntity.getClientSecret())) {
             entity.setClientSecret(passwordEncoder.encode(entity.getClientSecret()));

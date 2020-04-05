@@ -5,7 +5,6 @@ import com.github.fosin.anan.oauth2.annotation.EnableAnanOauth2;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.cloud.client.SpringCloudApplication;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 
 /**
  * Spring Cloud Gateway

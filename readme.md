@@ -80,19 +80,19 @@
     # Step 3: 安装指定版本的Docker-CE: (VERSION 例如上面的 17.03.0.ce.1-1.el7.centos)
     # sudo yum -y install docker-ce-[VERSION]
 #### 1.1.2、安装docker-compose(按需安装注意版本更新和匹配)
-    sudo curl -L "https://github.com/docker/compose/releases/download/1.24.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+    sudo curl -L https://github.com/docker/compose/releases/download/1.25.4/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
     sudo chmod +x /usr/local/bin/docker-compose
 #### 1.1.3、配置参数（阿里云镜像加速、开启实验性功能）
     sudo mkdir -p /etc/docker
-cat > /etc/docker/daemon.json <<EOF
-{
-  "exec-opts": ["native.cgroupdriver=systemd"],
-  "log-driver": "json-file",
-  "log-opts": {"max-size":"50m", "max-file":"3"},
-  "registry-mirrors": ["https://c70a1b9z.mirror.aliyuncs.com","https://docker.mirrors.ustc.edu.cn/","https://hub-mirror.c.163.com","https://registry.docker-cn.com"],
-  "experimental": true
-}
-EOF
+    cat > /etc/docker/daemon.json <<EOF
+    {
+      "exec-opts": ["native.cgroupdriver=systemd"],
+      "log-driver": "json-file",
+      "log-opts": {"max-size":"50m", "max-file":"3"},
+      "registry-mirrors": ["https://dockerhub.azk8s.cn","https://c70a1b9z.mirror.aliyuncs.com","https://docker.mirrors.ustc.edu.cn/"],
+      "experimental": true
+    }
+    EOF
 
     sudo systemctl daemon-reload
     sudo systemctl restart docker

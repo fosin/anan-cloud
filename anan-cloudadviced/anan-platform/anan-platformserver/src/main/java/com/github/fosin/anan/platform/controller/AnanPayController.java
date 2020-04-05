@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping(UrlPrefixConstant.PAY)
-@Api(value = UrlPrefixConstant.PAY, tags = "系统支付表接入层API", description = "系统支付表(anan_pay)接入层API")
+@Api(value = UrlPrefixConstant.PAY, tags = "系统支付表(anan_pay)接入层API")
 public class AnanPayController implements ISimpleController<AnanPayEntity, Long, AnanPayCreateDto, AnanPayRetrieveDto, AnanPayUpdateDto> {
     /**
      * 服务对象

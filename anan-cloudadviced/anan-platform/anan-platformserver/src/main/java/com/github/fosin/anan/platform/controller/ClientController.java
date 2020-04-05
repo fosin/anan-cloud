@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("v1/client")
-@Api(value = "v1/client", tags = "OAuth2.0客户端授权管理", description = "OAuth2.0客户端授权管理相关操作")
+@Api(value = "v1/client", tags = "OAuth2.0客户端授权管理相关操作")
 public class ClientController implements ISimpleController<OauthClientDetailsEntity, String, OauthClientDetailsEntity, OauthClientDetailsEntity, OauthClientDetailsEntity> {
     private final OauthClientService oauthClientService;
 

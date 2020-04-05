@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("v1/dictionary")
-@Api(value = "v1/dictionary", tags = "通用字典管理", description = "通用字典管理(增删改查)")
+@Api(value = "v1/dictionary", tags = "通用字典管理(增删改查)")
 public class DictionaryController implements ISimpleController<AnanDictionaryEntity, Long, AnanDictionaryCreateDto, AnanDictionaryRetrieveDto, AnanDictionaryUpdateDto> {
     private final DictionaryService dictionaryService;
 

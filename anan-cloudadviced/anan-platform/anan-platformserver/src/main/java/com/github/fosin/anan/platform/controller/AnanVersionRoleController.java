@@ -29,7 +29,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("v1/version/role")
-@Api(value = "v1/version/role", tags = "系统版本角色表接入层API", description = "系统版本角色表(anan_version_role)接入层API")
+@Api(value = "v1/version/role", tags = "系统版本角色表(anan_version_role)接入层API")
 public class AnanVersionRoleController implements ISimpleController<AnanVersionRoleEntity, Long, AnanVersionRoleCreateDto, AnanVersionRoleRetrieveDto, AnanVersionRoleUpdateDto> {
     /**
      * 服务对象

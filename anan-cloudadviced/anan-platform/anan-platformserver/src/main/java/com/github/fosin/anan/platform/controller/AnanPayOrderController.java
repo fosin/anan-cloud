@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("v1/order")
-@Api(value = "v1/order", tags = "系统支付订单表接入层API", description = "系统支付订单表(anan_pay_order)接入层API")
+@Api(value = "v1/order", tags = "系统支付订单表(anan_pay_order)接入层API")
 public class AnanPayOrderController implements ISimpleController<AnanPayOrderEntity, Long, AnanPayOrderCreateDto, AnanPayOrderRetrieveDto, AnanPayOrderUpdateDto> {
     /**
      * 服务对象
