@@ -27,7 +27,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-offset-3 col-md-6">
-                <form class="form-horizontal" method="post" role="form" th:action="@{loginAction}">
+                <form class="form-horizontal" method="post" role="form" th:action="@{login}">
                     <h2 class="heading" th:text="#{login.title.text}"></h2>
                     <div th:if="${param.error}">
                         <div class="alert alert-danger" th:text="#{login.error.text}">

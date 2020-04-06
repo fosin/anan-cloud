@@ -1,11 +1,13 @@
 package com.github.fosin.anan.auth.config;
 
+import com.github.fosin.anan.util.DateTimeUtil;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.format.datetime.DateFormatter;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.validation.MessageCodesResolver;
 import org.springframework.validation.Validator;
+import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.HandlerMethodReturnValueHandler;
 import org.springframework.web.servlet.HandlerExceptionResolver;
@@ -22,6 +24,7 @@ import java.util.List;
  * 3、extends WebMvcConfigurationSupport ：会覆盖@EnableAutoConfiguration关于WebMvcAutoConfiguration的配置
  * 4、extends DelegatingWebMvcConfiguration ：会覆盖@EnableAutoConfiguration关于WebMvcAutoConfiguration的配置
  * 5、WebMvcConfigurerAdapter在SpringBoot2.0及Spring 5.0 WebMvcConfigurerAdapter已被废弃
+ *
  * @author fosin
  */
 @Configuration
@@ -54,8 +57,9 @@ public class AnanWebMvcConfigurer implements WebMvcConfigurer {
 
     @Override
     public void addFormatters(FormatterRegistry registry) {
-        registry.addFormatter(new DateFormatter("yyyy-MM-dd HH:mm:ss"));
+        registry.addFormatter(new DateFormatter(DateTimeUtil.DATETIME_PATTERN));
     }
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
 
@@ -72,16 +76,16 @@ public class AnanWebMvcConfigurer implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-//        registry.addMapping("/**")
-//                .allowedHeaders(CorsConfiguration.ALL)
-//                .allowedMethods(CorsConfiguration.ALL)
-//                .allowedOrigins(CorsConfiguration.ALL);
+        registry.addMapping("/**")
+                .allowedHeaders(CorsConfiguration.ALL)
+                .allowedMethods(CorsConfiguration.ALL)
+                .allowedOrigins(CorsConfiguration.ALL)
+                .allowCredentials(true);
     }
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/").setViewName("/sso/login");
-        registry.addViewController("/sso").setViewName("/sso/login");
+        registry.addViewController("/").setViewName("/sso/index");
         registry.addViewController("/sso/login").setViewName("login");
         registry.addViewController("/sso/index").setViewName("index");
     }
@@ -98,6 +102,7 @@ public class AnanWebMvcConfigurer implements WebMvcConfigurer {
 
     /**
      * 静态资源
+     *
      * @param returnValueHandlers
      */
     @Override
@@ -108,6 +113,7 @@ public class AnanWebMvcConfigurer implements WebMvcConfigurer {
     /**
      * 消息内容转换配置
      * 配置fastJson返回json转换
+     *
      * @param converters
      */
     @Override

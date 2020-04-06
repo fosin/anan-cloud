@@ -40,7 +40,7 @@ public class OauthController {
         this.consumerTokenServices = consumerTokenServices;
     }
 
-    @RequestMapping(value = "/token", method = {RequestMethod.POST})
+    @RequestMapping(value = "/token", method = {RequestMethod.POST, RequestMethod.GET})
     @ApiOperation(value = "获取令牌", notes = "获取Oauth2.0令牌，通常用于前端的认证、登录操作")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "Authorization", value = "Basic认证信息,格式例如：Basic ouZTJoQk5BQVFLUjVVemlJSw==", required = true, dataType = "string", paramType = "header"),
@@ -84,6 +84,13 @@ public class OauthController {
         OAuth2AuthenticationDetails details = (OAuth2AuthenticationDetails) ((OAuth2Authentication) principal).getDetails();
         return ResponseEntity.ok(consumerTokenServices.revokeToken(details.getTokenValue()));
     }
+
+//    @RequestMapping(value = "/authorize", method = {RequestMethod.GET, RequestMethod.POST})
+//    @ApiOperation(value = "根据令牌获取当前认证用户信息", notes = "根据令牌获取当前认证用户信息，包括用户信息、客户端信息、Oauth2.0相关信息")
+//    @ApiImplicitParam(name = "Authorization", value = "Basic认证信息,格式例如：Basic ouZTJoQk5BQVFLUjVVemlJSw==", required = true, dataType = "string", paramType = "header")
+//    public ResponseEntity<Principal> authorize(Principal principal) {
+//        return ResponseEntity.ok(principal);
+//    }
 
 //    @Autowired
 //    private static RedisTokenStore redisTokenStore;

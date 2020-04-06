@@ -1,7 +1,6 @@
 package com.github.fosin.anan.auth.config;
 
 import com.github.fosin.anan.auth.security.AnanUserDetailsServiceImpl;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -37,29 +36,27 @@ public class AnanWebSecurityConfigurer extends WebSecurityConfigurerAdapter {
         this.dataSource = dataSource;
     }
 
-    @Bean(name = BeanIds.AUTHENTICATION_MANAGER)
-    @Override
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
-    }
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .antMatcher("/sso/**")
                 .authorizeRequests()
-                .antMatchers("/sso/login","/sso/logout","/sso/loginAction").permitAll()
+                .antMatchers("/sso/login", "/sso/logout").permitAll()
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
-//                //除以上路径都需要验证
+                //除以上路径都需要验证
                 .anyRequest().authenticated()
-//                .and()
-//                .exceptionHandling()
-//                .accessDeniedPage("/login?authorization_error=true")
+                .and()
+                .exceptionHandling()
+                .accessDeniedPage("/sso/login?error")
                 .and().csrf().disable()
                 .logout()
                 .clearAuthentication(true)
                 .logoutUrl("/sso/logout")
                 .logoutSuccessUrl("/sso/login?logout")
+                //指定在注销时是否使HttpSession无效。默认为true。
+//                .invalidateHttpSession(true)
+                //允许在注销成功时指定要删除的cookie的名称。这是显式添加CookieClearingLogoutHandler的快捷方式。
+//              .deleteCookies("")
                 .and()
                 //http参数中包含一个名为“remember-me”的参数，不管session是否过期，用户记录将会被记保存下来
                 .rememberMe()
@@ -72,11 +69,18 @@ public class AnanWebSecurityConfigurer extends WebSecurityConfigurerAdapter {
                 //form表单用户名参数名
                 .passwordParameter("password")
                 .loginPage("/sso/login")
-                .loginProcessingUrl("/sso/loginAction")
+                .loginProcessingUrl("/sso/login")
                 .defaultSuccessUrl("/sso/index")
                 .failureUrl("/sso/login?error")
-//                .and().httpBasic()
+                //permitall()方法允许为与基于表单的登录相关联的所有url授予所有用户访问权限。
+                .permitAll()
         ;
+    }
+
+    @Bean(name = BeanIds.AUTHENTICATION_MANAGER)
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
     }
 
     @Override
