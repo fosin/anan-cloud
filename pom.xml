@@ -225,6 +225,16 @@
                 <artifactId>druid-spring-boot-starter</artifactId>
                 <version>${anan-druid.version}</version>
             </dependency>
+            <dependency>
+                <groupId>${anan.groupId}</groupId>
+                <artifactId>anan-platformapi</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${anan.groupId}</groupId>
+                <artifactId>anan-platformpojo</artifactId>
+                <version>${project.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
     <repositories>

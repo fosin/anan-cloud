@@ -16,7 +16,7 @@
     </properties>
     <dependencies>
         <dependency>
-            <groupId>com.github.fosin.anan</groupId>
+            <groupId>${anan.groupId}</groupId>
             <artifactId>anan-core</artifactId>
         </dependency>
         <dependency>
