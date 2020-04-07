@@ -22,6 +22,7 @@
     <properties>
         <anan-placeholder1>${</anan-placeholder1>
         <anan-placeholder2>}</anan-placeholder2>
+        <anan-cloud.version>2.1.0-SNAPSHOT</anan-cloud.version>
         <anan-spring-cloud.version>Greenwich.SR5</anan-spring-cloud.version>
         <anan-spring-cloud-alibaba.version>2.1.1.RELEASE</anan-spring-cloud-alibaba.version>
         <anan-spring-boot-admin.version>2.1.6</anan-spring-boot-admin.version>
@@ -228,12 +229,12 @@
             <dependency>
                 <groupId>${anan.groupId}</groupId>
                 <artifactId>anan-platformapi</artifactId>
-                <version>${project.version}</version>
+                <version>${anan-cloud.version}</version>
             </dependency>
             <dependency>
                 <groupId>${anan.groupId}</groupId>
                 <artifactId>anan-platformpojo</artifactId>
-                <version>${project.version}</version>
+                <version>${anan-cloud.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -353,6 +354,10 @@
                         <nonFilteredFileExtension>scss</nonFilteredFileExtension>
                     </nonFilteredFileExtensions>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-help-plugin</artifactId>
             </plugin>
         </plugins>
     </build>

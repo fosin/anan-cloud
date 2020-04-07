@@ -1,6 +1,4 @@
 name: anan-cloud Dockerfile CI
-#env:
-#  MODULE_VERSION: ${{ github.ref }}
 on:
   push:
     tags:
@@ -25,9 +23,13 @@ jobs:
         with:
           java-version: '11.0.6'
           architecture: x64
-#      - name: Build And Deploy with Maven
-#        run: |
-#          mvn --batch-mode --errors --file $MODULE_PATH/pom.xml clean package deploy:deploy -Dmaven.javadoc.skip=true -Darguments=${{ secrets.maven_center_pass }}
+      #      - name: Build And Deploy with Maven
+      #        run: |
+      #          mvn --batch-mode --errors --file $MODULE_PATH/pom.xml clean package deploy:deploy -Dmaven.javadoc.skip=true -Darguments=${{ secrets.maven_center_pass }}
+      - name: Build with Maven
+        run: |
+          mvn --batch-mode --errors --file pom.xml clean compile jar:jar spring-boot:repackage
+
       - name: Docker Login
         run: |
           docker login --username=${{ secrets.dockerhub_user }} --password=${{ secrets.dockerhub_pass }}
@@ -37,7 +39,6 @@ jobs:
           MODULE_PATH: anan-cloudadviced/anan-platform/anan-authserver
           MODULE_NAME: anan-authserver
         run: |
-          mvn --batch-mode --errors --file $MODULE_PATH/pom.xml clean compile jar:jar spring-boot:repackage
           docker build ./$MODULE_PATH -t fosin/$MODULE_NAME:$MODULE_VERSION -f ./$MODULE_PATH/Dockerfile
           docker push fosin/$MODULE_NAME:$MODULE_VERSION
 
@@ -46,7 +47,6 @@ jobs:
           MODULE_PATH: anan-cloudadviced/anan-platform/anan-platformserver
           MODULE_NAME: anan-platformserver
         run: |
-          mvn --batch-mode --errors --file $MODULE_PATH/pom.xml clean compile jar:jar spring-boot:repackage
           docker build ./$MODULE_PATH -t fosin/$MODULE_NAME:$MODULE_VERSION -f ./$MODULE_PATH/Dockerfile
           docker push fosin/$MODULE_NAME:$MODULE_VERSION
 
@@ -55,7 +55,6 @@ jobs:
           MODULE_PATH: anan-cloudadviced/anan-zuulgateway
           MODULE_NAME: anan-zuulgateway
         run: |
-          mvn --batch-mode --errors --file $MODULE_PATH/pom.xml clean compile jar:jar spring-boot:repackage
           docker build ./$MODULE_PATH -t fosin/$MODULE_NAME:$MODULE_VERSION -f ./$MODULE_PATH/Dockerfile
           docker push fosin/$MODULE_NAME:$MODULE_VERSION
 
@@ -64,7 +63,6 @@ jobs:
           MODULE_PATH: anan-cloudadviced/anan-adminserver
           MODULE_NAME: anan-adminserver
         run: |
-          mvn --batch-mode --errors --file $MODULE_PATH/pom.xml clean compile jar:jar spring-boot:repackage
           docker build ./$MODULE_PATH -t fosin/$MODULE_NAME:$MODULE_VERSION -f ./$MODULE_PATH/Dockerfile
           docker push fosin/$MODULE_NAME:$MODULE_VERSION
 
@@ -73,7 +71,6 @@ jobs:
           MODULE_PATH: anan-cloudgateway
           MODULE_NAME: anan-cloudgateway
         run: |
-          mvn --batch-mode --errors --file $MODULE_PATH/pom.xml clean compile jar:jar spring-boot:repackage
           docker build ./$MODULE_PATH -t fosin/$MODULE_NAME:$MODULE_VERSION -f ./$MODULE_PATH/Dockerfile
           docker push fosin/$MODULE_NAME:$MODULE_VERSION
 
@@ -82,7 +79,6 @@ jobs:
           MODULE_PATH: anan-eurekaserver
           MODULE_NAME: anan-eurekaserver
         run: |
-          mvn --batch-mode --errors --file $MODULE_PATH/pom.xml clean compile jar:jar spring-boot:repackage
           docker build ./$MODULE_PATH -t fosin/$MODULE_NAME:$MODULE_VERSION -f ./$MODULE_PATH/Dockerfile
           docker push fosin/$MODULE_NAME:$MODULE_VERSION
 
@@ -91,6 +87,6 @@ jobs:
           MODULE_PATH: anan-configserver
           MODULE_NAME: anan-configserver
         run: |
-          mvn --batch-mode --errors --file $MODULE_PATH/pom.xml clean compile jar:jar spring-boot:repackage
           docker build ./$MODULE_PATH -t fosin/$MODULE_NAME:$MODULE_VERSION -f ./$MODULE_PATH/Dockerfile
           docker push fosin/$MODULE_NAME:$MODULE_VERSION
+          docker logout
