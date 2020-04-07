@@ -116,11 +116,13 @@ anan:
       name: fosin
       email: 28860823@qq.com
   oauth2:
-    enabled: true
-    disablecsrf: true
-    disableHttpBasic: true
-    blackWhiteList:
-    - path: /**/v2/api-docs
+    resource:
+      server:
+        enabled: true
+        disablecsrf: true
+        disableHttpBasic: true
+        blackWhiteList:
+        - path: /**/v2/api-docs
   redis:
     idempotent:
       enabled: false
@@ -145,6 +147,12 @@ INSERT INTO `config_info` (`id`, `data_id`, `group_id`, `content`, `md5`, `gmt_c
 #      enabled: false
 #      processor:
 #        enabled: false
+anan:
+  oauth2:
+    client:
+      client-id: appServer
+      client-secret: appServer
+      access-token-uri: http://anan-authserver:51400/oauth/token
 security:
   oauth2:
     resource:
@@ -192,31 +200,33 @@ turbine:
   app-config: anan-zuulgateway
 anan:
   oauth2:
-    disablecsrf: true
-    disableHttpBasic: true
-    cors:
-      allowedOrigins: ''*''
-      allowedMethods: ''*''
-      allowedHeaders: ''*''
-      allowCredentials: true
-    blackWhiteList:
-      - path: /**/*.html
-      - path: /**/*.css
-      - path: /**/*.js
-      - path: /**/img/**
-      - path: /third-party/**
-      - path: /**/api/**
-      - path: /**/login/**
-      - path: /**/logout/**
-      - path: /**/applications/**
-      - path: /**/instances/**
-      - method: OPTIONS
+    resource:
+      server:
+        disablecsrf: true
+        disableHttpBasic: true
+        cors:
+          allowedOrigins: ''*''
+          allowedMethods: ''*''
+          allowedHeaders: ''*''
+          allowCredentials: true
+        blackWhiteList:
+          - path: /**/*.html
+          - path: /**/*.css
+          - path: /**/*.js
+          - path: /**/img/**
+          - path: /third-party/**
+          - path: /**/api/**
+          - path: /**/login/**
+          - path: /**/logout/**
+          - path: /**/applications/**
+          - path: /**/instances/**
+          - method: OPTIONS
 security:
   oauth2:
     client:
-      client-id: appServer
-      client-secret: appServer
-      access-token-uri: http://anan-authserver:51400/oauth/token
+      client-id: ${anan.oauth2.client.client-id}
+      client-secret: ${anan.oauth2.client.client-secret}
+      access-token-uri: ${anan.oauth2.client.access-token-uri}
       grant-type: client_credentials
 spring:
   boot:
@@ -362,41 +372,43 @@ anan:
     session:
       manager: true
   oauth2:
-    disablecsrf: true
-    disableHttpBasic: true
-    cors:
-      allowedOrigins: ''*''
-      allowedMethods: ''*''
-      allowedHeaders: ''*''
-      allowCredentials: true
-    blackWhiteList:
-    - path: /**/auth/oauth/**
-    - path: /**/auth/sso/**
-    - path: /**/*.js
-    - path: /**/*.html
-    - path: /**/*.css
-    - path: /**/*.gif
-    - path: /**/*.png
-    - path: /**/*.jpg
-    - path: /**/*.jpeg
-    - path: /**/*.svg
-    - path: /**/*.bmp
-    - path: /**/*.ico
-    - path: /**/*.swf
-    - path: /**/*.woff
-    - path: /**/*.woff2
-    - path: /**/*.ttf
-    - path: /**/*.map
-    - path: /hystrix
-    - path: /hystrix.stream
-    - path: /hystrix/**
-    - path: /**/webjars/**
-#    - path: /**/springfox-swagger-ui/**
-    - path: /**/swagger-resources/**
-    - path: /**/v2/api-docs
-    - path: /**/third-party/**
-    - path: /**/api/**
-    - path: /**/images/**', '55b6239e5aed6a522b16d48872a0eedb', '2019-11-10 18:17:51', '2020-03-15 18:36:42', null, '192.168.137.1', '', '6138f451-2d5b-42fe-a793-df3744d7257c', 'null', 'null', 'null', 'yaml', 'null');
+    resource:
+      server:
+        disablecsrf: true
+        disableHttpBasic: true
+        cors:
+          allowedOrigins: ''*''
+          allowedMethods: ''*''
+          allowedHeaders: ''*''
+          allowCredentials: true
+        blackWhiteList:
+        - path: /**/auth/oauth/**
+        - path: /**/auth/sso/**
+        - path: /**/*.js
+        - path: /**/*.html
+        - path: /**/*.css
+        - path: /**/*.gif
+        - path: /**/*.png
+        - path: /**/*.jpg
+        - path: /**/*.jpeg
+        - path: /**/*.svg
+        - path: /**/*.bmp
+        - path: /**/*.ico
+        - path: /**/*.swf
+        - path: /**/*.woff
+        - path: /**/*.woff2
+        - path: /**/*.ttf
+        - path: /**/*.map
+        - path: /hystrix
+        - path: /hystrix.stream
+        - path: /hystrix/**
+        - path: /**/webjars/**
+    #    - path: /**/springfox-swagger-ui/**
+        - path: /**/swagger-resources/**
+        - path: /**/v2/api-docs
+        - path: /**/third-party/**
+        - path: /**/api/**
+        - path: /**/images/**', '55b6239e5aed6a522b16d48872a0eedb', '2019-11-10 18:17:51', '2020-03-15 18:36:42', null, '192.168.137.1', '', '6138f451-2d5b-42fe-a793-df3744d7257c', 'null', 'null', 'null', 'yaml', 'null');
 INSERT INTO `config_info` (`id`, `data_id`, `group_id`, `content`, `md5`, `gmt_create`, `gmt_modified`, `src_user`, `src_ip`, `app_name`, `tenant_id`, `c_desc`, `c_use`, `effect`, `type`, `c_schema`) VALUES (15, 'anan-mpi.yaml', 'DEFAULT_GROUP', 'server:
   port: 53000
 spring:
@@ -450,16 +462,18 @@ anan:
       name: fosin
       email: 28860823@qq.com
   oauth2:
-    disablecsrf: true
-    disableHttpBasic: true
-    blackWhiteList:
-    - path: /**/v2/api-docs
+    resource:
+      server:
+        disablecsrf: true
+        disableHttpBasic: true
+        blackWhiteList:
+        - path: /**/v2/api-docs
 security:
   oauth2:
     client:
-      client-id: appServer
-      client-secret: appServer
-      access-token-uri: http://anan-authserver:51400/oauth/token
+      client-id: ${anan.oauth2.client.client-id}
+      client-secret: ${anan.oauth2.client.client-secret}
+      access-token-uri: ${anan.oauth2.client.access-token-uri}
       grant-type: client_credentials
 ', 'd8eb297dfc893ce8f9ab939bbe264c36', '2019-11-10 18:18:19', '2020-02-18 15:41:38', null, '192.168.137.1', '', '6138f451-2d5b-42fe-a793-df3744d7257c', 'null', 'null', 'null', 'yaml', 'null');
 INSERT INTO `config_info` (`id`, `data_id`, `group_id`, `content`, `md5`, `gmt_create`, `gmt_modified`, `src_user`, `src_ip`, `app_name`, `tenant_id`, `c_desc`, `c_use`, `effect`, `type`, `c_schema`) VALUES (16, 'anan-vhr.yaml', 'DEFAULT_GROUP', 'server:
@@ -538,16 +552,18 @@ anan:
       name: fosin
       email: 28860823@qq.com
   oauth2:
-    disablecsrf: true
-    disableHttpBasic: true
-    blackWhiteList:
-    - path: /**/v2/api-docs
+    resource:
+      server:
+        disablecsrf: true
+        disableHttpBasic: true
+        blackWhiteList:
+        - path: /**/v2/api-docs
 security:
   oauth2:
     client:
-      client-id: appServer
-      client-secret: appServer
-      access-token-uri: http://anan-authserver:51400/oauth/token
+      client-id: ${anan.oauth2.client.client-id}
+      client-secret: ${anan.oauth2.client.client-secret}
+      access-token-uri: ${anan.oauth2.client.access-token-uri}
       grant-type: client_credentials
 ', '53b35f158b1d4642813e78335940a2d9', '2019-11-10 18:18:43', '2020-03-13 15:33:29', null, '192.168.137.1', '', '6138f451-2d5b-42fe-a793-df3744d7257c', 'null', 'null', 'null', 'yaml', 'null');
 INSERT INTO `config_info` (`id`, `data_id`, `group_id`, `content`, `md5`, `gmt_create`, `gmt_modified`, `src_user`, `src_ip`, `app_name`, `tenant_id`, `c_desc`, `c_use`, `effect`, `type`, `c_schema`) VALUES (18, 'anan-zuulgateway.yaml', 'DEFAULT_GROUP', 'server:
@@ -695,41 +711,43 @@ anan:
     session:
       manager: true
   oauth2:
-    disablecsrf: true
-    disableHttpBasic: true
-    cors:
-      allowedOrigins: ''*''
-      allowedMethods: ''*''
-      allowedHeaders: ''*''
-      allowCredentials: true
-    blackWhiteList:
-    - path: /**/auth/oauth/**
-    - path: /**/auth/sso/**
-    - path: /**/*.js
-    - path: /**/*.html
-    - path: /**/*.css
-    - path: /**/*.gif
-    - path: /**/*.png
-    - path: /**/*.jpg
-    - path: /**/*.jpeg
-    - path: /**/*.svg
-    - path: /**/*.bmp
-    - path: /**/*.ico
-    - path: /**/*.swf
-    - path: /**/*.woff
-    - path: /**/*.woff2
-    - path: /**/*.ttf
-    - path: /**/*.map
-    - path: /hystrix
-    - path: /hystrix.stream
-    - path: /hystrix/**
-    - path: /**/webjars/**
-#    - path: /**/springfox-swagger-ui/**
-    - path: /**/swagger-resources/**
-    - path: /**/v2/api-docs
-    - path: /**/third-party/**
-    - path: /**/api/**
-    - path: /**/images/**
+    resource:
+      server:
+        disablecsrf: true
+        disableHttpBasic: true
+        cors:
+          allowedOrigins: ''*''
+          allowedMethods: ''*''
+          allowedHeaders: ''*''
+          allowCredentials: true
+        blackWhiteList:
+        - path: /**/auth/oauth/**
+        - path: /**/auth/sso/**
+        - path: /**/*.js
+        - path: /**/*.html
+        - path: /**/*.css
+        - path: /**/*.gif
+        - path: /**/*.png
+        - path: /**/*.jpg
+        - path: /**/*.jpeg
+        - path: /**/*.svg
+        - path: /**/*.bmp
+        - path: /**/*.ico
+        - path: /**/*.swf
+        - path: /**/*.woff
+        - path: /**/*.woff2
+        - path: /**/*.ttf
+        - path: /**/*.map
+        - path: /hystrix
+        - path: /hystrix.stream
+        - path: /hystrix/**
+        - path: /**/webjars/**
+    #    - path: /**/springfox-swagger-ui/**
+        - path: /**/swagger-resources/**
+        - path: /**/v2/api-docs
+        - path: /**/third-party/**
+        - path: /**/api/**
+        - path: /**/images/**
 ', 'b7353d61807d909009a90b70e0a7114e', '2019-11-10 20:04:04', '2020-03-15 18:36:23', null, '192.168.137.1', '', '6138f451-2d5b-42fe-a793-df3744d7257c', 'null', 'null', 'null', 'yaml', 'null');
 INSERT INTO `config_info` (`id`, `data_id`, `group_id`, `content`, `md5`, `gmt_create`, `gmt_modified`, `src_user`, `src_ip`, `app_name`, `tenant_id`, `c_desc`, `c_use`, `effect`, `type`, `c_schema`) VALUES (20, 'anan-platformserver.yaml', 'DEFAULT_GROUP', 'server:
   port: 51500
@@ -786,9 +804,9 @@ feign:
 security:
   oauth2:
     client:
-      client-id: appServer
-      client-secret: appServer
-      access-token-uri: http://anan-authserver:51400/oauth/token
+      client-id: ${anan.oauth2.client.client-id}
+      client-secret: ${anan.oauth2.client.client-secret}
+      access-token-uri: ${anan.oauth2.client.access-token-uri}
       grant-type: client_credentials
 anan:
   swagger:
@@ -810,10 +828,12 @@ anan:
 #    parameterType: header
 #    required: true
   oauth2:
-    disablecsrf: true
-    disableHttpBasic: true
-    blackWhiteList:
-    - path: /**/v2/api-docs', 'c859d1296638e9cd9795a0bb74220ee2', '2019-11-10 20:16:42', '2020-03-15 18:35:53', null, '192.168.137.1', '', '6138f451-2d5b-42fe-a793-df3744d7257c', 'null', 'null', 'null', 'yaml', 'null');
+    resource:
+      server:
+        disablecsrf: true
+        disableHttpBasic: true
+        blackWhiteList:
+        - path: /**/v2/api-docs', 'c859d1296638e9cd9795a0bb74220ee2', '2019-11-10 20:16:42', '2020-03-15 18:35:53', null, '192.168.137.1', '', '6138f451-2d5b-42fe-a793-df3744d7257c', 'null', 'null', 'null', 'yaml', 'null');
 /*!40000 ALTER TABLE `config_info` ENABLE KEYS */;
 UNLOCK TABLES;
 
