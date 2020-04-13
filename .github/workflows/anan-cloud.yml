@@ -10,7 +10,7 @@ jobs:
       - name: Set env
         run: echo ::set-env name=MODULE_VERSION::$(echo ${GITHUB_REF:10})
 
-      - name: Checkout master branche
+      - name: Checkout branche
         uses: actions/checkout@v2
         with:
           # The branch, tag or SHA to checkout. When checking out the repository that
