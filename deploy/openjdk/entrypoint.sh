@@ -1,3 +1,3 @@
 #!/bin/bash
 set -x
-java -Djava.security.egd=file:/dev/./urandom -jar /app.jar
+java -Dloader.path=/anan/dependency -Djava.security.egd=file:/dev/./urandom -jar /anan/app.jar

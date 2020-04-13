@@ -3,13 +3,15 @@ MAINTAINER fosin 28860823@qq.com
 
 VOLUME ["/tmp","/logs"]
 
-COPY entrypoint.sh wait-for.sh /bin/
+RUN mkdir /anan
+WORKDIR /anan
 
-RUN chmod +x bin/entrypoint.sh bin/wait-for.sh \
+COPY entrypoint.sh wait-for.sh ./
+
+RUN chmod +x entrypoint.sh wait-for.sh \
     && echo "Asia/Shanghai" > /etc/timezone \
     && set -eux \
     && apt update \
     && apt -y install netcat \
     && apt -y install net-tools \
-    && apt -y install vim \
     && rm -rf /var/lib/apt/lists/*
