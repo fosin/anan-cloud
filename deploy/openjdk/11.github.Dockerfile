@@ -3,7 +3,6 @@ MAINTAINER fosin 28860823@qq.com
 
 VOLUME ["/tmp","/logs"]
 
-RUN mkdir /anan
 WORKDIR /anan
 
 COPY entrypoint.sh wait-for.sh ./
