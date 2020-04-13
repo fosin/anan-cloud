@@ -1,5 +1,7 @@
 FROM fosin/openjdk:11-jdk
 MAINTAINER fosin 28860823@qq.com
-COPY target/*.jar app.jar
 EXPOSE 51700
-ENTRYPOINT ["/bin/entrypoint.sh"]
+ENTRYPOINT ["entrypoint.sh"]
+COPY target/dependency dependency/
+COPY target/*.jar app.jar
+

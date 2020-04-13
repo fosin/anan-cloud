@@ -297,6 +297,14 @@
                 <configuration>
                     <!--<skip>true</skip> 默认跳过repackage-->
                     <executable>true</executable>
+                    <!--以下内容用于外置化依赖jar包-->
+                    <layout>ZIP</layout>
+                    <includes>
+                        <include>
+                            <groupId>nothing</groupId>
+                            <artifactId>nothing</artifactId>
+                        </include>
+                    </includes>
                 </configuration>
             </plugin>
             <!--Docker自动发布插件-->

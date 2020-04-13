@@ -262,7 +262,7 @@
     #删除所有未被tag标记（none）和未被容器使用的镜像(虚悬镜像)
    
     #清理无容器使用的镜像
-    docker image prune -a
+    docker image prune -af
     
 ### 3.3、修剪容器、数据卷、网络、镜像
     # 命令是修剪镜像、容器和网络的快捷方式，指定--volumes标志才会修剪卷

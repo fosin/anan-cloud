@@ -11,6 +11,7 @@ import org.springframework.security.oauth2.provider.token.TokenEnhancer;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 
 import java.util.Date;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -54,7 +55,7 @@ public class AnanTokenServices extends DefaultTokenServices {
                     }
 
                     //获取当前登录IP
-                    String clientIp = principal.getClient().getIp();
+                    String clientIp = Optional.of(principal.getClient().getIp()).orElse("");
                     //不一致则判断为异地登录
                     landFall = !clientIp.equalsIgnoreCase(oldClientIp);
                     log.debug("之前客户端IP:" + oldClientIp);

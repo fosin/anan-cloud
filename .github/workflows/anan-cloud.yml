@@ -28,7 +28,7 @@ jobs:
       #          mvn --batch-mode --errors --file $MODULE_PATH/pom.xml clean package deploy:deploy -Dmaven.javadoc.skip=true -Darguments=${{ secrets.maven_center_pass }}
       - name: Build with Maven
         run: |
-          mvn --batch-mode --errors --file pom.xml clean compile jar:jar spring-boot:repackage
+          mvn --batch-mode --errors --file pom.xml clean dependency:copy-dependencies -DincludeScope=runtime compile jar:jar spring-boot:repackage
 
       - name: Docker Login
         run: |
