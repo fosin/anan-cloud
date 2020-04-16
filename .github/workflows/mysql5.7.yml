@@ -2,7 +2,7 @@ name: Mysql5.7 Dockerfile CI
 env:
   MODULE_MASTER_NAME: mysql-master
   MODULE_SLAVE_NAME: mysql-slave
-  MODULE_VERSION: 5.7
+  MODULE_VERSION: 2.1.0
   MODULE_PATH: deploy/mysql
 on:
   push:

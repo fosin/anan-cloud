@@ -62,8 +62,6 @@ INSERT INTO `config_info` (`id`, `data_id`, `group_id`, `content`, `md5`, `gmt_c
 VALUES (4, 'anan-authserver.yaml', 'DEFAULT_GROUP', 'server:
   port: 51400
 spring:
-  jpa:
-    show-sql: true
   datasource:
     url: jdbc:mysql://mysql-master:3306/anan_platform?useUnicode=true&characterEncoding=utf-8&useSSL=false
     username: anan
@@ -123,7 +121,10 @@ anan:
         disableHttpBasic: true
         blackWhiteList:
         - path: /**/v2/api-docs
-  redis:
+        - path: /oauth/authorize
+        - path: /oauth/login
+        - path: /oauth/logout
+    redis:
     idempotent:
       enabled: false
     cache:
@@ -131,6 +132,14 @@ anan:
     session:
       manager: true', 'eca38d64f1ee85c0eb52633d48e80dbc', '2019-11-10 17:23:05', '2020-03-15 18:35:10', null, '192.168.137.1', '', '6138f451-2d5b-42fe-a793-df3744d7257c', 'null', 'null', 'null', 'yaml', 'null');
 INSERT INTO `config_info` (`id`, `data_id`, `group_id`, `content`, `md5`, `gmt_create`, `gmt_modified`, `src_user`, `src_ip`, `app_name`, `tenant_id`, `c_desc`, `c_use`, `effect`, `type`, `c_schema`) VALUES (7, 'application.yaml', 'DEFAULT_GROUP', 'spring:
+  jpa:
+    properties:
+      hibernate:
+        format_sql: true
+        use_sql_comments: true
+    #show-sql: true
+#    hibernate:
+#      ddl-auto: update
   zipkin:
 #    baseUrl: http://zipkin:9411/
     sender:
@@ -178,7 +187,15 @@ logging:
   level:
     com.alibaba.nacos.naming.log.level: warn
     com.alibaba.nacos.client.naming: warn
-#    root: info
+    #打印SQL语句
+    org.hibernate.SQL: info
+    #打印SQL语句参数
+    org.hibernate.type.descriptor.sql.BasicBinder: info
+    #打印SQL执行结果
+    org.hibernate.type.descriptor.sql.BasicExtractor: info
+    #打印查询中命名参数的值
+    org.hibernate.engine.spi.QueryParameters: info
+    org.hibernate.engine.query.spi.HQLQueryPlan: info
 #    zipkin2: debug
 #server:
 #  undertow:
@@ -412,10 +429,6 @@ anan:
 INSERT INTO `config_info` (`id`, `data_id`, `group_id`, `content`, `md5`, `gmt_create`, `gmt_modified`, `src_user`, `src_ip`, `app_name`, `tenant_id`, `c_desc`, `c_use`, `effect`, `type`, `c_schema`) VALUES (15, 'anan-mpi.yaml', 'DEFAULT_GROUP', 'server:
   port: 53000
 spring:
-  jpa:
-    show-sql: true
-#    hibernate:
-#      ddl-auto: update
   datasource:
     url: jdbc:mysql://mysql-master:3306/mpi?useUnicode=true&characterEncoding=utf-8&useSSL=false
     username: anan
@@ -499,10 +512,6 @@ spring:
             class: javax.net.ssl.SSLSocketFactory
             fallback: false
             port: ${spring.mail.port}
-  jpa:
-    show-sql: true
-#    hibernate:
-#      ddl-auto: update
   datasource:
     url: jdbc:mysql://mysql-master:3306/vhr?useUnicode=true&characterEncoding=utf-8&useSSL=false
     username: anan
@@ -752,8 +761,6 @@ anan:
 INSERT INTO `config_info` (`id`, `data_id`, `group_id`, `content`, `md5`, `gmt_create`, `gmt_modified`, `src_user`, `src_ip`, `app_name`, `tenant_id`, `c_desc`, `c_use`, `effect`, `type`, `c_schema`) VALUES (20, 'anan-platformserver.yaml', 'DEFAULT_GROUP', 'server:
   port: 51500
 spring:
-  jpa:
-    show-sql: true
   datasource:
     url: jdbc:mysql://mysql-master:3306/anan_platform?useUnicode=true&characterEncoding=utf-8&useSSL=false
     username: anan
