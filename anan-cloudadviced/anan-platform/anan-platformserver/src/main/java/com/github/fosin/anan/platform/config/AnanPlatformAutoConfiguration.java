@@ -1,8 +1,7 @@
 package com.github.fosin.anan.platform.config;
 
-import com.github.fosin.anan.oauth2.config.AnanOauth2Properties;
+import com.github.fosin.anan.oauth2.resource.AnanResourceServerProperties;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerInterceptor;
@@ -41,9 +40,8 @@ public class AnanPlatformAutoConfiguration {
 
     @Bean
     @RefreshScope
-    @ConfigurationProperties("anan.oauth2")
     @Primary
-    public AnanOauth2Properties ananOauth2Properties() {
-        return new AnanOauth2Properties();
+    public AnanResourceServerProperties ananResourceServerProperties() {
+        return new AnanResourceServerProperties();
     }
 }

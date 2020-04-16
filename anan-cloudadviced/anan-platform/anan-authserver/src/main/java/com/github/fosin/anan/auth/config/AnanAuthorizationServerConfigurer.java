@@ -2,9 +2,7 @@ package com.github.fosin.anan.auth.config;
 
 import com.github.fosin.anan.auth.security.AnanTokenServices;
 import com.github.fosin.anan.auth.security.AnanUserDetailsServiceImpl;
-import com.github.fosin.anan.oauth2.config.AnanOauth2Properties;
-
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import com.github.fosin.anan.oauth2.resource.AnanResourceServerProperties;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -149,10 +147,9 @@ public class AnanAuthorizationServerConfigurer extends AuthorizationServerConfig
 
     @Bean
     @RefreshScope
-    @ConfigurationProperties("anan.oauth2")
     @Primary
-    public AnanOauth2Properties ananOauth2Properties() {
-        return new AnanOauth2Properties();
+    public AnanResourceServerProperties ananResourceServerProperties() {
+        return new AnanResourceServerProperties();
     }
 
 //    @Bean

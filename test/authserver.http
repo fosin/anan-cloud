@@ -14,8 +14,12 @@ Authorization: Bearer {{access_token}}
 POST {{host}}:51400/oauth/removeToken
 Authorization: Bearer {{access_token}}
 
+### 授权码模式-获取code
+POST {{host}}:51400/oauth/authorize?client_id=sso&redirect_uri=http://localhost:51700/login&response_type=code&scope=all&state=C89ZEv
+Accept: */*
+Cache-Control: no-cache
+Authorization: Basic {{secerityId}} {{secerityPass}}
 ###
-
 
 
 
