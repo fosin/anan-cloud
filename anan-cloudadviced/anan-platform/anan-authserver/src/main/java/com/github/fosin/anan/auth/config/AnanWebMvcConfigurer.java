@@ -7,7 +7,6 @@ import org.springframework.format.datetime.DateFormatter;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.validation.MessageCodesResolver;
 import org.springframework.validation.Validator;
-import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.HandlerMethodReturnValueHandler;
 import org.springframework.web.servlet.HandlerExceptionResolver;
@@ -76,11 +75,13 @@ public class AnanWebMvcConfigurer implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**")
-                .allowedHeaders(CorsConfiguration.ALL)
-                .allowedMethods(CorsConfiguration.ALL)
-                .allowedOrigins(CorsConfiguration.ALL)
-                .allowCredentials(true);
+        //由于通过zuul网关代理后，网关已经做了跨域处理，这里则不需要再设置跨域，否则报错如下：
+        //The 'Access-Control-Allow-Origin' header contains multiple values '*, *', but only one is allowed 错误
+//        registry.addMapping("/**")
+//                .allowedHeaders(CorsConfiguration.ALL)
+//                .allowedMethods(CorsConfiguration.ALL)
+//                .allowedOrigins(CorsConfiguration.ALL)
+//                .allowCredentials(true);
     }
 
     @Override
