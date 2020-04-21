@@ -42,7 +42,7 @@
     -------------------------------------------------------
     1.0.0-SNAPSHOT      1.0.0-SNAPSHOT       1.0.0-SNAPSHOT
     2.0.0-SNAPSHOT      2.0.0-SNAPSHOT       2.0.0-SNAPSHOT
-    2.1.0-SNAPSHOT      2.0.0-SNAPSHOT       2.0.0-SNAPSHOT 
+    2.1.0-SNAPSHOT      2.0.0-SNAPSHOT       3.x.x
 
 # 搭建环境
 ## 1、本地开发环境local设置
@@ -259,9 +259,9 @@
 #### 3.2、删除指定的镜像
     #删除所有包含关键字fosin的镜像
     docker rmi $(docker images | grep fosin | awk '{print $3}')
-    #删除所有未被tag标记（none）和未被容器使用的镜像(虚悬镜像)
-   
-    #清理无容器使用的镜像
+    #删除所有未被tag标记（none）
+    docker rmi $(docker images | grep none | awk '{print $3}')
+    #清理无容器使用的镜像(虚悬镜像)
     docker image prune -af
     
 ### 3.3、修剪容器、数据卷、网络、镜像
