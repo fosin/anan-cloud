@@ -86,7 +86,7 @@ public class AnanWebMvcConfigurer implements WebMvcConfigurer {
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/").setViewName("/sso/index");
+        registry.addRedirectViewController("/", "/sso/index");
         registry.addViewController("/sso/login").setViewName("login");
         registry.addViewController("/sso/index").setViewName("index");
     }

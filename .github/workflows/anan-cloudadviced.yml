@@ -1,10 +1,10 @@
-name: anan-platformapi deploy CI
+name: anan-cloudadviced Deploy CI
 on:
   push:
     branches:
-      - '*'
+      - master
     paths:
-      - 'anan-cloudadviced/anan-platform/anan-platformapi/**'
+      - 'anan-cloudadviced/pom.xml'
 jobs:
   release:
     runs-on: ubuntu-18.04
@@ -24,8 +24,8 @@ jobs:
           #gpg_passphrase: ${{ secrets.gpg_passphrase }}
           nexus_username: ${{ secrets.center_nexus_username }}
           nexus_password: ${{ secrets.center_nexus_password }}
-          directory: "anan-cloudadviced/anan-platform/anan-platformapi"
+          directory: "anan-cloudadviced"
           maven_profiles: "sonatype-oss-release"
           maven_goals_phases: "clean package deploy:deploy"
-          maven_args: "-Dmaven.javadoc.skip=true"
+          maven_args: "-N"
           server_id: "sonatype-nexus-snapshots"
