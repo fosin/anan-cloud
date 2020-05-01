@@ -1,0 +1,65 @@
+name: anan-cloud Deploy CI
+on:
+  push:
+    branches:
+      - '*'
+    paths:
+      - 'pom.xml'
+      - 'anan-cloudadviced/pom.xml'
+      - 'anan-cloudadviced/anan-platform/pom.xml'
+      - 'anan-cloudadviced/anan-platform/anan-platformapi/**'
+      - 'anan-cloudadviced/anan-platform/anan-platformpojo/**'
+jobs:
+  release:
+    runs-on: ubuntu-18.04
+    steps:
+      #从11位截取GITHUB_REF变量中的分支号，例如:refs/heads/master，结果就是master
+      - name: Set GITHUB_REF
+        run: echo ::set-env name=MODULE_VERSION::$(echo ${GITHUB_REF:11})
+
+      - name: Check out Git repository
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ env.MODULE_VERSION }}
+          fetch-depth: 2
+
+      - name: Install Java and Maven
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+
+      - name: Set Build Modules
+        run: |
+          MODIFY_FILES=$(git diff --name-only HEAD^ HEAD)
+          echo MODIFY_FILES: ${MODIFY_FILES}
+          MODULES=""
+          if [[ $MODIFY_FILES =~ "[^/] \{,1\}pom.xml$" ]]; then
+             MODULES=${MODULES}",com.github.fosin.anan:anan-cloud"
+          fi
+          if [[ $MODIFY_FILES =~ "anan-cloudadviced/pom.xml" ]]; then
+            MODULES=${MODULES}",com.github.fosin.anan:anan-cloudadviced"
+          fi
+          if [[ $MODIFY_FILES =~ "anan-cloudadviced/anan-platform/pom.xml" ]]; then
+            MODULES=${MODULES}",com.github.fosin.anan:anan-platform"
+          fi
+          if [[ $MODIFY_FILES =~ "anan-platformapi" ]]; then
+            MODULES=${MODULES}",com.github.fosin.anan:anan-platformapi"
+          fi
+          if [[ $MODIFY_FILES =~ "anan-platformpojo" ]]; then
+            MODULES=${MODULES}",com.github.fosin.anan:anan-platformpojo"
+          fi
+          echo ::set-env name=MODULE_LIST::${MODULES:1}
+          echo MODULE_LIST: ${{ env.MODULE_LIST }}
+      - name: Release Maven package
+        uses: samuelmeuli/action-maven-publish@v1
+        if: env.MODULE_LIST != ''
+        with:
+          #gpg_private_key: ${{ secrets.gpg_private_key }}
+          #gpg_passphrase: ${{ secrets.gpg_passphrase }}
+          nexus_username: ${{ secrets.center_nexus_username }}
+          nexus_password: ${{ secrets.center_nexus_password }}
+          #directory: "."
+          maven_profiles: "sonatype-oss-release"
+          maven_goals_phases: "clean package deploy:deploy"
+          maven_args: "-Dmaven.javadoc.skip=true -pl ${{ env.MODULE_LIST }}"
+          server_id: "sonatype-nexus-snapshots"

@@ -7,6 +7,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      #从10位截取GITHUB_REF变量中的分支号，例如:refs/tags/master，结果就是master
       - name: Set env
         run: echo ::set-env name=MODULE_VERSION::$(echo ${GITHUB_REF:10})
 
