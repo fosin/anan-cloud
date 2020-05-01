@@ -1,0 +1,91 @@
+name: anan-cloud Dockerfile CI
+on:
+  push:
+    tags:
+      - '*'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set env
+        run: echo ::set-env name=MODULE_VERSION::$(echo ${GITHUB_REF:10})
+
+      - name: Checkout branche
+        uses: actions/checkout@v2
+        with:
+          # The branch, tag or SHA to checkout. When checking out the repository that
+          # triggered a workflow, this defaults to the reference or SHA for that event.
+          # Otherwise, defaults to `master`.
+          ref: ${{ env.MODULE_VERSION }}
+
+      - name: Setup JDK 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+      #      - name: Build And Deploy with Maven
+      #        run: |
+      #          mvn --batch-mode --errors --file $MODULE_PATH/pom.xml clean package deploy:deploy -Dmaven.javadoc.skip=true -Darguments=${{ secrets.maven_center_pass }}
+      - name: Build with Maven
+        run: |
+          mvn --batch-mode --errors --file pom.xml clean dependency:copy-dependencies -DincludeScope=runtime compile jar:jar spring-boot:repackage
+
+      - name: Docker Login
+        run: |
+          docker login --username=${{ secrets.dockerhub_user }} --password=${{ secrets.dockerhub_pass }}
+
+      - name: Build and Push anan-authserver
+        env:
+          MODULE_PATH: anan-cloudadviced/anan-platform/anan-authserver
+          MODULE_NAME: anan-authserver
+        run: |
+          docker build ./$MODULE_PATH -t fosin/$MODULE_NAME:$MODULE_VERSION -f ./$MODULE_PATH/Dockerfile
+          docker push fosin/$MODULE_NAME:$MODULE_VERSION
+
+      - name: Build and Push anan-platformserver
+        env:
+          MODULE_PATH: anan-cloudadviced/anan-platform/anan-platformserver
+          MODULE_NAME: anan-platformserver
+        run: |
+          docker build ./$MODULE_PATH -t fosin/$MODULE_NAME:$MODULE_VERSION -f ./$MODULE_PATH/Dockerfile
+          docker push fosin/$MODULE_NAME:$MODULE_VERSION
+
+      - name: Build and Push anan-zuulgateway
+        env:
+          MODULE_PATH: anan-cloudadviced/anan-zuulgateway
+          MODULE_NAME: anan-zuulgateway
+        run: |
+          docker build ./$MODULE_PATH -t fosin/$MODULE_NAME:$MODULE_VERSION -f ./$MODULE_PATH/Dockerfile
+          docker push fosin/$MODULE_NAME:$MODULE_VERSION
+
+      - name: Build and Push anan-adminserver
+        env:
+          MODULE_PATH: anan-cloudadviced/anan-adminserver
+          MODULE_NAME: anan-adminserver
+        run: |
+          docker build ./$MODULE_PATH -t fosin/$MODULE_NAME:$MODULE_VERSION -f ./$MODULE_PATH/Dockerfile
+          docker push fosin/$MODULE_NAME:$MODULE_VERSION
+
+      - name: Build and Push anan-cloudgateway
+        env:
+          MODULE_PATH: anan-cloudgateway
+          MODULE_NAME: anan-cloudgateway
+        run: |
+          docker build ./$MODULE_PATH -t fosin/$MODULE_NAME:$MODULE_VERSION -f ./$MODULE_PATH/Dockerfile
+          docker push fosin/$MODULE_NAME:$MODULE_VERSION
+
+      - name: Build and Push anan-eurekaserver
+        env:
+          MODULE_PATH: anan-eurekaserver
+          MODULE_NAME: anan-eurekaserver
+        run: |
+          docker build ./$MODULE_PATH -t fosin/$MODULE_NAME:$MODULE_VERSION -f ./$MODULE_PATH/Dockerfile
+          docker push fosin/$MODULE_NAME:$MODULE_VERSION
+
+      - name: Build and Push anan-configserver
+        env:
+          MODULE_PATH: anan-configserver
+          MODULE_NAME: anan-configserver
+        run: |
+          docker build ./$MODULE_PATH -t fosin/$MODULE_NAME:$MODULE_VERSION -f ./$MODULE_PATH/Dockerfile
+          docker push fosin/$MODULE_NAME:$MODULE_VERSION
+          docker logout
