@@ -127,12 +127,12 @@ anan:
           - path: /actuator/health
           - path: /actuator/shutdown
     redis:
-    idempotent:
-      enabled: false
-    cache:
-      manager: false
-    session:
-      manager: true', 'eca38d64f1ee85c0eb52633d48e80dbc', '2019-11-10 17:23:05', '2020-03-15 18:35:10', null, '192.168.137.1', '', '6138f451-2d5b-42fe-a793-df3744d7257c', 'null', 'null', 'null', 'yaml', 'null');
+      idempotent:
+        enabled: false
+      cache:
+        manager: false
+      session:
+        manager: true', 'eca38d64f1ee85c0eb52633d48e80dbc', '2019-11-10 17:23:05', '2020-03-15 18:35:10', null, '192.168.137.1', '', '6138f451-2d5b-42fe-a793-df3744d7257c', 'null', 'null', 'null', 'yaml', 'null');
 INSERT INTO `config_info` (`id`, `data_id`, `group_id`, `content`, `md5`, `gmt_create`, `gmt_modified`, `src_user`, `src_ip`, `app_name`, `tenant_id`, `c_desc`, `c_use`, `effect`, `type`, `c_schema`) VALUES (7, 'application.yaml', 'DEFAULT_GROUP', 'spring:
   jpa:
     properties:
