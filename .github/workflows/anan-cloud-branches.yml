@@ -32,7 +32,7 @@ jobs:
 
       - name: Set Build Modules
         run: |
-          MODIFY_FILES=$(git diff --name-only HEAD^ HEAD)
+          echo ::set-env name=MODIFY_FILES::$(git diff --name-only HEAD^ HEAD)
           echo MODIFY_FILES: ${MODIFY_FILES}
           MODULES=""
           if [[ $MODIFY_FILES =~ "[^/] \{,1\}pom.xml$" ]]; then
@@ -65,6 +65,10 @@ jobs:
           maven_goals_phases: "clean package deploy:deploy"
           maven_args: "-Dmaven.javadoc.skip=true -pl ${{ env.MODULE_LIST }}"
           server_id: "sonatype-nexus-snapshots"
+      - name: Docker Hub Login
+        if: contains(env.MODIFY_FILES,'deploy/openjdk') || contains(env.MODIFY_FILES,'deploy/mysql')
+        run: |
+          docker login --username=${{ secrets.dockerhub_user }} --password=${{ secrets.dockerhub_pass }}
       # 创建jdk11镜像
       - name: Docker build and push openjdk11
         if: contains(env.MODIFY_FILES,'deploy/openjdk/11') || contains(env.MODIFY_FILES,'.sh')
@@ -73,7 +77,6 @@ jobs:
           MODULE_VERSION: 11-jdk
           MODULE_PATH: deploy/openjdk
         run: |
-          docker login --username=${{ secrets.dockerhub_user }} --password=${{ secrets.dockerhub_pass }}
           docker build $MODULE_PATH -t fosin/$MODULE_NAME:$MODULE_VERSION -f $MODULE_PATH/11.github.Dockerfile
           docker push fosin/$MODULE_NAME:$MODULE_VERSION
       # 创建jdk8镜像
@@ -84,7 +87,6 @@ jobs:
           MODULE_VERSION: 8-jdk
           MODULE_PATH: deploy/openjdk
         run: |
-          docker login --username=${{ secrets.dockerhub_user }} --password=${{ secrets.dockerhub_pass }}
           docker build $MODULE_PATH -t fosin/$MODULE_NAME:MODULE_VERSION -f $MODULE_PATH/8.github.Dockerfile
           docker push fosin/$MODULE_NAME:MODULE_VERSION
       - name: Docker build and push mysql-master
@@ -94,7 +96,6 @@ jobs:
           MODULE_VERSION: 2.1.0
           MODULE_PATH: deploy/mysql/master
         run: |
-          docker login --username=${{ secrets.dockerhub_user }} --password=${{ secrets.dockerhub_pass }}
           docker build ./$MODULE_PATH -t fosin/$MODULE_NAME:$MODULE_VERSION -f ./$MODULE_PATH/7.Dockerfile
           docker push fosin/$MODULE_NAME:$MODULE_VERSION
       - name: Docker build and push mysql-slave
@@ -104,6 +105,5 @@ jobs:
           MODULE_VERSION: 2.1.0
           MODULE_PATH: deploy/mysql/slave
         run: |
-          docker login --username=${{ secrets.dockerhub_user }} --password=${{ secrets.dockerhub_pass }}
           docker build ./$MODULE_PATH -t fosin/$MODULE_NAME:$MODULE_VERSION -f ./$MODULE_PATH/7.Dockerfile
           docker push fosin/$MODULE_NAME:$MODULE_VERSION
