@@ -766,10 +766,9 @@ anan:
           - path: /**/v2/api-docs
           - path: /**/third-party/**
           - path: /**/api/**
-          - path: /actuator/health
-          - path: /actuator/shutdown
           - path: /**/images/**
-', 'b7353d61807d909009a90b70e0a7114e', '2019-11-10 20:04:04', '2020-03-15 18:36:23', null, '192.168.137.1', '', '6138f451-2d5b-42fe-a793-df3744d7257c', 'null', 'null', 'null', 'yaml', 'null');
+          - path: /actuator/health
+          - path: /actuator/shutdown', 'b7353d61807d909009a90b70e0a7114e', '2019-11-10 20:04:04', '2020-03-15 18:36:23', null, '192.168.137.1', '', '6138f451-2d5b-42fe-a793-df3744d7257c', 'null', 'null', 'null', 'yaml', 'null');
 INSERT INTO `config_info` (`id`, `data_id`, `group_id`, `content`, `md5`, `gmt_create`, `gmt_modified`, `src_user`, `src_ip`, `app_name`, `tenant_id`, `c_desc`, `c_use`, `effect`, `type`, `c_schema`) VALUES (20, 'anan-platformserver.yaml', 'DEFAULT_GROUP', 'server:
   port: 51500
 spring:
