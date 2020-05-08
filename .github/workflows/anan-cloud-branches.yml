@@ -1,4 +1,4 @@
-name: anan-cloud Deploy CI
+name: anan-cloud Branches CI
 on:
   push:
     branches:
@@ -9,6 +9,8 @@ on:
       - 'anan-cloudadviced/anan-platform/pom.xml'
       - 'anan-cloudadviced/anan-platform/anan-platformapi/**'
       - 'anan-cloudadviced/anan-platform/anan-platformpojo/**'
+      - 'deploy/mysql/**'
+      - 'deploy/openjdk/**'
 jobs:
   release:
     runs-on: ubuntu-18.04
@@ -63,3 +65,45 @@ jobs:
           maven_goals_phases: "clean package deploy:deploy"
           maven_args: "-Dmaven.javadoc.skip=true -pl ${{ env.MODULE_LIST }}"
           server_id: "sonatype-nexus-snapshots"
+      # 创建jdk11镜像
+      - name: Docker build and push openjdk11
+        if: contains(MODIFY_FILES,'deploy/openjdk/11') || contains(MODIFY_FILES,'.sh')
+        env:
+          MODULE_NAME: openjdk
+          MODULE_VERSION: 11-jdk
+          MODULE_PATH: deploy/openjdk
+        run: |
+          docker login --username=${{ secrets.dockerhub_user }} --password=${{ secrets.dockerhub_pass }}
+          docker build $MODULE_PATH -t fosin/$MODULE_NAME:$MODULE_VERSION -f $MODULE_PATH/11.github.Dockerfile
+          docker push fosin/$MODULE_NAME:$MODULE_VERSION
+      # 创建jdk8镜像
+      - name: Docker build and push openjdk8
+        if: contains(MODIFY_FILES,'deploy/openjdk/8') || contains(MODIFY_FILES,'.sh') || contains(MODIFY_FILES,'sources.list')
+        env:
+          MODULE_NAME: openjdk
+          MODULE_VERSION: 8-jdk
+          MODULE_PATH: deploy/openjdk
+        run: |
+          docker login --username=${{ secrets.dockerhub_user }} --password=${{ secrets.dockerhub_pass }}
+          docker build $MODULE_PATH -t fosin/$MODULE_NAME:MODULE_VERSION -f $MODULE_PATH/8.github.Dockerfile
+          docker push fosin/$MODULE_NAME:MODULE_VERSION
+      - name: Docker build and push mysql-master
+        if: contains(MODIFY_FILES,'deploy/mysql/master')
+        env:
+          MODULE_NAME: mysql-master
+          MODULE_VERSION: 2.1.0
+          MODULE_PATH: deploy/mysql/master
+        run: |
+          docker login --username=${{ secrets.dockerhub_user }} --password=${{ secrets.dockerhub_pass }}
+          docker build ./$MODULE_PATH -t fosin/$MODULE_NAME:$MODULE_VERSION -f ./$MODULE_PATH/7.Dockerfile
+          docker push fosin/$MODULE_NAME:$MODULE_VERSION
+      - name: Docker build and push mysql-slave
+        if: contains(MODIFY_FILES,'deploy/mysql/slave')
+        env:
+          MODULE_NAME: mysql-master
+          MODULE_VERSION: 2.1.0
+          MODULE_PATH: deploy/mysql/slave
+        run: |
+          docker login --username=${{ secrets.dockerhub_user }} --password=${{ secrets.dockerhub_pass }}
+          docker build ./$MODULE_PATH -t fosin/$MODULE_NAME:$MODULE_VERSION -f ./$MODULE_PATH/7.Dockerfile
+          docker push fosin/$MODULE_NAME:$MODULE_VERSION

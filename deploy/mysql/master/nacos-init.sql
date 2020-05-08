@@ -120,10 +120,12 @@ anan:
         disablecsrf: true
         disableHttpBasic: true
         blackWhiteList:
-        - path: /**/v2/api-docs
-        - path: /oauth/authorize
-        - path: /oauth/login
-        - path: /oauth/logout
+          - path: /**/v2/api-docs
+          - path: /oauth/authorize
+          - path: /oauth/login
+          - path: /oauth/logout
+          - path: /actuator/health
+          - path: /actuator/shutdown
     redis:
     idempotent:
       enabled: false
@@ -238,6 +240,8 @@ anan:
           - path: /**/applications/**
           - path: /**/instances/**
           - method: OPTIONS
+          - path: /actuator/health
+          - path: /actuator/shutdown
 security:
   oauth2:
     client:
@@ -399,33 +403,35 @@ anan:
           allowedHeaders: ''*''
           allowCredentials: true
         blackWhiteList:
-        - path: /**/auth/oauth/**
-        - path: /**/auth/sso/**
-        - path: /**/*.js
-        - path: /**/*.html
-        - path: /**/*.css
-        - path: /**/*.gif
-        - path: /**/*.png
-        - path: /**/*.jpg
-        - path: /**/*.jpeg
-        - path: /**/*.svg
-        - path: /**/*.bmp
-        - path: /**/*.ico
-        - path: /**/*.swf
-        - path: /**/*.woff
-        - path: /**/*.woff2
-        - path: /**/*.ttf
-        - path: /**/*.map
-        - path: /hystrix
-        - path: /hystrix.stream
-        - path: /hystrix/**
-        - path: /**/webjars/**
+          - path: /**/auth/oauth/**
+          - path: /**/auth/sso/**
+          - path: /**/*.js
+          - path: /**/*.html
+          - path: /**/*.css
+          - path: /**/*.gif
+          - path: /**/*.png
+          - path: /**/*.jpg
+          - path: /**/*.jpeg
+          - path: /**/*.svg
+          - path: /**/*.bmp
+          - path: /**/*.ico
+          - path: /**/*.swf
+          - path: /**/*.woff
+          - path: /**/*.woff2
+          - path: /**/*.ttf
+          - path: /**/*.map
+          - path: /hystrix
+          - path: /hystrix.stream
+          - path: /hystrix/**
+          - path: /**/webjars/**
     #    - path: /**/springfox-swagger-ui/**
-        - path: /**/swagger-resources/**
-        - path: /**/v2/api-docs
-        - path: /**/third-party/**
-        - path: /**/api/**
-        - path: /**/images/**', '55b6239e5aed6a522b16d48872a0eedb', '2019-11-10 18:17:51', '2020-03-15 18:36:42', null, '192.168.137.1', '', '6138f451-2d5b-42fe-a793-df3744d7257c', 'null', 'null', 'null', 'yaml', 'null');
+          - path: /**/swagger-resources/**
+          - path: /**/v2/api-docs
+          - path: /**/third-party/**
+          - path: /**/api/**
+          - path: /actuator/health
+          - path: /actuator/shutdown
+          - path: /**/images/**', '55b6239e5aed6a522b16d48872a0eedb', '2019-11-10 18:17:51', '2020-03-15 18:36:42', null, '192.168.137.1', '', '6138f451-2d5b-42fe-a793-df3744d7257c', 'null', 'null', 'null', 'yaml', 'null');
 INSERT INTO `config_info` (`id`, `data_id`, `group_id`, `content`, `md5`, `gmt_create`, `gmt_modified`, `src_user`, `src_ip`, `app_name`, `tenant_id`, `c_desc`, `c_use`, `effect`, `type`, `c_schema`) VALUES (15, 'anan-mpi.yaml', 'DEFAULT_GROUP', 'server:
   port: 53000
 spring:
@@ -480,7 +486,9 @@ anan:
         disablecsrf: true
         disableHttpBasic: true
         blackWhiteList:
-        - path: /**/v2/api-docs
+          - path: /**/v2/api-docs
+          - path: /actuator/health
+          - path: /actuator/shutdown
 security:
   oauth2:
     client:
@@ -566,7 +574,9 @@ anan:
         disablecsrf: true
         disableHttpBasic: true
         blackWhiteList:
-        - path: /**/v2/api-docs
+          - path: /**/v2/api-docs
+          - path: /actuator/health
+          - path: /actuator/shutdown
 security:
   oauth2:
     client:
@@ -730,33 +740,35 @@ anan:
           allowedHeaders: ''*''
           allowCredentials: true
         blackWhiteList:
-        - path: /**/auth/oauth/**
-        - path: /**/auth/sso/**
-        - path: /**/*.js
-        - path: /**/*.html
-        - path: /**/*.css
-        - path: /**/*.gif
-        - path: /**/*.png
-        - path: /**/*.jpg
-        - path: /**/*.jpeg
-        - path: /**/*.svg
-        - path: /**/*.bmp
-        - path: /**/*.ico
-        - path: /**/*.swf
-        - path: /**/*.woff
-        - path: /**/*.woff2
-        - path: /**/*.ttf
-        - path: /**/*.map
-        - path: /hystrix
-        - path: /hystrix.stream
-        - path: /hystrix/**
-        - path: /**/webjars/**
+          - path: /**/auth/oauth/**
+          - path: /**/auth/sso/**
+          - path: /**/*.js
+          - path: /**/*.html
+          - path: /**/*.css
+          - path: /**/*.gif
+          - path: /**/*.png
+          - path: /**/*.jpg
+          - path: /**/*.jpeg
+          - path: /**/*.svg
+          - path: /**/*.bmp
+          - path: /**/*.ico
+          - path: /**/*.swf
+          - path: /**/*.woff
+          - path: /**/*.woff2
+          - path: /**/*.ttf
+          - path: /**/*.map
+          - path: /hystrix
+          - path: /hystrix.stream
+          - path: /hystrix/**
+          - path: /**/webjars/**
     #    - path: /**/springfox-swagger-ui/**
-        - path: /**/swagger-resources/**
-        - path: /**/v2/api-docs
-        - path: /**/third-party/**
-        - path: /**/api/**
-        - path: /**/images/**
+          - path: /**/swagger-resources/**
+          - path: /**/v2/api-docs
+          - path: /**/third-party/**
+          - path: /**/api/**
+          - path: /actuator/health
+          - path: /actuator/shutdown
+          - path: /**/images/**
 ', 'b7353d61807d909009a90b70e0a7114e', '2019-11-10 20:04:04', '2020-03-15 18:36:23', null, '192.168.137.1', '', '6138f451-2d5b-42fe-a793-df3744d7257c', 'null', 'null', 'null', 'yaml', 'null');
 INSERT INTO `config_info` (`id`, `data_id`, `group_id`, `content`, `md5`, `gmt_create`, `gmt_modified`, `src_user`, `src_ip`, `app_name`, `tenant_id`, `c_desc`, `c_use`, `effect`, `type`, `c_schema`) VALUES (20, 'anan-platformserver.yaml', 'DEFAULT_GROUP', 'server:
   port: 51500
@@ -840,7 +852,9 @@ anan:
         disablecsrf: true
         disableHttpBasic: true
         blackWhiteList:
-        - path: /**/v2/api-docs', 'c859d1296638e9cd9795a0bb74220ee2', '2019-11-10 20:16:42', '2020-03-15 18:35:53', null, '192.168.137.1', '', '6138f451-2d5b-42fe-a793-df3744d7257c', 'null', 'null', 'null', 'yaml', 'null');
+          - path: /actuator/health
+          - path: /actuator/shutdown
+          - path: /**/v2/api-docs', 'c859d1296638e9cd9795a0bb74220ee2', '2019-11-10 20:16:42', '2020-03-15 18:35:53', null, '192.168.137.1', '', '6138f451-2d5b-42fe-a793-df3744d7257c', 'null', 'null', 'null', 'yaml', 'null');
 /*!40000 ALTER TABLE `config_info` ENABLE KEYS */;
 UNLOCK TABLES;
 
