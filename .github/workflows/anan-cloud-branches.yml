@@ -67,7 +67,7 @@ jobs:
           server_id: "sonatype-nexus-snapshots"
       # 创建jdk11镜像
       - name: Docker build and push openjdk11
-        if: contains(MODIFY_FILES,'deploy/openjdk/11') || contains(MODIFY_FILES,'.sh')
+        if: contains(env.MODIFY_FILES,'deploy/openjdk/11') || contains(env.MODIFY_FILES,'.sh')
         env:
           MODULE_NAME: openjdk
           MODULE_VERSION: 11-jdk
@@ -78,7 +78,7 @@ jobs:
           docker push fosin/$MODULE_NAME:$MODULE_VERSION
       # 创建jdk8镜像
       - name: Docker build and push openjdk8
-        if: contains(MODIFY_FILES,'deploy/openjdk/8') || contains(MODIFY_FILES,'.sh') || contains(MODIFY_FILES,'sources.list')
+        if: contains(env.MODIFY_FILES,'deploy/openjdk/8') || contains(env.MODIFY_FILES,'.sh') || contains(env.MODIFY_FILES,'sources.list')
         env:
           MODULE_NAME: openjdk
           MODULE_VERSION: 8-jdk
@@ -88,7 +88,7 @@ jobs:
           docker build $MODULE_PATH -t fosin/$MODULE_NAME:MODULE_VERSION -f $MODULE_PATH/8.github.Dockerfile
           docker push fosin/$MODULE_NAME:MODULE_VERSION
       - name: Docker build and push mysql-master
-        if: contains(MODIFY_FILES,'deploy/mysql/master')
+        if: contains(env.MODIFY_FILES,'deploy/mysql/master')
         env:
           MODULE_NAME: mysql-master
           MODULE_VERSION: 2.1.0
@@ -98,7 +98,7 @@ jobs:
           docker build ./$MODULE_PATH -t fosin/$MODULE_NAME:$MODULE_VERSION -f ./$MODULE_PATH/7.Dockerfile
           docker push fosin/$MODULE_NAME:$MODULE_VERSION
       - name: Docker build and push mysql-slave
-        if: contains(MODIFY_FILES,'deploy/mysql/slave')
+        if: contains(env.MODIFY_FILES,'deploy/mysql/slave')
         env:
           MODULE_NAME: mysql-master
           MODULE_VERSION: 2.1.0
