@@ -1,0 +1,121 @@
+statefulset:
+  updateStrategy:
+    type: RollingUpdate
+nacos:
+  namespaceId: "0c085925-44a0-41a8-ac0a-0ebd8cfb0a5d"
+  sharedDataids: "application.yaml"
+anan:
+  javaToolOptions: "-XX:+UseG1GC -XX:MaxGCPauseMillis=200 -XX:MaxRAMPercentage=60 -XX:InitialRAMPercentage=50 -XX:MaxMetaspaceSize=160M -XX:MetaspaceSize=160M -XX:+DisableExplicitGC -XX:ErrorFile=/logs/hs_err_pid%p.log"
+  spring:
+    profilesActive: test
+    preferredNetworks: "10.244."
+image: nacos/nacos-server:1.1.4
+imagePullPolicy: IfNotPresent
+replicaCount: 2
+resources:
+  limits:
+    memory: 512Mi
+  requests:
+    cpu: 1m
+    memory: 512Mi
+jvm:
+  xms: 500M
+  xmx: 500M
+  xmn: 250M
+service:
+  clusterIP: None
+  type: NodePort
+  ports:
+    - port: 8848
+      targetPort: 8848
+      nodePort: 8848
+      name: nacos
+env:
+  - name: JVM_XMS
+    valueFrom:
+      configMapKeyRef:
+        name: nacos-env
+        key: JVM_XMS
+  - name: JVM_XMX
+    valueFrom:
+      configMapKeyRef:
+        name: nacos-env
+        key: JVM_XMX
+  - name: JVM_XMN
+    valueFrom:
+      configMapKeyRef:
+        name: nacos-env
+        key: JVM_XMN
+  - name: TZ
+    valueFrom:
+      configMapKeyRef:
+        name: mysql-master-env
+        key: anan.tz
+  - name: PREFER_HOST_MODE
+    valueFrom:
+      configMapKeyRef:
+        name: nacos-env
+        key: PREFER_HOST_MODE
+  - name: NACOS_REPLICAS
+    valueFrom:
+      configMapKeyRef:
+        name: nacos-env
+        key: NACOS_REPLICAS
+  - name: NACOS_SERVERS
+    valueFrom:
+      configMapKeyRef:
+        name: nacos-env
+        key: NACOS_SERVERS
+  - name: NACOS_SERVER_PORT
+    valueFrom:
+      configMapKeyRef:
+        name: nacos-env
+        key: NACOS_SERVER_PORT
+  - name: MYSQL_MASTER_SERVICE_HOST
+    valueFrom:
+      configMapKeyRef:
+        name: mysql-master-env
+        key: mysql.master.service.host
+  - name: MYSQL_MASTER_SERVICE_DB_NAME
+    valueFrom:
+      configMapKeyRef:
+        name: mysql-master-env
+        key: mysql.nacos.dbname
+  - name: MYSQL_MASTER_SERVICE_PORT
+    valueFrom:
+      configMapKeyRef:
+        name: mysql-master-env
+        key: mysql.master.port
+  - name: MYSQL_MASTER_SERVICE_USER
+    valueFrom:
+      configMapKeyRef:
+        name: mysql-master-env
+        key: mysql.nacos.user
+  - name: MYSQL_MASTER_SERVICE_PASSWORD
+    valueFrom:
+      configMapKeyRef:
+        name: mysql-master-env
+        key: mysql.nacos.password
+  - name: MYSQL_SLAVE_SERVICE_HOST
+    valueFrom:
+      configMapKeyRef:
+        name: mysql-slave-env
+        key: mysql.slave.service.host
+  - name: MYSQL_SLAVE_SERVICE_PORT
+    valueFrom:
+      configMapKeyRef:
+        name: mysql-slave-env
+        key: mysql.slave.port
+volumeMounts:
+  - name: nacos-log
+    mountPath: /home/nacos/logs
+  - name: nacos-config
+    mountPath: /home/nacos/init.d
+volumes:
+  - name: nacos-log
+    hostPath:
+      path: /root/deploy/nacos/logs
+  - name: nacos-config
+    configMap:
+      name: nacos-conf
+terminationGracePeriodSeconds: 30

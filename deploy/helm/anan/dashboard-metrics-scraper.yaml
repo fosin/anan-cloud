@@ -1,0 +1,50 @@
+deployment:
+  strategy:
+    rollingUpdate:  ##由于replicas为2,则整个升级,pod个数在2-3个之间
+      maxSurge: 1      #滚动升级时会先启动1个pod
+      maxUnavailable: 1 #滚动升级时允许的最大Unavailable的pod个数
+  minReadySeconds: 60  #滚动升级时60s后认为该pod就绪
+image: kubernetesui/metrics-scraper:v1.0.4
+imagePullPolicy: IfNotPresent
+replicaCount: 1
+revisionHistoryLimit: 10
+resources:
+  limits:
+    memory: 512Mi
+  requests:
+    memory: 256Mi
+livenessProbe:
+  httpGet:
+    scheme: HTTP
+    path: /
+    port: 8000
+  initialDelaySeconds: 60
+  periodSeconds: 10
+  timeoutSeconds: 30
+readinessProbe:
+  httpGet:
+    scheme: HTTP
+    path: /
+    port: 8000
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  timeoutSeconds: 30
+service:
+  type: ClusterIP
+  ports:
+    - port: 8000
+      targetPort: 8000
+      nodePort: 8000
+      name: dashboard-mc
+securityContext:
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: true
+  runAsUser: 1001
+  runAsGroup: 2001
+terminationGracePeriodSeconds: 30 #优雅关闭pod的等待时间，默认30s
+volumeMounts:
+  - mountPath: /tmp
+    name: tmp-volume
+volumes:
+  - name: tmp-volume
+    emptyDir: {}

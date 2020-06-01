@@ -1,0 +1,15 @@
+{{ include "anan.persistentvolume.nfs" . }}
+---
+{{ include "anan.persistentvolumeclaim.nfs" . }}
+---
+{{ include "anan.role" . }}
+---
+{{ include "anan.serviceaccount" . }}
+---
+{{ include "anan.rolebinding" . }}
+---
+{{ if eq .Values.service.type "NodePort"}}
+{{ include "anan.service" . }}
+{{ end }}
+---
+{{ include "anan.service.headless" . }}

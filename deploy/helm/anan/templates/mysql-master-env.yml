@@ -1,0 +1,24 @@
+{{- if .Values.mysql }}
+{{- if .Values.mysql.master }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mysql-master-env
+data:
+  #环境配置
+  mysql.root.password: {{ $.Values.mysql.rootPassword | quote }}
+  mysql.master.service.host: {{ include "anan.service.headless.name" . | quote }}
+  mysql.master.port: {{ $.Values.mysql.master.port | quote }}
+  mysql.replication.user: {{ $.Values.mysql.replication.user | quote }}
+  mysql.replication.password: {{ $.Values.mysql.replication.password | quote }}
+  mysql.platform.dbname: {{ $.Values.mysql.platform.dbname | quote }}
+  mysql.platform.user: {{ $.Values.mysql.platform.user | quote }}
+  mysql.platform.password: {{ $.Values.mysql.platform.password | quote }}
+  mysql.nacos.dbname: {{ $.Values.mysql.nacos.dbname | quote }}
+  mysql.nacos.user: {{ $.Values.mysql.nacos.user | quote }}
+  mysql.nacos.password: {{ $.Values.mysql.nacos.password | quote }}
+  anan.tz: {{ include "anan.tz" . | quote }}
+  anan.username: {{ include "anan.user" . | quote }}
+  anan.password: {{ include "anan.password" . | quote }}
+{{- end }}
+{{- end }}

@@ -1,0 +1,35 @@
+image: rabbitmq:3-management
+imagePullPolicy: IfNotPresent
+replicaCount: 1
+resources:
+  limits:
+    memory: 512Mi
+  requests:
+    cpu: 1m
+    memory: 256Mi
+persistence:
+  size: 1G
+  accessMode: ReadWriteOnce
+  nfs:
+    - server: 192.168.137.8
+service:
+  type: NodePort
+  ports:
+    - port: 5672
+      targetPort: 5672
+      name: amqp
+    - port: 15672
+      targetPort: 15672
+      nodePort: 15672
+      name: cluster
+role:
+  rules:
+    - apiGroups: [""]
+      resources: ["endpoints"]
+      verbs: ["get"]
+rabbitmq:
+#  password: ""
+  erlangCookie: SWQOKODSQALRPCLNMEQG
+configmap:
+  envs: {}
+  confs: {}

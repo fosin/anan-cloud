@@ -1,0 +1,94 @@
+{{- if .Values.redis }}
+{{- if .Values.redis.createRedisAdmin }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redisadmin
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: redisadmin
+  template:
+    metadata:
+      labels:
+        name: redisadmin
+    spec:
+{{/*      initContainers:*/}}
+{{/*        - name: wait-redis*/}}
+{{/*          image: busybox*/}}
+{{/*          command: ['sh', '-c', 'until nc redis-5.redis-headless 6379; do echo waiting for redis-5; sleep 2; done;']*/}}
+{{/*          imagePullPolicy: IfNotPresent*/}}
+      containers:
+        - name: redisadmin
+          image: erikdubbelboer/phpredisadmin
+          env:
+            {{- $password := .Values.redis.password | default ( include "anan.password" .) }}
+            {{- $headlessName := include "anan.service.headless.name" . }}
+            {{- $releaseName := .Release.Name }}
+            {{- range $index,$data := until (int .Values.replicaCount) }}
+            {{- $num := add $index 1 }}
+            - name: REDIS_{{ $num }}_HOST
+              value: "{{ $releaseName }}-{{ $index }}.{{ $headlessName }}"
+            - name: REDIS_{{ $num }}_NAME
+              value: "{{ $releaseName }}-{{ $index }}"
+            - name: REDIS_{{ $num }}_PORT
+              valueFrom:
+                configMapKeyRef:
+                  key: port
+                  name: redis-env
+            - name: REDIS_{{ $num }}_AUTH
+              valueFrom:
+                configMapKeyRef:
+                  key: password
+                  name: redis-env
+            {{- end }}
+            - name: ADMIN_USER
+              value: {{ include "anan.user" . | quote }}
+            - name: ADMIN_PASS
+              value: {{ $password | quote }}
+          resources:
+            requests:
+              memory: "256Mi"
+            limits:
+              memory: "512Mi"
+          ports:
+            - name: redisadmin
+              containerPort: 80
+          livenessProbe:
+            initialDelaySeconds: 60
+            periodSeconds: 10
+            timeoutSeconds: 5
+            tcpSocket:
+              port: 80
+          readinessProbe:
+            initialDelaySeconds: 60
+            periodSeconds: 10
+            timeoutSeconds: 5
+            tcpSocket:
+              port: 80
+#          volumeMounts:
+#            - name: "redisadmin-conf"
+#              mountPath: "/app/phpredisadmin/includes"
+#      volumes:
+#        - name: "redisadmin-conf"
+#          configMap:
+#            name: "redisadmin-cm"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: redisadmin
+  labels:
+    name: redisadmin
+spec:
+  ports:
+    - name: redisadmin
+      port: 80
+      targetPort: 80
+      nodePort: 8345
+  selector:
+    name: redisadmin
+  type: NodePort
+{{- end }}
+{{- end }}

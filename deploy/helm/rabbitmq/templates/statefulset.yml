@@ -1,0 +1,119 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ .Release.Name }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  serviceName: {{ include "anan.service.headless.name" . }} # 必须与headless service的name相同，用于hostname传播访问pod
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "anan.lable.name" . | nindent 6 }}: {{ .Release.Name }} # 在apps/v1中，需与 .spec.template.metadata.label 相同，用于hostname传播访问pod，而在apps/v1beta中无需这样做
+   # RollingUpdate是默认策略
+  updateStrategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        {{- include "anan.lable.name" . | nindent 8 }}: {{ .Release.Name }} # 在apps/v1中，需与 .spec.selector.matchLabels 相同
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: name
+                      operator: In
+                      values:
+                        - {{ .Release.Name }}
+                topologyKey: kubernetes.io/hostname
+      serviceAccountName: {{ .Release.Name }}
+      terminationGracePeriodSeconds: 10
+      containers:
+        - name: {{ .Release.Name }}
+          image: {{ .Values.image }}
+          imagePullPolicy: {{ .Values.imagePullPolicy }}
+          {{- with .Values.resources }}
+          resources:
+          {{- toYaml . | nindent 12 }}
+          {{ end }}
+          ports:
+          {{- range .Values.service.ports }}
+            - name: {{ .name }}
+              containerPort: {{ .targetPort }}
+          {{- end }}
+          livenessProbe:
+            exec:
+              command: ["rabbitmqctl", "status"]
+            initialDelaySeconds: 180
+            periodSeconds: 10
+            timeoutSeconds: 5
+          readinessProbe:
+            exec:
+              command: ["rabbitmqctl", "status"]
+            initialDelaySeconds: 60
+            periodSeconds: 10
+            timeoutSeconds: 5
+          env:
+            - name: TZ
+              valueFrom:
+                configMapKeyRef:
+                  name: mysql-master-env
+                  key: anan.tz
+            - name: RABBITMQ_DEFAULT_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: rabbitmq-env
+                  key: username
+            - name: RABBITMQ_DEFAULT_PASS
+              valueFrom:
+                configMapKeyRef:
+                  name: rabbitmq-env
+                  key: password
+            - name: RABBITMQ_ERLANG_COOKIE
+              value: {{ .Values.rabbitmq.erlangCookie | quote }}
+            - name: HOSTNAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: RABBITMQ_USE_LONGNAME
+              value: "true"
+            - name: RABBITMQ_NODENAME
+              value: rabbit@$(HOSTNAME).{{ include "anan.service.headless.name" . }}.{{ .Release.Namespace }}.svc.cluster.local
+          volumeMounts:
+            - name: {{ .Release.Name }}
+              mountPath: /var/lib/rabbitmq/mnesia
+            - name: config
+              mountPath: /etc/rabbitmq
+      initContainers:
+        - name: configmap-copy
+          image: busybox
+          command: ['/bin/sh', '-c', 'cp /etc/rabbitmq/files/* /etc/rabbitmq/']
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - name: {{ .Release.Name }}-config
+              mountPath: /etc/rabbitmq/files
+            - name: config
+              mountPath: /etc/rabbitmq
+      volumes:
+        - name: config
+          emptyDir: {}
+        - name: {{ .Release.Name }}-config
+          configMap:
+            name: rabbitmq-conf
+            items:
+              - key: rabbitmq.conf
+                path: rabbitmq.conf
+              - key: enabled_plugins
+                path: enabled_plugins
+  volumeClaimTemplates:
+    - metadata:
+        name: {{ .Release.Name }}
+        namespace: {{ .Release.Namespace }}
+      spec:
+        accessModes: [ {{ .Values.persistence.accessMode }} ]
+        resources:
+          requests:
+            storage: {{ .Values.persistence.size }}i

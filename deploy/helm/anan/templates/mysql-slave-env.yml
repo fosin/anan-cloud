@@ -1,0 +1,12 @@
+{{- if .Values.mysql }}
+{{- if .Values.mysql.slave }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mysql-slave-env
+data:
+  #环境配置
+  mysql.slave.service.host: {{ include "anan.service.headless.name" . | quote }}
+  mysql.slave.port: {{ $.Values.mysql.slave.port | quote }}
+{{- end }}
+{{- end }}

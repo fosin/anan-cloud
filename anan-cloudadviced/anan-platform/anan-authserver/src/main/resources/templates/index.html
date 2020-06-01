@@ -3,7 +3,6 @@
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
     <title th:text="#{login.title.text}">AnAn统一认证中心</title>
-    <script type="text/javascript" src="js/jquery.min.js"></script>
     <link rel="shortcut icon" th:href="@{favicon.ico}"/>
     <link rel="bookmark" th:href="@{favicon.ico}"/>
 </head>
@@ -12,7 +11,7 @@
 
 <form action="logout" role="form" method="post">
     <input type="hidden" name="${_csrf.parameterName}"
-           value="${_csrf.token}" />
+           value="${_csrf.token}"/>
     <button class="btn btn-primary" type="submit">注销</button>
 </form>
 </body>

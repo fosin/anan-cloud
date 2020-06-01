@@ -1,0 +1,69 @@
+deployment:
+  strategy:
+    rollingUpdate:  ##由于replicas为2,则整个升级,pod个数在2-3个之间
+      maxSurge: 1      #滚动升级时会先启动1个pod
+      maxUnavailable: 1 #滚动升级时允许的最大Unavailable的pod个数
+  minReadySeconds: 60  #滚动升级时60s后认为该pod就绪
+image: fosin/anan-adminserver:2.1.0-SNAPSHOT
+imagePullPolicy: IfNotPresent
+replicaCount: 1
+resources:
+  limits:
+    memory: 768Mi
+  requests:
+    cpu: 1m
+    memory: 512Mi
+livenessProbe:
+  initialDelaySeconds: 45
+  periodSeconds: 10
+  timeoutSeconds: 5
+  httpGet:
+    scheme: HTTP
+    port: 51700
+    path: /actuator/health
+readinessProbe:
+  initialDelaySeconds: 45
+  periodSeconds: 10
+  timeoutSeconds: 5
+  httpGet:
+    scheme: HTTP
+    port: 51700
+    path: /actuator/health
+env:
+  - name: spring.rabbitmq.addresses
+    valueFrom:
+      configMapKeyRef:
+        name: rabbitmq-env
+        key: addresses
+  - name: spring.rabbitmq.username
+    valueFrom:
+      configMapKeyRef:
+        name: rabbitmq-env
+        key: username
+  - name: spring.rabbitmq.password
+    valueFrom:
+      configMapKeyRef:
+        name: rabbitmq-env
+        key: password
+envFrom:
+  - configMapRef:
+      name: anan-env
+lifecycle:
+  preStop:
+    httpGet:
+      scheme: HTTP
+      port: 51700
+      path: actuator/shutdown
+service:
+  type: ClusterIP
+  ports:
+    - port: 51700
+      targetPort: 51700
+      nodePort: 51700
+      name: one
+terminationGracePeriodSeconds: 30 #优雅关闭pod的等待时间，默认30s
+initContainers:
+  - name: wait-authserver
+    image: busybox
+    command: ['sh', '-c', 'until nc anan-zuulgateway 9000; do echo waiting for anan-zuulgateway; sleep 2; done;']
+    imagePullPolicy: IfNotPresent

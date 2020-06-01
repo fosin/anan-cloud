@@ -27,7 +27,7 @@ services:
       - JVM_XMN=256M
     volumes:
       -  /root/deploy/nacos/logs/:/home/nacos/logs
-      -  /root/deploy/nacos/custom.properties:/home/nacos/init.d/custom.properties
+#      -  /root/deploy/nacos/custom.properties:/home/nacos/init.d/custom.properties
     ports:
       - "8848:8848"
       - "9555:9555"
@@ -70,7 +70,7 @@ services:
       - MYSQL_USER2=anan
       - MYSQL_PASSWORD2=local
     volumes:
-      - /root/deploy/mysql/master:/var/lib/mysql
+      - /root/deploy/nfs/mysql-master0:/var/lib/mysql
     ports:
       - "3306:3306"
     networks:
@@ -88,7 +88,7 @@ services:
       - MYSQL_REPLICATION_PASSWORD=local
       - MYSQL_SERVICE_HOST=mysql-master
     volumes:
-      - /root/deploy/mysql/slave:/var/lib/mysql
+      - /root/deploy/nfs/mysql-slave0:/var/lib/mysql
     ports:
       - "3305:3306"
     depends_on:
@@ -205,13 +205,12 @@ services:
 
   anan-vue:
     container_name: anan-vue
-    image: fosin/anan-vue:3.0.0
+    image: fosin/anan-vue:3.0.1
     hostname: anan-vue
     environment:
       - TZ=Asia/Shanghai
     volumes:
       - /root/deploy/nginx/conf:/etc/nginx/conf.d/
-#      - /root/deploy/nginx/html:/usr/share/nginx/html
     ports:
       - 80:80
     networks:
