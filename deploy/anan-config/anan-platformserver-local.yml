@@ -79,5 +79,5 @@ anan:
   oauth2:
     disablecsrf: true
     disableHttpBasic: true
-    blackWhiteList:
+    customPermissionList:
     - path: /**/v2/api-docs

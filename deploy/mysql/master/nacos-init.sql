@@ -119,7 +119,7 @@ anan:
         enabled: true
         disablecsrf: true
         disableHttpBasic: true
-        blackWhiteList:
+        customPermissionList:
           - path: /**/v2/api-docs
           - path: /oauth/authorize
           - path: /oauth/login
@@ -228,7 +228,7 @@ anan:
           allowedMethods: ''*''
           allowedHeaders: ''*''
           allowCredentials: true
-        blackWhiteList:
+        customPermissionList:
           - path: /**/*.html
           - path: /**/*.css
           - path: /**/*.js
@@ -402,7 +402,7 @@ anan:
           allowedMethods: ''*''
           allowedHeaders: ''*''
           allowCredentials: true
-        blackWhiteList:
+        customPermissionList:
           - path: /**/auth/oauth/**
           - path: /**/auth/sso/**
           - path: /**/*.js
@@ -485,7 +485,7 @@ anan:
       server:
         disablecsrf: true
         disableHttpBasic: true
-        blackWhiteList:
+        customPermissionList:
           - path: /**/v2/api-docs
           - path: /actuator/health
           - path: /actuator/shutdown
@@ -573,7 +573,7 @@ anan:
       server:
         disablecsrf: true
         disableHttpBasic: true
-        blackWhiteList:
+        customPermissionList:
           - path: /**/v2/api-docs
           - path: /actuator/health
           - path: /actuator/shutdown
@@ -648,7 +648,7 @@ zuul:
     socket-timeout-millis: 10000
 spring:
  redis:
-   host: 192.168.137.8
+   host: redis
    port: 6379
    password: local
    timeout: 10000
@@ -739,7 +739,7 @@ anan:
           allowedMethods: ''*''
           allowedHeaders: ''*''
           allowCredentials: true
-        blackWhiteList:
+        customPermissionList:
           - path: /**/auth/oauth/**
           - path: /**/auth/sso/**
           - path: /**/*.js
@@ -850,7 +850,7 @@ anan:
       server:
         disablecsrf: true
         disableHttpBasic: true
-        blackWhiteList:
+        customPermissionList:
           - path: /actuator/health
           - path: /actuator/shutdown
           - path: /**/v2/api-docs', 'c859d1296638e9cd9795a0bb74220ee2', '2019-11-10 20:16:42', '2020-03-15 18:35:53', null, '192.168.137.1', '', '6138f451-2d5b-42fe-a793-df3744d7257c', 'null', 'null', 'null', 'yaml', 'null');

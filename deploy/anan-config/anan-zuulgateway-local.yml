@@ -151,7 +151,7 @@ anan:
       allowedMethods: '*'
       allowedHeaders: '*'
       allowCredentials: true
-    blackWhiteList:
+    customPermissionList:
     - path: /**/oauth/**
     - path: /**/*.js
     - path: /**/*.html

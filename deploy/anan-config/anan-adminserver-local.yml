@@ -12,7 +12,7 @@ anan:
       allowedMethods: '*'
       allowedHeaders: '*'
       allowCredentials: true
-    blackWhiteList:
+    customPermissionList:
       - path: /**/*.html
       - path: /**/*.css
       - path: /**/*.js

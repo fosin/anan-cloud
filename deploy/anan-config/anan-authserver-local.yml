@@ -66,7 +66,7 @@ anan:
     enabled: true
     disablecsrf: true
     disableHttpBasic: true
-    blackWhiteList:
+    customPermissionList:
     - path: /**/v2/api-docs
     - path: /login
     - path: /logout
