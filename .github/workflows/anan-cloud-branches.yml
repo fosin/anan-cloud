@@ -24,7 +24,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           ref: ${{ env.MODULE_VERSION }}
-          fetch-depth: 6
+          fetch-depth: 10
 
       - name: Install Java and Maven
         uses: actions/setup-java@v1
@@ -33,7 +33,7 @@ jobs:
 
       - name: Set Build Modules
         run: |
-          echo ::set-env name=MODIFY_FILES::$(git diff --name-only HEAD~6 HEAD)
+          echo ::set-env name=MODIFY_FILES::$(git diff --name-only HEAD~7 HEAD)
           echo MODIFY_FILES: ${MODIFY_FILES}
           MODULES=""
           if [[ $MODIFY_FILES =~ "[^/] \{,1\}pom.xml$" ]]; then
