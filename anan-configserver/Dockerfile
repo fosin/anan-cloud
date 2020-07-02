@@ -1,4 +1,4 @@
-FROM fosin/openjdk:11-jdk
+FROM fosin/adoptopenjdk:11-jdk-openj9
 MAINTAINER fosin 28860823@qq.com
 VOLUME /anan-config
 EXPOSE 51100
