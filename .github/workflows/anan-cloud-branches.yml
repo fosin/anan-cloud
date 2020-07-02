@@ -32,7 +32,7 @@ jobs:
 
       - name: Set Build Modules
         run: |
-          echo ::set-env name=MODIFY_FILES::$(git diff --name-only HEAD^ HEAD)
+          echo ::set-env name=MODIFY_FILES::$(git diff --name-only HEAD~2 HEAD)
           echo MODIFY_FILES: ${MODIFY_FILES}
           MODULES=""
           if [[ $MODIFY_FILES =~ "[^/] \{,1\}pom.xml$" ]]; then
