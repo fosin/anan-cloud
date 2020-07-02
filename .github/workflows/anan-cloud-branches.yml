@@ -33,26 +33,27 @@ jobs:
 
       - name: Set Build Modules
         run: |
-          echo ::set-env name=MODIFY_FILES::$(git diff --name-only HEAD~15 HEAD)
+          MODIFY_FILES=$(git diff --name-only HEAD~15 HEAD)
           MODULES=""
-          echo ${env:MODIFY_FILES}
-          if [[ ${env:MODIFY_FILES} =~ "[^/] \{,1\}pom.xml$" ]]; then
+          echo $MODIFY_FILES
+          if [[ $MODIFY_FILES =~ "[^/] \{,1\}pom.xml$" ]]; then
              MODULES=${MODULES}",com.github.fosin.anan:anan-cloud"
           fi
-          if [[ ${env:MODIFY_FILES} =~ "anan-cloudadviced/pom.xml" ]]; then
+          if [[ $MODIFY_FILES =~ "anan-cloudadviced/pom.xml" ]]; then
             MODULES=${MODULES}",com.github.fosin.anan:anan-cloudadviced"
           fi
-          if [[ ${env:MODIFY_FILES} =~ "anan-cloudadviced/anan-platform/pom.xml" ]]; then
+          if [[ $MODIFY_FILES =~ "anan-cloudadviced/anan-platform/pom.xml" ]]; then
             MODULES=${MODULES}",com.github.fosin.anan:anan-platform"
           fi
-          if [[ ${env:MODIFY_FILES} =~ "anan-platformapi" ]]; then
+          if [[ $MODIFY_FILES =~ "anan-platformapi" ]]; then
             MODULES=${MODULES}",com.github.fosin.anan:anan-platformapi"
           fi
-          if [[ ${env:MODIFY_FILES} =~ "anan-platformpojo" ]]; then
+          if [[ $MODIFY_FILES =~ "anan-platformpojo" ]]; then
             MODULES=${MODULES}",com.github.fosin.anan:anan-platformpojo"
           fi
+          echo ::set-env name=MODIFY_FILES::$MODIFY_FILES
           echo ::set-env name=MODULE_LIST::${MODULES:1}
-          echo ${env:MODULE_LIST}
+          echo $MODULES
       - name: Release Maven package
         uses: samuelmeuli/action-maven-publish@v1
         if: env.MODULE_LIST != ''
