@@ -11,6 +11,7 @@ on:
       - 'anan-cloudadviced/anan-platform/anan-platformpojo/**'
       - 'deploy/mysql/**'
       - 'deploy/openjdk/**'
+      - '.github\workflows/**'
 jobs:
   release:
     runs-on: ubuntu-18.04
@@ -32,7 +33,7 @@ jobs:
 
       - name: Set Build Modules
         run: |
-          echo ::set-env name=MODIFY_FILES::$(git diff --name-only HEAD~2 HEAD)
+          echo ::set-env name=MODIFY_FILES::$(git diff --name-only HEAD~5 HEAD)
           echo MODIFY_FILES: ${MODIFY_FILES}
           MODULES=""
           if [[ $MODIFY_FILES =~ "[^/] \{,1\}pom.xml$" ]]; then
