@@ -11,7 +11,6 @@ on:
       - 'anan-cloudadviced/anan-platform/anan-platformpojo/**'
       - 'deploy/mysql/**'
       - 'deploy/openjdk/**'
-      - '.github/workflows/**'
 jobs:
   release:
     runs-on: ubuntu-18.04
@@ -24,7 +23,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           ref: ${{ env.BRANCHE_VERSION }}
-          fetch-depth: 20
+          fetch-depth: 2
 
       - name: Install Java and Maven
         uses: actions/setup-java@v1
@@ -33,7 +32,7 @@ jobs:
 
       - name: Set Build Modules
         run: |
-          MODIFY_FILES=$(git diff --name-only HEAD~15 HEAD)
+          MODIFY_FILES=$(git diff --name-only HEAD~ HEAD)
           MODULES=""
           echo $MODIFY_FILES
           if [[ $MODIFY_FILES =~ "[^/] \{,1\}pom.xml$" ]]; then
