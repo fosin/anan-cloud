@@ -11,7 +11,7 @@ on:
       - 'anan-cloudadviced/anan-platform/anan-platformpojo/**'
       - 'deploy/mysql/**'
       - 'deploy/openjdk/**'
-      - '.github\workflows/**'
+      - '.github/workflows/**'
 jobs:
   release:
     runs-on: ubuntu-18.04
