@@ -40,9 +40,9 @@
 # 框架版本对照
        anan-cloud    |     anan-boot     |     anan-vue
     -------------------------------------------------------
-    1.0.0-SNAPSHOT      1.0.0-SNAPSHOT       1.0.0-SNAPSHOT
-    2.0.0-SNAPSHOT      2.0.0-SNAPSHOT       2.0.0-SNAPSHOT
-    2.1.0-SNAPSHOT      2.0.0-SNAPSHOT       3.x.x
+    1.0.x-SNAPSHOT      1.0.x-SNAPSHOT       1.0.0-SNAPSHOT
+    2.0.x-SNAPSHOT      2.0.x-SNAPSHOT       2.0.0-SNAPSHOT
+    2.2.x-SNAPSHOT      2.0.x-SNAPSHOT       3.x.x
 
 # 搭建环境
 ## 1、本地开发环境local设置

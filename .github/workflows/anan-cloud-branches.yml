@@ -111,7 +111,7 @@ jobs:
       - name: Docker build and push mysql-slave
         if: contains(env.MODIFY_FILES,'deploy/mysql/slave')
         env:
-          MODULE_NAME: mysql-master
+          MODULE_NAME: mysql-slave
           MODULE_VERSION: 2.1.0
           MODULE_PATH: deploy/mysql/slave
         run: |

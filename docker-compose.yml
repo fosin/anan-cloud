@@ -373,7 +373,7 @@ services:
       - "ALERTMANAGER_URIS=default:http://alertmanager:9093"
 
   anan-zuulgateway:
-    image: fosin/anan-zuulgateway:2.1.0-SNAPSHOT
+    image: fosin/anan-zuulgateway:2.2.0-SNAPSHOT
     entrypoint: "sh /anan/wait-for.sh anan-platformserver:51500 -t 3600 -- /anan/entrypoint.sh"
     container_name: anan-zuulgateway
     hostname: anan-zuulgateway
@@ -391,7 +391,7 @@ services:
       - nacos-server1
 
   anan-authserver:
-    image: fosin/anan-authserver:2.1.0-SNAPSHOT
+    image: fosin/anan-authserver:2.2.0-SNAPSHOT
     entrypoint: "sh /anan/wait-for.sh nacos-server1:8848 -t 3600 -- /anan/entrypoint.sh"
     container_name: anan-authserver
     hostname: anan-authserver
@@ -411,7 +411,7 @@ services:
       - nacos-server1
 
   anan-platformserver:
-    image: fosin/anan-platformserver:2.1.0-SNAPSHOT
+    image: fosin/anan-platformserver:2.2.0-SNAPSHOT
     entrypoint: "sh /anan/wait-for.sh anan-authserver:51400 -t 3600 -- /anan/entrypoint.sh"
     container_name: anan-platformserver
     hostname: anan-platformserver
@@ -431,7 +431,7 @@ services:
       - nacos-server1
 
   anan-adminserver:
-    image: fosin/anan-adminserver:2.1.0-SNAPSHOT
+    image: fosin/anan-adminserver:2.2.0-SNAPSHOT
 #    entrypoint: "sh /anan/wait-for.sh anan-zuulgateway:9000 -t 3600 -- /anan/entrypoint.sh"
     container_name: anan-adminserver
     hostname: anan-adminserver
@@ -450,7 +450,7 @@ services:
       - nacos-server1
 
   anan-eurekaserver:
-    image: fosin/anan-eurekaserver:2.1.0-SNAPSHOT
+    image: fosin/anan-eurekaserver:2.2.0-SNAPSHOT
     container_name: anan-eurekaserver
     hostname: anan-eurekaserver
     restart: on-failure
@@ -464,7 +464,7 @@ services:
       - 51000:51000
 
   anan-configserver:
-    image: fosin/anan-configserver:2.1.0-SNAPSHOT
+    image: fosin/anan-configserver:2.2.0-SNAPSHOT
     entrypoint: "sh /anan/wait-for.sh anan-eurekaserver:51000 -t 3600 -- /anan/entrypoint.sh"
     container_name: anan-configserver
     hostname: anan-configserver

@@ -2,7 +2,7 @@ apiVersion: v2
 description: A Helm chart for Kubernetes
 name: anan
 version: 0.0.1
-#appVersion: 2.1.0-SNAPSHOT
+#appVersion: 2.2.0-SNAPSHOT
 dependencies:
   - name: base
     version: 0.0.1
