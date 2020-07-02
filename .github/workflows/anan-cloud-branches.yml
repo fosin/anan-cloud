@@ -35,7 +35,7 @@ jobs:
         run: |
           echo ::set-env name=MODIFY_FILES::$(git diff --name-only HEAD~7 HEAD)
           echo MODIFY_FILES: ${MODIFY_FILES}
-          echo MODIFY_FILES2: ${git diff --name-only HEAD~7 HEAD}
+          echo MODIFY_FILES2: $(git diff --name-only HEAD~7 HEAD)
           MODULES=""
           if [[ $MODIFY_FILES =~ "[^/] \{,1\}pom.xml$" ]]; then
              MODULES=${MODULES}",com.github.fosin.anan:anan-cloud"
