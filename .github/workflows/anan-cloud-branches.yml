@@ -83,8 +83,8 @@ jobs:
       - name: Docker build and push openjdk11
         if: contains(env.MODIFY_FILES,'deploy/openjdk/11.Dockerfile') || contains(env.MODIFY_FILES,'.sh') || contains(env.MODIFY_FILES,'sources.list')
         env:
-          MODULE_NAME: openjdk
-          MODULE_VERSION: 11-jdk
+          MODULE_NAME: adoptopenjdk
+          MODULE_VERSION: 11-jdk-hotspot
           MODULE_PATH: deploy/openjdk
         run: |
           docker build $MODULE_PATH -t fosin/$MODULE_NAME:$MODULE_VERSION -f $MODULE_PATH/11.Dockerfile
@@ -93,8 +93,8 @@ jobs:
       - name: Docker build and push openjdk8
         if: contains(env.MODIFY_FILES,'deploy/openjdk/8.Dockerfile') || contains(env.MODIFY_FILES,'.sh') || contains(env.MODIFY_FILES,'sources.list')
         env:
-          MODULE_NAME: openjdk
-          MODULE_VERSION: 8-jdk
+          MODULE_NAME: adoptopenjdk
+          MODULE_VERSION: 8-jdk-hotspot
           MODULE_PATH: deploy/openjdk
         run: |
           docker build $MODULE_PATH -t fosin/$MODULE_NAME:MODULE_VERSION -f $MODULE_PATH/8.Dockerfile

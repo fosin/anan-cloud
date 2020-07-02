@@ -1,4 +1,4 @@
-FROM adoptopenjdk:11-jdk
+FROM adoptopenjdk:11-jdk-hotspot
 MAINTAINER fosin 28860823@qq.com
 
 VOLUME ["/tmp","/logs"]
