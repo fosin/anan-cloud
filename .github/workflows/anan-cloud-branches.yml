@@ -18,12 +18,12 @@ jobs:
     steps:
       #从11位截取GITHUB_REF变量中的分支号，例如:refs/heads/master，结果就是master
       - name: Set GITHUB_REF
-        run: echo ::set-env name=MODULE_VERSION::$(echo ${GITHUB_REF:11})
+        run: echo ::set-env name=BRANCHE_VERSION::$(echo ${GITHUB_REF:11})
 
       - name: Check out Git repository
         uses: actions/checkout@v2
         with:
-          ref: ${{ env.MODULE_VERSION }}
+          ref: ${{ env.BRANCHE_VERSION }}
           fetch-depth: 20
 
       - name: Install Java and Maven
@@ -33,26 +33,26 @@ jobs:
 
       - name: Set Build Modules
         run: |
-          echo ::set-env name=MODIFY_FILES::$(git diff --name-only HEAD~13 HEAD)
-          echo MODIFY_FILES: ${MODIFY_FILES}
+          echo ::set-env name=MODIFY_FILES::$(git diff --name-only HEAD~14 HEAD)
+          echo ${{ env.MODIFY_FILES }}
           MODULES=""
-          if [[ $MODIFY_FILES =~ "[^/] \{,1\}pom.xml$" ]]; then
+          if [[ ${{ env.MODIFY_FILES }} =~ "[^/] \{,1\}pom.xml$" ]]; then
              MODULES=${MODULES}",com.github.fosin.anan:anan-cloud"
           fi
-          if [[ $MODIFY_FILES =~ "anan-cloudadviced/pom.xml" ]]; then
+          if [[ ${{ env.MODIFY_FILES }} =~ "anan-cloudadviced/pom.xml" ]]; then
             MODULES=${MODULES}",com.github.fosin.anan:anan-cloudadviced"
           fi
-          if [[ $MODIFY_FILES =~ "anan-cloudadviced/anan-platform/pom.xml" ]]; then
+          if [[ ${{ env.MODIFY_FILES }} =~ "anan-cloudadviced/anan-platform/pom.xml" ]]; then
             MODULES=${MODULES}",com.github.fosin.anan:anan-platform"
           fi
-          if [[ $MODIFY_FILES =~ "anan-platformapi" ]]; then
+          if [[ ${{ env.MODIFY_FILES }} =~ "anan-platformapi" ]]; then
             MODULES=${MODULES}",com.github.fosin.anan:anan-platformapi"
           fi
-          if [[ $MODIFY_FILES =~ "anan-platformpojo" ]]; then
+          if [[ ${{ env.MODIFY_FILES }} =~ "anan-platformpojo" ]]; then
             MODULES=${MODULES}",com.github.fosin.anan:anan-platformpojo"
           fi
           echo ::set-env name=MODULE_LIST::${MODULES:1}
-          echo MODULE_LIST: ${{ env.MODULE_LIST }}
+          echo ${{ env.MODULE_LIST }}
       - name: Release Maven package
         uses: samuelmeuli/action-maven-publish@v1
         if: env.MODULE_LIST != ''
@@ -99,7 +99,7 @@ jobs:
           MODULE_PATH: deploy/openjdk
         run: |
           docker build $MODULE_PATH -t fosin/$MODULE_NAME:$MODULE_VERSION -f $MODULE_PATH/8.Dockerfile
-          docker push fosin/$MODULE_NAME:MODULE_VERSION
+          docker push fosin/$MODULE_NAME:$MODULE_VERSION
       - name: Docker build and push mysql-master
         if: contains(env.MODIFY_FILES,'deploy/mysql/master')
         env:
