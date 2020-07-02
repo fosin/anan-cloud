@@ -35,6 +35,7 @@ jobs:
         run: |
           echo ::set-env name=MODIFY_FILES::$(git diff --name-only HEAD~7 HEAD)
           echo MODIFY_FILES: ${MODIFY_FILES}
+          echo MODIFY_FILES2: ${git diff --name-only HEAD~7 HEAD}
           MODULES=""
           if [[ $MODIFY_FILES =~ "[^/] \{,1\}pom.xml$" ]]; then
              MODULES=${MODULES}",com.github.fosin.anan:anan-cloud"
@@ -98,7 +99,7 @@ jobs:
           MODULE_VERSION: 8-jdk-hotspot
           MODULE_PATH: deploy/openjdk
         run: |
-          docker build $MODULE_PATH -t fosin/$MODULE_NAME:MODULE_VERSION -f $MODULE_PATH/8.Dockerfile
+          docker build $MODULE_PATH -t fosin/$MODULE_NAME:$MODULE_VERSION -f $MODULE_PATH/8.Dockerfile
           docker push fosin/$MODULE_NAME:MODULE_VERSION
       - name: Docker build and push mysql-master
         if: contains(env.MODIFY_FILES,'deploy/mysql/master')
