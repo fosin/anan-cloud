@@ -318,20 +318,20 @@ _mysql_want_help() {
 	return 1
 }
 
-# 开启slave从master同步
+# 开启follower从leader同步
 mysql_grant_privilges() {
   if [ -n "$MYSQL_MASTER_SERVICE_HOST" ]; then
     if [ -z "$MYSQL_REPLICATION_USER" -o -z "$MYSQL_REPLICATION_PASSWORD" ]; then
       mysql_error $'MYSQL_MASTER_SERVICE_HOST、MYSQL_REPLICATION_USER、MYSQL_REPLICATION_PASSWORD must be all set!'
     fi
-    mysql_note "Stop slave sync"
-    docker_process_sql --database=mysql <<<"stop slave ;"
+    mysql_note "Stop follower sync"
+    docker_process_sql --database=mysql <<<"stop follower ;"
 
-    mysql_note "Change master to ${MYSQL_MASTER_SERVICE_HOST}"
+    mysql_note "Change leader to ${MYSQL_MASTER_SERVICE_HOST}"
     docker_process_sql --database=mysql <<<"change master to master_host='$MYSQL_MASTER_SERVICE_HOST', master_user='$MYSQL_REPLICATION_USER', master_password='$MYSQL_REPLICATION_PASSWORD', master_log_file='mysql-bin.000001', master_log_pos=1, master_port=${MYSQL_MASTER_SERVICE_PORT};"
 
-    mysql_note "Start slave sync"
-    docker_process_sql --database=mysql <<<"start slave ;"
+    mysql_note "Start follower sync"
+    docker_process_sql --database=mysql <<<"start follower ;"
 	fi
 	docker_process_sql --database=mysql <<<"FLUSH PRIVILEGES ;"
 

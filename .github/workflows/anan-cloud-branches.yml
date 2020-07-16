@@ -34,8 +34,8 @@ jobs:
         run: |
           MODIFY_FILES=$(git diff --name-only HEAD~ HEAD)
           MODULES=""
-          echo $MODIFY_FILES
-          if [[ $MODIFY_FILES =~ "[^/] \{,1\}pom.xml$" ]]; then
+          echo MODIFY_FILES: $MODIFY_FILES
+          if [[ $MODIFY_FILES =~ "^pom.xml| pom.xml" ]]; then
              MODULES=${MODULES}",com.github.fosin.anan:anan-cloud"
           fi
           if [[ $MODIFY_FILES =~ "anan-cloudadviced/pom.xml" ]]; then
@@ -52,7 +52,7 @@ jobs:
           fi
           echo ::set-env name=MODIFY_FILES::$MODIFY_FILES
           echo ::set-env name=MODULE_LIST::${MODULES:1}
-          echo $MODULES
+          echo MODULES: ${MODULES}
       - name: Release Maven package
         uses: samuelmeuli/action-maven-publish@v1
         if: env.MODULE_LIST != ''
@@ -100,21 +100,21 @@ jobs:
         run: |
           docker build $MODULE_PATH -t fosin/$MODULE_NAME:$MODULE_VERSION -f $MODULE_PATH/8.Dockerfile
           docker push fosin/$MODULE_NAME:$MODULE_VERSION
-      - name: Docker build and push mysql-master
-        if: contains(env.MODIFY_FILES,'deploy/mysql/master')
+      - name: Docker build and push mysql-leader
+        if: contains(env.MODIFY_FILES,'deploy/mysql/leader')
         env:
-          MODULE_NAME: mysql-master
-          MODULE_VERSION: 2.1.0
-          MODULE_PATH: deploy/mysql/master
+          MODULE_NAME: mysql-leader
+          MODULE_VERSION: 5.7
+          MODULE_PATH: deploy/mysql/leader
         run: |
           docker build ./$MODULE_PATH -t fosin/$MODULE_NAME:$MODULE_VERSION -f ./$MODULE_PATH/7.Dockerfile
           docker push fosin/$MODULE_NAME:$MODULE_VERSION
-      - name: Docker build and push mysql-slave
-        if: contains(env.MODIFY_FILES,'deploy/mysql/slave')
+      - name: Docker build and push mysql-follower
+        if: contains(env.MODIFY_FILES,'deploy/mysql/follower')
         env:
-          MODULE_NAME: mysql-slave
-          MODULE_VERSION: 2.1.0
-          MODULE_PATH: deploy/mysql/slave
+          MODULE_NAME: mysql-follower
+          MODULE_VERSION: 5.7
+          MODULE_PATH: deploy/mysql/follower
         run: |
           docker build ./$MODULE_PATH -t fosin/$MODULE_NAME:$MODULE_VERSION -f ./$MODULE_PATH/7.Dockerfile
           docker push fosin/$MODULE_NAME:$MODULE_VERSION

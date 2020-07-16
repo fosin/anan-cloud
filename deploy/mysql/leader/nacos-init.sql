@@ -63,7 +63,7 @@ VALUES (4, 'anan-authserver.yaml', 'DEFAULT_GROUP', 'server:
   port: 51400
 spring:
   datasource:
-    url: jdbc:mysql://mysql-master:3306/anan_platform?useUnicode=true&characterEncoding=utf-8&useSSL=false
+    url: jdbc:mysql://mysql-leader:3306/anan_platform?useUnicode=true&characterEncoding=utf-8&useSSL=false
     username: anan
     password: local
 #    type: com.alibaba.druid.pool.DruidDataSource
@@ -436,7 +436,7 @@ INSERT INTO `config_info` (`id`, `data_id`, `group_id`, `content`, `md5`, `gmt_c
   port: 53000
 spring:
   datasource:
-    url: jdbc:mysql://mysql-master:3306/mpi?useUnicode=true&characterEncoding=utf-8&useSSL=false
+    url: jdbc:mysql://mysql-leader:3306/mpi?useUnicode=true&characterEncoding=utf-8&useSSL=false
     username: anan
     password: local
     druid:
@@ -521,7 +521,7 @@ spring:
             fallback: false
             port: ${spring.mail.port}
   datasource:
-    url: jdbc:mysql://mysql-master:3306/vhr?useUnicode=true&characterEncoding=utf-8&useSSL=false
+    url: jdbc:mysql://mysql-leader:3306/vhr?useUnicode=true&characterEncoding=utf-8&useSSL=false
     username: anan
     password: local
     druid:
@@ -773,7 +773,7 @@ INSERT INTO `config_info` (`id`, `data_id`, `group_id`, `content`, `md5`, `gmt_c
   port: 51500
 spring:
   datasource:
-    url: jdbc:mysql://mysql-master:3306/anan_platform?useUnicode=true&characterEncoding=utf-8&useSSL=false
+    url: jdbc:mysql://mysql-leader:3306/anan_platform?useUnicode=true&characterEncoding=utf-8&useSSL=false
     username: anan
     password: local
     druid:
