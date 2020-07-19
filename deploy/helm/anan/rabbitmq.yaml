@@ -29,7 +29,7 @@ env:
   - name: TZ
     valueFrom:
       configMapKeyRef:
-        name: mysql-master-env
+        name: mysql-leader-env
         key: anan.tz
   - name: RABBITMQ_DEFAULT_USER
     valueFrom:

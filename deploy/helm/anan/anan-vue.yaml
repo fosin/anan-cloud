@@ -38,7 +38,7 @@ env:
   - name: TZ
     valueFrom:
       configMapKeyRef:
-        name: mysql-master-env
+        name: mysql-leader-env
         key: anan.tz
 volumeMounts:
   - name: anan-vue-config

@@ -7,7 +7,7 @@ data:
   #anan服务配置
   spring.profiles.active: {{ .Values.anan.spring.profilesActive | quote }}
   spring.cloud.nacos.config.namespace: {{ .Values.nacos.namespaceId | quote }}
-  spring.cloud.nacos.config.shared-dataids: {{ .Values.nacos.sharedDataids | quote }}
+  spring.cloud.nacos.config.sharedConfigs: {{ .Values.nacos.sharedConfigs | quote }}
   spring.cloud.nacos.discovery.namespace: {{ .Values.nacos.namespaceId | quote }}
   spring.cloud.nacos.config.server-addr:
   {{- $replicaCount := int .Values.replicaCount }}

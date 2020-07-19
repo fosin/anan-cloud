@@ -32,7 +32,7 @@ spring:
     nacos:
       config:
         namespace: @spring.cloud.nacos.config.namespace@
-        shared-dataids: @spring.cloud.nacos.config.shared-dataids@
+        sharedConfigs: @spring.cloud.nacos.config.sharedConfigs@
         file-extension: yaml
         server-addr: @spring.cloud.nacos.config.server-addr@
         enabled: true

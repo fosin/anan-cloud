@@ -1,39 +1,60 @@
 version: "3"
 services:
-  nacos-server1:
-    image: nacos/nacos-server:1.1.4
-    container_name: nacos-server1
-    hostname: nacos-server1
+#  nacos-0:
+#    image: nacos/nacos-server:1.1.4
+#    container_name: nacos-0
+#    hostname: nacos-0
+#    environment:
+#      - TZ=Asia/Shanghai
+#      - PREFER_HOST_MODE=hostname
+#      - MODE=standalone
+#      - SPRING_DATASOURCE_PLATFORM=mysql
+#      - MYSQL_MASTER_SERVICE_HOST=mysql-leader
+#      - MYSQL_MASTER_SERVICE_PORT=3306
+#      - MYSQL_MASTER_SERVICE_DB_NAME=nacos
+#      - MYSQL_MASTER_SERVICE_USER=nacos
+#      - MYSQL_MASTER_SERVICE_PASSWORD=local
+#      - MYSQL_SLAVE_SERVICE_HOST=mysql-follower
+#      - MYSQL_SLAVE_SERVICE_PORT=3306
+#      - JVM_XMS=512M
+#      - JVM_XMX=512M
+#      - JVM_XMN=256M
+#    volumes:
+#      -  /root/deploy/nacos/logs/:/home/nacos/logs
+##      -  /root/deploy/nacos/custom.properties:/home/nacos/init.d/custom.properties
+#    ports:
+#      - "8848:8848"
+#      - "9555:9555"
+#    depends_on:
+#      - mysql-leader
+#      - mysql-follower
+#    networks:
+#      - anan-bridge
+  nacos-0:
+    image: nacos/nacos-server:latest
+    container_name: nacos-0
+    hostname: nacos-0
     environment:
       - TZ=Asia/Shanghai
       - PREFER_HOST_MODE=hostname
       - MODE=standalone
       - SPRING_DATASOURCE_PLATFORM=mysql
-      - MYSQL_MASTER_SERVICE_HOST=mysql-master
-      - MYSQL_MASTER_SERVICE_PORT=3306
-      - MYSQL_MASTER_SERVICE_DB_NAME=nacos
-      - MYSQL_MASTER_SERVICE_USER=nacos
-      - MYSQL_MASTER_SERVICE_PASSWORD=local
-      - MYSQL_SLAVE_SERVICE_HOST=mysql-slave
-      - MYSQL_SLAVE_SERVICE_PORT=3306
-#      - MYSQL_SERVICE_HOST=nacos-mysql
-#      - MYSQL_SERVICE_PORT=3308
-#      - MYSQL_SERVICE_DB_NAME=nacos
-#      - MYSQL_SERVICE_USER=nacos
-#      - MYSQL_SERVICE_PASSWORD=local
-#      - MYSQL_DATABASE_NUM=1
+      - MYSQL_SERVICE_HOST=mysql-leader
+      - MYSQL_SERVICE_PORT=3306
+      - MYSQL_SERVICE_DB_NAME=nacos
+      - MYSQL_SERVICE_USER=nacos
+      - MYSQL_SERVICE_PASSWORD=local
       - JVM_XMS=512M
       - JVM_XMX=512M
       - JVM_XMN=256M
     volumes:
       -  /root/deploy/nacos/logs/:/home/nacos/logs
-#      -  /root/deploy/nacos/custom.properties:/home/nacos/init.d/custom.properties
+    #      -  /root/deploy/nacos/custom.properties:/home/nacos/init.d/custom.properties
     ports:
       - "8848:8848"
       - "9555:9555"
     depends_on:
-      - mysql-master
-      - mysql-slave
+      - mysql-leader
     networks:
       - anan-bridge
   nacos-mysql:
@@ -52,12 +73,12 @@ services:
       - "3308:3306"
     networks:
       - anan-bridge
-  mysql-master:
-    container_name: mysql-master
-    hostname: mysql-master
-    image: fosin/mysql-master:5.7
+  mysql-leader:
+    container_name: mysql-leader
+    hostname: mysql-leader
+    image: fosin/mysql-leader:5.7
 #    build:
-#      context: deploy/mysql/master
+#      context: deploy/mysql/leader
     environment:
       - TZ=Asia/Shanghai
       - MYSQL_ROOT_PASSWORD=local
@@ -70,29 +91,29 @@ services:
       - MYSQL_USER2=anan
       - MYSQL_PASSWORD2=local
     volumes:
-      - /root/deploy/nfs/mysql-master0:/var/lib/mysql
+      - /root/deploy/nfs/mysql-leader1:/var/lib/mysql
     ports:
       - "3306:3306"
     networks:
       - anan-bridge
-  mysql-slave:
-    container_name: mysql-slave
-    hostname: mysql-slave
-    image: fosin/mysql-slave:5.7
+  mysql-follower:
+    container_name: mysql-follower
+    hostname: mysql-follower
+    image: fosin/mysql-follower:5.7
 #    build:
-#      context: deploy/mysql/slave
+#      context: deploy/mysql/follower
     environment:
       - TZ=Asia/Shanghai
       - MYSQL_ROOT_PASSWORD=local
       - MYSQL_REPLICATION_USER=anan_ru
       - MYSQL_REPLICATION_PASSWORD=local
-      - MYSQL_SERVICE_HOST=mysql-master
+      - MYSQL_SERVICE_HOST=mysql-leader
     volumes:
-      - /root/deploy/nfs/mysql-slave0:/var/lib/mysql
+      - /root/deploy/nfs/mysql-follower2:/var/lib/mysql
     ports:
       - "3305:3306"
     depends_on:
-      - mysql-master
+      - mysql-leader
     networks:
       - anan-bridge
   filebeat:
@@ -217,7 +238,7 @@ services:
       - anan-bridge
 
   redis:
-    image: redis:4.0
+    image: redis:5.0
     container_name: redis
     hostname: redis
     environment:
@@ -373,7 +394,7 @@ services:
       - "ALERTMANAGER_URIS=default:http://alertmanager:9093"
 
   anan-zuulgateway:
-    image: fosin/anan-zuulgateway:2.2.0-SNAPSHOT
+    image: fosin/anan-zuulgateway:2.3.0-SNAPSHOT
     entrypoint: "sh /anan/wait-for.sh anan-platformserver:51500 -t 3600 -- /anan/entrypoint.sh"
     container_name: anan-zuulgateway
     hostname: anan-zuulgateway
@@ -388,11 +409,11 @@ services:
       - anan-bridge
     depends_on:
       - rabbitmq
-      - nacos-server1
+      - nacos-0
 
   anan-authserver:
     image: fosin/anan-authserver:2.2.0-SNAPSHOT
-    entrypoint: "sh /anan/wait-for.sh nacos-server1:8848 -t 3600 -- /anan/entrypoint.sh"
+    entrypoint: "sh /anan/wait-for.sh nacos-0:8848 -t 3600 -- /anan/entrypoint.sh"
     container_name: anan-authserver
     hostname: anan-authserver
     restart: on-failure
@@ -407,11 +428,11 @@ services:
     depends_on:
       - rabbitmq
       - redis
-      - mysql-master
-      - nacos-server1
+      - mysql-leader
+      - nacos-0
 
   anan-platformserver:
-    image: fosin/anan-platformserver:2.2.0-SNAPSHOT
+    image: fosin/anan-platformserver:2.3.0-SNAPSHOT
     entrypoint: "sh /anan/wait-for.sh anan-authserver:51400 -t 3600 -- /anan/entrypoint.sh"
     container_name: anan-platformserver
     hostname: anan-platformserver
@@ -427,11 +448,11 @@ services:
     depends_on:
       - rabbitmq
       - redis
-      - mysql-master
-      - nacos-server1
+      - mysql-leader
+      - nacos-0
 
   anan-adminserver:
-    image: fosin/anan-adminserver:2.2.0-SNAPSHOT
+    image: fosin/anan-adminserver:2.3.0-SNAPSHOT
 #    entrypoint: "sh /anan/wait-for.sh anan-zuulgateway:9000 -t 3600 -- /anan/entrypoint.sh"
     container_name: anan-adminserver
     hostname: anan-adminserver
@@ -447,10 +468,10 @@ services:
     depends_on:
       - rabbitmq
       - redis
-      - nacos-server1
+      - nacos-0
 
   anan-eurekaserver:
-    image: fosin/anan-eurekaserver:2.2.0-SNAPSHOT
+    image: fosin/anan-eurekaserver:2.3.0-SNAPSHOT
     container_name: anan-eurekaserver
     hostname: anan-eurekaserver
     restart: on-failure
@@ -464,7 +485,7 @@ services:
       - 51000:51000
 
   anan-configserver:
-    image: fosin/anan-configserver:2.2.0-SNAPSHOT
+    image: fosin/anan-configserver:2.3.0-SNAPSHOT
     entrypoint: "sh /anan/wait-for.sh anan-eurekaserver:51000 -t 3600 -- /anan/entrypoint.sh"
     container_name: anan-configserver
     hostname: anan-configserver

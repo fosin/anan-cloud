@@ -6,7 +6,7 @@ spring:
 #    hibernate:
 #      ddl-auto: update
   datasource:
-    url: jdbc:mysql://nacos-mysql-master:3306/mpi?useUnicode=true&characterEncoding=utf-8&useSSL=false
+    url: jdbc:mysql://nacos-mysql-leader:3306/mpi?useUnicode=true&characterEncoding=utf-8&useSSL=false
     username: root
     password: '{cipher}AQAf9K0s8zLVaIk44+wqpHGuHsHEK5G4KKu1vk0HwxlojaYQHRkNsFhdQwmcrnkayWpGmNZezJCVb56JJTYL0wOus7L+zUIRWG0YIBzZBzG0iAX/6fQ0l7EVc6JyYmksGi6czSWhhAYvaJ2zupxU5pMou+k48ILP1MSZ+2n/mmM2OA/msXzum7hhSbuHKHkazorFlYLem2efeU0M61xWGRgzHAJ6pOxWGJx2NepgFDGLSTpDiqRTXD98AabHa28X8TpBbFynDONrU3mueuW/TSrXOlzp2LOO/cDbYGpZXAc/jypbH8SWfkSQlQrWaKBg2FJ8DYg/hUnxfSy+QbzyeGkPfJAcrDZ+9lhluKJ2RplT9bAedAWmvzPu2cJCQuf/RmM='
     druid:

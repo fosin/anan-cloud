@@ -4,12 +4,12 @@ deployment:
       maxSurge: 1      #滚动升级时会先启动1个pod
       maxUnavailable: 1 #滚动升级时允许的最大Unavailable的pod个数
   minReadySeconds: 60  #滚动升级时60s后认为该pod就绪
-image: fosin/anan-platformserver:2.2.0-SNAPSHOT
+image: fosin/anan-platformserver:2.3.0-SNAPSHOT
 imagePullPolicy: IfNotPresent
 replicaCount: 1
 resources:
   limits:
-    memory: 768Mi
+    memory: 512Mi
   requests:
     cpu: 1m
     memory: 512Mi

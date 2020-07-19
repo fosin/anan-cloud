@@ -31,7 +31,7 @@ public class AppAuthorityConfig {
 
     @Bean
     @ConditionalOnBean(PermissionFeignService.class)
-    public AnanAuthorityConfig authorityConfiggs(PermissionFeignService permissionService) {
+    public AnanAuthorityConfig authorityConfigs(PermissionFeignService permissionService) {
         List<AnanAuthorityDto> authorityDtos = new ArrayList<>();
         List<AnanPermissionEntity> entities;
         if (StringUtil.hasText(appName) && !ServiceConstant.ANAN_AUTHSERVER.equals(appName)) {

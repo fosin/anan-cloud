@@ -30,7 +30,7 @@ public interface PermissionRepository extends IJpaRepository<AnanPermissionEntit
     List<AnanPermissionEntity> findByPid(Long pid, Sort sort);
 
     @Query(value = "select * from anan_permission where p_id = :pid and id in (select permission_id from anan_version_permission where version_id = :versionId) order by sort", nativeQuery = true)
-    List<AnanPermissionEntity> findByPid(@Param(value = "pid") Long pid, @Param(value = "versionId") Long versionId);
+    List<AnanPermissionEntity> findByPidAndVersionId(@Param(value = "pid") Long pid, @Param(value = "versionId") Long versionId);
 
     List<AnanPermissionEntity> findByType(Integer type);
 

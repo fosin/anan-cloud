@@ -5,14 +5,14 @@
     <parent>
         <groupId>com.github.fosin.anan</groupId>
         <artifactId>anan-boot</artifactId>
-        <version>2.0.0-SNAPSHOT</version>
+        <version>2.1.0-SNAPSHOT</version>
         <relativePath/>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <packaging>pom</packaging>
     <artifactId>anan-cloud</artifactId>
-    <version>2.2.0-SNAPSHOT</version>
+    <version>2.3.0-SNAPSHOT</version>
     <modules>
         <module>anan-eurekaserver</module>
         <module>anan-cloudadviced</module>
@@ -20,11 +20,12 @@
         <module>anan-configserver</module>
     </modules>
     <properties>
+        <revision>2.3.0-SNAPSHOT</revision>
         <anan-placeholder1>${</anan-placeholder1>
         <anan-placeholder2>}</anan-placeholder2>
-        <anan-spring-cloud.version>Greenwich.SR5</anan-spring-cloud.version>
-        <anan-spring-cloud-alibaba.version>2.1.1.RELEASE</anan-spring-cloud-alibaba.version>
-        <anan-spring-boot-admin.version>2.1.6</anan-spring-boot-admin.version>
+        <anan-spring-cloud.version>Hoxton.SR6</anan-spring-cloud.version>
+        <anan-spring-cloud-alibaba.version>2.2.1.RELEASE</anan-spring-cloud-alibaba.version>
+        <anan-spring-boot-admin.version>2.2.3</anan-spring-boot-admin.version>
         <sonar.host.url>http://192.168.137.8:9001/</sonar.host.url>
     </properties>
     <profiles>
@@ -32,13 +33,18 @@
             <id>local</id>
             <properties>
                 <profileActive>local</profileActive>
-                <spring.cloud.nacos.config.server-addr>nacos-server1:8848</spring.cloud.nacos.config.server-addr>
+                <spring.cloud.nacos.config.enabled>true</spring.cloud.nacos.config.enabled>
+                <spring.cloud.nacos.config.username>nacos</spring.cloud.nacos.config.username>
+                <spring.cloud.nacos.config.password>local</spring.cloud.nacos.config.password>
+                <spring.cloud.nacos.config.server-addr>nacos-0:8848</spring.cloud.nacos.config.server-addr>
                 <spring.cloud.nacos.config.namespace>6138f451-2d5b-42fe-a793-df3744d7257c
                 </spring.cloud.nacos.config.namespace>
-                <spring.cloud.nacos.config.shared-dataids>application.yaml</spring.cloud.nacos.config.shared-dataids>
+                <spring.cloud.nacos.config.sharedConfigs>application.yaml</spring.cloud.nacos.config.sharedConfigs>
+                <eureka.client.enabled>false</eureka.client.enabled>
                 <eureka.client.service-url.defaultZone>
                     http://${anan-placeholder1}spring.security.user.name${anan-placeholder2}:${anan-placeholder1}spring.security.user.password${anan-placeholder2}@anan-eurekaserver:51000/eureka/
                 </eureka.client.service-url.defaultZone>
+                <spring.cloud.config.enabled>false</spring.cloud.config.enabled>
                 <spring.cloud.config.profileActive>native</spring.cloud.config.profileActive>
                 <spring.cloud.config.server.svn.uri></spring.cloud.config.server.svn.uri>
                 <spring.cloud.config.server.svn.username></spring.cloud.config.server.svn.username>
@@ -78,14 +84,19 @@
             <id>dev</id>
             <properties>
                 <profileActive>dev</profileActive>
-                <spring.cloud.nacos.config.server-addr>nacos-server1:8848,nacos-server2:8848
+                <spring.cloud.nacos.config.enabled>true</spring.cloud.nacos.config.enabled>
+                <spring.cloud.nacos.config.username>nacos</spring.cloud.nacos.config.username>
+                <spring.cloud.nacos.config.password>xingyj</spring.cloud.nacos.config.password>
+                <spring.cloud.nacos.config.server-addr>nacos-0:8848,nacos-1:8848
                 </spring.cloud.nacos.config.server-addr>
                 <spring.cloud.nacos.config.namespace>5eb182d1-53da-4344-98c3-9bd7f09cf7d3
                 </spring.cloud.nacos.config.namespace>
-                <spring.cloud.nacos.config.shared-dataids>application.yaml</spring.cloud.nacos.config.shared-dataids>
+                <spring.cloud.nacos.config.sharedConfigs>application.yaml</spring.cloud.nacos.config.sharedConfigs>
+                <eureka.client.enabled>false</eureka.client.enabled>
                 <eureka.client.service-url.defaultZone>
                     http://${anan-placeholder1}spring.security.user.name${anan-placeholder2}:${anan-placeholder1}spring.security.user.password${anan-placeholder2}${anan-at}192.168.2.243:51000/eureka/,http://${anan-placeholder1}spring.security.user.name${anan-placeholder2}:${anan-placeholder1}spring.security.user.password${anan-placeholder2}${anan-at}192.168.2.244:51000/eureka/
                 </eureka.client.service-url.defaultZone>
+                <spring.cloud.config.enabled>false</spring.cloud.config.enabled>
                 <spring.cloud.config.profileActive>subversion</spring.cloud.config.profileActive>
                 <spring.cloud.config.server.svn.uri>
                     https://192.168.2.237/svn/xingyj/01-Development/01-Platform/v1/01-Souce/anan-cloud/anan-config/
@@ -119,17 +130,22 @@
             </activation>
         </profile>
         <profile>
-            <id>yaxrmyy</id>
+            <id>prod</id>
             <properties>
-                <profileActive>yaxrmyy</profileActive>
-                <spring.cloud.nacos.config.server-addr>nacos-server1:8848,nacos-server2:8848
+                <profileActive>prod</profileActive>
+                <spring.cloud.nacos.config.enabled>true</spring.cloud.nacos.config.enabled>
+                <spring.cloud.nacos.config.username>nacos</spring.cloud.nacos.config.username>
+                <spring.cloud.nacos.config.password>prod</spring.cloud.nacos.config.password>
+                <spring.cloud.nacos.config.server-addr>nacos-0:8848,nacos-1:8848
                 </spring.cloud.nacos.config.server-addr>
                 <spring.cloud.nacos.config.namespace>dea72156-b7c0-4687-9d7b-b9315e2631c5
                 </spring.cloud.nacos.config.namespace>
-                <spring.cloud.nacos.config.shared-dataids>application.yaml</spring.cloud.nacos.config.shared-dataids>
+                <spring.cloud.nacos.config.sharedConfigs>application.yaml</spring.cloud.nacos.config.sharedConfigs>
+                <eureka.client.enabled>false</eureka.client.enabled>
                 <eureka.client.service-url.defaultZone>
                     http://${anan-placeholder1}spring.security.user.name${anan-placeholder2}:${anan-placeholder1}spring.security.user.password${anan-placeholder2}${anan-at}anan-eurekaserver1:51000/eureka/,http://${anan-placeholder1}spring.security.user.name${anan-placeholder2}:${anan-placeholder1}spring.security.user.password${anan-placeholder2}${anan-at}anan-eurekaserver2:51000/eureka/
                 </eureka.client.service-url.defaultZone>
+                <spring.cloud.config.enabled>false</spring.cloud.config.enabled>
                 <spring.cloud.config.profileActive>native</spring.cloud.config.profileActive>
                 <spring.cloud.config.server.svn.uri></spring.cloud.config.server.svn.uri>
                 <spring.cloud.config.server.svn.username></spring.cloud.config.server.svn.username>
@@ -149,7 +165,7 @@
                 <!--<spring.security.user.name>'{cipher}AQAGy3LYSBkcOJA32VA/mT3jNtxscWGe0Eto3isApxPrUgv00Pw0629LROM3zCh9KC3/HqP4aoUexyBw3QhdLCkXr6zpXGFrj0x7EPcu+A9B9kbzZejfcdG3l+Wln+chjS50cLe0txPDt4ioZxbLb0BjgwfPS4THrIfozhJgyRKNwkrw4prTXSnE2o/tbo/rHKJutXF53ywkAqRK7sZNFUMiHZTKiQkKzzCTUQmFRoBYkYtoc2SjVMerEfySCyx8oEm0+FnLpUuFpexO/cVl/YbWxmeU4qvrpeDgj1OEJ9JAuKZGfSHF/1LdvaOP7HVlx1EiyqLoQys/pa1vFjkRu8YHSmSS7jOfiGty2sT3g4+fFG7G0K+8g5cmRGAUbhUppDI='</spring.security.user.name>
                 <spring.security.user.password>'{cipher}AQAb+qFiQkk4e6bNia6bBtZGeM4yNvzM6wk5B4KfpWnklmf6Misr5OW/7LvXkBssoPC6vvG49ixIb6iCapzktjlKYWY6HTNOdirGfhNZXsfPXOsTvche98uYZVIfBYJNj+/NQ+6BdJlKPjw9fGBRDHa6OFeWD4qcchl3KL1oYq9AzWIQ/nad26R4ErULUGkw9GAeCOjw6tRGeiS90wUZ5xKzY6WiakHenwJJx2P7IJ9EfcWDp+Bvwkx8bn78Yu+0J7Y0HETZqyIJHPo6Ob9aBgUJv3lqrkXmtUQ+7GaYwBBVq2NrE54n/YW5hgUJUcpFeN6pgDUJhDhMNXuV4AEBnCrCJuyJ1sKIo0NDTxA+RqrROa+X4pLuduSL3RK8qAKd0Ig='</spring.security.user.password>-->
                 <spring.security.user.name>anan</spring.security.user.name>
-                <spring.security.user.password>yaxrmyy</spring.security.user.password>
+                <spring.security.user.password>prod</spring.security.user.password>
                 <encrypt.key-store.location>classpath:/cdp.jks</encrypt.key-store.location>
                 <encrypt.key-store.password>123456</encrypt.key-store.password>
                 <encrypt.key-store.alias>cdp</encrypt.key-store.alias>
@@ -234,7 +250,7 @@
             <dependency>
                 <groupId>com.alibaba</groupId>
                 <artifactId>druid-spring-boot-starter</artifactId>
-                <version>1.1.21</version>
+                <version>1.1.23</version>
             </dependency>
             <dependency>
                 <groupId>de.codecentric</groupId>
@@ -244,12 +260,12 @@
             <dependency>
                 <groupId>${anan.groupId}</groupId>
                 <artifactId>anan-platformapi</artifactId>
-                <version>2.2.0-SNAPSHOT</version>
+                <version>2.3.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>${anan.groupId}</groupId>
                 <artifactId>anan-platformpojo</artifactId>
-                <version>2.2.0-SNAPSHOT</version>
+                <version>2.3.0-SNAPSHOT</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

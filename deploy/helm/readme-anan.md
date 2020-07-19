@@ -25,8 +25,8 @@ systemctl enable nfs && systemctl enable rpcbind
 #anonuid：匿名用户的UID值，通常是nobody或nfsnobody，可以在此处自行设定；
 #anongid：匿名用户的GID值。
 
-mkdir -p /root/deploy/nfs/mysql-master0
-mkdir -p /root/deploy/nfs/mysql-slave0
+mkdir -p /root/deploy/nfs/mysql-leader1
+mkdir -p /root/deploy/nfs/mysql-follower2
 mkdir -p /root/deploy/nfs/rabbitmq0
 mkdir -p /root/deploy/nfs/redis{0..5}
 mkdir -p /root/deploy/nfs/es{0}
@@ -38,7 +38,7 @@ cat >> /etc/exports <<EOF
 EOF
 
 # 重启相应服务（在每个节点上执行）
-systemctl restart nfs-server && systemctl restart nfs && systemctl restart rpcbind 
+systemctl restart nfs-server && systemctl restart nfs && systemctl restart rpcbind
 
 # 在nfs存储节点查看（在每个节点上执行）
 exportfs -v	
@@ -62,8 +62,8 @@ chmod +x /root/deploy/**/*.sh -R
 ```shell script
 #1、创建基础ConfigMap和启动mysql数据库、容器会自动创建对应的数据库，并启用主从同步
 cd /root/deploy/helm
-helm install mysql-master ./anan -f ./anan/mysql-master.yaml
-helm install mysql-slave ./anan -f ./anan/mysql-slave.yaml
+helm install mysql-leader ./anan -f ./anan/mysql-leader.yaml
+helm install mysql-follower ./anan -f ./anan/mysql-follower.yaml
 
 #2、部署rabbitmq集群
 #helm install rabbitmq ./anan -f ./anan/rabbitmq.yaml
@@ -76,8 +76,9 @@ helm install nacos ./anan -f ./anan/nacos.yaml
 #模拟6节点redis集群环境，redis持久化后的存储目录需要通过nfs和pv来实现
 helm install redis ./anan -f ./anan/redis.yaml
 kubectl exec -it redis-0 -- redis-cli -a local --cluster create $(kubectl get pods -l name=redis -o jsonpath='{range.items[*]}{.status.podIP}:6379 ') --cluster-replicas 1
-kubectl exec -it redis-0 -- redis-cli -a local --cluster create $(kubectl get pods -l name=redis -o=jsonpath='{range .items[*]}{.metadata.name}.redis-headless:6379 ') --cluster-replicas 1
-kubectl exec -it redis-0 -- redis-cli -a local --cluster create $(kubectl get pods -l name=redis -o=jsonpath='{range .items[*]}{.metadata.name}.redis-headless.default.svc.cluster.local:6379 ') --cluster-replicas 1
+
+#kubectl exec -it redis-0 -- redis-cli -a local --cluster create $(kubectl get pods -l name=redis -o=jsonpath='{range .items[*]}{.metadata.name}.redis-headless:6379 ') --cluster-replicas 1
+#kubectl exec -it redis-0 -- redis-cli -a local --cluster create $(kubectl get pods -l name=redis -o=jsonpath='{range .items[*]}{.metadata.name}.redis-headless.default.svc.cluster.local:6379 ') --cluster-replicas 1
 
 #5、部署anan服务
 helm install anan-authserver ./anan -f ./anan/anan-authserver.yaml

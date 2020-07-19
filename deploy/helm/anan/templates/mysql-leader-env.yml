@@ -1,14 +1,14 @@
 {{- if .Values.mysql }}
-{{- if .Values.mysql.master }}
+{{- if .Values.mysql.leader }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: mysql-master-env
+  name: mysql-leader-env
 data:
   #环境配置
   mysql.root.password: {{ $.Values.mysql.rootPassword | quote }}
-  mysql.master.service.host: {{ include "anan.service.headless.name" . | quote }}
-  mysql.master.port: {{ $.Values.mysql.master.port | quote }}
+  mysql.leader.service.host: {{ include "anan.service.headless.name" . | quote }}
+  mysql.leader.port: {{ $.Values.mysql.leader.port | quote }}
   mysql.replication.user: {{ $.Values.mysql.replication.user | quote }}
   mysql.replication.password: {{ $.Values.mysql.replication.password | quote }}
   mysql.platform.dbname: {{ $.Values.mysql.platform.dbname | quote }}

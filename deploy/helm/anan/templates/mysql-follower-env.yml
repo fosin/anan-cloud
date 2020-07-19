@@ -1,0 +1,12 @@
+{{- if .Values.mysql }}
+{{- if .Values.mysql.follower }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mysql-follower-env
+data:
+  #环境配置
+  mysql.follower.service.host: {{ include "anan.service.headless.name" . | quote }}
+  mysql.follower.port: {{ $.Values.mysql.follower.port | quote }}
+{{- end }}
+{{- end }}

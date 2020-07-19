@@ -38,7 +38,7 @@ env:
   - name: TZ
     valueFrom:
       configMapKeyRef:
-        name: mysql-master-env
+        name: mysql-leader-env
         key: anan.tz
   - name: JAVA_TOOL_OPTIONS
     valueFrom:

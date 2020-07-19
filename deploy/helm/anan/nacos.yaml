@@ -3,9 +3,9 @@ statefulset:
     type: RollingUpdate
 nacos:
   namespaceId: "0c085925-44a0-41a8-ac0a-0ebd8cfb0a5d"
-  sharedDataids: "application.yaml"
+  sharedConfigs: "application.yaml"
 anan:
-  javaToolOptions: "-XX:+UseG1GC -XX:MaxGCPauseMillis=200 -XX:MaxRAMPercentage=60 -XX:InitialRAMPercentage=50 -XX:MaxMetaspaceSize=160M -XX:MetaspaceSize=160M -XX:+DisableExplicitGC -XX:ErrorFile=/logs/hs_err_pid%p.log"
+  javaToolOptions: "-XX:+UseG1GC -XX:MaxGCPauseMillis=200 -XX:MaxRAMPercentage=60 -XX:InitialRAMPercentage=50 -XX:MaxMetaspaceSize=130M -XX:MetaspaceSize=130M -XX:+DisableExplicitGC -XX:ErrorFile=/logs/hs_err_pid%p.log"
   spring:
     profilesActive: test
     preferredNetworks: "10.244."
@@ -49,7 +49,7 @@ env:
   - name: TZ
     valueFrom:
       configMapKeyRef:
-        name: mysql-master-env
+        name: mysql-leader-env
         key: anan.tz
   - name: PREFER_HOST_MODE
     valueFrom:
@@ -74,38 +74,38 @@ env:
   - name: MYSQL_MASTER_SERVICE_HOST
     valueFrom:
       configMapKeyRef:
-        name: mysql-master-env
-        key: mysql.master.service.host
+        name: mysql-leader-env
+        key: mysql.leader.service.host
   - name: MYSQL_MASTER_SERVICE_DB_NAME
     valueFrom:
       configMapKeyRef:
-        name: mysql-master-env
+        name: mysql-leader-env
         key: mysql.nacos.dbname
   - name: MYSQL_MASTER_SERVICE_PORT
     valueFrom:
       configMapKeyRef:
-        name: mysql-master-env
-        key: mysql.master.port
+        name: mysql-leader-env
+        key: mysql.leader.port
   - name: MYSQL_MASTER_SERVICE_USER
     valueFrom:
       configMapKeyRef:
-        name: mysql-master-env
+        name: mysql-leader-env
         key: mysql.nacos.user
   - name: MYSQL_MASTER_SERVICE_PASSWORD
     valueFrom:
       configMapKeyRef:
-        name: mysql-master-env
+        name: mysql-leader-env
         key: mysql.nacos.password
   - name: MYSQL_SLAVE_SERVICE_HOST
     valueFrom:
       configMapKeyRef:
-        name: mysql-slave-env
-        key: mysql.slave.service.host
+        name: mysql-follower-env
+        key: mysql.follower.service.host
   - name: MYSQL_SLAVE_SERVICE_PORT
     valueFrom:
       configMapKeyRef:
-        name: mysql-slave-env
-        key: mysql.slave.port
+        name: mysql-follower-env
+        key: mysql.follower.port
 volumeMounts:
   - name: nacos-log
     mountPath: /home/nacos/logs

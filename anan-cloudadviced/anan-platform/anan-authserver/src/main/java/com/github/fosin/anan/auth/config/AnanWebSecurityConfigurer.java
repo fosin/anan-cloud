@@ -104,8 +104,10 @@ public class AnanWebSecurityConfigurer extends WebSecurityConfigurerAdapter {
                 "/**/webjars/**",
                 "/**/images/**",
                 "/**/*.jpg",
+                "/**/*.png",
                 "/**/swagger-resources/**",
-                "/**/v2/api-docs");
+                "/**/api-docs"
+        );
     }
 
     @Bean

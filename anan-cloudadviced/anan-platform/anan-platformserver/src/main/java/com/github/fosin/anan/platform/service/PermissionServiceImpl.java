@@ -148,13 +148,13 @@ public class PermissionServiceImpl implements PermissionService {
 
     @Override
     public List<AnanPermissionEntity> findByPid(Long pid) {
-        Sort sort = new Sort(Sort.Direction.fromString("ASC"), "sort");
+        Sort sort = Sort.by(Sort.Direction.fromString("ASC"), "sort");
         return permissionRepository.findByPid(pid, sort);
     }
 
     @Override
     public List<AnanPermissionEntity> findByPid(Long pid, Long versionId) {
-        return permissionRepository.findByPid(pid, versionId);
+        return permissionRepository.findByPidAndVersionId(pid, versionId);
     }
 
     @Override

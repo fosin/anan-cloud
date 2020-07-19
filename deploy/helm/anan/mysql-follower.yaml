@@ -1,34 +1,21 @@
 statefulset:
   updateStrategy:
     type: RollingUpdate
-mysql:
-  nacos:
-    password: "local"
-    user: "nacos"
-    dbname: "nacos"
-  platform:
-    password: "local"
-    user: "anan"
-    dbname: "anan_platform"
-  replication:
-    user: "anan_ru"
-    password: "local"
-  master:
-    port: 3306
-  rootPassword: "local"
-image: fosin/mysql-master:2.1.0
+image: fosin/mysql-follower:2.1.0
 imagePullPolicy: IfNotPresent
 replicaCount: 1
-createCm: true
+mysql:
+  follower:
+    port: 3306
 resources:
   limits:
-    memory: 384Mi
+    memory: 512Mi
   requests:
     cpu: 1m
     memory: 256Mi
 persistence:
   enabled: true
-#  storageClassName: "anan-nfs"
+  #  storageClassName: "anan-nfs"
   size: 1G
   accessMode: ReadWriteOnce
   nfs:
@@ -43,7 +30,7 @@ affinity:
               - key: name
                 operator: NotIn
                 values:
-                  - mysql-slave
+                  - mysql-leader
           topologyKey: kubernetes.io/hostname
 service:
   type: ClusterIP
@@ -56,45 +43,45 @@ env:
   - name: TZ
     valueFrom:
       configMapKeyRef:
-        name: mysql-master-env
+        name: mysql-leader-env
         key: anan.tz
   - name: MYSQL_ROOT_PASSWORD
     valueFrom:
       configMapKeyRef:
-        name: mysql-master-env
+        name: mysql-leader-env
         key: mysql.root.password
   - name: MYSQL_DATABASE
     valueFrom:
       configMapKeyRef:
-        name: mysql-master-env
+        name: mysql-leader-env
         key: mysql.nacos.dbname
   - name: MYSQL_USER
     valueFrom:
       configMapKeyRef:
-        name: mysql-master-env
+        name: mysql-leader-env
         key: mysql.nacos.user
   - name: MYSQL_PASSWORD
     valueFrom:
       configMapKeyRef:
-        name: mysql-master-env
+        name: mysql-leader-env
         key: mysql.nacos.password
   - name: MYSQL_REPLICATION_USER
     valueFrom:
       configMapKeyRef:
-        name: mysql-master-env
+        name: mysql-leader-env
         key: mysql.replication.user
   - name: MYSQL_REPLICATION_PASSWORD
     valueFrom:
       configMapKeyRef:
-        name: mysql-master-env
+        name: mysql-leader-env
         key: mysql.replication.password
   - name: MYSQL_MASTER_SERVICE_HOST
     valueFrom:
       configMapKeyRef:
-        name: mysql-master-env
-        key: mysql.master.service.host
+        name: mysql-leader-env
+        key: mysql.leader.service.host
 volumeMounts:
-  - name: mysql-master
+  - name: mysql-follower
     mountPath: /var/lib/mysql
 configmap:
   envs: {}

@@ -43,7 +43,7 @@
     1.0.x-SNAPSHOT      1.0.x-SNAPSHOT       1.0.0-SNAPSHOT
     2.0.x-SNAPSHOT      2.0.x-SNAPSHOT       2.0.0-SNAPSHOT
     2.2.x-SNAPSHOT      2.0.x-SNAPSHOT       3.x.x
-
+    2.3.x-SNAPSHOT      2.1.x-SNAPSHOT       3.x.x
 # 搭建环境
 ## 1、本地开发环境local设置
     基于docker的运行环境都是在CentOS7上部署得，如果是其他操作系统需要自行研究，理论上也是没有问题得。
@@ -103,11 +103,11 @@
            docker-compose.yml（中间件帐号和密码）
            nacos配置中心（anan服务相关帐号密码）
            anan-cloud下面的pom.xml中的profile local 的配置信息（spring security帐号密码）
-       docker-compose.yml中redis、rabbitmq、nacos-server1、mysql-master、mysql-slave5个是后台开发环境必须启动的
+       docker-compose.yml中redis、rabbitmq、nacos-0、mysql-leader、mysql-follower5个是后台开发环境必须启动的
        1.2.1、创建docker网络     
             docker network create -d bridge --subnet=172.28.0.0/16 anan-bridge
        1.2.2、启动mysql主从同步模式和nacos服务发现和配置管理
-            docker-compose -f anan-cloud\docker-compose.yml up -d mysql-master mysql-slave nacos-server1
+            docker-compose -f anan-cloud\docker-compose.yml up -d mysql-leader mysql-follower nacos-0
             
             启动完成后，可以访问http://容器主机IP:8848/nacos/来查看nacos服务发现和配置中心。
             账户：nacos
@@ -117,7 +117,7 @@
        1.2.4、安装Rabbitmq(只测试过3.x)
             docker-compose -f anan-cloud\docker-compose.yml up -d rabbitmq
        1.2.5、如果对机器性能有信息，以上组件也可以使用一个命令启动
-            docker-compose -f D:\myproject\anan\anan-cloud\docker-compose.yml up -d redis rabbitmq mysql-master mysql-slave nacos-server1
+            docker-compose -f D:\myproject\anan\anan-cloud\docker-compose.yml up -d redis rabbitmq mysql-leader mysql-follower nacos-0
 
 ### 1.3、日志安装篇，使用文件docker-compose.yml(elsaticsearch、filebeat、kibana等) -非必须
        1.3.1、安装ElasticSearch6.7及以上(6.7及以上kibana有中文版，不要中文版安装低版本也可以)
@@ -169,11 +169,11 @@
        1.5.2、Windows下修改c:/windows/system32/drives/etc/hosts文件增加以下信息，IP地址根据实际情况设定
             192.168.137.1是本机IP，192.168.137.8是Docker容器的主机IP
 
-            192.168.137.8 nacos-server1
+            192.168.137.8 nacos-0
             192.168.137.8 redis
             192.168.137.8 rabbitmq
-            192.168.137.8 mysql-master
-            192.168.137.8 mysql-slave
+            192.168.137.8 mysql-leader
+            192.168.137.8 mysql-follower
             192.168.137.1 anan-eurekaserver
             192.168.137.1 anan-authserver
             
