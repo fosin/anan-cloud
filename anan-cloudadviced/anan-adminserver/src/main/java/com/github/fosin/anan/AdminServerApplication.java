@@ -5,13 +5,14 @@ import com.github.fosin.anan.oauth2.annotation.EnableAnanResourceServer;
 import de.codecentric.boot.admin.server.config.EnableAdminServer;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.cloud.netflix.eureka.loadbalancer.LoadBalancerEurekaAutoConfiguration;
 
 /**
  * Description
  *
  * @author fosin
  */
-@SpringBootApplication
+@SpringBootApplication(exclude = LoadBalancerEurekaAutoConfiguration.class)
 @EnableAdminServer
 @EnableAnanResourceServer
 public class AdminServerApplication {
