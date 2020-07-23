@@ -4,20 +4,22 @@ import com.github.fosin.anan.core.exception.AnanControllerException;
 import com.github.fosin.anan.model.controller.AbstractBaseController;
 import com.github.fosin.anan.model.controller.ISimpleController;
 import com.github.fosin.anan.model.service.ISimpleService;
+import com.github.fosin.anan.platform.service.inter.PermissionService;
 import com.github.fosin.anan.platformapi.constant.SystemConstant;
 import com.github.fosin.anan.platformapi.constant.UrlPrefixConstant;
+import com.github.fosin.anan.platformapi.entity.AnanPermissionEntity;
 import com.github.fosin.anan.pojo.dto.request.AnanPermissionCreateDto;
 import com.github.fosin.anan.pojo.dto.request.AnanPermissionRetrieveDto;
 import com.github.fosin.anan.pojo.dto.request.AnanPermissionUpdateDto;
-import com.github.fosin.anan.platformapi.entity.AnanPermissionEntity;
-import com.github.fosin.anan.platform.service.inter.PermissionService;
 import com.github.fosin.anan.util.TreeUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
-
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -40,7 +42,8 @@ public class PermissionController extends AbstractBaseController
     }
 
     @ApiOperation(value = "根据权限类型type获取权限树", notes = "如果权限类型type在0-4之内的任意值则返回对应的权限树，否则返回所有权限树")
-    @ApiImplicitParam(name = "type", value = "权限类型type,AnanPermissionEntity.type")
+    @ApiImplicitParam(name = "type", value = "权限类型type,AnanPermissionEntity.type",
+            required = true, dataTypeClass = Integer.class, paramType = "path")
     @PostMapping("/tree/{type}")
     public ResponseEntity<List<AnanPermissionEntity>> getListTree(@PathVariable Integer type) throws AnanControllerException {
         Collection<AnanPermissionEntity> list;
@@ -74,15 +77,17 @@ public class PermissionController extends AbstractBaseController
     }
 
     @ApiOperation(value = "根据父权限ID获取其孩子数据列表")
-    @ApiImplicitParam(name = "pid", value = "父权限ID,AnanPermissionEntity.pid")
+    @ApiImplicitParam(name = "pid", value = "父权限ID,AnanPermissionEntity.pid",
+            required = true, dataTypeClass = Long.class, paramType = "path")
     @PostMapping("/listChild/{pid}")
     public ResponseEntity<Object> getListChild(@PathVariable Long pid) {
         List<AnanPermissionEntity> list = permissionService.findByPid(pid);
         return ResponseEntity.ok(list);
     }
 
-    @PostMapping("/findByAppName")
-    @ApiImplicitParam(name = "appName", value = "应用名称,spring.application.name")
+    @PostMapping("/findByAppName/{appName}")
+    @ApiImplicitParam(name = "appName", value = "应用名称,spring.application.name",
+            required = true, dataTypeClass = String.class, paramType = "path")
     @ApiOperation(value = "查询应用权限", notes = "根据应用名称(spring.application.name)查询其权限列表")
     public ResponseEntity<List<AnanPermissionEntity>> findByAppName(@PathVariable String appName) {
         return ResponseEntity.ok(permissionService.findByAppName(appName));

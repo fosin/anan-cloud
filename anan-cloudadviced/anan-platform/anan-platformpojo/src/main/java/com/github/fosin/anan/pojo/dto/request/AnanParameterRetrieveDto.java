@@ -20,30 +20,30 @@ import java.io.Serializable;
 public class AnanParameterRetrieveDto implements Serializable {
     private static final long serialVersionUID = -95372770044687456L;
 
-    @ApiModelProperty(value = "参数ID, 主键", example = "Long")
+    @ApiModelProperty(value = "参数ID, 主键")
     private Long id;
 
-    @ApiModelProperty(value = "参数键", example = "String")
+    @ApiModelProperty(value = "参数键")
     @NotBlank(message = "参数键{javax.validation.constraints.NotBlank.message}")
     private String name;
 
-    @ApiModelProperty(value = "参数值", example = "String")
+    @ApiModelProperty(value = "参数值")
     private String value;
 
-    @ApiModelProperty(value = "参数分类：具体取值于字典表anan_dictionary.code=10", example = "Integer")
+    @ApiModelProperty(value = "参数分类：具体取值于字典表anan_dictionary.code=10")
     @NotNull(message = "参数分类{javax.validation.constraints.NotNull.message}")
     private Integer type;
 
-    @ApiModelProperty(value = "参数作用域", example = "String")
+    @ApiModelProperty(value = "参数作用域")
     private String scope;
 
-    @ApiModelProperty(value = "默认值", example = "String")
+    @ApiModelProperty(value = "默认值")
     private String defaultValue;
 
-    @ApiModelProperty(value = "参数描述", example = "String")
+    @ApiModelProperty(value = "参数描述")
     private String description;
 
-    @ApiModelProperty(value = "参数状态：0=正常状态、1=修改状态、2=删除状态", example = "Integer")
+    @ApiModelProperty(value = "参数状态：0=正常状态、1=修改状态、2=删除状态")
     private Integer status;
 
 }

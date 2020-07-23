@@ -18,12 +18,12 @@ import java.io.Serializable;
 public class AnanRolePermissionRetrieveDto implements Serializable {
     private static final long serialVersionUID = -44755376359236777L;
 
-    @ApiModelProperty(value = "角色权限ID, 主键", example = "Long")
+    @ApiModelProperty(value = "角色权限ID, 主键")
     private Long id;
 
-    @ApiModelProperty(value = "角色ID", example = "Long")
+    @ApiModelProperty(value = "角色ID")
     private Long roleId;
 
-    @ApiModelProperty(value = "权限ID", example = "Long")
+    @ApiModelProperty(value = "权限ID")
     private Long permissionId;
 }

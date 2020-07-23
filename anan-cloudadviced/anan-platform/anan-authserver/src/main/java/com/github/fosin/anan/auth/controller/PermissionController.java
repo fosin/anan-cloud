@@ -32,7 +32,8 @@ public class PermissionController {
     }
 
     @PostMapping("/findByAppName/{appName}")
-    @ApiImplicitParam(name = "appName", value = "应用名称,spring.application.name")
+    @ApiImplicitParam(name = "appName", value = "应用名称,spring.application.name",
+            required = true, dataTypeClass = String.class, paramType = "path")
     @ApiOperation(value = "查询应用权限", notes = "根据应用名称(spring.application.name)查询其权限列表")
     public ResponseEntity<List<AnanPermissionEntity>> findByAppName(@PathVariable("appName") String appName) {
         return ResponseEntity.ok(permissionService.findByAppName(appName));

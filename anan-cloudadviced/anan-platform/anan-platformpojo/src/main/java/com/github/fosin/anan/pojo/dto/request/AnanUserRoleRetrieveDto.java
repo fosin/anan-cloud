@@ -21,23 +21,23 @@ import java.util.Date;
 public class AnanUserRoleRetrieveDto implements Serializable {
     private static final long serialVersionUID = 818450290607468187L;
 
-    @ApiModelProperty(value = "用户角色ID, 主键", example = "Long")
+    @ApiModelProperty(value = "用户角色ID, 主键")
     private Long id;
 
-    @ApiModelProperty(value = "机构ID", example = "Long")
+    @ApiModelProperty(value = "机构ID")
     private Long organizId;
 
-    @ApiModelProperty(value = "用户ID", example = "Long")
+    @ApiModelProperty(value = "用户ID")
     private Long userId;
 
-    @ApiModelProperty(value = "角色ID", example = "Long")
+    @ApiModelProperty(value = "角色ID")
     private Long roleId;
 
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
-    @ApiModelProperty(value = "创建日期，该值由后台维护，更改数据时前端不需要关心", example = "Date")
+    @ApiModelProperty(value = "创建日期，该值由后台维护，更改数据时前端不需要关心")
     private Date createTime;
 
-    @ApiModelProperty(value = "该值由后台维护，更改数据时前端不需要关心，取值于anan_user.id", example = "Long")
+    @ApiModelProperty(value = "该值由后台维护，更改数据时前端不需要关心，取值于anan_user.id")
     private Long createBy;
 
 }

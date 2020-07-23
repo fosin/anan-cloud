@@ -20,19 +20,19 @@ public class AnanPayDetailUpdateDto implements Serializable {
     private static final long serialVersionUID = -84127296586986403L;
 
     @NotNull(message = "付款明细ID" + "{javax.validation.constraints.NotNull.message}")
-    @ApiModelProperty(value = "付款明细ID, 主键", example = "Long", required = true)
+    @ApiModelProperty(value = "付款明细ID, 主键", required = true)
     private Long id;
 
     @NotNull(message = "支付ID" + "{javax.validation.constraints.NotNull.message}")
-    @ApiModelProperty(value = "支付ID", example = "Long", required = true)
+    @ApiModelProperty(value = "支付ID", required = true)
     private Long payId;
 
     @NotNull(message = "付款方式" + "{javax.validation.constraints.NotNull.message}")
-    @ApiModelProperty(value = "付款方式", example = "Integer", required = true)
+    @ApiModelProperty(value = "付款方式", required = true)
     private Integer payway;
 
     @NotNull(message = "付款金额" + "{javax.validation.constraints.NotNull.message}")
-    @ApiModelProperty(value = "付款金额", example = "Double", required = true)
+    @ApiModelProperty(value = "付款金额", required = true)
     private Double money;
 
 }

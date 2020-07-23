@@ -20,15 +20,15 @@ public class AnanUserRoleCreateDto implements Serializable {
     private static final long serialVersionUID = 749406371216875374L;
 
     @NotNull(message = "机构ID" + "{javax.validation.constraints.NotNull.message}")
-    @ApiModelProperty(value = "机构ID", example = "Long", required = true)
+    @ApiModelProperty(value = "机构ID", required = true)
     private Long organizId;
 
     @NotNull(message = "用户ID" + "{javax.validation.constraints.NotNull.message}")
-    @ApiModelProperty(value = "用户ID", example = "Long", required = true)
+    @ApiModelProperty(value = "用户ID", required = true)
     private Long userId;
 
     @NotNull(message = "角色ID" + "{javax.validation.constraints.NotNull.message}")
-    @ApiModelProperty(value = "角色ID", example = "Long", required = true)
+    @ApiModelProperty(value = "角色ID", required = true)
     private Long roleId;
 
 }

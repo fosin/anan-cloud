@@ -20,11 +20,11 @@ public class AnanRolePermissionCreateDto implements Serializable {
     private static final long serialVersionUID = -15682978445746756L;
 
     @NotNull(message = "角色ID" + "{javax.validation.constraints.NotNull.message}")
-    @ApiModelProperty(value = "角色ID", example = "Long", required = true)
+    @ApiModelProperty(value = "角色ID", required = true)
     private Long roleId;
 
     @NotNull(message = "权限ID" + "{javax.validation.constraints.NotNull.message}")
-    @ApiModelProperty(value = "权限ID", example = "Long", required = true)
+    @ApiModelProperty(value = "权限ID", required = true)
     private Long permissionId;
 
 }

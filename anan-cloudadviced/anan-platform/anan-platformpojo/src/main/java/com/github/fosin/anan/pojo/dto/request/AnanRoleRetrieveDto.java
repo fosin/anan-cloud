@@ -18,25 +18,25 @@ import java.io.Serializable;
 public class AnanRoleRetrieveDto implements Serializable {
     private static final long serialVersionUID = 431913654589649616L;
 
-    @ApiModelProperty(value = "角色ID, 主键", example = "Long")
+    @ApiModelProperty(value = "角色ID, 主键")
     private Long id;
 
-    @ApiModelProperty(value = "机构ID", example = "Long")
+    @ApiModelProperty(value = "机构ID")
     private Long organizId;
 
-    @ApiModelProperty(value = "角色名称", example = "String")
+    @ApiModelProperty(value = "角色名称")
     private String name;
 
-    @ApiModelProperty(value = "角色标识", example = "String")
+    @ApiModelProperty(value = "角色标识")
     private String value;
 
-    @ApiModelProperty(value = "角色说明", example = "String")
+    @ApiModelProperty(value = "角色说明")
     private String tips;
 
-    @ApiModelProperty(value = "使用状态：0=启用，1=禁用，具体取值于字典表anan_dictionary.code=11", example = "Integer")
+    @ApiModelProperty(value = "使用状态：0=启用，1=禁用，具体取值于字典表anan_dictionary.code=11")
     private Integer status;
 
-    @ApiModelProperty(value = "内置标志：是否是系统内置角色，内置角色不能被用户删除和修改，0=不是 1=是", example = "Integer")
+    @ApiModelProperty(value = "内置标志：是否是系统内置角色，内置角色不能被用户删除和修改，0=不是 1=是")
     private Integer builtIn;
 
 }

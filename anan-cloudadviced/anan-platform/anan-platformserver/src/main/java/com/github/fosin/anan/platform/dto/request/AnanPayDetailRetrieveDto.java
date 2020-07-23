@@ -18,16 +18,16 @@ import java.io.Serializable;
 public class AnanPayDetailRetrieveDto implements Serializable {
     private static final long serialVersionUID = 318623987516262809L;
 
-    @ApiModelProperty(value = "付款明细ID, 主键", example = "Long")
+    @ApiModelProperty(value = "付款明细ID, 主键")
     private Long id;
 
-    @ApiModelProperty(value = "支付ID", example = "Long")
+    @ApiModelProperty(value = "支付ID")
     private Long payId;
 
-    @ApiModelProperty(value = "付款方式", example = "Integer")
+    @ApiModelProperty(value = "付款方式")
     private Integer payway;
 
-    @ApiModelProperty(value = "付款金额", example = "Double")
+    @ApiModelProperty(value = "付款金额")
     private Double money;
 
 }

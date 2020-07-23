@@ -52,7 +52,8 @@ public class AnanOrganizationController extends AbstractBaseController
     }
 
     @ApiOperation("根据机构ID获取机构权限")
-    @ApiImplicitParam(name = "organizId", value = "机构ID,取值于AnanOrganizationEntity.id")
+    @ApiImplicitParam(name = "organizId", value = "机构ID,取值于AnanOrganizationEntity.id",
+            required = true, dataTypeClass = Long.class, paramType = "path")
     @RequestMapping(value = "/permissions/{organizId}", method = {RequestMethod.GET, RequestMethod.POST})
     public ResponseEntity<List<AnanOrganizationPermissionEntity>> permissions(@PathVariable Long organizId) {
         return ResponseEntity.ok(organizationPermissionService.findByOrganizId(organizId));
@@ -61,24 +62,26 @@ public class AnanOrganizationController extends AbstractBaseController
     @ApiOperation(value = "根据版本ID更新版本权限", notes = "根据版本ID更新版本权限，此操作将先删除原权限，再新增新权限")
     @ApiImplicitParams({
 //            @ApiImplicitParam(name = "entities", value = "版本权限集合(List<AnanOrganizationPermissionEntity>)"),
-            @ApiImplicitParam(name = "organizId", value = "版本ID,取值于AnanOrganizationEntity.id")
+            @ApiImplicitParam(name = "organizId", value = "机构ID,取值于AnanOrganizationEntity.id",
+                    required = true, dataTypeClass = Long.class, paramType = "path")
+
     })
     @PutMapping(value = "/permissions/{organizId}")
     public ResponseEntity<Collection<AnanOrganizationPermissionEntity>> permissions(@RequestBody List<AnanOrganizationPermissionUpdateDto> entities,
-                                                                                   @PathVariable("organizId") Long organizId) {
+                                                                                    @PathVariable("organizId") Long organizId) {
         return ResponseEntity.ok(organizationPermissionService.updateInBatch(organizId, entities));
     }
 
 
     @ApiOperation("根据父机构ID获取其孩子节点数据")
-    @ApiImplicitParam(name = "pid", value = "父节点ID,AnanOrganizationEntity.pid")
     @PostMapping("/listChild/{pid}")
+    @ApiImplicitParam(name = "pid", required = true, dataTypeClass = Long.class, value = "父节点ID,AnanOrganizationEntity.pid", paramType = "path")
     public ResponseEntity<List<AnanOrganizationEntity>> listChild(@PathVariable("pid") Long pid) {
         return ResponseEntity.ok(organizationService.findByPid(pid));
     }
 
     @ApiOperation("根据父机构ID获取其所有后代节点数据")
-    @ApiImplicitParam(name = "pid", value = "父节点ID,AnanOrganizationEntity.pid")
+    @ApiImplicitParam(name = "pid", required = true, dataTypeClass = Long.class, value = "父节点ID,AnanOrganizationEntity.pid", paramType = "path")
     @PostMapping("/listAllChild/{pid}")
     public ResponseEntity<List<AnanOrganizationEntity>> listAllChild(@PathVariable("pid") Long pid) {
         List<String> codes = new ArrayList<>();
@@ -104,6 +107,7 @@ public class AnanOrganizationController extends AbstractBaseController
 
     @ApiOperation("生成机构树")
     @RequestMapping(value = "/tree/{topId}", method = {RequestMethod.POST})
+    @ApiImplicitParam(name = "topId", required = true, dataTypeClass = Long.class, value = "父节点ID,AnanOrganizationEntity.pid", paramType = "path")
     public ResponseEntity<List<AnanOrganizationEntity>> tree(@PathVariable Long topId) throws AnanControllerException {
         Collection<AnanOrganizationEntity> list = organizationService.findAllByTopId(topId);
 
@@ -129,7 +133,7 @@ public class AnanOrganizationController extends AbstractBaseController
 
     @ApiOperation(value = "机构注册", notes = "用户自助注册机构")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "registerDto", value = "注册新机构、新用户"),
+            @ApiImplicitParam(name = "registerDto", required = true, dataTypeClass = RegisterDto.class, value = "注册新机构、新用户", paramType = "body")
     })
     @PutMapping(value = "/register")
     public ResponseEntity<Boolean> register(@RequestBody RegisterDto registerDto) {
@@ -138,7 +142,7 @@ public class AnanOrganizationController extends AbstractBaseController
 
 
     @ApiOperation("根据父机构ID获取其孩子节点数据")
-    @ApiImplicitParam(name = "organizId", value = "机构ID,取值于AnanOrganizationEntity.id")
+    @ApiImplicitParam(name = "organizId", required = true, dataTypeClass = Long.class, value = "机构ID,取值于AnanOrganizationEntity.id", paramType = "path")
     @PostMapping("/auth/{organizId}")
     public ResponseEntity<AnanOrganizationAuthEntity> getOrganizAuth(@PathVariable("organizId") Long organizId) {
         List<AnanOrganizationAuthEntity> organizationAuthEntities = organizationAuthService.findAllByOrganizId(organizId);

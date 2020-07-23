@@ -48,7 +48,8 @@ public class UserController extends AbstractBaseController implements ISimpleCon
     }
 
     @PostMapping("/usercode/{usercode}")
-    @ApiImplicitParam(name = "usercode", value = "用户工号,取值于AnanUserEntity.usercode")
+    @ApiImplicitParam(name = "usercode", value = "用户工号,取值于AnanUserEntity.usercode",
+            required = true, dataTypeClass = String.class, paramType = "path")
     @ApiOperation("根据用户工号查找用户信息")
     public ResponseEntity<AnanUserEntity> getByUsercode(@PathVariable("usercode") String usercode) {
         return ResponseEntity.ok(userService.findByUsercode(usercode));
@@ -57,10 +58,14 @@ public class UserController extends AbstractBaseController implements ISimpleCon
     @ApiOperation("修改用户帐号密码")
     @PostMapping("/changePassword")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "id", value = "参数类型,取值于AnanUserEntity.id"),
-            @ApiImplicitParam(name = "password", value = "原密码(未加密)"),
-            @ApiImplicitParam(name = "confirmPassword1", value = "确认新密码1(未加密)"),
-            @ApiImplicitParam(name = "confirmPassword2", value = "确认新密码2(未加密)")
+            @ApiImplicitParam(name = "id", value = "参数类型,取值于AnanUserEntity.id",
+            required = true, dataTypeClass = Long.class, paramType = "query"),
+            @ApiImplicitParam(name = "password", value = "原密码(未加密)",
+                    required = true, dataTypeClass = String.class, paramType = "query"),
+            @ApiImplicitParam(name = "confirmPassword1", value = "确认新密码1(未加密)",
+                    required = true, dataTypeClass = String.class, paramType = "query"),
+            @ApiImplicitParam(name = "confirmPassword2", value = "确认新密码2(未加密)",
+                    required = true, dataTypeClass = String.class, paramType = "query"),
     })
     public ResponseEntity<String> changePassword(@RequestParam("id") Long id,
                                                  @RequestParam("password") String password,
@@ -88,7 +93,8 @@ public class UserController extends AbstractBaseController implements ISimpleCon
 //    }
 
     @ApiOperation("根据用户ID查询用户权限列表")
-    @ApiImplicitParam(name = "userId", value = "用户ID,取值于AnanUserEntity.id")
+    @ApiImplicitParam(name = "userId", value = "用户ID,取值于AnanUserEntity.id",
+            required = true, dataTypeClass = String.class, paramType = "query")
     @RequestMapping(value = "/permissions/{userId}", method = {RequestMethod.GET, RequestMethod.POST})
     public ResponseEntity<List<AnanUserPermissionEntity>> permissions(@PathVariable Long userId) {
         return ResponseEntity.ok(userPermissionService.findByUserId(userId));
@@ -96,8 +102,10 @@ public class UserController extends AbstractBaseController implements ISimpleCon
 
     @ApiOperation("根据用户ID更新用户权限")
     @ApiImplicitParams({
-//            @ApiImplicitParam(name = "entities", value = "用户权限集合(List<AnanUserPermissionEntity>)"),
-            @ApiImplicitParam(name = "userId", value = "用户ID,取值于AnanUserEntity.id")
+            @ApiImplicitParam(name = "entities", value = "用户权限集合(List<AnanUserPermissionEntity>)",
+                    required = true, dataTypeClass = List.class, paramType = "body"),
+            @ApiImplicitParam(name = "userId", value = "用户ID,取值于AnanUserEntity.id",
+                    required = true, dataTypeClass = Long.class, paramType = "path"),
     })
     @PutMapping(value = "/permissions/{userId}")
     public ResponseEntity<Collection<AnanUserPermissionEntity>> permissions(@RequestBody List<AnanUserPermissionUpdateDto> entities, @PathVariable Long userId) {
@@ -105,14 +113,16 @@ public class UserController extends AbstractBaseController implements ISimpleCon
     }
 
     @ApiOperation(value = "根据用户ID重置用户密码", notes = "重置后的密码或是固定密码或是随机密码，具体由机构参数UserResetPasswordType决定")
-    @ApiImplicitParam(name = "id", value = "用户ID,取值于AnanUserEntity.id")
+    @ApiImplicitParam(name = "id", value = "用户ID,取值于AnanUserEntity.id",
+            required = true, dataTypeClass = Long.class, paramType = "path")
     @PostMapping("/resetPassword/{id}")
     public ResponseEntity<String> resetPassword(@PathVariable() Long id) {
         return ResponseEntity.ok(userService.resetPassword(id).getPassword());
     }
 
     @ApiOperation("根据用户唯一id查找用户所有角色信息列表")
-    @ApiImplicitParam(name = "userId", value = "用户ID,取值于AnanUserEntity.id")
+    @ApiImplicitParam(name = "userId", value = "用户ID,取值于AnanUserEntity.id",
+            required = true, dataTypeClass = Long.class, paramType = "path")
     @RequestMapping(value = "/roles/{userId}", method = {RequestMethod.GET, RequestMethod.POST})
     public ResponseEntity<List<AnanRoleEntity>> getUserRoles(@PathVariable("userId") Long userId) {
         return ResponseEntity.ok(roleService.findRoleUsersByRoleId(userId));
@@ -120,8 +130,10 @@ public class UserController extends AbstractBaseController implements ISimpleCon
 
     @ApiOperation("更新用户拥有的角色")
     @ApiImplicitParams({
-//            @ApiImplicitParam(name = "entities", value = "用户角色集合(List<AnanUserRoleEntity>)"),
-            @ApiImplicitParam(name = "userId", value = "用户ID,取值于AnanUserEntity.id")
+            @ApiImplicitParam(name = "entities", value = "用户角色集合(List<AnanUserRoleEntity>)",
+                    required = true, dataTypeClass = List.class, paramType = "path"),
+            @ApiImplicitParam(name = "userId", value = "用户ID,取值于AnanUserEntity.id",
+                    required = true, dataTypeClass = Long.class, paramType = "path")
     })
     @PutMapping(value = "/roles/{userId}")
     public ResponseEntity<List<AnanUserRoleEntity>> putUserRoles
@@ -131,7 +143,8 @@ public class UserController extends AbstractBaseController implements ISimpleCon
     }
 
     @ApiOperation("根据用户唯一id查找用户所有角色信息")
-    @ApiImplicitParam(name = "userId", value = "用户ID,对应AnanRoleEntity.id", required = true, dataType = "Integer", paramType = "path")
+    @ApiImplicitParam(name = "userId", value = "用户ID,对应AnanRoleEntity.id",
+            required = true, dataTypeClass = Integer.class, paramType = "path")
     @RequestMapping(value = "/otherRoles/{userId}", method = {RequestMethod.GET, RequestMethod.POST})
     public ResponseEntity<List<AnanRoleEntity>> getOtherRoles(@PathVariable("userId") Long userId) {
         return ResponseEntity.ok(roleService.findOtherUsersByRoleId(userId));
@@ -139,7 +152,8 @@ public class UserController extends AbstractBaseController implements ISimpleCon
 
     @PostMapping({"/childList/organizId/{organizId}"})
     @ApiOperation("根据机构ID查询该机构及子机构的所有用户")
-    @ApiImplicitParam(name = "organizId", value = "机构ID")
+    @ApiImplicitParam(name = "organizId", value = "机构ID",
+            required = true, dataTypeClass = Long.class, paramType = "path")
     public ResponseEntity<List<AnanUserEntity>> findAllByOrganizId(@PathVariable("organizId") Long organizId) {
         return ResponseEntity.ok(userService.findAllByOrganizId(organizId));
     }

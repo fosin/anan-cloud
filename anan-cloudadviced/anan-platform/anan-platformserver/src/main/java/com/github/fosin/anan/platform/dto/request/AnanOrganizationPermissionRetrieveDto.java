@@ -19,21 +19,21 @@ import com.github.fosin.anan.util.DateTimeUtil;
 @ApiModel(value = "系统机构权限表查询DTO", description = "表(anan_organization_permission)的对应的查询DTO")
 public class AnanOrganizationPermissionRetrieveDto implements Serializable {
     private static final long serialVersionUID = 258891966081450196L;
-    
-    @ApiModelProperty(value = "机构权限ID, 主键", example = "Long")
+
+    @ApiModelProperty(value = "机构权限ID, 主键")
     private Long id;
 
-    @ApiModelProperty(value = "机构ID", example = "Long")
+    @ApiModelProperty(value = "机构ID")
     private Long organizId;
 
-    @ApiModelProperty(value = "权限ID", example = "Long")
+    @ApiModelProperty(value = "权限ID")
     private Long permissionId;
 
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
-    @ApiModelProperty(value = "创建时间", example = "Date")
+    @ApiModelProperty(value = "创建时间")
     private Date createTime;
 
-    @ApiModelProperty(value = "创建人，该值由后台维护，更改数据时前端不需要关心，取值于anan_user.id", example = "Long")
+    @ApiModelProperty(value = "创建人，该值由后台维护，更改数据时前端不需要关心，取值于anan_user.id")
     private Long createBy;
 
 }

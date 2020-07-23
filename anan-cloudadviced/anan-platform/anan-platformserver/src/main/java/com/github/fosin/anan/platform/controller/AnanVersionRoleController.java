@@ -36,13 +36,14 @@ public class AnanVersionRoleController implements ISimpleController<AnanVersionR
      */
     private final AnanVersionRoleService ananSysVersionRoleService;
     private final AnanVersionRolePermissionService versionRolePermissionService;
+
     public AnanVersionRoleController(AnanVersionRoleService ananSysVersionRoleService, AnanVersionRolePermissionService versionRolePermissionService) {
         this.ananSysVersionRoleService = ananSysVersionRoleService;
         this.versionRolePermissionService = versionRolePermissionService;
     }
 
     @ApiOperation("根据角色ID获取版本权限")
-    @ApiImplicitParam(name = "roleId", value = "版本ID,取值于AnanVersionRoleEntity.id")
+    @ApiImplicitParam(name = "roleId", value = "版本ID,取值于AnanVersionRoleEntity.id", required = true, dataTypeClass = Long.class, paramType = "path")
     @RequestMapping(value = "/permissions/{roleId}", method = {RequestMethod.GET, RequestMethod.POST})
     public ResponseEntity<List<AnanVersionRolePermissionEntity>> permissions(@PathVariable Long roleId) {
         return ResponseEntity.ok(versionRolePermissionService.findByRoleId(roleId));
@@ -50,8 +51,8 @@ public class AnanVersionRoleController implements ISimpleController<AnanVersionR
 
     @ApiOperation(value = "根据版本ID更新版本权限", notes = "根据版本ID更新版本权限，此操作将先删除原权限，再新增新权限")
     @ApiImplicitParams({
-//            @ApiImplicitParam(name = "entities", value = "版本权限集合(List<AnanVersionRolePermissionEntity>)"),
-            @ApiImplicitParam(name = "roleId", value = "版本ID,取值于AnanVersionRoleEntity.id")
+            @ApiImplicitParam(name = "entities", value = "版本权限集合(List<AnanVersionRolePermissionEntity>)", required = true, dataTypeClass = List.class, paramType = "body"),
+            @ApiImplicitParam(name = "roleId", value = "版本ID,取值于AnanVersionRoleEntity.id", required = true, dataTypeClass = Long.class, paramType = "path")
     })
     @PutMapping(value = "/permissions/{roleId}")
     public ResponseEntity<Boolean> permissions(@RequestBody List<AnanVersionRolePermissionUpdateDto> entities,

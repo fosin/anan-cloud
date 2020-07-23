@@ -1,35 +1,5 @@
 version: "3"
 services:
-#  nacos-0:
-#    image: nacos/nacos-server:1.1.4
-#    container_name: nacos-0
-#    hostname: nacos-0
-#    environment:
-#      - TZ=Asia/Shanghai
-#      - PREFER_HOST_MODE=hostname
-#      - MODE=standalone
-#      - SPRING_DATASOURCE_PLATFORM=mysql
-#      - MYSQL_MASTER_SERVICE_HOST=mysql-leader
-#      - MYSQL_MASTER_SERVICE_PORT=3306
-#      - MYSQL_MASTER_SERVICE_DB_NAME=nacos
-#      - MYSQL_MASTER_SERVICE_USER=nacos
-#      - MYSQL_MASTER_SERVICE_PASSWORD=local
-#      - MYSQL_SLAVE_SERVICE_HOST=mysql-follower
-#      - MYSQL_SLAVE_SERVICE_PORT=3306
-#      - JVM_XMS=512M
-#      - JVM_XMX=512M
-#      - JVM_XMN=256M
-#    volumes:
-#      -  /root/deploy/nacos/logs/:/home/nacos/logs
-##      -  /root/deploy/nacos/custom.properties:/home/nacos/init.d/custom.properties
-#    ports:
-#      - "8848:8848"
-#      - "9555:9555"
-#    depends_on:
-#      - mysql-leader
-#      - mysql-follower
-#    networks:
-#      - anan-bridge
   nacos-0:
     image: nacos/nacos-server:latest
     container_name: nacos-0

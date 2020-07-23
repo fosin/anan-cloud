@@ -56,9 +56,11 @@ public class ApplicationController {
     @ApiOperation(value = "根据服务名称获取对应实例管理web地址", notes = "获取当前注册到Eureka注册中心的实例地址")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "serviceId",
-                    value = "注册Eureka注册中心的服务名称，一般等于spring.application.name"),
+                    value = "注册Eureka注册中心的服务名称，一般等于spring.application.name",
+                    required = true, dataTypeClass = String.class,paramType = "query"),
             @ApiImplicitParam(name = "path",
-                    value = "当前服务节点管理端点的url")
+                    value = "当前服务节点管理端点的url",
+                    required = false, dataTypeClass = String.class,paramType = "query")
     })
     @RequestMapping(value = "/ui/url", method = {RequestMethod.POST})
     public ResponseEntity<PageURI> uiUrl(@RequestParam String serviceId, @RequestParam(value = "path", required = false) String path) {

@@ -23,38 +23,38 @@ public class AnanPayOrderCreateDto implements Serializable {
     private static final long serialVersionUID = -16509988727597750L;
 
     @NotNull(message = "订单机构" + "{javax.validation.constraints.NotNull.message}")
-    @ApiModelProperty(value = "订单机构", example = "Long", required = true)
+    @ApiModelProperty(value = "订单机构", required = true)
     private Long organizId;
 
     @NotNull(message = "订单用户" + "{javax.validation.constraints.NotNull.message}")
-    @ApiModelProperty(value = "订单用户", example = "Long", required = true)
+    @ApiModelProperty(value = "订单用户", required = true)
     private Long userId;
 
     @NotNull(message = "版本ID" + "{javax.validation.constraints.NotNull.message}")
-    @ApiModelProperty(value = "版本ID", example = "Long", required = true)
+    @ApiModelProperty(value = "版本ID", required = true)
     private Long versionId;
 
     @NotNull(message = "版本金额" + "{javax.validation.constraints.NotNull.message}")
-    @ApiModelProperty(value = "版本金额", example = "Double", required = true)
+    @ApiModelProperty(value = "版本金额", required = true)
     private Double money;
 
-    @ApiModelProperty(value = "订单日期", example = "Date", required = true)
+    @ApiModelProperty(value = "订单日期", required = true)
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
     private Date orderTime;
 
     @NotNull(message = "订单状态：0=新建，1=支付，2=取消，3=作废" + "{javax.validation.constraints.NotNull.message}")
-    @ApiModelProperty(value = "订单状态：0=新建，1=支付，2=取消，3=作废", example = "Integer", required = true)
+    @ApiModelProperty(value = "订单状态：0=新建，1=支付，2=取消，3=作废", required = true)
     private Integer status;
 
-    @ApiModelProperty(value = "支付日期", example = "Date")
+    @ApiModelProperty(value = "支付日期")
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
     private Date payTime;
 
-    @ApiModelProperty(value = "取消日期", example = "Date")
+    @ApiModelProperty(value = "取消日期")
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
     private Date cancleTime;
 
-    @ApiModelProperty(value = "作废日期", example = "Date")
+    @ApiModelProperty(value = "作废日期")
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
     private Date invalidTime;
 

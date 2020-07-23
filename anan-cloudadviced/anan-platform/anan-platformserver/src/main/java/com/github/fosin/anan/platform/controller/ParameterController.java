@@ -10,6 +10,7 @@ import com.github.fosin.anan.pojo.dto.request.AnanParameterUpdateDto;
 import com.github.fosin.anan.platformapi.entity.AnanParameterEntity;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 
 import org.springframework.http.ResponseEntity;
@@ -32,20 +33,40 @@ public class ParameterController implements ISimpleController<AnanParameterEntit
 
     @ApiOperation(value = "获取指定机构或指定用户的参数整条数据", notes = "type=1则是机构参数(机构参数系统会从当前机构向逐级上级机构查找该参数),type=2则是用户参数,如果缓存和数据库中都没有找到参数，返回null值")
     @RequestMapping(value = "/entity/nearest", method = {RequestMethod.POST, RequestMethod.GET})
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "type", value = "字典类型,取值于AnanParameterEntity.type",
+                    required = true, dataTypeClass = Integer.class, paramType = "query"),
+            @ApiImplicitParam(name = "scope", value = "字典作用域,取值于AnanParameterEntity.scope",
+                    required = true, dataTypeClass = String.class, paramType = "query"),
+            @ApiImplicitParam(name = "name", value = "字典名称,取值于AnanParameterEntity.name",
+                    required = true, dataTypeClass = String.class, paramType = "query")
+    })
     public ResponseEntity<AnanParameterEntity> getNearestParameter(@RequestParam("type") Integer type,
-                                                                   @RequestParam("scope") String scope, @RequestParam("name") String name) {
+                                                                   @RequestParam("scope") String scope,
+                                                                   @RequestParam("name") String name) {
         return ResponseEntity.ok(parameterService.getNearestParameter(type, scope, name));
     }
 
     @ApiOperation(value = "获取指定机构或指定用户的参数整条数据", notes = "type=1则是机构参数,只找当前机构,type=2则是用户参数,如果缓存和数据库中都没有找到参数，返回null值")
     @RequestMapping(value = "/entity", method = {RequestMethod.POST, RequestMethod.GET})
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "type", value = "字典类型,取值于AnanParameterEntity.type",
+                    required = true, dataTypeClass = Integer.class, paramType = "query"),
+            @ApiImplicitParam(name = "scope", value = "字典作用域,取值于AnanParameterEntity.scope",
+                    required = true, dataTypeClass = String.class, paramType = "query"),
+            @ApiImplicitParam(name = "name", value = "字典名称,取值于AnanParameterEntity.name",
+                    required = true, dataTypeClass = String.class, paramType = "query")
+    })
     public ResponseEntity<AnanParameterEntity> getParameter(@RequestParam("type") Integer type,
-                                                            @RequestParam("scope") String scope, @RequestParam("name") String name) {
+                                                            @RequestParam("scope") String scope,
+                                                            @RequestParam("name") String name) {
         return ResponseEntity.ok(parameterService.getParameter(type, scope, name));
     }
 
     @ApiOperation(value = "获取或创建指定机构或指定用户参数值", notes = "type=1则是机构参数(机构参数系统会从当前机构向逐级上级机构查找该参数),type=2则是用户参数，如果缓存和数据库中都没有找到参数，则自动创建一个无域参数")
     @RequestMapping(value = "/value", method = {RequestMethod.POST, RequestMethod.GET})
+    @ApiImplicitParam(name = "id", value = "参数ID,取值于AnanParameterEntity.id",
+            required = true, dataTypeClass = AnanParameterRetrieveDto.class, paramType = "body")
     public ResponseEntity<String> getOrCreateParameter(@RequestBody AnanParameterRetrieveDto retrieveDto) {
         int type = retrieveDto.getType();
         String scope = retrieveDto.getScope();
@@ -56,7 +77,8 @@ public class ParameterController implements ISimpleController<AnanParameterEntit
     }
 
     @ApiOperation(value = "根据参数ID刷新参数缓存信息", notes = "该方法是幂等性的，可以重复调用")
-    @ApiImplicitParam(name = "id", value = "参数ID,取值于AnanParameterEntity.id")
+    @ApiImplicitParam(name = "id", value = "参数ID,取值于AnanParameterEntity.id",
+            required = true, dataTypeClass = Long.class, paramType = "path")
     @RequestMapping(value = "/apply/{id}", method = {RequestMethod.POST, RequestMethod.GET})
     public ResponseEntity<Boolean> apply(@PathVariable("id") Long id) {
         return ResponseEntity.ok(parameterService.applyChange(id));

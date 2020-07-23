@@ -21,7 +21,7 @@ import java.util.List;
  */
 @Service
 public class PermissionServiceImpl implements PermissionService {
-    private PermissionRepository permissionRepository;
+    private final PermissionRepository permissionRepository;
 
     public PermissionServiceImpl(PermissionRepository permissionRepository) {
         this.permissionRepository = permissionRepository;

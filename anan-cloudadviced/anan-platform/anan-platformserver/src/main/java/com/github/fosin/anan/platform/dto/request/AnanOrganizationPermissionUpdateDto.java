@@ -20,15 +20,15 @@ public class AnanOrganizationPermissionUpdateDto implements Serializable {
     private static final long serialVersionUID = 186440811228040786L;
 
     @NotNull(message = "机构权限ID" + "{javax.validation.constraints.NotNull.message}")
-    @ApiModelProperty(value = "机构权限ID, 主键", example = "Long", required = true)
+    @ApiModelProperty(value = "机构权限ID, 主键", required = true)
     private Long id;
 
     @NotNull(message = "机构ID" + "{javax.validation.constraints.NotNull.message}")
-    @ApiModelProperty(value = "机构ID", example = "Long", required = true)
+    @ApiModelProperty(value = "机构ID", required = true)
     private Long organizId;
 
     @NotNull(message = "权限ID" + "{javax.validation.constraints.NotNull.message}")
-    @ApiModelProperty(value = "权限ID", example = "Long", required = true)
+    @ApiModelProperty(value = "权限ID", required = true)
     private Long permissionId;
 
 }

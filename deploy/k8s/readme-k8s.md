@@ -40,7 +40,7 @@ sysctl -p /etc/sysctl.d/kubernetes.conf
 #sysctl: cannot stat /proc/sys/net/bridge/bridge-nf-call-ip6tables: No such file or directory
 #sysctl: cannot stat /proc/sys/net/bridge/bridge-nf-call-iptables: No such file or directory
 
-解决方法：
+解决方法
 [root@localhost ~]# modprobe br_netfilter
 [root@localhost ~]# sysctl -p
 net.bridge.bridge-nf-call-ip6tables = 1
@@ -163,6 +163,10 @@ EOF
 
 # 创建目录存放docker配置文件
 mkdir -p /etc/systemd/system/docker.service.d
+
+# 开启Docker远程端口2375(按需选做)
+ -H tcp://0.0.0.0:2375
+sed -i 's/usr\/bin\/dockerd -H/\/usr\/bin\/dockerd -H tcp:\/\/0.0.0.0:2375 -H' /usr/lib/systemd/system/docker.service
 
 # 重启docker服务
 systemctl daemon-reload && systemctl restart docker && systemctl enable docker

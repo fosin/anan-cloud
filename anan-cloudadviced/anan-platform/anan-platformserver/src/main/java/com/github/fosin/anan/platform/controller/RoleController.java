@@ -45,7 +45,8 @@ public class RoleController implements ISimpleController<AnanRoleEntity, Long, A
     }
 
     @ApiOperation("根据角色ID获取角色权限")
-    @ApiImplicitParam(name = "roleId", value = "角色ID,取值于AnanRoleEntity.id")
+    @ApiImplicitParam(name = "roleId", value = "角色ID,取值于AnanRoleEntity.id",
+            required = true, dataTypeClass = Long.class, paramType = "path")
     @RequestMapping(value = "/permissions/{roleId}", method = {RequestMethod.GET, RequestMethod.POST})
     public ResponseEntity<List<AnanRolePermissionEntity>> permissions(@PathVariable Long roleId) {
         return ResponseEntity.ok(rolePermissionService.findByRoleId(roleId));
@@ -53,8 +54,10 @@ public class RoleController implements ISimpleController<AnanRoleEntity, Long, A
 
     @ApiOperation(value = "根据角色ID更新角色权限", notes = "根据角色ID更新角色权限，此操作将先删除原权限，再新增新权限")
     @ApiImplicitParams({
-//            @ApiImplicitParam(name = "entities", value = "角色权限集合(List<AnanRolePermissionEntity>)"),
-            @ApiImplicitParam(name = "roleId", value = "角色ID,取值于AnanRoleEntity.id")
+            @ApiImplicitParam(name = "entities", value = "角色权限集合(List<AnanRolePermissionEntity>)",
+                    required = true, dataTypeClass = List.class, paramType = "body"),
+            @ApiImplicitParam(name = "roleId", value = "角色ID,取值于AnanRoleEntity.id",
+                    required = true, dataTypeClass = Long.class, paramType = "path")
     })
     @PutMapping(value = "/permissions/{roleId}")
     public ResponseEntity<Collection<AnanRolePermissionEntity>> permissions(@RequestBody List<AnanRolePermissionUpdateDto> entities,
@@ -63,7 +66,8 @@ public class RoleController implements ISimpleController<AnanRoleEntity, Long, A
     }
 
     @ApiOperation("根据角色唯一id查找该角色所有用户信息")
-    @ApiImplicitParam(name = "roleId", value = "角色ID,取值于AnanRoleEntity.id")
+    @ApiImplicitParam(name = "roleId", value = "角色ID,取值于AnanRoleEntity.id",
+            required = true, dataTypeClass = Long.class, paramType = "path")
     @RequestMapping(value = "/users/{roleId}", method = {RequestMethod.GET, RequestMethod.POST})
     public ResponseEntity<List<AnanUserEntity>> getRoleUsers(@PathVariable("roleId") Long roleId) {
         return ResponseEntity.ok(userService.findRoleUsersByRoleId(roleId));
@@ -72,8 +76,10 @@ public class RoleController implements ISimpleController<AnanRoleEntity, Long, A
 
     @ApiOperation(value = "根据角色ID更新角色拥有的用户", notes = "更新角色拥有的用户，此操作将先删除原用户集合，再新增新用户集合")
     @ApiImplicitParams({
-//            @ApiImplicitParam(name = "entities", value = "角色用户集合(List<AnanUserRoleEntity>)"),
-            @ApiImplicitParam(name = "roleId", value = "角色ID,取值于AnanRoleEntity.id"),
+            @ApiImplicitParam(name = "entities", value = "角色用户集合(List<AnanUserRoleEntity>)",
+                    required = true, dataTypeClass = List.class, paramType = "body"),
+            @ApiImplicitParam(name = "roleId", value = "角色ID,取值于AnanRoleEntity.id",
+                    required = true, dataTypeClass = Long.class, paramType = "path"),
     })
     @PutMapping(value = "/users/{roleId}")
     public ResponseEntity<List<AnanUserRoleEntity>> putUsers(@RequestBody List<AnanUserRoleCreateDto> entities,
@@ -82,22 +88,30 @@ public class RoleController implements ISimpleController<AnanRoleEntity, Long, A
     }
 
     @ApiOperation("根据用户唯一id查找用户目前不拥有的所有角色信息")
-    @ApiImplicitParam(name = "roleId", value = "角色ID,取值于AnanRoleEntity.id")
+    @ApiImplicitParam(name = "roleId", value = "角色ID,取值于AnanRoleEntity.id",
+            required = true, dataTypeClass = Long.class, paramType = "path")
     @RequestMapping(value = "/otherUsers/{roleId}", method = {RequestMethod.POST})
     public ResponseEntity<List<AnanUserEntity>> getOtherUsers(@PathVariable("roleId") Long roleId) throws AnanControllerException {
         return ResponseEntity.ok(userService.findOtherUsersByRoleId(roleId));
     }
 
     @ApiOperation("根据机构ID获取该机构及下级机构的角色分页列表")
-    @ApiImplicitParam(name = "organizId", value = "机构ID")
     @RequestMapping(value = "/pageList/organizId/{organizId}", method = {RequestMethod.POST})
-    public ResponseEntity<Result> findAllByOrganizId(@PathVariable("organizId") Long organizId, @RequestBody PageModule pageModule) throws AnanControllerException {
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "pageModule", value = "角色用户集合(List<AnanUserRoleEntity>)",
+                    required = true, dataTypeClass = PageModule.class, paramType = "body"),
+            @ApiImplicitParam(name = "organizId", value = "机构ID",
+                    required = true, dataTypeClass = Long.class, paramType = "path")
+    })
+    public ResponseEntity<Result> findAllByOrganizId(@PathVariable("organizId") Long organizId,
+                                                     @RequestBody PageModule pageModule) throws AnanControllerException {
         return ResponseEntity.ok(roleService.findAllByOrganizId(organizId, pageModule));
     }
 
     @PostMapping({"/childList/organizId/{organizId}"})
     @ApiOperation("根据机构ID查询该机构及子机构的所有角色")
-    @ApiImplicitParam(name = "organizId", value = "机构ID")
+    @ApiImplicitParam(name = "organizId", value = "机构ID",
+            required = true, dataTypeClass = Long.class, paramType = "path")
     public ResponseEntity<List<AnanRoleEntity>> findAllByOrganizId(@PathVariable("organizId") Long organizId) {
         return ResponseEntity.ok(roleService.findAllByOrganizId(organizId));
     }

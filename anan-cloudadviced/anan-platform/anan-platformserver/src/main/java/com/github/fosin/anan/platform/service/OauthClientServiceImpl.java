@@ -46,7 +46,7 @@ public class OauthClientServiceImpl implements OauthClientService {
         Assert.notNull(entity, "传入了空对象!");
         String id = entity.getClientId();
         Optional<OauthClientDetailsEntity> entityOptional = oauthClientRepository.findById(id);
-        Assert.isTrue(entityOptional.isEmpty(), "该数据已存在，请重新设置客户端标识以区分");
+        Assert.isTrue(entityOptional.isPresent(), "该数据已存在，请重新设置客户端标识以区分");
         entity.setClientSecret(passwordEncoder.encode(entity.getClientSecret()));
         return oauthClientRepository.save(entity);
     }

@@ -46,39 +46,9 @@
     2.3.x-SNAPSHOT      2.1.x-SNAPSHOT       3.x.x
 # 搭建环境
 ## 1、本地开发环境local设置
-    基于docker的运行环境都是在CentOS7上部署得，如果是其他操作系统需要自行研究，理论上也是没有问题得。
 ### 1.1、安装docker、docker-compose并配置镜像加速
 #### 1.1.1、安装docker
-    # step 1: 安装必要的一些系统工具
-    sudo yum install -y yum-utils device-mapper-persistent-data lvm2
-    # Step 2: 添加软件源信息
-    sudo yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
-    # Step 3: 更新并安装 Docker-CE
-    sudo yum makecache fast
-    sudo yum -y install docker-ce
-    # Step 4: 开启Docker服务
-    sudo systemctl start docker
-    # Step 5: 开启开机Docker服务自动启动
-    sudo systemctl enable docker    
-    
-    # 注意：
-    # 官方软件源默认启用了最新的软件，您可以通过编辑软件源的方式获取各个版本的软件包。例如官方并没有将测试版本的软件源置为可用，你可以通过以下方式开启。同理可以开启各种测试版本等。
-    # vim /etc/yum.repos.d/docker-ce.repo
-    #   将 [docker-ce-test] 下方的 enabled=0 修改为 enabled=1
-    #
-    # 安装指定版本的Docker-CE:
-    # Step 1: 安装指定版本的docker-ce-selinux
-    # yum install https://download.docker.com/linux/centos/7/x86_64/stable/Packages/docker-ce-selinux-17.03.2.ce-1.el7.centos.noarch.rpm
-    # Step 2: 查找Docker-CE的版本:
-    # yum list docker-ce.x86_64 --showduplicates | sort -r
-    #   Loading mirror speeds from cached hostfile
-    #   Loaded plugins: branch, fastestmirror, langpacks
-    #   docker-ce.x86_64            17.03.1.ce-1.el7.centos            docker-ce-stable
-    #   docker-ce.x86_64            17.03.1.ce-1.el7.centos            @docker-ce-stable
-    #   docker-ce.x86_64            17.03.0.ce-1.el7.centos            docker-ce-stable
-    #   Available Packages
-    # Step 3: 安装指定版本的Docker-CE: (VERSION 例如上面的 17.03.0.ce.1-1.el7.centos)
-    # sudo yum -y install docker-ce-[VERSION]
+    参考deploy/readme-docker.md
 #### 1.1.2、安装docker-compose(按需安装注意版本更新和匹配)
     sudo curl -L https://github.com/docker/compose/releases/download/1.25.4/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
     sudo chmod +x /usr/local/bin/docker-compose

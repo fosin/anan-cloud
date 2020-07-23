@@ -1,14 +1,18 @@
 package com.github.fosin.anan.platform.entity;
 
-import java.util.Date;
+import com.github.fosin.anan.jpa.entity.AbstractIdJpaEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.DynamicUpdate;
-import javax.persistence.*;
+
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.io.Serializable;
-import lombok.Data;
-import com.github.fosin.anan.jpa.entity.AbstractIdJpaEntity;
+import java.util.Date;
 
 /**
  * 系统支付发票表(AnanPayInvoice)实体类
@@ -43,7 +47,7 @@ public class AnanPayInvoiceEntity  extends AbstractIdJpaEntity<Long> implements 
 
     @Basic
     @ApiModelProperty(value = "操作人", required = true)
-    @Column(name = "crreate_by", nullable = false)
-    private Long crreateBy;
+    @Column(name = "create_by", nullable = false)
+    private Long createBy;
 
 }

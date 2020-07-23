@@ -19,63 +19,63 @@ import com.github.fosin.anan.util.DateTimeUtil;
 @ApiModel(value = "系统版本表查询DTO", description = "表(anan_version)的对应的查询DTO")
 public class AnanVersionRetrieveDto implements Serializable {
     private static final long serialVersionUID = -91727267823167686L;
-    
-    @ApiModelProperty(value = "版本ID, 主键", example = "Long")
+
+    @ApiModelProperty(value = "版本ID, 主键")
     private Long id;
 
-    @ApiModelProperty(value = "版本名称", example = "String")
+    @ApiModelProperty(value = "版本名称")
     private String name;
 
-    @ApiModelProperty(value = "版本类型：0=收费版 1=免费版 2=开发版", example = "Integer")
+    @ApiModelProperty(value = "版本类型：0=收费版 1=免费版 2=开发版")
     private Integer type;
 
-    @ApiModelProperty(value = "版本价格", example = "Double")
+    @ApiModelProperty(value = "版本价格")
     private Double price;
 
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
-    @ApiModelProperty(value = "活动开始日期", example = "Date")
+    @ApiModelProperty(value = "活动开始日期")
     private Date beginTime;
 
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
-    @ApiModelProperty(value = "活动结束日期", example = "Date")
+    @ApiModelProperty(value = "活动结束日期")
     private Date endTime;
 
-    @ApiModelProperty(value = "有效期：一般按天计算", example = "Integer")
+    @ApiModelProperty(value = "有效期：一般按天计算")
     private Integer validity;
 
-    @ApiModelProperty(value = "到期后保护期", example = "Integer")
+    @ApiModelProperty(value = "到期后保护期")
     private Integer protectDays;
 
-    @ApiModelProperty(value = "最大机构数：0=无限制 n=限制数", example = "Integer")
+    @ApiModelProperty(value = "最大机构数：0=无限制 n=限制数")
     private Integer maxOrganizs;
 
-    @ApiModelProperty(value = "最大机构数：0=无限制 n=限制数", example = "Integer")
+    @ApiModelProperty(value = "最大机构数：0=无限制 n=限制数")
     private Integer maxUsers;
 
-    @ApiModelProperty(value = "是否试用：0=不试用 1=试用", example = "Integer")
+    @ApiModelProperty(value = "是否试用：0=不试用 1=试用")
     private Integer tryout;
 
-    @ApiModelProperty(value = "试用天数", example = "Integer")
+    @ApiModelProperty(value = "试用天数")
     private Integer tryoutDays;
 
-    @ApiModelProperty(value = "启用状态：0=启用，1=禁用", example = "Integer")
+    @ApiModelProperty(value = "启用状态：0=启用，1=禁用")
     private Integer status;
 
-    @ApiModelProperty(value = "版本描述", example = "String")
+    @ApiModelProperty(value = "版本描述")
     private String description;
 
-    @ApiModelProperty(value = "创建人，创建人：该值由后台自动维护，取值于系统用户表的编号", example = "Long")
+    @ApiModelProperty(value = "创建人，创建人：该值由后台自动维护，取值于系统用户表的编号")
     private Long createBy;
 
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
-    @ApiModelProperty(value = "创建日期", example = "Date")
+    @ApiModelProperty(value = "创建日期")
     private Date createTime;
 
-    @ApiModelProperty(value = "更新人，创建人：该值由后台自动维护，取值于系统用户表的编号", example = "Long")
+    @ApiModelProperty(value = "更新人，创建人：该值由后台自动维护，取值于系统用户表的编号")
     private Long updateBy;
 
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
-    @ApiModelProperty(value = "更新日期，该值由后台自动维护", example = "Date")
+    @ApiModelProperty(value = "更新日期，该值由后台自动维护")
     private Date updateTime;
 
 }

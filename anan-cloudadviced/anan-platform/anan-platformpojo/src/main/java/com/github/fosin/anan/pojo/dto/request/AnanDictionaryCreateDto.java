@@ -23,14 +23,14 @@ public class AnanDictionaryCreateDto implements Serializable {
     private static final long serialVersionUID = -99315500947021174L;
 
     @NotBlank(message = "字典名称" + "{javax.validation.constraints.NotBlank.message}")
-    @ApiModelProperty(value = "字典名称", example = "String", required = true)
+    @ApiModelProperty(value = "字典名称", required = true)
     private String name;
 
     @NotNull(message = "字典类别" + "{javax.validation.constraints.NotNull.message}")
-    @ApiModelProperty(value = "字典类别，区别字典的大分类，取值于表anan_dictionary.code = 1数据", example = "Integer", required = true)
+    @ApiModelProperty(value = "字典类别，区别字典的大分类，取值于表anan_dictionary.code = 1数据", required = true)
     private Integer type;
 
-    @ApiModelProperty(value = "字典作用域，以字典类别为前提，在字典类别基础上再次细化分类字典", example = "String")
+    @ApiModelProperty(value = "字典作用域，以字典类别为前提，在字典类别基础上再次细化分类字典")
     @Pattern(regexp = RegexUtil.SPECIAL, message = "作用域不能包含特殊字符")
     private String scope;
 

@@ -49,15 +49,18 @@ public class AnanVersionController implements ISimpleController<AnanVersionEntit
     }
 
     @ApiOperation(value = "根据父权限ID获取其孩子数据列表")
-    @ApiImplicitParam(name = "pid", value = "父权限ID,AnanVersionPermissionEntity.id")
     @RequestMapping(value = "/listChild/{pid}", method = {RequestMethod.POST})
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "versionId", required = true, dataTypeClass = Long.class, value = "版本ID,取值于AnanVersionEntity.id", paramType = "query"),
+            @ApiImplicitParam(name = "pid", required = true, dataTypeClass = Long.class, value = "父权限ID,AnanVersionPermissionEntity.id", paramType = "path")
+    })
     public ResponseEntity<List<AnanPermissionEntity>> getListChild(@PathVariable Long pid, @RequestParam Long versionId) {
         List<AnanPermissionEntity> list = permissionService.findByPid(pid, versionId);
         return ResponseEntity.ok(list);
     }
 
     @ApiOperation("根据版本ID获取版本权限")
-    @ApiImplicitParam(name = "versionId", value = "版本ID,取值于AnanRoleEntity.id")
+    @ApiImplicitParam(name = "versionId", required = true, dataTypeClass = Long.class, value = "版本ID,取值于AnanVersionEntity.id", paramType = "path")
     @RequestMapping(value = "/permissions/{versionId}", method = {RequestMethod.GET, RequestMethod.POST})
     public ResponseEntity<List<AnanVersionPermissionEntity>> permissions(@PathVariable Long versionId) {
         return ResponseEntity.ok(versionPermissionService.findByVersionId(versionId));
@@ -65,8 +68,9 @@ public class AnanVersionController implements ISimpleController<AnanVersionEntit
 
     @ApiOperation(value = "根据版本ID更新版本权限", notes = "根据版本ID更新版本权限，此操作将先删除原权限，再新增新权限")
     @ApiImplicitParams({
-//            @ApiImplicitParam(name = "entities", value = "版本权限集合(List<AnanVersionPermissionEntity>)"),
-            @ApiImplicitParam(name = "versionId", value = "版本ID,取值于AnanVersionEntity.id")
+            @ApiImplicitParam(name = "entities", required = true, dataTypeClass = List.class, value = "版本权限集合(List<AnanVersionPermissionEntity>)", paramType = "body"),
+            @ApiImplicitParam(name = "versionId", required = true, dataTypeClass = Long.class, value = "版本ID,取值于AnanVersionEntity.id", paramType = "path")
+
     })
     @PutMapping(value = "/permissions/{versionId}")
     public ResponseEntity<Boolean> permissions(@RequestBody List<AnanVersionPermissionUpdateDto> entities,

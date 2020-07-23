@@ -1,4 +1,5 @@
 ### 获取token
+
 POST {{host}}:{{port}}/gateway/auth/oauth/token?username={{username}}&password={{password}}&grant_type=password
 Accept: */*
 Cache-Control: no-cache
