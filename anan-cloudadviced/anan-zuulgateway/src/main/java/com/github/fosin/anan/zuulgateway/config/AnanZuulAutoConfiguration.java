@@ -4,7 +4,6 @@ import com.github.fosin.anan.oauth2.resource.AnanResourceServerProperties;
 import com.github.fosin.anan.swagger.config.AnanSwaggerResourcesProvider;
 import com.github.fosin.anan.swagger.spring4all.SwaggerProperties;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerInterceptor;
@@ -32,7 +31,6 @@ public class AnanZuulAutoConfiguration {
 
     @Bean
     @RefreshScope
-    @ConfigurationProperties("zuul")
     @Primary
     public ZuulProperties zuulProperties() {
         return new ZuulProperties();
