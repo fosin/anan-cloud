@@ -1,6 +1,6 @@
 package com.github.fosin.anan.platform.config;
 
-import com.github.fosin.anan.oauth2.resource.AnanResourceServerProperties;
+import com.github.fosin.anan.security.config.AnanSecurityProperties;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
@@ -41,7 +41,7 @@ public class AnanPlatformAutoConfiguration {
     @Bean
     @RefreshScope
     @Primary
-    public AnanResourceServerProperties ananResourceServerProperties() {
-        return new AnanResourceServerProperties();
+    public AnanSecurityProperties ananSecurityProperties() {
+        return new AnanSecurityProperties();
     }
 }

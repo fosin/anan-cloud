@@ -9,7 +9,7 @@ import com.github.fosin.anan.platform.repository.DictionaryDetailRepository;
 import com.github.fosin.anan.platform.service.inter.DictionaryDetailService;
 import com.github.fosin.anan.platform.service.inter.UserService;
 import com.github.fosin.anan.platformapi.constant.SystemConstant;
-import com.github.fosin.anan.platformapi.constant.TableNameConstant;
+import com.github.fosin.anan.platformapi.constant.RedisConstant;
 import com.github.fosin.anan.platformapi.entity.AnanDictionaryDetailEntity;
 import com.github.fosin.anan.platformapi.entity.AnanUserEntity;
 import com.github.fosin.anan.platformapi.util.LoginUserUtil;
@@ -57,7 +57,7 @@ public class DictionaryDetailServiceImpl implements DictionaryDetailService {
     }
 
     @Override
-    @CacheEvict(value = TableNameConstant.ANAN_DICTIONARY_DETAIL, key = "#result.dictionaryId")
+    @CacheEvict(value = RedisConstant.ANAN_DICTIONARY_DETAIL, key = "#result.dictionaryId")
     public AnanDictionaryDetailEntity create(AnanDictionaryDetailCreateDto entity) {
         Assert.notNull(entity, "传入的创建数据实体对象不能为空!");
         AnanDictionaryDetailEntity createEntiy = new AnanDictionaryDetailEntity();
@@ -66,7 +66,7 @@ public class DictionaryDetailServiceImpl implements DictionaryDetailService {
     }
 
     @Override
-    @CacheEvict(value = TableNameConstant.ANAN_DICTIONARY_DETAIL, key = "#entity.dictionaryId")
+    @CacheEvict(value = RedisConstant.ANAN_DICTIONARY_DETAIL, key = "#entity.dictionaryId")
     public AnanDictionaryDetailEntity update(AnanDictionaryDetailUpdateDto entity) {
         Assert.notNull(entity, "传入的更新数据实体对象不能为空!");
         Long id = entity.getId();
@@ -97,19 +97,19 @@ public class DictionaryDetailServiceImpl implements DictionaryDetailService {
         Assert.notNull(entity, "传入的ID找不到数据!");
         isSuperUser(entity);
 
-        ananCacheManger.evict(TableNameConstant.ANAN_DICTIONARY_DETAIL, entity.getDictionaryId() + "");
+        ananCacheManger.evict(RedisConstant.ANAN_DICTIONARY_DETAIL, entity.getDictionaryId() + "");
         dictionaryDetailRepository.deleteById(id);
         try {
             Thread.sleep(500);
         } catch (InterruptedException e) {
             throw new AnanServiceException(e);
         }
-        ananCacheManger.evict(TableNameConstant.ANAN_DICTIONARY_DETAIL, entity.getDictionaryId() + "");
+        ananCacheManger.evict(RedisConstant.ANAN_DICTIONARY_DETAIL, entity.getDictionaryId() + "");
         return null;
     }
 
     @Override
-    @CacheEvict(value = TableNameConstant.ANAN_DICTIONARY_DETAIL, key = "#entity.dictionaryId")
+    @CacheEvict(value = RedisConstant.ANAN_DICTIONARY_DETAIL, key = "#entity.dictionaryId")
     public AnanDictionaryDetailEntity deleteByEntity(AnanDictionaryDetailEntity entity) {
         Assert.notNull(entity, "传入了空的对象!");
         isSuperUser(entity);
@@ -159,7 +159,7 @@ public class DictionaryDetailServiceImpl implements DictionaryDetailService {
     }
 
     @Override
-    @Cacheable(value = TableNameConstant.ANAN_DICTIONARY_DETAIL, key = "#dictionaryId")
+    @Cacheable(value = RedisConstant.ANAN_DICTIONARY_DETAIL, key = "#dictionaryId")
     public List<AnanDictionaryDetailEntity> findByDictionaryId(Long dictionaryId) {
         return dictionaryDetailRepository.findByDictionaryId(dictionaryId);
     }

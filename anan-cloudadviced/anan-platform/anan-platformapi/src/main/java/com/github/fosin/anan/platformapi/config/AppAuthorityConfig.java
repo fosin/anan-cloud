@@ -1,10 +1,10 @@
 package com.github.fosin.anan.platformapi.config;
 
-import com.github.fosin.anan.oauth2.config.AnanAuthorityConfig;
-import com.github.fosin.anan.oauth2.dto.AnanAuthorityDto;
 import com.github.fosin.anan.platformapi.constant.ServiceConstant;
-import com.github.fosin.anan.platformapi.service.inter.PermissionFeignService;
 import com.github.fosin.anan.platformapi.entity.AnanPermissionEntity;
+import com.github.fosin.anan.platformapi.service.inter.PermissionFeignService;
+import com.github.fosin.anan.security.config.AnanAuthorityConfig;
+import com.github.fosin.anan.security.resouce.AnanAuthorityDto;
 import com.github.fosin.anan.util.StringUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
@@ -41,17 +41,16 @@ public class AppAuthorityConfig {
             Objects.requireNonNull(entities).forEach(entity -> {
                 if (StringUtil.hasText(entity.getPath())) {
                     String method = entity.getMethod();
-                    HttpMethod[] httpMethods = new HttpMethod[0];
+                    List<HttpMethod> httpMethods = new ArrayList<>();
                     if (StringUtil.hasText(method)) {
                         String[] strings = method.split(",");
-                        httpMethods = new HttpMethod[strings.length];
-                        for (int i = 0; i < strings.length; i++) {
-                            httpMethods[i] = HttpMethod.resolve(strings[i]);
+                        for (String string : strings) {
+                            httpMethods.add(HttpMethod.resolve(string));
                         }
                     }
                     AnanAuthorityDto authorityDto = new AnanAuthorityDto();
                     authorityDto.setPath(entity.getPath());
-                    authorityDto.setMethod(httpMethods);
+                    authorityDto.setMethods(httpMethods);
                     authorityDto.setAuthority(entity.getId() + "");
                     authorityDtos.add(authorityDto);
                 }

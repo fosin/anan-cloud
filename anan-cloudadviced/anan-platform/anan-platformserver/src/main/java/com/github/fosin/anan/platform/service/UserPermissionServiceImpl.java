@@ -4,7 +4,7 @@ import com.github.fosin.anan.core.exception.AnanServiceException;
 import com.github.fosin.anan.jpa.repository.IJpaRepository;
 import com.github.fosin.anan.jpa.service.batch.IUpdateInBatchJpaService;
 import com.github.fosin.anan.platform.service.inter.UserPermissionService;
-import com.github.fosin.anan.platformapi.constant.TableNameConstant;
+import com.github.fosin.anan.platformapi.constant.RedisConstant;
 import com.github.fosin.anan.platformapi.entity.AnanUserPermissionEntity;
 import com.github.fosin.anan.platformapi.repository.UserPermissionRepository;
 import com.github.fosin.anan.pojo.dto.request.AnanUserPermissionUpdateDto;
@@ -41,13 +41,13 @@ public class UserPermissionServiceImpl implements UserPermissionService {
     }
 
     @Override
-    @Cacheable(value = TableNameConstant.ANAN_USER_PERMISSION, key = "T(String).valueOf(#userId).concat('-').concat(T(String).valueOf(#organizId))")
+    @Cacheable(value = RedisConstant.ANAN_USER_PERMISSION, key = "T(String).valueOf(#userId).concat('-').concat(T(String).valueOf(#organizId))")
     public List<AnanUserPermissionEntity> findByUserIdAndOrganizId(Long userId, Long organizId) {
         return userPermissionRepository.findByUserIdAndOrganizId(userId, organizId);
     }
 
     @Override
-    @Cacheable(value = TableNameConstant.ANAN_USER_PERMISSION, key = "#userId")
+    @Cacheable(value = RedisConstant.ANAN_USER_PERMISSION, key = "#userId")
     public List<AnanUserPermissionEntity> findByUserId(Long userId) {
         return userPermissionRepository.findByUserId(userId);
     }
@@ -65,7 +65,7 @@ public class UserPermissionServiceImpl implements UserPermissionService {
         }
         Assert.isTrue(needDelUsers.size() != 0, "没有找到需要删除数据!");
         for (Long userId : needDelUsers) {
-            ananCacheManger.evict(TableNameConstant.ANAN_USER_PERMISSION, userId + "");
+            ananCacheManger.evict(RedisConstant.ANAN_USER_PERMISSION, userId + "");
         }
         userPermissionRepository.deleteInBatch(entities);
         try {
@@ -74,14 +74,14 @@ public class UserPermissionServiceImpl implements UserPermissionService {
             throw new AnanServiceException(e);
         }
         for (Long userId : needDelUsers) {
-            ananCacheManger.evict(TableNameConstant.ANAN_USER_PERMISSION, userId + "");
+            ananCacheManger.evict(RedisConstant.ANAN_USER_PERMISSION, userId + "");
         }
     }
 
     @Override
     @Caching(
             evict = {
-                    @CacheEvict(value = TableNameConstant.ANAN_USER_PERMISSION, key = "#userId")
+                    @CacheEvict(value = RedisConstant.ANAN_USER_PERMISSION, key = "#userId")
             }
     )
     @Transactional

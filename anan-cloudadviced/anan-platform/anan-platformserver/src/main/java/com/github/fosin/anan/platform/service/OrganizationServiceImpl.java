@@ -6,7 +6,7 @@ import com.github.fosin.anan.model.result.Result;
 import com.github.fosin.anan.model.result.ResultUtils;
 import com.github.fosin.anan.platform.repository.OrganizationRepository;
 import com.github.fosin.anan.platform.service.inter.OrganizationService;
-import com.github.fosin.anan.platformapi.constant.TableNameConstant;
+import com.github.fosin.anan.platformapi.constant.RedisConstant;
 import com.github.fosin.anan.pojo.dto.request.AnanOrganizationCreateDto;
 import com.github.fosin.anan.pojo.dto.request.AnanOrganizationUpdateDto;
 import com.github.fosin.anan.platformapi.entity.AnanOrganizationEntity;
@@ -44,7 +44,7 @@ public class OrganizationServiceImpl implements OrganizationService {
     }
 
     @Override
-    @CachePut(value = TableNameConstant.ANAN_ORGANIZATION, key = "#result.id")
+    @CachePut(value = RedisConstant.ANAN_ORGANIZATION, key = "#result.id")
     public AnanOrganizationEntity create(AnanOrganizationCreateDto entity) {
         Assert.notNull(entity, "传入的创建数据实体对象不能为空!");
         AnanOrganizationEntity createEntity = new AnanOrganizationEntity();
@@ -61,7 +61,7 @@ public class OrganizationServiceImpl implements OrganizationService {
     }
 
     @Override
-    @CachePut(value = TableNameConstant.ANAN_ORGANIZATION, key = "#entity.id")
+    @CachePut(value = RedisConstant.ANAN_ORGANIZATION, key = "#entity.id")
     public AnanOrganizationEntity update(AnanOrganizationUpdateDto entity) {
         Assert.notNull(entity, "无效的更新数据");
         Long id = entity.getId();
@@ -79,13 +79,13 @@ public class OrganizationServiceImpl implements OrganizationService {
     }
 
     @Override
-    @Cacheable(value = TableNameConstant.ANAN_ORGANIZATION, key = "#id")
+    @Cacheable(value = RedisConstant.ANAN_ORGANIZATION, key = "#id")
     public AnanOrganizationEntity findById(Long id) {
         return organizationRepository.findById(id).orElse(null);
     }
 
     @Override
-    @CacheEvict(value = TableNameConstant.ANAN_ORGANIZATION, key = "#id")
+    @CacheEvict(value = RedisConstant.ANAN_ORGANIZATION, key = "#id")
     public AnanOrganizationEntity deleteById(Long id) {
         Assert.notNull(id, "传入了空ID!");
         List<AnanOrganizationEntity> entities = findByPid(id);
@@ -95,7 +95,7 @@ public class OrganizationServiceImpl implements OrganizationService {
     }
 
     @Override
-    @CacheEvict(value = TableNameConstant.ANAN_ORGANIZATION, key = "#entity.id")
+    @CacheEvict(value = RedisConstant.ANAN_ORGANIZATION, key = "#entity.id")
     public AnanOrganizationEntity deleteByEntity(AnanOrganizationEntity entity) {
         Assert.notNull(entity, "传入了空对象!");
         Assert.notNull(entity.getId(), "传入了空ID!");

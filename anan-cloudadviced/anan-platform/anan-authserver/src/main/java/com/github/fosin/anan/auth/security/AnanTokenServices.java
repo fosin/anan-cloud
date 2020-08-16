@@ -15,8 +15,9 @@ import java.util.Optional;
 import java.util.UUID;
 
 /**
- * Description:
  *
+ *重写判断Token是否有效规则
+ * 如果同意Token在不同客户端IP则，需要重新获取Token
  * @author fosin
  * @date 2018.8.10
  */

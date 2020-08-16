@@ -6,7 +6,7 @@ import com.github.fosin.anan.jpa.repository.IJpaRepository;
 import com.github.fosin.anan.platform.repository.UserRoleRepository;
 import com.github.fosin.anan.platform.service.inter.UserRoleService;
 import com.github.fosin.anan.platform.service.inter.UserService;
-import com.github.fosin.anan.platformapi.constant.TableNameConstant;
+import com.github.fosin.anan.platformapi.constant.RedisConstant;
 import com.github.fosin.anan.platformapi.entity.AnanRoleEntity;
 import com.github.fosin.anan.platformapi.entity.AnanUserEntity;
 import com.github.fosin.anan.platformapi.entity.AnanUserRoleEntity;
@@ -83,8 +83,8 @@ public class UserRoleServiceImpl implements UserRoleService {
 
         userRoleRepository.deleteByUserId(userId);
         //如果是用户角色，则只需要删除一个用户的缓存
-        ananCacheManger.evict(TableNameConstant.ANAN_USER, userId + "");
-        ananCacheManger.evict(TableNameConstant.ANAN_USER, userService.findById(userId).getUsercode());
+        ananCacheManger.evict(RedisConstant.ANAN_USER, userId + "");
+        ananCacheManger.evict(RedisConstant.ANAN_USER, userService.findById(userId).getUsercode());
 
         return getAnanUserRoleEntities(entities);
     }
@@ -124,8 +124,8 @@ public class UserRoleServiceImpl implements UserRoleService {
         //如果是角色用户，则需要删除所有角色相关用户的缓存
         for (AnanUserRoleCreateDto entity : entities) {
             Long userId = entity.getUserId();
-            ananCacheManger.evict(TableNameConstant.ANAN_USER, userId + "");
-            ananCacheManger.evict(TableNameConstant.ANAN_USER, userService.findById(userId).getUsercode());
+            ananCacheManger.evict(RedisConstant.ANAN_USER, userId + "");
+            ananCacheManger.evict(RedisConstant.ANAN_USER, userService.findById(userId).getUsercode());
         }
 
         return getAnanUserRoleEntities(entities);

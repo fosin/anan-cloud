@@ -1,7 +1,7 @@
 package com.github.fosin.anan.auth.service;
 
 import com.github.fosin.anan.auth.service.inter.RolePermissionService;
-import com.github.fosin.anan.platformapi.constant.TableNameConstant;
+import com.github.fosin.anan.platformapi.constant.RedisConstant;
 import com.github.fosin.anan.platformapi.entity.AnanRolePermissionEntity;
 import com.github.fosin.anan.platformapi.repository.RolePermissionRepository;
 
@@ -25,7 +25,7 @@ public class RolePermissionServiceImpl implements RolePermissionService {
     }
 
     @Override
-    @Cacheable(value = TableNameConstant.ANAN_ROLE_PERMISSION, key = "#roleId")
+    @Cacheable(value = RedisConstant.ANAN_ROLE_PERMISSION, key = "#roleId")
     public List<AnanRolePermissionEntity> findByRoleId(Long roleId) {
         return rolePermissionRepository.findByRoleId(roleId);
     }

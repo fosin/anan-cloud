@@ -7,7 +7,7 @@ import com.github.fosin.anan.model.result.ResultUtils;
 import com.github.fosin.anan.platform.service.inter.PermissionService;
 import com.github.fosin.anan.platform.service.inter.RolePermissionService;
 import com.github.fosin.anan.platform.service.inter.UserPermissionService;
-import com.github.fosin.anan.platformapi.constant.TableNameConstant;
+import com.github.fosin.anan.platformapi.constant.RedisConstant;
 import com.github.fosin.anan.pojo.dto.request.AnanPermissionCreateDto;
 import com.github.fosin.anan.pojo.dto.request.AnanPermissionUpdateDto;
 import com.github.fosin.anan.platformapi.entity.AnanPermissionEntity;
@@ -52,7 +52,7 @@ public class PermissionServiceImpl implements PermissionService {
     }
 
     @Override
-    @CachePut(value = TableNameConstant.ANAN_PERMISSION, key = "#result.id")
+    @CachePut(value = RedisConstant.ANAN_PERMISSION, key = "#result.id")
     public AnanPermissionEntity create(AnanPermissionCreateDto entity) {
         Assert.notNull(entity, "传入的创建数据实体对象不能为空!");
 
@@ -71,7 +71,7 @@ public class PermissionServiceImpl implements PermissionService {
     }
 
     @Override
-    @CachePut(value = TableNameConstant.ANAN_PERMISSION, key = "#entity.id")
+    @CachePut(value = RedisConstant.ANAN_PERMISSION, key = "#entity.id")
     public AnanPermissionEntity update(AnanPermissionUpdateDto entity) {
         Assert.notNull(entity, "传入了空对象!");
         Long id = entity.getId();
@@ -91,7 +91,7 @@ public class PermissionServiceImpl implements PermissionService {
 
 
     @Override
-    @CacheEvict(value = TableNameConstant.ANAN_PERMISSION, key = "#id")
+    @CacheEvict(value = RedisConstant.ANAN_PERMISSION, key = "#id")
     public AnanPermissionEntity deleteById(Long id) {
         Assert.notNull(id, "传入了空ID!");
         AnanPermissionEntity entity = permissionRepository.findById(id).orElse(null);
@@ -110,7 +110,7 @@ public class PermissionServiceImpl implements PermissionService {
     }
 
     @Override
-    @CacheEvict(value = TableNameConstant.ANAN_PERMISSION, key = "#entity.id")
+    @CacheEvict(value = RedisConstant.ANAN_PERMISSION, key = "#entity.id")
     public AnanPermissionEntity deleteByEntity(AnanPermissionEntity entity) {
         Assert.notNull(entity, "传入了空对象!");
         Long id = entity.getId();
@@ -141,7 +141,7 @@ public class PermissionServiceImpl implements PermissionService {
     }
 
     @Override
-    @Cacheable(value = TableNameConstant.ANAN_PERMISSION, key = "#id")
+    @Cacheable(value = RedisConstant.ANAN_PERMISSION, key = "#id")
     public AnanPermissionEntity findById(Long id) {
         return permissionRepository.findById(id).orElse(null);
     }

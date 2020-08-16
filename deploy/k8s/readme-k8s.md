@@ -88,18 +88,7 @@ EOF
 
 systemctl restart systemd-journald
 ```
-## 1.8、升级系统内核为 4.44
-```shell script
-# CentOS 7.x 系统自带的 3.10.x 内核存在一些 Bugs，导致运行的 Docker、Kubernetes 不稳定
 
-rpm -Uvh http://www.elrepo.org/elrepo-release-7.0-3.el7.elrepo.noarch.rpm
-# 安装完成后检查 /boot/grub2/grub.cfg 中对应内核 menuentry 中是否包含 initrd16 配置，如果没有，再安装一次！
-yum --enablerepo=elrepo-kernel install -y kernel-lt
-# 设置开机从新内核启动并重启生效（注意在线安装的内核版本是不是4.4.212-1）
-grub2-set-default "CentOS Linux (4.4.213-1.el7.elrepo.x86_64) 7 (Core)" && reboot
-# 重启后安装内核源文件（这步可以不做）
-yum --enablerepo=elrepo-kernel install kernel-lt-devel-$(uname -r) kernel-lt-headers-$(uname -r)
-```
 ## 1.9、关闭 NUMA
 ```shell script
 vim /etc/default/grub # 在 GRUB_CMDLINE_LINUX 一行添加 `numa=off` 参数，如下所示：

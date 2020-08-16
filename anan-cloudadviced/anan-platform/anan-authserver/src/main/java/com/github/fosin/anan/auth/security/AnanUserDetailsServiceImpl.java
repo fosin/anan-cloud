@@ -12,6 +12,7 @@ import com.github.fosin.anan.util.TreeUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.context.annotation.Lazy;
+import org.springframework.context.annotation.Primary;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -33,6 +34,7 @@ import java.util.TreeSet;
 @Service
 @Lazy
 @Slf4j
+@Primary
 public class AnanUserDetailsServiceImpl implements UserDetailsService {
     private final UserService userService;
     private final RolePermissionService rolePermissionService;

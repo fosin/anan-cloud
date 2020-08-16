@@ -1,9 +1,9 @@
 package com.github.fosin.anan;
 
 import com.github.fosin.anan.core.banner.AnanBanner;
-import com.github.fosin.anan.oauth2.annotation.EnableAnanResourceServer;
 import com.github.fosin.anan.platformapi.config.EnableFeignOAuth2Client;
 import com.github.fosin.anan.redis.annotation.EnableAnanRedis;
+import com.github.fosin.anan.security.annotation.EnableAnanWebSecurity;
 import com.github.fosin.anan.swagger.annotation.EnableAnanSwagger2;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -19,7 +19,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @SpringBootApplication(exclude = {LoadBalancerEurekaAutoConfiguration.class})
 @EnableAnanRedis
 @EnableAnanSwagger2
-@EnableAnanResourceServer
+@EnableAnanWebSecurity
 @EnableJpaAuditing
 @EnableCircuitBreaker
 @EnableFeignOAuth2Client

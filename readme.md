@@ -52,20 +52,6 @@
 #### 1.1.2、安装docker-compose(按需安装注意版本更新和匹配)
     sudo curl -L https://github.com/docker/compose/releases/download/1.25.4/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
     sudo chmod +x /usr/local/bin/docker-compose
-#### 1.1.3、配置参数（阿里云镜像加速、开启实验性功能）
-    sudo mkdir -p /etc/docker
-    cat > /etc/docker/daemon.json <<EOF
-    {
-      "exec-opts": ["native.cgroupdriver=systemd"],
-      "log-driver": "json-file",
-      "log-opts": {"max-size":"50m", "max-file":"3"},
-      "registry-mirrors": ["https://dockerhub.azk8s.cn","https://c70a1b9z.mirror.aliyuncs.com","https://docker.mirrors.ustc.edu.cn/"],
-      "experimental": true
-    }
-    EOF
-
-    sudo systemctl daemon-reload
-    sudo systemctl restart docker
 
 ### 1.2、基础运行环境安装篇，使用docker-compose.yml文件(mysql、Redis、RabbitMQ、nacos)
        所有涉及帐号和密码的地方默认帐号都是anan，默认密码都是local，如果不是账户不是anan得地方，下面会单独说明。
@@ -88,7 +74,8 @@
             docker-compose -f anan-cloud\docker-compose.yml up -d rabbitmq
        1.2.5、如果对机器性能有信息，以上组件也可以使用一个命令启动
             docker-compose -f D:\myproject\anan\anan-cloud\docker-compose.yml up -d redis rabbitmq mysql-leader mysql-follower nacos-0
-
+       1.2.6、关闭compose
+            docker-compose -f D:\myproject\anan\anan-cloud\docker-compose.yml down --remove-orphans
 ### 1.3、日志安装篇，使用文件docker-compose.yml(elsaticsearch、filebeat、kibana等) -非必须
        1.3.1、安装ElasticSearch6.7及以上(6.7及以上kibana有中文版，不要中文版安装低版本也可以)
             docker-compose -f anan-cloud\docker-compose.yml up -d elasticsearch
@@ -126,6 +113,7 @@
        1.4.2、启动完成后，可以访问以下站点：
             Promethus: http://容器主机IP:9090
             grafana: http://容器主机IP:3000/
+
 ### 1.5、服务安装篇，使用文件docker-compose.yml(anan-eurekaserver、anan-configserver、anan-authserver等) -非必须
         本地开发环境基本上不需要启动这些服务，主要还是使用源码跑
             anan-eurekaserver

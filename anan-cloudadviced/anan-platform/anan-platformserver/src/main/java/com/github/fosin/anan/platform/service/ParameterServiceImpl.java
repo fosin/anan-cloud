@@ -9,7 +9,7 @@ import com.github.fosin.anan.model.result.ResultUtils;
 import com.github.fosin.anan.platform.repository.OrganizationRepository;
 import com.github.fosin.anan.platform.repository.ParameterRepository;
 import com.github.fosin.anan.platform.service.inter.ParameterService;
-import com.github.fosin.anan.platformapi.constant.TableNameConstant;
+import com.github.fosin.anan.platformapi.constant.RedisConstant;
 import com.github.fosin.anan.platformapi.entity.AnanOrganizationEntity;
 import com.github.fosin.anan.platformapi.entity.AnanParameterEntity;
 import com.github.fosin.anan.platformapi.parameter.OrganStrategy;
@@ -61,7 +61,7 @@ public class ParameterServiceImpl implements ParameterService {
     }
 
     @Override
-    @CachePut(value = TableNameConstant.ANAN_PARAMETER, key = "#root.target.getCacheKey(#result)")
+    @CachePut(value = RedisConstant.ANAN_PARAMETER, key = "#root.target.getCacheKey(#result)")
     public AnanParameterEntity create(AnanParameterCreateDto entity) {
         Assert.notNull(entity, "传入的创建数据实体对象不能为空!");
         AnanParameterEntity createEntiy = new AnanParameterEntity();
@@ -82,8 +82,8 @@ public class ParameterServiceImpl implements ParameterService {
         //如果修改了type、scope、name则需要删除以前的缓存并设置新缓存
         if (!cCacheKey.equals(cacheKey)) {
             //新key设置旧值，需要发布以后才刷新缓存换成本次更新的新值
-            ananCacheManger.put(TableNameConstant.ANAN_PARAMETER, cacheKey, cEntity);
-            ananCacheManger.evict(TableNameConstant.ANAN_PARAMETER, cCacheKey);
+            ananCacheManger.put(RedisConstant.ANAN_PARAMETER, cacheKey, cEntity);
+            ananCacheManger.evict(RedisConstant.ANAN_PARAMETER, cCacheKey);
         }
         return save;
     }
@@ -93,19 +93,19 @@ public class ParameterServiceImpl implements ParameterService {
         AnanParameterEntity entity = parameterRepository.findById(id).orElse(null);
         Assert.notNull(entity, "通过ID没有能找到参数数据,删除被取消!");
         String cacheKey = getCacheKey(entity);
-        ananCacheManger.evict(TableNameConstant.ANAN_PARAMETER, cacheKey);
+        ananCacheManger.evict(RedisConstant.ANAN_PARAMETER, cacheKey);
         parameterRepository.deleteById(id);
         try {
             Thread.sleep(500);
         } catch (InterruptedException e) {
             throw new AnanServiceException(e);
         }
-        ananCacheManger.evict(TableNameConstant.ANAN_PARAMETER, cacheKey);
+        ananCacheManger.evict(RedisConstant.ANAN_PARAMETER, cacheKey);
         return null;
     }
 
     @Override
-    @CacheEvict(value = TableNameConstant.ANAN_PARAMETER, key = "#root.target.getCacheKey(#entity)")
+    @CacheEvict(value = RedisConstant.ANAN_PARAMETER, key = "#root.target.getCacheKey(#entity)")
     public AnanParameterEntity deleteByEntity(AnanParameterEntity entity) {
         Assert.notNull(entity, "传入了空对象!");
         parameterRepository.delete(entity);
@@ -145,7 +145,7 @@ public class ParameterServiceImpl implements ParameterService {
     }
 
     @Override
-    @Cacheable(value = TableNameConstant.ANAN_PARAMETER, key = "#root.target.getCacheKey(#type,#scope,#name)")
+    @Cacheable(value = RedisConstant.ANAN_PARAMETER, key = "#root.target.getCacheKey(#type,#scope,#name)")
     public AnanParameterEntity getParameter(Integer type, String scope, String name) {
         AnanParameterEntity entity = parameterRepository.findByTypeAndScopeAndName(type, scope, name);
         //因为参数会逐级上上级机构查找，为减少没有必要的查询，该代码为解决Spring Cache默认不缓存null值问题
@@ -163,7 +163,7 @@ public class ParameterServiceImpl implements ParameterService {
      * @return 参数
      */
     @Override
-    @Cacheable(value = TableNameConstant.ANAN_PARAMETER, key = "#root.target.getCacheKey(#type,#scope,#name)")
+    @Cacheable(value = RedisConstant.ANAN_PARAMETER, key = "#root.target.getCacheKey(#type,#scope,#name)")
     public AnanParameterEntity getNearestParameter(int type, String scope, String name) {
         AnanParameterEntity parameter = parameterRepository.findByTypeAndScopeAndName(type, scope, name);
         boolean finded = parameter != null && parameter.getId() != null;
@@ -195,7 +195,7 @@ public class ParameterServiceImpl implements ParameterService {
     }
 
     @Override
-    @Cacheable(value = TableNameConstant.ANAN_PARAMETER, key = "#root.target.getCacheKey(#type,#scope,#name)")
+    @Cacheable(value = RedisConstant.ANAN_PARAMETER, key = "#root.target.getCacheKey(#type,#scope,#name)")
     public AnanParameterEntity getOrCreateParameter(int type, String scope, String name, String defaultValue, String description) {
         AnanParameterEntity entity;
         try {
@@ -229,13 +229,13 @@ public class ParameterServiceImpl implements ParameterService {
                 entity.setApplyBy(loginUser.getId());
                 entity.setApplyTime(new Date());
                 entity.setStatus(0);
-                success = ananCacheManger.put(TableNameConstant.ANAN_PARAMETER, cacheKey, entity);
+                success = ananCacheManger.put(RedisConstant.ANAN_PARAMETER, cacheKey, entity);
                 if (success) {
                     parameterRepository.save(entity);
                 }
                 break;
             case 2:
-                success = ananCacheManger.evict(TableNameConstant.ANAN_PARAMETER, cacheKey);
+                success = ananCacheManger.evict(RedisConstant.ANAN_PARAMETER, cacheKey);
                 if (success) {
                     parameterRepository.deleteById(id);
                     try {
@@ -243,11 +243,11 @@ public class ParameterServiceImpl implements ParameterService {
                     } catch (InterruptedException e) {
                         throw new AnanServiceException(e);
                     }
-                    success = ananCacheManger.evict(TableNameConstant.ANAN_PARAMETER, cacheKey);
+                    success = ananCacheManger.evict(RedisConstant.ANAN_PARAMETER, cacheKey);
                 }
                 break;
             default:
-                success = ananCacheManger.put(TableNameConstant.ANAN_PARAMETER, cacheKey, entity);
+                success = ananCacheManger.put(RedisConstant.ANAN_PARAMETER, cacheKey, entity);
         }
         return success;
     }

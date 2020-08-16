@@ -27,22 +27,68 @@ services:
       - mysql-leader
     networks:
       - anan-bridge
-  nacos-mysql:
-    container_name: nacos-mysql
-    hostname: nacos-mysql
-    image: nacos/nacos-mysql:5.7
+
+  rabbitmq:
+    container_name: rabbitmq
+    hostname: rabbitmq
+    image: rabbitmq:3-management
     environment:
+      - RABBITMQ_ERLANG_COOKIE=SWQOKODSQALRPCLNMEQG
+      - RABBITMQ_DEFAULT_USER=anan
+      - RABBITMQ_DEFAULT_PASS=local
+      - RABBITMQ_DEFAULT_VHOST=/
       - TZ=Asia/Shanghai
-      - MYSQL_ROOT_PASSWORD=local
-      - MYSQL_DATABASE=nacos
-      - MYSQL_USER=nacos
-      - MYSQL_PASSWORD=local
-    volumes:
-      - /root/deploy/mysql/nacos:/var/lib/mysql
+    #    volumes: TODO 启动后报错cookie file /var/lib/rabbitmq/.erlang.cookie must be accessible by owner only
+    #      - /root/deploy/rabbitmq:/var/lib/rabbitmq
+    restart: on-failure
     ports:
-      - "3308:3306"
+      - 15672:15672
+      - 5672:5672
     networks:
       - anan-bridge
+
+  anan-vue:
+    container_name: anan-vue
+    image: fosin/anan-vue:3.0.1
+    hostname: anan-vue
+    environment:
+      - TZ=Asia/Shanghai
+    volumes:
+      - /root/deploy/nginx/conf:/etc/nginx/conf.d/
+    ports:
+      - 80:80
+    networks:
+      - anan-bridge
+
+  redis:
+    image: redis:5.0
+    container_name: redis
+    hostname: redis
+    environment:
+      - TZ=Asia/Shanghai
+    volumes:
+      - /root/deploy/redis:/data
+    restart: on-failure
+    ports:
+      - 6379:6379
+    command: redis-server --appendonly yes --requirepass local
+    networks:
+      - anan-bridge
+
+  phpredisadmin:
+    image: erikdubbelboer/phpredisadmin
+    environment:
+      - TZ=Asia/Shanghai
+      - ADMIN_USER=admin
+      - ADMIN_PASS=local
+      - REDIS_1_AUTH=local
+      - REDIS_1_HOST=redis
+      - REDIS_1_PORT=6379
+    ports:
+      - 6380:80
+    networks:
+      - anan-bridge
+
   mysql-leader:
     container_name: mysql-leader
     hostname: mysql-leader
@@ -51,7 +97,7 @@ services:
 #      context: deploy/mysql/leader
     environment:
       - TZ=Asia/Shanghai
-      - MYSQL_ROOT_PASSWORD=local
+      - MYSQL_ROOT_PASSWORD=P3CJkdDX3pFeRDx
       - MYSQL_REPLICATION_USER=anan_ru
       - MYSQL_REPLICATION_PASSWORD=local
       - MYSQL_DATABASE=nacos
@@ -69,12 +115,12 @@ services:
   mysql-follower:
     container_name: mysql-follower
     hostname: mysql-follower
-    image: fosin/mysql-follower:5.7
+    image: fosin/mysql-follower:2.3
 #    build:
 #      context: deploy/mysql/follower
     environment:
       - TZ=Asia/Shanghai
-      - MYSQL_ROOT_PASSWORD=local
+      - MYSQL_ROOT_PASSWORD=P3CJkdDX3pFeRDx
       - MYSQL_REPLICATION_USER=anan_ru
       - MYSQL_REPLICATION_PASSWORD=local
       - MYSQL_SERVICE_HOST=mysql-leader
@@ -161,7 +207,7 @@ services:
 #      - RABBIT_QUEUE=zipkin
       # Uncomment to see requests to and from elasticsearch
       # - ES_HTTP_LOGGING=BODY
-      - RABBIT_ADDRESSES=rabbitmq:5672
+      - RABBIT_ADDRESSES=rabbitmq:7890
       - RABBIT_USER=anan
       - RABBIT_PASSWORD=local
     networks:
@@ -174,67 +220,6 @@ services:
       - 9411:9411
       # Uncomment if you set SCRIBE_ENABLED=true
       # - 9410:9410
-
-  rabbitmq:
-    container_name: rabbitmq
-    hostname: rabbitmq
-    image: rabbitmq:3-management
-    environment:
-      - RABBITMQ_ERLANG_COOKIE=SWQOKODSQALRPCLNMEQG
-      - RABBITMQ_DEFAULT_USER=anan
-      - RABBITMQ_DEFAULT_PASS=local
-      - RABBITMQ_DEFAULT_VHOST=/
-      - TZ=Asia/Shanghai
-    #    volumes: TODO 启动后报错cookie file /var/lib/rabbitmq/.erlang.cookie must be accessible by owner only
-    #      - /root/deploy/rabbitmq:/var/lib/rabbitmq
-    restart: on-failure
-    ports:
-      - 15672:15672
-      - 5672:5672
-    networks:
-      - anan-bridge
-
-  anan-vue:
-    container_name: anan-vue
-    image: fosin/anan-vue:3.0.1
-    hostname: anan-vue
-    environment:
-      - TZ=Asia/Shanghai
-    volumes:
-      - /root/deploy/nginx/conf:/etc/nginx/conf.d/
-    ports:
-      - 80:80
-    networks:
-      - anan-bridge
-
-  redis:
-    image: redis:5.0
-    container_name: redis
-    hostname: redis
-    environment:
-      - TZ=Asia/Shanghai
-    volumes:
-      - /root/deploy/redis:/data
-    restart: on-failure
-    ports:
-      - 6379:6379
-    command: redis-server --appendonly yes --requirepass local
-    networks:
-      - anan-bridge
-
-  phpredisadmin:
-    image: erikdubbelboer/phpredisadmin
-    environment:
-      - TZ=Asia/Shanghai
-      - ADMIN_USER=admin
-      - ADMIN_PASS=local
-      - REDIS_1_AUTH=local
-      - REDIS_1_HOST=redis
-      - REDIS_1_PORT=6379
-    ports:
-      - 6380:80
-    networks:
-      - anan-bridge
 
   mongodb:
     image: mongo:3.4
@@ -500,6 +485,23 @@ services:
       - anan-bridge
     depends_on:
       - postgresql
+
+  nacos-mysql:
+    container_name: nacos-mysql
+    hostname: nacos-mysql
+    image: nacos/nacos-mysql:5.7
+    environment:
+      - TZ=Asia/Shanghai
+      - MYSQL_ROOT_PASSWORD=local
+      - MYSQL_DATABASE=nacos
+      - MYSQL_USER=nacos
+      - MYSQL_PASSWORD=local
+    volumes:
+      - /root/deploy/mysql/nacos:/var/lib/mysql
+    ports:
+      - "3308:3306"
+    networks:
+      - anan-bridge
 networks:
   anan-bridge:
     external: true

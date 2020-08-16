@@ -7,6 +7,7 @@ import com.github.fosin.anan.model.result.ResultUtils;
 import com.github.fosin.anan.platform.repository.OrganizationRepository;
 import com.github.fosin.anan.platform.repository.UserRoleRepository;
 import com.github.fosin.anan.platform.service.inter.UserService;
+import com.github.fosin.anan.platformapi.constant.RedisConstant;
 import com.github.fosin.anan.platformapi.constant.SystemConstant;
 import com.github.fosin.anan.platformapi.constant.TableNameConstant;
 import com.github.fosin.anan.platformapi.entity.AnanOrganizationEntity;
@@ -71,7 +72,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Cacheable(value = TableNameConstant.ANAN_USER, key = "#usercode")
+    @Cacheable(value = RedisConstant.ANAN_USER, key = "#usercode")
     @Transactional(readOnly = true)
     public AnanUserEntity findByUsercode(String usercode) {
         Assert.notNull(usercode, "用户工号不能为空!");
@@ -97,8 +98,8 @@ public class UserServiceImpl implements UserService {
     @Override
     @Caching(
             put = {
-                    @CachePut(value = TableNameConstant.ANAN_USER, key = "#result.id", condition = "#result.id != null"),
-                    @CachePut(value = TableNameConstant.ANAN_USER, key = "#result.usercode", condition = "#result.usercode != null"),
+                    @CachePut(value = RedisConstant.ANAN_USER, key = "#result.id", condition = "#result.id != null"),
+                    @CachePut(value = RedisConstant.ANAN_USER, key = "#result.usercode", condition = "#result.usercode != null"),
             }
     )
     public AnanUserEntity create(AnanUserCreateDto entity) {
@@ -118,12 +119,12 @@ public class UserServiceImpl implements UserService {
     @Override
     @Caching(
             evict = {
-                    @CacheEvict(value = TableNameConstant.ANAN_USER, beforeInvocation = true, key = "#root.caches[0].get(#entity.id).get().usercode", condition = "#root.caches[0].get(#entity.id) != null && !#root.caches[0].get(#entity.id).get().usercode.equals(#entity.usercode)"),
-                    @CacheEvict(value = TableNameConstant.ANAN_USER_PERMISSION, key = "#entity.id")
+                    @CacheEvict(value = RedisConstant.ANAN_USER, beforeInvocation = true, key = "#root.caches[0].get(#entity.id).get().usercode", condition = "#root.caches[0].get(#entity.id) != null && !#root.caches[0].get(#entity.id).get().usercode.equals(#entity.usercode)"),
+                    @CacheEvict(value = RedisConstant.ANAN_USER_PERMISSION, key = "#entity.id")
             },
             put = {
-                    @CachePut(value = TableNameConstant.ANAN_USER, key = "#result.id", condition = "#result.id != null"),
-                    @CachePut(value = TableNameConstant.ANAN_USER, key = "#result.usercode", condition = "#result.usercode != null"),
+                    @CachePut(value = RedisConstant.ANAN_USER, key = "#result.id", condition = "#result.id != null"),
+                    @CachePut(value = RedisConstant.ANAN_USER, key = "#result.usercode", condition = "#result.usercode != null"),
             }
     )
     public AnanUserEntity update(AnanUserUpdateDto entity) {
@@ -145,7 +146,7 @@ public class UserServiceImpl implements UserService {
         List<AnanUserEntity> rcList = new ArrayList<>();
         List<Long> needQueryIds = new ArrayList<>();
         for (Long id : ids) {
-            AnanUserEntity userEntity = ananCacheManger.get(TableNameConstant.ANAN_USER, id + "", AnanUserEntity.class);
+            AnanUserEntity userEntity = ananCacheManger.get(RedisConstant.ANAN_USER, id + "", AnanUserEntity.class);
             if (userEntity != null) {
                 rcList.add(userEntity);
             } else {
@@ -163,14 +164,14 @@ public class UserServiceImpl implements UserService {
     @Override
     @Caching(
             evict = {
-                    @CacheEvict(value = TableNameConstant.ANAN_USER, key = "#root.caches[0].get(#id).get().usercode", condition = "#root.caches[0].get(#id) != null"),
-                    @CacheEvict(value = TableNameConstant.ANAN_USER, key = "#id"),
-                    @CacheEvict(value = TableNameConstant.ANAN_USER_PERMISSION, key = "#id")
+                    @CacheEvict(value = RedisConstant.ANAN_USER, key = "#root.caches[0].get(#id).get().usercode", condition = "#root.caches[0].get(#id) != null"),
+                    @CacheEvict(value = RedisConstant.ANAN_USER, key = "#id"),
+                    @CacheEvict(value = RedisConstant.ANAN_USER_PERMISSION, key = "#id")
             }
     )
     public AnanUserEntity deleteById(Long id) {
         Assert.isTrue(id != null && id > 0, "传入的用户ID无效！");
-        AnanUserEntity entity = ananCacheManger.get(TableNameConstant.ANAN_USER, id + "", AnanUserEntity.class);
+        AnanUserEntity entity = ananCacheManger.get(RedisConstant.ANAN_USER, id + "", AnanUserEntity.class);
         if (entity == null) {
             entity = userRepository.findById(id).orElse(null);
         }
@@ -184,7 +185,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Cacheable(value = TableNameConstant.ANAN_USER, key = "#id")
+    @Cacheable(value = RedisConstant.ANAN_USER, key = "#id")
     @Transactional(readOnly = true)
     public AnanUserEntity findById(Long id) {
         Assert.isTrue(id != null && id > 0, "传入的用户ID无效！");
@@ -198,9 +199,9 @@ public class UserServiceImpl implements UserService {
     @Override
     @Caching(
             evict = {
-                    @CacheEvict(value = TableNameConstant.ANAN_USER, key = "#entity.id"),
-                    @CacheEvict(value = TableNameConstant.ANAN_USER, key = "#entity.usercode"),
-                    @CacheEvict(value = TableNameConstant.ANAN_USER_PERMISSION, key = "#entity.id")
+                    @CacheEvict(value = RedisConstant.ANAN_USER, key = "#entity.id"),
+                    @CacheEvict(value = RedisConstant.ANAN_USER, key = "#entity.usercode"),
+                    @CacheEvict(value = RedisConstant.ANAN_USER_PERMISSION, key = "#entity.id")
             }
     )
     public AnanUserEntity deleteByEntity(AnanUserEntity entity) {
@@ -272,8 +273,8 @@ public class UserServiceImpl implements UserService {
     @Override
     @Caching(
             evict = {
-                    @CacheEvict(value = TableNameConstant.ANAN_USER, key = "#result.id"),
-                    @CacheEvict(value = TableNameConstant.ANAN_USER, key = "#result.usercode")
+                    @CacheEvict(value = RedisConstant.ANAN_USER, key = "#result.id"),
+                    @CacheEvict(value = RedisConstant.ANAN_USER, key = "#result.usercode")
             }
     )
     public AnanUserEntity changePassword(Long id, String password, String confirmPassword1, String confirmPassword2) {
@@ -295,8 +296,8 @@ public class UserServiceImpl implements UserService {
     @Override
     @Caching(
             evict = {
-                    @CacheEvict(value = TableNameConstant.ANAN_USER, key = "#result.usercode"),
-                    @CacheEvict(value = TableNameConstant.ANAN_USER, key = "#id")
+                    @CacheEvict(value = RedisConstant.ANAN_USER, key = "#result.usercode"),
+                    @CacheEvict(value = RedisConstant.ANAN_USER, key = "#id")
             }
     )
     public AnanUserEntity resetPassword(Long id) {

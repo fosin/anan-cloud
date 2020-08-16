@@ -1,7 +1,7 @@
 package com.github.fosin.anan.auth.service;
 
 import com.github.fosin.anan.auth.service.inter.UserService;
-import com.github.fosin.anan.platformapi.constant.TableNameConstant;
+import com.github.fosin.anan.platformapi.constant.RedisConstant;
 import com.github.fosin.anan.platformapi.entity.AnanUserEntity;
 import com.github.fosin.anan.platformapi.entity.AnanUserRoleEntity;
 import com.github.fosin.anan.platformapi.repository.UserRepository;
@@ -32,7 +32,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Cacheable(value = TableNameConstant.ANAN_USER, key = "#usercode")
+    @Cacheable(value = RedisConstant.ANAN_USER, key = "#usercode")
     @Transactional(readOnly = true)
     public AnanUserEntity findByUsercode(String usercode) {
         Assert.notNull(usercode, "用户工号不能为空!");

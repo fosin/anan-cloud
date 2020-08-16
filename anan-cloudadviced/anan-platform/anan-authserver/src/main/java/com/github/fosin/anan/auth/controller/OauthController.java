@@ -4,14 +4,15 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationDetails;
 import org.springframework.security.oauth2.provider.endpoint.TokenEndpoint;
-import org.springframework.security.oauth2.provider.token.ConsumerTokenServices;
+import org.springframework.security.oauth2.provider.endpoint.TokenKeyEndpoint;
+import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.util.Assert;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.*;
@@ -29,16 +30,13 @@ import java.util.Map;
 @RestController
 @Slf4j
 @RequestMapping("/oauth")
+@AllArgsConstructor
 @Api(value = "/oauth", tags = "OAuth认证相关,获取令牌、刷新令牌、注销令牌")
 public class OauthController {
-    final TokenEndpoint tokenEndpoint;
+    private final TokenEndpoint tokenEndpoint;
+    private final TokenKeyEndpoint tokenKeyEndpoint;
+    private final DefaultTokenServices consumerTokenServices;
 
-    private final ConsumerTokenServices consumerTokenServices;
-
-    public OauthController(TokenEndpoint tokenEndpoint, ConsumerTokenServices consumerTokenServices) {
-        this.tokenEndpoint = tokenEndpoint;
-        this.consumerTokenServices = consumerTokenServices;
-    }
 
     @RequestMapping(value = "/token", method = {RequestMethod.POST, RequestMethod.GET})
     @ApiOperation(value = "获取令牌", notes = "获取Oauth2.0令牌，通常用于前端的认证、登录操作")
@@ -63,18 +61,19 @@ public class OauthController {
 
     @RequestMapping(value = "/principal", method = {RequestMethod.GET, RequestMethod.POST})
     @ApiOperation(value = "根据令牌获取当前认证用户信息", notes = "根据令牌获取当前认证用户信息，包括用户信息、客户端信息、Oauth2.0相关信息")
-    @ApiImplicitParam(name = "Authorization", value = "Basic认证信息,格式例如：Basic ouZTJoQk5BQVFLUjVVemlJSw==", required = true, dataTypeClass = String.class, paramType = "header")
+    @ApiImplicitParam(name = "Authorization", value = "Token认证信息,格式例如：Bearer c05b6fed-256c-4cd0-a55d-ae8ffdafbf75", required = true, dataTypeClass = String.class, paramType = "header")
     public ResponseEntity<Principal> principal(Principal principal) {
         return ResponseEntity.ok(principal);
     }
 
-//    @RequestMapping("/authentication/principal")
-//    public ResponseEntity<Object> authenticationPrincipal(Authentication authentication) {
-//        AnanUserDetail userDetail = LoginUserUtil.getUserDetail();
-//        return ResponseEntity.ok(authentication.getPrincipal());
-//    }
+    @RequestMapping(value = "/token_key", method = RequestMethod.GET)
+    @ApiOperation(value = "根据令牌获取JWK", notes = "根据令牌获取JWT的公钥信息")
+    @ApiImplicitParam(name = "Authorization", value = "Token认证信息,格式例如：Bearer c05b6fed-256c-4cd0-a55d-ae8ffdafbf75", required = true, dataTypeClass = String.class, paramType = "header")
+    public ResponseEntity<Map<String, String>> getKey(Principal principal) {
+        return ResponseEntity.ok(tokenKeyEndpoint.getKey(principal));
+    }
 
-    @RequestMapping(value = "/removeToken", method = {RequestMethod.POST})
+    @RequestMapping(value = "/removeToken", method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
     @ApiOperation(value = "移除指定令牌信息", notes = "移除指定令牌信息，通常用于前端的退出登录操作")
     @ApiImplicitParam(name = "Authorization", value = "Basic认证信息,格式例如：Basic ouZTJoQk5BQVFLUjVVemlJSw==", required = true, dataTypeClass = String.class, paramType = "header")

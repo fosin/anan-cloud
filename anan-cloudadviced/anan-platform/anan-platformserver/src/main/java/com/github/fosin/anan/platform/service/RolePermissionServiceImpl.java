@@ -4,7 +4,7 @@ import com.github.fosin.anan.core.exception.AnanServiceException;
 import com.github.fosin.anan.jpa.repository.IJpaRepository;
 import com.github.fosin.anan.jpa.service.batch.IUpdateInBatchJpaService;
 import com.github.fosin.anan.platform.service.inter.RolePermissionService;
-import com.github.fosin.anan.platformapi.constant.TableNameConstant;
+import com.github.fosin.anan.platformapi.constant.RedisConstant;
 import com.github.fosin.anan.platformapi.entity.AnanRolePermissionEntity;
 import com.github.fosin.anan.platformapi.repository.RolePermissionRepository;
 import com.github.fosin.anan.pojo.dto.request.AnanRolePermissionUpdateDto;
@@ -41,7 +41,7 @@ public class RolePermissionServiceImpl implements RolePermissionService {
     }
 
     @Override
-    @Cacheable(value = TableNameConstant.ANAN_ROLE_PERMISSION, key = "#roleId")
+    @Cacheable(value = RedisConstant.ANAN_ROLE_PERMISSION, key = "#roleId")
     public List<AnanRolePermissionEntity> findByRoleId(Long roleId) {
         return rolePermissionRepository.findByRoleId(roleId);
     }
@@ -60,7 +60,7 @@ public class RolePermissionServiceImpl implements RolePermissionService {
         }
         Assert.notEmpty(needDelRoles, "没有找到需要删除数据!");
         for (Long roleId : needDelRoles) {
-            ananCacheManger.evict(TableNameConstant.ANAN_ROLE_PERMISSION, roleId + "");
+            ananCacheManger.evict(RedisConstant.ANAN_ROLE_PERMISSION, roleId + "");
         }
         rolePermissionRepository.deleteInBatch(entities);
         try {
@@ -69,14 +69,14 @@ public class RolePermissionServiceImpl implements RolePermissionService {
             throw new AnanServiceException(e);
         }
         for (Long roleId : needDelRoles) {
-            ananCacheManger.evict(TableNameConstant.ANAN_ROLE_PERMISSION, roleId + "");
+            ananCacheManger.evict(RedisConstant.ANAN_ROLE_PERMISSION, roleId + "");
         }
     }
 
     @Override
     @Caching(
             evict = {
-                    @CacheEvict(value = TableNameConstant.ANAN_ROLE_PERMISSION, key = "#roleId")
+                    @CacheEvict(value = RedisConstant.ANAN_ROLE_PERMISSION, key = "#roleId")
             }
     )
     @Transactional

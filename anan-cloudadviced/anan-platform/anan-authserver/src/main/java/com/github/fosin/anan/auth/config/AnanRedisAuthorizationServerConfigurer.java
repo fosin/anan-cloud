@@ -2,18 +2,14 @@ package com.github.fosin.anan.auth.config;
 
 import com.github.fosin.anan.auth.security.AnanTokenServices;
 import com.github.fosin.anan.auth.security.AnanUserDetailsServiceImpl;
-import com.github.fosin.anan.oauth2.resource.AnanResourceServerProperties;
-import org.springframework.cloud.context.config.annotation.RefreshScope;
+import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
-import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.client.JdbcClientDetailsService;
@@ -32,22 +28,16 @@ import java.util.Map;
  *
  * @author fosin
  */
-@Configuration
-@EnableAuthorizationServer
-public class AnanAuthorizationServerConfigurer extends AuthorizationServerConfigurerAdapter {
+//@Configuration
+//@EnableAuthorizationServer
+@SuppressWarnings("SpringConfigurationProxyMethods")
+@AllArgsConstructor
+public class AnanRedisAuthorizationServerConfigurer extends AuthorizationServerConfigurerAdapter {
     private final AuthenticationManager authenticationManager;
     private final DataSource dataSource;
     private final AnanUserDetailsServiceImpl userDetailsService;
     private final RedisConnectionFactory redisConnectionFactory;
     private final PasswordEncoder passwordEncoder;
-
-    public AnanAuthorizationServerConfigurer(AuthenticationManager authenticationManager, DataSource dataSource, AnanUserDetailsServiceImpl userDetailsService, RedisConnectionFactory redisConnectionFactory, PasswordEncoder passwordEncoder) {
-        this.authenticationManager = authenticationManager;
-        this.dataSource = dataSource;
-        this.userDetailsService = userDetailsService;
-        this.redisConnectionFactory = redisConnectionFactory;
-        this.passwordEncoder = passwordEncoder;
-    }
 
     /**
      * 用来配置客户端详情服务（ClientDetailsService），
@@ -109,11 +99,10 @@ public class AnanAuthorizationServerConfigurer extends AuthorizationServerConfig
     }
 
     /**
-     * <p>注意，自定义TokenServices的时候，需要设置@Primary，否则报错，</p>
      *
      * @return DefaultTokenServices
      */
-    @Primary
+//    @Primary
     @Bean
     public AnanTokenServices defaultTokenServices() {
         AnanTokenServices tokenServices = new AnanTokenServices();
@@ -143,13 +132,6 @@ public class AnanAuthorizationServerConfigurer extends AuthorizationServerConfig
         JdbcClientDetailsService clientDetailsService = new JdbcClientDetailsService(dataSource);
         clientDetailsService.setPasswordEncoder(passwordEncoder);
         return clientDetailsService;
-    }
-
-    @Bean
-    @RefreshScope
-    @Primary
-    public AnanResourceServerProperties ananResourceServerProperties() {
-        return new AnanResourceServerProperties();
     }
 
 //    @Bean
@@ -208,17 +190,4 @@ public class AnanAuthorizationServerConfigurer extends AuthorizationServerConfig
 //        return new InMemoryTokenStore();
 //    }
 
-    /**
-     * 这个版本的全称是 JSON Web Token（JWT），它可以把令牌相关的数据进行编码（因此对于后端服务来说，
-     * 它不需要进行存储，这将是一个重大优势），但是它有一个缺点，那就是撤销一个已经授权令牌将会非常困难，
-     * 所以它通常用来处理一个生命周期较短的令牌以及撤销刷新令牌（refresh_token）。
-     * 另外一个缺点就是这个令牌占用的空间会比较大，如果你加入了比较多用户凭证信息。
-     * JwtTokenStore 不会保存任何数据，但是它在转换令牌值以及授权信息方面与 DefaultTokenServices
-     * 所扮演的角色是一样的。
-     * @return
-     */
-//     @Bean
-//     public JwtTokenStore jwtTokenStore(){
-//         return JwtTokenStore();
-//     }
 }
