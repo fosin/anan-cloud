@@ -8,7 +8,6 @@ import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.oauth2.provider.token.DefaultUserAuthenticationConverter;
-import org.springframework.stereotype.Component;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -18,7 +17,7 @@ import java.util.Map;
  * @date 2020/8/9
  * @since 2.1.0
  */
-@Component
+//@Component
 @AllArgsConstructor
 public class AnanUserAuthenticationConverter extends DefaultUserAuthenticationConverter {
     private final UserDetailsService userDetailsService;
@@ -51,9 +50,8 @@ public class AnanUserAuthenticationConverter extends DefaultUserAuthenticationCo
         response.put("phone", user.getPhone());
 
         if (authentication.getAuthorities() != null && !authentication.getAuthorities().isEmpty()) {
-            response.put("authorities", AuthorityUtils.authorityListToSet(authentication.getAuthorities()));
+            response.put(AUTHORITIES, AuthorityUtils.authorityListToSet(authentication.getAuthorities()));
         }
-
         return response;
     }
 

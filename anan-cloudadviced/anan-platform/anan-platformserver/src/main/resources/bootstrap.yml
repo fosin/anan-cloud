@@ -1,3 +1,43 @@
+anan:
+  security:
+    oauth2:
+      session:
+        session-creation-policy: stateless
+      authority:
+        root-path: /**
+        authorities:
+          - methods: OPTIONS
+      resource-server:
+        enabled: true
+        token-type: jwt
+        jwt:
+          public-key-location: classpath:anan.pub
+    disable-csrf: true
+    cors:
+      enabled: true
+      allowed-origins: '*'
+      allowed-methods: '*'
+      allowed-headers: '*'
+      exposed-headers: '*'
+      allow-credentials: true
+    web-ignoring:
+      - /**/*.html
+      - /**/*.css
+      - /**/*.js
+      - /**/*.woff*
+      - /**/*.ttf*
+      - /**/*.map
+      - /**/*.ico
+      - /**/*.swf
+      - /**/*.jpg
+      - /**/*.png
+      - /**/*.svg
+      - /**/webjars/**
+      - /**/images/**
+      - /**/swagger-resources/**
+      - /**/api-docs
+      - /actuator/health
+      - /actuator/shutdown
 eureka:
   client:
     service-url:
