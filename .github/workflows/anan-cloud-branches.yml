@@ -5,6 +5,7 @@ on:
       - '*'
     paths:
       - 'pom.xml'
+      - 'anan-cloudresource/**'
       - 'anan-cloudadviced/pom.xml'
       - 'anan-cloudadviced/anan-platform/pom.xml'
       - 'anan-cloudadviced/anan-platform/anan-platformapi/**'
@@ -37,6 +38,9 @@ jobs:
           echo MODIFY_FILES: $MODIFY_FILES
           if [[ $MODIFY_FILES =~ "^pom.xml| pom.xml" ]]; then
              MODULES=${MODULES}",com.github.fosin.anan:anan-cloud"
+          fi
+          if [[ $MODIFY_FILES =~ "anan-cloudresource" ]]; then
+             MODULES=${MODULES}",com.github.fosin.anan:anan-cloudresource"
           fi
           if [[ $MODIFY_FILES =~ "anan-cloudadviced/pom.xml" ]]; then
             MODULES=${MODULES}",com.github.fosin.anan:anan-cloudadviced"

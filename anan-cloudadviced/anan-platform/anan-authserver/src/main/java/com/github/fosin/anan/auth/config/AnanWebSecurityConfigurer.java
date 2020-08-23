@@ -24,20 +24,20 @@ public class AnanWebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 //    @Override
 //    protected void configure(HttpSecurity http) throws Exception {
 //        http
-//                .antMatcher("/sso/**")
+//                .antMatcher("/**")
 //                .authorizeRequests()
-//                .antMatchers("/sso/login", "/sso/logout").permitAll()
+//                .antMatchers("/login", "/logout").permitAll()
 //                .antMatchers(HttpMethod.OPTIONS).permitAll()
 //                //除以上路径都需要验证
 //                .anyRequest().authenticated()
 //                .and()
 //                .exceptionHandling()
-//                .accessDeniedPage("/sso/login?error")
+//                .accessDeniedPage("/login?error")
 //                .and().csrf().disable()
 //                .logout()
 //                .clearAuthentication(true)
-//                .logoutUrl("/sso/logout")
-//                .logoutSuccessUrl("/sso/login?logout")
+//                .logoutUrl("/logout")
+//                .logoutSuccessUrl("/login?logout")
 //                //指定在注销时是否使HttpSession无效。默认为true。
 ////                .invalidateHttpSession(true)
 //                //允许在注销成功时指定要删除的cookie的名称。这是显式添加CookieClearingLogoutHandler的快捷方式。
@@ -53,10 +53,10 @@ public class AnanWebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 //                .usernameParameter("usercode")
 //                //form表单用户名参数名
 //                .passwordParameter("password")
-//                .loginPage("/sso/login")
-//                .loginProcessingUrl("/sso/login")
-//                .defaultSuccessUrl("/sso/index")
-//                .failureUrl("/sso/login?error")
+//                .loginPage("/login")
+//                .loginProcessingUrl("/login")
+//                .defaultSuccessUrl("/index")
+//                .failureUrl("/login?error")
 //                //permitall()方法允许为与基于表单的登录相关联的所有url授予所有用户访问权限。
 //                .permitAll()
 //        ;

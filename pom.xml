@@ -18,6 +18,7 @@
         <module>anan-cloudadviced</module>
         <module>anan-cloudgateway</module>
         <module>anan-configserver</module>
+        <module>anan-cloudresource</module>
     </modules>
     <properties>
         <revision>2.3.0-SNAPSHOT</revision>
@@ -56,20 +57,16 @@
                 <spring.cloud.config.server.git.search-paths>anan-config</spring.cloud.config.server.git.search-paths>
                 <spring.cloud.inetutils.preferred-networks>192.168.137.</spring.cloud.inetutils.preferred-networks>
                 <spring.rabbitmq.addresses>rabbitmq:5672</spring.rabbitmq.addresses>
-                <spring.rabbitmq.username>
-                    '{cipher}AQAGy3LYSBkcOJA32VA/mT3jNtxscWGe0Eto3isApxPrUgv00Pw0629LROM3zCh9KC3/HqP4aoUexyBw3QhdLCkXr6zpXGFrj0x7EPcu+A9B9kbzZejfcdG3l+Wln+chjS50cLe0txPDt4ioZxbLb0BjgwfPS4THrIfozhJgyRKNwkrw4prTXSnE2o/tbo/rHKJutXF53ywkAqRK7sZNFUMiHZTKiQkKzzCTUQmFRoBYkYtoc2SjVMerEfySCyx8oEm0+FnLpUuFpexO/cVl/YbWxmeU4qvrpeDgj1OEJ9JAuKZGfSHF/1LdvaOP7HVlx1EiyqLoQys/pa1vFjkRu8YHSmSS7jOfiGty2sT3g4+fFG7G0K+8g5cmRGAUbhUppDI='
-                </spring.rabbitmq.username>
-                <spring.rabbitmq.password>
-                    '{cipher}AQAf9K0s8zLVaIk44+wqpHGuHsHEK5G4KKu1vk0HwxlojaYQHRkNsFhdQwmcrnkayWpGmNZezJCVb56JJTYL0wOus7L+zUIRWG0YIBzZBzG0iAX/6fQ0l7EVc6JyYmksGi6czSWhhAYvaJ2zupxU5pMou+k48ILP1MSZ+2n/mmM2OA/msXzum7hhSbuHKHkazorFlYLem2efeU0M61xWGRgzHAJ6pOxWGJx2NepgFDGLSTpDiqRTXD98AabHa28X8TpBbFynDONrU3mueuW/TSrXOlzp2LOO/cDbYGpZXAc/jypbH8SWfkSQlQrWaKBg2FJ8DYg/hUnxfSy+QbzyeGkPfJAcrDZ+9lhluKJ2RplT9bAedAWmvzPu2cJCQuf/RmM='
-                </spring.rabbitmq.password>
+                <spring.rabbitmq.username>anan</spring.rabbitmq.username>
+                <spring.rabbitmq.password>local</spring.rabbitmq.password>
                 <!--TODO 这里启用加密后除anan-eurekaserver、anan-configserver之外的应用都无法解密
                 <spring.security.user.name>'{cipher}AQAGy3LYSBkcOJA32VA/mT3jNtxscWGe0Eto3isApxPrUgv00Pw0629LROM3zCh9KC3/HqP4aoUexyBw3QhdLCkXr6zpXGFrj0x7EPcu+A9B9kbzZejfcdG3l+Wln+chjS50cLe0txPDt4ioZxbLb0BjgwfPS4THrIfozhJgyRKNwkrw4prTXSnE2o/tbo/rHKJutXF53ywkAqRK7sZNFUMiHZTKiQkKzzCTUQmFRoBYkYtoc2SjVMerEfySCyx8oEm0+FnLpUuFpexO/cVl/YbWxmeU4qvrpeDgj1OEJ9JAuKZGfSHF/1LdvaOP7HVlx1EiyqLoQys/pa1vFjkRu8YHSmSS7jOfiGty2sT3g4+fFG7G0K+8g5cmRGAUbhUppDI='</spring.security.user.name>
                 <spring.security.user.password>'{cipher}AQAf9K0s8zLVaIk44+wqpHGuHsHEK5G4KKu1vk0HwxlojaYQHRkNsFhdQwmcrnkayWpGmNZezJCVb56JJTYL0wOus7L+zUIRWG0YIBzZBzG0iAX/6fQ0l7EVc6JyYmksGi6czSWhhAYvaJ2zupxU5pMou+k48ILP1MSZ+2n/mmM2OA/msXzum7hhSbuHKHkazorFlYLem2efeU0M61xWGRgzHAJ6pOxWGJx2NepgFDGLSTpDiqRTXD98AabHa28X8TpBbFynDONrU3mueuW/TSrXOlzp2LOO/cDbYGpZXAc/jypbH8SWfkSQlQrWaKBg2FJ8DYg/hUnxfSy+QbzyeGkPfJAcrDZ+9lhluKJ2RplT9bAedAWmvzPu2cJCQuf/RmM='</spring.security.user.password>-->
                 <spring.security.user.name>anan</spring.security.user.name>
                 <spring.security.user.password>local</spring.security.user.password>
-                <encrypt.key-store.location>classpath:/cdp.jks</encrypt.key-store.location>
+                <encrypt.key-store.location>classpath:/anan.jks</encrypt.key-store.location>
                 <encrypt.key-store.password>123456</encrypt.key-store.password>
-                <encrypt.key-store.alias>cdp</encrypt.key-store.alias>
+                <encrypt.key-store.alias>anan</encrypt.key-store.alias>
                 <encrypt.key-store.secret>123456</encrypt.key-store.secret>
                 <docker.register.url>fosin</docker.register.url>
                 <!--<docker.register.url>registry.cn-hangzhou.aliyuncs.com/fosin</docker.register.url>
@@ -217,6 +214,10 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>${anan.groupId}</groupId>
+            <artifactId>anan-cloudresource</artifactId>
+        </dependency>
         <!--spring boot 项目引入了 spring的devtools 会产生java.lang.ClassCastException 两个一样的类不能强转
         java.lang.ClassCastException: class com.github.fosin.anan.pojo.dto.AnanUserDetail cannot be
         cast to class com.github.fosin.anan.pojo.dto.AnanUserDetail (com.github.fosin.anan.pojo.dto.
@@ -265,6 +266,11 @@
             <dependency>
                 <groupId>${anan.groupId}</groupId>
                 <artifactId>anan-platformpojo</artifactId>
+                <version>2.3.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>${anan.groupId}</groupId>
+                <artifactId>anan-cloudresource</artifactId>
                 <version>2.3.0-SNAPSHOT</version>
             </dependency>
         </dependencies>

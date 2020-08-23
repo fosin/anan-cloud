@@ -2,16 +2,14 @@ package com.github.fosin.anan;
 
 import com.github.fosin.anan.core.banner.AnanBanner;
 import com.github.fosin.anan.redis.annotation.EnableAnanRedis;
-import com.github.fosin.anan.security.annotation.EnableAnanWebSecurity;
-import com.github.fosin.anan.security.config.AnanSecurityProperties;
+import com.github.fosin.anan.security.annotation.EnableAnanFormLogin;
+import com.github.fosin.anan.security.annotation.EnableAnanSecurityOauth2;
 import com.github.fosin.anan.swagger.annotation.EnableAnanSwagger2;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
-import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Primary;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
@@ -28,8 +26,8 @@ import javax.sql.DataSource;
 @SpringBootApplication
 @EnableAnanRedis
 @EnableAnanSwagger2
-//@EnableAnanResourceServer
-@EnableAnanWebSecurity
+@EnableAnanFormLogin
+@EnableAnanSecurityOauth2
 public class AuthServerApplication {
     public static void main(String[] args) {
         new SpringApplicationBuilder(AuthServerApplication.class)
@@ -63,11 +61,11 @@ public class AuthServerApplication {
         return jdbcTokenRepository;
     }
 
-    @Bean
-    @RefreshScope
-    @Primary
-    public AnanSecurityProperties ananSecurityProperties() {
-        return new AnanSecurityProperties();
-    }
+//    @Bean
+//    @RefreshScope
+//    @Primary
+//    public AnanSecurityProperties ananSecurityProperties() {
+//        return new AnanSecurityProperties();
+//    }
 
 }

@@ -14,8 +14,7 @@ spring:
     name: @project.artifactId@
   cloud:
     inetutils:
-      #      preferred-networks: @spring.cloud.inetutils.preferred-networks@
-      use-only-site-local-interfaces: true
+      preferred-networks: @spring.cloud.inetutils.preferred-networks@
     config:
       username: ${spring.security.user.name}
       password: ${spring.security.user.password}
@@ -49,21 +48,10 @@ spring:
     addresses: @spring.rabbitmq.addresses@
     username: @spring.rabbitmq.username@
     password: @spring.rabbitmq.password@
-
   security:
-#    oauth2:
-#      resourceserver:
-#        jwt:
-#          jwk-set-uri: http://anan-authserver/oauth2/jwk
     user:
       name: @spring.security.user.name@
       password: @spring.security.user.password@
-#security:
-#  oauth2:
-#    authorization:
-#      jwt:
-#        key-store:
-#        key-value:
 encrypt:
   key-store:
     location: @encrypt.key-store.location@
@@ -77,66 +65,3 @@ encrypt:
 info: #定义各种额外的详情给服务端显示
   description: "@project.description@"
   version: "@project.version@"
-anan:
-  security:
-    authority:
-      root-path: '/**'
-      authorities:
-        - methods:
-            - OPTIONS
-        - path: '/sso/login'
-        - path: '/sso/logout'
-    cors:
-      allowedOrigins: '*'
-      allowedMethods: '*'
-      allowedHeaders: '*'
-      allowCredentials: true
-    csrf:
-      enabled: false
-    basic:
-      enabled: true
-    exception-handling:
-      access-denied-page: '/sso/login?error'
-      enabled: true
-    form-login:
-      enabled: true
-      login-page: '/sso/login'
-      login-processing-url: '/sso/login'
-      password-parameter: 'password'
-      username-parameter: 'usercode'
-      default-success-url: '/sso/index'
-      failure-url: '/sso/login?error'
-      logoutUrl: '/sso/logout'
-      logoutSuccessUrl: '/sso/login?logout'
-      clear-authentication: true
-    remember-me:
-      enabled: true
-    oauth2-resource-server:
-      enabled: true
-      token-type: jwt
-      jwt:
-        jwk-set-uri: http://anan-authserver:51400/oauth/token_key
-    jwt:
-      key-value: fosin
-      key-store:
-        location: ${encrypt.key-store.location}
-        password: ${encrypt.key-store.password}
-        alias: ${encrypt.key-store.alias}
-        secret: ${encrypt.key-store.secret}
-    web-ignoring:
-      - /**/*.html
-      - /**/*.css
-      - /**/*.js
-      - /**/*.woff*
-      - /**/*.ttf*
-      - /**/*.map
-      - /**/*.ico
-      - /**/*.swf
-      - /**/*.jpg
-      - /**/*.png
-      - /**/*.svg
-      - /**/webjars/**
-      - /**/images/**
-      - /**/swagger-resources/**
-      - /**/api-docs"
-
