@@ -7,7 +7,7 @@ import com.github.fosin.anan.platform.dto.request.AnanPayRetrieveDto;
 import com.github.fosin.anan.platform.dto.request.AnanPayUpdateDto;
 import com.github.fosin.anan.platform.entity.AnanPayEntity;
 import com.github.fosin.anan.platform.service.inter.AnanPayService;
-import com.github.fosin.anan.platformapi.constant.UrlPrefixConstant;
+import com.github.fosin.anan.pojo.constant.UrlPrefixConstant;
 import io.swagger.annotations.Api;
 
 import org.springframework.web.bind.annotation.RequestMapping;

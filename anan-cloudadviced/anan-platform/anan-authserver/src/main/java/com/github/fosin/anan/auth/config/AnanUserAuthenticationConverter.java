@@ -1,7 +1,6 @@
 package com.github.fosin.anan.auth.config;
 
 import com.github.fosin.anan.pojo.dto.AnanUserDetail;
-import com.github.fosin.anan.pojo.dto.AnanUserDto;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -17,7 +16,6 @@ import java.util.Map;
  * @date 2020/8/9
  * @since 2.1.0
  */
-//@Component
 @AllArgsConstructor
 public class AnanUserAuthenticationConverter extends DefaultUserAuthenticationConverter {
     private final UserDetailsService userDetailsService;
@@ -37,18 +35,16 @@ public class AnanUserAuthenticationConverter extends DefaultUserAuthenticationCo
             UserDetails userDetails = userDetailsService.loadUserByUsername(name);
             ananUserDetail = (AnanUserDetail) userDetails;
         }
-        AnanUserDto user = ananUserDetail.getUser();
-        response.put("namecode", user.getUsercode());
-        response.put("id", user.getId());
-        response.put("organizId", user.getOrganizId());
-        response.put("avatar", user.getAvatar());
-        response.put("sex", user.getSex());
-        response.put("birthday", user.getBirthday());
-        response.put("statu", user.getStatus());
-        response.put("expireTime", user.getExpireTime());
-        response.put("email", user.getEmail());
-        response.put("phone", user.getPhone());
 
+        response.put("user", ananUserDetail.getUser());
+        response.put("client", ananUserDetail.getClient());
+        response.put("username", ananUserDetail.getUsername());
+        response.put("password", ananUserDetail.getUsername());
+        response.put("accountNonExpired", ananUserDetail.isAccountNonExpired());
+        response.put("accountNonLocked", ananUserDetail.isAccountNonLocked());
+        response.put("credentialsNonExpired", ananUserDetail.isCredentialsNonExpired());
+        response.put("enabled", ananUserDetail.isEnabled());
+        
         if (authentication.getAuthorities() != null && !authentication.getAuthorities().isEmpty()) {
             response.put(AUTHORITIES, AuthorityUtils.authorityListToSet(authentication.getAuthorities()));
         }

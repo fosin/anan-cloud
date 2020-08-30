@@ -1,4 +1,4 @@
-package com.github.fosin.anan.zuulgateway.ratelimit;
+package com.github.fosin.anan.zuul.ratelimit;
 
 import com.marcosbarbero.cloud.autoconfigure.zuul.ratelimit.config.RateLimitUtils;
 import com.marcosbarbero.cloud.autoconfigure.zuul.ratelimit.config.properties.RateLimitProperties;

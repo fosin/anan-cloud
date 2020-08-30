@@ -8,7 +8,7 @@
         <Property name="patternColor">%highlight{%d{HH:mm:ss,SSS} [%t] %-5level %logger{36}: %msg%n%throwable}{FATAL=Bright Magenta,
             ERROR=Bright Red,WARN=Bright Yellow,INFO=Bright White,DEBUG=Bright Cyan,TRACE=Bright Blue}
         </Property>
-        <Property name="displayName">@project.artifactId@</Property>
+        <Property name="displayName">@anan-cloud.moduleName@</Property>
     </Properties>
     <Appenders>
         <Console name="console" target="SYSTEM_OUT" follow="true">

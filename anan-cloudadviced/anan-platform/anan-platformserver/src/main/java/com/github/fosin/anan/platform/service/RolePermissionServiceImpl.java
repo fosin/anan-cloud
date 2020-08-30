@@ -4,7 +4,7 @@ import com.github.fosin.anan.core.exception.AnanServiceException;
 import com.github.fosin.anan.jpa.repository.IJpaRepository;
 import com.github.fosin.anan.jpa.service.batch.IUpdateInBatchJpaService;
 import com.github.fosin.anan.platform.service.inter.RolePermissionService;
-import com.github.fosin.anan.platformapi.constant.RedisConstant;
+import com.github.fosin.anan.pojo.constant.RedisConstant;
 import com.github.fosin.anan.platformapi.entity.AnanRolePermissionEntity;
 import com.github.fosin.anan.platformapi.repository.RolePermissionRepository;
 import com.github.fosin.anan.pojo.dto.request.AnanRolePermissionUpdateDto;

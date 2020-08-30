@@ -1,15 +1,12 @@
 package com.github.fosin.anan.auth.config;
 
 import com.github.fosin.anan.auth.security.AnanTokenServices;
+import com.github.fosin.anan.security.resource.AnanSecurityProperties;
 import com.github.fosin.anan.util.StringUtil;
 import lombok.AllArgsConstructor;
-import org.springframework.boot.autoconfigure.security.oauth2.authserver.AuthorizationServerProperties;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
-import org.springframework.core.io.Resource;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,9 +20,7 @@ import org.springframework.security.oauth2.provider.ClientDetailsService;
 import org.springframework.security.oauth2.provider.client.JdbcClientDetailsService;
 import org.springframework.security.oauth2.provider.code.AuthorizationCodeServices;
 import org.springframework.security.oauth2.provider.code.JdbcAuthorizationCodeServices;
-import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
-import org.springframework.security.oauth2.provider.token.TokenEnhancer;
-import org.springframework.security.oauth2.provider.token.TokenStore;
+import org.springframework.security.oauth2.provider.token.*;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 import org.springframework.security.rsa.crypto.KeyStoreKeyFactory;
@@ -44,15 +39,12 @@ import java.util.Map;
 @Configuration
 @EnableAuthorizationServer
 @AllArgsConstructor
-@EnableConfigurationProperties(value = AuthorizationServerProperties.class)
 public class AnanJwtAuthorizationServerConfigurer extends AuthorizationServerConfigurerAdapter {
     private final AuthenticationManager authenticationManager;
     private final DataSource dataSource;
     private final UserDetailsService userDetailsService;
     private final PasswordEncoder passwordEncoder;
-//    private final AnanUserAuthenticationConverter ananUserAuthenticationConverter;
-    private final AuthorizationServerProperties authorizationServerProperties;
-    private final ApplicationContext applicationContext;
+    private final AnanSecurityProperties ananSecurityProperties;
 
     /**
      * 用来配置客户端详情服务（ClientDetailsService），
@@ -126,6 +118,11 @@ public class AnanJwtAuthorizationServerConfigurer extends AuthorizationServerCon
         return tokenServices;
     }
 
+    @Bean
+    public DefaultUserAuthenticationConverter defaultUserAuthenticationConverter() {
+        return new AnanUserAuthenticationConverter(userDetailsService);
+    }
+
     /**
      * 这个版本的全称是 JSON Web Token（JWT），它可以把令牌相关的数据进行编码（因此对于后端服务来说，
      * 它不需要进行存储，这将是一个重大优势），但是它有一个缺点，那就是撤销一个已经授权令牌将会非常困难，
@@ -142,36 +139,31 @@ public class AnanJwtAuthorizationServerConfigurer extends AuthorizationServerCon
     }
 
     private KeyPair keyPair() {
-        AuthorizationServerProperties.Jwt jwt = authorizationServerProperties.getJwt();
-        String keyStore = jwt.getKeyStore();
-        if (StringUtil.hasText(keyStore)) {
-            Resource resource = applicationContext.getResource(keyStore);
-            return new KeyStoreKeyFactory
-                    (resource,
-                            jwt.getKeyStorePassword().toCharArray())
-                    .getKeyPair(jwt.getKeyAlias(),
-                            jwt.getKeyPassword().toCharArray());
-        }
-        return null;
+        AnanSecurityProperties.Jwt jwt = ananSecurityProperties.getJwt();
+        return new KeyStoreKeyFactory
+                (jwt.getKeyStore(),
+                        jwt.getKeyStorePassword().toCharArray())
+                .getKeyPair(jwt.getKeyAlias(),
+                        jwt.getKeyPassword().toCharArray());
     }
 
     @Bean
     public JwtAccessTokenConverter jwtAccessTokenConverter() {
         JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
-        AuthorizationServerProperties.Jwt jwt = authorizationServerProperties.getJwt();
+        AnanSecurityProperties.Jwt jwt = ananSecurityProperties.getJwt();
         KeyPair keyPair = keyPair();
         if (keyPair != null) {
             converter.setKeyPair(keyPair);
         } else {
-            String keyValue = jwt.getKeyValue();
+            String keyValue = jwt.getPublicKeyValue();
             if (StringUtil.hasText(keyValue)) {
                 converter.setSigningKey(keyValue);
             }
         }
 
         //配置自定义的CustomUserAuthenticationConverter
-//        DefaultAccessTokenConverter accessTokenConverter = (DefaultAccessTokenConverter) converter.getAccessTokenConverter();
-//        accessTokenConverter.setUserTokenConverter(ananUserAuthenticationConverter);
+        DefaultAccessTokenConverter accessTokenConverter = (DefaultAccessTokenConverter) converter.getAccessTokenConverter();
+        accessTokenConverter.setUserTokenConverter(defaultUserAuthenticationConverter());
         return converter;
     }
 
@@ -207,10 +199,10 @@ public class AnanJwtAuthorizationServerConfigurer extends AuthorizationServerCon
 
         security
                 //url:/oauth/token_key,exposes public key for token verification if using JWT tokens
-                .tokenKeyAccess(authorizationServerProperties.getTokenKeyAccess())
+                .tokenKeyAccess("isAuthenticated()")
                 //url:/oauth/check_token allow check token
-                .checkTokenAccess(authorizationServerProperties.getCheckTokenAccess())
-                .realm(authorizationServerProperties.getRealm())
+                .checkTokenAccess("isAuthenticated()")
+                .realm("fosin")
                 //允许表单认证
                 .allowFormAuthenticationForClients()
                 .passwordEncoder(passwordEncoder)

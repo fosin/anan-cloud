@@ -1,4 +1,4 @@
-package com.github.fosin.anan.zuulgateway.dto;
+package com.github.fosin.anan.zuul.dto;
 
 import lombok.Data;
 import org.springframework.http.HttpHeaders;

@@ -1,7 +1,7 @@
 package com.github.fosin.anan.auth.service;
 
 import com.github.fosin.anan.auth.service.inter.UserService;
-import com.github.fosin.anan.platformapi.constant.RedisConstant;
+import com.github.fosin.anan.pojo.constant.RedisConstant;
 import com.github.fosin.anan.platformapi.entity.AnanUserEntity;
 import com.github.fosin.anan.platformapi.entity.AnanUserRoleEntity;
 import com.github.fosin.anan.platformapi.repository.UserRepository;

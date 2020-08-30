@@ -1,9 +1,10 @@
-package com.github.fosin.anan.platformapi.service.inter;
+package com.github.fosin.anan.zuul.service.inter;
 
+import com.github.fosin.anan.model.constant.PathConstant;
 import com.github.fosin.anan.pojo.constant.ServiceConstant;
 import com.github.fosin.anan.pojo.constant.UrlPrefixConstant;
-import com.github.fosin.anan.platformapi.service.PermissionFeignFallbackServiceImpl;
-import com.github.fosin.anan.platformapi.entity.AnanPermissionEntity;
+import com.github.fosin.anan.pojo.dto.request.AnanPermissionRetrieveDto;
+import com.github.fosin.anan.zuul.service.PermissionFeignFallbackServiceImpl;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,5 +28,14 @@ public interface PermissionFeignService {
      * @return 应用权限列表
      */
     @PostMapping("/findByAppName/{appName}")
-    ResponseEntity<List<AnanPermissionEntity>> findByAppName(@PathVariable("appName") String appName);
+    ResponseEntity<List<AnanPermissionRetrieveDto>> findByAppName(@PathVariable("appName") String appName);
+
+    /**
+     * 远程查询应用权限
+     *
+     * @return 应用权限列表
+     */
+    @PostMapping(PathConstant.PATH_LIST)
+    ResponseEntity<List<AnanPermissionRetrieveDto>> findAll();
+
 }

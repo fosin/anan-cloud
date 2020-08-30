@@ -1,4 +1,4 @@
-package com.github.fosin.anan.zuulgateway.balance;
+package com.github.fosin.anan.zuul.balance;
 
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;

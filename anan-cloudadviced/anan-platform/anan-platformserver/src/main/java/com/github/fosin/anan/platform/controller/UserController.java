@@ -9,7 +9,7 @@ import com.github.fosin.anan.platform.service.inter.RoleService;
 import com.github.fosin.anan.platform.service.inter.UserPermissionService;
 import com.github.fosin.anan.platform.service.inter.UserRoleService;
 import com.github.fosin.anan.platform.service.inter.UserService;
-import com.github.fosin.anan.platformapi.constant.UrlPrefixConstant;
+import com.github.fosin.anan.pojo.constant.UrlPrefixConstant;
 import com.github.fosin.anan.pojo.dto.request.*;
 import com.github.fosin.anan.platformapi.entity.AnanRoleEntity;
 import com.github.fosin.anan.platformapi.entity.AnanUserEntity;

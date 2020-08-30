@@ -20,10 +20,6 @@
             <artifactId>anan-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>${anan.groupId}</groupId>
-            <artifactId>anan-oauth2</artifactId>
-        </dependency>
-        <dependency>
             <groupId>de.codecentric</groupId>
             <artifactId>spring-boot-admin-starter-server</artifactId>
         </dependency>

@@ -21,20 +21,6 @@
         </dependency>
         <dependency>
             <groupId>${anan.groupId}</groupId>
-            <artifactId>anan-security</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.security.oauth.boot</groupId>
-            <artifactId>spring-security-oauth2-autoconfigure</artifactId>
-        </dependency>
-        <!--
-                <dependency>
-                    <groupId>${anan.groupId}</groupId>
-                    <artifactId>anan-oauth2</artifactId>
-                </dependency>
-        -->
-        <dependency>
-            <groupId>${anan.groupId}</groupId>
             <artifactId>anan-platformpojo</artifactId>
         </dependency>
         <dependency>

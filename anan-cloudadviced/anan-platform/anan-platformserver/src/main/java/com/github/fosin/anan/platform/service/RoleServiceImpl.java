@@ -9,11 +9,11 @@ import com.github.fosin.anan.platform.repository.OrganizationRepository;
 import com.github.fosin.anan.platform.repository.RoleRepository;
 import com.github.fosin.anan.platform.repository.UserRoleRepository;
 import com.github.fosin.anan.platform.service.inter.RoleService;
-import com.github.fosin.anan.platformapi.constant.SystemConstant;
+import com.github.fosin.anan.pojo.constant.SystemConstant;
 import com.github.fosin.anan.platformapi.entity.AnanOrganizationEntity;
 import com.github.fosin.anan.platformapi.entity.AnanRoleEntity;
 import com.github.fosin.anan.platformapi.entity.AnanUserRoleEntity;
-import com.github.fosin.anan.platformapi.util.LoginUserUtil;
+import com.github.fosin.anan.pojo.util.AnanUserDetailUtil;
 import com.github.fosin.anan.pojo.dto.AnanUserDto;
 import com.github.fosin.anan.pojo.dto.request.AnanRoleCreateDto;
 import com.github.fosin.anan.pojo.dto.request.AnanRoleUpdateDto;
@@ -43,17 +43,16 @@ import java.util.Objects;
 @Service
 @Lazy
 public class RoleServiceImpl implements RoleService {
-
     private final RoleRepository roleRepository;
-
     private final UserRoleRepository userRoleRepository;
-
     private final OrganizationRepository organizationRepository;
+    private final AnanUserDetailUtil ananUserDetailUtil;
 
-    public RoleServiceImpl(RoleRepository roleRepository, UserRoleRepository userRoleRepository, OrganizationRepository organizationRepository) {
+    public RoleServiceImpl(RoleRepository roleRepository, UserRoleRepository userRoleRepository, OrganizationRepository organizationRepository, AnanUserDetailUtil ananUserDetailUtil) {
         this.roleRepository = roleRepository;
         this.userRoleRepository = userRoleRepository;
         this.organizationRepository = organizationRepository;
+        this.ananUserDetailUtil = ananUserDetailUtil;
     }
 
     @Override
@@ -124,7 +123,7 @@ public class RoleServiceImpl implements RoleService {
         PageRequest pageable = PageRequest.of(pageModule.getPageNumber() - 1, pageModule.getPageSize(), Sort.Direction.fromString(pageModule.getSortOrder()), pageModule.getSortName());
         String searchCondition = pageModule.getSearchText();
 
-        AnanUserDto loginUser = LoginUserUtil.getUser();
+        AnanUserDto loginUser = ananUserDetailUtil.getAnanUser();
         Specification<AnanRoleEntity> condition = (Specification<AnanRoleEntity>) (root, query, cb) -> {
             Path<String> roleName = root.get("name");
             Path<String> roleValue = root.get("value");
@@ -164,7 +163,7 @@ public class RoleServiceImpl implements RoleService {
         Assert.notNull(pageModule, "传入的分页信息不能为空!");
         Assert.notNull(organizId, "机构ID不能为空!");
         String searchCondition = pageModule.getSearchText();
-        AnanUserDto loginUser = LoginUserUtil.getUser();
+        AnanUserDto loginUser = ananUserDetailUtil.getAnanUser();
         PageRequest pageable = PageRequest.of(pageModule.getPageNumber() - 1, pageModule.getPageSize(), Sort.Direction.fromString(pageModule.getSortOrder()), pageModule.getSortName());
 
         Page<AnanRoleEntity> page;
@@ -211,7 +210,7 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public List<AnanRoleEntity> findAllByOrganizId(Long organizId) {
         Assert.notNull(organizId, "机构ID不能为空!");
-        AnanUserDto loginUser = LoginUserUtil.getUser();
+        AnanUserDto loginUser = ananUserDetailUtil.getAnanUser();
         if (loginUser.getUsercode().equals(SystemConstant.ANAN_USER_CODE)) {
             return roleRepository.findAll();
         } else {

@@ -1,4 +1,4 @@
-package com.github.fosin.anan.platformapi.constant;
+package com.github.fosin.anan.pojo.constant;
 
 /**
  * Description

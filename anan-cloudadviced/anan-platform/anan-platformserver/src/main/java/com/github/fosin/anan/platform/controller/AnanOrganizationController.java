@@ -7,7 +7,7 @@ import com.github.fosin.anan.model.service.ISimpleService;
 import com.github.fosin.anan.platform.service.inter.AnanOrganizationAuthService;
 import com.github.fosin.anan.platform.service.inter.AnanOrganizationPermissionService;
 import com.github.fosin.anan.platform.service.inter.OrganizationService;
-import com.github.fosin.anan.platformapi.constant.UrlPrefixConstant;
+import com.github.fosin.anan.pojo.constant.UrlPrefixConstant;
 import com.github.fosin.anan.pojo.dto.RegisterDto;
 import com.github.fosin.anan.pojo.dto.request.AnanOrganizationCreateDto;
 import com.github.fosin.anan.platform.dto.request.AnanOrganizationPermissionUpdateDto;

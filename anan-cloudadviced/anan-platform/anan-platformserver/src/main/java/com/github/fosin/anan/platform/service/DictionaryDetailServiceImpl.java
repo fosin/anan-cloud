@@ -8,11 +8,11 @@ import com.github.fosin.anan.model.result.ResultUtils;
 import com.github.fosin.anan.platform.repository.DictionaryDetailRepository;
 import com.github.fosin.anan.platform.service.inter.DictionaryDetailService;
 import com.github.fosin.anan.platform.service.inter.UserService;
-import com.github.fosin.anan.platformapi.constant.SystemConstant;
-import com.github.fosin.anan.platformapi.constant.RedisConstant;
+import com.github.fosin.anan.pojo.constant.SystemConstant;
+import com.github.fosin.anan.pojo.constant.RedisConstant;
 import com.github.fosin.anan.platformapi.entity.AnanDictionaryDetailEntity;
 import com.github.fosin.anan.platformapi.entity.AnanUserEntity;
-import com.github.fosin.anan.platformapi.util.LoginUserUtil;
+import com.github.fosin.anan.pojo.util.AnanUserDetailUtil;
 import com.github.fosin.anan.pojo.dto.AnanUserDto;
 import com.github.fosin.anan.pojo.dto.request.AnanDictionaryDetailCreateDto;
 import com.github.fosin.anan.pojo.dto.request.AnanDictionaryDetailUpdateDto;
@@ -49,11 +49,13 @@ public class DictionaryDetailServiceImpl implements DictionaryDetailService {
     private final DictionaryDetailRepository dictionaryDetailRepository;
     private final UserService userService;
     private final AnanCacheManger ananCacheManger;
+    private final AnanUserDetailUtil ananUserDetailUtil;
 
-    public DictionaryDetailServiceImpl(DictionaryDetailRepository dictionaryDetailRepository, UserService userService, AnanCacheManger ananCacheManger) {
+    public DictionaryDetailServiceImpl(DictionaryDetailRepository dictionaryDetailRepository, UserService userService, AnanCacheManger ananCacheManger, AnanUserDetailUtil ananUserDetailUtil) {
         this.dictionaryDetailRepository = dictionaryDetailRepository;
         this.userService = userService;
         this.ananCacheManger = ananCacheManger;
+        this.ananUserDetailUtil = ananUserDetailUtil;
     }
 
     @Override
@@ -79,7 +81,7 @@ public class DictionaryDetailServiceImpl implements DictionaryDetailService {
     }
 
     private void isSuperUser(AnanDictionaryDetailEntity findEntity) {
-        AnanUserDto loginUser = LoginUserUtil.getUser();
+        AnanUserDto loginUser = ananUserDetailUtil.getAnanUser();
         //不是超级管理员
         if (!SystemConstant.ANAN_USER_CODE.equals(loginUser.getUsercode())) {
             AnanUserEntity superUser = userService.findByUsercode(SystemConstant.ANAN_USER_CODE);

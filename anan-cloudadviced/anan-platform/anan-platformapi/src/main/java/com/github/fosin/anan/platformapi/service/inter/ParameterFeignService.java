@@ -1,7 +1,7 @@
 package com.github.fosin.anan.platformapi.service.inter;
 
-import com.github.fosin.anan.platformapi.constant.ServiceConstant;
-import com.github.fosin.anan.platformapi.constant.UrlPrefixConstant;
+import com.github.fosin.anan.pojo.constant.ServiceConstant;
+import com.github.fosin.anan.pojo.constant.UrlPrefixConstant;
 import com.github.fosin.anan.pojo.dto.request.AnanParameterRetrieveDto;
 import com.github.fosin.anan.platformapi.service.ParameterFeignFallbackServiceImpl;
 import com.github.fosin.anan.pojo.dto.request.AnanParameterCreateDto;

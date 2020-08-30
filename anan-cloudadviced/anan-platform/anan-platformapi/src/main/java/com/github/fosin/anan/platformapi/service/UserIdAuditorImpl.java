@@ -1,6 +1,7 @@
 package com.github.fosin.anan.platformapi.service;
 
-import com.github.fosin.anan.platformapi.util.LoginUserUtil;
+import com.github.fosin.anan.pojo.util.AnanUserDetailUtil;
+import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;
 
@@ -13,9 +14,12 @@ import java.util.Optional;
  * @date 2019.1.15
  */
 @Configuration
+@AllArgsConstructor
 public class UserIdAuditorImpl implements AuditorAware<Long> {
+    private final AnanUserDetailUtil ananUserDetailUtil;
+
     @Override
     public Optional<Long> getCurrentAuditor() {
-        return Optional.of(LoginUserUtil.getUser().getId());
+        return Optional.of(ananUserDetailUtil.getAnanUser().getId());
     }
 }

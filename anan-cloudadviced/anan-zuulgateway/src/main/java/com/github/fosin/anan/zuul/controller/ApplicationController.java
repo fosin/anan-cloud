@@ -1,7 +1,7 @@
-package com.github.fosin.anan.zuulgateway.controller;
+package com.github.fosin.anan.zuul.controller;
 
 import com.github.fosin.anan.util.StringUtil;
-import com.github.fosin.anan.zuulgateway.dto.PageURI;
+import com.github.fosin.anan.zuul.dto.PageURI;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;

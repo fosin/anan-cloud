@@ -4,7 +4,7 @@ import com.github.fosin.anan.auth.service.inter.PermissionService;
 import com.github.fosin.anan.auth.service.inter.RolePermissionService;
 import com.github.fosin.anan.auth.service.inter.UserPermissionService;
 import com.github.fosin.anan.auth.service.inter.UserService;
-import com.github.fosin.anan.platformapi.constant.SystemConstant;
+import com.github.fosin.anan.pojo.constant.SystemConstant;
 import com.github.fosin.anan.platformapi.entity.*;
 import com.github.fosin.anan.pojo.dto.AnanUserDetail;
 import com.github.fosin.anan.pojo.dto.AnanUserAllPermissionDto;
@@ -118,7 +118,7 @@ public class AnanUserDetailsServiceImpl implements UserDetailsService {
 
         AnanUserAllPermissionDto permissionTree = TreeUtil.createTree(userPermissions, SystemConstant.ROOT_PERMISSION_ID, "id", "pid", "children");
 
-        AnanUserDetail user = new AnanUserDetail(userService.copyUserData(userEntity), permissionTree, grantedAuthoritySet);
+        AnanUserDetail user = new AnanUserDetail(userService.copyUserData(userEntity), grantedAuthoritySet);
         log.debug("UserDetailsServiceImpl User:" + user.toString());
         return user;
     }

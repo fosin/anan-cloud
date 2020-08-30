@@ -15,8 +15,8 @@ import java.util.Objects;
  * @date 2019/5/13
  */
 public class RemoteParameter implements IParameter {
-    private IParameterStrategy parameterStrategy;
-    private ParameterFeignService parameterService;
+    private final IParameterStrategy parameterStrategy;
+    private final ParameterFeignService parameterService;
 
     public RemoteParameter(IParameterStrategy parameterStrategy, ParameterFeignService parameterService) {
         this.parameterStrategy = parameterStrategy;

@@ -23,21 +23,18 @@ public class AnanUserDetail extends User {
     @Getter
     private AnanUserDto user;
     @Getter
-    private AnanUserAllPermissionDto permissionTree;
-    @Getter
     private Client client;
 
-    //该五参构造函数用于Map转Bean时使用
+    //该无参构造函数用于Map转Bean时使用
     public AnanUserDetail() {
-        super("dfgsdfgdsgr", "sdfgergergerg", new HashSet<GrantedAuthority>());
+        super("dfgsdfgdsgr", "sdfgergergerg", new HashSet<>());
     }
 
-    public AnanUserDetail(AnanUserDto user, AnanUserAllPermissionDto permissionTree, Collection<? extends GrantedAuthority> authorities) {
+    public AnanUserDetail(AnanUserDto user, Collection<? extends GrantedAuthority> authorities) {
         super(user.getUsercode(), user.getPassword(), user.getStatus() == 0, user.getExpireTime().after(new Date()), true, user.getStatus() != 9, authorities);
         this.user = new AnanUserDto();
         BeanUtils.copyProperties(user, this.user);
         this.user.setPassword(null);
-        this.permissionTree = permissionTree;
         client = new Client();
         ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         if (requestAttributes != null) {
@@ -57,7 +54,6 @@ public class AnanUserDetail extends User {
         sb.append("Password: [PROTECTED]; ").append(lineSeparator);
         sb.append("Enabled: ").append(this.getPassword()).append("; ").append(lineSeparator);
         sb.append("user: ").append(this.getUser()).append("; ").append(lineSeparator);
-        sb.append("permissionTree: ").append(this.getPermissionTree()).append("; ").append(lineSeparator);
         Collection<GrantedAuthority> authorities = this.getAuthorities();
         if (!authorities.isEmpty()) {
             sb.append("Granted Authorities: ");

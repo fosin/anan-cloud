@@ -6,7 +6,7 @@ import com.github.fosin.anan.model.result.Result;
 import com.github.fosin.anan.model.result.ResultUtils;
 import com.github.fosin.anan.platform.repository.OrganizationRepository;
 import com.github.fosin.anan.platform.service.inter.OrganizationService;
-import com.github.fosin.anan.platformapi.constant.RedisConstant;
+import com.github.fosin.anan.pojo.constant.RedisConstant;
 import com.github.fosin.anan.pojo.dto.request.AnanOrganizationCreateDto;
 import com.github.fosin.anan.pojo.dto.request.AnanOrganizationUpdateDto;
 import com.github.fosin.anan.platformapi.entity.AnanOrganizationEntity;

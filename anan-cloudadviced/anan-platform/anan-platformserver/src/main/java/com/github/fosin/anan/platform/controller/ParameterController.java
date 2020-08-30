@@ -3,7 +3,7 @@ package com.github.fosin.anan.platform.controller;
 import com.github.fosin.anan.model.controller.ISimpleController;
 import com.github.fosin.anan.model.service.ISimpleService;
 import com.github.fosin.anan.platform.service.inter.ParameterService;
-import com.github.fosin.anan.platformapi.constant.UrlPrefixConstant;
+import com.github.fosin.anan.pojo.constant.UrlPrefixConstant;
 import com.github.fosin.anan.pojo.dto.request.AnanParameterCreateDto;
 import com.github.fosin.anan.pojo.dto.request.AnanParameterRetrieveDto;
 import com.github.fosin.anan.pojo.dto.request.AnanParameterUpdateDto;

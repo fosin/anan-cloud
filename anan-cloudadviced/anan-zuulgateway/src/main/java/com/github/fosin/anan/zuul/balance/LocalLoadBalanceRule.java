@@ -1,4 +1,4 @@
-package com.github.fosin.anan.zuulgateway.balance;
+package com.github.fosin.anan.zuul.balance;
 
 import com.github.fosin.anan.util.IpAddressUtil;
 import com.netflix.client.config.IClientConfig;

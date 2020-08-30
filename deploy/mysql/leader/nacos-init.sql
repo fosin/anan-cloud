@@ -404,7 +404,7 @@ anan:
           allowCredentials: true
         customPermissionList:
           - path: /**/auth/oauth/**
-          - path: /**/auth/sso/**
+          - path: /**/auth/**
           - path: /**/*.js
           - path: /**/*.html
           - path: /**/*.css
@@ -741,7 +741,7 @@ anan:
           allowCredentials: true
         customPermissionList:
           - path: /**/auth/oauth/**
-          - path: /**/auth/sso/**
+          - path: /**/auth/**
           - path: /**/*.js
           - path: /**/*.html
           - path: /**/*.css

@@ -2,10 +2,12 @@ package com.github.fosin.anan.auth.service;
 
 import com.github.fosin.anan.auth.service.inter.PermissionService;
 import com.github.fosin.anan.jpa.repository.IJpaRepository;
-import com.github.fosin.anan.platformapi.constant.RedisConstant;
 import com.github.fosin.anan.platformapi.entity.AnanPermissionEntity;
 import com.github.fosin.anan.platformapi.repository.PermissionRepository;
 import com.github.fosin.anan.pojo.dto.AnanUserAllPermissionDto;
+import com.github.fosin.anan.pojo.constant.RedisConstant;
+import com.github.fosin.anan.pojo.dto.request.AnanPermissionRetrieveDto;
+import org.springframework.beans.BeanUtils;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
@@ -33,8 +35,16 @@ public class PermissionServiceImpl implements PermissionService {
     }
 
     @Override
-    public List<AnanPermissionEntity> findByAppName(String appName) {
-        return permissionRepository.findByAppName(appName);
+    public List<AnanPermissionRetrieveDto> findByAppName(String appName) {
+        List<AnanPermissionEntity> byAppName = permissionRepository.findByAppName(appName);
+        List<AnanPermissionRetrieveDto> retrieveDtos = new ArrayList<>();
+        for (AnanPermissionEntity ananPermissionEntity : byAppName) {
+            AnanPermissionRetrieveDto retrieveDto = new AnanPermissionRetrieveDto();
+            BeanUtils.copyProperties(ananPermissionEntity, retrieveDto);
+            retrieveDto.setId(ananPermissionEntity.getId());
+            retrieveDtos.add(retrieveDto);
+        }
+        return retrieveDtos;
     }
 
     @Override

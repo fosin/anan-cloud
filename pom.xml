@@ -25,6 +25,7 @@
         <anan-placeholder1>${</anan-placeholder1>
         <anan-placeholder2>}</anan-placeholder2>
         <anan-spring-cloud.version>Hoxton.SR6</anan-spring-cloud.version>
+        <anan-cloud.moduleName>${project.artifactId}</anan-cloud.moduleName>
         <anan-spring-cloud-alibaba.version>2.2.1.RELEASE</anan-spring-cloud-alibaba.version>
         <anan-spring-boot-admin.version>2.2.3</anan-spring-boot-admin.version>
         <sonar.host.url>http://192.168.137.8:9001/</sonar.host.url>
@@ -179,16 +180,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter-logging</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-log4j2</artifactId>
         </dependency>
         <dependency>
             <groupId>com.lmax</groupId>

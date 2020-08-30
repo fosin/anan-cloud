@@ -7,7 +7,7 @@ import com.github.fosin.anan.model.result.ResultUtils;
 import com.github.fosin.anan.platform.service.inter.PermissionService;
 import com.github.fosin.anan.platform.service.inter.RolePermissionService;
 import com.github.fosin.anan.platform.service.inter.UserPermissionService;
-import com.github.fosin.anan.platformapi.constant.RedisConstant;
+import com.github.fosin.anan.pojo.constant.RedisConstant;
 import com.github.fosin.anan.pojo.dto.request.AnanPermissionCreateDto;
 import com.github.fosin.anan.pojo.dto.request.AnanPermissionUpdateDto;
 import com.github.fosin.anan.platformapi.entity.AnanPermissionEntity;

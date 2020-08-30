@@ -1,4 +1,4 @@
-package com.github.fosin.anan.zuulgateway.filter;
+package com.github.fosin.anan.zuul.filter;
 
 
 import com.netflix.zuul.ZuulFilter;
