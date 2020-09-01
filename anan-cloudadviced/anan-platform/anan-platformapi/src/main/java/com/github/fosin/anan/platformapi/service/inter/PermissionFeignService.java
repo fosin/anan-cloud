@@ -1,7 +1,7 @@
 package com.github.fosin.anan.platformapi.service.inter;
 
-import com.github.fosin.anan.pojo.constant.ServiceConstant;
-import com.github.fosin.anan.pojo.constant.UrlPrefixConstant;
+import com.github.fosin.anan.cloudresource.constant.ServiceConstant;
+import com.github.fosin.anan.cloudresource.constant.UrlPrefixConstant;
 import com.github.fosin.anan.platformapi.service.PermissionFeignFallbackServiceImpl;
 import com.github.fosin.anan.platformapi.entity.AnanPermissionEntity;
 import org.springframework.cloud.openfeign.FeignClient;

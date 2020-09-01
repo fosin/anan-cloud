@@ -9,7 +9,6 @@ on:
       - 'anan-cloudadviced/pom.xml'
       - 'anan-cloudadviced/anan-platform/pom.xml'
       - 'anan-cloudadviced/anan-platform/anan-platformapi/**'
-      - 'anan-cloudadviced/anan-platform/anan-platformpojo/**'
       - 'deploy/mysql/**'
       - 'deploy/openjdk/**'
 jobs:
@@ -50,9 +49,6 @@ jobs:
           fi
           if [[ $MODIFY_FILES =~ "anan-platformapi" ]]; then
             MODULES=${MODULES}",com.github.fosin.anan:anan-platformapi"
-          fi
-          if [[ $MODIFY_FILES =~ "anan-platformpojo" ]]; then
-            MODULES=${MODULES}",com.github.fosin.anan:anan-platformpojo"
           fi
           echo ::set-env name=MODIFY_FILES::$MODIFY_FILES
           echo ::set-env name=MODULE_LIST::${MODULES:1}

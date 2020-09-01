@@ -1,12 +1,12 @@
 package com.github.fosin.anan.auth.service;
 
 import com.github.fosin.anan.auth.service.inter.UserService;
-import com.github.fosin.anan.pojo.constant.RedisConstant;
+import com.github.fosin.anan.cloudresource.constant.RedisConstant;
 import com.github.fosin.anan.platformapi.entity.AnanUserEntity;
 import com.github.fosin.anan.platformapi.entity.AnanUserRoleEntity;
 import com.github.fosin.anan.platformapi.repository.UserRepository;
-import com.github.fosin.anan.pojo.dto.AnanUserDto;
-import com.github.fosin.anan.pojo.dto.request.AnanUserRoleRetrieveDto;
+import com.github.fosin.anan.cloudresource.dto.AnanUserDto;
+import com.github.fosin.anan.cloudresource.dto.request.AnanUserRoleRetrieveDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;

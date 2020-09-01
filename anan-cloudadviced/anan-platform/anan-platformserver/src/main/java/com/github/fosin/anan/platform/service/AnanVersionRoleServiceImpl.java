@@ -8,7 +8,7 @@ import com.github.fosin.anan.platform.dto.request.AnanVersionRoleUpdateDto;
 import com.github.fosin.anan.platform.entity.AnanVersionRoleEntity;
 import com.github.fosin.anan.platform.repository.AnanVersionRoleRepository;
 import com.github.fosin.anan.platform.service.inter.AnanVersionRoleService;
-import com.github.fosin.anan.pojo.constant.SystemConstant;
+import com.github.fosin.anan.cloudresource.constant.SystemConstant;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.context.annotation.Lazy;

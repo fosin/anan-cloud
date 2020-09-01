@@ -5,8 +5,8 @@ import com.github.fosin.anan.platformapi.entity.AnanParameterEntity;
 import com.github.fosin.anan.platformapi.parameter.IParameter;
 import com.github.fosin.anan.platformapi.parameter.IParameterStrategy;
 import com.github.fosin.anan.platformapi.parameter.OrganStrategy;
-import com.github.fosin.anan.pojo.dto.request.AnanParameterCreateDto;
-import com.github.fosin.anan.pojo.util.AnanUserDetailUtil;
+import com.github.fosin.anan.cloudresource.dto.request.AnanParameterCreateDto;
+import com.github.fosin.anan.cloudresource.util.AnanUserDetailUtil;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 

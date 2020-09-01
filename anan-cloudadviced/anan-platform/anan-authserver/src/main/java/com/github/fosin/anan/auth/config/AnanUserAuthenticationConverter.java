@@ -1,6 +1,6 @@
 package com.github.fosin.anan.auth.config;
 
-import com.github.fosin.anan.pojo.dto.AnanUserDetail;
+import com.github.fosin.anan.cloudresource.dto.AnanUserDetail;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -37,14 +37,14 @@ public class AnanUserAuthenticationConverter extends DefaultUserAuthenticationCo
         }
 
         response.put("user", ananUserDetail.getUser());
-        response.put("client", ananUserDetail.getClient());
+        response.put("client", ananUserDetail.getAnanClient());
         response.put("username", ananUserDetail.getUsername());
         response.put("password", ananUserDetail.getUsername());
         response.put("accountNonExpired", ananUserDetail.isAccountNonExpired());
         response.put("accountNonLocked", ananUserDetail.isAccountNonLocked());
         response.put("credentialsNonExpired", ananUserDetail.isCredentialsNonExpired());
         response.put("enabled", ananUserDetail.isEnabled());
-        
+
         if (authentication.getAuthorities() != null && !authentication.getAuthorities().isEmpty()) {
             response.put(AUTHORITIES, AuthorityUtils.authorityListToSet(authentication.getAuthorities()));
         }

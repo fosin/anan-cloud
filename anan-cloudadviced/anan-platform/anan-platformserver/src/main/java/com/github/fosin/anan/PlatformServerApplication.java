@@ -7,18 +7,15 @@ import com.github.fosin.anan.swagger.annotation.EnableAnanSwagger2;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
-import org.springframework.cloud.netflix.eureka.loadbalancer.LoadBalancerEurekaAutoConfiguration;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
  * @author fosin
- * TODO eureka.client.enabled=false，还是会执行LoadBalancerEurekaAutoConfiguration，这个bug在SR7会解决
  */
-@SpringBootApplication(exclude = {LoadBalancerEurekaAutoConfiguration.class})
+@SpringBootApplication
 @EnableAnanRedis
 @EnableAnanSwagger2
-//@EnableAnanSecurityOauth2
 @EnableJpaAuditing
 @EnableCircuitBreaker
 @EnableFeignOAuth2Client

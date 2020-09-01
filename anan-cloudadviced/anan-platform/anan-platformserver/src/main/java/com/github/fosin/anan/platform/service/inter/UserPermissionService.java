@@ -1,9 +1,9 @@
 package com.github.fosin.anan.platform.service.inter;
 
 
-import com.github.fosin.anan.pojo.dto.request.AnanUserPermissionCreateDto;
-import com.github.fosin.anan.pojo.dto.request.AnanUserPermissionRetrieveDto;
-import com.github.fosin.anan.pojo.dto.request.AnanUserPermissionUpdateDto;
+import com.github.fosin.anan.cloudresource.dto.request.AnanUserPermissionCreateDto;
+import com.github.fosin.anan.cloudresource.dto.request.AnanUserPermissionRetrieveDto;
+import com.github.fosin.anan.cloudresource.dto.request.AnanUserPermissionUpdateDto;
 import com.github.fosin.anan.platformapi.entity.AnanUserPermissionEntity;
 import com.github.fosin.anan.jpa.service.batch.ICrudBatchJpaService;
 

@@ -1,9 +1,9 @@
 package com.github.fosin.anan.zuul.service.inter;
 
 import com.github.fosin.anan.model.constant.PathConstant;
-import com.github.fosin.anan.pojo.constant.ServiceConstant;
-import com.github.fosin.anan.pojo.constant.UrlPrefixConstant;
-import com.github.fosin.anan.pojo.dto.request.AnanPermissionRetrieveDto;
+import com.github.fosin.anan.cloudresource.constant.ServiceConstant;
+import com.github.fosin.anan.cloudresource.constant.UrlPrefixConstant;
+import com.github.fosin.anan.cloudresource.dto.request.AnanPermissionRetrieveDto;
 import com.github.fosin.anan.zuul.service.PermissionFeignFallbackServiceImpl;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;

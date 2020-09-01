@@ -1,7 +1,7 @@
 package com.github.fosin.anan.zuul.service;
 
 
-import com.github.fosin.anan.pojo.dto.request.AnanPermissionRetrieveDto;
+import com.github.fosin.anan.cloudresource.dto.request.AnanPermissionRetrieveDto;
 import com.github.fosin.anan.zuul.service.inter.PermissionFeignService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;

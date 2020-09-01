@@ -1,5 +1,5 @@
 # 设计定位
-    当前master分支升级Hoxton.SR6还未完成，还存在部分认证问题，有待改进，有需要先使用2.2.0。
+    当前master分支升级Hoxton.SR8还未完成，还存在部分认证问题，有待改进，有需要先使用分支2.2.x。
     
     anan基于Spring Boot 2.3.x和Spring Cloud Hoxton生态体系技术，采用微服务前后端分离架构，为个人及企业微
     服务架构提供一种解决方案，供开发人员学习和交流。其中包括服务注册与发现、服务监控、服务管理、
@@ -47,20 +47,22 @@
     2.2.x-SNAPSHOT      2.0.x-SNAPSHOT       3.x.x
     2.3.x-SNAPSHOT      2.1.x-SNAPSHOT       3.x.x
 # 搭建环境
-## 1、本地开发环境local设置
+## 1、本地（profile=local）开发环境设置
 ### 1.1、安装docker、docker-compose并配置镜像加速
 #### 1.1.1、安装docker
-    参考deploy/readme-docker.md
+详细介绍 [点这里deploy/readme-docker.md](deploy/readme-docker.md) 
 #### 1.1.2、安装docker-compose(按需安装注意版本更新和匹配)
-    参考deploy/readme-docker-compose.md
-### 1.2、运行前端项目anan-vue, 
-    移步 https://github.com/fosin/anan-vue下面的README.md查看前端项目的开发环境搭建过程
+详细介绍 [点这里deploy/readme-docker-compose.md](deploy/readme-docker-compose.md) 
+### 1.2、开发指南
+
+### 1.3、运行前端项目anan-vue, 
+详细介绍移步<https://github.com/fosin/anan-vue>查看前端项目的开发环境搭建过程
 ## 2、部署生产环境
 ### 2.1、Docker Swarm集群环境部署
-    移步看 deploy/swarm/readme-swarm.md
+详细介绍 [点这里deploy/swarm/readme-swarm.md](deploy/swarm/readme-swarm.md) 
 ### 2.2、Kubernetes部署
-	移步看 deploy/k8s/readme-k8s.md
+详细介绍 [点这里deploy/k8s/readme-k8s.md](deploy/k8s/readme-k8s.md) 
 ### 2.3、jar包部署
-    移步看 deploy/jar/readme-jar.md
+详细介绍 [点这里deploy/jar/readme-jar.md](deploy/jar/readme-jar.md) 
 ### 2.4、war包部署
    

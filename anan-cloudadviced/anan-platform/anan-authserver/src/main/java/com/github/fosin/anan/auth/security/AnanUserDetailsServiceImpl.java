@@ -4,10 +4,10 @@ import com.github.fosin.anan.auth.service.inter.PermissionService;
 import com.github.fosin.anan.auth.service.inter.RolePermissionService;
 import com.github.fosin.anan.auth.service.inter.UserPermissionService;
 import com.github.fosin.anan.auth.service.inter.UserService;
-import com.github.fosin.anan.pojo.constant.SystemConstant;
+import com.github.fosin.anan.cloudresource.constant.SystemConstant;
 import com.github.fosin.anan.platformapi.entity.*;
-import com.github.fosin.anan.pojo.dto.AnanUserDetail;
-import com.github.fosin.anan.pojo.dto.AnanUserAllPermissionDto;
+import com.github.fosin.anan.cloudresource.dto.AnanUserDetail;
+import com.github.fosin.anan.cloudresource.dto.AnanUserAllPermissionDto;
 import com.github.fosin.anan.util.TreeUtil;
 import lombok.extern.slf4j.Slf4j;
 

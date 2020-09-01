@@ -1,7 +1,7 @@
 package com.github.fosin.anan.platform.service.inter;
 
 
-import com.github.fosin.anan.pojo.dto.request.AnanUserRoleCreateDto;
+import com.github.fosin.anan.cloudresource.dto.request.AnanUserRoleCreateDto;
 import com.github.fosin.anan.platformapi.entity.AnanUserRoleEntity;
 import com.github.fosin.anan.core.exception.AnanUserOrPassInvalidException;
 import com.github.fosin.anan.jpa.service.batch.ICrudBatchJpaService;

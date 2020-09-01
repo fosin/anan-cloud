@@ -7,16 +7,14 @@ import com.github.fosin.anan.swagger.annotation.EnableAnanSwagger2;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
-import org.springframework.cloud.netflix.eureka.loadbalancer.LoadBalancerEurekaAutoConfiguration;
 import org.springframework.cloud.netflix.hystrix.dashboard.EnableHystrixDashboard;
 import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 
 /**
  * @author fosin
- * TODO eureka.client.enabled=false，还是会执行LoadBalancerEurekaAutoConfiguration，这个bug在SR7会解决
  */
-@SpringBootApplication(exclude = LoadBalancerEurekaAutoConfiguration.class)
+@SpringBootApplication
 @EnableCircuitBreaker
 @EnableZuulProxy //启用RateLimit
 @EnableHystrixDashboard

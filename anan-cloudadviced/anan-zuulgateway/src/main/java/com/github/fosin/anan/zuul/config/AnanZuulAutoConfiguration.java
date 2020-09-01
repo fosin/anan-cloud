@@ -1,6 +1,6 @@
 package com.github.fosin.anan.zuul.config;
 
-import com.github.fosin.anan.pojo.dto.request.AnanPermissionRetrieveDto;
+import com.github.fosin.anan.cloudresource.dto.request.AnanPermissionRetrieveDto;
 import com.github.fosin.anan.security.resource.AnanAuthorityPermission;
 import com.github.fosin.anan.security.resource.AnanProgramAuthorities;
 import com.github.fosin.anan.security.resource.AnanSecurityProperties;
@@ -37,6 +37,7 @@ import java.util.Objects;
 @Configuration
 public class AnanZuulAutoConfiguration {
 
+    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     @Bean
     @ConditionalOnBean(PermissionFeignService.class)
     public AnanProgramAuthorities ananProgramAuthorities(RouteLocator routeLocator, PermissionFeignService permissionService) {

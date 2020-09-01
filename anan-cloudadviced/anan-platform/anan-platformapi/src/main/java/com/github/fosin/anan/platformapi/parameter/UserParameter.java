@@ -1,7 +1,7 @@
 package com.github.fosin.anan.platformapi.parameter;
 
 import com.github.fosin.anan.platformapi.service.inter.ParameterFeignService;
-import com.github.fosin.anan.pojo.util.AnanUserDetailUtil;
+import com.github.fosin.anan.cloudresource.util.AnanUserDetailUtil;
 
 /**
  * @author fosin

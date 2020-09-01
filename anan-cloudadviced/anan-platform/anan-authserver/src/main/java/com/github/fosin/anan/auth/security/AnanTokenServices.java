@@ -1,6 +1,6 @@
 package com.github.fosin.anan.auth.security;
 
-import com.github.fosin.anan.pojo.dto.AnanUserDetail;
+import com.github.fosin.anan.cloudresource.dto.AnanUserDetail;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -15,9 +15,9 @@ import java.util.Optional;
 import java.util.UUID;
 
 /**
- *
- *重写判断Token是否有效规则
+ * 重写判断Token是否有效规则
  * 如果同意Token在不同客户端IP则，需要重新获取Token
+ *
  * @author fosin
  * @date 2018.8.10
  */
@@ -52,11 +52,11 @@ public class AnanTokenServices extends DefaultTokenServices {
 //                   Client client = ReflectUtil.getValueByField("client",oldPrincipal);
 //                   oldClientIp = client.getIp();
                         AnanUserDetail oldPrincipal = (AnanUserDetail) oldUserAuthentication.getPrincipal();
-                        oldClientIp = oldPrincipal.getClient().getIp();
+                        oldClientIp = oldPrincipal.getAnanClient().getIp();
                     }
 
                     //获取当前登录IP
-                    String clientIp = Optional.of(principal.getClient().getIp()).orElse("");
+                    String clientIp = Optional.of(principal.getAnanClient().getIp()).orElse("");
                     //不一致则判断为异地登录
                     landFall = !clientIp.equalsIgnoreCase(oldClientIp);
                     log.debug("之前客户端IP:" + oldClientIp);

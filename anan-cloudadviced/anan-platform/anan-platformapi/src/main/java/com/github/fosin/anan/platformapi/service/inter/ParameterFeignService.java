@@ -1,11 +1,11 @@
 package com.github.fosin.anan.platformapi.service.inter;
 
-import com.github.fosin.anan.pojo.constant.ServiceConstant;
-import com.github.fosin.anan.pojo.constant.UrlPrefixConstant;
-import com.github.fosin.anan.pojo.dto.request.AnanParameterRetrieveDto;
+import com.github.fosin.anan.cloudresource.constant.ServiceConstant;
+import com.github.fosin.anan.cloudresource.constant.UrlPrefixConstant;
+import com.github.fosin.anan.cloudresource.dto.request.AnanParameterRetrieveDto;
 import com.github.fosin.anan.platformapi.service.ParameterFeignFallbackServiceImpl;
-import com.github.fosin.anan.pojo.dto.request.AnanParameterCreateDto;
-import com.github.fosin.anan.pojo.dto.request.AnanParameterUpdateDto;
+import com.github.fosin.anan.cloudresource.dto.request.AnanParameterCreateDto;
+import com.github.fosin.anan.cloudresource.dto.request.AnanParameterUpdateDto;
 import com.github.fosin.anan.platformapi.entity.AnanParameterEntity;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.HttpStatus;

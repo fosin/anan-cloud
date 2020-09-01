@@ -1,8 +1,8 @@
 package com.github.fosin.anan.platform.service.inter;
 
-import com.github.fosin.anan.pojo.dto.request.AnanParameterCreateDto;
-import com.github.fosin.anan.pojo.dto.request.AnanParameterRetrieveDto;
-import com.github.fosin.anan.pojo.dto.request.AnanParameterUpdateDto;
+import com.github.fosin.anan.cloudresource.dto.request.AnanParameterCreateDto;
+import com.github.fosin.anan.cloudresource.dto.request.AnanParameterRetrieveDto;
+import com.github.fosin.anan.cloudresource.dto.request.AnanParameterUpdateDto;
 import com.github.fosin.anan.platformapi.entity.AnanParameterEntity;
 import com.github.fosin.anan.jpa.service.ISimpleJpaService;
 

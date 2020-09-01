@@ -1,6 +1,6 @@
 package com.github.fosin.anan.platformapi.service;
 
-import com.github.fosin.anan.pojo.util.AnanUserDetailUtil;
+import com.github.fosin.anan.cloudresource.util.AnanUserDetailUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;

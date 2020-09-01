@@ -2,9 +2,9 @@ package com.github.fosin.anan.platform.controller;
 
 import com.github.fosin.anan.model.controller.ISimpleController;
 import com.github.fosin.anan.model.service.ISimpleService;
-import com.github.fosin.anan.pojo.dto.request.AnanDictionaryCreateDto;
-import com.github.fosin.anan.pojo.dto.request.AnanDictionaryRetrieveDto;
-import com.github.fosin.anan.pojo.dto.request.AnanDictionaryUpdateDto;
+import com.github.fosin.anan.cloudresource.dto.request.AnanDictionaryCreateDto;
+import com.github.fosin.anan.cloudresource.dto.request.AnanDictionaryRetrieveDto;
+import com.github.fosin.anan.cloudresource.dto.request.AnanDictionaryUpdateDto;
 import com.github.fosin.anan.platformapi.entity.AnanDictionaryEntity;
 import com.github.fosin.anan.platform.service.inter.DictionaryService;
 import io.swagger.annotations.Api;

@@ -1,7 +1,7 @@
 package com.github.fosin.anan.auth.service.inter;
 
 import com.github.fosin.anan.platformapi.entity.AnanUserEntity;
-import com.github.fosin.anan.pojo.dto.AnanUserDto;
+import com.github.fosin.anan.cloudresource.dto.AnanUserDto;
 
 /**
  * 2017/12/27.

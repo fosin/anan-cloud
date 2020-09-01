@@ -29,11 +29,40 @@ import javax.sql.DataSource;
 @EnableAnanFormLogin
 @EnableAnanSecurityOauth2
 public class AuthServerApplication {
+//    public static void setLogFile(String appName, String name) {
+//        LoggerContext ctx = (LoggerContext) LogManager.getContext(false);
+//        Configuration config = ctx.getConfiguration();
+//
+//        if (config.getAppender(appName) != null) {
+//            RollingFileAppender rollingFileAppender = config.getAppender(appName);
+//            config.getLoggerConfig("").removeAppender(appName);
+//            rollingFileAppender.stop();
+//            Appender appender = RollingFileAppender.newBuilder()
+//                    .setName(appName+"_rebuild")
+//                    .withFileName(name)
+//                    .withFilePattern(rollingFileAppender.getFilePattern())
+//                    .setLayout(rollingFileAppender.getLayout())
+//                    .withPolicy(rollingFileAppender.getTriggeringPolicy())
+//                    .build();
+//            appender.start();
+//            config.getLoggerConfig("").addAppender(appender, config.getRootLogger().getLevel(), null);
+//            ctx.updateLoggers(config);
+//        }
+//    }
+
     public static void main(String[] args) {
         new SpringApplicationBuilder(AuthServerApplication.class)
                 .banner(new AnanBanner("AnAn Auth Server"))
                 .logStartupInfo(true)
                 .run(args);
+
+//        SpringApplication app = new SpringApplicationBuilder(AuthServerApplication.class)
+//                .banner(new AnanBanner("AnAn Auth Server"))
+//                .logStartupInfo(true)
+//                .application();
+//        app.addListeners(new LogApplicationEventListener());
+//        app.run(args);
+
     }
 
     @LoadBalanced
@@ -60,12 +89,5 @@ public class AuthServerApplication {
         jdbcTokenRepository.setDataSource(dataSource);
         return jdbcTokenRepository;
     }
-
-//    @Bean
-//    @RefreshScope
-//    @Primary
-//    public AnanSecurityProperties ananSecurityProperties() {
-//        return new AnanSecurityProperties();
-//    }
 
 }

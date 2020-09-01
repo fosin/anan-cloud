@@ -3,8 +3,8 @@ package com.github.fosin.anan.auth.service.inter;
 
 import com.github.fosin.anan.jpa.service.IRetrieveJpaService;
 import com.github.fosin.anan.platformapi.entity.AnanPermissionEntity;
-import com.github.fosin.anan.pojo.dto.AnanUserAllPermissionDto;
-import com.github.fosin.anan.pojo.dto.request.AnanPermissionRetrieveDto;
+import com.github.fosin.anan.cloudresource.dto.AnanUserAllPermissionDto;
+import com.github.fosin.anan.cloudresource.dto.request.AnanPermissionRetrieveDto;
 
 import java.util.List;
 

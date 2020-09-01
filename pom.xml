@@ -24,8 +24,7 @@
         <revision>2.3.0-SNAPSHOT</revision>
         <anan-placeholder1>${</anan-placeholder1>
         <anan-placeholder2>}</anan-placeholder2>
-        <anan-spring-cloud.version>Hoxton.SR6</anan-spring-cloud.version>
-        <anan-cloud.moduleName>${project.artifactId}</anan-cloud.moduleName>
+        <anan-spring-cloud.version>Hoxton.SR8</anan-spring-cloud.version>
         <anan-spring-cloud-alibaba.version>2.2.1.RELEASE</anan-spring-cloud-alibaba.version>
         <anan-spring-boot-admin.version>2.2.3</anan-spring-boot-admin.version>
         <sonar.host.url>http://192.168.137.8:9001/</sonar.host.url>
@@ -48,9 +47,9 @@
                 </eureka.client.service-url.defaultZone>
                 <spring.cloud.config.enabled>false</spring.cloud.config.enabled>
                 <spring.cloud.config.profileActive>native</spring.cloud.config.profileActive>
-                <spring.cloud.config.server.svn.uri></spring.cloud.config.server.svn.uri>
-                <spring.cloud.config.server.svn.username></spring.cloud.config.server.svn.username>
-                <spring.cloud.config.server.svn.password></spring.cloud.config.server.svn.password>
+                <spring.cloud.config.server.svn.uri/>
+                <spring.cloud.config.server.svn.username/>
+                <spring.cloud.config.server.svn.password/>
                 <spring.cloud.config.server.native.search-locations>file:deploy/anan-config
                 </spring.cloud.config.server.native.search-locations>
                 <spring.cloud.config.server.git.uri>https://github.com/fosin/anan-cloud/deploy
@@ -84,7 +83,7 @@
                 <profileActive>dev</profileActive>
                 <spring.cloud.nacos.config.enabled>true</spring.cloud.nacos.config.enabled>
                 <spring.cloud.nacos.config.username>nacos</spring.cloud.nacos.config.username>
-                <spring.cloud.nacos.config.password>xingyj</spring.cloud.nacos.config.password>
+                <spring.cloud.nacos.config.password>local</spring.cloud.nacos.config.password>
                 <spring.cloud.nacos.config.server-addr>nacos-0:8848
                 </spring.cloud.nacos.config.server-addr>
                 <spring.cloud.nacos.config.namespace>5eb182d1-53da-4344-98c3-9bd7f09cf7d3
@@ -101,27 +100,21 @@
                 </spring.cloud.config.server.svn.uri>
                 <spring.cloud.config.server.svn.username>configServer</spring.cloud.config.server.svn.username>
                 <spring.cloud.config.server.svn.password>xingyj</spring.cloud.config.server.svn.password>
-                <spring.cloud.config.server.native.search-locations></spring.cloud.config.server.native.search-locations>
-                <spring.cloud.config.server.git.uri></spring.cloud.config.server.git.uri>
-                <spring.cloud.config.server.git.search-paths></spring.cloud.config.server.git.search-paths>
+                <spring.cloud.config.server.native.search-locations/>
+                <spring.cloud.config.server.git.uri/>
+                <spring.cloud.config.server.git.search-paths/>
                 <spring.cloud.inetutils.preferred-networks>192.168.0.</spring.cloud.inetutils.preferred-networks>
-                <spring.rabbitmq.addresses>rabbitmq:5672</spring.rabbitmq.addresses>
-                <spring.rabbitmq.username>
-                    '{cipher}AQAGy3LYSBkcOJA32VA/mT3jNtxscWGe0Eto3isApxPrUgv00Pw0629LROM3zCh9KC3/HqP4aoUexyBw3QhdLCkXr6zpXGFrj0x7EPcu+A9B9kbzZejfcdG3l+Wln+chjS50cLe0txPDt4ioZxbLb0BjgwfPS4THrIfozhJgyRKNwkrw4prTXSnE2o/tbo/rHKJutXF53ywkAqRK7sZNFUMiHZTKiQkKzzCTUQmFRoBYkYtoc2SjVMerEfySCyx8oEm0+FnLpUuFpexO/cVl/YbWxmeU4qvrpeDgj1OEJ9JAuKZGfSHF/1LdvaOP7HVlx1EiyqLoQys/pa1vFjkRu8YHSmSS7jOfiGty2sT3g4+fFG7G0K+8g5cmRGAUbhUppDI='
-                </spring.rabbitmq.username>
-                <spring.rabbitmq.password>
-                    '{cipher}AQBDc1ErZqS+aPq0dXnNf3P7r80dn83dGdU7YPhuD3LzVKWdpdA7IMq+l3pScI+NnZnBEy1T8rFtFGl51q200vAyTaWI6XrsCp5J/wtiY3pHaQk98b1NHVRFWRshXYSSLVIuaDBFAt6dFedbBTfh53U8bHEiHxaw85dSwWbRO/oCY7/ct1MmrS6zIVgIrBokou/6HACoczLtwSIjj8F/R/Divrc7Po9TpZBJvsxVrrzW82yqeRejci1jB06Si53n+/XgnIyNvpZFMYPTQwexp5Xc31kQwDuUYmftnIvrGv+XIEezNtgtIJWe1TzedGnytTCYu8bz3FSRsHvRievafRntlgqGxKonxBAtzOWza3V74QUq4E+fdOi2T3Go4kD2/PY='
-                </spring.rabbitmq.password>
-                <!--<spring.security.user.name>'{cipher}AQAGy3LYSBkcOJA32VA/mT3jNtxscWGe0Eto3isApxPrUgv00Pw0629LROM3zCh9KC3/HqP4aoUexyBw3QhdLCkXr6zpXGFrj0x7EPcu+A9B9kbzZejfcdG3l+Wln+chjS50cLe0txPDt4ioZxbLb0BjgwfPS4THrIfozhJgyRKNwkrw4prTXSnE2o/tbo/rHKJutXF53ywkAqRK7sZNFUMiHZTKiQkKzzCTUQmFRoBYkYtoc2SjVMerEfySCyx8oEm0+FnLpUuFpexO/cVl/YbWxmeU4qvrpeDgj1OEJ9JAuKZGfSHF/1LdvaOP7HVlx1EiyqLoQys/pa1vFjkRu8YHSmSS7jOfiGty2sT3g4+fFG7G0K+8g5cmRGAUbhUppDI='</spring.security.user.name>
-                <spring.security.user.password>'{cipher}AQBDc1ErZqS+aPq0dXnNf3P7r80dn83dGdU7YPhuD3LzVKWdpdA7IMq+l3pScI+NnZnBEy1T8rFtFGl51q200vAyTaWI6XrsCp5J/wtiY3pHaQk98b1NHVRFWRshXYSSLVIuaDBFAt6dFedbBTfh53U8bHEiHxaw85dSwWbRO/oCY7/ct1MmrS6zIVgIrBokou/6HACoczLtwSIjj8F/R/Divrc7Po9TpZBJvsxVrrzW82yqeRejci1jB06Si53n+/XgnIyNvpZFMYPTQwexp5Xc31kQwDuUYmftnIvrGv+XIEezNtgtIJWe1TzedGnytTCYu8bz3FSRsHvRievafRntlgqGxKonxBAtzOWza3V74QUq4E+fdOi2T3Go4kD2/PY='</spring.security.user.password>-->
+                <spring.rabbitmq.addresses>rabbitmq:7890</spring.rabbitmq.addresses>
+                <spring.rabbitmq.username>anan</spring.rabbitmq.username>
+                <spring.rabbitmq.password>local</spring.rabbitmq.password>
                 <spring.security.user.name>anan</spring.security.user.name>
-                <spring.security.user.password>xingyj</spring.security.user.password>
-                <encrypt.key-store.location>classpath:/cdp.jks</encrypt.key-store.location>
+                <spring.security.user.password>local</spring.security.user.password>
+                <encrypt.key-store.location>classpath:/anan.jks</encrypt.key-store.location>
                 <encrypt.key-store.password>123456</encrypt.key-store.password>
-                <encrypt.key-store.alias>cdp</encrypt.key-store.alias>
+                <encrypt.key-store.alias>anan</encrypt.key-store.alias>
                 <encrypt.key-store.secret>123456</encrypt.key-store.secret>
                 <docker.register.url>fosin</docker.register.url>
-                <docker.host>http://192.168.137.8:2375</docker.host>
+                <docker.host>https://anan.fosin.top:2375</docker.host>
             </properties>
             <activation>
                 <activeByDefault>false</activeByDefault>
@@ -145,14 +138,14 @@
                 </eureka.client.service-url.defaultZone>
                 <spring.cloud.config.enabled>false</spring.cloud.config.enabled>
                 <spring.cloud.config.profileActive>native</spring.cloud.config.profileActive>
-                <spring.cloud.config.server.svn.uri></spring.cloud.config.server.svn.uri>
-                <spring.cloud.config.server.svn.username></spring.cloud.config.server.svn.username>
-                <spring.cloud.config.server.svn.password></spring.cloud.config.server.svn.password>
+                <spring.cloud.config.server.svn.uri/>
+                <spring.cloud.config.server.svn.username/>
+                <spring.cloud.config.server.svn.password/>
                 <spring.cloud.config.server.native.search-locations>file:/anan-config/@profileActive@
                 </spring.cloud.config.server.native.search-locations>
-                <spring.cloud.config.server.git.uri></spring.cloud.config.server.git.uri>
-                <spring.cloud.config.server.git.search-paths></spring.cloud.config.server.git.search-paths>
-                <spring.cloud.inetutils.preferred-networks></spring.cloud.inetutils.preferred-networks>
+                <spring.cloud.config.server.git.uri/>
+                <spring.cloud.config.server.git.search-paths/>
+                <spring.cloud.inetutils.preferred-networks/>
                 <spring.rabbitmq.addresses>rabbitmq:5672</spring.rabbitmq.addresses>
                 <spring.rabbitmq.username>
                     '{cipher}AQAGy3LYSBkcOJA32VA/mT3jNtxscWGe0Eto3isApxPrUgv00Pw0629LROM3zCh9KC3/HqP4aoUexyBw3QhdLCkXr6zpXGFrj0x7EPcu+A9B9kbzZejfcdG3l+Wln+chjS50cLe0txPDt4ioZxbLb0BjgwfPS4THrIfozhJgyRKNwkrw4prTXSnE2o/tbo/rHKJutXF53ywkAqRK7sZNFUMiHZTKiQkKzzCTUQmFRoBYkYtoc2SjVMerEfySCyx8oEm0+FnLpUuFpexO/cVl/YbWxmeU4qvrpeDgj1OEJ9JAuKZGfSHF/1LdvaOP7HVlx1EiyqLoQys/pa1vFjkRu8YHSmSS7jOfiGty2sT3g4+fFG7G0K+8g5cmRGAUbhUppDI='
@@ -180,16 +173,26 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-log4j2</artifactId>
         </dependency>
         <dependency>
             <groupId>com.lmax</groupId>
             <artifactId>disruptor</artifactId>
             <version>3.3.7</version>
         </dependency>
-         <dependency>
-             <groupId>org.springframework.cloud</groupId>
-             <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
-         </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>de.codecentric</groupId>
@@ -252,11 +255,6 @@
             <dependency>
                 <groupId>${anan.groupId}</groupId>
                 <artifactId>anan-platformapi</artifactId>
-                <version>2.3.0-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>${anan.groupId}</groupId>
-                <artifactId>anan-platformpojo</artifactId>
                 <version>2.3.0-SNAPSHOT</version>
             </dependency>
             <dependency>
