@@ -1,12 +1,11 @@
 package com.github.fosin.anan.cloudresource.util;
 
+import com.github.fosin.anan.cloudresource.dto.AnanClient;
 import com.github.fosin.anan.cloudresource.dto.AnanUserDetail;
 import com.github.fosin.anan.cloudresource.dto.AnanUserDto;
-import com.github.fosin.anan.cloudresource.dto.AnanClient;
 import com.github.fosin.anan.security.util.AnanJwtTool;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
-import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
 import java.util.HashSet;
@@ -20,7 +19,6 @@ import java.util.Set;
  * @date 2018.7.23
  */
 @Slf4j
-@Component
 public class AnanUserDetailUtil extends AnanJwtTool<AnanUserDetail> {
 
     public AnanUserDetailUtil(JwtDecoder jwtDecoder) {

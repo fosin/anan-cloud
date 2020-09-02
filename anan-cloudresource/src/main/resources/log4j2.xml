@@ -17,7 +17,7 @@
             </PatternLayout>
         </Console>
         <!-- 滚动文件 -->
-        <!--<RollingFile name="rollingFile" fileName="logs/${displayName}.log"
+        <RollingFile name="rollingFile" fileName="logs/${displayName}.log"
                      filePattern="logs/${displayName}_%d{yyyy-MM-dd}-%i.log">
             <ThresholdFilter level="INFO" onMatch="ACCEPT"
                              onMismatch="DENY"/>
@@ -28,12 +28,12 @@
                 <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
                 <SizeBasedTriggeringPolicy size="50MB"/>
             </Policies>
-        </RollingFile>-->
+        </RollingFile>
     </Appenders>
     <Loggers>
         <Root level="INFO">
             <AppenderRef ref="console"/>
-            <AppenderRef ref="rollingFile"/>
+           <!-- <AppenderRef ref="rollingFile"/>-->
         </Root>
     </Loggers>
 </configuration>
