@@ -12,7 +12,9 @@
     <artifactId>anan-cloudadviced</artifactId>
     <modules>
         <module>anan-adminserver</module>
-        <module>anan-platform</module>
+        <module>anan-authserver</module>
+        <module>anan-platformapi</module>
+        <module>anan-platformserver</module>
         <module>anan-zuulgateway</module>
     </modules>
     <dependencies>

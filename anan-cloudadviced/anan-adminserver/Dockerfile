@@ -1,4 +1,4 @@
-FROM fosin/adoptopenjdk:11-jdk-openj9
+FROM fosin/adoptopenjdk:11-jdk-hotspot
 MAINTAINER fosin 28860823@qq.com
 EXPOSE 51700
 ENTRYPOINT ["./entrypoint.sh"]

@@ -7,8 +7,7 @@ on:
       - 'pom.xml'
       - 'anan-cloudresource/**'
       - 'anan-cloudadviced/pom.xml'
-      - 'anan-cloudadviced/anan-platform/pom.xml'
-      - 'anan-cloudadviced/anan-platform/anan-platformapi/**'
+      - 'anan-cloudadviced/anan-platformapi/**'
       - 'deploy/mysql/**'
       - 'deploy/openjdk/**'
 jobs:
@@ -43,9 +42,6 @@ jobs:
           fi
           if [[ $MODIFY_FILES =~ "anan-cloudadviced/pom.xml" ]]; then
             MODULES=${MODULES}",com.github.fosin.anan:anan-cloudadviced"
-          fi
-          if [[ $MODIFY_FILES =~ "anan-cloudadviced/anan-platform/pom.xml" ]]; then
-            MODULES=${MODULES}",com.github.fosin.anan:anan-platform"
           fi
           if [[ $MODIFY_FILES =~ "anan-platformapi" ]]; then
             MODULES=${MODULES}",com.github.fosin.anan:anan-platformapi"

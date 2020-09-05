@@ -1,7 +1,6 @@
-FROM fosin/adoptopenjdk:11-jdk-openj9
+FROM fosin/adoptopenjdk:11-jdk-hotspot
 MAINTAINER fosin 28860823@qq.com
-EXPOSE 51500
+EXPOSE 51400
 ENTRYPOINT ["./entrypoint.sh"]
 COPY target/dependency dependency/
 COPY target/*.jar app.jar
-
