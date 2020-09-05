@@ -61,12 +61,14 @@ public class OauthController {
         }
     }
 
-    @GetMapping("/jwt")
+    @RequestMapping(value = "/userinfo/jwt", method = {RequestMethod.POST, RequestMethod.GET})
+    @ApiOperation(value = "根据JWT令牌获取当前认证用户信息", notes = "根据JWT令牌获取当前认证用户信息，包括用户信息、客户端信息相关信息")
+    @ApiImplicitParam(name = "Authorization", value = "Token认证信息,格式例如：Bearer c05b6fed-256c-4cd0-a55d-ae8ffdafbf75", required = true, dataTypeClass = String.class, paramType = "header")
     public ResponseEntity<Jwt> index(@AuthenticationPrincipal Jwt jwt) {
         return ResponseEntity.ok(jwt);
     }
 
-    @RequestMapping(value = "/principal", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "/userinfo/principal", method = {RequestMethod.GET, RequestMethod.POST})
     @ApiOperation(value = "根据令牌获取当前认证用户信息", notes = "根据令牌获取当前认证用户信息，包括用户信息、客户端信息、Oauth2.0相关信息")
     @ApiImplicitParam(name = "Authorization", value = "Token认证信息,格式例如：Bearer c05b6fed-256c-4cd0-a55d-ae8ffdafbf75", required = true, dataTypeClass = String.class, paramType = "header")
     public ResponseEntity<Principal> principal(Principal principal) {

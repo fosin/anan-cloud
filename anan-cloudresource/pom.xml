@@ -13,9 +13,6 @@
     <artifactId>anan-cloudresource</artifactId>
     <packaging>jar</packaging>
     <version>2.3.0-SNAPSHOT</version>
-    <properties>
-        <maven.deploy.skip>true</maven.deploy.skip>
-    </properties>
     <dependencies>
         <dependency>
             <groupId>${anan.groupId}</groupId>

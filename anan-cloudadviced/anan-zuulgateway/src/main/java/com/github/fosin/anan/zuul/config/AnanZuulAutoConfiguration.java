@@ -3,6 +3,7 @@ package com.github.fosin.anan.zuul.config;
 import com.github.fosin.anan.cloudresource.dto.request.AnanPermissionRetrieveDto;
 import com.github.fosin.anan.security.resource.AnanAuthorityPermission;
 import com.github.fosin.anan.security.resource.AnanProgramAuthorities;
+import com.github.fosin.anan.security.resource.AnanSecurityConstant;
 import com.github.fosin.anan.security.resource.AnanSecurityProperties;
 import com.github.fosin.anan.swagger.config.AnanSwaggerResourcesProvider;
 import com.github.fosin.anan.swagger.spring4all.SwaggerProperties;
@@ -63,10 +64,11 @@ public class AnanZuulAutoConfiguration {
                     Long id = entity.getId();
                     String joinPath = joinPath(fullPath, entityPath);
                     Assert.isTrue(id != null && id > 0, "无效的权限ID：" + id);
+                    String authority = AnanSecurityConstant.PREFIX_ROLE + id;
                     AnanSecurityProperties.AnanAuthorityProperties authorityProperties = new AnanSecurityProperties.AnanAuthorityProperties();
                     authorityProperties.setPaths(Collections.singletonList(joinPath));
                     authorityProperties.setMethods(httpMethods);
-                    authorityProperties.setPermission(AnanAuthorityPermission.hasAuthority.getName() + AnanAuthorityPermission.SPLITER + id);
+                    authorityProperties.setPermission(AnanAuthorityPermission.hasAuthority.getName() + AnanAuthorityPermission.SPLITER + authority);
                     propertiesList.add(authorityProperties);
                 }
             });
