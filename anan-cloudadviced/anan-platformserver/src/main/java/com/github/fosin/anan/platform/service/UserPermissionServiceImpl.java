@@ -65,6 +65,7 @@ public class UserPermissionServiceImpl implements UserPermissionService {
         }
         Assert.isTrue(needDelUsers.size() != 0, "没有找到需要删除数据!");
         for (Long userId : needDelUsers) {
+            ananCacheManger.evict(RedisConstant.ANAN_USER_ALL_PERMISSIONS, userId + "");
             ananCacheManger.evict(RedisConstant.ANAN_USER_PERMISSION, userId + "");
         }
         userPermissionRepository.deleteInBatch(entities);
@@ -74,6 +75,7 @@ public class UserPermissionServiceImpl implements UserPermissionService {
             throw new AnanServiceException(e);
         }
         for (Long userId : needDelUsers) {
+            ananCacheManger.evict(RedisConstant.ANAN_USER_ALL_PERMISSIONS, userId + "");
             ananCacheManger.evict(RedisConstant.ANAN_USER_PERMISSION, userId + "");
         }
     }
@@ -81,7 +83,8 @@ public class UserPermissionServiceImpl implements UserPermissionService {
     @Override
     @Caching(
             evict = {
-                    @CacheEvict(value = RedisConstant.ANAN_USER_PERMISSION, key = "#userId")
+                    @CacheEvict(value = RedisConstant.ANAN_USER_PERMISSION, key = "#userId"),
+                    @CacheEvict(value = RedisConstant.ANAN_USER_ALL_PERMISSIONS, key = "#userId"),
             }
     )
     @Transactional

@@ -1,5 +1,8 @@
 package com.github.fosin.anan.platform.service;
 
+import com.github.fosin.anan.cloudresource.constant.RedisConstant;
+import com.github.fosin.anan.cloudresource.dto.request.AnanPermissionCreateDto;
+import com.github.fosin.anan.cloudresource.dto.request.AnanPermissionUpdateDto;
 import com.github.fosin.anan.jpa.repository.IJpaRepository;
 import com.github.fosin.anan.model.module.PageModule;
 import com.github.fosin.anan.model.result.Result;
@@ -7,17 +10,14 @@ import com.github.fosin.anan.model.result.ResultUtils;
 import com.github.fosin.anan.platform.service.inter.PermissionService;
 import com.github.fosin.anan.platform.service.inter.RolePermissionService;
 import com.github.fosin.anan.platform.service.inter.UserPermissionService;
-import com.github.fosin.anan.cloudresource.constant.RedisConstant;
-import com.github.fosin.anan.cloudresource.dto.request.AnanPermissionCreateDto;
-import com.github.fosin.anan.cloudresource.dto.request.AnanPermissionUpdateDto;
 import com.github.fosin.anan.platformapi.entity.AnanPermissionEntity;
 import com.github.fosin.anan.platformapi.repository.PermissionRepository;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
-
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -26,7 +26,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
-import javax.persistence.criteria.*;
+import javax.persistence.criteria.Path;
 import java.util.List;
 import java.util.Objects;
 
@@ -71,7 +71,10 @@ public class PermissionServiceImpl implements PermissionService {
     }
 
     @Override
-    @CachePut(value = RedisConstant.ANAN_PERMISSION, key = "#entity.id")
+    @Caching(
+            evict = @CacheEvict(value = RedisConstant.ANAN_USER_ALL_PERMISSIONS, allEntries = true),
+            put = @CachePut(value = RedisConstant.ANAN_PERMISSION, key = "#entity.id")
+    )
     public AnanPermissionEntity update(AnanPermissionUpdateDto entity) {
         Assert.notNull(entity, "传入了空对象!");
         Long id = entity.getId();
@@ -91,7 +94,12 @@ public class PermissionServiceImpl implements PermissionService {
 
 
     @Override
-    @CacheEvict(value = RedisConstant.ANAN_PERMISSION, key = "#id")
+    @Caching(
+            evict = {
+                    @CacheEvict(value = RedisConstant.ANAN_USER_ALL_PERMISSIONS, allEntries = true),
+                    @CacheEvict(value = RedisConstant.ANAN_PERMISSION, key = "#id")
+            }
+    )
     public AnanPermissionEntity deleteById(Long id) {
         Assert.notNull(id, "传入了空ID!");
         AnanPermissionEntity entity = permissionRepository.findById(id).orElse(null);
@@ -110,7 +118,12 @@ public class PermissionServiceImpl implements PermissionService {
     }
 
     @Override
-    @CacheEvict(value = RedisConstant.ANAN_PERMISSION, key = "#entity.id")
+    @Caching(
+            evict = {
+                    @CacheEvict(value = RedisConstant.ANAN_USER_ALL_PERMISSIONS, allEntries = true),
+                    @CacheEvict(value = RedisConstant.ANAN_PERMISSION, key = "#entity.id")
+            }
+    )
     public AnanPermissionEntity deleteByEntity(AnanPermissionEntity entity) {
         Assert.notNull(entity, "传入了空对象!");
         Long id = entity.getId();

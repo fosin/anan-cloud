@@ -1,18 +1,24 @@
 package com.github.fosin.anan.auth.service;
 
 import com.github.fosin.anan.auth.service.inter.PermissionService;
+import com.github.fosin.anan.cloudresource.constant.RedisConstant;
+import com.github.fosin.anan.cloudresource.constant.SystemConstant;
+import com.github.fosin.anan.cloudresource.dto.AnanUserAllPermissionDto;
+import com.github.fosin.anan.cloudresource.dto.request.AnanPermissionRetrieveDto;
 import com.github.fosin.anan.jpa.repository.IJpaRepository;
 import com.github.fosin.anan.platformapi.entity.AnanPermissionEntity;
+import com.github.fosin.anan.platformapi.entity.AnanUserAllPermissionsEntity;
 import com.github.fosin.anan.platformapi.repository.PermissionRepository;
-import com.github.fosin.anan.cloudresource.dto.AnanUserAllPermissionDto;
-import com.github.fosin.anan.cloudresource.constant.RedisConstant;
-import com.github.fosin.anan.cloudresource.dto.request.AnanPermissionRetrieveDto;
+import com.github.fosin.anan.platformapi.repository.UserAllPermissionsRepository;
+import com.github.fosin.anan.util.TreeUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * 2017/12/29.
@@ -23,9 +29,11 @@ import java.util.List;
 @Service
 public class PermissionServiceImpl implements PermissionService {
     private final PermissionRepository permissionRepository;
+    private final UserAllPermissionsRepository userAllPermissionsRepository;
 
-    public PermissionServiceImpl(PermissionRepository permissionRepository) {
+    public PermissionServiceImpl(PermissionRepository permissionRepository, UserAllPermissionsRepository userAllPermissionsRepository) {
         this.permissionRepository = permissionRepository;
+        this.userAllPermissionsRepository = userAllPermissionsRepository;
     }
 
     @Override
@@ -48,36 +56,50 @@ public class PermissionServiceImpl implements PermissionService {
     }
 
     @Override
+    @Cacheable(value = RedisConstant.ANAN_USER_ALL_PERMISSIONS, key = "#userId")
+    public List<AnanUserAllPermissionsEntity> findByUserId(Long userId) {
+        return userAllPermissionsRepository.findByUserId(userId);
+    }
+
+    @Override
+    public AnanUserAllPermissionDto findTreeByUserId(Long userId) {
+        Set<AnanUserAllPermissionDto> userPermissions = new TreeSet<>((o1, o2) -> {
+            long subId = o1.getId() - o2.getId();
+            if (subId == 0) {
+                return 0;
+            }
+            int subLevel = o1.getLevel() - o2.getLevel();
+            if (subLevel != 0) {
+                return subLevel;
+            }
+            int subSort = o1.getSort() - o2.getSort();
+            if (subSort != 0) {
+                return subSort;
+            }
+
+            return o1.getCode().compareToIgnoreCase(o2.getCode());
+        });
+        List<AnanUserAllPermissionsEntity> permissionEntities = userAllPermissionsRepository.findByUserId(userId);
+
+        for (AnanUserAllPermissionsEntity entity : permissionEntities) {
+            // 只操作状态为启用的权限
+            if (entity.getStatus() == 0) {
+                Long id = entity.getId();
+                //获取用户增权限
+                if (entity.getAddMode() == 0) {
+                    userPermissions.add(entity.convert2Dto());
+                } else { //
+                    userPermissions.remove(entity.convert2Dto());
+                }
+            }
+        }
+
+        return TreeUtil.createTree(userPermissions, SystemConstant.ROOT_PERMISSION_ID, "id", "pid", "children");
+    }
+
+    @Override
     public IJpaRepository<AnanPermissionEntity, Long> getRepository() {
         return permissionRepository;
     }
 
-    @Override
-    public AnanUserAllPermissionDto copyPermissionData(AnanPermissionEntity entity) {
-        AnanUserAllPermissionDto dto = new AnanUserAllPermissionDto();
-        dto.setId(entity.getId());
-        dto.setAppName(entity.getAppName());
-        dto.setCode(entity.getCode());
-        dto.setIcon(entity.getIcon());
-        dto.setLevel(entity.getLevel());
-        dto.setSort(entity.getSort());
-        dto.setStatus(entity.getStatus());
-        dto.setMethod(entity.getMethod());
-        dto.setName(entity.getName());
-        dto.setPath(entity.getPath());
-        dto.setPid(entity.getPid());
-        dto.setType(entity.getType());
-        dto.setUrl(entity.getUrl());
-        dto.setLeaf(entity.getLeaf());
-
-        List<AnanPermissionEntity> children = entity.getChildren();
-        List<AnanUserAllPermissionDto> childrenPermission = new ArrayList<>();
-        if (children != null && children.size() > 0) {
-            children.forEach(ananPermissionEntity -> {
-                childrenPermission.add(copyPermissionData(ananPermissionEntity));
-            });
-        }
-        dto.setChildren(childrenPermission);
-        return dto;
-    }
 }

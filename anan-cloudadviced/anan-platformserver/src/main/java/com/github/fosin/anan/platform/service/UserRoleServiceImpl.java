@@ -87,7 +87,7 @@ public class UserRoleServiceImpl implements UserRoleService {
         //如果是用户角色，则只需要删除一个用户的缓存
         ananCacheManger.evict(RedisConstant.ANAN_USER, userId + "");
         ananCacheManger.evict(RedisConstant.ANAN_USER, userService.findById(userId).getUsercode());
-
+        ananCacheManger.evict(RedisConstant.ANAN_USER_ALL_PERMISSIONS, userId + "");
         return getAnanUserRoleEntities(entities);
     }
 
@@ -128,6 +128,7 @@ public class UserRoleServiceImpl implements UserRoleService {
             Long userId = entity.getUserId();
             ananCacheManger.evict(RedisConstant.ANAN_USER, userId + "");
             ananCacheManger.evict(RedisConstant.ANAN_USER, userService.findById(userId).getUsercode());
+            ananCacheManger.evict(RedisConstant.ANAN_USER_ALL_PERMISSIONS, userId + "");
         }
 
         return getAnanUserRoleEntities(entities);

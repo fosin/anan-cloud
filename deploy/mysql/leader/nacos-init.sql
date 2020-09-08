@@ -62,11 +62,146 @@ INSERT INTO `config_info` (`id`, `data_id`, `group_id`, `content`, `md5`, `gmt_c
 VALUES (4, 'anan-authserver.yaml', 'DEFAULT_GROUP', 'server:
   port: 51400
 spring:
+  session:
+    store-type: redis
+  thymeleaf:
+    cache: false
+  # mvc:
+  #   static-path-pattern: /auth/**
+anan:
+  security:
+    sso:
+      session:
+        session-creation-policy: if_required
+      authority:
+        root-path: /sso/**
+        authorities:
+          - methods: OPTIONS
+      http-basic: true
+      form-login:
+        enabled: true
+        login-page: /sso/login
+        login-processing-url: /sso/login
+        password-parameter: password
+        username-parameter: usercode
+        default-success-url: /sso/index
+        failure-url: /sso/login?error
+        logout-url: /sso/logout
+        logout-success-url  : /sso/login?logout
+        clear-authentication: true
+      remember-me:
+        enabled: true
+    oauth2:
+      session:
+        session-creation-policy: stateless
+      authority:
+        root-path: /**
+        authorities:
+          - methods: OPTIONS
+      exception-handling:
+        access-denied-page: /error
+        enabled: true
+      resource-server:
+        enabled: true
+        token-type: jwt
+    jwt:
+      key-store: ${encrypt.key-store.location}
+      key-alias: ${encrypt.key-store.alias}
+      key-password: ${encrypt.key-store.password}
+      key-store-password: ${encrypt.key-store.secret}
+      public-key-location: classpath:anan.pub
+    disable-csrf: true
+    web-ignoring:
+      - /
+      - /**/*.html
+      - /**/*.css
+      - /**/*.js
+      - /**/*.woff*
+      - /**/*.ttf*
+      - /**/*.map
+      - /**/*.ico
+      - /**/*.swf
+      - /**/*.jpg
+      - /**/*.png
+      - /**/*.svg
+      - /**/*.gif
+      - /error
+      - /**/webjars/**
+      - /**/images/**
+      - /**/swagger-resources/**
+      - /**/api-docs
+      - /actuator/**
+      - /v1/permission/**
+  swagger:
+    enabled: true
+    title: ${spring.application.name}
+    description: ${info.description}
+    version: ${info.version}
+    base-package: com.github.fosin.anan.auth
+    authorization:
+      name: Oauth2.0 Authorization
+      keyName: Authorization
+#      authRegex: ^[^/oauth/token]$
+    contact:
+      name: fosin
+      email: 28860823@qq.com
+  redis:
+    idempotent:
+      enabled: false
+    cache:
+      manager: false
+    session:
+      manager: true', 'eca38d64f1ee85c0eb52633d48e80dbc', '2019-11-10 17:23:05', '2020-03-15 18:35:10', null, '192.168.137.1', '', '6138f451-2d5b-42fe-a793-df3744d7257c', 'null', 'null', 'null', 'yaml', 'null');
+INSERT INTO `config_info` (`id`, `data_id`, `group_id`, `content`, `md5`, `gmt_create`, `gmt_modified`, `src_user`, `src_ip`, `app_name`, `tenant_id`, `c_desc`, `c_use`, `effect`, `type`, `c_schema`)
+VALUES (7, 'application.yaml', 'DEFAULT_GROUP', 'logging:
+  # pattern:
+  #   file: ''%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{50} %msg%n%throwablen%''
+  #   console: ''%highlight(%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level) %cyan(%logger{50}) %highlight(%msg%n%throwablen%)''
+  # file:
+  #   max-size: 50MB
+  #   max-history: 7
+  #   name: logs/${spring.application.name}.log
+  #   total-size-cap: 400MB
+  #   clean-history-on-start: true
+  level:
+    com.alibaba.nacos.naming.log.level: warn
+    com.alibaba.nacos.client.naming: warn
+    com.alibaba.nacos.client.config: warn
+    #打印SQL语句
+    org.hibernate.SQL: info
+    #打印SQL语句参数
+    org.hibernate.type.descriptor.sql.BasicBinder: info
+    #打印SQL执行结果
+    org.hibernate.type.descriptor.sql.BasicExtractor: info
+    #打印查询中命名参数的值
+    org.hibernate.engine.spi.QueryParameters: info
+    org.hibernate.engine.query.spi.HQLQueryPlan: info
+#    zipkin2: debug
+    com.github.fosin.anan.security: DEBUG
+    org.springframework.security: DEBUG
+spring:
   datasource:
-    url: jdbc:mysql://mysql-leader:3306/anan_platform?useUnicode=true&characterEncoding=utf-8&useSSL=false
+    url: jdbc:mysql://mysql-leader:6478/anan_platform?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=GMT%2b8
     username: anan
     password: local
 #    type: com.alibaba.druid.pool.DruidDataSource
+    # Hikari 连接池配置
+    hikari:
+      # 最小空闲连接数量
+      minimum-idle: 1
+      # 空闲连接存活最大时间，默认600000（10分钟）
+      idle-timeout: 180000
+      # 连接池最大连接数，默认是10
+      maximum-pool-size: 5
+      # 此属性控制从池返回的连接的默认自动提交行为,默认值：true
+      auto-commit: true
+      # 连接池名称
+      pool-name: MyHikariCP
+      # 此属性控制池中连接的最长生命周期，值0表示无限生命周期，默认1800000即30分钟
+      max-lifetime: 1800000
+      # 数据库连接超时时间,默认30秒，即30000
+      connection-timeout: 30000
+      connection-test-query: SELECT 1
     druid:
       initial-size: 5
       min-idle: 5
@@ -87,54 +222,31 @@ spring:
   #    continue-on-error: true
   redis:
     #database: 10
-#    cluster:
-#      max-redirects:
-#      nodes: redis:6379
+    #    cluster:
+    #      max-redirects:
+    #      nodes: redis:6379
     host: redis
-    port: 6379
+    port: 5798
     password: local
-  session:
-    store-type: redis
-  thymeleaf:
-    cache: false
-  # mvc:
-  #   static-path-pattern: /auth/**
-anan:
-  swagger:
-    enabled: true
-    title: ${spring.application.name}
-    description: ${info.description}
-    version: ${info.version}
-    base-package: com.github.fosin.anan.auth
-    authorization:
-      name: Oauth2.0 Authorization
-      keyName: Authorization
-#      authRegex: ^[^/oauth/token]$
-    contact:
-      name: fosin
-      email: 28860823@qq.com
-  oauth2:
-    resource:
-      server:
+    # 连接超时时间（毫秒）
+    timeout: 10s
+    lettuce:
+      # 连接池最大阻塞等待时间 毫秒（使用负值表示没有限制） 默认 -1
+      max-active: 3
+      # 连接池最大连接数（使用负值表示没有限制） 默认 8
+      max-wait: -1
+      # 连接池中的最大空闲连接 默认 8
+      max-idle: 1
+      # 连接池中的最小空闲连接 默认 0
+      min-idle: 1
+  cloud:
+    loadbalancer:
+      ribbon:
         enabled: true
-        disablecsrf: true
-        disableHttpBasic: true
-        customPermissionList:
-          - path: /**/v2/api-docs
-          - path: /oauth/authorize
-          - path: /oauth/login
-          - path: /oauth/logout
-          - path: /actuator/health
-          - path: /actuator/shutdown
-    redis:
-      idempotent:
-        enabled: false
-      cache:
-        manager: false
-      session:
-        manager: true', 'eca38d64f1ee85c0eb52633d48e80dbc', '2019-11-10 17:23:05', '2020-03-15 18:35:10', null, '192.168.137.1', '', '6138f451-2d5b-42fe-a793-df3744d7257c', 'null', 'null', 'null', 'yaml', 'null');
-INSERT INTO `config_info` (`id`, `data_id`, `group_id`, `content`, `md5`, `gmt_create`, `gmt_modified`, `src_user`, `src_ip`, `app_name`, `tenant_id`, `c_desc`, `c_use`, `effect`, `type`, `c_schema`) VALUES (7, 'application.yaml', 'DEFAULT_GROUP', 'spring:
   jpa:
+    #Hibernate自动创建表的时候使用InnoDB存储引擎，不然就会以默认存储引擎MyISAM来建表，而MyISAM存储引擎是没有事务的。
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    open-in-view: true
     properties:
       hibernate:
         format_sql: true
@@ -143,6 +255,7 @@ INSERT INTO `config_info` (`id`, `data_id`, `group_id`, `content`, `md5`, `gmt_c
 #    hibernate:
 #      ddl-auto: update
   zipkin:
+    message-timeout: 10
 #    baseUrl: http://zipkin:9411/
     sender:
       type: rabbit
@@ -158,6 +271,72 @@ INSERT INTO `config_info` (`id`, `data_id`, `group_id`, `content`, `md5`, `gmt_c
 #      enabled: false
 #      processor:
 #        enabled: false
+  jackson:
+    #日期格式化
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+    # serialization:
+    #    #格式化输出
+    #   indent_output: true
+    #   #忽略无法转换的对象
+    #   fail_on_empty_beans: false
+    # #设置空如何序列化
+    # defaultPropertyInclusion: NON_EMPTY
+    # deserialization:
+    #   #允许对象忽略json中不存在的属性
+    #   fail_on_unknown_properties: false
+    # parser:
+    #   #允许出现特殊字符和转义符
+    #   allow_unquoted_control_chars: true
+    #   #允许出现单引号
+    #   allow_single_quotes: true
+  oauth2:
+    client:
+      registration:
+        anan-authserver:
+          client-id: appServer
+          client-secret: appServer
+          provider: anan-authserver
+      provider:
+        anan-authserver:
+          authorization-uri: http://anan-authserver:51400/oauth2/authorize
+          token-uri: http://anan-authserver:51400/oauth2/token
+          user-info-uri: http://anan-authserver:51400/oauth2/userinfo/jwt
+          jwk-set-uri: http://anan-authserver:51400/oauth2/token_key
+server:
+  servlet:
+    session:
+      cookie:
+        # This is to prevent cookie clash with other service as they run on the same host and context path
+        name: ${spring.application.name}
+  undertow:
+    threads:
+    # 设置IO线程数, 它主要执行非阻塞的任务,它们会负责多个连接, 默认设置每个CPU核心一个线程
+    # 不要设置过大，如果过大，启动项目会报错：打开文件数过多
+      io: 4
+    # 阻塞任务线程池, 当执行类似servlet请求阻塞IO操作, undertow会从这个线程池中取得线程
+    # 它的值设置取决于系统线程执行任务的阻塞系数，默认值是IO线程数*8
+      worker: 4
+    # 以下的配置会影响buffer,这些buffer会用于服务器连接的IO操作,有点类似netty的池化内存管理
+    # 每块buffer的空间大小,越小的空间被利用越充分，不要设置太大，以免影响其他应用，合适即可
+    buffer-size: 1024
+    direct-buffers: true
+management:
+  endpoints:
+    web:
+      exposure:
+        include: ''*''
+  endpoint:
+    shutdown:
+      enabled: true
+    health:
+      show-details: ALWAYS
+  metrics:
+    web:
+      server:
+        request:
+          autotime:
+            enabled: false
 anan:
   oauth2:
     client:
@@ -168,43 +347,8 @@ security:
   oauth2:
     resource:
       loadBalanced: true
-      user-info-uri: http://anan-authserver/oauth/principal
+      user-info-uri: http://anan-authserver/oauth/userinfo/principal
       prefer-token-info: false
-management:
-  endpoints:
-    web:
-      exposure:
-        include: ''*''
-  endpoint:
-    health:
-      show-details: ALWAYS
-  metrics:
-    web:
-      server:
-        auto-time-requests: false
-logging:
-#  file: logs/${spring.application.name}.log
-#  file.max-size: 50mb
-#  file.max-history: 365
-  level:
-    com.alibaba.nacos.naming.log.level: warn
-    com.alibaba.nacos.client.naming: warn
-    #打印SQL语句
-    org.hibernate.SQL: info
-    #打印SQL语句参数
-    org.hibernate.type.descriptor.sql.BasicBinder: info
-    #打印SQL执行结果
-    org.hibernate.type.descriptor.sql.BasicExtractor: info
-    #打印查询中命名参数的值
-    org.hibernate.engine.spi.QueryParameters: info
-    org.hibernate.engine.query.spi.HQLQueryPlan: info
-#    zipkin2: debug
-#server:
-#  undertow:
-#    io-threads: 16
-#    worker-threads: 256
-#    buffer-size: 1024
-#    direct-buffers: true
 eureka:
   client:
     healthcheck:
@@ -212,43 +356,12 @@ eureka:
   instance:
     lease-expiration-duration-in-seconds: 10 # 续约到期时间（默认90秒）
     lease-renewal-interval-in-seconds: 5 # 续约更新时间间隔（默认30秒）', '626830ef58e9b827b03feeda3492d01f', '2019-11-10 17:39:32', '2019-11-22 21:28:31', null, '192.168.137.1', '', '6138f451-2d5b-42fe-a793-df3744d7257c', '服务公用设置', 'null', 'null', 'yaml', 'null');
-INSERT INTO `config_info` (`id`, `data_id`, `group_id`, `content`, `md5`, `gmt_create`, `gmt_modified`, `src_user`, `src_ip`, `app_name`, `tenant_id`, `c_desc`, `c_use`, `effect`, `type`, `c_schema`) VALUES (13, 'anan-adminserver.yaml', 'DEFAULT_GROUP', 'server:
+INSERT INTO `config_info` (`id`, `data_id`, `group_id`, `content`, `md5`, `gmt_create`, `gmt_modified`, `src_user`, `src_ip`, `app_name`, `tenant_id`, `c_desc`, `c_use`, `effect`, `type`, `c_schema`)
+VALUES (13, 'anan-adminserver.yaml', 'DEFAULT_GROUP', 'server:
   port: 51700
 turbine:
   cluster-name-expression: new String(''default'')
   app-config: anan-zuulgateway
-anan:
-  oauth2:
-    resource:
-      server:
-        disablecsrf: true
-        disableHttpBasic: true
-        cors:
-          allowedOrigins: ''*''
-          allowedMethods: ''*''
-          allowedHeaders: ''*''
-          allowCredentials: true
-        customPermissionList:
-          - path: /**/*.html
-          - path: /**/*.css
-          - path: /**/*.js
-          - path: /**/img/**
-          - path: /third-party/**
-          - path: /**/api/**
-          - path: /**/login/**
-          - path: /**/logout/**
-          - path: /**/applications/**
-          - path: /**/instances/**
-          - method: OPTIONS
-          - path: /actuator/health
-          - path: /actuator/shutdown
-security:
-  oauth2:
-    client:
-      client-id: ${anan.oauth2.client.client-id}
-      client-secret: ${anan.oauth2.client.client-secret}
-      access-token-uri: ${anan.oauth2.client.access-token-uri}
-      grant-type: client_credentials
 spring:
   boot:
     admin:
@@ -269,7 +382,8 @@ spring:
           template: "classpath:/META-INF/spring-boot-admin-server/mail/status-changed.html"
           ignore-changes: "UNKNOWN:UP"
           enabled: true', 'e21f85d17b34ccfdbc9bf544af884e61', '2019-11-10 18:17:25', '2020-02-26 22:12:50', null, '192.168.137.1', '', '6138f451-2d5b-42fe-a793-df3744d7257c', 'null', 'null', 'null', 'yaml', 'null');
-INSERT INTO `config_info` (`id`, `data_id`, `group_id`, `content`, `md5`, `gmt_create`, `gmt_modified`, `src_user`, `src_ip`, `app_name`, `tenant_id`, `c_desc`, `c_use`, `effect`, `type`, `c_schema`) VALUES (14, 'anan-cloudgateway.yaml', 'DEFAULT_GROUP', 'server:
+INSERT INTO `config_info` (`id`, `data_id`, `group_id`, `content`, `md5`, `gmt_create`, `gmt_modified`, `src_user`, `src_ip`, `app_name`, `tenant_id`, `c_desc`, `c_use`, `effect`, `type`, `c_schema`)
+VALUES (14, 'anan-cloudgateway.yaml', 'DEFAULT_GROUP', 'server:
   port: 9000
 spring:
   cloud:
@@ -308,7 +422,7 @@ spring:
         predicates:
           - path=/mpi/**
         filters:
-          - RewritePath=/mpi/(?<segment>.*), /$\\{segment}
+          - RewritePath=/mpi/(?<segment>.*), /$\{segment}
       - id: anan-vhr
         uri: lb://anan-vhr
         predicates:
@@ -391,201 +505,9 @@ anan:
     cache:
       manager: false
     session:
-      manager: true
-  oauth2:
-    resource:
-      server:
-        disablecsrf: true
-        disableHttpBasic: true
-        cors:
-          allowedOrigins: ''*''
-          allowedMethods: ''*''
-          allowedHeaders: ''*''
-          allowCredentials: true
-        customPermissionList:
-          - path: /**/auth/oauth/**
-          - path: /**/auth/**
-          - path: /**/*.js
-          - path: /**/*.html
-          - path: /**/*.css
-          - path: /**/*.gif
-          - path: /**/*.png
-          - path: /**/*.jpg
-          - path: /**/*.jpeg
-          - path: /**/*.svg
-          - path: /**/*.bmp
-          - path: /**/*.ico
-          - path: /**/*.swf
-          - path: /**/*.woff
-          - path: /**/*.woff2
-          - path: /**/*.ttf
-          - path: /**/*.map
-          - path: /hystrix
-          - path: /hystrix.stream
-          - path: /hystrix/**
-          - path: /**/webjars/**
-    #    - path: /**/springfox-swagger-ui/**
-          - path: /**/swagger-resources/**
-          - path: /**/v2/api-docs
-          - path: /**/third-party/**
-          - path: /**/api/**
-          - path: /actuator/health
-          - path: /actuator/shutdown
-          - path: /**/images/**', '55b6239e5aed6a522b16d48872a0eedb', '2019-11-10 18:17:51', '2020-03-15 18:36:42', null, '192.168.137.1', '', '6138f451-2d5b-42fe-a793-df3744d7257c', 'null', 'null', 'null', 'yaml', 'null');
-INSERT INTO `config_info` (`id`, `data_id`, `group_id`, `content`, `md5`, `gmt_create`, `gmt_modified`, `src_user`, `src_ip`, `app_name`, `tenant_id`, `c_desc`, `c_use`, `effect`, `type`, `c_schema`) VALUES (15, 'anan-mpi.yaml', 'DEFAULT_GROUP', 'server:
-  port: 53000
-spring:
-  datasource:
-    url: jdbc:mysql://mysql-leader:3306/mpi?useUnicode=true&characterEncoding=utf-8&useSSL=false
-    username: anan
-    password: local
-    druid:
-      initial-size: 5 #初始化大小
-      min-idle: 5 #最小
-      maxActive: 10 # 最大
-      maxWait: 60000 #配置获取连接等待超时的时间
-      timeBetweenEvictionRunsMillis: 60000 # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
-      minEvictableIdleTimeMillis: 300000 # 配置一个连接在池中最小生存的时间，单位是毫秒
-      #      validationQuery: SELECT 1 FROM DUAL
-      testWhileIdle: true
-      testOnBorrow: false
-      testOnReturn: false
-  #      poolPreparedStatements: true # 打开PSCache，并且指定每个连接上PSCache的大小
-  #      maxPoolPreparedStatementPerConnectionSize: 20
-  #      filters: stat,wall,log4j # 配置监控统计拦截的filters，去掉后监控界面sql无法统计，''wall''用于防火墙
-  #      connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000 # 通过connectProperties属性来打开mergeSql功能；慢SQL记录
-  #      useGlobalDataSourceStat: true # 合并多个DruidDataSource的监控数据
-#    platform: mysql
-#    continue-on-error: true
-  redis:
-    #database: 10
-    #    cluster:
-    #      max-redirects:  # （普通集群，不使用则不用开启）在群集中执行命令时要遵循的最大重定向数目。
-    #      nodes: redis:6379 # （普通集群，不使用则不用开启）以逗号分隔的“主机：端口”对列表进行引导。
-    host: redis
-    port: 6379
-    password: local
-  session:
-    store-type: redis
-anan:
-  swagger:
-    enabled: true
-    title: ${spring.application.name}
-    description: ${info.description}
-    version: ${info.version}
-    base-package: com.github.fosin.mpi
-    authorization:
-      name: Oauth2.0 Authorization
-      keyName: Authorization
-    contact:
-      name: fosin
-      email: 28860823@qq.com
-  oauth2:
-    resource:
-      server:
-        disablecsrf: true
-        disableHttpBasic: true
-        customPermissionList:
-          - path: /**/v2/api-docs
-          - path: /actuator/health
-          - path: /actuator/shutdown
-security:
-  oauth2:
-    client:
-      client-id: ${anan.oauth2.client.client-id}
-      client-secret: ${anan.oauth2.client.client-secret}
-      access-token-uri: ${anan.oauth2.client.access-token-uri}
-      grant-type: client_credentials
-', 'd8eb297dfc893ce8f9ab939bbe264c36', '2019-11-10 18:18:19', '2020-02-18 15:41:38', null, '192.168.137.1', '', '6138f451-2d5b-42fe-a793-df3744d7257c', 'null', 'null', 'null', 'yaml', 'null');
-INSERT INTO `config_info` (`id`, `data_id`, `group_id`, `content`, `md5`, `gmt_create`, `gmt_modified`, `src_user`, `src_ip`, `app_name`, `tenant_id`, `c_desc`, `c_use`, `effect`, `type`, `c_schema`) VALUES (16, 'anan-vhr.yaml', 'DEFAULT_GROUP', 'server:
-  port: 53001
-spring:
-  mail:
-    host: smtp.qq.com
-    port: 25
-    username: 1186340749@qq.com
-    password: ghkmjtncgemsbaae
-    default-encoding: UTF-8
-    properties:
-      mail:
-        debug: false
-        smtp:
-          user: ${spring.mail.username}
-          host: ${spring.mail.host}
-          auth: true
-          port: ${spring.mail.port}
-          starttls:
-            enable: true
-          socketFactory:
-            class: javax.net.ssl.SSLSocketFactory
-            fallback: false
-            port: ${spring.mail.port}
-  datasource:
-    url: jdbc:mysql://mysql-leader:3306/vhr?useUnicode=true&characterEncoding=utf-8&useSSL=false
-    username: anan
-    password: local
-    druid:
-      initial-size: 5 #初始化大小
-      min-idle: 5 #最小
-      maxActive: 10 # 最大
-      maxWait: 60000 #配置获取连接等待超时的时间
-      timeBetweenEvictionRunsMillis: 60000 # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
-      minEvictableIdleTimeMillis: 300000 # 配置一个连接在池中最小生存的时间，单位是毫秒
-      #      validationQuery: SELECT 1 FROM DUAL
-      testWhileIdle: true
-      testOnBorrow: false
-      testOnReturn: false
-  #      poolPreparedStatements: true # 打开PSCache，并且指定每个连接上PSCache的大小
-  #      maxPoolPreparedStatementPerConnectionSize: 20
-  #      filters: stat,wall,log4j # 配置监控统计拦截的filters，去掉后监控界面sql无法统计，''wall''用于防火墙
-  #      connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000 # 通过connectProperties属性来打开mergeSql功能；慢SQL记录
-  #      useGlobalDataSourceStat: true # 合并多个DruidDataSource的监控数据
-#    platform: mysql
-#    continue-on-error: true
-  redis:
-    #database: 10
-    #    cluster:
-    #      max-redirects:  # （普通集群，不使用则不用开启）在群集中执行命令时要遵循的最大重定向数目。
-    #      nodes: redis:6379 # （普通集群，不使用则不用开启）以逗号分隔的“主机：端口”对列表进行引导。
-    host: redis
-    port: 6379
-    password: local
-  session:
-    store-type: redis
-#MyBatis
-mybatis:
-  config-location: classpath:/mybatis-config.xml
-anan:
-  swagger:
-    enabled: true
-    title: ${spring.application.name}
-    description: ${info.description}
-    version: ${info.version}
-    base-package: com.github.fosin.vhr
-    authorization:
-      name: Oauth2.0 Authorization
-      keyName: Authorization
-    contact:
-      name: fosin
-      email: 28860823@qq.com
-  oauth2:
-    resource:
-      server:
-        disablecsrf: true
-        disableHttpBasic: true
-        customPermissionList:
-          - path: /**/v2/api-docs
-          - path: /actuator/health
-          - path: /actuator/shutdown
-security:
-  oauth2:
-    client:
-      client-id: ${anan.oauth2.client.client-id}
-      client-secret: ${anan.oauth2.client.client-secret}
-      access-token-uri: ${anan.oauth2.client.access-token-uri}
-      grant-type: client_credentials
-', '53b35f158b1d4642813e78335940a2d9', '2019-11-10 18:18:43', '2020-03-13 15:33:29', null, '192.168.137.1', '', '6138f451-2d5b-42fe-a793-df3744d7257c', 'null', 'null', 'null', 'yaml', 'null');
-INSERT INTO `config_info` (`id`, `data_id`, `group_id`, `content`, `md5`, `gmt_create`, `gmt_modified`, `src_user`, `src_ip`, `app_name`, `tenant_id`, `c_desc`, `c_use`, `effect`, `type`, `c_schema`) VALUES (18, 'anan-zuulgateway.yaml', 'DEFAULT_GROUP', 'server:
+      manager: true', '55b6239e5aed6a522b16d48872a0eedb', '2019-11-10 18:17:51', '2020-03-15 18:36:42', null, '192.168.137.1', '', '6138f451-2d5b-42fe-a793-df3744d7257c', 'null', 'null', 'null', 'yaml', 'null');
+INSERT INTO `config_info` (`id`, `data_id`, `group_id`, `content`, `md5`, `gmt_create`, `gmt_modified`, `src_user`, `src_ip`, `app_name`, `tenant_id`, `c_desc`, `c_use`, `effect`, `type`, `c_schema`)
+VALUES (18, 'anan-zuulgateway.yaml', 'DEFAULT_GROUP', 'server:
   port: 9000
 zuul:
   add-host-header: true
@@ -769,42 +691,9 @@ anan:
           - path: /**/images/**
           - path: /actuator/health
           - path: /actuator/shutdown', 'b7353d61807d909009a90b70e0a7114e', '2019-11-10 20:04:04', '2020-03-15 18:36:23', null, '192.168.137.1', '', '6138f451-2d5b-42fe-a793-df3744d7257c', 'null', 'null', 'null', 'yaml', 'null');
-INSERT INTO `config_info` (`id`, `data_id`, `group_id`, `content`, `md5`, `gmt_create`, `gmt_modified`, `src_user`, `src_ip`, `app_name`, `tenant_id`, `c_desc`, `c_use`, `effect`, `type`, `c_schema`) VALUES (20, 'anan-platformserver.yaml', 'DEFAULT_GROUP', 'server:
+INSERT INTO `config_info` (`id`, `data_id`, `group_id`, `content`, `md5`, `gmt_create`, `gmt_modified`, `src_user`, `src_ip`, `app_name`, `tenant_id`, `c_desc`, `c_use`, `effect`, `type`, `c_schema`)
+VALUES (20, 'anan-platformserver.yaml', 'DEFAULT_GROUP', 'server:
   port: 51500
-spring:
-  datasource:
-    url: jdbc:mysql://mysql-leader:3306/anan_platform?useUnicode=true&characterEncoding=utf-8&useSSL=false
-    username: anan
-    password: local
-    druid:
-      initial-size: 5 #初始化大小
-      min-idle: 5 #最小
-      maxActive: 10 # 最大
-      maxWait: 60000 #配置获取连接等待超时的时间
-      timeBetweenEvictionRunsMillis: 60000 # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
-      minEvictableIdleTimeMillis: 300000 # 配置一个连接在池中最小生存的时间，单位是毫秒
-      #      validationQuery: SELECT 1 FROM DUAL
-      testWhileIdle: true
-      testOnBorrow: false
-      testOnReturn: false
-  #      poolPreparedStatements: true # 打开PSCache，并且指定每个连接上PSCache的大小
-  #      maxPoolPreparedStatementPerConnectionSize: 20
-  #      filters: stat,wall,log4j # 配置监控统计拦截的filters，去掉后监控界面sql无法统计，''wall''用于防火墙
-  #      connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000 # 通过connectProperties属性来打开mergeSql功能；慢SQL记录
-  #      useGlobalDataSourceStat: true # 合并多个DruidDataSource的监控数据
-  #    platform: mysql
-  #    continue-on-error: true
-  redis:
-    #database: 10
-    #    cluster:
-    #      max-redirects:  # （普通集群，不使用则不用开启）在群集中执行命令时要遵循的最大重定向数目。
-    #      nodes: redis:6379 # （普通集群，不使用则不用开启）以逗号分隔的“主机：端口”对列表进行引导。
-    host: redis
-    port: 6379
-    password: local
-  session:
-    store-type: redis
-
 feign:
 #  compression: #开启这个设置比较耗CPU
 #    request:
@@ -819,13 +708,6 @@ feign:
     enabled: false
     max-connections: 1000 #最大连接数
     max-connections-per-route: 100 #每个url的连接数
-security:
-  oauth2:
-    client:
-      client-id: ${anan.oauth2.client.client-id}
-      client-secret: ${anan.oauth2.client.client-secret}
-      access-token-uri: ${anan.oauth2.client.access-token-uri}
-      grant-type: client_credentials
 anan:
   swagger:
     enabled: true
@@ -844,16 +726,7 @@ anan:
 #    description: Oauth2.0令牌信息,格式例如：Bearer 58cb49cd-be59-4706-bbc5-9c41fc3cbef4
 #    modelRef: string
 #    parameterType: header
-#    required: true
-  oauth2:
-    resource:
-      server:
-        disablecsrf: true
-        disableHttpBasic: true
-        customPermissionList:
-          - path: /actuator/health
-          - path: /actuator/shutdown
-          - path: /**/v2/api-docs', 'c859d1296638e9cd9795a0bb74220ee2', '2019-11-10 20:16:42', '2020-03-15 18:35:53', null, '192.168.137.1', '', '6138f451-2d5b-42fe-a793-df3744d7257c', 'null', 'null', 'null', 'yaml', 'null');
+#    required: true', 'c859d1296638e9cd9795a0bb74220ee2', '2019-11-10 20:16:42', '2020-03-15 18:35:53', null, '192.168.137.1', '', '6138f451-2d5b-42fe-a793-df3744d7257c', 'null', 'null', 'null', 'yaml', 'null');
 /*!40000 ALTER TABLE `config_info` ENABLE KEYS */;
 UNLOCK TABLES;
 

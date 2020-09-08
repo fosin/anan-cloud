@@ -15,6 +15,7 @@ public class RedisConstant {
     public static final String ANAN_USER = RedisConstant.ANAN + TableNameConstant.ANAN_USER + RedisConstant.DELIMITER;
     public static final String ANAN_USER_ROLE = RedisConstant.ANAN + TableNameConstant.ANAN_USER_ROLE + RedisConstant.DELIMITER;
     public static final String ANAN_USER_PERMISSION = RedisConstant.ANAN + TableNameConstant.ANAN_USER_PERMISSION + RedisConstant.DELIMITER;
+    public static final String ANAN_USER_ALL_PERMISSIONS = RedisConstant.ANAN + TableNameConstant.ANAN_USER_ALL_PERMISSIONS + RedisConstant.DELIMITER;
     public static final String ANAN_ROLE_PERMISSION = RedisConstant.ANAN + TableNameConstant.ANAN_ROLE_PERMISSION + RedisConstant.DELIMITER;
     public static final String ANAN_ROLE = RedisConstant.ANAN + TableNameConstant.ANAN_ROLE + RedisConstant.DELIMITER;
     public static final String ANAN_PERMISSION = RedisConstant.ANAN + TableNameConstant.ANAN_PERMISSION + RedisConstant.DELIMITER;

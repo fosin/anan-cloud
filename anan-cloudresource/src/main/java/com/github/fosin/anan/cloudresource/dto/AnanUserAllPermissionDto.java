@@ -82,4 +82,13 @@ public class AnanUserAllPermissionDto implements Serializable {
     @ApiModelProperty(value = "一般用于前端菜单选项前的图标")
     private String icon;
 
+    @ApiModelProperty(value = "用户ID", required = true)
+    private Long userId;
+
+    @ApiModelProperty(value = "补充方式：0=增加权限、1=删除权限", required = true)
+    private Integer addMode;
+
+    @NotNull(message = "角色ID" + "{javax.validation.constraints.NotNull.message}")
+    @ApiModelProperty(value = "角色ID", required = true)
+    private Long roleId;
 }

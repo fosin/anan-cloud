@@ -8,6 +8,7 @@ public class TableNameConstant {
     public static final String ANAN_USER = "anan_user";
     public static final String ANAN_USER_ROLE = "anan_user_role";
     public static final String ANAN_USER_PERMISSION = "anan_user_permission";
+    public static final String ANAN_USER_ALL_PERMISSIONS = "anan_user_all_permissions";
 
     public static final String ANAN_ROLE_PERMISSION = "anan_role_permission";
     public static final String ANAN_ROLE = "anan_role";

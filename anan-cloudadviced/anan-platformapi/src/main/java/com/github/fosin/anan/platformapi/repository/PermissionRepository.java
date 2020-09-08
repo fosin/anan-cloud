@@ -35,4 +35,5 @@ public interface PermissionRepository extends IJpaRepository<AnanPermissionEntit
     List<AnanPermissionEntity> findByType(Integer type);
 
     List<AnanPermissionEntity> findByAppName(String appName);
+
 }

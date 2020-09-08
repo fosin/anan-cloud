@@ -32,7 +32,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping(UrlPrefixConstant.PERMISSION)
-@Api(value = UrlPrefixConstant.PERMISSION, tags = "权限管理", description = "权限管理相关操作")
+@Api(value = UrlPrefixConstant.PERMISSION, tags = "权限管理")
 public class PermissionController extends AbstractBaseController
         implements ISimpleController<AnanPermissionEntity, Long, AnanPermissionCreateDto, AnanPermissionRetrieveDto, AnanPermissionUpdateDto> {
     private final PermissionService permissionService;
@@ -85,7 +85,7 @@ public class PermissionController extends AbstractBaseController
         return ResponseEntity.ok(list);
     }
 
-    @PostMapping("/findByAppName/{appName}")
+    @PostMapping("/appName/{appName}")
     @ApiImplicitParam(name = "appName", value = "应用名称,spring.application.name",
             required = true, dataTypeClass = String.class, paramType = "path")
     @ApiOperation(value = "查询应用权限", notes = "根据应用名称(spring.application.name)查询其权限列表")

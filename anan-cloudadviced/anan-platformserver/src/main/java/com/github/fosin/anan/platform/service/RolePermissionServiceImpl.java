@@ -61,6 +61,7 @@ public class RolePermissionServiceImpl implements RolePermissionService {
         Assert.notEmpty(needDelRoles, "没有找到需要删除数据!");
         for (Long roleId : needDelRoles) {
             ananCacheManger.evict(RedisConstant.ANAN_ROLE_PERMISSION, roleId + "");
+            ananCacheManger.clear(RedisConstant.ANAN_USER_ALL_PERMISSIONS);
         }
         rolePermissionRepository.deleteInBatch(entities);
         try {
@@ -70,13 +71,15 @@ public class RolePermissionServiceImpl implements RolePermissionService {
         }
         for (Long roleId : needDelRoles) {
             ananCacheManger.evict(RedisConstant.ANAN_ROLE_PERMISSION, roleId + "");
+            ananCacheManger.clear(RedisConstant.ANAN_USER_ALL_PERMISSIONS);
         }
     }
 
     @Override
     @Caching(
             evict = {
-                    @CacheEvict(value = RedisConstant.ANAN_ROLE_PERMISSION, key = "#roleId")
+                    @CacheEvict(value = RedisConstant.ANAN_ROLE_PERMISSION, key = "#roleId"),
+                    @CacheEvict(value = RedisConstant.ANAN_USER_ALL_PERMISSIONS, allEntries = true)
             }
     )
     @Transactional

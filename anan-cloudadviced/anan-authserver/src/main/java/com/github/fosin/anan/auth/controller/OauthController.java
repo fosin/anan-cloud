@@ -1,5 +1,6 @@
 package com.github.fosin.anan.auth.controller;
 
+import com.github.fosin.anan.util.StringUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -7,10 +8,10 @@ import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationDetails;
 import org.springframework.security.oauth2.provider.endpoint.TokenEndpoint;
 import org.springframework.security.oauth2.provider.endpoint.TokenKeyEndpoint;
@@ -83,14 +84,20 @@ public class OauthController {
     }
 
     @RequestMapping(value = "/removeToken", method = {RequestMethod.GET, RequestMethod.POST})
-    @ResponseBody
     @ApiOperation(value = "移除指定令牌信息", notes = "移除指定令牌信息，通常用于前端的退出登录操作")
     @ApiImplicitParam(name = "Authorization", value = "Basic认证信息,格式例如：Basic ouZTJoQk5BQVFLUjVVemlJSw==", required = true, dataTypeClass = String.class, paramType = "header")
-    public ResponseEntity<Boolean> removeToken(Principal principal) {
-        Assert.notNull(principal, "principal不能为空，可能是认证失败!");
-        Assert.isTrue(principal instanceof OAuth2Authentication, "principal必须是OAuth2Authentication类型!");
-        OAuth2AuthenticationDetails details = (OAuth2AuthenticationDetails) ((OAuth2Authentication) principal).getDetails();
-        return ResponseEntity.ok(consumerTokenServices.revokeToken(details.getTokenValue()));
+    public ResponseEntity<Boolean> removeToken(Authentication authentication) {
+        Assert.notNull(authentication, "authentication不能为空，可能是认证失败!");
+        Object principal = authentication.getPrincipal();
+        String token = null;
+        if (principal instanceof OAuth2AuthenticationDetails) {
+            token = ((OAuth2AuthenticationDetails) principal).getTokenValue();
+        }
+        if (principal instanceof Jwt) {
+            token = ((Jwt) principal).getTokenValue();
+        }
+        Assert.isTrue(StringUtil.hasText(token), "token不能为空!");
+        return ResponseEntity.ok(consumerTokenServices.revokeToken(token));
     }
 
 //    //获取jwt的公钥

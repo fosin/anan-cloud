@@ -27,7 +27,7 @@ public interface PermissionFeignService {
      * @param appName 应用名称
      * @return 应用权限列表
      */
-    @PostMapping("/findByAppName/{appName}")
+    @PostMapping("/appName/{appName}")
     ResponseEntity<List<AnanPermissionRetrieveDto>> findByAppName(@PathVariable("appName") String appName);
 
     /**

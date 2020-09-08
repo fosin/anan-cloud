@@ -23,7 +23,7 @@ Authorization: Basic {{secerityId}} {{secerityPass}}
 ###
 
 ### 查询服务下的权限列表
-POST http://{{host}}:51400/v1/permission/findByAppName/anan-platformserver
+POST http://{{host}}:51400/v1/permission/appName/anan-platformserver
 Authorization: Bearer {{access_token}}
 
 
