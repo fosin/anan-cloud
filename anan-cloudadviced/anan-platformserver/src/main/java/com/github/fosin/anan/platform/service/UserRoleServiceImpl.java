@@ -10,7 +10,7 @@ import com.github.fosin.anan.cloudresource.constant.RedisConstant;
 import com.github.fosin.anan.platformapi.entity.AnanRoleEntity;
 import com.github.fosin.anan.platformapi.entity.AnanUserEntity;
 import com.github.fosin.anan.platformapi.entity.AnanUserRoleEntity;
-import com.github.fosin.anan.cloudresource.util.AnanUserDetailUtil;
+import com.github.fosin.anan.platformapi.service.AnanUserDetailService;
 import com.github.fosin.anan.cloudresource.dto.AnanUserDto;
 import com.github.fosin.anan.cloudresource.dto.request.AnanUserRoleCreateDto;
 import com.github.fosin.anan.redis.cache.AnanCacheManger;
@@ -37,14 +37,14 @@ public class UserRoleServiceImpl implements UserRoleService {
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
     private final AnanCacheManger ananCacheManger;
-    private final AnanUserDetailUtil ananUserDetailUtil;
+    private final AnanUserDetailService ananUserDetailService;
 
-    public UserRoleServiceImpl(UserRoleRepository userRoleRepository, UserService userService, PasswordEncoder passwordEncoder, AnanCacheManger ananCacheManger, AnanUserDetailUtil ananUserDetailUtil) {
+    public UserRoleServiceImpl(UserRoleRepository userRoleRepository, UserService userService, PasswordEncoder passwordEncoder, AnanCacheManger ananCacheManger, AnanUserDetailService ananUserDetailService) {
         this.userRoleRepository = userRoleRepository;
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
         this.ananCacheManger = ananCacheManger;
-        this.ananUserDetailUtil = ananUserDetailUtil;
+        this.ananUserDetailService = ananUserDetailService;
     }
 
     @Override
@@ -93,7 +93,7 @@ public class UserRoleServiceImpl implements UserRoleService {
 
     private List<AnanUserRoleEntity> getAnanUserRoleEntities(Collection<AnanUserRoleCreateDto> entities) {
         List<AnanUserRoleEntity> saveEntities = new ArrayList<>();
-        AnanUserDto loginUser = ananUserDetailUtil.getAnanUser();
+        AnanUserDto loginUser = ananUserDetailService.getAnanUser();
         for (AnanUserRoleCreateDto entity : entities) {
             AnanUserRoleEntity ananUserRoleEntity = new AnanUserRoleEntity();
             ananUserRoleEntity.setUserId(entity.getUserId());

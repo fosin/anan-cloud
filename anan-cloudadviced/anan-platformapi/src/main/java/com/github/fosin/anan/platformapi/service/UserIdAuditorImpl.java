@@ -1,6 +1,5 @@
 package com.github.fosin.anan.platformapi.service;
 
-import com.github.fosin.anan.cloudresource.util.AnanUserDetailUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;
@@ -16,10 +15,10 @@ import java.util.Optional;
 @Configuration
 @AllArgsConstructor
 public class UserIdAuditorImpl implements AuditorAware<Long> {
-    private final AnanUserDetailUtil ananUserDetailUtil;
+    private final AnanUserDetailService ananUserDetailService;
 
     @Override
     public Optional<Long> getCurrentAuditor() {
-        return Optional.of(ananUserDetailUtil.getAnanUser().getId());
+        return Optional.of(ananUserDetailService.getAnanUser().getId());
     }
 }

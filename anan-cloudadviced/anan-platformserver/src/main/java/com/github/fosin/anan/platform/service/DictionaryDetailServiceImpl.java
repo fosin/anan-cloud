@@ -12,7 +12,7 @@ import com.github.fosin.anan.cloudresource.constant.SystemConstant;
 import com.github.fosin.anan.cloudresource.constant.RedisConstant;
 import com.github.fosin.anan.platformapi.entity.AnanDictionaryDetailEntity;
 import com.github.fosin.anan.platformapi.entity.AnanUserEntity;
-import com.github.fosin.anan.cloudresource.util.AnanUserDetailUtil;
+import com.github.fosin.anan.platformapi.service.AnanUserDetailService;
 import com.github.fosin.anan.cloudresource.dto.AnanUserDto;
 import com.github.fosin.anan.cloudresource.dto.request.AnanDictionaryDetailCreateDto;
 import com.github.fosin.anan.cloudresource.dto.request.AnanDictionaryDetailUpdateDto;
@@ -49,13 +49,13 @@ public class DictionaryDetailServiceImpl implements DictionaryDetailService {
     private final DictionaryDetailRepository dictionaryDetailRepository;
     private final UserService userService;
     private final AnanCacheManger ananCacheManger;
-    private final AnanUserDetailUtil ananUserDetailUtil;
+    private final AnanUserDetailService ananUserDetailService;
 
-    public DictionaryDetailServiceImpl(DictionaryDetailRepository dictionaryDetailRepository, UserService userService, AnanCacheManger ananCacheManger, AnanUserDetailUtil ananUserDetailUtil) {
+    public DictionaryDetailServiceImpl(DictionaryDetailRepository dictionaryDetailRepository, UserService userService, AnanCacheManger ananCacheManger, AnanUserDetailService ananUserDetailService) {
         this.dictionaryDetailRepository = dictionaryDetailRepository;
         this.userService = userService;
         this.ananCacheManger = ananCacheManger;
-        this.ananUserDetailUtil = ananUserDetailUtil;
+        this.ananUserDetailService = ananUserDetailService;
     }
 
     @Override
@@ -81,7 +81,7 @@ public class DictionaryDetailServiceImpl implements DictionaryDetailService {
     }
 
     private void isSuperUser(AnanDictionaryDetailEntity findEntity) {
-        AnanUserDto loginUser = ananUserDetailUtil.getAnanUser();
+        AnanUserDto loginUser = ananUserDetailService.getAnanUser();
         //不是超级管理员
         if (!SystemConstant.ANAN_USER_CODE.equals(loginUser.getUsercode())) {
             AnanUserEntity superUser = userService.findByUsercode(SystemConstant.ANAN_USER_CODE);

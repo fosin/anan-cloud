@@ -6,7 +6,7 @@ import com.github.fosin.anan.platformapi.parameter.IParameter;
 import com.github.fosin.anan.platformapi.parameter.IParameterStrategy;
 import com.github.fosin.anan.platformapi.parameter.OrganStrategy;
 import com.github.fosin.anan.cloudresource.dto.request.AnanParameterCreateDto;
-import com.github.fosin.anan.cloudresource.util.AnanUserDetailUtil;
+import com.github.fosin.anan.platformapi.service.AnanUserDetailService;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
@@ -22,10 +22,10 @@ import java.util.Objects;
 @Lazy
 public class LocalOrganParameter implements IParameter {
     private final ParameterService parameterService;
-    private final AnanUserDetailUtil ananUserDetailUtil;
-    public LocalOrganParameter(ParameterService parameterService, AnanUserDetailUtil ananUserDetailUtil) {
+    private final AnanUserDetailService ananUserDetailService;
+    public LocalOrganParameter(ParameterService parameterService, AnanUserDetailService ananUserDetailService) {
         this.parameterService = parameterService;
-        this.ananUserDetailUtil = ananUserDetailUtil;
+        this.ananUserDetailService = ananUserDetailService;
     }
 
     @Override
@@ -57,6 +57,6 @@ public class LocalOrganParameter implements IParameter {
 
     @Override
     public IParameterStrategy getParameterStrategy() {
-        return new OrganStrategy(ananUserDetailUtil);
+        return new OrganStrategy(ananUserDetailService);
     }
 }

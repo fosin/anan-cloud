@@ -13,7 +13,7 @@ import com.github.fosin.anan.platformapi.entity.AnanOrganizationEntity;
 import com.github.fosin.anan.platformapi.entity.AnanUserEntity;
 import com.github.fosin.anan.platformapi.entity.AnanUserRoleEntity;
 import com.github.fosin.anan.platformapi.repository.UserRepository;
-import com.github.fosin.anan.cloudresource.util.AnanUserDetailUtil;
+import com.github.fosin.anan.platformapi.service.AnanUserDetailService;
 import com.github.fosin.anan.cloudresource.dto.AnanUserDto;
 import com.github.fosin.anan.cloudresource.dto.request.AnanUserCreateDto;
 import com.github.fosin.anan.cloudresource.dto.request.AnanUserUpdateDto;
@@ -60,16 +60,16 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final LocalOrganParameter localOrganParameter;
     private final AnanCacheManger ananCacheManger;
-    private final AnanUserDetailUtil ananUserDetailUtil;
+    private final AnanUserDetailService ananUserDetailService;
 
-    public UserServiceImpl(UserRepository userRepository, UserRoleRepository userRoleRepository, OrganizationRepository organizationRepository, PasswordEncoder passwordEncoder, LocalOrganParameter localOrganParameter, AnanCacheManger ananCacheManger, AnanUserDetailUtil ananUserDetailUtil) {
+    public UserServiceImpl(UserRepository userRepository, UserRoleRepository userRoleRepository, OrganizationRepository organizationRepository, PasswordEncoder passwordEncoder, LocalOrganParameter localOrganParameter, AnanCacheManger ananCacheManger, AnanUserDetailService ananUserDetailService) {
         this.userRepository = userRepository;
         this.userRoleRepository = userRoleRepository;
         this.organizationRepository = organizationRepository;
         this.passwordEncoder = passwordEncoder;
         this.localOrganParameter = localOrganParameter;
         this.ananCacheManger = ananCacheManger;
-        this.ananUserDetailUtil = ananUserDetailUtil;
+        this.ananUserDetailService = ananUserDetailService;
     }
 
     @Override
@@ -220,7 +220,7 @@ public class UserServiceImpl implements UserService {
         PageRequest pageable = PageRequest.of(pageModule.getPageNumber() - 1, pageModule.getPageSize(), Sort.Direction.fromString(pageModule.getSortOrder()), pageModule.getSortName());
         String searchCondition = pageModule.getSearchText();
 
-        AnanUserDto loginUser = ananUserDetailUtil.getAnanUser();
+        AnanUserDto loginUser = ananUserDetailService.getAnanUser();
         Specification<AnanUserEntity> condition = (Specification<AnanUserEntity>) (root, query, cb) -> {
             Path<String> usercode = root.get("usercode");
             Path<String> username = root.get("username");
@@ -303,7 +303,7 @@ public class UserServiceImpl implements UserService {
     )
     public AnanUserEntity resetPassword(Long id) {
         Assert.notNull(id, "用户ID不能为空!");
-        AnanUserDto loginUser = ananUserDetailUtil.getAnanUser();
+        AnanUserDto loginUser = ananUserDetailService.getAnanUser();
         Long loginId = loginUser.getId();
         Assert.isTrue(!Objects.equals(loginId, id), "不能重置本人密码,请使用修改密码功能!");
         AnanUserEntity user = userRepository.findById(id).orElse(null);
@@ -350,7 +350,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<AnanUserEntity> findAllByOrganizId(Long organizId) {
         Assert.notNull(organizId, "机构ID不能为空!");
-        AnanUserDto loginUser = ananUserDetailUtil.getAnanUser();
+        AnanUserDto loginUser = ananUserDetailService.getAnanUser();
         if (loginUser.getUsercode().equals(SystemConstant.ANAN_USER_CODE)) {
             return userRepository.findAll();
         } else {

@@ -22,10 +22,6 @@
             <groupId>${anan.groupId}</groupId>
             <artifactId>anan-swagger</artifactId>
         </dependency>
-        <dependency>
-            <groupId>${anan.groupId}</groupId>
-            <artifactId>anan-security</artifactId>
-        </dependency>
     </dependencies>
     <build>
         <plugins>

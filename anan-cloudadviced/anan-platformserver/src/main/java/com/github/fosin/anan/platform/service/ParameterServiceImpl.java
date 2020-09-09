@@ -13,7 +13,7 @@ import com.github.fosin.anan.cloudresource.constant.RedisConstant;
 import com.github.fosin.anan.platformapi.entity.AnanOrganizationEntity;
 import com.github.fosin.anan.platformapi.entity.AnanParameterEntity;
 import com.github.fosin.anan.platformapi.parameter.OrganStrategy;
-import com.github.fosin.anan.cloudresource.util.AnanUserDetailUtil;
+import com.github.fosin.anan.platformapi.service.AnanUserDetailService;
 import com.github.fosin.anan.cloudresource.dto.AnanUserDto;
 import com.github.fosin.anan.cloudresource.dto.request.AnanParameterCreateDto;
 import com.github.fosin.anan.cloudresource.dto.request.AnanParameterUpdateDto;
@@ -50,13 +50,13 @@ import java.util.Objects;
 @Slf4j
 public class ParameterServiceImpl implements ParameterService {
     private final ParameterRepository parameterRepository;
-    private final AnanUserDetailUtil ananUserDetailUtil;
+    private final AnanUserDetailService ananUserDetailService;
     private final OrganizationRepository organizationRepository;
     private final AnanCacheManger ananCacheManger;
 
-    public ParameterServiceImpl(ParameterRepository parameterRepository, AnanUserDetailUtil ananUserDetailUtil, OrganizationRepository organizationRepository, AnanCacheManger ananCacheManger) {
+    public ParameterServiceImpl(ParameterRepository parameterRepository, AnanUserDetailService ananUserDetailService, OrganizationRepository organizationRepository, AnanCacheManger ananCacheManger) {
         this.parameterRepository = parameterRepository;
-        this.ananUserDetailUtil = ananUserDetailUtil;
+        this.ananUserDetailService = ananUserDetailService;
         this.organizationRepository = organizationRepository;
         this.ananCacheManger = ananCacheManger;
     }
@@ -184,7 +184,7 @@ public class ParameterServiceImpl implements ParameterService {
 
     private String getNearestScope(int type, String scope) {
         String rc = null;
-        OrganStrategy organStrategy = new OrganStrategy(ananUserDetailUtil);
+        OrganStrategy organStrategy = new OrganStrategy(ananUserDetailService);
         if (type == organStrategy.getType()) {
             Long id = Long.parseLong(scope);
             AnanOrganizationEntity entity = organizationRepository.findById(id).orElse(null);
@@ -226,7 +226,7 @@ public class ParameterServiceImpl implements ParameterService {
         boolean success;
         switch (entity.getStatus()) {
             case 1:
-                loginUser = ananUserDetailUtil.getAnanUser();
+                loginUser = ananUserDetailService.getAnanUser();
                 entity.setApplyBy(loginUser.getId());
                 entity.setApplyTime(new Date());
                 entity.setStatus(0);

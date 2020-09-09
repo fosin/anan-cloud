@@ -1,16 +1,16 @@
 package com.github.fosin.anan.platformapi.parameter;
 
-import com.github.fosin.anan.cloudresource.util.AnanUserDetailUtil;
+import com.github.fosin.anan.platformapi.service.AnanUserDetailService;
 
 /**
  * @author fosin
  * @date 2019/5/13
  */
 public class UserStrategy implements IParameterStrategy {
-    private final AnanUserDetailUtil ananUserDetailUtil;
+    private final AnanUserDetailService ananUserDetailService;
 
-    public UserStrategy(AnanUserDetailUtil ananUserDetailUtil) {
-        this.ananUserDetailUtil = ananUserDetailUtil;
+    public UserStrategy(AnanUserDetailService ananUserDetailService) {
+        this.ananUserDetailService = ananUserDetailService;
     }
 
     @Override
@@ -20,6 +20,6 @@ public class UserStrategy implements IParameterStrategy {
 
     @Override
     public String getScope() {
-        return ananUserDetailUtil.getAnanUser().getId() + "";
+        return ananUserDetailService.getAnanUser().getId() + "";
     }
 }

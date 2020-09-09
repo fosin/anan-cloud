@@ -1,7 +1,7 @@
-package com.github.fosin.anan.cloudresource.util;
+package com.github.fosin.anan.platformapi.service;
 
 import com.github.fosin.anan.cloudresource.dto.AnanClient;
-import com.github.fosin.anan.cloudresource.dto.AnanUserDetail;
+import com.github.fosin.anan.platformapi.dto.AnanUserDetail;
 import com.github.fosin.anan.cloudresource.dto.AnanUserDto;
 import com.github.fosin.anan.security.util.AnanJwtTool;
 import lombok.extern.slf4j.Slf4j;
@@ -19,9 +19,9 @@ import java.util.Set;
  * @date 2018.7.23
  */
 @Slf4j
-public class AnanUserDetailUtil extends AnanJwtTool<AnanUserDetail> {
+public class AnanUserDetailService extends AnanJwtTool<AnanUserDetail> {
 
-    public AnanUserDetailUtil(JwtDecoder jwtDecoder) {
+    public AnanUserDetailService(JwtDecoder jwtDecoder) {
         super(jwtDecoder);
     }
 

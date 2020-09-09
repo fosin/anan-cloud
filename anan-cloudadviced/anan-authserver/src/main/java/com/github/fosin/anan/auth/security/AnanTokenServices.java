@@ -1,6 +1,6 @@
 package com.github.fosin.anan.auth.security;
 
-import com.github.fosin.anan.cloudresource.dto.AnanUserDetail;
+import com.github.fosin.anan.platformapi.dto.AnanUserDetail;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;

@@ -71,7 +71,6 @@
                 <docker.register.url>fosin</docker.register.url>
                 <!--<docker.register.url>registry.cn-hangzhou.aliyuncs.com/fosin</docker.register.url>
                  <docker.register.url>ccr.ccs.tencentyun.com/fosin</docker.register.url>-->
-                <docker.host>http://192.168.137.8:2375</docker.host>
             </properties>
             <activation>
                 <activeByDefault>true</activeByDefault>
@@ -103,7 +102,7 @@
                 <spring.cloud.config.server.native.search-locations/>
                 <spring.cloud.config.server.git.uri/>
                 <spring.cloud.config.server.git.search-paths/>
-                <spring.cloud.inetutils.preferred-networks>192.168.0.</spring.cloud.inetutils.preferred-networks>
+                <spring.cloud.inetutils.preferred-networks>192.168.0.,100.100.1.,172.16.0.</spring.cloud.inetutils.preferred-networks>
                 <spring.rabbitmq.addresses>rabbitmq:7890</spring.rabbitmq.addresses>
                 <spring.rabbitmq.username>anan</spring.rabbitmq.username>
                 <spring.rabbitmq.password>local</spring.rabbitmq.password>
@@ -114,7 +113,6 @@
                 <encrypt.key-store.alias>anan</encrypt.key-store.alias>
                 <encrypt.key-store.secret>123456</encrypt.key-store.secret>
                 <docker.register.url>fosin</docker.register.url>
-                <docker.host>https://anan.fosin.top:2375</docker.host>
             </properties>
             <activation>
                 <activeByDefault>false</activeByDefault>
@@ -162,7 +160,6 @@
                 <encrypt.key-store.alias>cdp</encrypt.key-store.alias>
                 <encrypt.key-store.secret>123456</encrypt.key-store.secret>
                 <docker.register.url>fosin</docker.register.url>
-                <docker.host>http://192.168.137.8:2375</docker.host>
             </properties>
             <activation>
                 <activeByDefault>false</activeByDefault>
