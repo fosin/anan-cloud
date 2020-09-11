@@ -35,12 +35,12 @@ public class ErrorFilter extends SendErrorFilter {
         try {
             RequestContext ctx = RequestContext.getCurrentContext();
             Throwable throwable = getRealCause(ctx.getThrowable());
-            log.error("Zuul ErrorFilter :" + throwable.getMessage(), throwable);
+            log.error("", throwable);
             HttpServletRequest request = ctx.getRequest();
+//            request.setAttribute("javax.servlet.error.status_code", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            request.setAttribute("javax.servlet.error.status_code", ctx.getResponseStatusCode());
 
-            request.setAttribute("javax.servlet.error.status_code", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-
-            log.warn("Error during filtering", throwable);
+//            log.warn("Error during filtering", throwable);
             request.setAttribute("javax.servlet.error.exception", throwable);
 
             if (StringUtils.hasText(throwable.getMessage())) {
