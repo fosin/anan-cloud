@@ -1,18 +1,18 @@
 package com.github.fosin.anan.platform.service;
 
 
+import com.github.fosin.anan.cloudresource.constant.RedisConstant;
+import com.github.fosin.anan.cloudresource.dto.AnanUserDto;
+import com.github.fosin.anan.cloudresource.dto.request.AnanUserRoleCreateDto;
 import com.github.fosin.anan.core.exception.AnanUserOrPassInvalidException;
 import com.github.fosin.anan.jpa.repository.IJpaRepository;
 import com.github.fosin.anan.platform.repository.UserRoleRepository;
 import com.github.fosin.anan.platform.service.inter.UserRoleService;
 import com.github.fosin.anan.platform.service.inter.UserService;
-import com.github.fosin.anan.cloudresource.constant.RedisConstant;
 import com.github.fosin.anan.platformapi.entity.AnanRoleEntity;
 import com.github.fosin.anan.platformapi.entity.AnanUserEntity;
 import com.github.fosin.anan.platformapi.entity.AnanUserRoleEntity;
 import com.github.fosin.anan.platformapi.service.AnanUserDetailService;
-import com.github.fosin.anan.cloudresource.dto.AnanUserDto;
-import com.github.fosin.anan.cloudresource.dto.request.AnanUserRoleCreateDto;
 import com.github.fosin.anan.redis.cache.AnanCacheManger;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -85,7 +85,6 @@ public class UserRoleServiceImpl implements UserRoleService {
 
         userRoleRepository.deleteByUserId(userId);
         //如果是用户角色，则只需要删除一个用户的缓存
-        ananCacheManger.evict(RedisConstant.ANAN_USER, userId + "");
         ananCacheManger.evict(RedisConstant.ANAN_USER, userService.findById(userId).getUsercode());
         ananCacheManger.evict(RedisConstant.ANAN_USER_ALL_PERMISSIONS, userId + "");
         return getAnanUserRoleEntities(entities);
@@ -126,7 +125,6 @@ public class UserRoleServiceImpl implements UserRoleService {
         //如果是角色用户，则需要删除所有角色相关用户的缓存
         for (AnanUserRoleCreateDto entity : entities) {
             Long userId = entity.getUserId();
-            ananCacheManger.evict(RedisConstant.ANAN_USER, userId + "");
             ananCacheManger.evict(RedisConstant.ANAN_USER, userService.findById(userId).getUsercode());
             ananCacheManger.evict(RedisConstant.ANAN_USER_ALL_PERMISSIONS, userId + "");
         }
