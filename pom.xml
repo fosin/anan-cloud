@@ -26,7 +26,7 @@
         <anan-placeholder2>}</anan-placeholder2>
         <anan-spring-cloud.version>Hoxton.SR8</anan-spring-cloud.version>
         <anan-spring-cloud-alibaba.version>2.2.1.RELEASE</anan-spring-cloud-alibaba.version>
-        <anan-spring-boot-admin.version>2.2.3</anan-spring-boot-admin.version>
+        <anan-spring-boot-admin.version>2.3.0</anan-spring-boot-admin.version>
         <sonar.host.url>http://192.168.137.8:9001/</sonar.host.url>
     </properties>
     <profiles>
