@@ -3,13 +3,13 @@ on:
   push:
     branches:
       - '*'
-    paths:
-      - 'pom.xml'
-      - 'anan-cloudresource/**'
-      - 'anan-cloudadviced/pom.xml'
-      - 'anan-cloudadviced/anan-platformapi/**'
-      - 'deploy/mysql/**'
-      - 'deploy/openjdk/**'
+#     paths:
+#       - 'pom.xml'
+#       - 'anan-cloudresource/**'
+#       - 'anan-cloudadviced/pom.xml'
+#       - 'anan-cloudadviced/anan-platformapi/**'
+#       - 'deploy/mysql/**'
+#       - 'deploy/openjdk/**'
 jobs:
   release:
     runs-on: ubuntu-18.04
@@ -31,7 +31,7 @@ jobs:
 
       - name: Set Build Modules
         run: |
-          MODIFY_FILES=$(git diff --name-only HEAD~2 HEAD)
+          MODIFY_FILES=$(git diff --name-only HEAD~3 HEAD)
           MODULES=""
           echo MODIFY_FILES: $MODIFY_FILES
           if [[ $MODIFY_FILES == "pom.xml" || $MODIFY_FILES =~ " pom.xml" ]]; then
