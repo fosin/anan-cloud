@@ -4,6 +4,7 @@ services:
     image: nacos/nacos-server:latest
     container_name: nacos-0
     hostname: nacos-0
+    restart: on-failure:3
     environment:
       - TZ=Asia/Shanghai
       - PREFER_HOST_MODE=hostname
@@ -16,7 +17,9 @@ services:
       - MYSQL_SERVICE_PASSWORD=local
       - JVM_XMS=512M
       - JVM_XMX=512M
-      - JVM_XMN=256M
+      - JVM_XMN=170M
+      - JVM_MS=160M
+      - JVM_MMS=160M
     volumes:
       -  /root/deploy/nacos/logs/:/home/nacos/logs
     #      -  /root/deploy/nacos/custom.properties:/home/nacos/init.d/custom.properties
@@ -40,7 +43,7 @@ services:
       - TZ=Asia/Shanghai
     #    volumes: TODO 启动后报错cookie file /var/lib/rabbitmq/.erlang.cookie must be accessible by owner only
     #      - /root/deploy/rabbitmq:/var/lib/rabbitmq
-    restart: on-failure
+    restart: on-failure:3
     ports:
       - 15672:15672
       - 7890:5672
@@ -70,7 +73,7 @@ services:
       - TZ=Asia/Shanghai
     volumes:
       - /root/deploy/redis:/data
-    restart: on-failure
+    restart: on-failure:3
     ports:
       - 5798:6379
     command: redis-server --appendonly yes --requirepass local
@@ -140,9 +143,9 @@ services:
     entrypoint: "sh /anan/wait-for.sh nacos-0:8848 -t 3600 -- /anan/entrypoint.sh"
     container_name: anan-authserver
     hostname: anan-authserver
-    restart: on-failure
+    restart: on-failure:3
     environment:
-      - JAVA_TOOL_OPTIONS=-Xmx250M -Xms250M -XX:+DisableExplicitGC -XX:ErrorFile=/logs/hs_err_pid%p.log
+      - JAVA_TOOL_OPTIONS=-Xmx200M -Xms200M -XX:MaxMetaspaceSize=160M -XX:MetaspaceSize=160M -XX:+DisableExplicitGC -XX:ErrorFile=/logs/hs_err_pid%p.log
     ports:
       - 51400:51400
       #    volumes:
@@ -160,9 +163,9 @@ services:
     entrypoint: "sh /anan/wait-for.sh anan-platformserver:51500 -t 3600 -- /anan/entrypoint.sh"
     container_name: anan-zuulgateway
     hostname: anan-zuulgateway
-    restart: on-failure
+    restart: on-failure:3
     environment:
-      - JAVA_TOOL_OPTIONS=-Xmx250M -Xms250M -XX:+DisableExplicitGC -XX:ErrorFile=/logs/hs_err_pid%p.log
+      - JAVA_TOOL_OPTIONS=-Xmx200M -Xms200M -XX:MaxMetaspaceSize=160M -XX:MetaspaceSize=160M -XX:+DisableExplicitGC -XX:ErrorFile=/logs/hs_err_pid%p.log
     ports:
       - 9000:9000
       #    volumes:
@@ -178,9 +181,9 @@ services:
     entrypoint: "sh /anan/wait-for.sh anan-authserver:51400 -t 3600 -- /anan/entrypoint.sh"
     container_name: anan-platformserver
     hostname: anan-platformserver
-    restart: on-failure
+    restart: on-failure:3
     environment:
-      - JAVA_TOOL_OPTIONS=-Xmx250M -Xms250M -XX:+DisableExplicitGC -XX:ErrorFile=/logs/hs_err_pid%p.log
+      - JAVA_TOOL_OPTIONS=-Xmx200M -Xms200M -XX:MaxMetaspaceSize=160M -XX:MetaspaceSize=160M -XX:+DisableExplicitGC -XX:ErrorFile=/logs/hs_err_pid%p.log
       #    volumes:
       #- /root/deploy/logs/anan:/logs
     ports:
@@ -198,9 +201,9 @@ services:
     #    entrypoint: "sh /anan/wait-for.sh anan-zuulgateway:9000 -t 3600 -- /anan/entrypoint.sh"
     container_name: anan-adminserver
     hostname: anan-adminserver
-    restart: on-failure
+    restart: on-failure:3
     environment:
-      - JAVA_TOOL_OPTIONS=-Xmx250M -Xms250M -XX:+DisableExplicitGC -XX:ErrorFile=/logs/hs_err_pid%p.log
+      - JAVA_TOOL_OPTIONS=-Xmx200M -Xms200M -XX:MaxMetaspaceSize=160M -XX:MetaspaceSize=160M -XX:+DisableExplicitGC -XX:ErrorFile=/logs/hs_err_pid%p.log
       #    volumes:
       #- /root/deploy/logs/anan:/logs
     ports:
@@ -216,9 +219,9 @@ services:
     image: fosin/anan-eurekaserver:2.3.0-SNAPSHOT
     container_name: anan-eurekaserver
     hostname: anan-eurekaserver
-    restart: on-failure
+    restart: on-failure:3
     environment:
-      - JAVA_TOOL_OPTIONS=-Xmx250M -Xms250M -XX:+DisableExplicitGC -XX:ErrorFile=/logs/hs_err_pid%p.log
+      - JAVA_TOOL_OPTIONS=-Xmx200M -Xms200M -XX:+DisableExplicitGC -XX:ErrorFile=/logs/hs_err_pid%p.log
     networks:
       - anan-bridge
       #    volumes:
@@ -231,11 +234,11 @@ services:
     entrypoint: "sh /anan/wait-for.sh anan-eurekaserver:51000 -t 3600 -- /anan/entrypoint.sh"
     container_name: anan-configserver
     hostname: anan-configserver
-    restart: on-failure
+    restart: on-failure:3
     ports:
       - 51100:51100
     environment:
-      - JAVA_TOOL_OPTIONS=-Xmx250M -Xms250M -XX:+DisableExplicitGC -XX:ErrorFile=/logs/hs_err_pid%p.log
+      - JAVA_TOOL_OPTIONS=-Xmx200M -Xms200M -XX:+DisableExplicitGC -XX:ErrorFile=/logs/hs_err_pid%p.log
       - spring.cloud.config.server.native.search-locations=file:/anan-config
       #    volumes:
       #- /root/deploy/logs/anan:/logs
@@ -250,7 +253,7 @@ services:
     image: elastic/filebeat:6.8.6
     container_name: filebeat
     hostname: filebeat
-    restart: on-failure
+    restart: on-failure:3
     user: root
     volumes:
       - /root/deploy/filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
@@ -274,7 +277,7 @@ services:
     image: kibana:6.8.6
     container_name: kibana
     hostname: kibana
-    restart: on-failure
+    restart: on-failure:3
     environment:
       - I18N_LOCALE=zh-CN
       #      -SERVER_NAME=kibana.example.org
@@ -290,7 +293,7 @@ services:
     image: elasticsearch:6.8.6
     container_name: elasticsearch
     hostname: elasticsearch
-    restart: on-failure
+    restart: on-failure:3
     environment:
       #      - cluster.name=docker-cluster
       - bootstrap.memory_lock=true
@@ -310,7 +313,7 @@ services:
     image: openzipkin/zipkin
     container_name: zipkin
     hostname: zipkin
-    restart: on-failure
+    restart: on-failure:3
     environment:
       - STORAGE_TYPE=elasticsearch
       # Point the zipkin at the storage backend
@@ -345,7 +348,7 @@ services:
       - MONGO_INITDB_ROOT_PASSWORD=local
     volumes:
       - /root/deploy/mongodb/db:/data/db
-    restart: on-failure
+    restart: on-failure:3
     ports:
       - 27017:27017
     networks:
@@ -359,7 +362,7 @@ services:
     volumes:
       - /root/deploy/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
     #      - /root/deploy/prometheus/data:/prometheus TODO 不能挂载外部目录，报错
-    restart: on-failure
+    restart: on-failure:3
     privileged: true
     depends_on:
       - cadvisor
@@ -372,7 +375,7 @@ services:
   node-exporter:
     container_name: node-exporter
     image: prom/node-exporter
-    restart: on-failure
+    restart: on-failure:3
     environment:
       - TZ=Asia/Shanghai
       - NODE_ID={{.Node.ID}}
@@ -404,7 +407,7 @@ services:
       - GF_SERVER_ROOT_URL=http://grafana.server.name
       - GF_SECURITY_ADMIN_PASSWORD=local
       - GF_USERS_ALLOW_SIGN_UP='false'
-    restart: on-failure
+    restart: on-failure:3
     ports:
       - 3000:3000
     networks:
@@ -416,7 +419,7 @@ services:
     hostname: cadvisor
     environment:
       - TZ=Asia/Shanghai
-    restart: on-failure
+    restart: on-failure:3
     privileged: true
     volumes:
       - /dev/disk/:/dev/disk:ro
@@ -435,7 +438,7 @@ services:
     image: prom/alertmanager
     container_name: alertmanager
     hostname: alertmanager
-    restart: on-failure
+    restart: on-failure:3
     ports:
       - 9093:9093
     networks:
@@ -455,7 +458,7 @@ services:
     container_name: unsee
     hostname: unsee
     image: cloudflare/unsee:v0.8.0
-    restart: on-failure
+    restart: on-failure:3
     networks:
       - anan-bridge
     environment:
@@ -466,7 +469,7 @@ services:
     image: postgres
     container_name: postgresql
     hostname: postgresql
-    restart: on-failure
+    restart: on-failure:3
     ports:
       - 5432:5432
     environment:
@@ -479,7 +482,7 @@ services:
     image: sonarqube
     container_name: sonarqube
     hostname: sonarqube
-    restart: on-failure
+    restart: on-failure:3
     ports:
       - 9001:9000
     environment:

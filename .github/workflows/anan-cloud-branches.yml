@@ -34,7 +34,7 @@ jobs:
           MODIFY_FILES=$(git diff --name-only HEAD~ HEAD)
           MODULES=""
           echo MODIFY_FILES: $MODIFY_FILES
-          if [[ $MODIFY_FILES =~ "^pom.xml| pom.xml" ]]; then
+          if [[ $MODIFY_FILES =~ "^pom.xml| pom.xml$" ]]; then
              MODULES=${MODULES}",com.github.fosin.anan:anan-cloud"
           fi
           if [[ $MODIFY_FILES =~ "anan-cloudresource" ]]; then
