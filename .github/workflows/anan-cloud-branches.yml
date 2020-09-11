@@ -31,10 +31,10 @@ jobs:
 
       - name: Set Build Modules
         run: |
-          MODIFY_FILES=$(git diff --name-only HEAD~3 HEAD)
+          MODIFY_FILES=$(git diff --name-only HEAD~4 HEAD)
           MODULES=""
           echo MODIFY_FILES: $MODIFY_FILES
-          if [[ $MODIFY_FILES == "pom.xml" || $MODIFY_FILES =~ " pom.xml" ]]; then
+          if [[ $MODIFY_FILES =~ " pom\.xml" || $MODIFY_FILES == "pom\.xml" ]]; then
              MODULES=${MODULES}",com.github.fosin.anan:anan-cloud"
           fi
           if [[ $MODIFY_FILES =~ "anan-cloudresource" ]]; then
