@@ -104,12 +104,6 @@ anan:
       resource-server:
         enabled: true
         token-type: jwt
-    jwt:
-      key-store: ${encrypt.key-store.location}
-      key-alias: ${encrypt.key-store.alias}
-      key-password: ${encrypt.key-store.password}
-      key-store-password: ${encrypt.key-store.secret}
-      public-key-location: classpath:anan.pub
     disable-csrf: true
     web-ignoring:
       - /
@@ -177,11 +171,11 @@ VALUES (7, 'application.yaml', 'DEFAULT_GROUP', 'logging:
     org.hibernate.engine.spi.QueryParameters: info
     org.hibernate.engine.query.spi.HQLQueryPlan: info
 #    zipkin2: debug
-    com.github.fosin.anan.security: DEBUG
-    org.springframework.security: DEBUG
+    # com.github.fosin.anan.security: DEBUG
+    # org.springframework.security: DEBUG
 spring:
   datasource:
-    url: jdbc:mysql://mysql-leader:6478/anan_platform?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=GMT%2b8
+    url: jdbc:mysql://mysql-leader:3306/anan_platform?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=GMT%2b8
     username: anan
     password: local
 #    type: com.alibaba.druid.pool.DruidDataSource
@@ -226,7 +220,7 @@ spring:
     #      max-redirects:
     #      nodes: redis:6379
     host: redis
-    port: 5798
+    port: 6379
     password: local
     # 连接超时时间（毫秒）
     timeout: 10s
@@ -338,6 +332,13 @@ management:
           autotime:
             enabled: false
 anan:
+  security:
+    jwt:
+      key-store: ${encrypt.key-store.location}
+      key-alias: ${encrypt.key-store.alias}
+      key-password: ${encrypt.key-store.password}
+      key-store-password: ${encrypt.key-store.secret}
+      public-key-location: classpath:anan.pub
   oauth2:
     client:
       client-id: appServer
@@ -365,6 +366,7 @@ turbine:
 spring:
   boot:
     admin:
+      context-path: /adminmonitor
       ui:
 #        favicon-danger: "assets/img/favicon-danger.png"
 #        favicon: "assets/img/favicon.png"
@@ -462,26 +464,7 @@ hystrix:
         coreSize: 10  #命令线程池执行最大并发量（10）
 ##禁用自定义过滤器ThrowExceptionFilter
 #zuul.ThrowExceptionFilter.pre.disable=true
-#security:
-#  sessions: stateless
-#  oauth2:
-#    client:
-#      client-id: anan
-#      client-secret: local
-##      access-token-uri: http://localhost:9000/auth/oauth/token
-##      user-authorization-uri: http://localhost:9000/auth/oauth/authorize
-#      access-token-uri: http://localhost:51400/oauth/token
-#      user-authorization-uri: http://localhost:51400/oauth/authorize
-##      auto-approve-scopes:
-##      pre-established-redirect-uri: http://${security.user.name}:${security.user.password}@${eureka.instance.hostname}:${server.port}/
-##      token-name:
-##      refresh-token-validity-seconds:
-##      access-token-validity-seconds:
-##      scope:
-#      authorized-grant-types: authorization_code
-##      use-current-uri: false
-##      registered-redirect-uri: http://localhost:9000/platform/login
-##      client-authentication-scheme: form
+
 anan:
   swagger:
     enabled: true
@@ -512,32 +495,51 @@ VALUES (18, 'anan-zuulgateway.yaml', 'DEFAULT_GROUP', 'server:
 zuul:
   add-host-header: true
   add-proxy-headers: true
-  sensitiveHeaders:   #Cookie,Set-Cookie,Authorization   blacklist，如果不过滤，则须显式设为空。
-  retryable: true #默认启用重试
+  #如果不过滤，则须显式设为空，默认Cookie,Set-Cookie,Authorization。
+  #在Hoxton.SR6中这个参数在application.yaml不会生效，但是转移值bootstrap.yaml中就可以
+  #当前只能通过设置每个服务的custom-sensitive-headers: true来解决
+  sensitive-headers:
+  #  - Cookie
+  #  - Set-Cookie
+  #  - Authorization
+  #默认启用重试
+  retryable: true
   ignored-services: ''*''
-#  strip-prefix: true #是否移除代理前缀
-  prefix: /gateway #为所有http请求前增加/zuul前缀
+  #是否移除代理前缀,默认为true
+  #strip-prefix: true
+  #为所有http请求前增加/zuul前缀
+  prefix: /gateway
   routes:
     anan-platformserver:
       path: /platform/**
       serviceId: anan-platformserver
       retryable: true
+      custom-sensitive-headers: true
+      sensitive-headers:
     anan-authserver:
       path: /auth/**
       serviceId: anan-authserver
       retryable: true
+      custom-sensitive-headers: true
+      sensitive-headers:
     anan-zuulgateway:
       path: /**
       serviceId: anan-zuulgateway
       retryable: true
+      custom-sensitive-headers: true
+      sensitive-headers:
     anan-mpi:
       path: /mpi/**
       serviceId: anan-mpi
       retryable: true
+      custom-sensitive-headers: true
+      sensitive-headers:
     anan-vhr:
       path: /vhr/**
       serviceId: anan-vhr
       retryable: true
+      custom-sensitive-headers: true
+      sensitive-headers:
 #  semaphore:
 #    max-semaphores: 100
 #  ribbon-isolation-strategy: THREAD
@@ -545,19 +547,27 @@ zuul:
 #    use-separate-thread-pools: true
 #    thread-pool-key-prefix: zuulgw
   ratelimit:
-    key-prefix: zuulgateway #对应用来标识请求的key的前缀
+    #对应用来标识请求的key的前缀
+    key-prefix: anan:ratelimit-zuul
     enabled: true
-    repository: REDIS #对应存储类型（用来存储统计信息）,可选值REDIS、IN_MEMORY、JPA、CONSUL,默认IN_MEMORY
-    behind-proxy: true #代理之后
-    add-response-headers: true
-    default-policy-list: #可选 - 针对所有的路由配置的策略，除非特别配置了policies
-      - limit: 1200 #可选 - 每个刷新时间窗口对应的请求数量限制
+    #对应存储类型（用来存储统计信息）,可选值REDIS、IN_MEMORY、JPA、CONSUL,默认IN_MEMORY
+    repository: REDIS
+    #代理之后
+    behind-proxy: true
+    response-headers: VERBOSE
+    #可选 - 针对所有的路由配置的策略，除非特别配置了policies
+    default-policy-list:
+      - limit: 6000 #可选 - 每个刷新时间窗口对应的请求数量限制
         quota: 1000 #可选-  每个刷新时间窗口对应的请求时间限制（秒）
         refresh-interval: 60 # 刷新时间窗口的时间，默认值 60(秒)
-        type: #可选 限流方式
-  #        - user #用户粒度
-  #        - origin #ORIGIN粒度 (用户请求的origin作为粒度控制)
-          - url #接口粒度 (请求接口的地址作为粒度控制)
+        #可选 限流方式
+        type:
+           #用户粒度
+  #        - user
+           #ORIGIN粒度 (用户请求的origin作为粒度控制)
+  #        - origin
+          #接口粒度 (请求接口的地址作为粒度控制)
+          - url
     policy-list:
       anan-mpi:
         - limit: 900
@@ -568,43 +578,44 @@ zuul:
   host:
     connect-timeout-millis: 10000
     socket-timeout-millis: 10000
-spring:
- redis:
-   host: redis
-   port: 6379
-   password: local
-   timeout: 10000
-   lettuce:
-     max-active: 3
-     max-wait: -1
-     max-idle: 1
-     min-idle: 1
 ribbon:
-  OkToRetryOnAllOperations: false #对所有操作请求都进行重试,默认false
-  MaxAutoRetries: 0     #对当前实例的重试次数，默认0
-  MaxAutoRetriesNextServer: 1 #对切换实例的重试次数，默认1
-  ReadTimeout: 5000   #负载均衡超时时间，默认值1000，单位ms
-  ConnectTimeout: 5000 #ribbon请求连接的超时时间，默认值1000，单位ms
-  ServerListRefreshInterval: 15000 # 从注册中心刷新servelist的时间 默认30秒，单位ms
+  #对所有操作请求都进行重试,默认false
+  OkToRetryOnAllOperations: false
+  #对当前实例的重试次数，默认0
+  MaxAutoRetries: 0
+  #对切换实例的重试次数，默认1
+  MaxAutoRetriesNextServer: 1
+  #负载均衡超时时间，默认值1000，单位ms
+  ReadTimeout: 5000
+  #ribbon请求连接的超时时间，默认值1000，单位ms
+  ConnectTimeout: 5000
+  #从注册中心刷新servelist的时间 默认30秒，单位ms
+  ServerListRefreshInterval: 15000
 hystrix:
   threadpool:
     default:
       coreSize: 100
       maximumSize: 2000
-      allowMaximumSizeToDivergeFromCoreSize: true #允许maximumSize起作用
-      maxQueueSize: -1 #如该值为-1，那么使用的是SynchronousQueue，否则使用的是LinkedBlockingQueue
+      #允许maximumSize起作用
+      allowMaximumSizeToDivergeFromCoreSize: true
+      #如该值为-1，那么使用的是SynchronousQueue，否则使用的是LinkedBlockingQueue
+      maxQueueSize: -1
   command:
     default:
       execution:
         isolation:
           thread:
-            timeoutInMilliseconds: 20001 #断路器的超时时间；如果ribbon配置了重试那么该值必需大于ribbonTimeout = (ribbonReadTimeout + ribbonConnectTimeout) * (maxAutoRetries + 1) * (maxAutoRetriesNextServer + 1)，重试才能生效
+            #断路器的超时时间；如果ribbon配置了重试那么该值必需大于ribbonTimeout = (ribbonReadTimeout + ribbonConnectTimeout) * (maxAutoRetries + 1) * (maxAutoRetriesNextServer + 1)，重试才能生效
+            timeoutInMilliseconds: 20001
       timeout:
         enabled: false
       circuitBreaker:
-        requestVolumeThreshold: 20 #当在配置时间窗口内达到此数量的失败后，进行短路。默认20个
-        sleepWindowInMilliseconds: 5 #短路多久以后开始尝试是否恢复，默认5s
-        errorThresholdPercentage: 50% #出错百分比阈值，当达到此阈值后，开始短路。默认50%
+        #当在配置时间窗口内达到此数量的失败后，进行短路。默认20个
+        requestVolumeThreshold: 20
+        #短路多久以后开始尝试是否恢复，默认5s
+        sleepWindowInMilliseconds: 5
+        #出错百分比阈值，当达到此阈值后，开始短路。默认50%
+        errorThresholdPercentage: 50%
 
 ##禁用自定义过滤器ThrowExceptionFilter
 #zuul.ThrowExceptionFilter.pre.disable=true
@@ -629,6 +640,48 @@ hystrix:
 ##      registered-redirect-uri: http://localhost:9000/platform/login
 ##      client-authentication-scheme: form
 anan:
+  security:
+    oauth2:
+      session:
+        session-creation-policy: stateless
+      authority:
+        root-path: /**
+        authorities:
+          - methods: OPTIONS
+      resource-server:
+        enabled: true
+        token-type: jwt
+    disable-csrf: true
+    corss:
+      enabled: true
+      cors:
+        - path: /**
+          allowed-origins: ''*''
+          allowed-methods: ''*''
+          allowed-headers: ''*''
+          # exposed-headers: ''*''
+          allow-credentials: true
+    web-ignoring:
+      - /**/auth/oauth/**
+      - /**/*.html
+      - /**/*.css
+      - /**/*.js
+      - /**/*.woff*
+      - /**/*.ttf*
+      - /**/*.map
+      - /**/*.ico
+      - /**/*.swf
+      - /**/*.jpg
+      - /**/*.png
+      - /**/*.svg
+      - /hystrix
+      - /hystrix.stream
+      - /hystrix/**
+      - /**/webjars/**
+      - /**/images/**
+      - /**/swagger-resources/**
+      - /**/api-docs
+      - /actuator/**
   swagger:
     enabled: true
     title: ${spring.application.name}
@@ -650,47 +703,7 @@ anan:
     cache:
       manager: false
     session:
-      manager: true
-  oauth2:
-    resource:
-      server:
-        disablecsrf: true
-        disableHttpBasic: true
-        cors:
-          allowedOrigins: ''*''
-          allowedMethods: ''*''
-          allowedHeaders: ''*''
-          allowCredentials: true
-        customPermissionList:
-          - path: /**/auth/oauth/**
-          - path: /**/auth/**
-          - path: /**/*.js
-          - path: /**/*.html
-          - path: /**/*.css
-          - path: /**/*.gif
-          - path: /**/*.png
-          - path: /**/*.jpg
-          - path: /**/*.jpeg
-          - path: /**/*.svg
-          - path: /**/*.bmp
-          - path: /**/*.ico
-          - path: /**/*.swf
-          - path: /**/*.woff
-          - path: /**/*.woff2
-          - path: /**/*.ttf
-          - path: /**/*.map
-          - path: /hystrix
-          - path: /hystrix.stream
-          - path: /hystrix/**
-          - path: /**/webjars/**
-    #    - path: /**/springfox-swagger-ui/**
-          - path: /**/swagger-resources/**
-          - path: /**/v2/api-docs
-          - path: /**/third-party/**
-          - path: /**/api/**
-          - path: /**/images/**
-          - path: /actuator/health
-          - path: /actuator/shutdown', 'b7353d61807d909009a90b70e0a7114e', '2019-11-10 20:04:04', '2020-03-15 18:36:23', null, '192.168.137.1', '', '6138f451-2d5b-42fe-a793-df3744d7257c', 'null', 'null', 'null', 'yaml', 'null');
+      manager: true', 'b7353d61807d909009a90b70e0a7114e', '2019-11-10 20:04:04', '2020-03-15 18:36:23', null, '192.168.137.1', '', '6138f451-2d5b-42fe-a793-df3744d7257c', 'null', 'null', 'null', 'yaml', 'null');
 INSERT INTO `config_info` (`id`, `data_id`, `group_id`, `content`, `md5`, `gmt_create`, `gmt_modified`, `src_user`, `src_ip`, `app_name`, `tenant_id`, `c_desc`, `c_use`, `effect`, `type`, `c_schema`)
 VALUES (20, 'anan-platformserver.yaml', 'DEFAULT_GROUP', 'server:
   port: 51500

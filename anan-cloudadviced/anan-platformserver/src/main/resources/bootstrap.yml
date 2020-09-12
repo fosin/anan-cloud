@@ -1,7 +1,3 @@
-anan:
-  security:
-    jwt:
-      public-key-location: classpath:anan.pub
 eureka:
   client:
     service-url:
