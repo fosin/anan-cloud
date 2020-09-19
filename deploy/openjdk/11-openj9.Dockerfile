@@ -16,4 +16,6 @@ RUN chmod +x entrypoint.sh wait-for.sh \
     && set -eux \
     && apt -y install netcat \
     && apt -y install net-tools \
+    && apt -y install iputils-ping \
+    && apt -y install telnet \
     && rm -rf /var/lib/apt/lists/*
