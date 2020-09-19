@@ -3,7 +3,7 @@ server:
 spring:
   mail:
     host: smtp.qq.com
-    port: 465
+    port: 25
     username: 1186340749@qq.com
     password: ghkmjtncgemsbaae
     default-encoding: UTF-8
@@ -21,14 +21,28 @@ spring:
             class: javax.net.ssl.SSLSocketFactory
             fallback: false
             port: ${spring.mail.port}
-  jpa:
-    show-sql: true
-#    hibernate:
-#      ddl-auto: update
   datasource:
-    url: jdbc:mysql://anan-platform-mysql:3308/vhr?useUnicode=true&characterEncoding=utf-8&useSSL=false
-    username: root
-    password: '{cipher}AQAf9K0s8zLVaIk44+wqpHGuHsHEK5G4KKu1vk0HwxlojaYQHRkNsFhdQwmcrnkayWpGmNZezJCVb56JJTYL0wOus7L+zUIRWG0YIBzZBzG0iAX/6fQ0l7EVc6JyYmksGi6czSWhhAYvaJ2zupxU5pMou+k48ILP1MSZ+2n/mmM2OA/msXzum7hhSbuHKHkazorFlYLem2efeU0M61xWGRgzHAJ6pOxWGJx2NepgFDGLSTpDiqRTXD98AabHa28X8TpBbFynDONrU3mueuW/TSrXOlzp2LOO/cDbYGpZXAc/jypbH8SWfkSQlQrWaKBg2FJ8DYg/hUnxfSy+QbzyeGkPfJAcrDZ+9lhluKJ2RplT9bAedAWmvzPu2cJCQuf/RmM='
+    url: jdbc:mysql://172.17.0.15:3306/vhr?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=GMT%2b8
+    username: anan
+    password: local
+#    type: com.alibaba.druid.pool.DruidDataSource
+    # Hikari 连接池配置
+    hikari:
+      # 最小空闲连接数量
+      minimum-idle: 1
+      # 空闲连接存活最大时间，默认600000（10分钟）
+      idle-timeout: 180000
+      # 连接池最大连接数，默认是10
+      maximum-pool-size: 5
+      # 此属性控制从池返回的连接的默认自动提交行为,默认值：true
+      auto-commit: true
+      # 连接池名称
+      pool-name: MyHikariCP
+      # 此属性控制池中连接的最长生命周期，值0表示无限生命周期，默认1800000即30分钟
+      max-lifetime: 1800000
+      # 数据库连接超时时间,默认30秒，即30000
+      connection-timeout: 30000
+      connection-test-query: SELECT 1
     druid:
       initial-size: 5 #初始化大小
       min-idle: 5 #最小
@@ -48,13 +62,13 @@ spring:
 #    platform: mysql
 #    continue-on-error: true
   redis:
-    database: 10
+    #database: 10
     #    cluster:
     #      max-redirects:  # （普通集群，不使用则不用开启）在群集中执行命令时要遵循的最大重定向数目。
     #      nodes: redis:6379 # （普通集群，不使用则不用开启）以逗号分隔的“主机：端口”对列表进行引导。
     host: redis
     port: 6379
-    password: '{cipher}AQAf9K0s8zLVaIk44+wqpHGuHsHEK5G4KKu1vk0HwxlojaYQHRkNsFhdQwmcrnkayWpGmNZezJCVb56JJTYL0wOus7L+zUIRWG0YIBzZBzG0iAX/6fQ0l7EVc6JyYmksGi6czSWhhAYvaJ2zupxU5pMou+k48ILP1MSZ+2n/mmM2OA/msXzum7hhSbuHKHkazorFlYLem2efeU0M61xWGRgzHAJ6pOxWGJx2NepgFDGLSTpDiqRTXD98AabHa28X8TpBbFynDONrU3mueuW/TSrXOlzp2LOO/cDbYGpZXAc/jypbH8SWfkSQlQrWaKBg2FJ8DYg/hUnxfSy+QbzyeGkPfJAcrDZ+9lhluKJ2RplT9bAedAWmvzPu2cJCQuf/RmM='
+    password: local
   session:
     store-type: redis
 #MyBatis
@@ -73,15 +87,3 @@ anan:
     contact:
       name: fosin
       email: 28860823@qq.com
-  oauth2:
-    disablecsrf: true
-    disableHttpBasic: true
-    customPermissionList:
-    - path: /**/v2/api-docs
-security:
-  oauth2:
-    client:
-      client-id: appServer
-      client-secret: appServer
-      access-token-uri: http://anan-authserver:51400/oauth/token
-      grant-type: client_credentials

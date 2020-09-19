@@ -1,0 +1,87 @@
+server:
+  port: 51400
+spring:
+  session:
+    store-type: redis
+  thymeleaf:
+    cache: false
+  # mvc:
+  #   static-path-pattern: /auth/**
+anan:
+  security:
+    sso:
+      session:
+        session-creation-policy: if_required
+      authority:
+        root-path: /sso/**
+        authorities:
+          - methods: OPTIONS
+      http-basic: true
+      form-login:
+        enabled: true
+        login-page: /sso/login
+        login-processing-url: /sso/login
+        password-parameter: password
+        username-parameter: usercode
+        default-success-url: /sso/index
+        failure-url: /sso/login?error
+        logout-url: /sso/logout
+        logout-success-url  : /sso/login?logout
+        clear-authentication: true
+      remember-me:
+        enabled: true
+    oauth2:
+      session:
+        session-creation-policy: stateless
+      authority:
+        root-path: /**
+        authorities:
+          - methods: OPTIONS
+      exception-handling:
+        access-denied-page: /error
+        enabled: true
+      resource-server:
+        enabled: true
+        token-type: jwt
+    disable-csrf: true
+    web-ignoring:
+      - /
+      - /**/*.html
+      - /**/*.css
+      - /**/*.js
+      - /**/*.woff*
+      - /**/*.ttf*
+      - /**/*.map
+      - /**/*.ico
+      - /**/*.swf
+      - /**/*.jpg
+      - /**/*.png
+      - /**/*.svg
+      - /**/*.gif
+      - /error
+      - /**/webjars/**
+      - /**/images/**
+      - /**/swagger-resources/**
+      - /**/api-docs
+      - /actuator/**
+      - /v1/permission/**  
+  swagger:
+    enabled: true
+    title: ${spring.application.name}
+    description: ${info.description}
+    version: ${info.version}
+    base-package: com.github.fosin.anan.auth
+    authorization:
+      name: Oauth2.0 Authorization
+      keyName: Authorization
+#      authRegex: ^[^/oauth/token]$
+    contact:
+      name: fosin
+      email: 28860823@qq.com       
+  redis:
+    idempotent:
+      enabled: false
+    cache:
+      manager: false
+    session:
+      manager: true

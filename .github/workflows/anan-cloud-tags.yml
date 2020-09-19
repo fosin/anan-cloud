@@ -19,13 +19,11 @@ jobs:
           # Otherwise, defaults to `master`.
           ref: ${{ env.MODULE_VERSION }}
 
-      - name: Setup JDK 11
+      - name: Setup JDK
         uses: actions/setup-java@v1
         with:
           java-version: 11
-      #      - name: Build And Deploy with Maven
-      #        run: |
-      #          mvn --batch-mode --errors --file $MODULE_PATH/pom.xml clean package deploy:deploy -Dmaven.javadoc.skip=true -Darguments=${{ secrets.maven_center_pass }}
+
       - name: Build with Maven
         run: |
           mvn --batch-mode --errors --file pom.xml clean dependency:copy-dependencies -DincludeScope=runtime compile jar:jar spring-boot:repackage

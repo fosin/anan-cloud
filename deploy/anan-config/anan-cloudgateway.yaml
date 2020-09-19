@@ -1,0 +1,123 @@
+server:
+  port: 9000
+spring:
+  cloud:
+    gateway:
+      enabled: true #If you include the starter, but, for some reason, you do not want the gateway to be enabled
+    routes:
+      - id: anan-platformserver
+        uri: lb://anan-platformserver
+        predicates:
+          - path=/platform/{segment}
+        filters:
+          - SetPath=/{segment}
+          # - StripPrefix=1
+          #   # 限流
+          # - name: RequestRateLimiter
+          #   args:
+          #     # 限流策略
+          #     key-resolver: '#{@remoteAddrKeyResolver}'
+          #     # 令牌桶每秒填充率
+          #     redis-rate-limiter.replenishRate: 1
+          #     # 令牌桶容量
+          #     redis-rate-limiter.burstCapacity: 2
+          #   # 熔断
+          # - name: Hystrix
+          #   args:
+          #     name: appService1EchoCmd
+
+      - id: anan-authserver
+        uri: lb://anan-authserver
+        predicates:
+          - path=/auth/**
+        filters:
+          - StripPrefix=1
+      - id: anan-mpi
+        uri: lb://anan-mpi
+        predicates:
+          - path=/mpi/**
+        filters:
+          - RewritePath=/mpi/(?<segment>.*), /$\{segment}
+      - id: anan-vhr
+        uri: lb://anan-vhr
+        predicates:
+          - path=/vhr/**
+        filters:
+          - StripPrefix=1
+ribbon:
+  OkToRetryOnAllOperations: false #对所有操作请求都进行重试,默认false
+  MaxAutoRetries: 0     #对当前实例的重试次数，默认0
+  MaxAutoRetriesNextServer: 1 #对切换实例的重试次数，默认1
+  ReadTimeout: 5000   #负载均衡超时时间，默认值5000，单位ms
+  ConnectTimeout: 5000 #ribbon请求连接的超时时间，默认值2000，单位ms
+  ServerListRefreshInterval: 15000 # 从注册中心刷新servelist的时间 默认30秒，单位ms
+hystrix:
+  threadpool:
+    default:
+      coreSize: 100
+      maximumSize: 2000
+      allowMaximumSizeToDivergeFromCoreSize: true #允许maximumSize起作用
+      maxQueueSize: -1 #如该值为-1，那么使用的是SynchronousQueue，否则使用的是LinkedBlockingQueue
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 20001 #断路器的超时时间；如果ribbon配置了重试那么该值必需大于ribbonTimeout，重试才能生效
+      timeout:
+        enabled: false
+      metrics:
+        rollingStats:
+          timeInMilliseconds: 10000 #判断健康度的滚动时间窗长度（10000）
+      circuitBreaker:
+        requestVolumeThreshold: 20 #当在配置时间窗口内达到此数量的失败后，进行短路。默认20个
+        sleepWindowInMilliseconds: 5 #短路多久以后开始尝试是否恢复，默认5s
+        errorThresholdPercentage: 50% #出错百分比阈值，当达到此阈值后，开始短路。默认50%
+      threadPool:
+        coreSize: 10  #命令线程池执行最大并发量（10）
+##禁用自定义过滤器ThrowExceptionFilter
+#zuul.ThrowExceptionFilter.pre.disable=true
+#security:
+#  sessions: stateless
+#  oauth2:
+#    client:
+#      client-id: anan
+#      client-secret: local
+##      access-token-uri: http://localhost:9000/auth/oauth/token
+##      user-authorization-uri: http://localhost:9000/auth/oauth/authorize
+#      access-token-uri: http://localhost:51400/oauth/token
+#      user-authorization-uri: http://localhost:51400/oauth/authorize
+##      auto-approve-scopes:
+##      pre-established-redirect-uri: http://${security.user.name}:${security.user.password}@${eureka.instance.hostname}:${server.port}/
+##      token-name:
+##      refresh-token-validity-seconds:
+##      access-token-validity-seconds:
+##      scope:
+#      authorized-grant-types: authorization_code
+##      use-current-uri: false
+##      registered-redirect-uri: http://localhost:9000/platform/login
+##      client-authentication-scheme: form
+anan:
+  swagger:
+    enabled: true
+    title: ${spring.application.name}
+    description: ${info.description}
+    version: ${info.version}
+    base-package: com.github.fosin.anan.cloudgateway
+    authorization:
+      name: Oauth2.0 Authorization
+      keyName: Authorization
+    #      authRegex: ^[^/oauth/token]$
+    contact:
+      name: fosin
+      email: 28860823@qq.com
+    ignoreResourceNames:
+      - anan-zuulgateway
+      - anan-cloudgateway
+  redis:
+    idempotent:
+      enabled: false
+    cache:
+      manager: false
+    session:
+      manager: true

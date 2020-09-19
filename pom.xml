@@ -102,7 +102,8 @@
                 <spring.cloud.config.server.native.search-locations/>
                 <spring.cloud.config.server.git.uri/>
                 <spring.cloud.config.server.git.search-paths/>
-                <spring.cloud.inetutils.preferred-networks>192.168.0.,100.100.1.,172.16.0.</spring.cloud.inetutils.preferred-networks>
+                <spring.cloud.inetutils.preferred-networks>192.168.0.,100.100.1.,172.16.0.
+                </spring.cloud.inetutils.preferred-networks>
                 <spring.rabbitmq.addresses>rabbitmq:7890</spring.rabbitmq.addresses>
                 <spring.rabbitmq.username>anan</spring.rabbitmq.username>
                 <spring.rabbitmq.password>local</spring.rabbitmq.password>
@@ -319,6 +320,24 @@
                     </execution>
                 </executions>
                 <configuration>
+                    <excludes>
+                        <exclude>
+                            <groupId>com.github.fosin.anan</groupId>
+                            <artifactId>anan-cloud</artifactId>
+                        </exclude>
+                        <exclude>
+                            <groupId>com.github.fosin.anan</groupId>
+                            <artifactId>anan-cloudadviced</artifactId>
+                        </exclude>
+                        <exclude>
+                            <groupId>com.github.fosin.anan</groupId>
+                            <artifactId>anan-cloudresource</artifactId>
+                        </exclude>
+                        <exclude>
+                            <groupId>com.github.fosin.anan</groupId>
+                            <artifactId>anan-platformapi</artifactId>
+                        </exclude>
+                    </excludes>
                     <!--<skip>true</skip> 默认跳过repackage-->
                     <executable>true</executable>
                     <!--以下内容用于外置化依赖jar包-->

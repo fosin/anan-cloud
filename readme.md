@@ -56,11 +56,11 @@
 ### 1.3、运行前端项目anan-vue, 
 详细介绍移步<https://github.com/fosin/anan-vue>查看前端项目的开发环境搭建过程
 ## 2、部署生产环境
-### 2.1、Docker Swarm集群环境部署
-详细介绍 [点这里deploy/swarm/readme-swarm.md](deploy/swarm/readme-swarm.md) 
-### 2.2、Kubernetes部署
+### 2.1、Kubernetes部署
 详细介绍 [点这里deploy/k8s/readme-k8s.md](deploy/k8s/readme-k8s.md) 
-### 2.3、jar包部署
+### 2.2、jar包部署
 详细介绍 [点这里deploy/jar/readme-jar.md](deploy/jar/readme-jar.md) 
+### 2.3、Docker Swarm集群环境部署
+详细介绍 [点这里deploy/swarm/readme-swarm.md](deploy/swarm/readme-swarm.md) 
 ### 2.4、war包部署
    

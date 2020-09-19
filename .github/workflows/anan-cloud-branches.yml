@@ -24,7 +24,7 @@ jobs:
           ref: ${{ env.BRANCHE_VERSION }}
           fetch-depth: 2
 
-      - name: Install Java and Maven
+      - name: Setup JDK
         uses: actions/setup-java@v1
         with:
           java-version: 11

@@ -1,0 +1,35 @@
+server:
+  port: 51500
+feign:
+#  compression: #开启这个设置比较耗CPU
+#    request:
+#      enabled: true #开启Feign请求压缩
+#      mime-types: text/xml,application/xml,application/json # 配置压缩文档类型
+#    response:
+#      enabled: true #开启Feign响应压缩
+#      min-request-size: 2048 # 配置最小压缩的文档大小
+  okhttp:
+    enabled: true
+  httpclient:
+    enabled: false
+    max-connections: 1000 #最大连接数
+    max-connections-per-route: 100 #每个url的连接数
+anan:
+  swagger:
+    enabled: true
+    title: ${spring.application.name}
+    description: ${info.description}
+    version: ${info.version}
+    base-package: com.github.fosin.anan.platform
+    authorization:
+      name: Oauth2.0 Authorization
+      keyName: Authorization
+    contact:
+      name: fosin
+      email: 28860823@qq.com
+#  global-operation-parameters:
+#  - name: Authorization
+#    description: Oauth2.0令牌信息,格式例如：Bearer 58cb49cd-be59-4706-bbc5-9c41fc3cbef4
+#    modelRef: string
+#    parameterType: header
+#    required: true
