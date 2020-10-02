@@ -90,16 +90,15 @@
                 <spring.cloud.nacos.config.sharedConfigs>application.yaml</spring.cloud.nacos.config.sharedConfigs>
                 <eureka.client.enabled>false</eureka.client.enabled>
                 <eureka.client.service-url.defaultZone>
-                    http://${anan-placeholder1}spring.security.user.name${anan-placeholder2}:${anan-placeholder1}spring.security.user.password${anan-placeholder2}${anan-at}192.168.2.243:51000/eureka/,http://${anan-placeholder1}spring.security.user.name${anan-placeholder2}:${anan-placeholder1}spring.security.user.password${anan-placeholder2}${anan-at}192.168.2.244:51000/eureka/
+                    http://${anan-placeholder1}spring.security.user.name${anan-placeholder2}:${anan-placeholder1}spring.security.user.password${anan-placeholder2}${anan-at}localhost:51000/eureka/
                 </eureka.client.service-url.defaultZone>
                 <spring.cloud.config.enabled>false</spring.cloud.config.enabled>
-                <spring.cloud.config.profileActive>subversion</spring.cloud.config.profileActive>
-                <spring.cloud.config.server.svn.uri>
-                    https://192.168.2.237/svn/xingyj/01-Development/01-Platform/v1/01-Souce/anan-cloud/anan-config/
-                </spring.cloud.config.server.svn.uri>
-                <spring.cloud.config.server.svn.username>configServer</spring.cloud.config.server.svn.username>
-                <spring.cloud.config.server.svn.password>xingyj</spring.cloud.config.server.svn.password>
-                <spring.cloud.config.server.native.search-locations/>
+                <spring.cloud.config.profileActive>native</spring.cloud.config.profileActive>
+                <spring.cloud.config.server.svn.uri/>
+                <spring.cloud.config.server.svn.username/>
+                <spring.cloud.config.server.svn.password/>
+                <spring.cloud.config.server.native.search-locations>file:deploy/anan-config
+                </spring.cloud.config.server.native.search-locations>
                 <spring.cloud.config.server.git.uri/>
                 <spring.cloud.config.server.git.search-paths/>
                 <spring.cloud.inetutils.preferred-networks>192.168.0.,100.100.1.,172.16.0.
@@ -168,6 +167,20 @@
         </profile>
     </profiles>
     <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <exclusions>
+                <exclusion>
+                    <artifactId>spring-boot-starter-tomcat</artifactId>
+                    <groupId>org.springframework.boot</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-undertow</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
@@ -327,7 +340,7 @@
                         </exclude>
                         <exclude>
                             <groupId>com.github.fosin.anan</groupId>
-                            <artifactId>anan-cloudadviced</artifactId>
+                            <artifactId>anan-cloudmvc</artifactId>
                         </exclude>
                         <exclude>
                             <groupId>com.github.fosin.anan</groupId>

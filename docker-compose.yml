@@ -52,7 +52,7 @@ services:
 
   anan-vue:
     container_name: anan-vue
-    image: fosin/anan-vue:3.1.0
+    image: fosin/anan-vue:3.2.0
     hostname: anan-vue
     restart: always
     environment:
