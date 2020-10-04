@@ -59,8 +59,10 @@ tar -zxvf deploy.tar.gz ~/
 chmod +x /root/deploy/**/*.sh -R
 ```
 ## 3.4、按顺序启动服务
+一般使用helm操作k8s，部署helm [点这里readme-helm.md](readme-helm.md) 
 ```shell script
 #1、创建基础ConfigMap和启动mysql数据库、容器会自动创建对应的数据库，并启用主从同步
+
 cd /root/deploy/helm
 helm install mysql-leader ./anan -f ./anan/mysql-leader.yaml
 helm install mysql-follower ./anan -f ./anan/mysql-follower.yaml

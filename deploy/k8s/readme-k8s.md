@@ -1,4 +1,4 @@
-# 1、操作系统初始化
+# 1、准备环境
 ## 1.1、安装依赖包
 ```shell script
 yum install -y conntrack ntp ipvsadm ipset jq iptables curl sysstat libseccomp wget vim net-tools git
@@ -125,41 +125,8 @@ EOF
 
 chmod 755 /etc/sysconfig/modules/ipvs.modules && bash /etc/sysconfig/modules/ipvs.modules && lsmod | grep -e ip_vs -e nf_conntrack_ipv4
 ```
-## 2.2、安装 Docker 软件
-```shell script
-# 安装docker依赖包
-yum install -y yum-utils device-mapper-persistent-data lvm2
-
-# 导入阿里云docker镜像仓库
-yum-config-manager --add-repo https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
-
-# 更新操作系统并安装docker-ce最新版
-yum update -y && yum install -y docker-ce
-
-## 创建 /etc/docker 目录
-mkdir /etc/docker
-
-# 配置 daemon.json,执行命令前需要手动去掉前面的空格
-cat > /etc/docker/daemon.json <<EOF
-{
-  "exec-opts": ["native.cgroupdriver=systemd"],
-  "log-driver": "json-file",
-  "log-opts": {"max-size":"50m", "max-file":"3"},
-  "registry-mirrors": ["https://dockerhub.azk8s.cn","https://c70a1b9z.mirror.aliyuncs.com","https://docker.mirrors.ustc.edu.cn/"],
-  "experimental": true
-}
-EOF
-
-# 创建目录存放docker配置文件
-mkdir -p /etc/systemd/system/docker.service.d
-
-# 开启Docker远程端口2375(按需选做)
- -H tcp://0.0.0.0:2375
-sed -i 's/usr\/bin\/dockerd -H/\/usr\/bin\/dockerd -H tcp:\/\/0.0.0.0:2375 -H' /usr/lib/systemd/system/docker.service
-
-# 重启docker服务
-systemctl daemon-reload && systemctl restart docker && systemctl enable docker
-```
+## 2.2、安装Docker软件
+部署Docker[点这里readme-docker.md](../readme-docker.md) 
 ## 2.3、查询当前k8s可用的所有版本
 ```shell script
 yum makecache fast && yum list --showduplicates kubeadm --disableexcludes=kubernetes
@@ -373,3 +340,5 @@ rm -rf /var/lib/etcd
 rm -rf /var/etcd
 
 ```
+# 6、使用Helm部署anan服务
+部署anan [点这里readme-anan.md](../helm/readme-anan.md) 

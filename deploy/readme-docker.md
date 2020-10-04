@@ -132,21 +132,21 @@ openssl genrsa -aes256 -out ca-key.pem 4096
 ### 2、补全CA证书信息，执行如下指令：
 openssl req -new -x509 -days 365 -key ca-key.pem -sha256 -out ca.pem
 
-Enter pass phrase for ca-key.pem:
-You are about to be asked to enter information that will be incorporated
-into your certificate request.
-What you are about to enter is what is called a Distinguished Name or a DN.
-There are quite a few fields but you can leave some blank
-For some fields there will be a default value,
-If you enter '.', the field will be left blank.
------
-Country Name (2 letter code) [XX]:cn
-State or Province Name (full name) []:guiyang
-Locality Name (eg, city) [Default City]:guiyang
-Organization Name (eg, company) [Default Company Ltd]:fosin
-Organizational Unit Name (eg, section) []:fosin
-Common Name (eg, your name or your server's hostname) []:fosin
-Email Address []:28860823@qq.com
+    Enter pass phrase for ca-key.pem:
+    You are about to be asked to enter information that will be incorporated
+    into your certificate request.
+    What you are about to enter is what is called a Distinguished Name or a DN.
+    There are quite a few fields but you can leave some blank
+    For some fields there will be a default value,
+    If you enter '.', the field will be left blank.
+    -----
+    Country Name (2 letter code) [XX]:cn
+    State or Province Name (full name) []:guiyang
+    Locality Name (eg, city) [Default City]:guiyang
+    Organization Name (eg, company) [Default Company Ltd]:fosin
+    Organizational Unit Name (eg, section) []:fosin
+    Common Name (eg, your name or your server's hostname) []:fosin
+    Email Address []:28860823@qq.com
 
 ### 3、生成server-key.pem
 openssl genrsa -out server-key.pem 4096

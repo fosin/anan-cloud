@@ -1,8 +1,8 @@
 # 设计定位
     anan基于Spring Boot 2.3.x和Spring Cloud Hoxton.SR8生态体系技术，采用微服务前后端分离架构，为个人及企业微
     服务架构提供一种解决方案，供开发人员学习和交流。其中包括服务注册与发现、服务监控、服务管理、
-    服务治理、服务网关、服务熔断、配置管理、认证授权中心等常见微服务组件。其中服务注册与发现支持
-    nacos、eureka。支持swarm集群部署、Kubernetes集群部署、jar包集群部署、war包集群部署
+    服务治理、服务网关、服务熔断、配置管理、认证授权中心等常见微服务组件。其中服务注册与发现支持nacos、eureka。
+    支持Kubernetes(Helm)集群部署、jar包集群部署、Docker-Compose部署、Swarm集群部署
     对应前端项目地址: https://github.com/fosin/anan-vue
 # 技术选型
      技术     |   简介 
@@ -57,10 +57,11 @@
 详细介绍移步<https://github.com/fosin/anan-vue>查看前端项目的开发环境搭建过程
 ## 2、部署生产环境
 ### 2.1、Kubernetes部署
-详细介绍 [点这里deploy/k8s/readme-k8s.md](deploy/k8s/readme-k8s.md) 
+详细介绍 [点这里readme-k8s.md](deploy/k8s/readme-k8s.md) 
 ### 2.2、jar包部署
-详细介绍 [点这里deploy/jar/readme-jar.md](deploy/jar/readme-jar.md) 
-### 2.3、Docker Swarm集群环境部署
-详细介绍 [点这里deploy/swarm/readme-swarm.md](deploy/swarm/readme-swarm.md) 
-### 2.4、war包部署
+详细介绍 [点这里readme-jar.md](deploy/jar/readme-jar.md) 
+### 2.3、Docker Compose环境部署
+详细介绍 [点这里readme-docker-compose.md](deploy/readme-docker-compose.md)
+### 2.4、Docker Swarm集群环境部署
+详细介绍 [点这里readme-swarm.md](deploy/swarm/readme-swarm.md) 
    
