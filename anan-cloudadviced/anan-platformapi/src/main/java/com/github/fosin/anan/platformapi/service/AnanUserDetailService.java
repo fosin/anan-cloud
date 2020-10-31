@@ -54,6 +54,41 @@ public class AnanUserDetailService extends AnanJwtTool<AnanUserDetail> {
     }
 
     /**
+     * 得到当前登录用户的ID
+     *
+     * @return Long 前登录用户的ID
+     */
+    public Long getAnanUserId() {
+        return this.getAnanUser().getId();
+    }
+    /**
+     * 得到当前登录用户名
+     *
+     * @return Long 前登录用户名
+     */
+    public String getAnanUserName() {
+        return this.getAnanUser().getUsername();
+    }
+
+    /**
+     * 得到当前登录用户的机构ID
+     *
+     * @return Long 前登录用户的机构ID
+     */
+    public Long getAnanOrganizId() {
+        return this.getAnanUser().getOrganizId();
+    }
+
+    /**
+     * 得到当前登录用户工号
+     *
+     * @return Long 前登录用户工号
+     */
+    public String getAnanUserCode() {
+        return this.getAnanUser().getUsercode();
+    }
+
+    /**
      * 得到当前登录用户登录的客户端信息
      *
      * @return Client

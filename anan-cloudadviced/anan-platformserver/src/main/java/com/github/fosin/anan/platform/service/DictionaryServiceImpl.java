@@ -1,6 +1,9 @@
 package com.github.fosin.anan.platform.service;
 
 
+import com.github.fosin.anan.cloudresource.constant.SystemConstant;
+import com.github.fosin.anan.cloudresource.dto.request.AnanDictionaryCreateDto;
+import com.github.fosin.anan.cloudresource.dto.request.AnanDictionaryUpdateDto;
 import com.github.fosin.anan.core.exception.AnanServiceException;
 import com.github.fosin.anan.jpa.repository.IJpaRepository;
 import com.github.fosin.anan.model.module.PageModule;
@@ -9,16 +12,11 @@ import com.github.fosin.anan.model.result.ResultUtils;
 import com.github.fosin.anan.platform.repository.DictionaryDetailRepository;
 import com.github.fosin.anan.platform.repository.DictionaryRepository;
 import com.github.fosin.anan.platform.service.inter.DictionaryService;
-import com.github.fosin.anan.cloudresource.constant.SystemConstant;
 import com.github.fosin.anan.platformapi.entity.AnanDictionaryEntity;
 import com.github.fosin.anan.platformapi.service.AnanUserDetailService;
-import com.github.fosin.anan.cloudresource.dto.AnanUserDto;
-import com.github.fosin.anan.cloudresource.dto.request.AnanDictionaryCreateDto;
-import com.github.fosin.anan.cloudresource.dto.request.AnanDictionaryUpdateDto;
 import com.github.fosin.anan.util.NumberUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
-
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -55,9 +53,9 @@ public class DictionaryServiceImpl implements DictionaryService {
         Assert.notNull(entity, "传入的创建数据实体对象不能为空!");
         //系统字典
         if (Objects.equals(entity.getType(), SystemConstant.SYSTEM_DICTIONARY_TYPE)) {
-            AnanUserDto loginUser = ananUserDetailService.getAnanUser();
+
             //非超级管理员不能创建系统字典
-            Assert.isTrue(SystemConstant.ANAN_USER_CODE.equals(loginUser.getUsercode()), "没有权限创建系统字典!");
+            Assert.isTrue(SystemConstant.ANAN_USER_CODE.equals(ananUserDetailService.getAnanUserCode()), "没有权限创建系统字典!");
 
         }
         AnanDictionaryEntity createEntity = new AnanDictionaryEntity();
@@ -74,9 +72,9 @@ public class DictionaryServiceImpl implements DictionaryService {
         Assert.notNull(updateEntity, "根据传入的字典code" + id + "在数据库中未能找到对于数据!");
         //系统字典
         if (entity.getType().equals(SystemConstant.SYSTEM_DICTIONARY_TYPE)) {
-            AnanUserDto loginUser = ananUserDetailService.getAnanUser();
+
             //非超级管理员不能创建系统字典
-            Assert.isTrue(SystemConstant.ANAN_USER_CODE.equals(loginUser.getUsercode()), "没有权限修改系统字典!");
+            Assert.isTrue(SystemConstant.ANAN_USER_CODE.equals(ananUserDetailService.getAnanUserCode()), "没有权限修改系统字典!");
         }
 
         BeanUtils.copyProperties(entity, updateEntity);
@@ -96,9 +94,9 @@ public class DictionaryServiceImpl implements DictionaryService {
         //系统字典
 
         if (Objects.equals(SystemConstant.SYSTEM_DICTIONARY_TYPE, Objects.requireNonNull(entity,"通过code没有找到对应的字典").getType())) {
-            AnanUserDto loginUser = ananUserDetailService.getAnanUser();
+
             //非超级管理员不能删除系统字典
-            if (!SystemConstant.ANAN_USER_CODE.equals(loginUser.getUsercode())) {
+            if (!SystemConstant.ANAN_USER_CODE.equals(ananUserDetailService.getAnanUserCode())) {
                 throw new AnanServiceException("没有权限删除系统字典!");
             }
         }
@@ -113,9 +111,9 @@ public class DictionaryServiceImpl implements DictionaryService {
         Assert.notNull(entity, "传入了空的对象!");
         //系统字典
         if (entity.getType().equals(SystemConstant.SYSTEM_DICTIONARY_TYPE)) {
-            AnanUserDto loginUser = ananUserDetailService.getAnanUser();
+
             //非超级管理员不能删除系统字典
-            Assert.isTrue(SystemConstant.ANAN_USER_CODE.equals(loginUser.getUsercode()), "没有权限删除系统字典!");
+            Assert.isTrue(SystemConstant.ANAN_USER_CODE.equals(ananUserDetailService.getAnanUserCode()), "没有权限删除系统字典!");
         }
         dictionaryDetailRepository.deleteAllByDictionaryId(entity.getId());
         dictionaryRepository.delete(entity);

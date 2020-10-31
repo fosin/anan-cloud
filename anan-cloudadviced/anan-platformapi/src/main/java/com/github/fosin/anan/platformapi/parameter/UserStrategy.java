@@ -20,6 +20,6 @@ public class UserStrategy implements IParameterStrategy {
 
     @Override
     public String getScope() {
-        return ananUserDetailService.getAnanUser().getId() + "";
+        return ananUserDetailService.getAnanUserId() + "";
     }
 }

@@ -92,7 +92,8 @@ public class UserRoleServiceImpl implements UserRoleService {
 
     private List<AnanUserRoleEntity> getAnanUserRoleEntities(Collection<AnanUserRoleCreateDto> entities) {
         List<AnanUserRoleEntity> saveEntities = new ArrayList<>();
-        AnanUserDto loginUser = ananUserDetailService.getAnanUser();
+
+        Long organizId = ananUserDetailService.getAnanOrganizId();
         for (AnanUserRoleCreateDto entity : entities) {
             AnanUserRoleEntity ananUserRoleEntity = new AnanUserRoleEntity();
             ananUserRoleEntity.setUserId(entity.getUserId());
@@ -100,7 +101,7 @@ public class UserRoleServiceImpl implements UserRoleService {
             ananRoleEntity.setId(entity.getRoleId());
             ananUserRoleEntity.setRole(ananRoleEntity);
             if (entity.getOrganizId() == null) {
-                ananUserRoleEntity.setOrganizId(loginUser.getOrganizId());
+                ananUserRoleEntity.setOrganizId(organizId);
             } else {
                 ananUserRoleEntity.setOrganizId(entity.getOrganizId());
             }

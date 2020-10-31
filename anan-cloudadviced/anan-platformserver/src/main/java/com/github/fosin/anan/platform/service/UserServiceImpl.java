@@ -214,7 +214,8 @@ public class UserServiceImpl implements UserService {
         PageRequest pageable = PageRequest.of(pageModule.getPageNumber() - 1, pageModule.getPageSize(), Sort.Direction.fromString(pageModule.getSortOrder()), pageModule.getSortName());
         String searchCondition = pageModule.getSearchText();
 
-        AnanUserDto loginUser = ananUserDetailService.getAnanUser();
+
+        String userCode = ananUserDetailService.getAnanUserCode();
         Specification<AnanUserEntity> condition = (Specification<AnanUserEntity>) (root, query, cb) -> {
             Path<String> usercode = root.get("usercode");
             Path<String> username = root.get("username");
@@ -222,8 +223,8 @@ public class UserServiceImpl implements UserService {
             Path<String> email = root.get("email");
 
             CriteriaBuilder.In<Object> organizId1 = null;
-            if (loginUser != null && !loginUser.getUsercode().equals(SystemConstant.ANAN_USER_CODE)) {
-                Long organizId = loginUser.getOrganizId();
+            if (!userCode.equals(SystemConstant.ANAN_USER_CODE)) {
+                Long organizId = ananUserDetailService.getAnanOrganizId();
                 AnanOrganizationEntity organizationEntity = organizationRepository.findById(organizId).orElse(null);
 
                 Subquery<Integer> subQuery = query.subquery(Integer.class);
@@ -239,7 +240,7 @@ public class UserServiceImpl implements UserService {
             }
 
             if (StringUtils.isBlank(searchCondition)) {
-                if (loginUser != null && loginUser.getUsercode().equals(SystemConstant.ANAN_USER_CODE)) {
+                if (userCode.equals(SystemConstant.ANAN_USER_CODE)) {
                     return query.getRestriction();
                 } else {
                     return cb.and(cb.notEqual(usercode, SystemConstant.ANAN_USER_CODE), organizId1);
@@ -249,7 +250,7 @@ public class UserServiceImpl implements UserService {
                     cb.like(usercode, "%" + searchCondition + "%"),
                     cb.like(phone, "%" + searchCondition + "%"),
                     cb.like(email, "%" + searchCondition + "%"));
-            if (loginUser != null && loginUser.getUsercode().equals(SystemConstant.ANAN_USER_CODE)) {
+            if (userCode.equals(SystemConstant.ANAN_USER_CODE)) {
                 return predicate;
             } else {
                 return cb.and(cb.notEqual(usercode, SystemConstant.ANAN_USER_CODE), predicate, organizId1);
@@ -287,8 +288,8 @@ public class UserServiceImpl implements UserService {
     @CacheEvict(value = RedisConstant.ANAN_USER, key = "#result.usercode")
     public AnanUserEntity resetPassword(Long id) {
         Assert.notNull(id, "用户ID不能为空!");
-        AnanUserDto loginUser = ananUserDetailService.getAnanUser();
-        Long loginId = loginUser.getId();
+
+        Long loginId = ananUserDetailService.getAnanUserId();
         Assert.isTrue(!Objects.equals(loginId, id), "不能重置本人密码,请使用修改密码功能!");
         AnanUserEntity user = userRepository.findById(id).orElse(null);
         String password = getPassword();
@@ -334,8 +335,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<AnanUserEntity> findAllByOrganizId(Long organizId) {
         Assert.notNull(organizId, "机构ID不能为空!");
-        AnanUserDto loginUser = ananUserDetailService.getAnanUser();
-        if (loginUser.getUsercode().equals(SystemConstant.ANAN_USER_CODE)) {
+
+        if (ananUserDetailService.getAnanUserCode().equals(SystemConstant.ANAN_USER_CODE)) {
             return userRepository.findAll();
         } else {
             AnanOrganizationEntity organiz = organizationRepository.findById(organizId).orElse(null);

@@ -1,6 +1,7 @@
-package com.github.fosin.anan.platform.config;
+package com.github.fosin.anan.platformapi.config;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -12,10 +13,11 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
  */
 @Configuration
 @EnableWebSecurity
-public class PlatformWebSecurityConfigurer extends WebSecurityConfigurerAdapter {
+@Order(999)
+public class PermitAllWebSecurityConfigurer extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
-        http.authorizeRequests().anyRequest().permitAll().and().logout().permitAll();
+        http.authorizeRequests().anyRequest().permitAll();
     }
 }

@@ -3,7 +3,7 @@
     服务架构提供一种解决方案，供开发人员学习和交流。其中包括服务注册与发现、服务监控、服务管理、
     服务治理、服务网关、服务熔断、配置管理、认证授权中心等常见微服务组件。其中服务注册与发现支持nacos、eureka。
     支持Kubernetes(Helm)集群部署、jar包集群部署、Docker-Compose部署、Swarm集群部署
-    对应前端项目地址: https://github.com/fosin/anan-vue
+对应前端项目地址: <https://github.com/fosin/anan-vue>
 # 技术选型
      技术     |   简介 
     ------   |  ------
@@ -38,24 +38,24 @@
 # 原理介绍
 
 # 框架版本对照
-       anan-cloud    |     anan-boot     |     anan-vue
+    anan-cloud    |     anan-boot     |      anan-vue
     -------------------------------------------------------
-    1.0.x-SNAPSHOT      1.0.x-SNAPSHOT       1.0.0-SNAPSHOT
-    2.0.x-SNAPSHOT      2.0.x-SNAPSHOT       2.0.0-SNAPSHOT
-    2.2.x-SNAPSHOT      2.0.x-SNAPSHOT       3.x.x
-    2.3.x-SNAPSHOT      2.1.x-SNAPSHOT       3.x.x
+    1.0.x               1.0.x                1.0.0         
+    2.0.x               2.0.x                2.0.0         
+    2.2.x               2.0.x                3.x.x
+    2.3.x               2.1.x                3.x.x
 # 搭建环境
-## 1、本地（profile=local）开发环境设置
+## 1、本地（profile=local）开发环境指南
 ### 1.1、安装docker、docker-compose并配置镜像加速
 #### 1.1.1、安装docker
 详细介绍 [点这里deploy/readme-docker.md](deploy/readme-docker.md) 
 #### 1.1.2、安装docker-compose(按需安装注意版本更新和匹配)
 详细介绍 [点这里deploy/readme-docker-compose.md](deploy/readme-docker-compose.md) 
 ### 1.2、开发指南
-
-### 1.3、运行前端项目anan-vue, 
+详细介绍 [点这里deploy/readme-dev.md](deploy/readme-dev.md) 
+### 1.3、运行前端项目anan-vue
 详细介绍移步<https://github.com/fosin/anan-vue>查看前端项目的开发环境搭建过程
-## 2、部署生产环境
+## 2、部署生产环境指南
 ### 2.1、Kubernetes部署
 详细介绍 [点这里readme-k8s.md](deploy/k8s/readme-k8s.md) 
 ### 2.2、jar包部署

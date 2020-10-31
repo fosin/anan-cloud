@@ -123,20 +123,20 @@ public class RoleServiceImpl implements RoleService {
         PageRequest pageable = PageRequest.of(pageModule.getPageNumber() - 1, pageModule.getPageSize(), Sort.Direction.fromString(pageModule.getSortOrder()), pageModule.getSortName());
         String searchCondition = pageModule.getSearchText();
 
-        AnanUserDto loginUser = ananUserDetailService.getAnanUser();
+
         Specification<AnanRoleEntity> condition = (Specification<AnanRoleEntity>) (root, query, cb) -> {
             Path<String> roleName = root.get("name");
             Path<String> roleValue = root.get("value");
-
+            String userCode = ananUserDetailService.getAnanUserCode();
             if (StringUtils.isBlank(searchCondition)) {
-                if (loginUser.getUsercode().equals(SystemConstant.ANAN_USER_CODE)) {
+                if (userCode.equals(SystemConstant.ANAN_USER_CODE)) {
                     return query.getRestriction();
                 } else {
                     return cb.and(cb.notEqual(roleValue, SystemConstant.ANAN_ROLE_NAME));
                 }
             }
             Predicate predicate = cb.or(cb.like(roleName, "%" + searchCondition + "%"), cb.like(roleValue, "%" + searchCondition + "%"));
-            if (loginUser.getUsercode().equals(SystemConstant.ANAN_USER_CODE)) {
+            if (userCode.equals(SystemConstant.ANAN_USER_CODE)) {
                 return predicate;
             } else {
                 return cb.and(cb.notEqual(roleValue, SystemConstant.ANAN_ROLE_NAME), predicate);
@@ -163,11 +163,11 @@ public class RoleServiceImpl implements RoleService {
         Assert.notNull(pageModule, "传入的分页信息不能为空!");
         Assert.notNull(organizId, "机构ID不能为空!");
         String searchCondition = pageModule.getSearchText();
-        AnanUserDto loginUser = ananUserDetailService.getAnanUser();
+
         PageRequest pageable = PageRequest.of(pageModule.getPageNumber() - 1, pageModule.getPageSize(), Sort.Direction.fromString(pageModule.getSortOrder()), pageModule.getSortName());
 
         Page<AnanRoleEntity> page;
-        if (loginUser.getUsercode().equals(SystemConstant.ANAN_USER_CODE)) {
+        if (ananUserDetailService.getAnanUserCode().equals(SystemConstant.ANAN_USER_CODE)) {
             Specification<AnanRoleEntity> condition = (root, query, cb) -> {
                 Path<String> roleName = root.get("name");
                 Path<String> roleValue = root.get("value");
@@ -210,8 +210,8 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public List<AnanRoleEntity> findAllByOrganizId(Long organizId) {
         Assert.notNull(organizId, "机构ID不能为空!");
-        AnanUserDto loginUser = ananUserDetailService.getAnanUser();
-        if (loginUser.getUsercode().equals(SystemConstant.ANAN_USER_CODE)) {
+
+        if (ananUserDetailService.getAnanUserCode().equals(SystemConstant.ANAN_USER_CODE)) {
             return roleRepository.findAll();
         } else {
             AnanOrganizationEntity organiz = organizationRepository.findById(organizId).orElse(null);

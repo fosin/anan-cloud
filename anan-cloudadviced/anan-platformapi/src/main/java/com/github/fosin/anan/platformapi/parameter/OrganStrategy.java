@@ -20,6 +20,6 @@ public class OrganStrategy implements IParameterStrategy {
 
     @Override
     public String getScope() {
-        return ananUserDetailService.getAnanUser().getOrganizId() + "";
+        return ananUserDetailService.getAnanOrganizId() + "";
     }
 }

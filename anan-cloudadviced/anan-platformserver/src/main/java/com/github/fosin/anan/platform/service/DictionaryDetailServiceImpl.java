@@ -1,5 +1,9 @@
 package com.github.fosin.anan.platform.service;
 
+import com.github.fosin.anan.cloudresource.constant.RedisConstant;
+import com.github.fosin.anan.cloudresource.constant.SystemConstant;
+import com.github.fosin.anan.cloudresource.dto.request.AnanDictionaryDetailCreateDto;
+import com.github.fosin.anan.cloudresource.dto.request.AnanDictionaryDetailUpdateDto;
 import com.github.fosin.anan.core.exception.AnanServiceException;
 import com.github.fosin.anan.jpa.repository.IJpaRepository;
 import com.github.fosin.anan.model.module.PageModule;
@@ -8,14 +12,9 @@ import com.github.fosin.anan.model.result.ResultUtils;
 import com.github.fosin.anan.platform.repository.DictionaryDetailRepository;
 import com.github.fosin.anan.platform.service.inter.DictionaryDetailService;
 import com.github.fosin.anan.platform.service.inter.UserService;
-import com.github.fosin.anan.cloudresource.constant.SystemConstant;
-import com.github.fosin.anan.cloudresource.constant.RedisConstant;
 import com.github.fosin.anan.platformapi.entity.AnanDictionaryDetailEntity;
 import com.github.fosin.anan.platformapi.entity.AnanUserEntity;
 import com.github.fosin.anan.platformapi.service.AnanUserDetailService;
-import com.github.fosin.anan.cloudresource.dto.AnanUserDto;
-import com.github.fosin.anan.cloudresource.dto.request.AnanDictionaryDetailCreateDto;
-import com.github.fosin.anan.cloudresource.dto.request.AnanDictionaryDetailUpdateDto;
 import com.github.fosin.anan.redis.cache.AnanCacheManger;
 import com.github.fosin.anan.util.NumberUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -81,9 +80,8 @@ public class DictionaryDetailServiceImpl implements DictionaryDetailService {
     }
 
     private void isSuperUser(AnanDictionaryDetailEntity findEntity) {
-        AnanUserDto loginUser = ananUserDetailService.getAnanUser();
         //不是超级管理员
-        if (!SystemConstant.ANAN_USER_CODE.equals(loginUser.getUsercode())) {
+        if (!SystemConstant.ANAN_USER_CODE.equals(ananUserDetailService.getAnanUserCode())) {
             AnanUserEntity superUser = userService.findByUsercode(SystemConstant.ANAN_USER_CODE);
             //是超级管理员创建的数据则不需要非超级管理员修改
             if (Objects.equals(superUser.getId(), findEntity.getCreateBy())) {

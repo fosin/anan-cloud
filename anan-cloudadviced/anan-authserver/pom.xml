@@ -24,6 +24,10 @@
             <artifactId>anan-redis</artifactId>
         </dependency>
         <dependency>
+            <groupId>${anan.groupId}</groupId>
+            <artifactId>anan-security</artifactId>
+        </dependency>
+        <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
         </dependency>

@@ -1,6 +1,9 @@
 package com.github.fosin.anan.platform.service;
 
 
+import com.github.fosin.anan.cloudresource.constant.RedisConstant;
+import com.github.fosin.anan.cloudresource.dto.request.AnanParameterCreateDto;
+import com.github.fosin.anan.cloudresource.dto.request.AnanParameterUpdateDto;
 import com.github.fosin.anan.core.exception.AnanServiceException;
 import com.github.fosin.anan.jpa.repository.IJpaRepository;
 import com.github.fosin.anan.model.module.PageModule;
@@ -9,14 +12,10 @@ import com.github.fosin.anan.model.result.ResultUtils;
 import com.github.fosin.anan.platform.repository.OrganizationRepository;
 import com.github.fosin.anan.platform.repository.ParameterRepository;
 import com.github.fosin.anan.platform.service.inter.ParameterService;
-import com.github.fosin.anan.cloudresource.constant.RedisConstant;
 import com.github.fosin.anan.platformapi.entity.AnanOrganizationEntity;
 import com.github.fosin.anan.platformapi.entity.AnanParameterEntity;
 import com.github.fosin.anan.platformapi.parameter.OrganStrategy;
 import com.github.fosin.anan.platformapi.service.AnanUserDetailService;
-import com.github.fosin.anan.cloudresource.dto.AnanUserDto;
-import com.github.fosin.anan.cloudresource.dto.request.AnanParameterCreateDto;
-import com.github.fosin.anan.cloudresource.dto.request.AnanParameterUpdateDto;
 import com.github.fosin.anan.redis.cache.AnanCacheManger;
 import com.github.fosin.anan.util.StringUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -222,12 +221,10 @@ public class ParameterServiceImpl implements ParameterService {
         AnanParameterEntity entity = parameterRepository.findById(id).orElse(null);
         Assert.notNull(entity, "该参数已经不存在!");
         String cacheKey = getCacheKey(entity);
-        AnanUserDto loginUser;
         boolean success;
         switch (entity.getStatus()) {
             case 1:
-                loginUser = ananUserDetailService.getAnanUser();
-                entity.setApplyBy(loginUser.getId());
+                entity.setApplyBy(ananUserDetailService.getAnanUserId());
                 entity.setApplyTime(new Date());
                 entity.setStatus(0);
                 success = ananCacheManger.put(RedisConstant.ANAN_PARAMETER, cacheKey, entity);
