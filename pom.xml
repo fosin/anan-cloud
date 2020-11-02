@@ -101,8 +101,7 @@
                 </spring.cloud.config.server.native.search-locations>
                 <spring.cloud.config.server.git.uri/>
                 <spring.cloud.config.server.git.search-paths/>
-                <spring.cloud.inetutils.preferred-networks>192.168.0.,100.100.1.,172.16.0.
-                </spring.cloud.inetutils.preferred-networks>
+                <spring.cloud.inetutils.preferred-networks>192.168.137.</spring.cloud.inetutils.preferred-networks>
                 <spring.rabbitmq.addresses>rabbitmq:7890</spring.rabbitmq.addresses>
                 <spring.rabbitmq.username>anan</spring.rabbitmq.username>
                 <spring.rabbitmq.password>local</spring.rabbitmq.password>

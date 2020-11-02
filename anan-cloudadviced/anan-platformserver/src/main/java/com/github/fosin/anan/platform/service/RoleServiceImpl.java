@@ -1,6 +1,9 @@
 package com.github.fosin.anan.platform.service;
 
 
+import com.github.fosin.anan.cloudresource.constant.SystemConstant;
+import com.github.fosin.anan.cloudresource.dto.request.AnanRoleCreateDto;
+import com.github.fosin.anan.cloudresource.dto.request.AnanRoleUpdateDto;
 import com.github.fosin.anan.jpa.repository.IJpaRepository;
 import com.github.fosin.anan.model.module.PageModule;
 import com.github.fosin.anan.model.result.Result;
@@ -9,17 +12,12 @@ import com.github.fosin.anan.platform.repository.OrganizationRepository;
 import com.github.fosin.anan.platform.repository.RoleRepository;
 import com.github.fosin.anan.platform.repository.UserRoleRepository;
 import com.github.fosin.anan.platform.service.inter.RoleService;
-import com.github.fosin.anan.cloudresource.constant.SystemConstant;
 import com.github.fosin.anan.platformapi.entity.AnanOrganizationEntity;
 import com.github.fosin.anan.platformapi.entity.AnanRoleEntity;
 import com.github.fosin.anan.platformapi.entity.AnanUserRoleEntity;
 import com.github.fosin.anan.platformapi.service.AnanUserDetailService;
-import com.github.fosin.anan.cloudresource.dto.AnanUserDto;
-import com.github.fosin.anan.cloudresource.dto.request.AnanRoleCreateDto;
-import com.github.fosin.anan.cloudresource.dto.request.AnanRoleUpdateDto;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
-
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -127,16 +125,15 @@ public class RoleServiceImpl implements RoleService {
         Specification<AnanRoleEntity> condition = (Specification<AnanRoleEntity>) (root, query, cb) -> {
             Path<String> roleName = root.get("name");
             Path<String> roleValue = root.get("value");
-            String userCode = ananUserDetailService.getAnanUserCode();
             if (StringUtils.isBlank(searchCondition)) {
-                if (userCode.equals(SystemConstant.ANAN_USER_CODE)) {
+                if (ananUserDetailService.hasSysAdminRole()) {
                     return query.getRestriction();
                 } else {
                     return cb.and(cb.notEqual(roleValue, SystemConstant.ANAN_ROLE_NAME));
                 }
             }
             Predicate predicate = cb.or(cb.like(roleName, "%" + searchCondition + "%"), cb.like(roleValue, "%" + searchCondition + "%"));
-            if (userCode.equals(SystemConstant.ANAN_USER_CODE)) {
+            if (ananUserDetailService.hasSysAdminRole()) {
                 return predicate;
             } else {
                 return cb.and(cb.notEqual(roleValue, SystemConstant.ANAN_ROLE_NAME), predicate);
@@ -167,7 +164,7 @@ public class RoleServiceImpl implements RoleService {
         PageRequest pageable = PageRequest.of(pageModule.getPageNumber() - 1, pageModule.getPageSize(), Sort.Direction.fromString(pageModule.getSortOrder()), pageModule.getSortName());
 
         Page<AnanRoleEntity> page;
-        if (ananUserDetailService.getAnanUserCode().equals(SystemConstant.ANAN_USER_CODE)) {
+        if (ananUserDetailService.hasSysAdminRole()) {
             Specification<AnanRoleEntity> condition = (root, query, cb) -> {
                 Path<String> roleName = root.get("name");
                 Path<String> roleValue = root.get("value");
@@ -211,7 +208,7 @@ public class RoleServiceImpl implements RoleService {
     public List<AnanRoleEntity> findAllByOrganizId(Long organizId) {
         Assert.notNull(organizId, "机构ID不能为空!");
 
-        if (ananUserDetailService.getAnanUserCode().equals(SystemConstant.ANAN_USER_CODE)) {
+        if (ananUserDetailService.hasSysAdminRole()) {
             return roleRepository.findAll();
         } else {
             AnanOrganizationEntity organiz = organizationRepository.findById(organizId).orElse(null);

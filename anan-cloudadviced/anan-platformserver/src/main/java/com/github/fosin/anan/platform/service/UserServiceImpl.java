@@ -2,7 +2,6 @@ package com.github.fosin.anan.platform.service;
 
 import com.github.fosin.anan.cloudresource.constant.RedisConstant;
 import com.github.fosin.anan.cloudresource.constant.SystemConstant;
-import com.github.fosin.anan.cloudresource.dto.AnanUserDto;
 import com.github.fosin.anan.cloudresource.dto.request.AnanUserCreateDto;
 import com.github.fosin.anan.cloudresource.dto.request.AnanUserUpdateDto;
 import com.github.fosin.anan.jpa.repository.IJpaRepository;
@@ -127,11 +126,11 @@ public class UserServiceImpl implements UserService {
         Assert.notNull(id, "更新的数据id不能为空或者小于1!");
         AnanUserEntity createUser = userRepository.findById(id).orElse(null);
         String usercode = Objects.requireNonNull(createUser, "通过ID：" + id + "未能找到对应的数据!").getUsercode().toLowerCase();
-        if (SystemConstant.ADMIN_USER_CODE.equals(usercode) &&
-                !SystemConstant.ADMIN_USER_CODE.equals(entity.getUsercode().toLowerCase())) {
+        if (ananUserDetailService.isAdminUser(usercode) &&
+                !ananUserDetailService.isAdminUser(entity.getUsercode().toLowerCase())) {
             throw new IllegalArgumentException("不能修改管理员" + SystemConstant.ADMIN_USER_CODE + "的帐号名称!");
         }
-        Assert.isTrue(!SystemConstant.ANAN_USER_CODE.equals(usercode),
+        Assert.isTrue(!ananUserDetailService.isSysAdminUser(usercode),
                 "不能修改超级管理员帐号信息!");
         BeanUtils.copyProperties(entity, createUser);
         return userRepository.save(createUser);
@@ -171,8 +170,8 @@ public class UserServiceImpl implements UserService {
             entity = userRepository.findById(id).orElse(null);
         }
         Assert.notNull(entity, "通过该ID没有找到相应的用户数据!");
-        Assert.isTrue(!SystemConstant.ANAN_USER_CODE.equals(entity.getUsercode())
-                && !SystemConstant.ADMIN_USER_CODE.equals(entity.getUsercode()), "不能删除管理员帐号!");
+        Assert.isTrue(!ananUserDetailService.isSysAdminUser(entity.getUsercode())
+                && !ananUserDetailService.isAdminUser(entity.getUsercode()), "不能删除管理员帐号!");
 //        List<AnanUserRoleEntity> userRoles = userRoleRepository.findByUserId(id);
 //        Assert.isTrue(userRoles.size() == 0, "该用户下还存在角色信息,不能直接删除用户!");
         userRepository.deleteById(id);
@@ -180,7 +179,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Cacheable(value = RedisConstant.ANAN_USER, key = "#result.usercode")
+    @Cacheable(value = RedisConstant.ANAN_USER, key = "#id")
     @Transactional(readOnly = true)
     public AnanUserEntity findById(Long id) {
         Assert.isTrue(id != null && id > 0, "传入的用户ID无效！");
@@ -201,8 +200,8 @@ public class UserServiceImpl implements UserService {
     )
     public AnanUserEntity deleteByEntity(AnanUserEntity entity) {
         Assert.notNull(entity, "不能删除空的用户对象!");
-        Assert.isTrue(!SystemConstant.ANAN_USER_CODE.equals(entity.getUsercode())
-                && !SystemConstant.ADMIN_USER_CODE.equals(entity.getUsercode()), "不能删除管理员帐号!");
+        Assert.isTrue(!ananUserDetailService.isSysAdminUser(entity.getUsercode())
+                && !ananUserDetailService.isAdminUser(entity.getUsercode()), "不能删除管理员帐号!");
         List<AnanUserRoleEntity> userRoles = userRoleRepository.findByUserId(entity.getId());
         Assert.isTrue(userRoles.size() == 0, "该用户下还存在角色信息,不能直接删除用户!");
         userRepository.delete(entity);
@@ -214,8 +213,6 @@ public class UserServiceImpl implements UserService {
         PageRequest pageable = PageRequest.of(pageModule.getPageNumber() - 1, pageModule.getPageSize(), Sort.Direction.fromString(pageModule.getSortOrder()), pageModule.getSortName());
         String searchCondition = pageModule.getSearchText();
 
-
-        String userCode = ananUserDetailService.getAnanUserCode();
         Specification<AnanUserEntity> condition = (Specification<AnanUserEntity>) (root, query, cb) -> {
             Path<String> usercode = root.get("usercode");
             Path<String> username = root.get("username");
@@ -223,7 +220,8 @@ public class UserServiceImpl implements UserService {
             Path<String> email = root.get("email");
 
             CriteriaBuilder.In<Object> organizId1 = null;
-            if (!userCode.equals(SystemConstant.ANAN_USER_CODE)) {
+            boolean sysAdminUser = ananUserDetailService.isSysAdminUser();
+            if (!sysAdminUser) {
                 Long organizId = ananUserDetailService.getAnanOrganizId();
                 AnanOrganizationEntity organizationEntity = organizationRepository.findById(organizId).orElse(null);
 
@@ -240,7 +238,7 @@ public class UserServiceImpl implements UserService {
             }
 
             if (StringUtils.isBlank(searchCondition)) {
-                if (userCode.equals(SystemConstant.ANAN_USER_CODE)) {
+                if (sysAdminUser) {
                     return query.getRestriction();
                 } else {
                     return cb.and(cb.notEqual(usercode, SystemConstant.ANAN_USER_CODE), organizId1);
@@ -250,7 +248,7 @@ public class UserServiceImpl implements UserService {
                     cb.like(usercode, "%" + searchCondition + "%"),
                     cb.like(phone, "%" + searchCondition + "%"),
                     cb.like(email, "%" + searchCondition + "%"));
-            if (userCode.equals(SystemConstant.ANAN_USER_CODE)) {
+            if (sysAdminUser) {
                 return predicate;
             } else {
                 return cb.and(cb.notEqual(usercode, SystemConstant.ANAN_USER_CODE), predicate, organizId1);
@@ -336,7 +334,7 @@ public class UserServiceImpl implements UserService {
     public List<AnanUserEntity> findAllByOrganizId(Long organizId) {
         Assert.notNull(organizId, "机构ID不能为空!");
 
-        if (ananUserDetailService.getAnanUserCode().equals(SystemConstant.ANAN_USER_CODE)) {
+        if (ananUserDetailService.hasSysAdminRole()) {
             return userRepository.findAll();
         } else {
             AnanOrganizationEntity organiz = organizationRepository.findById(organizId).orElse(null);

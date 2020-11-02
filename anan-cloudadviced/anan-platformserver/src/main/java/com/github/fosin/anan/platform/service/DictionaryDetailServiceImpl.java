@@ -1,7 +1,6 @@
 package com.github.fosin.anan.platform.service;
 
 import com.github.fosin.anan.cloudresource.constant.RedisConstant;
-import com.github.fosin.anan.cloudresource.constant.SystemConstant;
 import com.github.fosin.anan.cloudresource.dto.request.AnanDictionaryDetailCreateDto;
 import com.github.fosin.anan.cloudresource.dto.request.AnanDictionaryDetailUpdateDto;
 import com.github.fosin.anan.core.exception.AnanServiceException;
@@ -13,7 +12,6 @@ import com.github.fosin.anan.platform.repository.DictionaryDetailRepository;
 import com.github.fosin.anan.platform.service.inter.DictionaryDetailService;
 import com.github.fosin.anan.platform.service.inter.UserService;
 import com.github.fosin.anan.platformapi.entity.AnanDictionaryDetailEntity;
-import com.github.fosin.anan.platformapi.entity.AnanUserEntity;
 import com.github.fosin.anan.platformapi.service.AnanUserDetailService;
 import com.github.fosin.anan.redis.cache.AnanCacheManger;
 import com.github.fosin.anan.util.NumberUtil;
@@ -33,7 +31,6 @@ import org.springframework.util.Assert;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * 字典表服务
@@ -74,29 +71,28 @@ public class DictionaryDetailServiceImpl implements DictionaryDetailService {
         Assert.notNull(id, "传入的更新数据实体对象主键不能为空!");
         AnanDictionaryDetailEntity findEntity = dictionaryDetailRepository.findById(id).orElse(null);
         Assert.notNull(findEntity, "根据传入的主键[" + id + "]在数据库中未能找到数据!");
-        isSuperUser(findEntity);
+        Assert.isTrue(ananUserDetailService.hasSysAdminRole(),"没有权限修改系统创建的字典明细项");
         BeanUtils.copyProperties(entity, findEntity);
         return dictionaryDetailRepository.save(findEntity);
     }
 
-    private void isSuperUser(AnanDictionaryDetailEntity findEntity) {
-        //不是超级管理员
-        if (!SystemConstant.ANAN_USER_CODE.equals(ananUserDetailService.getAnanUserCode())) {
-            AnanUserEntity superUser = userService.findByUsercode(SystemConstant.ANAN_USER_CODE);
-            //是超级管理员创建的数据则不需要非超级管理员修改
-            if (Objects.equals(superUser.getId(), findEntity.getCreateBy())) {
-                throw new AnanServiceException("没有权限修改系统创建的字典明细项!");
-            }
-        }
-    }
+//    private void isSuperUser(AnanDictionaryDetailEntity findEntity) {
+//        //不是超级管理员
+//        if (!ananUserDetailService.hasSysAdminRole()) {
+//            AnanUserEntity superUser = userService.findByUsercode(SystemConstant.ANAN_USER_CODE);
+//            //是超级管理员创建的数据则不需要非超级管理员修改
+//            if (Objects.equals(superUser.getId(), findEntity.getCreateBy())) {
+//                throw new AnanServiceException("没有权限修改系统创建的字典明细项!");
+//            }
+//        }
+//    }
 
     @Override
     public AnanDictionaryDetailEntity deleteById(Long id) {
         Assert.notNull(id, "传入了空的ID!");
         AnanDictionaryDetailEntity entity = dictionaryDetailRepository.findById(id).orElse(null);
         Assert.notNull(entity, "传入的ID找不到数据!");
-        isSuperUser(entity);
-
+        Assert.isTrue(ananUserDetailService.hasSysAdminRole(),"没有权限修改系统创建的字典明细项");
         ananCacheManger.evict(RedisConstant.ANAN_DICTIONARY_DETAIL, entity.getDictionaryId() + "");
         dictionaryDetailRepository.deleteById(id);
         try {
@@ -112,7 +108,7 @@ public class DictionaryDetailServiceImpl implements DictionaryDetailService {
     @CacheEvict(value = RedisConstant.ANAN_DICTIONARY_DETAIL, key = "#entity.dictionaryId")
     public AnanDictionaryDetailEntity deleteByEntity(AnanDictionaryDetailEntity entity) {
         Assert.notNull(entity, "传入了空的对象!");
-        isSuperUser(entity);
+        Assert.isTrue(ananUserDetailService.hasSysAdminRole(),"没有权限修改系统创建的字典明细项");
         dictionaryDetailRepository.delete(entity);
         return entity;
     }

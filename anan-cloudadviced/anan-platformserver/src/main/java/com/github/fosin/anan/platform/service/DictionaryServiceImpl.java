@@ -42,6 +42,7 @@ public class DictionaryServiceImpl implements DictionaryService {
     private final DictionaryRepository dictionaryRepository;
     private final DictionaryDetailRepository dictionaryDetailRepository;
     private final AnanUserDetailService ananUserDetailService;
+
     public DictionaryServiceImpl(DictionaryRepository dictionaryRepository, DictionaryDetailRepository dictionaryDetailRepository, AnanUserDetailService ananUserDetailService) {
         this.dictionaryRepository = dictionaryRepository;
         this.dictionaryDetailRepository = dictionaryDetailRepository;
@@ -55,7 +56,7 @@ public class DictionaryServiceImpl implements DictionaryService {
         if (Objects.equals(entity.getType(), SystemConstant.SYSTEM_DICTIONARY_TYPE)) {
 
             //非超级管理员不能创建系统字典
-            Assert.isTrue(SystemConstant.ANAN_USER_CODE.equals(ananUserDetailService.getAnanUserCode()), "没有权限创建系统字典!");
+            Assert.isTrue(ananUserDetailService.hasSysAdminRole(), "没有权限修改系统创建的字典明细项");
 
         }
         AnanDictionaryEntity createEntity = new AnanDictionaryEntity();
@@ -74,7 +75,7 @@ public class DictionaryServiceImpl implements DictionaryService {
         if (entity.getType().equals(SystemConstant.SYSTEM_DICTIONARY_TYPE)) {
 
             //非超级管理员不能创建系统字典
-            Assert.isTrue(SystemConstant.ANAN_USER_CODE.equals(ananUserDetailService.getAnanUserCode()), "没有权限修改系统字典!");
+            Assert.isTrue(ananUserDetailService.hasSysAdminRole(), "没有权限修改系统创建的字典明细项");
         }
 
         BeanUtils.copyProperties(entity, updateEntity);
@@ -93,12 +94,9 @@ public class DictionaryServiceImpl implements DictionaryService {
 //        }
         //系统字典
 
-        if (Objects.equals(SystemConstant.SYSTEM_DICTIONARY_TYPE, Objects.requireNonNull(entity,"通过code没有找到对应的字典").getType())) {
-
+        if (Objects.equals(SystemConstant.SYSTEM_DICTIONARY_TYPE, Objects.requireNonNull(entity, "通过code没有找到对应的字典").getType())) {
             //非超级管理员不能删除系统字典
-            if (!SystemConstant.ANAN_USER_CODE.equals(ananUserDetailService.getAnanUserCode())) {
-                throw new AnanServiceException("没有权限删除系统字典!");
-            }
+            Assert.isTrue(!ananUserDetailService.hasSysAdminRole(), "没有权限删除系统字典");
         }
         dictionaryDetailRepository.deleteAllByDictionaryId(entity.getId());
         dictionaryRepository.deleteById(code);
@@ -113,7 +111,7 @@ public class DictionaryServiceImpl implements DictionaryService {
         if (entity.getType().equals(SystemConstant.SYSTEM_DICTIONARY_TYPE)) {
 
             //非超级管理员不能删除系统字典
-            Assert.isTrue(SystemConstant.ANAN_USER_CODE.equals(ananUserDetailService.getAnanUserCode()), "没有权限删除系统字典!");
+            Assert.isTrue(!ananUserDetailService.hasSysAdminRole(), "没有权限删除系统字典");
         }
         dictionaryDetailRepository.deleteAllByDictionaryId(entity.getId());
         dictionaryRepository.delete(entity);

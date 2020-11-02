@@ -1,14 +1,17 @@
 package com.github.fosin.anan.platformapi.service;
 
+import com.github.fosin.anan.cloudresource.constant.SystemConstant;
 import com.github.fosin.anan.cloudresource.dto.AnanClient;
-import com.github.fosin.anan.platformapi.dto.AnanUserDetail;
 import com.github.fosin.anan.cloudresource.dto.AnanUserDto;
+import com.github.fosin.anan.cloudresource.dto.request.AnanUserRoleRetrieveDto;
+import com.github.fosin.anan.platformapi.dto.AnanUserDetail;
 import com.github.fosin.anan.security.util.AnanJwtTool;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.util.Assert;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -61,6 +64,7 @@ public class AnanUserDetailService extends AnanJwtTool<AnanUserDetail> {
     public Long getAnanUserId() {
         return this.getAnanUser().getId();
     }
+
     /**
      * 得到当前登录用户名
      *
@@ -95,5 +99,63 @@ public class AnanUserDetailService extends AnanJwtTool<AnanUserDetail> {
      */
     public AnanClient getAnanClient() {
         return this.getCachedUser().getAnanClient();
+    }
+
+    /**
+     * 当前操作者是否是超管用户
+     *
+     * @return boolean true：是 false：否
+     */
+    public boolean isSysAdminUser() {
+        return isSysAdminUser(this.getAnanUser().getUsercode());
+    }
+
+    /**
+     * 当前操作者是否是超管用户
+     *
+     * @return boolean true：是 false：否
+     */
+    public boolean isSysAdminUser(String usercode) {
+        return SystemConstant.ANAN_USER_CODE.equals(usercode);
+    }
+
+    /**
+     * 当前操作者是否是管理员用户
+     *
+     * @return boolean true：是 false：否
+     */
+    public boolean isAdminUser() {
+        return isAdminUser(this.getAnanUser().getUsercode());
+    }
+
+    /**
+     * 当前操作者是否是管理员用户
+     *
+     * @return boolean true：是 false：否
+     */
+    public boolean isAdminUser(String usercode) {
+        return SystemConstant.ADMIN_USER_CODE.equals(usercode);
+    }
+
+    /**
+     * 当前用户是否是拥有管理员角色
+     *
+     * @return boolean true：是 false：否
+     */
+    public boolean hasAdminRole() {
+        List<AnanUserRoleRetrieveDto> userRoles = this.getAnanUser().getUserRoles();
+        userRoles.forEach(ananUserRole -> ananUserRole.getRoleId().equals(SystemConstant.ADMIN_ROLE_ID));
+        return false;
+    }
+
+    /**
+     * 当前用户是否是拥有超级管理员角色
+     *
+     * @return boolean true：是 false：否
+     */
+    public boolean hasSysAdminRole() {
+        List<AnanUserRoleRetrieveDto> userRoles = this.getAnanUser().getUserRoles();
+        userRoles.forEach(ananUserRole -> ananUserRole.getRoleId().equals(SystemConstant.ANAN_ROLE_ID));
+        return false;
     }
 }
