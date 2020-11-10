@@ -10,6 +10,7 @@ import com.github.fosin.anan.cloudresource.constant.RedisConstant;
 import com.github.fosin.anan.cloudresource.dto.request.AnanOrganizationCreateDto;
 import com.github.fosin.anan.cloudresource.dto.request.AnanOrganizationUpdateDto;
 import com.github.fosin.anan.platformapi.entity.AnanOrganizationEntity;
+import com.github.fosin.anan.platformapi.service.AnanUserDetailService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 
@@ -38,9 +39,11 @@ import java.util.Objects;
 @Lazy
 public class OrganizationServiceImpl implements OrganizationService {
     private final OrganizationRepository organizationRepository;
+    private final AnanUserDetailService ananUserDetailService;
 
-    public OrganizationServiceImpl(OrganizationRepository organizationRepository) {
+    public OrganizationServiceImpl(OrganizationRepository organizationRepository, AnanUserDetailService ananUserDetailService) {
         this.organizationRepository = organizationRepository;
+        this.ananUserDetailService = ananUserDetailService;
     }
 
     @Override
@@ -51,13 +54,22 @@ public class OrganizationServiceImpl implements OrganizationService {
         BeanUtils.copyProperties(entity, createEntity);
         Long pid = entity.getPid();
         int level = 1;
-        if (pid != 0) {
+        if (pid == 0) {
+            ananUserDetailService.clear();
+            Assert.isTrue(ananUserDetailService.hasSysAdminRole(), "只有超级管理员才能创建顶级机构!");
+            createEntity.setTopId(0L);
+        } else {
             AnanOrganizationEntity parentEntity = organizationRepository.findById(pid).orElse(null);
             Assert.notNull(parentEntity, "传入的创建数据实体找不到对于的父节点数据!");
             level = parentEntity.getLevel() + 1;
         }
         createEntity.setLevel(level);
-        return organizationRepository.save(createEntity);
+        AnanOrganizationEntity result = organizationRepository.save(createEntity);
+        if (pid == 0) {
+            result.setTopId(result.getId());
+            result = organizationRepository.save(result);
+        }
+        return result;
     }
 
     @Override
