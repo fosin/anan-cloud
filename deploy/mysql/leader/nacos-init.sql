@@ -175,9 +175,9 @@ VALUES (7, 'application.yaml', 'DEFAULT_GROUP', 'logging:
     # org.springframework.security: DEBUG
 spring:
   datasource:
-    url: jdbc:mysql://mysql-leader:3306/anan_platform?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=GMT%2b8
-    username: anan
-    password: local
+    url: ${anan.datasource.url}
+    username: ${anan.datasource.username}
+    password: ${anan.datasource.password}
 #    type: com.alibaba.druid.pool.DruidDataSource
     # Hikari 连接池配置
     hikari:
@@ -332,6 +332,10 @@ management:
           autotime:
             enabled: false
 anan:
+  datasource:
+    url: jdbc:mysql://mysql-leader:3306/anan_platform?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=GMT%2b8
+    username: anan
+    password: local
   security:
     jwt:
       key-store: ${encrypt.key-store.location}
@@ -540,6 +544,12 @@ zuul:
       retryable: true
       custom-sensitive-headers: true
       sensitive-headers:
+    anan-exam:
+      path: /exam/**
+      serviceId: anan-exam
+      retryable: true
+      custom-sensitive-headers: true
+      sensitive-headers:
 #  semaphore:
 #    max-semaphores: 100
 #  ribbon-isolation-strategy: THREAD
@@ -613,7 +623,7 @@ hystrix:
         #当在配置时间窗口内达到此数量的失败后，进行短路。默认20个
         requestVolumeThreshold: 20
         #短路多久以后开始尝试是否恢复，默认5s
-        sleepWindowInMilliseconds: 5
+        sleepWindowInMilliseconds: 5000
         #出错百分比阈值，当达到此阈值后，开始短路。默认50%
         errorThresholdPercentage: 50%
 
