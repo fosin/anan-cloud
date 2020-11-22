@@ -96,13 +96,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @CachePut(value = RedisConstant.ANAN_USER, key = "#result.usercode", condition = "#result.usercode != null")
+    @Caching(
+            put = {
+                    @CachePut(value = RedisConstant.ANAN_USER, key = "#result.id", condition = "#result.id != null"),
+                    @CachePut(value = RedisConstant.ANAN_USER, key = "#result.usercode", condition = "#result.usercode != null")
+            }
+    )
     public AnanUserEntity create(AnanUserCreateDto entity) {
         AnanUserEntity createUser = new AnanUserEntity();
         BeanUtils.copyProperties(entity, createUser);
 
-        String passwordStrength = localOrganParameter.getOrCreateParameter("DefaultPasswordStrength", RegexUtil.PASSWORD_STRONG, "用户密码强度正则表达式,密码最少6位，包括至少1个大写字母，1个小写字母，1个数字，1个特殊字符");
-        Assert.isTrue(RegexUtil.matcher(createUser.getPassword(), passwordStrength), "密码强度不符合强度要求!");
+//        String passwordStrength = localOrganParameter.getOrCreateParameter("DefaultPasswordStrength", RegexUtil.PASSWORD_STRONG, "用户密码强度正则表达式,密码最少6位，包括至少1个大写字母，1个小写字母，1个数字，1个特殊字符");
+//        Assert.isTrue(RegexUtil.matcher(createUser.getPassword(), passwordStrength), "用户密码强度正则表达式,密码最少6位，包括至少1个大写字母，1个小写字母，1个数字，1个特殊字符!");
         String password = encryptBeforeSave(createUser);
         AnanUserEntity savedEntity = userRepository.save(createUser);
         AnanUserEntity rcEntity = new AnanUserEntity();
@@ -115,9 +120,11 @@ public class UserServiceImpl implements UserService {
     @Caching(
             evict = {
                     @CacheEvict(value = RedisConstant.ANAN_USER, beforeInvocation = true, key = "#root.caches[0].get(#entity.id).get().usercode", condition = "#root.caches[0].get(#entity.id) != null && !#root.caches[0].get(#entity.id).get().usercode.equals(#entity.usercode)"),
+                    @CacheEvict(value = RedisConstant.ANAN_USER, key = "#entity.id"),
                     @CacheEvict(value = RedisConstant.ANAN_USER_PERMISSION, key = "#entity.id")
             },
             put = {
+                    @CachePut(value = RedisConstant.ANAN_USER, key = "#result.id", condition = "#result.id != null"),
                     @CachePut(value = RedisConstant.ANAN_USER, key = "#result.usercode", condition = "#result.usercode != null")
             }
     )
@@ -159,6 +166,7 @@ public class UserServiceImpl implements UserService {
     @Caching(
             evict = {
                     @CacheEvict(value = RedisConstant.ANAN_USER, key = "#root.caches[0].get(#id).get().usercode", condition = "#root.caches[0].get(#id) != null"),
+                    @CacheEvict(value = RedisConstant.ANAN_USER, key = "#id"),
                     @CacheEvict(value = RedisConstant.ANAN_USER_PERMISSION, key = "#id"),
                     @CacheEvict(value = RedisConstant.ANAN_USER_ALL_PERMISSIONS, key = "#id")
             }
@@ -194,6 +202,7 @@ public class UserServiceImpl implements UserService {
     @Caching(
             evict = {
                     @CacheEvict(value = RedisConstant.ANAN_USER, key = "#entity.usercode"),
+                    @CacheEvict(value = RedisConstant.ANAN_USER, key = "#entity.id"),
                     @CacheEvict(value = RedisConstant.ANAN_USER_PERMISSION, key = "#entity.id"),
                     @CacheEvict(value = RedisConstant.ANAN_USER_ALL_PERMISSIONS, key = "#entity.id")
             }
@@ -265,7 +274,12 @@ public class UserServiceImpl implements UserService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    @CacheEvict(value = RedisConstant.ANAN_USER, key = "#result.usercode")
+    @Caching(
+            put = {
+                    @CachePut(value = RedisConstant.ANAN_USER, key = "#id"),
+                    @CachePut(value = RedisConstant.ANAN_USER, key = "#result.usercode")
+            }
+    )
     public AnanUserEntity changePassword(Long id, String password, String confirmPassword1, String confirmPassword2) {
         Assert.notNull(id, "用户ID不能为空!");
         Assert.isTrue(!StringUtil.isEmpty(confirmPassword1) &&
@@ -283,7 +297,12 @@ public class UserServiceImpl implements UserService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    @CacheEvict(value = RedisConstant.ANAN_USER, key = "#result.usercode")
+    @Caching(
+            put = {
+                    @CachePut(value = RedisConstant.ANAN_USER, key = "#id"),
+                    @CachePut(value = RedisConstant.ANAN_USER, key = "#result.usercode")
+            }
+    )
     public AnanUserEntity resetPassword(Long id) {
         Assert.notNull(id, "用户ID不能为空!");
 
