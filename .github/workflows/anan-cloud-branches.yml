@@ -12,6 +12,8 @@ on:
       - 'deploy/openjdk/**'
 jobs:
   release:
+    env:
+      ACTIONS_ALLOW_UNSECURE_COMMANDS: true
     runs-on: ubuntu-18.04
     steps:
       #从11位截取GITHUB_REF变量中的分支号，例如:refs/heads/master，结果就是master
