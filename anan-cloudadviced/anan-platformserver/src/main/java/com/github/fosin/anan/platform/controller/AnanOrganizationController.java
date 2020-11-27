@@ -24,6 +24,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -146,6 +147,7 @@ public class AnanOrganizationController extends AbstractBaseController
     @PostMapping("/auth/{organizId}")
     public ResponseEntity<AnanOrganizationAuthEntity> getOrganizAuth(@PathVariable("organizId") Long organizId) {
         List<AnanOrganizationAuthEntity> organizationAuthEntities = organizationAuthService.findAllByOrganizId(organizId);
+        Assert.isTrue(organizationAuthEntities.size() > 0, "该机构还未购买服务器!");
         return ResponseEntity.ok(organizationAuthEntities.get(0));
     }
 
