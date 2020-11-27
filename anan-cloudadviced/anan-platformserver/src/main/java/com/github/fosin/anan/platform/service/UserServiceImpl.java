@@ -24,7 +24,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.context.annotation.Lazy;
@@ -76,10 +75,12 @@ public class UserServiceImpl implements UserService {
     @Transactional(readOnly = true)
     public AnanUserEntity findByUsercode(String usercode) {
         Assert.notNull(usercode, "用户工号不能为空!");
-        //该代码看似无用，其实是为了解决懒加载和缓存先后问题
+
         AnanUserEntity userEntity = userRepository.findByUsercode(usercode);
+
         if (userEntity != null) {
             List<AnanUserRoleEntity> userRoles = userEntity.getUserRoles();
+            //该代码看似无用，其实是为了解决懒加载和缓存先后问题
             log.debug(userRoles.toString());
         }
         return userEntity;
@@ -96,12 +97,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Caching(
-            put = {
-                    @CachePut(value = RedisConstant.ANAN_USER, key = "#result.id", condition = "#result.id != null"),
-                    @CachePut(value = RedisConstant.ANAN_USER, key = "#result.usercode", condition = "#result.usercode != null")
-            }
-    )
+//    @Caching(
+//            put = {
+//                    @CachePut(value = RedisConstant.ANAN_USER, key = "#result.id", condition = "#result.id != null"),
+//                    @CachePut(value = RedisConstant.ANAN_USER, key = "#result.usercode", condition = "#result.usercode != null")
+//            }
+//    )
     public AnanUserEntity create(AnanUserCreateDto entity) {
         AnanUserEntity createUser = new AnanUserEntity();
         BeanUtils.copyProperties(entity, createUser);
@@ -122,10 +123,6 @@ public class UserServiceImpl implements UserService {
                     @CacheEvict(value = RedisConstant.ANAN_USER, beforeInvocation = true, key = "#root.caches[0].get(#entity.id).get().usercode", condition = "#root.caches[0].get(#entity.id) != null && !#root.caches[0].get(#entity.id).get().usercode.equals(#entity.usercode)"),
                     @CacheEvict(value = RedisConstant.ANAN_USER, key = "#entity.id"),
                     @CacheEvict(value = RedisConstant.ANAN_USER_PERMISSION, key = "#entity.id")
-            },
-            put = {
-                    @CachePut(value = RedisConstant.ANAN_USER, key = "#result.id", condition = "#result.id != null"),
-                    @CachePut(value = RedisConstant.ANAN_USER, key = "#result.usercode", condition = "#result.usercode != null")
             }
     )
     public AnanUserEntity update(AnanUserUpdateDto entity) {
@@ -275,9 +272,9 @@ public class UserServiceImpl implements UserService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     @Caching(
-            put = {
-                    @CachePut(value = RedisConstant.ANAN_USER, key = "#id"),
-                    @CachePut(value = RedisConstant.ANAN_USER, key = "#result.usercode")
+            evict = {
+                    @CacheEvict(value = RedisConstant.ANAN_USER, key = "#id"),
+                    @CacheEvict(value = RedisConstant.ANAN_USER, key = "#result.usercode")
             }
     )
     public AnanUserEntity changePassword(Long id, String password, String confirmPassword1, String confirmPassword2) {
@@ -298,9 +295,9 @@ public class UserServiceImpl implements UserService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     @Caching(
-            put = {
-                    @CachePut(value = RedisConstant.ANAN_USER, key = "#id"),
-                    @CachePut(value = RedisConstant.ANAN_USER, key = "#result.usercode")
+            evict = {
+                    @CacheEvict(value = RedisConstant.ANAN_USER, key = "#id"),
+                    @CacheEvict(value = RedisConstant.ANAN_USER, key = "#result.usercode")
             }
     )
     public AnanUserEntity resetPassword(Long id) {
