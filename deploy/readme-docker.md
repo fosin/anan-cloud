@@ -3,8 +3,14 @@
 
 ### 1、 升级系统内核为 4.4
 ```shell script
+# 检查系统内核和模块是否适合运行 docker (仅适用于linux 系统)
+curl https://raw.githubusercontent.com/docker/docker/master/contrib/check-config.sh > check-config.sh
+chmod +x check-config.sh
+bash ./check-config.sh
+
 # CentOS 7.x 系统自带的 3.10.x 内核存在一些 Bugs，导致运行的 Docker、Kubernetes 不稳定
-rpm -Uvh http://www.elrepo.org/elrepo-release-7.0-3.el7.elrepo.noarch.rpm
+#rpm -Uvh http://www.elrepo.org/elrepo-release-7.0-3.el7.elrepo.noarch.rpm
+yum install https://www.elrepo.org/elrepo-release-7.el7.elrepo.noarch.rpm
 # 安装完成后检查 /boot/grub2/grub.cfg 中对应内核 menuentry 中是否包含 initrd16 配置，如果没有，再安装一次！
 yum --enablerepo=elrepo-kernel install -y kernel-lt
 
@@ -19,7 +25,7 @@ sudo awk -F\' '$1=="menuentry " {print i++ " : " $2}' /etc/grub2.cfg
 grub2-set-default 0
 # 通过 gurb2-mkconfig 命令创建 grub2 的配置文件，然后重启
 grub2-mkconfig -o /boot/grub2/grub.cfg && reboot
-# 重启后安装内核源文件（这步可以不做）
+# 重启后安装内核源文件（可选）
 yum --enablerepo=elrepo-kernel install kernel-lt-devel-$(uname -r) kernel-lt-headers-$(uname -r)
 
 ### 2、删除旧内核（可选）
@@ -35,7 +41,6 @@ kernel-3.10.0-862.11.6.el7.x86_64
 ### 3、安装docker依赖包
 yum install -y yum-utils device-mapper-persistent-data lvm2
 
-yum update -y yum-utils device-mapper-persistent-data lvm2
 # 导入阿里云docker镜像仓库
 yum-config-manager --add-repo https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
 
@@ -57,24 +62,28 @@ yum list docker-ce.x86_64 --showduplicates | sort -r
 #   Available Packages
 # Step 3: 安装指定版本的Docker-CE: (VERSION 例如上面的 17.03.0.ce.1-1.el7.centos)
 # sudo yum -y install docker-ce-[VERSION]
+# 当前选择最新版本
 sudo yum makecache fast
-sudo yum -y install docker-ce
+sudo yum install -y docker-ce
 
 # 配置 daemon.json,执行命令前需要手动去掉前面的空格
 mkdir /etc/docker
 cat > /etc/docker/daemon.json <<EOF
 {
   "exec-opts": ["native.cgroupdriver=systemd"],
+  "max-concurrent-downloads": 10,
+  "log-level": "warn",
   "log-driver": "json-file",
-  "log-opts": {"max-size":"50m", "max-file":"3"},
+  "log-opts": {"max-size":"50m", "max-file":"7"},
   "registry-mirrors": ["https://dockerhub.azk8s.cn","https://c70a1b9z.mirror.aliyuncs.com","https://docker.mirrors.ustc.edu.cn/"],
-  "experimental": true
+  "experimental": true,
+  "data-root": "/var/lib/docker"
 }
 EOF
 
 ```
 ##  开启Docker远程端口2375(按需选做)
-sed -i 's/usr\/bin\/dockerd -H/\/usr\/bin\/dockerd -H tcp:\/\/0.0.0.0:2375 -H' /usr/lib/systemd/system/docker.service
+sed -i 's/usr\/bin\/dockerd -H/usr\/bin\/dockerd -H tcp:\/\/0.0.0.0:2375 -H/g' /usr/lib/systemd/system/docker.service
 
 ##  重启docker服务
 systemctl daemon-reload && systemctl start docker && systemctl enable docker
@@ -103,7 +112,7 @@ rm -rf /var/lib/docker
 
 #### 3.2、删除指定的镜像
     #删除所有包含关键字fosin的镜像
-    docker rmi $(docker images | grep fosin | awk '{print $3}')
+    docker rmi $(docker images | grep 1.16.15 | awk '{print $3}')
     #删除所有未被tag标记（none）
     docker rmi $(docker images | grep none | awk '{print $3}')
     #清理无容器使用的镜像(虚悬镜像)
