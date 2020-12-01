@@ -2,7 +2,11 @@ package com.github.fosin.anan.platform.service;
 
 import com.github.fosin.anan.jpa.service.batch.IUpdateInBatchJpaService;
 import com.github.fosin.anan.platform.dto.request.AnanVersionPermissionUpdateDto;
+import com.github.fosin.anan.platform.entity.AnanOrganizationAuthEntity;
+import com.github.fosin.anan.platform.entity.AnanOrganizationPermissionEntity;
 import com.github.fosin.anan.platform.entity.AnanVersionPermissionEntity;
+import com.github.fosin.anan.platform.repository.AnanOrganizationAuthRepository;
+import com.github.fosin.anan.platform.repository.AnanOrganizationPermissionRepository;
 import com.github.fosin.anan.platform.repository.AnanVersionPermissionRepository;
 import com.github.fosin.anan.platform.service.inter.AnanVersionPermissionService;
 import com.github.fosin.anan.util.BeanUtil;
@@ -12,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -24,10 +29,14 @@ import java.util.List;
 @Service
 @Lazy
 public class AnanVersionPermissionServiceImpl implements AnanVersionPermissionService {
-    private final AnanVersionPermissionRepository ananSysVersionPermissionRepository;
+    private final AnanVersionPermissionRepository versionPermissionRepository;
+    private final AnanOrganizationAuthRepository organizationAuthRepository;
+    private final AnanOrganizationPermissionRepository organizationPermissionRepository;
 
-    public AnanVersionPermissionServiceImpl(AnanVersionPermissionRepository ananSysVersionPermissionRepository) {
-        this.ananSysVersionPermissionRepository = ananSysVersionPermissionRepository;
+    public AnanVersionPermissionServiceImpl(AnanVersionPermissionRepository versionPermissionRepository, AnanOrganizationAuthRepository organizationAuthRepository, AnanOrganizationPermissionRepository organizationPermissionRepository) {
+        this.versionPermissionRepository = versionPermissionRepository;
+        this.organizationAuthRepository = organizationAuthRepository;
+        this.organizationPermissionRepository = organizationPermissionRepository;
     }
 
     /**
@@ -35,7 +44,7 @@ public class AnanVersionPermissionServiceImpl implements AnanVersionPermissionSe
      */
     @Override
     public AnanVersionPermissionRepository getRepository() {
-        return ananSysVersionPermissionRepository;
+        return versionPermissionRepository;
     }
 
     @Override
@@ -49,7 +58,7 @@ public class AnanVersionPermissionServiceImpl implements AnanVersionPermissionSe
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public Collection<AnanVersionPermissionEntity> updateInBatch(Long versionId, Collection<AnanVersionPermissionUpdateDto> entities) {
 
         Assert.notNull(versionId, "传入的版本ID不能为空!");
@@ -58,11 +67,25 @@ public class AnanVersionPermissionServiceImpl implements AnanVersionPermissionSe
             Assert.isTrue(entity.getVersionId().equals(versionId), "需要更新的数据集中有与版本ID不匹配的数据!");
         }
 
-        ananSysVersionPermissionRepository.deleteByVersionId(versionId);
+        Collection<AnanVersionPermissionEntity> versionPermissionEntities = BeanUtil.copyCollectionProperties(this.getClass(), IUpdateInBatchJpaService.class, entities);
 
-        Collection<AnanVersionPermissionEntity> saveEntities = BeanUtil.copyCollectionProperties(this.getClass(), IUpdateInBatchJpaService.class, entities);
+        List<AnanOrganizationAuthEntity> organizationAuthEntities = organizationAuthRepository.findAllByVersionId(versionId);
+        organizationAuthEntities.forEach(authEntity -> {
+            Long organizId = authEntity.getOrganizId();
+            Collection<AnanOrganizationPermissionEntity> organizationPermissionEntities = new ArrayList<>();
+            versionPermissionEntities.forEach(versionPermissionEntity -> {
+                AnanOrganizationPermissionEntity entity = new AnanOrganizationPermissionEntity();
+                entity.setOrganizId(organizId);
+                entity.setPermissionId(versionPermissionEntity.getPermissionId());
+                organizationPermissionEntities.add(entity);
+            });
+            organizationPermissionRepository.deleteByOrganizId(organizId);
+            organizationPermissionRepository.saveAll(organizationPermissionEntities);
+        });
 
-        return ananSysVersionPermissionRepository.saveAll(saveEntities);
+        versionPermissionRepository.deleteByVersionId(versionId);
+
+        return versionPermissionRepository.saveAll(versionPermissionEntities);
     }
 
 }
