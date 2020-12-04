@@ -16,7 +16,7 @@ import java.util.List;
  */
 @Repository
 @Lazy
-public interface RoleRepository extends IJpaRepository<AnanRoleEntity, Long>{
+public interface RoleRepository extends IJpaRepository<AnanRoleEntity, Long> {
 
     @Query(value = "select * from anan_role where id not in (select role_id from anan_user_role where user_id =?1)", nativeQuery = true)
     List<AnanRoleEntity> findOtherRolesByUserId(Long userId);
@@ -26,4 +26,8 @@ public interface RoleRepository extends IJpaRepository<AnanRoleEntity, Long>{
 
 //    @Query(value = "select a.* from AnanRoleEntity a where a.organizId in (select b.id from anan_organization b where b.code like :code + '%') ")
 //    Page<AnanRoleEntity> findAllByOrganizCode(String code, PageRequest pageable);
+
+    List<AnanRoleEntity> findAllByOrganizId(Long findByOrganizId);
+
+    AnanRoleEntity findByOrganizIdAndValue(Long findByOrganizId, String value);
 }
