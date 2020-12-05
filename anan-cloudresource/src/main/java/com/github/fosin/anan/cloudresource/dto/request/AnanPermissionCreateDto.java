@@ -61,11 +61,11 @@ public class AnanPermissionCreateDto implements Serializable {
     private String appName;
 
     @ApiModelProperty(value = "后台请求权限地址，权限路径ant风格表达式，用于动态验证HTTP后台请求的权限标识")
-    @Pattern(regexp = "[A-Za-z0-9/?*. \\\\-]", message = "匹配路径只支持大小写字母 数字 / . * - ?")
+    @Pattern(regexp = "[A-Za-z0-9/?*. -]*", message = "匹配路径只支持大小写字母 数字 / . * - ?")
     private String path;
 
     @ApiModelProperty(value = "http请求方法：GET、POST、DELETE、OPTIONS、PUT、PATCH，具体取值于字典表anan_dictionary.id=12")
-    @Pattern(regexp = "[A-Z]{0,20}", message = "http请求方法：只能大写字母组合而成,长度不超过20位")
+    @Pattern(regexp = "[A-Z,]{0,20}", message = "http请求方法：只能大写字母和,组合而成,长度不超过20位")
     private String method;
 
     @ApiModelProperty(value = "一般用于前端菜单选项前的图标")
