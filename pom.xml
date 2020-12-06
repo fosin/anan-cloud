@@ -225,14 +225,14 @@
         AnanUserDetail is in unnamed module of loader 'app'; com.github.fosin.anan.pojo.dto.
         AnanUserDetail is in unnamed module of loader org.springframework.boot.devtools.restart.
         classloader.RestartClassLoader @37b70696) at com.github.fosin.anan.auth.security.
-        AnanTokenServices.createAccessToken(AnanTokenServices.java:53)-->
+        AnanTokenServices.createAccessToken(AnanTokenServices.java:53)
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
-            <!--这个需要为 true 热部署才有效-->
+            这个需要为 true 热部署才有效
             <optional>true</optional>
             <scope>runtime</scope>
-        </dependency>
+        </dependency>-->
     </dependencies>
     <dependencyManagement>
         <dependencies>
