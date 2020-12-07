@@ -46,8 +46,8 @@ public class LogApplicationEventListener implements GenericApplicationListener {
             PropertySource<?> ps = mps.get("springCloudDefaultProperties");
 
             if (ps != null && ps.containsProperty("spring.application.name")) {
-                String appName = (String) ps.getProperty("spring.application.name");
-                MDC.put("appName", appName);
+                String serviceCode = (String) ps.getProperty("spring.application.name");
+                MDC.put("serviceCode", serviceCode);
             }
 
         }

@@ -108,9 +108,9 @@ public class AnanUserAllPermissionsEntity extends AbstractCreateUpdateJpaEntity<
     private Integer status;
 
     @Basic
-    @ApiModelProperty(value = "所属应用名称,等同于配置文件中的spring.application.name", required = true)
-    @Column(name = "app_name", nullable = false, length = 64)
-    private String appName;
+    @ApiModelProperty(value = "所属服务：等同于anan_service.id", required = true)
+    @Column(name = "service_id", nullable = false)
+    private Integer serviceId;
 
     @Basic
     @ApiModelProperty(value = "后台请求权限地址，权限路径ant风格表达式，用于动态验证HTTP后台请求的权限标识")

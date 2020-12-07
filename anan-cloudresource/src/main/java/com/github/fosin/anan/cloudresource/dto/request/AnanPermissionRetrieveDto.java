@@ -45,8 +45,8 @@ public class AnanPermissionRetrieveDto implements Serializable {
     @ApiModelProperty(value = "使用状态：0=启用，1=禁用，具体取值于字典表anan_dictionary.code=11")
     private Integer status;
 
-    @ApiModelProperty(value = "所属应用名称,等同于配置文件中的spring.application.name")
-    private String appName;
+    @ApiModelProperty(value = "所属服务：等同于anan_service.id", required = true)
+    private Integer serviceId;
 
     @ApiModelProperty(value = "后台请求权限地址，权限路径ant风格表达式，用于动态验证HTTP后台请求的权限标识")
     private String path;

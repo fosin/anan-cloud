@@ -48,7 +48,7 @@ public class AnanZuulAutoConfiguration {
             String fullPath = route.getFullPath();
             String location = route.getLocation();
 
-            ResponseEntity<List<AnanPermissionRetrieveDto>> responseEntity = permissionService.findByAppName(location);
+            ResponseEntity<List<AnanPermissionRetrieveDto>> responseEntity = permissionService.findByServiceCode(location);
             List<AnanPermissionRetrieveDto> entities = responseEntity.getBody();
             Objects.requireNonNull(entities).forEach(entity -> {
                 String entityPath = entity.getPath();

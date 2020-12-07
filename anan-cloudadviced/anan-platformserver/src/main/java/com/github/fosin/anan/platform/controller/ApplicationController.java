@@ -36,7 +36,7 @@ public class ApplicationController {
     private final DiscoveryClient discoveryClient;
 
     @Value("${spring.application.name}")
-    private String appName;
+    private String serviceCode;
 
     public ApplicationController(DiscoveryClient discoveryClient) {
         this.discoveryClient = discoveryClient;
@@ -91,9 +91,9 @@ public class ApplicationController {
             return serviceInstances.get(0);
         }
 
-        if (serviceId.equals(appName)) {
+        if (serviceId.equals(serviceCode)) {
             for (ServiceInstance s : serviceInstances) {
-                if (s.getServiceId().equals(appName)) {
+                if (s.getServiceId().equals(serviceCode)) {
                     rc = s;
                     break;
                 }

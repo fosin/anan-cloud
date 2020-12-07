@@ -1,7 +1,31 @@
 version: "3"
 services:
+  mysql-leader:
+    container_name: mysql-leader
+    hostname: mysql-leader
+    restart: always
+    image: fosin/mysql-leader:2.3
+    #    build:
+    #      context: deploy/mysql/leader
+    environment:
+      - TZ=Asia/Shanghai
+      - MYSQL_ROOT_PASSWORD=P3CJkdDX3pFeRDx
+      - MYSQL_REPLICATION_USER=anan_ru
+      - MYSQL_REPLICATION_PASSWORD=local
+      - MYSQL_DATABASE=nacos
+      - MYSQL_USER=nacos
+      - MYSQL_PASSWORD=local
+      - MYSQL_DATABASE2=anan_platform
+      - MYSQL_USER2=anan
+      - MYSQL_PASSWORD2=local
+    volumes:
+      - /root/deploy/nfs/mysql-leader1:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    networks:
+      - anan-bridge
   nacos-0:
-    image: nacos/nacos-server:latest
+    image: nacos/nacos-server:1.3.2
     container_name: nacos-0
     hostname: nacos-0
     restart: always
@@ -10,7 +34,7 @@ services:
       - PREFER_HOST_MODE=hostname
       - MODE=standalone
       - SPRING_DATASOURCE_PLATFORM=mysql
-      - MYSQL_SERVICE_HOST=172.17.0.15
+      - MYSQL_SERVICE_HOST=mysql-leader
       - MYSQL_SERVICE_PORT=3306
       - MYSQL_SERVICE_DB_NAME=nacos
       - MYSQL_SERVICE_USER=nacos
@@ -22,12 +46,11 @@ services:
       - JVM_MMS=160M
     volumes:
       -  /root/deploy/nacos/logs/:/home/nacos/logs
-    #      -  /root/deploy/nacos/custom.properties:/home/nacos/init.d/custom.properties
     ports:
       - "8848:8848"
       - "9555:9555"
-#    depends_on:
-#      - mysql-leader
+    depends_on:
+      - mysql-leader
     networks:
       - anan-bridge
 
@@ -46,7 +69,7 @@ services:
     restart: always
     ports:
       - 15672:15672
-      - 7890:5672
+      - 5672:5672
     networks:
       - anan-bridge
 
@@ -78,49 +101,11 @@ services:
       - /root/deploy/redis:/data
     restart: always
     ports:
-      - 5798:6379
+      - 6379:6379
     command: redis-server --appendonly yes --requirepass local
     networks:
       - anan-bridge
 
-  phpredisadmin:
-    image: erikdubbelboer/phpredisadmin
-    environment:
-      - TZ=Asia/Shanghai
-      - ADMIN_USER=admin
-      - ADMIN_PASS=local
-      - REDIS_1_AUTH=local
-      - REDIS_1_HOST=redis
-      - REDIS_1_PORT=6379
-    ports:
-      - 6380:80
-    networks:
-      - anan-bridge
-
-  mysql-leader:
-    container_name: mysql-leader
-    hostname: mysql-leader
-    restart: always
-    image: fosin/mysql-leader:2.3
-    #    build:
-    #      context: deploy/mysql/leader
-    environment:
-      - TZ=Asia/Shanghai
-      - MYSQL_ROOT_PASSWORD=P3CJkdDX3pFeRDx
-      - MYSQL_REPLICATION_USER=anan_ru
-      - MYSQL_REPLICATION_PASSWORD=local
-      - MYSQL_DATABASE=nacos
-      - MYSQL_USER=nacos
-      - MYSQL_PASSWORD=local
-      - MYSQL_DATABASE2=anan_platform
-      - MYSQL_USER2=anan
-      - MYSQL_PASSWORD2=local
-    volumes:
-      - /root/deploy/nfs/mysql-leader1:/var/lib/mysql
-    ports:
-      - "6478:3306"
-    networks:
-      - anan-bridge
   mysql-follower:
     container_name: mysql-follower
     hostname: mysql-follower
@@ -144,7 +129,7 @@ services:
       - anan-bridge
 
   anan-authserver:
-    image: fosin/anan-authserver:2.3.0-SNAPSHOT
+    image: fosin/anan-authserver:2.4.0-SNAPSHOT
     entrypoint: "sh /anan/wait-for.sh nacos-0:8848 -t 3600 -- /anan/entrypoint.sh"
     container_name: anan-authserver
     hostname: anan-authserver
@@ -164,7 +149,7 @@ services:
       - nacos-0
 
   anan-zuulgateway:
-    image: fosin/anan-zuulgateway:2.3.0-SNAPSHOT
+    image: fosin/anan-zuulgateway:2.4.0-SNAPSHOT
     entrypoint: "sh /anan/wait-for.sh anan-platformserver:51500 -t 3600 -- /anan/entrypoint.sh"
     container_name: anan-zuulgateway
     hostname: anan-zuulgateway
@@ -182,7 +167,7 @@ services:
       - nacos-0
 
   anan-platformserver:
-    image: fosin/anan-platformserver:2.3.0-SNAPSHOT
+    image: fosin/anan-platformserver:2.4.0-SNAPSHOT
     entrypoint: "sh /anan/wait-for.sh anan-authserver:51400 -t 3600 -- /anan/entrypoint.sh"
     container_name: anan-platformserver
     hostname: anan-platformserver
@@ -202,7 +187,7 @@ services:
       - nacos-0
 
   anan-adminserver:
-    image: fosin/anan-adminserver:2.3.0-SNAPSHOT
+    image: fosin/anan-adminserver:2.4.0-SNAPSHOT
     entrypoint: "sh /anan/wait-for.sh anan-zuulgateway:9000 -t 3600 -- /anan/entrypoint.sh"
     container_name: anan-adminserver
     hostname: anan-adminserver
@@ -221,7 +206,7 @@ services:
       - nacos-0
 
   anan-eurekaserver:
-    image: fosin/anan-eurekaserver:2.3.0-SNAPSHOT
+    image: fosin/anan-eurekaserver:2.4.0-SNAPSHOT
     container_name: anan-eurekaserver
     hostname: anan-eurekaserver
     restart: always
@@ -235,7 +220,7 @@ services:
       - 51000:51000
 
   anan-configserver:
-    image: fosin/anan-configserver:2.3.0-SNAPSHOT
+    image: fosin/anan-configserver:2.4.0-SNAPSHOT
     entrypoint: "sh /anan/wait-for.sh anan-eurekaserver:51000 -t 3600 -- /anan/entrypoint.sh"
     container_name: anan-configserver
     hostname: anan-configserver
@@ -514,6 +499,21 @@ services:
       - "3308:3306"
     networks:
       - anan-bridge
+
+  phpredisadmin:
+    image: erikdubbelboer/phpredisadmin
+    environment:
+      - TZ=Asia/Shanghai
+      - ADMIN_USER=admin
+      - ADMIN_PASS=local
+      - REDIS_1_AUTH=local
+      - REDIS_1_HOST=redis
+      - REDIS_1_PORT=6379
+    ports:
+      - 6380:80
+    networks:
+      - anan-bridge
+
 networks:
   anan-bridge:
     external: true

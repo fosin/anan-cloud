@@ -23,9 +23,9 @@ public interface PermissionFeignService {
     /**
      * 远程查询应用权限
      *
-     * @param appName 应用名称
+     * @param serviceCode 服务标识
      * @return 应用权限列表
      */
-    @PostMapping("/appName/{appName}")
-    ResponseEntity<List<AnanPermissionEntity>> findByAppName(@PathVariable("appName") String appName);
+    @PostMapping("/serviceCode/{serviceCode}")
+    ResponseEntity<List<AnanPermissionEntity>> findByServiceCode(@PathVariable("serviceCode") String serviceCode);
 }

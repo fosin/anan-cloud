@@ -19,16 +19,16 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 @EnableAnanFormLogin
 @EnableAnanSecurityOauth2
 public class AuthServerApplication {
-//    public static void setLogFile(String appName, String name) {
+//    public static void setLogFile(String serviceCode, String name) {
 //        LoggerContext ctx = (LoggerContext) LogManager.getContext(false);
 //        Configuration config = ctx.getConfiguration();
 //
-//        if (config.getAppender(appName) != null) {
-//            RollingFileAppender rollingFileAppender = config.getAppender(appName);
-//            config.getLoggerConfig("").removeAppender(appName);
+//        if (config.getAppender(serviceCode) != null) {
+//            RollingFileAppender rollingFileAppender = config.getAppender(serviceCode);
+//            config.getLoggerConfig("").removeAppender(serviceCode);
 //            rollingFileAppender.stop();
 //            Appender appender = RollingFileAppender.newBuilder()
-//                    .setName(appName+"_rebuild")
+//                    .setName(serviceCode+"_rebuild")
 //                    .withFileName(name)
 //                    .withFilePattern(rollingFileAppender.getFilePattern())
 //                    .setLayout(rollingFileAppender.getLayout())
@@ -54,6 +54,6 @@ public class AuthServerApplication {
 //        app.run(args);
 
     }
-    
+
 
 }

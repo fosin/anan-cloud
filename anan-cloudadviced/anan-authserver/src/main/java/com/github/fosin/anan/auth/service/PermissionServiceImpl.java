@@ -7,7 +7,9 @@ import com.github.fosin.anan.cloudresource.dto.AnanUserAllPermissionDto;
 import com.github.fosin.anan.cloudresource.dto.request.AnanPermissionRetrieveDto;
 import com.github.fosin.anan.jpa.repository.IJpaRepository;
 import com.github.fosin.anan.platformapi.entity.AnanPermissionEntity;
+import com.github.fosin.anan.platformapi.entity.AnanServiceEntity;
 import com.github.fosin.anan.platformapi.entity.AnanUserAllPermissionsEntity;
+import com.github.fosin.anan.platformapi.repository.AnanServiceRepository;
 import com.github.fosin.anan.platformapi.repository.PermissionRepository;
 import com.github.fosin.anan.platformapi.repository.UserAllPermissionsRepository;
 import com.github.fosin.anan.util.TreeUtil;
@@ -30,10 +32,12 @@ import java.util.TreeSet;
 public class PermissionServiceImpl implements PermissionService {
     private final PermissionRepository permissionRepository;
     private final UserAllPermissionsRepository userAllPermissionsRepository;
+    private final AnanServiceRepository serviceRepository;
 
-    public PermissionServiceImpl(PermissionRepository permissionRepository, UserAllPermissionsRepository userAllPermissionsRepository) {
+    public PermissionServiceImpl(PermissionRepository permissionRepository, UserAllPermissionsRepository userAllPermissionsRepository, AnanServiceRepository serviceRepository) {
         this.permissionRepository = permissionRepository;
         this.userAllPermissionsRepository = userAllPermissionsRepository;
+        this.serviceRepository = serviceRepository;
     }
 
     @Override
@@ -43,10 +47,11 @@ public class PermissionServiceImpl implements PermissionService {
     }
 
     @Override
-    public List<AnanPermissionRetrieveDto> findByAppName(String appName) {
-        List<AnanPermissionEntity> byAppName = permissionRepository.findByAppName(appName);
+    public List<AnanPermissionRetrieveDto> findByServiceCode(String serviceCode) {
+        AnanServiceEntity serviceEntity = serviceRepository.findOneByCode(serviceCode);
+        List<AnanPermissionEntity> byServiceCode = permissionRepository.findAllByServiceId(serviceEntity.getId());
         List<AnanPermissionRetrieveDto> retrieveDtos = new ArrayList<>();
-        for (AnanPermissionEntity ananPermissionEntity : byAppName) {
+        for (AnanPermissionEntity ananPermissionEntity : byServiceCode) {
             AnanPermissionRetrieveDto retrieveDto = new AnanPermissionRetrieveDto();
             BeanUtils.copyProperties(ananPermissionEntity, retrieveDto);
             retrieveDto.setId(ananPermissionEntity.getId());

@@ -85,12 +85,12 @@ public class PermissionController extends AbstractBaseController
         return ResponseEntity.ok(list);
     }
 
-    @PostMapping("/appName/{appName}")
-    @ApiImplicitParam(name = "appName", value = "应用名称,spring.application.name",
+    @PostMapping("/serviceCode/{serviceCode}")
+    @ApiImplicitParam(name = "serviceCode", value = "服务标识，等同于anan_service.code",
             required = true, dataTypeClass = String.class, paramType = "path")
-    @ApiOperation(value = "查询应用权限", notes = "根据应用名称(spring.application.name)查询其权限列表")
-    public ResponseEntity<List<AnanPermissionEntity>> findByAppName(@PathVariable String appName) {
-        return ResponseEntity.ok(permissionService.findByAppName(appName));
+    @ApiOperation(value = "查询应用权限", notes = "根据服务标识(anan_service.code)查询其权限列表")
+    public ResponseEntity<List<AnanPermissionEntity>> findByServiceCode(@PathVariable String serviceCode) {
+        return ResponseEntity.ok(permissionService.findByServiceCode(serviceCode));
     }
 
     @Override

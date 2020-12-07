@@ -27,13 +27,13 @@ public interface PermissionRepository extends IJpaRepository<AnanPermissionEntit
 //
 //    @Query(value = "select m.* from anan_menu m,(select p.role_id,p.menu_id,r.add_mode from anan_role_privilege p left join anan_user_privilege r on p.role_id =r.role_id and p.menu_id=r.menu_id  and r.user_id=?1  where p.role_id=?2 and (r.add_mode = 0 or r.add_mode is null)) z where m.id=z.menu_id union select m.* from anan_menu m ,anan_user_privilege r where m.id=r.menu_id and r.role_id=?2 and r.user_id=?1 and r.add_mode=0",nativeQuery = true)
 //    List<AnanPermissionEntity> getAllMenuByUserIdAndRoleId(Integer userId, Integer roleId);
-    List<AnanPermissionEntity> findByPid(Long pid, Sort sort);
+    List<AnanPermissionEntity> findAllByPid(Long pid, Sort sort);
 
     @Query(value = "select * from anan_permission where p_id = :pid and id in (select permission_id from anan_version_permission where version_id = :versionId) order by sort", nativeQuery = true)
-    List<AnanPermissionEntity> findByPidAndVersionId(@Param(value = "pid") Long pid, @Param(value = "versionId") Long versionId);
+    List<AnanPermissionEntity> findAllByPidAndVersionId(@Param(value = "pid") Long pid, @Param(value = "versionId") Long versionId);
 
-    List<AnanPermissionEntity> findByType(Integer type);
+    List<AnanPermissionEntity> findAllByType(Integer type);
 
-    List<AnanPermissionEntity> findByAppName(String appName);
+    List<AnanPermissionEntity> findAllByServiceId(Integer serviceId);
 
 }

@@ -36,12 +36,12 @@ public class PermissionController {
         this.permissionService = permissionService;
     }
 
-    @RequestMapping(value = "/appName/{appName}", method = {RequestMethod.GET, RequestMethod.POST})
-    @ApiImplicitParam(name = "appName", value = "应用名称,spring.application.name",
+    @RequestMapping(value = "/serviceCode/{serviceCode}", method = {RequestMethod.GET, RequestMethod.POST})
+    @ApiImplicitParam(name = "serviceCode", value = "服务标识",
             required = true, dataTypeClass = String.class, paramType = "path")
-    @ApiOperation(value = "查询应用权限", notes = "根据应用名称(spring.application.name)查询其权限列表")
-    public ResponseEntity<List<AnanPermissionRetrieveDto>> findByAppName(@PathVariable("appName") String appName) {
-        return ResponseEntity.ok(permissionService.findByAppName(appName));
+    @ApiOperation(value = "查询应用权限", notes = "根据服务标识查询其权限列表")
+    public ResponseEntity<List<AnanPermissionRetrieveDto>> findByServiceCode(@PathVariable("serviceCode") String serviceCode) {
+        return ResponseEntity.ok(permissionService.findByServiceCode(serviceCode));
     }
 
     @RequestMapping(value = PathConstant.PATH_LIST, method = {RequestMethod.GET, RequestMethod.POST})

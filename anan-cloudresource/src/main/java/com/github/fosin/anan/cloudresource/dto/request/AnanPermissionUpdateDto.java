@@ -59,10 +59,9 @@ public class AnanPermissionUpdateDto implements Serializable {
     @ApiModelProperty(value = "使用状态：0=启用，1=禁用，具体取值于字典表anan_dictionary.code=11", required = true)
     private Integer status;
 
-    @NotBlank(message = "所属应用名称" + "{javax.validation.constraints.NotBlank.message}")
-    @ApiModelProperty(value = "所属应用名称,等同于配置文件中的spring.application.name", required = true)
-    @Pattern(regexp = "[a-zA-Z][a-zA-Z0-9_-]{1,64}", message = "应用名称只能大小写字母开始、数字、下杠(_)组合而成,长度不超过64位")
-    private String appName;
+    @NotNull(message = "所属服务" + "{javax.validation.constraints.NotNull.message}")
+    @ApiModelProperty(value = "所属服务：等同于anan_service.id", required = true)
+    private Integer serviceId;
 
     @ApiModelProperty(value = "后台请求权限地址，权限路径ant风格表达式，用于动态验证HTTP后台请求的权限标识")
     @Pattern(regexp = "[A-Za-z0-9/?*. -]*", message = "匹配路径只支持大小写字母 数字 / . * - ?")

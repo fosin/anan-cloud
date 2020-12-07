@@ -20,7 +20,7 @@ public interface PermissionService extends ISimpleJpaService<AnanPermissionEntit
 
     List<AnanPermissionEntity> findByType(Integer type);
 
-    List<AnanPermissionEntity> findByAppName(String appName);
+    List<AnanPermissionEntity> findByServiceCode(String serviceCode);
 
     List<AnanPermissionEntity> findByPid(Long pid, Long versionId);
 }

@@ -1,4 +1,4 @@
-image: fosin/anan-authserver:2.3.0-SNAPSHOT
+image: fosin/anan-authserver:2.4.0-SNAPSHOT
 imagePullPolicy: IfNotPresent
 replicaCount: 1
 deployment:

@@ -59,23 +59,23 @@ zuul:
     key-prefix: anan:ratelimit-zuul
     enabled: true
     #对应存储类型（用来存储统计信息）,可选值REDIS、IN_MEMORY、JPA、CONSUL,默认IN_MEMORY
-    repository: REDIS 
+    repository: REDIS
     #代理之后
     behind-proxy: true
     response-headers: VERBOSE
     #可选 - 针对所有的路由配置的策略，除非特别配置了policies
     default-policy-list:
       - limit: 6000 #可选 - 每个刷新时间窗口对应的请求数量限制
-        quota: 1000 #可选-  每个刷新时间窗口对应的请求时间限制（秒）
+        quota: 1000 #可选 - 每个刷新时间窗口对应的请求时间限制（秒）
         refresh-interval: 60 # 刷新时间窗口的时间，默认值 60(秒)
         #可选 限流方式
-        type: 
+        type:
            #用户粒度
   #        - user
            #ORIGIN粒度 (用户请求的origin作为粒度控制)
-  #        - origin 
+  #        - origin
           #接口粒度 (请求接口的地址作为粒度控制)
-          - url 
+          - url
     policy-list:
       anan-mpi:
         - limit: 900

@@ -31,12 +31,12 @@ import java.util.Random;
  */
 @RestController
 @RequestMapping("v1/application")
-@Api(value = "v1/application", tags = "应用集群相关信息获取", description = "用于应用集群相关的信息获取")
+@Api(value = "v1/application", tags = "应用集群相关信息获取")
 public class ApplicationController {
     private final DiscoveryClient discoveryClient;
 
     @Value("${spring.application.name}")
-    private String appName;
+    private String serviceCode;
 
     public ApplicationController(DiscoveryClient discoveryClient) {
         this.discoveryClient = discoveryClient;
@@ -91,9 +91,9 @@ public class ApplicationController {
             return serviceInstances.get(0);
         }
 
-        if (serviceId.equals(appName)) {
+        if (serviceId.equals(serviceCode)) {
             for (ServiceInstance s : serviceInstances) {
-                if (s.getServiceId().equals(appName)) {
+                if (s.getServiceId().equals(serviceCode)) {
                     rc = s;
                     break;
                 }

@@ -102,7 +102,7 @@ jobs:
         if: contains(env.MODIFY_FILES,'deploy/mysql/leader')
         env:
           MODULE_NAME: mysql-leader
-          MODULE_VERSION: 2.3
+          MODULE_VERSION: 2.4
           MODULE_PATH: deploy/mysql/leader
         run: |
           docker build ./$MODULE_PATH -t fosin/$MODULE_NAME:$MODULE_VERSION -f ./$MODULE_PATH/7.Dockerfile
@@ -111,7 +111,7 @@ jobs:
         if: contains(env.MODIFY_FILES,'deploy/mysql/follower')
         env:
           MODULE_NAME: mysql-follower
-          MODULE_VERSION: 2.3
+          MODULE_VERSION: 2.4
           MODULE_PATH: deploy/mysql/follower
         run: |
           docker build ./$MODULE_PATH -t fosin/$MODULE_NAME:$MODULE_VERSION -f ./$MODULE_PATH/7.Dockerfile

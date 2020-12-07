@@ -20,8 +20,8 @@ import java.util.List;
 public class PermissionFeignFallbackServiceImpl implements PermissionFeignService {
 
     @Override
-    public ResponseEntity<List<AnanPermissionEntity>> findByAppName(String appName) {
-        log.error("feign 远程查询当前应用权限失败:{}", appName);
+    public ResponseEntity<List<AnanPermissionEntity>> findByServiceCode(String serviceCode) {
+        log.error("feign 远程查询当前应用权限失败:{}", serviceCode);
         return null;
     }
 }

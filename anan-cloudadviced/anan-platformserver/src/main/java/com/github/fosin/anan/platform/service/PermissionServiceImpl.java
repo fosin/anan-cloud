@@ -11,6 +11,7 @@ import com.github.fosin.anan.platform.service.inter.PermissionService;
 import com.github.fosin.anan.platform.service.inter.RolePermissionService;
 import com.github.fosin.anan.platform.service.inter.UserPermissionService;
 import com.github.fosin.anan.platformapi.entity.AnanPermissionEntity;
+import com.github.fosin.anan.platformapi.repository.AnanServiceRepository;
 import com.github.fosin.anan.platformapi.repository.PermissionRepository;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -24,9 +25,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import javax.persistence.criteria.Path;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -40,15 +43,15 @@ import java.util.Objects;
 @Lazy
 public class PermissionServiceImpl implements PermissionService {
     private final PermissionRepository permissionRepository;
-
     private final UserPermissionService userPermissionService;
-
     private final RolePermissionService rolePermissionService;
+    private final AnanServiceRepository serviceRepository;
 
-    public PermissionServiceImpl(PermissionRepository permissionRepository, UserPermissionService userPermissionService, RolePermissionService rolePermissionService) {
+    public PermissionServiceImpl(PermissionRepository permissionRepository, UserPermissionService userPermissionService, RolePermissionService rolePermissionService, AnanServiceRepository serviceRepository) {
         this.permissionRepository = permissionRepository;
         this.userPermissionService = userPermissionService;
         this.rolePermissionService = rolePermissionService;
+        this.serviceRepository = serviceRepository;
     }
 
     @Override
@@ -72,15 +75,29 @@ public class PermissionServiceImpl implements PermissionService {
 
     @Override
     @Caching(
-            evict = @CacheEvict(value = RedisConstant.ANAN_USER_ALL_PERMISSIONS, allEntries = true),
-            put = @CachePut(value = RedisConstant.ANAN_PERMISSION, key = "#entity.id")
+            evict = {
+                    @CacheEvict(value = RedisConstant.ANAN_USER_ALL_PERMISSIONS, allEntries = true),
+                    @CacheEvict(value = RedisConstant.ANAN_PERMISSION, allEntries = true)
+            }
     )
+    @Transactional(rollbackFor = Exception.class)
     public AnanPermissionEntity update(AnanPermissionUpdateDto entity) {
         Assert.notNull(entity, "传入了空对象!");
         Long id = entity.getId();
         Assert.notNull(id, "传入了空ID!");
 
         AnanPermissionEntity updateEntity = permissionRepository.findById(id).orElse(null);
+
+        List<AnanPermissionEntity> saveEntities = new ArrayList<>();
+        //如果是目录菜单，则需要级联修改子节点的数据
+        if (Objects.requireNonNull(updateEntity).getType() == 3) {
+            //只同步serviceId和code
+            if (!updateEntity.getServiceId().equals(entity.getServiceId())
+                    || !updateEntity.getCode().equals(entity.getCode())) {
+                saveEntities.addAll(getUpdateCascadeChild(entity, updateEntity));
+            }
+        }
+
         BeanUtils.copyProperties(entity, Objects.requireNonNull(updateEntity, "通过ID：" + id + "未能找到对应的数据!"));
         Long pid = entity.getPid();
         if (!updateEntity.getPid().equals(pid)) {
@@ -88,10 +105,27 @@ public class PermissionServiceImpl implements PermissionService {
             Assert.notNull(parentEntity, "传入的创建数据实体找不到对于的父节点数据!");
             updateEntity.setLevel(parentEntity.getLevel() + 1);
         }
+        saveEntities.add(updateEntity);
 
-        return permissionRepository.save(updateEntity);
+        permissionRepository.saveAll(saveEntities);
+        return updateEntity;
     }
 
+    protected List<AnanPermissionEntity> getUpdateCascadeChild(AnanPermissionUpdateDto originEntity, AnanPermissionEntity updateEntity) {
+        Long id = updateEntity.getId();
+        Sort sort = Sort.by(Sort.Direction.fromString("ASC"), "sort");
+        List<AnanPermissionEntity> allByPid = permissionRepository.findAllByPid(id, sort);
+        List<AnanPermissionEntity> saves = new ArrayList<>();
+        allByPid.forEach(entity -> {
+            AnanPermissionUpdateDto entity2 = new AnanPermissionUpdateDto();
+            BeanUtils.copyProperties(entity, entity2);
+            entity.setServiceId(originEntity.getServiceId());
+            entity.setCode(entity.getCode().replace(updateEntity.getCode(), originEntity.getCode()));
+            saves.add(entity);
+            saves.addAll(getUpdateCascadeChild(entity2, entity));
+        });
+        return saves;
+    }
 
     @Override
     @Caching(
@@ -162,22 +196,22 @@ public class PermissionServiceImpl implements PermissionService {
     @Override
     public List<AnanPermissionEntity> findByPid(Long pid) {
         Sort sort = Sort.by(Sort.Direction.fromString("ASC"), "sort");
-        return permissionRepository.findByPid(pid, sort);
+        return permissionRepository.findAllByPid(pid, sort);
     }
 
     @Override
     public List<AnanPermissionEntity> findByPid(Long pid, Long versionId) {
-        return permissionRepository.findByPidAndVersionId(pid, versionId);
+        return permissionRepository.findAllByPidAndVersionId(pid, versionId);
     }
 
     @Override
     public List<AnanPermissionEntity> findByType(Integer type) {
-        return permissionRepository.findByType(type);
+        return permissionRepository.findAllByType(type);
     }
 
     @Override
-    public List<AnanPermissionEntity> findByAppName(String appName) {
-        return permissionRepository.findByAppName(appName);
+    public List<AnanPermissionEntity> findByServiceCode(String serviceCode) {
+        return permissionRepository.findAllByServiceId(serviceRepository.findOneByCode(serviceCode).getId());
     }
 
     @Override
