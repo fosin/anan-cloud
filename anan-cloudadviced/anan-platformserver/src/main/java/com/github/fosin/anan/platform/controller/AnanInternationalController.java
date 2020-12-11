@@ -48,6 +48,25 @@ public class AnanInternationalController implements ISimpleController<AnanIntern
         return ResponseEntity.ok(ananInternationalService.findAllByStatus(status));
     }
 
+    @RequestMapping(path = "/code/{code}")
+    @ApiOperation("根据国际化语言编码查找国际化语言")
+    @ApiImplicitParam(
+            name = "code",
+            value = "国际化语言编码",
+            paramType = "path",
+            required = true,
+            dataTypeClass = String.class
+    )
+    public ResponseEntity<AnanInternationalEntity> findAllByCode(@PathVariable String code) {
+        return ResponseEntity.ok(ananInternationalService.findByCode(code));
+    }
+
+    @RequestMapping(path = "/default")
+    @ApiOperation("查找默认语言")
+    public ResponseEntity<AnanInternationalEntity> findByDefaultFlag() {
+        return ResponseEntity.ok(ananInternationalService.findByDefaultFlag());
+    }
+
     @Override
     public ISimpleService<AnanInternationalEntity, Integer, AnanInternationalCreateDto, AnanInternationalRetrieveDto, AnanInternationalUpdateDto> getService() {
         return ananInternationalService;

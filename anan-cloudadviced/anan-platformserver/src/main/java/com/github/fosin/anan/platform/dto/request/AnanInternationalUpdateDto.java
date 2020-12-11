@@ -9,27 +9,27 @@ import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
- * 国际化(AnanInternational)更新DTO
+ * 国际化语言集(AnanInternational)更新DTO
  *
  * @author fosin
- * @date 2020-12-04 11:09:49
+ * @date 2020-12-08 20:54:17
  * @since 1.0.0
  */
 @Data
-@ApiModel(value = "国际化更新DTO", description = "表(anan_international)的对应的更新DTO")
+@ApiModel(value = "国际化语言集更新DTO", description = "表(anan_international)的对应的更新DTO")
 public class AnanInternationalUpdateDto implements Serializable {
-    private static final long serialVersionUID = -79755587019766552L;
+    private static final long serialVersionUID = -76433218731003447L;
 
     @NotNull(message = "主键" + "{javax.validation.constraints.NotNull.message}")
     @ApiModelProperty(value = "主键", example = "Integer")
     private Integer id;
 
-    @NotBlank(message = "国际化通用标识" + "{javax.validation.constraints.NotBlank.message}")
-    @ApiModelProperty(value = "国际化通用标识", example = "String")
+    @NotBlank(message = "标识" + "{javax.validation.constraints.NotBlank.message}")
+    @ApiModelProperty(value = "标识", example = "String")
     private String code;
 
-    @NotBlank(message = "国际化名称" + "{javax.validation.constraints.NotBlank.message}")
-    @ApiModelProperty(value = "国际化名称", example = "String")
+    @NotBlank(message = "名称" + "{javax.validation.constraints.NotBlank.message}")
+    @ApiModelProperty(value = "名称", example = "String")
     private String name;
 
     @ApiModelProperty(value = "图标", example = "String")

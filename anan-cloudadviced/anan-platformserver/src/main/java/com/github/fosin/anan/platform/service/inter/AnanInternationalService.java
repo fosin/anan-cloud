@@ -17,4 +17,8 @@ import java.util.List;
 public interface AnanInternationalService extends ISimpleJpaService<AnanInternationalEntity, Integer,
         AnanInternationalCreateDto, AnanInternationalRetrieveDto, AnanInternationalUpdateDto> {
     List<AnanInternationalEntity> findAllByStatus(Integer status);
+
+    AnanInternationalEntity findByCode(String code);
+
+    AnanInternationalEntity findByDefaultFlag();
 }

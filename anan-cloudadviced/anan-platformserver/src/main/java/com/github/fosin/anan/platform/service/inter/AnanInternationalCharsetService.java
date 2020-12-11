@@ -7,7 +7,6 @@ import com.github.fosin.anan.platform.dto.request.AnanInternationalCharsetUpdate
 import com.github.fosin.anan.platform.entity.AnanInternationalCharsetEntity;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * 国际化明显(anan_international_charset)表服务接口
@@ -19,5 +18,7 @@ public interface AnanInternationalCharsetService extends ISimpleJpaService<AnanI
         AnanInternationalCharsetCreateDto, AnanInternationalCharsetRetrieveDto, AnanInternationalCharsetUpdateDto> {
     List<AnanInternationalCharsetEntity> findAllByInternationalId(Integer internationalId);
 
-    Map<String, Object> findCharsetByInternationalId(Integer internationalId);
+    List<AnanInternationalCharsetEntity> findCharsetByInternationalId(Integer internationalId);
+
+    List<AnanInternationalCharsetEntity> findAllByInternationalIdAndServiceId(Integer internationalId, Integer serviceId);
 }

@@ -9,6 +9,7 @@ import com.github.fosin.anan.platform.entity.AnanInternationalCharsetEntity;
 import com.github.fosin.anan.platform.service.inter.AnanInternationalCharsetService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * 国际化明显(anan_international_charset: table)表控制层
@@ -50,17 +50,26 @@ public class AnanInternationalCharsetController implements ISimpleController<Ana
         return ResponseEntity.ok(ananInternationalCharsetService.findAllByInternationalId(internationalId));
     }
 
-    @RequestMapping(path = "/keyvalue/internationalId/{internationalId}", method = {RequestMethod.GET, RequestMethod.POST})
-    @ApiOperation("根据语言ID查找所有字符集实际数据")
-    @ApiImplicitParam(
-            name = "internationalId",
-            value = "状态: 0=有效，1=无效",
-            paramType = "path",
-            required = true,
-            dataTypeClass = Integer.class
-    )
-    public ResponseEntity<Map<String, Object>> findCharsetByInternationalId(@PathVariable Integer internationalId) {
-        return ResponseEntity.ok(ananInternationalCharsetService.findCharsetByInternationalId(internationalId));
+    @RequestMapping(path = "/internationalId/{internationalId}/serviceId/{serviceId}", method = {RequestMethod.GET, RequestMethod.POST})
+    @ApiOperation("根据语言ID和服务ID查找所有字符集实际数据")
+    @ApiImplicitParams({
+            @ApiImplicitParam(
+                    name = "internationalId",
+                    value = "状态: 0=有效，1=无效",
+                    paramType = "path",
+                    required = true,
+                    dataTypeClass = Integer.class
+            ),
+            @ApiImplicitParam(
+                    name = "serviceId",
+                    value = "服务ID，对应anan_service.id",
+                    paramType = "path",
+                    required = true,
+                    dataTypeClass = Integer.class
+            )
+    })
+    public ResponseEntity<List<AnanInternationalCharsetEntity>> findAllByInternationalIdAndServiceId(@PathVariable Integer internationalId, @PathVariable Integer serviceId) {
+        return ResponseEntity.ok(ananInternationalCharsetService.findAllByInternationalIdAndServiceId(internationalId, serviceId));
     }
 
     @Override

@@ -12,20 +12,20 @@ import java.io.Serializable;
  * 国际化语言集(AnanInternational)创建DTO
  *
  * @author fosin
- * @date 2020-12-05 22:10:56
+ * @date 2020-12-08 20:54:15
  * @since 1.0.0
  */
 @Data
 @ApiModel(value = "国际化语言集创建DTO", description = "表(anan_international)的对应的创建DTO")
 public class AnanInternationalCreateDto implements Serializable {
-    private static final long serialVersionUID = 241629439266650229L;
+    private static final long serialVersionUID = 161205976988896597L;
 
-    @NotBlank(message = "国际化通用标识" + "{javax.validation.constraints.NotBlank.message}")
-    @ApiModelProperty(value = "国际化通用标识", example = "String")
+    @NotBlank(message = "标识" + "{javax.validation.constraints.NotBlank.message}")
+    @ApiModelProperty(value = "标识", example = "String")
     private String code;
 
-    @NotBlank(message = "国际化名称" + "{javax.validation.constraints.NotBlank.message}")
-    @ApiModelProperty(value = "国际化名称", example = "String")
+    @NotBlank(message = "名称" + "{javax.validation.constraints.NotBlank.message}")
+    @ApiModelProperty(value = "名称", example = "String")
     private String name;
 
     @ApiModelProperty(value = "图标", example = "String")

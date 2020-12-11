@@ -16,4 +16,8 @@ import java.util.List;
 @Repository
 public interface AnanInternationalRepository extends IJpaRepository<AnanInternationalEntity, Integer>, JpaSpecificationExecutor<AnanInternationalEntity> {
     List<AnanInternationalEntity> findAllByStatus(Integer status);
+
+    AnanInternationalEntity findByCode(String code);
+
+    AnanInternationalEntity findByDefaultFlag(Integer defaultFlag);
 }

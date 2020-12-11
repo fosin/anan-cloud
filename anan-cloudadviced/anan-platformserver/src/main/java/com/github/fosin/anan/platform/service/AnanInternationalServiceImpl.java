@@ -28,6 +28,17 @@ public class AnanInternationalServiceImpl implements AnanInternationalService {
     public List<AnanInternationalEntity> findAllByStatus(Integer status) {
         return this.getRepository().findAllByStatus(status);
     }
+
+    @Override
+    public AnanInternationalEntity findByCode( String code) {
+        return this.getRepository().findByCode(code);
+    }
+
+    @Override
+    public AnanInternationalEntity findByDefaultFlag() {
+        return this.getRepository().findByDefaultFlag(1);
+    }
+
     /**
      * 获取DAO
      */

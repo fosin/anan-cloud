@@ -16,4 +16,6 @@ import java.util.List;
 @Repository
 public interface AnanInternationalCharsetRepository extends IJpaRepository<AnanInternationalCharsetEntity, Long>, JpaSpecificationExecutor<AnanInternationalCharsetEntity> {
     List<AnanInternationalCharsetEntity> findAllByInternationalId(Integer internationalId);
+
+    List<AnanInternationalCharsetEntity> findAllByInternationalIdAndServiceId(Integer internationalId, Integer serviceId);
 }

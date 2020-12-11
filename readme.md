@@ -1,5 +1,5 @@
 # 设计定位
-    anan基于Spring Boot 2.3.x和Spring Cloud Hoxton.SR8生态体系技术，采用微服务前后端分离架构，为个人及企业微
+    anan基于Spring Boot 2.3.x和Spring Cloud Hoxton.SR9生态体系技术，采用微服务前后端分离架构，为个人及企业微
     服务架构提供一种解决方案，供开发人员学习和交流。其中包括服务注册与发现、服务监控、服务管理、
     服务治理、服务网关、服务熔断、配置管理、OAuth2认证授权中心等常见微服务组件。其中服务注册与发现支持nacos、eureka。
     支持Kubernetes(Helm)集群部署、jar包集群部署、Docker-Compose部署、Swarm集群部署
