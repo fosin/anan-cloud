@@ -28,4 +28,9 @@ public class TableNameConstant {
     public static final String ANAN_VERSION_ROLE_PERMISSION = "anan_version_role_permission";
     public static final String ANAN_VERSION_ROLE = "anan_version_role";
 
+    public static final String ANAN_SERVICE = "anan_service";
+
+    public static final String ANAN_INTERNATIONAL = "anan_international";
+    public static final String ANAN_INTERNATIONAL_CHARSET = "anan_international_charset";
+
 }

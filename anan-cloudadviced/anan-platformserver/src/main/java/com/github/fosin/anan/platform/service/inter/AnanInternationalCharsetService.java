@@ -18,7 +18,5 @@ public interface AnanInternationalCharsetService extends ISimpleJpaService<AnanI
         AnanInternationalCharsetCreateDto, AnanInternationalCharsetRetrieveDto, AnanInternationalCharsetUpdateDto> {
     List<AnanInternationalCharsetEntity> findAllByInternationalId(Integer internationalId);
 
-    List<AnanInternationalCharsetEntity> findCharsetByInternationalId(Integer internationalId);
-
     List<AnanInternationalCharsetEntity> findAllByInternationalIdAndServiceId(Integer internationalId, Integer serviceId);
 }

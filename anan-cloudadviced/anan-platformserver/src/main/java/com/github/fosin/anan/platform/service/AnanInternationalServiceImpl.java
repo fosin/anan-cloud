@@ -1,10 +1,19 @@
 package com.github.fosin.anan.platform.service;
 
+import com.github.fosin.anan.cloudresource.constant.RedisConstant;
+import com.github.fosin.anan.jpa.util.JpaUtil;
+import com.github.fosin.anan.platform.dto.request.AnanInternationalCreateDto;
+import com.github.fosin.anan.platform.dto.request.AnanInternationalUpdateDto;
 import com.github.fosin.anan.platform.entity.AnanInternationalEntity;
 import com.github.fosin.anan.platform.repository.AnanInternationalRepository;
 import com.github.fosin.anan.platform.service.inter.AnanInternationalService;
+import org.springframework.beans.BeanUtils;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import java.util.List;
 
@@ -18,19 +27,21 @@ import java.util.List;
 @Lazy
 public class AnanInternationalServiceImpl implements AnanInternationalService {
 
-    private final AnanInternationalRepository ananInternationalRepository;
+    private final AnanInternationalRepository defaultRepository;
 
-    public AnanInternationalServiceImpl(AnanInternationalRepository ananInternationalRepository) {
-        this.ananInternationalRepository = ananInternationalRepository;
+    public AnanInternationalServiceImpl(AnanInternationalRepository defaultRepository) {
+        this.defaultRepository = defaultRepository;
     }
 
     @Override
+    @Cacheable(value = RedisConstant.ANAN_INTERNATIONAL + "status" + RedisConstant.DELIMITER, key = "#status")
     public List<AnanInternationalEntity> findAllByStatus(Integer status) {
         return this.getRepository().findAllByStatus(status);
     }
 
     @Override
-    public AnanInternationalEntity findByCode( String code) {
+    @Cacheable(value = RedisConstant.ANAN_INTERNATIONAL + "code" + RedisConstant.DELIMITER, key = "#code")
+    public AnanInternationalEntity findByCode(String code) {
         return this.getRepository().findByCode(code);
     }
 
@@ -39,11 +50,78 @@ public class AnanInternationalServiceImpl implements AnanInternationalService {
         return this.getRepository().findByDefaultFlag(1);
     }
 
+    @Override
+    @Caching(
+            evict = {
+                    @CacheEvict(value = RedisConstant.ANAN_INTERNATIONAL + "status" + RedisConstant.DELIMITER),
+                    @CacheEvict(value = RedisConstant.ANAN_INTERNATIONAL + "code" + RedisConstant.DELIMITER)
+            }
+    )
+    public AnanInternationalEntity create(AnanInternationalCreateDto entity) {
+        Assert.notNull(entity, "传入的创建数据实体对象不能为空!");
+        AnanInternationalEntity entityDynamic = JpaUtil.findOneByEntityDynamic(defaultRepository, entity);
+        if (entityDynamic == null) {
+            AnanInternationalEntity createEntiy = new AnanInternationalEntity();
+            BeanUtils.copyProperties(entity, createEntiy);
+            entityDynamic = defaultRepository.save(createEntiy);
+        }
+
+        return entityDynamic;
+    }
+
+    @Override
+    @Caching(
+            evict = {
+                    @CacheEvict(value = RedisConstant.ANAN_INTERNATIONAL + "status" + RedisConstant.DELIMITER),
+                    @CacheEvict(value = RedisConstant.ANAN_INTERNATIONAL + "code" + RedisConstant.DELIMITER)
+            }
+    )
+    public AnanInternationalEntity deleteById(Integer id) {
+        Assert.notNull(id, "需要删除的数据主键不能为空!");
+        AnanInternationalEntity entity = defaultRepository.findById(id).orElse(null);
+        if (entity != null) {
+            defaultRepository.delete(entity);
+        }
+        return entity;
+    }
+
+    @Override
+    @Caching(
+            evict = {
+                    @CacheEvict(value = RedisConstant.ANAN_INTERNATIONAL + "status" + RedisConstant.DELIMITER),
+                    @CacheEvict(value = RedisConstant.ANAN_INTERNATIONAL + "code" + RedisConstant.DELIMITER)
+            }
+    )
+    public AnanInternationalEntity deleteByEntity(AnanInternationalEntity entity) {
+        Assert.notNull(entity, "删除数据的实体对象不能为空!");
+        AnanInternationalEntity deleteEntity = JpaUtil.findOneByEntityDynamic(defaultRepository, entity);
+        if (deleteEntity != null) {
+            defaultRepository.delete(entity);
+        }
+        return entity;
+    }
+
+    @Override
+    @Caching(
+            evict = {
+                    @CacheEvict(value = RedisConstant.ANAN_INTERNATIONAL + "status" + RedisConstant.DELIMITER),
+                    @CacheEvict(value = RedisConstant.ANAN_INTERNATIONAL + "code" + RedisConstant.DELIMITER)
+            }
+    )
+    public AnanInternationalEntity update(AnanInternationalUpdateDto entity) {
+        Integer id = entity.getId();
+        Assert.notNull(id, "更新的数据id不能为空或者小于1!");
+        AnanInternationalEntity createUser = defaultRepository.findById(id).orElse(null);
+        Assert.notNull(createUser, "在数据库中未找到该用户数据!");
+        BeanUtils.copyProperties(entity, createUser);
+        return defaultRepository.save(createUser);
+    }
+
     /**
      * 获取DAO
      */
     @Override
     public AnanInternationalRepository getRepository() {
-        return ananInternationalRepository;
+        return defaultRepository;
     }
 }
