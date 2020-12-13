@@ -19,4 +19,6 @@ public interface AnanVersionRolePermissionRepository extends IJpaRepository<Anan
     List<AnanVersionRolePermissionEntity> findByRoleId(Long roleId);
 
     void deleteByRoleId(Long roleId);
+
+    long countByPermissionId(Long permissionId);
 }

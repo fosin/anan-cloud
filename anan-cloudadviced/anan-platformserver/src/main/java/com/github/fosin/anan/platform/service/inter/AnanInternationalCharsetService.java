@@ -1,6 +1,8 @@
 package com.github.fosin.anan.platform.service.inter;
 
 import com.github.fosin.anan.jpa.service.ISimpleJpaService;
+import com.github.fosin.anan.model.module.PageModule;
+import com.github.fosin.anan.model.result.ListResult;
 import com.github.fosin.anan.platform.dto.request.AnanInternationalCharsetCreateDto;
 import com.github.fosin.anan.platform.dto.request.AnanInternationalCharsetRetrieveDto;
 import com.github.fosin.anan.platform.dto.request.AnanInternationalCharsetUpdateDto;
@@ -19,4 +21,6 @@ public interface AnanInternationalCharsetService extends ISimpleJpaService<AnanI
     List<AnanInternationalCharsetEntity> findAllByInternationalId(Integer internationalId);
 
     List<AnanInternationalCharsetEntity> findAllByInternationalIdAndServiceId(Integer internationalId, Integer serviceId);
+
+    ListResult<AnanInternationalCharsetEntity> findAllCharsetPageByinternationalId(PageModule pageModule, Integer internationalId);
 }

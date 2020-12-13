@@ -7,12 +7,15 @@ import com.github.fosin.anan.jpa.repository.IJpaRepository;
 import com.github.fosin.anan.model.module.PageModule;
 import com.github.fosin.anan.model.result.Result;
 import com.github.fosin.anan.model.result.ResultUtils;
+import com.github.fosin.anan.platform.repository.AnanOrganizationPermissionRepository;
+import com.github.fosin.anan.platform.repository.AnanVersionPermissionRepository;
+import com.github.fosin.anan.platform.repository.AnanVersionRolePermissionRepository;
 import com.github.fosin.anan.platform.service.inter.PermissionService;
-import com.github.fosin.anan.platform.service.inter.RolePermissionService;
-import com.github.fosin.anan.platform.service.inter.UserPermissionService;
 import com.github.fosin.anan.platformapi.entity.AnanPermissionEntity;
 import com.github.fosin.anan.platformapi.repository.AnanServiceRepository;
 import com.github.fosin.anan.platformapi.repository.PermissionRepository;
+import com.github.fosin.anan.platformapi.repository.RolePermissionRepository;
+import com.github.fosin.anan.platformapi.repository.UserPermissionRepository;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.cache.annotation.CacheEvict;
@@ -43,14 +46,26 @@ import java.util.Objects;
 @Lazy
 public class PermissionServiceImpl implements PermissionService {
     private final PermissionRepository permissionRepository;
-    private final UserPermissionService userPermissionService;
-    private final RolePermissionService rolePermissionService;
+    private final UserPermissionRepository userPermissionRepository;
+    private final RolePermissionRepository rolePermissionRepository;
+    private final AnanVersionPermissionRepository versionPermissionRepository;
+    private final AnanVersionRolePermissionRepository versionRolePermissionRepository;
+    private final AnanOrganizationPermissionRepository organizationPermissionRepository;
     private final AnanServiceRepository serviceRepository;
 
-    public PermissionServiceImpl(PermissionRepository permissionRepository, UserPermissionService userPermissionService, RolePermissionService rolePermissionService, AnanServiceRepository serviceRepository) {
+    public PermissionServiceImpl(PermissionRepository permissionRepository,
+                                 UserPermissionRepository userPermissionRepository,
+                                 RolePermissionRepository rolePermissionRepository,
+                                 AnanVersionPermissionRepository versionPermissionRepository,
+                                 AnanVersionRolePermissionRepository versionRolePermissionRepository,
+                                 AnanOrganizationPermissionRepository organizationPermissionRepository,
+                                 AnanServiceRepository serviceRepository) {
         this.permissionRepository = permissionRepository;
-        this.userPermissionService = userPermissionService;
-        this.rolePermissionService = rolePermissionService;
+        this.userPermissionRepository = userPermissionRepository;
+        this.rolePermissionRepository = rolePermissionRepository;
+        this.versionPermissionRepository = versionPermissionRepository;
+        this.versionRolePermissionRepository = versionRolePermissionRepository;
+        this.organizationPermissionRepository = organizationPermissionRepository;
         this.serviceRepository = serviceRepository;
     }
 
@@ -142,10 +157,16 @@ public class PermissionServiceImpl implements PermissionService {
     }
 
     private void deleteById(Long id, AnanPermissionEntity entity) {
-        long countByPermissionId = rolePermissionService.countByPermissionId(id);
-        Assert.isTrue(countByPermissionId == 0, "还有角色在使用该权限，不能直接删除!");
-        countByPermissionId = userPermissionService.countByPermissionId(id);
+        long countByPermissionId = userPermissionRepository.countByPermissionId(id);
         Assert.isTrue(countByPermissionId == 0, "还有用户在使用该权限，不能直接删除!");
+        countByPermissionId = versionRolePermissionRepository.countByPermissionId(id);
+        Assert.isTrue(countByPermissionId == 0, "还有版本角色在使用该权限，不能直接删除!");
+        countByPermissionId = versionPermissionRepository.countByPermissionId(id);
+        Assert.isTrue(countByPermissionId == 0, "还有版本在使用该权限，不能直接删除!");
+        countByPermissionId = rolePermissionRepository.countByPermissionId(id);
+        Assert.isTrue(countByPermissionId == 0, "还有角色在使用该权限，不能直接删除!");
+        countByPermissionId = organizationPermissionRepository.countByPermissionId(id);
+        Assert.isTrue(countByPermissionId == 0, "还有机构在使用该权限，不能直接删除!");
         List<AnanPermissionEntity> entities = findByPid(id);
         Assert.isTrue(entities == null || entities.size() == 0, "该节点还存在子节点不能直接删除!");
         permissionRepository.delete(entity);

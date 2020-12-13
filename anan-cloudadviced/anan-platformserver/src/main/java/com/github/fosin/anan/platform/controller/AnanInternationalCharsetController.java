@@ -1,6 +1,8 @@
 package com.github.fosin.anan.platform.controller;
 
 import com.github.fosin.anan.model.controller.ISimpleController;
+import com.github.fosin.anan.model.module.PageModule;
+import com.github.fosin.anan.model.result.ListResult;
 import com.github.fosin.anan.model.service.ISimpleService;
 import com.github.fosin.anan.platform.dto.request.AnanInternationalCharsetCreateDto;
 import com.github.fosin.anan.platform.dto.request.AnanInternationalCharsetRetrieveDto;
@@ -12,10 +14,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -70,6 +69,28 @@ public class AnanInternationalCharsetController implements ISimpleController<Ana
     })
     public ResponseEntity<List<AnanInternationalCharsetEntity>> findAllByInternationalIdAndServiceId(@PathVariable Integer internationalId, @PathVariable Integer serviceId) {
         return ResponseEntity.ok(ananInternationalCharsetService.findAllByInternationalIdAndServiceId(internationalId, serviceId));
+    }
+
+    @PostMapping({"/pageList/internationalId/{internationalId}"})
+    @ApiOperation("根据分页条件查找分页信息")
+    @ApiImplicitParams({
+            @ApiImplicitParam(
+                    name = "pageModule",
+                    value = "分页条件实体类",
+                    paramType = "body",
+                    required = true,
+                    dataTypeClass = PageModule.class
+            ),
+            @ApiImplicitParam(
+                    name = "internationalId",
+                    value = "语言ID，对应anan_international.id",
+                    paramType = "path",
+                    required = true,
+                    dataTypeClass = Integer.class
+            )
+    })
+    public ResponseEntity<ListResult<AnanInternationalCharsetEntity>> findAllCharsetPageByinternationalId(@RequestBody PageModule pageModule, @PathVariable Integer internationalId) {
+        return ResponseEntity.ok(ananInternationalCharsetService.findAllCharsetPageByinternationalId(pageModule, internationalId));
     }
 
     @Override

@@ -2,18 +2,27 @@ package com.github.fosin.anan.platform.service;
 
 import com.github.fosin.anan.cloudresource.constant.RedisConstant;
 import com.github.fosin.anan.jpa.util.JpaUtil;
+import com.github.fosin.anan.model.module.PageModule;
+import com.github.fosin.anan.model.result.ListResult;
+import com.github.fosin.anan.model.result.ResultUtils;
 import com.github.fosin.anan.platform.dto.request.AnanInternationalCharsetCreateDto;
 import com.github.fosin.anan.platform.dto.request.AnanInternationalCharsetUpdateDto;
 import com.github.fosin.anan.platform.entity.AnanInternationalCharsetEntity;
 import com.github.fosin.anan.platform.repository.AnanInternationalCharsetRepository;
 import com.github.fosin.anan.platform.service.inter.AnanInternationalCharsetService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
+import javax.persistence.criteria.Path;
 import java.util.List;
 
 /**
@@ -90,6 +99,18 @@ public class AnanInternationalCharsetServiceImpl implements AnanInternationalCha
     @Cacheable(value = RedisConstant.ANAN_INTERNATIONAL_CHARSET + RedisConstant.ALL, key = "#internationalId")
     public List<AnanInternationalCharsetEntity> findAllByInternationalId(Integer internationalId) {
         return this.getRepository().findAllByInternationalId(internationalId);
+    }
+
+    @Override
+    public ListResult<AnanInternationalCharsetEntity> findAllCharsetPageByinternationalId(PageModule pageModule, Integer internationalId) {
+        PageRequest pageable = PageRequest.of(pageModule.getPageNumber() - 1, pageModule.getPageSize(), Direction.fromString(pageModule.getSortOrder()), pageModule.getSortName());
+        String searchCondition = pageModule.getSearchText();
+        Specification<AnanInternationalCharsetEntity> condition = (root, query, cb) -> {
+            Path<Integer> dictionaryIdPath = root.get("internationalId");
+            return StringUtils.isBlank(searchCondition) ? cb.equal(dictionaryIdPath, internationalId) : query.getRestriction();
+        };
+        Page<AnanInternationalCharsetEntity> page = this.getRepository().findAll(condition, pageable);
+        return ResultUtils.success(page.getTotalElements(), page.getContent());
     }
 
     @Override
