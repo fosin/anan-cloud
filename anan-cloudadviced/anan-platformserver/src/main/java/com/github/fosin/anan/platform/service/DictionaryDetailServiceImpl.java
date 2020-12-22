@@ -43,13 +43,11 @@ import java.util.List;
 public class DictionaryDetailServiceImpl implements DictionaryDetailService {
 
     private final DictionaryDetailRepository dictionaryDetailRepository;
-    private final UserService userService;
     private final AnanCacheManger ananCacheManger;
     private final AnanUserDetailService ananUserDetailService;
 
     public DictionaryDetailServiceImpl(DictionaryDetailRepository dictionaryDetailRepository, UserService userService, AnanCacheManger ananCacheManger, AnanUserDetailService ananUserDetailService) {
         this.dictionaryDetailRepository = dictionaryDetailRepository;
-        this.userService = userService;
         this.ananCacheManger = ananCacheManger;
         this.ananUserDetailService = ananUserDetailService;
     }

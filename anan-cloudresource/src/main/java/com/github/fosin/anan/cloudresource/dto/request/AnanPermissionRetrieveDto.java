@@ -51,6 +51,9 @@ public class AnanPermissionRetrieveDto implements Serializable {
     @ApiModelProperty(value = "后台请求权限地址，权限路径ant风格表达式，用于动态验证HTTP后台请求的权限标识")
     private String path;
 
+    @ApiModelProperty(value = "路由地址，权限路径ant风格表达式，默认等于code")
+    private String routePath;
+
     @ApiModelProperty(value = "http请求方法：GET、POST、DELETE、OPTIONS、PUT、PATCH，具体取值于字典表anan_dictionary.code=12")
     private String method;
 

@@ -63,6 +63,10 @@ public class AnanPermissionCreateDto implements Serializable {
     @Pattern(regexp = "[A-Za-z0-9/?*. -]*", message = "匹配路径只支持大小写字母 数字 / . * - ?")
     private String path;
 
+    @ApiModelProperty(value = "路由地址，权限路径ant风格表达式，默认等于code")
+    @Pattern(regexp = "[A-Za-z0-9/?*.: -]*", message = "匹配路径只支持大小写字母 数字 : / . * - ?")
+    private String routePath;
+
     @ApiModelProperty(value = "http请求方法：GET、POST、DELETE、OPTIONS、PUT、PATCH，具体取值于字典表anan_dictionary.id=12")
     @Pattern(regexp = "[A-Z,]{0,20}", message = "http请求方法：只能大写字母和,组合而成,长度不超过20位")
     private String method;

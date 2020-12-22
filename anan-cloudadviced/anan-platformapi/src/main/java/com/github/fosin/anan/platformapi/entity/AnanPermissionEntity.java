@@ -101,6 +101,11 @@ public class AnanPermissionEntity extends AbstractCreateUpdateJpaEntity<Long, Lo
     private String path;
 
     @Basic
+    @ApiModelProperty(value = "路由地址，权限路径ant风格表达式，默认等于code")
+    @Column(name = "route_path", length = 64)
+    private String routePath;
+
+    @Basic
     @ApiModelProperty(value = "http请求方法：GET、POST、DELETE、OPTIONS、PUT、PATCH，具体取值于字典表anan_dictionary.id=12")
     @Column(name = "method", length = 64)
     private String method;

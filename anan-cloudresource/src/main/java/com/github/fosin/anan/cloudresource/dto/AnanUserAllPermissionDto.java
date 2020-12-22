@@ -78,6 +78,10 @@ public class AnanUserAllPermissionDto implements Serializable {
     @Pattern(regexp = "[A-Z]{0,20}", message = "请求方法只能大写字母组合而成,长度不超过20位")
     private String method;
 
+    @ApiModelProperty(value = "路由地址，权限路径ant风格表达式，默认等于code")
+    @Pattern(regexp = "[A-Za-z0-9/?*.: -]*", message = "匹配路径只支持大小写字母 数字 : / . * - ?")
+    private String routePath;
+
     @ApiModelProperty(value = "一般用于前端菜单选项前的图标")
     private String icon;
 
