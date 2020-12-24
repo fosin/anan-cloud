@@ -146,7 +146,9 @@ public class PermissionServiceImpl implements PermissionService {
     @Caching(
             evict = {
                     @CacheEvict(value = RedisConstant.ANAN_USER_ALL_PERMISSIONS, allEntries = true),
-                    @CacheEvict(value = RedisConstant.ANAN_PERMISSION, key = "#id")
+                    @CacheEvict(value = RedisConstant.ANAN_PERMISSION, key = "#id"),
+                    @CacheEvict(value = RedisConstant.ANAN_USER_PERMISSION, allEntries = true),
+                    @CacheEvict(value = RedisConstant.ANAN_ROLE_PERMISSION, allEntries = true)
             }
     )
     public AnanPermissionEntity deleteById(Long id) {
@@ -176,7 +178,9 @@ public class PermissionServiceImpl implements PermissionService {
     @Caching(
             evict = {
                     @CacheEvict(value = RedisConstant.ANAN_USER_ALL_PERMISSIONS, allEntries = true),
-                    @CacheEvict(value = RedisConstant.ANAN_PERMISSION, key = "#entity.id")
+                    @CacheEvict(value = RedisConstant.ANAN_PERMISSION, key = "#entity.id"),
+                    @CacheEvict(value = RedisConstant.ANAN_USER_PERMISSION, allEntries = true),
+                    @CacheEvict(value = RedisConstant.ANAN_ROLE_PERMISSION, allEntries = true)
             }
     )
     public AnanPermissionEntity deleteByEntity(AnanPermissionEntity entity) {
