@@ -17,8 +17,6 @@ import java.util.List;
 @Repository
 @Lazy
 public interface DictionaryDetailRepository extends IJpaRepository<AnanDictionaryDetailEntity, Long> {
-    List<AnanDictionaryDetailEntity> findByDictionaryId(Long dictionaryId);
-
     List<AnanDictionaryDetailEntity> findByDictionaryId(Long dictionaryId, Sort sort);
 
     void deleteAllByDictionaryId(Long dictionaryId);
