@@ -28,7 +28,6 @@ import org.springframework.util.Assert;
 
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
-import java.util.Objects;
 
 /**
  * 字典表服务
@@ -52,16 +51,17 @@ public class DictionaryServiceImpl implements DictionaryService {
     @Override
     public AnanDictionaryEntity create(AnanDictionaryCreateDto entity) {
         Assert.notNull(entity, "传入的创建数据实体对象不能为空!");
-        //系统字典
-        if (Objects.equals(entity.getType(), SystemConstant.SYSTEM_DICTIONARY_TYPE)) {
-
-            //非超级管理员不能创建系统字典
-            Assert.isTrue(ananUserDetailService.hasSysAdminRole(), "没有权限修改系统创建的字典明细项");
-
-        }
         AnanDictionaryEntity createEntity = new AnanDictionaryEntity();
         BeanUtils.copyProperties(entity, createEntity);
+        hasModifiedPrivileges(createEntity);
         return dictionaryRepository.save(createEntity);
+    }
+
+    private void hasModifiedPrivileges(AnanDictionaryEntity entity) {
+        if (SystemConstant.SYSTEM_DICTIONARY_TYPE.equals(entity.getType())) {
+            //非超级管理员不能修改系统字典
+            Assert.isTrue(ananUserDetailService.hasSysAdminRole(), "没有权限增删改系统字典!");
+        }
     }
 
     @Override
@@ -71,14 +71,8 @@ public class DictionaryServiceImpl implements DictionaryService {
         Assert.notNull(id, "无效的字典代码id");
         AnanDictionaryEntity updateEntity = dictionaryRepository.findById(id).orElse(null);
         Assert.notNull(updateEntity, "根据传入的字典code" + id + "在数据库中未能找到对于数据!");
-        //系统字典
-        if (entity.getType().equals(SystemConstant.SYSTEM_DICTIONARY_TYPE)) {
-
-            //非超级管理员不能创建系统字典
-            Assert.isTrue(ananUserDetailService.hasSysAdminRole(), "没有权限修改系统创建的字典明细项");
-        }
-
         BeanUtils.copyProperties(entity, updateEntity);
+        hasModifiedPrivileges(updateEntity);
         return dictionaryRepository.save(updateEntity);
     }
 
@@ -89,17 +83,11 @@ public class DictionaryServiceImpl implements DictionaryService {
             throw new AnanServiceException("传入的code无效!");
         }
         AnanDictionaryEntity entity = dictionaryRepository.findById(code).orElse(null);
-//        if (entity == null) {
-//            throw new AnanServiceException("通过code没有找到对应的字典!");
-//        }
-        //系统字典
-
-        if (Objects.equals(SystemConstant.SYSTEM_DICTIONARY_TYPE, Objects.requireNonNull(entity, "通过code没有找到对应的字典").getType())) {
-            //非超级管理员不能删除系统字典
-            Assert.isTrue(!ananUserDetailService.hasSysAdminRole(), "没有权限删除系统字典");
+        if (entity != null) {
+            hasModifiedPrivileges(entity);
+            dictionaryDetailRepository.deleteAllByDictionaryId(entity.getId());
+            dictionaryRepository.deleteById(code);
         }
-        dictionaryDetailRepository.deleteAllByDictionaryId(entity.getId());
-        dictionaryRepository.deleteById(code);
         return null;
     }
 
@@ -107,12 +95,7 @@ public class DictionaryServiceImpl implements DictionaryService {
     @Transactional(rollbackFor = AnanServiceException.class)
     public AnanDictionaryEntity deleteByEntity(AnanDictionaryEntity entity) {
         Assert.notNull(entity, "传入了空的对象!");
-        //系统字典
-        if (entity.getType().equals(SystemConstant.SYSTEM_DICTIONARY_TYPE)) {
-
-            //非超级管理员不能删除系统字典
-            Assert.isTrue(!ananUserDetailService.hasSysAdminRole(), "没有权限删除系统字典");
-        }
+        hasModifiedPrivileges(entity);
         dictionaryDetailRepository.deleteAllByDictionaryId(entity.getId());
         dictionaryRepository.delete(entity);
         return entity;

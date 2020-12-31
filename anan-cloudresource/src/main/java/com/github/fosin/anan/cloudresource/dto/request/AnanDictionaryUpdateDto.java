@@ -39,4 +39,6 @@ public class AnanDictionaryUpdateDto implements Serializable {
     @Pattern(regexp = RegexUtil.SPECIAL, message = "作用域不能包含特殊字符")
     private String scope;
 
+    @ApiModelProperty(value = "字典说明")
+    private String description;
 }

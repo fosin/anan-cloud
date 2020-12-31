@@ -2,6 +2,7 @@ package com.github.fosin.anan.platform.repository;
 
 import com.github.fosin.anan.platformapi.entity.AnanDictionaryDetailEntity;
 import com.github.fosin.anan.jpa.repository.IJpaRepository;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 import org.springframework.context.annotation.Lazy;
 
@@ -17,6 +18,8 @@ import java.util.List;
 @Lazy
 public interface DictionaryDetailRepository extends IJpaRepository<AnanDictionaryDetailEntity, Long> {
     List<AnanDictionaryDetailEntity> findByDictionaryId(Long dictionaryId);
+
+    List<AnanDictionaryDetailEntity> findByDictionaryId(Long dictionaryId, Sort sort);
 
     void deleteAllByDictionaryId(Long dictionaryId);
 }

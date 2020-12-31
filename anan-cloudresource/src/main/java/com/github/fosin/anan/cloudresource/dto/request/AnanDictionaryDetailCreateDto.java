@@ -53,4 +53,6 @@ public class AnanDictionaryDetailCreateDto implements Serializable {
     @ApiModelProperty(value = "使用标志：0=未使用，1=已使用，已使用的字典就不能再修改name属性", required = true)
     private Integer used;
 
+    @ApiModelProperty(value = "字典说明")
+    private String description;
 }

@@ -48,4 +48,8 @@ public class AnanDictionaryEntity extends AbstractSoftDeleteJpaEntity<Long, Long
     @Column(name = "scope", length = 64)
     private String scope;
 
+    @Basic
+    @ApiModelProperty(value = "字典说明")
+    @Column(name = "description", length = 120)
+    private String description;
 }
