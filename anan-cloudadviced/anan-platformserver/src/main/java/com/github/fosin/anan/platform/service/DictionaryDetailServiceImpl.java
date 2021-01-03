@@ -156,7 +156,7 @@ public class DictionaryDetailServiceImpl implements DictionaryDetailService {
     @Cacheable(value = RedisConstant.ANAN_DICTIONARY_DETAIL, key = "#dictionaryId")
     public List<AnanDictionaryDetailEntity> findByDictionaryId(Long dictionaryId) {
         Sort sort = Sort.by(Sort.Direction.fromString("ASC"), "sort");
-        return dictionaryDetailRepository.findByDictionaryId(dictionaryId, sort);
+        return dictionaryDetailRepository.findAllByDictionaryId(dictionaryId, sort);
     }
 
 

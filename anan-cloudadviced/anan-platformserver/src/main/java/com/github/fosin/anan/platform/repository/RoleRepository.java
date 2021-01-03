@@ -27,7 +27,7 @@ public interface RoleRepository extends IJpaRepository<AnanRoleEntity, Long> {
 //    @Query(value = "select a.* from AnanRoleEntity a where a.organizId in (select b.id from anan_organization b where b.code like :code + '%') ")
 //    Page<AnanRoleEntity> findAllByOrganizCode(String code, PageRequest pageable);
 
-    List<AnanRoleEntity> findAllByOrganizId(Long findByOrganizId);
+    List<AnanRoleEntity> findAllByOrganizId(Long organizId);
 
-    AnanRoleEntity findByOrganizIdAndValue(Long findByOrganizId, String value);
+    AnanRoleEntity findByOrganizIdAndValue(Long organizId, String value);
 }
