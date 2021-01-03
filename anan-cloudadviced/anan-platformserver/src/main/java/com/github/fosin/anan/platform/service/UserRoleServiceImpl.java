@@ -2,7 +2,6 @@ package com.github.fosin.anan.platform.service;
 
 
 import com.github.fosin.anan.cloudresource.constant.RedisConstant;
-import com.github.fosin.anan.cloudresource.dto.AnanUserDto;
 import com.github.fosin.anan.cloudresource.dto.request.AnanUserRoleCreateDto;
 import com.github.fosin.anan.core.exception.AnanUserOrPassInvalidException;
 import com.github.fosin.anan.jpa.repository.IJpaRepository;
@@ -77,10 +76,11 @@ public class UserRoleServiceImpl implements UserRoleService {
     @Transactional
     public List<AnanUserRoleEntity> updateInBatchByUserId(Long userId, Collection<AnanUserRoleCreateDto> entities) {
         Assert.notNull(userId, "传入的用户ID不能为空!");
-        Assert.isTrue(entities != null && entities.size() > 0, "传入的实体集合不能为空!");
 
-        for (AnanUserRoleCreateDto entity : entities) {
-            Assert.isTrue(entity.getUserId().equals(userId), "需要更新的数据集中有与用户ID不匹配的数据!");
+        if (entities != null && entities.size() > 0) {
+            for (AnanUserRoleCreateDto entity : entities) {
+                Assert.isTrue(entity.getUserId().equals(userId), "需要更新的数据集中有与用户ID不匹配的数据!");
+            }
         }
 
         userRoleRepository.deleteByUserId(userId);
@@ -92,7 +92,9 @@ public class UserRoleServiceImpl implements UserRoleService {
 
     private List<AnanUserRoleEntity> getAnanUserRoleEntities(Collection<AnanUserRoleCreateDto> entities) {
         List<AnanUserRoleEntity> saveEntities = new ArrayList<>();
-
+        if (entities == null || entities.size() == 0) {
+            return saveEntities;
+        }
         Long organizId = ananUserDetailService.getAnanOrganizId();
         for (AnanUserRoleCreateDto entity : entities) {
             AnanUserRoleEntity ananUserRoleEntity = new AnanUserRoleEntity();
@@ -115,20 +117,20 @@ public class UserRoleServiceImpl implements UserRoleService {
     @Transactional
     public List<AnanUserRoleEntity> updateInBatchByRoleId(Long roleId, Collection<AnanUserRoleCreateDto> entities) {
         Assert.notNull(roleId, "传入的角色ID不能为空!");
-        Assert.isTrue(entities != null && entities.size() > 0, "传入的实体集合不能为空!");
 
-        for (AnanUserRoleCreateDto entity : entities) {
-            Assert.isTrue(entity.getRoleId().equals(roleId), "需要更新的数据集中有与角色ID不匹配的数据!");
+        if (entities != null && entities.size() > 0) {
+            for (AnanUserRoleCreateDto entity : entities) {
+                Assert.isTrue(entity.getRoleId().equals(roleId), "需要更新的数据集中有与角色ID不匹配的数据!");
+            }
+            //如果是角色用户，则需要删除所有角色相关用户的缓存
+            for (AnanUserRoleCreateDto entity : entities) {
+                Long userId = entity.getUserId();
+                ananCacheManger.evict(RedisConstant.ANAN_USER, userService.findById(userId).getUsercode());
+                ananCacheManger.evict(RedisConstant.ANAN_USER_ALL_PERMISSIONS, userId + "");
+            }
         }
 
         userRoleRepository.deleteByRoleId(roleId);
-
-        //如果是角色用户，则需要删除所有角色相关用户的缓存
-        for (AnanUserRoleCreateDto entity : entities) {
-            Long userId = entity.getUserId();
-            ananCacheManger.evict(RedisConstant.ANAN_USER, userService.findById(userId).getUsercode());
-            ananCacheManger.evict(RedisConstant.ANAN_USER_ALL_PERMISSIONS, userId + "");
-        }
 
         return getAnanUserRoleEntities(entities);
     }
