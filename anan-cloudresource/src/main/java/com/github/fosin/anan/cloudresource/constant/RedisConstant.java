@@ -30,7 +30,10 @@ public class RedisConstant {
     public static final String ANAN_VERSION_PERMISSION = ANAN_TABLE + TableNameConstant.ANAN_VERSION_PERMISSION + RedisConstant.DELIMITER;
     public static final String ANAN_VERSION_ROLE_PERMISSION = ANAN_TABLE + TableNameConstant.ANAN_VERSION_ROLE_PERMISSION + RedisConstant.DELIMITER;
     public static final String ANAN_VERSION_ROLE = ANAN_TABLE + TableNameConstant.ANAN_VERSION_ROLE + RedisConstant.DELIMITER;
-    public static final String ANAN_SERVICE = ANAN_TABLE + TableNameConstant.ANAN_VERSION_ROLE + RedisConstant.DELIMITER;
-    public static final String ANAN_INTERNATIONAL = ANAN_TABLE + TableNameConstant.ANAN_VERSION_ROLE + RedisConstant.DELIMITER;
-    public static final String ANAN_INTERNATIONAL_CHARSET = ANAN_TABLE + TableNameConstant.ANAN_VERSION_ROLE + RedisConstant.DELIMITER;
+    public static final String ANAN_SERVICE = ANAN_TABLE + TableNameConstant.ANAN_SERVICE + RedisConstant.DELIMITER;
+
+    public static final String ANAN_INTERNATIONAL = ANAN_TABLE + TableNameConstant.ANAN_INTERNATIONAL + RedisConstant.DELIMITER;
+    public static final String ANAN_INTERNATIONAL_STATUS = ANAN_INTERNATIONAL + "status" + RedisConstant.DELIMITER;
+    public static final String ANAN_INTERNATIONAL_CODE = ANAN_INTERNATIONAL + "code" + RedisConstant.DELIMITER;
+    public static final String ANAN_INTERNATIONAL_CHARSET = ANAN_TABLE + TableNameConstant.ANAN_INTERNATIONAL_CHARSET + RedisConstant.DELIMITER;
 }

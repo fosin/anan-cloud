@@ -34,13 +34,13 @@ public class AnanInternationalServiceImpl implements AnanInternationalService {
     }
 
     @Override
-    @Cacheable(value = RedisConstant.ANAN_INTERNATIONAL + "status" + RedisConstant.DELIMITER, key = "#status")
+    @Cacheable(value = RedisConstant.ANAN_INTERNATIONAL_STATUS, key = "#status")
     public List<AnanInternationalEntity> findAllByStatus(Integer status) {
         return this.getRepository().findAllByStatus(status);
     }
 
     @Override
-    @Cacheable(value = RedisConstant.ANAN_INTERNATIONAL + "code" + RedisConstant.DELIMITER, key = "#code")
+    @Cacheable(value = RedisConstant.ANAN_INTERNATIONAL_CODE, key = "#code")
     public AnanInternationalEntity findByCode(String code) {
         return this.getRepository().findByCode(code);
     }
@@ -53,8 +53,8 @@ public class AnanInternationalServiceImpl implements AnanInternationalService {
     @Override
     @Caching(
             evict = {
-                    @CacheEvict(value = RedisConstant.ANAN_INTERNATIONAL + "status" + RedisConstant.DELIMITER),
-                    @CacheEvict(value = RedisConstant.ANAN_INTERNATIONAL + "code" + RedisConstant.DELIMITER)
+                    @CacheEvict(value = RedisConstant.ANAN_INTERNATIONAL_STATUS, allEntries = true),
+                    @CacheEvict(value = RedisConstant.ANAN_INTERNATIONAL_CODE, allEntries = true)
             }
     )
     public AnanInternationalEntity create(AnanInternationalCreateDto entity) {
@@ -72,8 +72,8 @@ public class AnanInternationalServiceImpl implements AnanInternationalService {
     @Override
     @Caching(
             evict = {
-                    @CacheEvict(value = RedisConstant.ANAN_INTERNATIONAL + "status" + RedisConstant.DELIMITER),
-                    @CacheEvict(value = RedisConstant.ANAN_INTERNATIONAL + "code" + RedisConstant.DELIMITER)
+                    @CacheEvict(value = RedisConstant.ANAN_INTERNATIONAL_STATUS, allEntries = true),
+                    @CacheEvict(value = RedisConstant.ANAN_INTERNATIONAL_CODE, allEntries = true)
             }
     )
     public AnanInternationalEntity deleteById(Integer id) {
@@ -88,8 +88,8 @@ public class AnanInternationalServiceImpl implements AnanInternationalService {
     @Override
     @Caching(
             evict = {
-                    @CacheEvict(value = RedisConstant.ANAN_INTERNATIONAL + "status" + RedisConstant.DELIMITER),
-                    @CacheEvict(value = RedisConstant.ANAN_INTERNATIONAL + "code" + RedisConstant.DELIMITER)
+                    @CacheEvict(value = RedisConstant.ANAN_INTERNATIONAL_STATUS, allEntries = true),
+                    @CacheEvict(value = RedisConstant.ANAN_INTERNATIONAL_CODE, allEntries = true)
             }
     )
     public AnanInternationalEntity deleteByEntity(AnanInternationalEntity entity) {
@@ -104,8 +104,8 @@ public class AnanInternationalServiceImpl implements AnanInternationalService {
     @Override
     @Caching(
             evict = {
-                    @CacheEvict(value = RedisConstant.ANAN_INTERNATIONAL + "status" + RedisConstant.DELIMITER),
-                    @CacheEvict(value = RedisConstant.ANAN_INTERNATIONAL + "code" + RedisConstant.DELIMITER)
+                    @CacheEvict(value = RedisConstant.ANAN_INTERNATIONAL_STATUS, allEntries = true),
+                    @CacheEvict(value = RedisConstant.ANAN_INTERNATIONAL_CODE, allEntries = true)
             }
     )
     public AnanInternationalEntity update(AnanInternationalUpdateDto entity) {
