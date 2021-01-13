@@ -16,6 +16,7 @@ import com.github.fosin.anan.util.TreeUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -98,7 +99,7 @@ public class PermissionServiceImpl implements PermissionService {
                 }
             }
         }
-
+        Assert.isTrue(userPermissions.stream().anyMatch(ananUserAllPermissionDto -> SystemConstant.ROOT_PERMISSION_ID.equals(ananUserAllPermissionDto.getId())), "未分配根节点权限,请联系管理员核对权限!");
         return TreeUtil.createTree(userPermissions, SystemConstant.ROOT_PERMISSION_ID, "id", "pid", "children");
     }
 
