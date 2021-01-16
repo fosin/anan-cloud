@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
+import org.springframework.security.oauth2.core.AbstractOAuth2Token;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationDetails;
 import org.springframework.security.oauth2.provider.endpoint.TokenEndpoint;
@@ -18,7 +19,10 @@ import org.springframework.security.oauth2.provider.endpoint.TokenKeyEndpoint;
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.util.Assert;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpServletRequest;
@@ -64,40 +68,43 @@ public class OauthController {
 
     @RequestMapping(value = "/userinfo/jwt", method = {RequestMethod.POST, RequestMethod.GET})
     @ApiOperation(value = "根据JWT令牌获取当前认证用户信息", notes = "根据JWT令牌获取当前认证用户信息，包括用户信息、客户端信息相关信息")
-    @ApiImplicitParam(name = "Authorization", value = "Token认证信息,格式例如：Bearer c05b6fed-256c-4cd0-a55d-ae8ffdafbf75", required = true, dataTypeClass = String.class, paramType = "header")
+    @ApiImplicitParam(name = "Authorization", value = "认证信息,格式例如：Bearer c05b6fed-256c-4cd0-a55d-ae8ffdafbf75", required = true, dataTypeClass = String.class, paramType = "header")
     public ResponseEntity<Jwt> index(@AuthenticationPrincipal Jwt jwt) {
         return ResponseEntity.ok(jwt);
     }
 
     @RequestMapping(value = "/userinfo/principal", method = {RequestMethod.GET, RequestMethod.POST})
     @ApiOperation(value = "根据令牌获取当前认证用户信息", notes = "根据令牌获取当前认证用户信息，包括用户信息、客户端信息、Oauth2.0相关信息")
-    @ApiImplicitParam(name = "Authorization", value = "Token认证信息,格式例如：Bearer c05b6fed-256c-4cd0-a55d-ae8ffdafbf75", required = true, dataTypeClass = String.class, paramType = "header")
+    @ApiImplicitParam(name = "principal", value = "认证信息,格式例如：Bearer c05b6fed-256c-4cd0-a55d-ae8ffdafbf75", required = true, dataTypeClass = String.class, paramType = "header")
     public ResponseEntity<Principal> principal(Principal principal) {
         return ResponseEntity.ok(principal);
     }
 
     @RequestMapping(value = "/token_key", method = RequestMethod.GET)
     @ApiOperation(value = "根据令牌获取JWK", notes = "根据令牌获取JWT的公钥信息")
-    @ApiImplicitParam(name = "Authorization", value = "认证信息,格式例如：Basic c05b6fed256c4cd0a55dae8ffdafbf75", required = true, dataTypeClass = String.class, paramType = "header")
+    @ApiImplicitParam(name = "Authorization", value = "认证信息,格式例如：Bearer c05b6fed-256c-4cd0-a55d-ae8ffdafbf75", required = true, dataTypeClass = String.class, paramType = "header")
     public ResponseEntity<Map<String, String>> getKey(Principal principal) {
         return ResponseEntity.ok(tokenKeyEndpoint.getKey(principal));
     }
 
     @RequestMapping(value = "/removeToken", method = {RequestMethod.GET, RequestMethod.POST})
     @ApiOperation(value = "移除指定令牌信息", notes = "移除指定令牌信息，通常用于前端的退出登录操作")
-    @ApiImplicitParam(name = "Authorization", value = "Basic认证信息,格式例如：Basic ouZTJoQk5BQVFLUjVVemlJSw==", required = true, dataTypeClass = String.class, paramType = "header")
+    @ApiImplicitParam(name = "Authorization", value = "认证信息,格式例如：Bearer c05b6fed-256c-4cd0-a55d-ae8ffdafbf75", required = true, dataTypeClass = String.class, paramType = "header")
     public ResponseEntity<Boolean> removeToken(Authentication authentication) {
-        Assert.notNull(authentication, "authentication不能为空，可能是认证失败!");
-        Object principal = authentication.getPrincipal();
-        String token = null;
-        if (principal instanceof OAuth2AuthenticationDetails) {
-            token = ((OAuth2AuthenticationDetails) principal).getTokenValue();
+        boolean rc = false;
+        if (authentication != null) {
+            Object principal = authentication.getPrincipal();
+            String token = null;
+            if (principal instanceof OAuth2AuthenticationDetails) {
+                token = ((OAuth2AuthenticationDetails) principal).getTokenValue();
+            }
+            if (principal instanceof AbstractOAuth2Token) {
+                token = ((AbstractOAuth2Token) principal).getTokenValue();
+            }
+            Assert.isTrue(StringUtil.hasText(token), "token不能为空!");
+            rc = consumerTokenServices.revokeToken(token);
         }
-        if (principal instanceof Jwt) {
-            token = ((Jwt) principal).getTokenValue();
-        }
-        Assert.isTrue(StringUtil.hasText(token), "token不能为空!");
-        return ResponseEntity.ok(consumerTokenServices.revokeToken(token));
+        return ResponseEntity.ok(rc);
     }
 
 //    //获取jwt的公钥
