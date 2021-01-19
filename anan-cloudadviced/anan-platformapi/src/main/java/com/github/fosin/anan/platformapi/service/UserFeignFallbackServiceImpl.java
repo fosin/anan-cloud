@@ -27,7 +27,7 @@ public class UserFeignFallbackServiceImpl implements UserFeignService {
     }
 
     @Override
-    public ResponseEntity<List<AnanUserEntity>> getByUsercode(@PathVariable("usercode") String usercode) {
+    public ResponseEntity<AnanUserEntity> getByUsercode(@PathVariable("usercode") String usercode) {
         log.error("feign 远程获取用户信息失败:{}", usercode);
         return null;
     }

@@ -350,7 +350,7 @@ public class UserServiceImpl implements UserService {
     public List<AnanUserEntity> findAllByOrganizId(Long organizId) {
         Assert.notNull(organizId, "机构ID不能为空!");
 
-        if (ananUserDetailService.hasSysAdminRole()) {
+        if (ananUserDetailService.isUserRequest() && ananUserDetailService.hasSysAdminRole()) {
             return userRepository.findAll();
         } else {
             AnanOrganizationEntity organiz = organizationRepository.findById(organizId).orElse(null);

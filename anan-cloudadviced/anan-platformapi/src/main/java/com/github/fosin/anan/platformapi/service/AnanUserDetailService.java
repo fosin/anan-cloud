@@ -28,7 +28,6 @@ public class AnanUserDetailService extends AnanJwtTool<AnanUserDetail> {
         super(jwtDecoder);
     }
 
-
     @Override
     public void removeCachedUser(AnanUserDetail userDetail) {
         Assert.notNull(userDetail, "用户信息不能为空!");
