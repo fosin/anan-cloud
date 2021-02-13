@@ -9,8 +9,18 @@
            nacos配置中心（anan服务相关帐号密码）
            anan-cloud下面的pom.xml中的profile local 的配置信息（spring security帐号密码）
        docker-compose.yml中redis、rabbitmq、nacos-0、mysql-leader、mysql-follower5个是后台开发环境必须启动的
-       1.2.1、创建docker网络     
-            docker network create -d bridge --subnet=172.28.0.0/16 anan-bridge
+       1.2.1、使用docker默认的host网络，需要在docker主机上设置hosts映射     
+            cat > /etc/hosts << EOF
+            192.168.137.8 redis
+            192.168.137.8 rabbitmq
+            192.168.137.8 nacos-0
+            192.168.137.8 mysql-leader
+            192.168.137.8 mysql-follower
+            
+            192.168.137.8 anan-authserver
+            192.168.137.8 anan-platformserver
+            192.168.137.8 anan-zuulgateway
+            EOF
        1.2.2、启动mysql主从同步模式和nacos服务发现和配置管理
             docker-compose -f anan-cloud\docker-compose.yml up -d mysql-leader nacos-0
             
