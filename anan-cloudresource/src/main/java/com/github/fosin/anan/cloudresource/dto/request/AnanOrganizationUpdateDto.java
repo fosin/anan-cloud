@@ -26,12 +26,12 @@ public class AnanOrganizationUpdateDto implements Serializable {
     @ApiModelProperty(value = "机构ID, 主键", required = true)
     private Long id;
 
-    @NotNull(message = "父机构编码" + "{javax.validation.constraints.NotNull.message}")
-    @ApiModelProperty(value = "父机构编码，取值于id，表示当前数据所属的父类机构", required = true)
+    @NotNull(message = "父机构编号" + "{javax.validation.constraints.NotNull.message}")
+    @ApiModelProperty(value = "父机构编号，取值于id，表示当前数据所属的父类机构", required = true)
     private Long pid;
 
-    @NotNull(message = "顶级机构编码：一般指用户注册的机构，通常是一个集团组的最高级别机构，取值于id" + "{javax.validation.constraints.NotNull.message}")
-    @ApiModelProperty(value = "顶级机构编码：一般指用户注册的机构，通常是一个集团组的最高级别机构，取值于id", required = true)
+    @NotNull(message = "顶级机构编号：一般指用户注册的机构，通常是一个集团组的最高级别机构，取值于id" + "{javax.validation.constraints.NotNull.message}")
+    @ApiModelProperty(value = "顶级机构编号：一般指用户注册的机构，通常是一个集团组的最高级别机构，取值于id", required = true)
     private Long topId;
 
     @NotBlank(message = "机构编码" + "{javax.validation.constraints.NotBlank.message}")

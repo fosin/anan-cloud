@@ -11,17 +11,17 @@
 # NODE_INDEX：主机唯一编号，从0开始，每增加一台服务器，数值+1
 # NODE_NAME_PREFIX：主机名称的前缀
 # NODE_IPS：主机IP数组列表，第一个IP就是部署主节点
-# K8S_LOAD_BALANCER_IP：K8S多控制面板的VIP
+# K8S_LB_IP：K8S多控制面板的VIP
 # K8S_VERSION：K8S部署版本
-# NGINX_LOAD_BALANCER_IP：用于nginx做高可用的VIP
+# NGINX_LB_IP：用于nginx做高可用的VIP
 # ANAN_WORKDIR：部署主目录，后面不带/
 
 cat >> .bash_profile <<EOF
 export NODE_INDEX=0
 export NODE_NAME_PREFIX=local
 export NODE_IPS=(172.16.1.206 172.16.1.207 172.16.1.208)
-export K8S_LOAD_BALANCER_IP=172.16.1.200
-export NGINX_LOAD_BALANCER_IP=100.100.1.200
+export K8S_LB_IP=172.16.1.200
+export NGINX_LB_IP=100.100.1.200
 export K8S_VERSION=1.18.12
 export ANAN_WORKDIR=/data
 EOF

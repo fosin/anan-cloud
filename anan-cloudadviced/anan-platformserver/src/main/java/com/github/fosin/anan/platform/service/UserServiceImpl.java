@@ -71,7 +71,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Cacheable(value = RedisConstant.ANAN_USER, key = "#usercode")
+    @Cacheable(value = RedisConstant.ANAN_USER, key = "#usercode", condition = "#result != null")
     @Transactional(readOnly = true)
     public AnanUserEntity findByUsercode(String usercode) {
         Assert.notNull(usercode, "用户工号不能为空!");
@@ -82,9 +82,31 @@ public class UserServiceImpl implements UserService {
             List<AnanUserRoleEntity> userRoles = userEntity.getUserRoles();
             //该代码看似无用，其实是为了解决懒加载和缓存先后问题
             log.debug(userRoles.toString());
+        } else {
+            log.debug("通过UserCode：" + usercode + "未能找到对应的数据!");
         }
         return userEntity;
     }
+
+
+    @Override
+    @Cacheable(value = RedisConstant.ANAN_USER, key = "#id", condition = "#result != null")
+    @Transactional(readOnly = true)
+    public AnanUserEntity findById(Long id) {
+        Assert.isTrue(id != null && id > 0, "传入的用户ID无效！");
+
+        AnanUserEntity userEntity = userRepository.findById(id).orElse(null);
+        if (userEntity != null) {
+            List<AnanUserRoleEntity> userRoles = userEntity.getUserRoles();
+            //该代码看似无用，其实是为了解决懒加载和缓存先后问题
+            log.debug(userRoles.toString());
+        } else {
+            log.debug("通过ID：" + id + "未能找到对应的数据!");
+        }
+
+        return userEntity;
+    }
+
 
     private String encryptBeforeSave(AnanUserEntity entity) {
         String password = entity.getPassword();
@@ -97,12 +119,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-//    @Caching(
-//            put = {
-//                    @CachePut(value = RedisConstant.ANAN_USER, key = "#result.id", condition = "#result.id != null"),
-//                    @CachePut(value = RedisConstant.ANAN_USER, key = "#result.usercode", condition = "#result.usercode != null")
-//            }
-//    )
     public AnanUserEntity create(AnanUserCreateDto entity) {
         AnanUserEntity createUser = new AnanUserEntity();
         BeanUtils.copyProperties(entity, createUser);
@@ -118,13 +134,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Caching(
-            evict = {
-                    @CacheEvict(value = RedisConstant.ANAN_USER, beforeInvocation = true, key = "#root.caches[0].get(#entity.id).get().usercode", condition = "#root.caches[0].get(#entity.id) != null && !#root.caches[0].get(#entity.id).get().usercode.equals(#entity.usercode)"),
-                    @CacheEvict(value = RedisConstant.ANAN_USER, key = "#entity.id"),
-                    @CacheEvict(value = RedisConstant.ANAN_USER_PERMISSION, key = "#entity.id")
-            }
-    )
     public AnanUserEntity update(AnanUserUpdateDto entity) {
         Long id = entity.getId();
         Assert.notNull(id, "更新的数据id不能为空或者小于1!");
@@ -137,6 +146,9 @@ public class UserServiceImpl implements UserService {
         Assert.isTrue(!ananUserDetailService.isSysAdminUser(usercode),
                 "不能修改超级管理员帐号信息!");
         BeanUtils.copyProperties(entity, createUser);
+        ananCacheManger.evict(RedisConstant.ANAN_USER, usercode);
+        ananCacheManger.evict(RedisConstant.ANAN_USER, id + "");
+        ananCacheManger.evict(RedisConstant.ANAN_USER_PERMISSION, id + "");
         return userRepository.save(createUser);
     }
 
@@ -184,18 +196,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Cacheable(value = RedisConstant.ANAN_USER, key = "#id")
-    @Transactional(readOnly = true)
-    public AnanUserEntity findById(Long id) {
-        Assert.isTrue(id != null && id > 0, "传入的用户ID无效！");
-        //该代码看似无用，其实是为了解决懒加载和缓存先后问题
-        AnanUserEntity userEntity = userRepository.findById(id).orElse(null);
-        List<AnanUserRoleEntity> userRoles = Objects.requireNonNull(userEntity, "通过ID：" + id + "未能找到对应的数据!").getUserRoles();
-        log.debug(userRoles.toString());
-        return userEntity;
-    }
-
-    @Override
     @Caching(
             evict = {
                     @CacheEvict(value = RedisConstant.ANAN_USER, key = "#entity.usercode"),
@@ -219,7 +219,7 @@ public class UserServiceImpl implements UserService {
         PageRequest pageable = PageRequest.of(pageModule.getPageNumber() - 1, pageModule.getPageSize(), Sort.Direction.fromString(pageModule.getSortOrder()), pageModule.getSortName());
         String searchCondition = pageModule.getSearchText();
 
-        Specification<AnanUserEntity> condition = (Specification<AnanUserEntity>) (root, query, cb) -> {
+        Specification<AnanUserEntity> condition = (root, query, cb) -> {
             Path<String> usercode = root.get("usercode");
             Path<String> username = root.get("username");
             Path<String> phone = root.get("phone");
@@ -357,7 +357,7 @@ public class UserServiceImpl implements UserService {
             Assert.notNull(organiz, "根据传入的机构编码没有找到任何数据!");
             Long topId = organiz.getTopId();
             AnanOrganizationEntity topOrganiz = organizationRepository.findById(topId).orElse(null);
-            List<AnanOrganizationEntity> organizs = organizationRepository.findByCodeStartingWithOrderByCodeAsc(Objects.requireNonNull(topOrganiz, "通过topId：" + topId + "未找到对应的用户信息!").getCode());
+            List<AnanOrganizationEntity> organizs = organizationRepository.findByTopIdAndCodeStartingWithOrderByCodeAsc(topId, Objects.requireNonNull(topOrganiz, "通过topId：" + topId + "未找到对应的用户信息!").getCode());
 
             Specification<AnanUserEntity> condition = (root, query, cb) -> {
                 Path<Long> organizIdPath = root.get("organizId");

@@ -118,13 +118,15 @@ errorExit() {
 }
 
 curl --silent --max-time 2 --insecure https://localhost:6443/ -o /dev/null || errorExit "Error GET https://localhost:6443/"
-if ip addr | grep -q ${K8S_LOAD_BALANCER_IP}; then
-    curl --silent --max-time 2 --insecure https://${K8S_LOAD_BALANCER_IP}:6443/ -o /dev/null || errorExit "Error GET https://${K8S_LOAD_BALANCER_IP}:6443/"
+ps aux | grep mysqld | grep -v grep > /dev/null || errorExit "Error check mysqld process"
+if ip addr | grep -q ${K8S_LB_IP}; then
+    curl --silent --max-time 2 --insecure https://${K8S_LB_IP}:6443/ -o /dev/null || errorExit "Error GET https://${K8S_LB_IP}:6443/"
 fi
 EOF
 
 chmod +x /etc/keepalived/check_apiserver.sh && sh /etc/keepalived/check_apiserver.sh
 
+#设置nginx的健康检查脚本
 cat > /etc/keepalived/check_nginx.sh << EOF
 #!/bin/sh
 errorExit() {
@@ -133,13 +135,12 @@ errorExit() {
 }
 
 curl --silent --max-time 2 --insecure http://localhost:80/ -o /dev/null || errorExit "Error GET http://localhost:80/"
-if ip addr | grep -q ${NGINX_LOAD_BALANCER_IP}; then
-    curl --silent --max-time 2 --insecure http://${NGINX_LOAD_BALANCER_IP}:80/ -o /dev/null || errorExit "Error GET http://${NGINX_LOAD_BALANCER_IP}:80/"
+if ip addr | grep -q ${NGINX_LB_IP}; then
+    curl --silent --max-time 2 --insecure http://${NGINX_LB_IP}:80/ -o /dev/null || errorExit "Error GET http://${NGINX_LB_IP}:80/"
 fi
 EOF
 
 chmod +x /etc/keepalived/check_nginx.sh && sh /etc/keepalived/check_nginx.sh
-
 
 #所有控制平面节点修改配置文件
 cat > /etc/keepalived/keepalived.conf << EOF
@@ -152,9 +153,7 @@ global_defs {
 vrrp_script check_apiserver {
     script "/etc/keepalived/check_apiserver.sh"
     interval 3
-    weight -2
-    fall 10
-    rise 2
+    weight `expr 0 - ${#NODE_IPS[*]}`
 }
 vrrp_instance k8s {
     #服务启动时的角色,0节点为MASTER，其余节点为BACKUP(不需要修改)
@@ -176,18 +175,17 @@ vrrp_instance k8s {
     }
     virtual_ipaddress {
       #VIP地址
-      ${K8S_LOAD_BALANCER_IP}/24
+      ${K8S_LB_IP}/24
     }
     track_script {
       check_apiserver
     }
 }
+
 vrrp_script check_nginx {
     script "/etc/keepalived/check_nginx.sh"
     interval 3
-    weight -2
-    fall 10
-    rise 2
+    weight `expr 0 - ${#NODE_IPS[*]}`
 }
 vrrp_instance nginx {
     #服务启动时的角色,0节点为MASTER，其余节点为BACKUP(不需要修改)
@@ -209,7 +207,7 @@ vrrp_instance nginx {
     }
     virtual_ipaddress {
       #VIP地址
-      ${NGINX_LOAD_BALANCER_IP}/24
+      ${NGINX_LB_IP}/24
     }
     track_script {
       check_nginx
@@ -220,7 +218,7 @@ EOF
 systemctl restart keepalived && systemctl status keepalived && systemctl enable keepalived 
 
 # 第一个节点查看
-ip a s | grep ${K8S_LOAD_BALANCER_IP}
+ip a s | grep ${K8S_LB_IP}
 
 ```
 ## 2、Kubeadm部署安装
@@ -287,7 +285,7 @@ kubeadm init --kubernetes-version=v${K8S_VERSION} \
 --image-repository registry.aliyuncs.com/google_containers \
 --apiserver-advertise-address=${NODE_IPS[${NODE_INDEX}]} \
 --pod-network-cidr=10.244.0.0/16 \
---control-plane-endpoint="${K8S_LOAD_BALANCER_IP}:6443" \
+--control-plane-endpoint="${K8S_LB_IP}:6443" \
 --service-cidr=10.96.0.0/12 \
 --upload-certs \
 --ignore-preflight-errors=Swap

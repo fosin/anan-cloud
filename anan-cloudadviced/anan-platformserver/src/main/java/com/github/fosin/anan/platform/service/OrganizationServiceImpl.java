@@ -1,19 +1,20 @@
 package com.github.fosin.anan.platform.service;
 
+import com.github.fosin.anan.cloudresource.constant.RedisConstant;
+import com.github.fosin.anan.cloudresource.dto.request.AnanOrganizationCreateDto;
+import com.github.fosin.anan.cloudresource.dto.request.AnanOrganizationUpdateDto;
+import com.github.fosin.anan.cloudresource.dto.res.AnanOrganizationTreeDto;
 import com.github.fosin.anan.jpa.repository.IJpaRepository;
 import com.github.fosin.anan.model.module.PageModule;
 import com.github.fosin.anan.model.result.Result;
 import com.github.fosin.anan.model.result.ResultUtils;
 import com.github.fosin.anan.platform.repository.OrganizationRepository;
 import com.github.fosin.anan.platform.service.inter.OrganizationService;
-import com.github.fosin.anan.cloudresource.constant.RedisConstant;
-import com.github.fosin.anan.cloudresource.dto.request.AnanOrganizationCreateDto;
-import com.github.fosin.anan.cloudresource.dto.request.AnanOrganizationUpdateDto;
 import com.github.fosin.anan.platformapi.entity.AnanOrganizationEntity;
 import com.github.fosin.anan.platformapi.service.AnanUserDetailService;
+import com.github.fosin.anan.util.TreeUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
-
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
@@ -26,6 +27,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import javax.persistence.criteria.Path;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -100,7 +102,7 @@ public class OrganizationServiceImpl implements OrganizationService {
     @CacheEvict(value = RedisConstant.ANAN_ORGANIZATION, key = "#id")
     public AnanOrganizationEntity deleteById(Long id) {
         Assert.notNull(id, "传入了空ID!");
-        List<AnanOrganizationEntity> entities = findByPid(id);
+        List<AnanOrganizationEntity> entities = findChildByPid(id);
         Assert.isTrue(entities == null || entities.size() == 0, "该节点还存在子节点不能直接删除!");
         organizationRepository.deleteById(id);
         return null;
@@ -111,7 +113,7 @@ public class OrganizationServiceImpl implements OrganizationService {
     public AnanOrganizationEntity deleteByEntity(AnanOrganizationEntity entity) {
         Assert.notNull(entity, "传入了空对象!");
         Assert.notNull(entity.getId(), "传入了空ID!");
-        List<AnanOrganizationEntity> entities = findByPid(entity.getId());
+        List<AnanOrganizationEntity> entities = findChildByPid(entity.getId());
         Assert.isTrue(entities == null || entities.size() == 0, "该节点还存在子节点不能直接删除!");
         organizationRepository.delete(entity);
         return entity;
@@ -119,7 +121,7 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     @Override
     public List<AnanOrganizationEntity> findAllByTopId(Long topId) {
-        Assert.isTrue(topId != null && topId >= 0, "顶级机构编码无效!");
+        Assert.isTrue(topId != null && topId >= 0, "顶级机构编号无效!");
         return organizationRepository.findAllByTopId(topId);
     }
 
@@ -149,13 +151,56 @@ public class OrganizationServiceImpl implements OrganizationService {
     }
 
     @Override
-    public List<AnanOrganizationEntity> findByPid(Long pid) {
+    public List<AnanOrganizationEntity> findChildByPid(Long pid) {
         return organizationRepository.findByPidOrderByCodeAsc(pid);
     }
 
     @Override
-    public List<AnanOrganizationEntity> findByCodeStartingWith(String code) {
-        return organizationRepository.findByCodeStartingWithOrderByCodeAsc(code);
+    public List<AnanOrganizationEntity> findAllChildByPid(Long pid) {
+        List<AnanOrganizationEntity> result = new ArrayList<>();
+        if (pid == 0) {
+            List<AnanOrganizationEntity> list = organizationRepository.findByPidOrderByCodeAsc(pid);
+            for (AnanOrganizationEntity organizationEntity : list) {
+                List<AnanOrganizationEntity> byCodeStartingWith = organizationRepository.findByTopIdAndCodeStartingWithOrderByCodeAsc(organizationEntity.getTopId(), organizationEntity.getCode());
+                result.addAll(byCodeStartingWith);
+            }
+        } else {
+            AnanOrganizationEntity organizationEntity = organizationRepository.findById(pid).orElse(null);
+            if (organizationEntity != null) {
+                List<AnanOrganizationEntity> byCodeStartingWith = organizationRepository.findByTopIdAndCodeStartingWithOrderByCodeAsc(organizationEntity.getTopId(), organizationEntity.getCode());
+                result.addAll(byCodeStartingWith);
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public AnanOrganizationTreeDto treeAllChildByid(Long id) {
+        Assert.isTrue(id > 0, "传入ID不能小于1");
+        AnanOrganizationEntity organizationEntity = organizationRepository.findById(id).orElse(null);
+        List<AnanOrganizationEntity> list = organizationRepository.findByTopIdAndCodeStartingWithOrderByCodeAsc(Objects.requireNonNull(organizationEntity).getTopId(), organizationEntity.getCode());
+        Assert.isTrue(list.size() > 0, "没有找到任何机构数据");
+        Long rootId = organizationEntity.getId();
+        List<AnanOrganizationTreeDto> dtoList = new ArrayList<>(list.size());
+        for (AnanOrganizationEntity entity : list) {
+            AnanOrganizationTreeDto dto = new AnanOrganizationTreeDto();
+            BeanUtils.copyProperties(entity, dto);
+            dto.setId(entity.getId());
+            dtoList.add(dto);
+        }
+        AnanOrganizationTreeDto tree = TreeUtil.createTree(dtoList, rootId, "id", "pid", "children");
+        setLeaf(tree);
+        return tree;
+    }
+
+    private void setLeaf(AnanOrganizationTreeDto tree) {
+        List<AnanOrganizationTreeDto> children = tree.getChildren();
+        tree.setLeaf(children == null || children.size() == 0);
+        if (children != null) {
+            for (AnanOrganizationTreeDto child : children) {
+                setLeaf(child);
+            }
+        }
     }
 
     @Override

@@ -4,6 +4,7 @@ import com.github.fosin.anan.platformapi.entity.AnanOrganizationEntity;
 import com.github.fosin.anan.jpa.repository.IJpaRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.context.annotation.Lazy;
+
 import java.util.List;
 
 /**
@@ -17,7 +18,7 @@ import java.util.List;
 public interface OrganizationRepository extends IJpaRepository<AnanOrganizationEntity, Long> {
     List<AnanOrganizationEntity> findByPidOrderByCodeAsc(Long pid);
 
-    List<AnanOrganizationEntity> findByCodeStartingWithOrderByCodeAsc(String code);
+    List<AnanOrganizationEntity> findByTopIdAndCodeStartingWithOrderByCodeAsc(Long topId, String code);
 
     List<AnanOrganizationEntity> findAllByTopId(Long topId);
 }

@@ -90,7 +90,6 @@ public class PermissionServiceImpl implements PermissionService {
         for (AnanUserAllPermissionsEntity entity : permissionEntities) {
             // 只操作状态为启用的权限
             if (entity.getStatus() == 0) {
-                Long id = entity.getId();
                 //获取用户增权限
                 if (entity.getAddMode() == 0) {
                     userPermissions.add(entity.convert2Dto());

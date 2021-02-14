@@ -177,7 +177,7 @@ public class RoleServiceImpl implements RoleService {
         } else {
             AnanOrganizationEntity organiz = organizationRepository.findById(organizId).orElse(null);
             Assert.notNull(organiz, "根据传入的机构编码没有找到任何数据!");
-            List<AnanOrganizationEntity> organizs = organizationRepository.findByCodeStartingWithOrderByCodeAsc(organiz.getCode());
+            List<AnanOrganizationEntity> organizs = organizationRepository.findByTopIdAndCodeStartingWithOrderByCodeAsc(organiz.getTopId(), organiz.getCode());
 
             Specification<AnanRoleEntity> condition = (root, query, cb) -> {
                 Path<Long> organizIdPath = root.get("organizId");
@@ -214,7 +214,7 @@ public class RoleServiceImpl implements RoleService {
             AnanOrganizationEntity organiz = organizationRepository.findById(organizId).orElse(null);
             Assert.notNull(organiz, "根据传入的机构编码没有找到任何数据!");
             AnanOrganizationEntity topOrganiz = organizationRepository.findById(organiz.getTopId()).orElse(null);
-            List<AnanOrganizationEntity> organizs = organizationRepository.findByCodeStartingWithOrderByCodeAsc(Objects.requireNonNull(topOrganiz).getCode());
+            List<AnanOrganizationEntity> organizs = organizationRepository.findByTopIdAndCodeStartingWithOrderByCodeAsc(organiz.getTopId(), Objects.requireNonNull(topOrganiz).getCode());
 
             Specification<AnanRoleEntity> condition = (root, query, cb) -> {
                 Path<Long> organizIdPath = root.get("organizId");
