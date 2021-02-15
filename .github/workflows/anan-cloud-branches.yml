@@ -36,7 +36,7 @@ jobs:
 
       - name: Set Build Modules
         run: |
-          MODIFY_FILES=$(git diff --name-only HEAD~6 HEAD)
+          MODIFY_FILES=$(git diff --name-only HEAD~7 HEAD)
           MODULES=""
           echo MODIFY_FILES: $MODIFY_FILES
           if [[ $MODIFY_FILES =~ "\s*pom.xml" ]]; then
@@ -51,8 +51,8 @@ jobs:
           if [[ $MODIFY_FILES =~ "anan-platformapi" ]]; then
             MODULES=${MODULES}",com.github.fosin.anan:anan-platformapi"
           fi
-          echo ::set-env name=MODIFY_FILES::$MODIFY_FILES
-          echo ::set-env name=MODULE_LIST::${MODULES:1}
+          echo MODIFY_FILES=$MODIFY_FILES >> $GITHUB_ENV
+          echo MODULE_LIST=${MODULES:1} >> $GITHUB_ENV
           echo MODULES: ${MODULES}
       - name: Release Maven package
         uses: samuelmeuli/action-maven-publish@v1
