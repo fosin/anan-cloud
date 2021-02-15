@@ -120,7 +120,7 @@ jobs:
           docker push ${{ env.DOCKER_MIRROR_SERVER }}/${{ env.DOCKER_MIRROR_NS }}/$MODULE_NAME:$MODULE_VERSION
       # 创建anan-authserver
       - name: Docker build and push anan-authserver
-        if: contains(env.MODIFY_FILES,'anan-cloudadviced/anan-authserver/') || contains(env.MODIFY_FILES,'anan-cloudadviced/pom.xml' || contains(env.MODIFY_FILES,'anan-cloudadviced/anan-platformapi/')
+        if: contains(env.MODIFY_FILES,'anan-cloudadviced/anan-authserver/') || contains(env.MODIFY_FILES,'anan-cloudadviced/pom.xml') || contains(env.MODIFY_FILES,'anan-cloudadviced/anan-platformapi/')
         env:
           MODULE_NAME: anan-authserver
           MODULE_VERSION: ${{ env.ANAN_VERSION }}
@@ -131,7 +131,7 @@ jobs:
           docker push ${{ env.DOCKER_MIRROR_SERVER }}/${{ env.DOCKER_MIRROR_NS }}/$MODULE_NAME:$MODULE_VERSION
       # 创建anan-platformserver
       - name: Docker build and push anan-platformserver
-        if: contains(env.MODIFY_FILES,'anan-cloudadviced/anan-platformserver/') || contains(env.MODIFY_FILES,'anan-cloudadviced/pom.xml' || contains(env.MODIFY_FILES,'anan-cloudadviced/anan-platformapi/')
+        if: contains(env.MODIFY_FILES,'anan-cloudadviced/anan-platformserver/') || contains(env.MODIFY_FILES,'anan-cloudadviced/pom.xml') || contains(env.MODIFY_FILES,'anan-cloudadviced/anan-platformapi/')
         env:
           MODULE_NAME: anan-platformserver
           MODULE_VERSION: ${{ env.ANAN_VERSION }}
