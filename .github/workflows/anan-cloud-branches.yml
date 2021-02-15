@@ -25,7 +25,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           ref: ${{ env.BRANCHE_VERSION }}
-          fetch-depth: 5
+          fetch-depth: 20
 
       - name: Setup JDK
         uses: actions/setup-java@v1
@@ -34,7 +34,7 @@ jobs:
 
       - name: Set Build Modules
         run: |
-          MODIFY_FILES=$(git diff --name-only HEAD~5 HEAD)
+          MODIFY_FILES=$(git diff --name-only HEAD~6 HEAD)
           MODULES=""
           echo MODIFY_FILES: $MODIFY_FILES
           if [[ $MODIFY_FILES =~ "\s*pom.xml" ]]; then
