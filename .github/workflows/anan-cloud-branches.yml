@@ -67,7 +67,7 @@ jobs:
       - name: Docker Hub Login
         if: contains(env.MODIFY_FILES,'deploy/openjdk') || contains(env.MODIFY_FILES,'deploy/mysql')
         run: |
-          docker login --username=${{ secrets.dockerhub_user }} --password=${{ secrets.dockerhub_pass }}
+          docker login --username=${{ secrets.alidocker_username }} --password=${{ secrets.alidocker_secrect }} registry.cn-chengdu.aliyuncs.com
       # 创建adoptopenjdk11-openj9镜像
       - name: Docker build and push adoptopenjdk-11-jdk-openj9
         if: contains(env.MODIFY_FILES,'deploy/openjdk/11-openj9.Dockerfile') || contains(env.MODIFY_FILES,'entrypoint.sh') || contains(env.MODIFY_FILES,'sources.list')
@@ -76,8 +76,8 @@ jobs:
           MODULE_VERSION: 11-jdk-openj9
           MODULE_PATH: deploy/openjdk
         run: |
-          docker build $MODULE_PATH -t fosin/$MODULE_NAME:$MODULE_VERSION -f $MODULE_PATH/11-openj9.Dockerfile
-          docker push fosin/$MODULE_NAME:$MODULE_VERSION
+          docker build $MODULE_PATH -t registry.cn-chengdu.aliyuncs.com/fosin/$MODULE_NAME:$MODULE_VERSION -f $MODULE_PATH/11-openj9.Dockerfile
+          docker push registry.cn-chengdu.aliyuncs.com/fosin/$MODULE_NAME:$MODULE_VERSION
       # 创建jdk11镜像
       - name: Docker build and push openjdk11
         if: contains(env.MODIFY_FILES,'deploy/openjdk/11.Dockerfile') || contains(env.MODIFY_FILES,'entrypoint.sh') || contains(env.MODIFY_FILES,'sources.list')
@@ -86,8 +86,8 @@ jobs:
           MODULE_VERSION: 11-jdk-hotspot
           MODULE_PATH: deploy/openjdk
         run: |
-          docker build $MODULE_PATH -t fosin/$MODULE_NAME:$MODULE_VERSION -f $MODULE_PATH/11.Dockerfile
-          docker push fosin/$MODULE_NAME:$MODULE_VERSION
+          docker build $MODULE_PATH -t registry.cn-chengdu.aliyuncs.com/fosin/$MODULE_NAME:$MODULE_VERSION -f $MODULE_PATH/11.Dockerfile
+          docker push registry.cn-chengdu.aliyuncs.com/fosin/$MODULE_NAME:$MODULE_VERSION
       # 创建jdk8镜像
       - name: Docker build and push openjdk8
         if: contains(env.MODIFY_FILES,'deploy/openjdk/8.Dockerfile') || contains(env.MODIFY_FILES,'entrypoint.sh') || contains(env.MODIFY_FILES,'sources.list')
@@ -96,8 +96,8 @@ jobs:
           MODULE_VERSION: 8-jdk-hotspot
           MODULE_PATH: deploy/openjdk
         run: |
-          docker build $MODULE_PATH -t fosin/$MODULE_NAME:$MODULE_VERSION -f $MODULE_PATH/8.Dockerfile
-          docker push fosin/$MODULE_NAME:$MODULE_VERSION
+          docker build $MODULE_PATH -t registry.cn-chengdu.aliyuncs.com/fosin/$MODULE_NAME:$MODULE_VERSION -f $MODULE_PATH/8.Dockerfile
+          docker push registry.cn-chengdu.aliyuncs.com/fosin/$MODULE_NAME:$MODULE_VERSION
       - name: Docker build and push mysql-leader
         if: contains(env.MODIFY_FILES,'deploy/mysql/leader')
         env:
