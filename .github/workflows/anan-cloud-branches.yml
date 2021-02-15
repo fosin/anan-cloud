@@ -34,7 +34,7 @@ jobs:
 
       - name: Set Build Modules
         run: |
-          MODIFY_FILES=$(git diff --name-only HEAD~ HEAD)
+          MODIFY_FILES=$(git diff --name-only HEAD~5 HEAD)
           MODULES=""
           echo MODIFY_FILES: $MODIFY_FILES
           if [[ $MODIFY_FILES =~ "\s*pom.xml" ]]; then
