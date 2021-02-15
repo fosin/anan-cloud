@@ -11,6 +11,7 @@ on:
       - 'deploy/openjdk/**'
       - 'anan-configserver/**'
       - 'anan-eurekaserver/**'
+      - '.github/workflows/anan-cloud-branches.yml'
 jobs:
   release:
     runs-on: ubuntu-latest
@@ -67,7 +68,6 @@ jobs:
           maven_args: "-Dmaven.javadoc.skip=true -pl ${{ env.MODULE_LIST }}"
           server_id: "sonatype-nexus-snapshots"
       - name: Docker Hub Login
-        if: contains(env.MODIFY_FILES,'deploy/openjdk') || contains(env.MODIFY_FILES,'deploy/mysql' || contains(env.MODIFY_FILES,'anan-cloudadviced' || contains(env.MODIFY_FILES,'anan-cloudresource' || contains(env.MODIFY_FILES,'anan-configserver' || contains(env.MODIFY_FILES,'anan-eurekaserver' || contains(env.MODIFY_FILES,'anan-cloudgateway')
         run: |
           docker login --username=${{ secrets.alidocker_username }} --password=${{ secrets.alidocker_secrect }} ${{ env.DOCKER_MIRROR_SERVER }}
       # 创建adoptopenjdk11-openj9镜像
