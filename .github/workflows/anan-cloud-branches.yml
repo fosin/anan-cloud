@@ -36,7 +36,7 @@ jobs:
 
       - name: Set Build Modules
         run: |
-          MODIFY_FILES=$(git diff --name-only HEAD~7 HEAD)
+          MODIFY_FILES=$(git diff --name-only HEAD~8 HEAD)
           MODULES=""
           echo MODIFY_FILES: $MODIFY_FILES
           if [[ $MODIFY_FILES =~ "\s*pom.xml" ]]; then
@@ -118,6 +118,11 @@ jobs:
         run: |
           docker build ./$MODULE_PATH -t ${{ env.DOCKER_MIRROR_SERVER }}/${{ env.DOCKER_MIRROR_NS }}/$MODULE_NAME:$MODULE_VERSION -f ./$MODULE_PATH/7.Dockerfile
           docker push ${{ env.DOCKER_MIRROR_SERVER }}/${{ env.DOCKER_MIRROR_NS }}/$MODULE_NAME:$MODULE_VERSION
+      # Maven构建jar包
+      - name: Build with Maven
+        if: contains(env.MODIFY_FILES,'anan-cloudadviced/') || contains(env.MODIFY_FILES,'anan-cloudresource/') || contains(env.MODIFY_FILES,'anan-configserver/') || contains(env.MODIFY_FILES,'anan-eurekaserver/')
+        run: |
+          mvn --batch-mode --errors --file pom.xml clean dependency:copy-dependencies -DincludeScope=runtime compile jar:jar spring-boot:repackage
       # 创建anan-authserver
       - name: Docker build and push anan-authserver
         if: contains(env.MODIFY_FILES,'anan-cloudadviced/anan-authserver/') || contains(env.MODIFY_FILES,'anan-cloudadviced/pom.xml') || contains(env.MODIFY_FILES,'anan-cloudadviced/anan-platformapi/')
@@ -126,7 +131,6 @@ jobs:
           MODULE_VERSION: ${{ env.ANAN_VERSION }}
           MODULE_PATH: anan-cloudadviced/anan-authserver
         run: |
-          mvn --batch-mode --errors --file $MODULE_PATH/pom.xml clean compile jar:jar spring-boot:repackage
           docker build ./$MODULE_PATH -t ${{ env.DOCKER_MIRROR_SERVER }}/${{ env.DOCKER_MIRROR_NS }}/$MODULE_NAME:$MODULE_VERSION -f ./$MODULE_PATH/Dockerfile
           docker push ${{ env.DOCKER_MIRROR_SERVER }}/${{ env.DOCKER_MIRROR_NS }}/$MODULE_NAME:$MODULE_VERSION
       # 创建anan-platformserver
@@ -137,7 +141,6 @@ jobs:
           MODULE_VERSION: ${{ env.ANAN_VERSION }}
           MODULE_PATH: anan-cloudadviced/anan-platformserver
         run: |
-          mvn --batch-mode --errors --file $MODULE_PATH/pom.xml clean compile jar:jar spring-boot:repackage
           docker build ./$MODULE_PATH -t ${{ env.DOCKER_MIRROR_SERVER }}/${{ env.DOCKER_MIRROR_NS }}/$MODULE_NAME:$MODULE_VERSION -f ./$MODULE_PATH/Dockerfile
           docker push ${{ env.DOCKER_MIRROR_SERVER }}/${{ env.DOCKER_MIRROR_NS }}/$MODULE_NAME:$MODULE_VERSION
       # 创建anan-zuulgateway
@@ -148,7 +151,6 @@ jobs:
           MODULE_VERSION: ${{ env.ANAN_VERSION }}
           MODULE_PATH: anan-cloudadviced/anan-zuulgateway
         run: |
-          mvn --batch-mode --errors --file $MODULE_PATH/pom.xml clean compile jar:jar spring-boot:repackage
           docker build ./$MODULE_PATH -t ${{ env.DOCKER_MIRROR_SERVER }}/${{ env.DOCKER_MIRROR_NS }}/$MODULE_NAME:$MODULE_VERSION -f ./$MODULE_PATH/Dockerfile
           docker push ${{ env.DOCKER_MIRROR_SERVER }}/${{ env.DOCKER_MIRROR_NS }}/$MODULE_NAME:$MODULE_VERSION
       # 创建anan-adminserver
@@ -159,7 +161,6 @@ jobs:
           MODULE_VERSION: ${{ env.ANAN_VERSION }}
           MODULE_PATH: anan-cloudadviced/anan-adminserver
         run: |
-          mvn --batch-mode --errors --file $MODULE_PATH/pom.xml clean compile jar:jar spring-boot:repackage
           docker build ./$MODULE_PATH -t ${{ env.DOCKER_MIRROR_SERVER }}/${{ env.DOCKER_MIRROR_NS }}/$MODULE_NAME:$MODULE_VERSION -f ./$MODULE_PATH/Dockerfile
           docker push ${{ env.DOCKER_MIRROR_SERVER }}/${{ env.DOCKER_MIRROR_NS }}/$MODULE_NAME:$MODULE_VERSION
       # 创建anan-eurekaserver
@@ -170,7 +171,6 @@ jobs:
           MODULE_VERSION: ${{ env.ANAN_VERSION }}
           MODULE_PATH: anan-eurekaserver
         run: |
-          mvn --batch-mode --errors --file $MODULE_PATH/pom.xml clean compile jar:jar spring-boot:repackage
           docker build ./$MODULE_PATH -t ${{ env.DOCKER_MIRROR_SERVER }}/${{ env.DOCKER_MIRROR_NS }}/$MODULE_NAME:$MODULE_VERSION -f ./$MODULE_PATH/Dockerfile
           docker push ${{ env.DOCKER_MIRROR_SERVER }}/${{ env.DOCKER_MIRROR_NS }}/$MODULE_NAME:$MODULE_VERSION
       # 创建anan-configserver
@@ -181,6 +181,5 @@ jobs:
           MODULE_VERSION: ${{ env.ANAN_VERSION }}
           MODULE_PATH: anan-cloudadviced/anan-configserver
         run: |
-          mvn --batch-mode --errors --file $MODULE_PATH/pom.xml clean compile jar:jar spring-boot:repackage
           docker build ./$MODULE_PATH -t ${{ env.DOCKER_MIRROR_SERVER }}/${{ env.DOCKER_MIRROR_NS }}/$MODULE_NAME:$MODULE_VERSION -f ./$MODULE_PATH/Dockerfile
           docker push ${{ env.DOCKER_MIRROR_SERVER }}/${{ env.DOCKER_MIRROR_NS }}/$MODULE_NAME:$MODULE_VERSION
