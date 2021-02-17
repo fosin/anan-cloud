@@ -5,7 +5,7 @@ services:
     container_name: mysql-leader
     hostname: mysql-leader
     restart: always
-    image: fosin/mysql-leader:2.3
+    image: registry.cn-hongkong.aliyuncs.com/fosin/mysql-leader:2.3
     #    build:
     #      context: deploy/mysql/leader
     environment:
@@ -73,7 +73,7 @@ services:
   anan-vue:
     network_mode: host
     container_name: anan-vue
-    image: fosin/anan-vue:3.2.0
+    image: registry.cn-hongkong.aliyuncs.com/fosin/anan-vue:3.2.0
     hostname: anan-vue
     restart: always
     environment:
@@ -108,7 +108,7 @@ services:
     container_name: mysql-follower
     hostname: mysql-follower
     restart: always
-    image: fosin/mysql-follower:2.3
+    image: registry.cn-hongkong.aliyuncs.com/fosin/mysql-follower:2.3
     #    build:
     #      context: deploy/mysql/follower
     environment:
@@ -126,7 +126,7 @@ services:
 
   anan-authserver:
     network_mode: host
-    image: fosin/anan-authserver:2.4.0-SNAPSHOT
+    image: registry.cn-hongkong.aliyuncs.com/fosin/anan-authserver:2.4.0-SNAPSHOT
     entrypoint: "sh /anan/wait-for.sh nacos-0:8848 -t 3600 -- /anan/entrypoint.sh"
     container_name: anan-authserver
     hostname: anan-authserver
@@ -146,7 +146,7 @@ services:
 
   anan-zuulgateway:
     network_mode: host
-    image: fosin/anan-zuulgateway:2.4.0-SNAPSHOT
+    image: registry.cn-hongkong.aliyuncs.com/fosin/anan-zuulgateway:2.4.0-SNAPSHOT
     entrypoint: "sh /anan/wait-for.sh anan-authserver:51400 -t 3600 -- /anan/entrypoint.sh"
     container_name: anan-zuulgateway
     hostname: anan-zuulgateway
@@ -164,7 +164,7 @@ services:
 
   anan-platformserver:
     network_mode: host
-    image: fosin/anan-platformserver:2.4.0-SNAPSHOT
+    image: registry.cn-hongkong.aliyuncs.com/fosin/anan-platformserver:2.4.0-SNAPSHOT
     entrypoint: "sh /anan/wait-for.sh anan-authserver:51400 -t 3600 -- /anan/entrypoint.sh"
     container_name: anan-platformserver
     hostname: anan-platformserver
@@ -184,7 +184,7 @@ services:
 
   anan-adminserver:
     network_mode: host
-    image: fosin/anan-adminserver:2.4.0-SNAPSHOT
+    image: registry.cn-hongkong.aliyuncs.com/fosin/anan-adminserver:2.4.0-SNAPSHOT
     entrypoint: "sh /anan/wait-for.sh anan-zuulgateway:9000 -t 3600 -- /anan/entrypoint.sh"
     container_name: anan-adminserver
     hostname: anan-adminserver
@@ -203,7 +203,7 @@ services:
 
   anan-eurekaserver:
     network_mode: host
-    image: fosin/anan-eurekaserver:2.4.0-SNAPSHOT
+    image: registry.cn-hongkong.aliyuncs.com/fosin/anan-eurekaserver:2.4.0-SNAPSHOT
     container_name: anan-eurekaserver
     hostname: anan-eurekaserver
     restart: always
@@ -217,7 +217,7 @@ services:
 
   anan-configserver:
     network_mode: host
-    image: fosin/anan-configserver:2.4.0-SNAPSHOT
+    image: registry.cn-hongkong.aliyuncs.com/fosin/anan-configserver:2.4.0-SNAPSHOT
     entrypoint: "sh /anan/wait-for.sh anan-eurekaserver:51000 -t 3600 -- /anan/entrypoint.sh"
     container_name: anan-configserver
     hostname: anan-configserver
