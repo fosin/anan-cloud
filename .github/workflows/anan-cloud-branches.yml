@@ -38,7 +38,7 @@ jobs:
           MODIFY_FILES=$(git diff --name-only HEAD~ HEAD)
           MODULES=""
           echo MODIFY_FILES: $MODIFY_FILES
-          if [[ $MODIFY_FILES =~ "\s*pom.xml" ]]; then
+          if [[ $MODIFY_FILES =~ "\npom.xml" || $MODIFY_FILES =~ "^pom.xml" ]]; then
              MODULES=${MODULES}",com.github.fosin.anan:anan-cloud"
           fi
           if [[ $MODIFY_FILES =~ "anan-cloudresource" ]]; then
@@ -128,7 +128,7 @@ jobs:
 
       # 创建anan-authserver
       - name: Docker build and push anan-authserver
-        if: contains(env.MODIFY_FILES,'anan-cloudadviced/anan-authserver/') || contains(env.MODIFY_FILES,'anan-cloudadviced/pom.xml') || contains(env.MODIFY_FILES,'anan-cloudadviced/anan-platformapi/')
+        if: contains(env.MODIFY_FILES,'anan-cloudadviced/anan-authserver/') || contains(env.MODIFY_FILES,'anan-cloudadviced/pom.xml') || contains(env.MODIFY_FILES,'anan-cloudadviced/anan-platformapi/') || contains(env.MODULE_LIST,'anan-cloud')
         env:
           MODULE_PATH: anan-cloudadviced/anan-authserver
           MODULE_NAME: $(grep 'artifactId=' $MODULE_PATH/target/maven-archiver/pom.properties | awk -F '=' '{ print $2 }')
@@ -138,7 +138,7 @@ jobs:
           docker push ${{ env.DOCKER_MIRROR_SERVER }}/${{ env.DOCKER_MIRROR_NS }}/$MODULE_NAME:$MODULE_VERSION
       # 创建anan-platformserver
       - name: Docker build and push anan-platformserver
-        if: contains(env.MODIFY_FILES,'anan-cloudadviced/anan-platformserver/') || contains(env.MODIFY_FILES,'anan-cloudadviced/pom.xml') || contains(env.MODIFY_FILES,'anan-cloudadviced/anan-platformapi/')
+        if: contains(env.MODIFY_FILES,'anan-cloudadviced/anan-platformserver/') || contains(env.MODIFY_FILES,'anan-cloudadviced/pom.xml') || contains(env.MODIFY_FILES,'anan-cloudadviced/anan-platformapi/') || contains(env.MODULE_LIST,'anan-cloud')
         env:
           MODULE_PATH: anan-cloudadviced/anan-platformserver
           MODULE_NAME: $(grep 'artifactId=' $MODULE_PATH/target/maven-archiver/pom.properties | awk -F '=' '{ print $2 }')
@@ -148,7 +148,7 @@ jobs:
           docker push ${{ env.DOCKER_MIRROR_SERVER }}/${{ env.DOCKER_MIRROR_NS }}/$MODULE_NAME:$MODULE_VERSION
       # 创建anan-zuulgateway
       - name: Docker build and push anan-zuulgateway
-        if: contains(env.MODIFY_FILES,'anan-cloudadviced/anan-zuulgateway/') || contains(env.MODIFY_FILES,'anan-cloudadviced/pom.xml')
+        if: contains(env.MODIFY_FILES,'anan-cloudadviced/anan-zuulgateway/') || contains(env.MODIFY_FILES,'anan-cloudadviced/pom.xml') || contains(env.MODULE_LIST,'anan-cloud')
         env:
           MODULE_PATH: anan-cloudadviced/anan-zuulgateway
           MODULE_NAME: $(grep 'artifactId=' $MODULE_PATH/target/maven-archiver/pom.properties | awk -F '=' '{ print $2 }')
@@ -158,7 +158,7 @@ jobs:
           docker push ${{ env.DOCKER_MIRROR_SERVER }}/${{ env.DOCKER_MIRROR_NS }}/$MODULE_NAME:$MODULE_VERSION
       # 创建anan-adminserver
       - name: Docker build and push anan-adminserver
-        if: contains(env.MODIFY_FILES,'anan-cloudadviced/anan-adminserver/') || contains(env.MODIFY_FILES,'anan-cloudadviced/pom.xml')
+        if: contains(env.MODIFY_FILES,'anan-cloudadviced/anan-adminserver/') || contains(env.MODIFY_FILES,'anan-cloudadviced/pom.xml') || contains(env.MODULE_LIST,'anan-cloud')
         env:
           MODULE_PATH: anan-cloudadviced/anan-adminserver
           MODULE_NAME: $(grep 'artifactId=' $MODULE_PATH/target/maven-archiver/pom.properties | awk -F '=' '{ print $2 }')
@@ -168,7 +168,7 @@ jobs:
           docker push ${{ env.DOCKER_MIRROR_SERVER }}/${{ env.DOCKER_MIRROR_NS }}/$MODULE_NAME:$MODULE_VERSION
       # 创建anan-eurekaserver
       - name: Docker build and push anan-eurekaserver
-        if: contains(env.MODIFY_FILES,'anan-eurekaserver/')
+        if: contains(env.MODIFY_FILES,'anan-eurekaserver/') || contains(env.MODULE_LIST,'anan-cloud')
         env:
           MODULE_PATH: anan-eurekaserver
           MODULE_NAME: $(grep 'artifactId=' $MODULE_PATH/target/maven-archiver/pom.properties | awk -F '=' '{ print $2 }')
@@ -180,7 +180,7 @@ jobs:
           docker push ${{ env.DOCKER_MIRROR_SERVER }}/${{ env.DOCKER_MIRROR_NS }}/$MODULE_NAME:$MODULE_VERSION
       # 创建anan-configserver
       - name: Docker build and push anan-configserver
-        if: contains(env.MODIFY_FILES,'anan-configserver/')
+        if: contains(env.MODIFY_FILES,'anan-configserver/') || contains(env.MODULE_LIST,'anan-cloud')
         env:
           MODULE_PATH: anan-configserver
           MODULE_NAME: $(grep 'artifactId=' $MODULE_PATH/target/maven-archiver/pom.properties | awk -F '=' '{ print $2 }')

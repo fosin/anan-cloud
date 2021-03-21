@@ -24,8 +24,8 @@
         <revision>2.4.0-SNAPSHOT</revision>
         <anan-placeholder1>${</anan-placeholder1>
         <anan-placeholder2>}</anan-placeholder2>
-        <anan-spring-cloud.version>Hoxton.SR9</anan-spring-cloud.version>
-        <anan-spring-cloud-alibaba.version>2.2.1.RELEASE</anan-spring-cloud-alibaba.version>
+        <anan-spring-cloud.version>Hoxton.SR10</anan-spring-cloud.version>
+        <anan-spring-cloud-alibaba.version>2.2.5.RELEASE</anan-spring-cloud-alibaba.version>
         <anan-spring-boot-admin.version>2.3.1</anan-spring-boot-admin.version>
         <sonar.host.url>http://192.168.137.8:9001/</sonar.host.url>
     </properties>
