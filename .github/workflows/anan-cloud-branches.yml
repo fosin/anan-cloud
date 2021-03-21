@@ -11,7 +11,7 @@ on:
       - 'deploy/openjdk/**'
       - 'anan-configserver/**'
       - 'anan-eurekaserver/**'
-#      - '.github/workflows/anan-cloud-branches.yml'
+      - '.github/workflows/anan-cloud-branches.yml'
 jobs:
   release:
     runs-on: ubuntu-latest
@@ -35,7 +35,7 @@ jobs:
 
       - name: Set Build Modules
         run: |
-          MODIFY_FILES=$(git diff --name-only HEAD~2 HEAD)
+          MODIFY_FILES=$(git diff --name-only HEAD~3 HEAD)
           MODULES=""
           echo MODIFY_FILES: $MODIFY_FILES
           if [[ $MODIFY_FILES =~ "\npom.xml" || $MODIFY_FILES =~ "^pom.xml" || $MODIFY_FILES =~ " pom.xml" ]]; then
