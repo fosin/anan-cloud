@@ -25,5 +25,5 @@ public interface UserService extends ISimpleJpaService<AnanUserEntity, Long, Ana
 
     List<AnanUserEntity> findRoleUsersByRoleId(Long roleId);
 
-    List<AnanUserEntity> findAllByOrganizId(Long organizId);
+    List<AnanUserEntity> findAllByOrganizId(Long organizId, Integer status);
 }

@@ -347,7 +347,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<AnanUserEntity> findAllByOrganizId(Long organizId) {
+    public List<AnanUserEntity> findAllByOrganizId(Long organizId, Integer status) {
         Assert.notNull(organizId, "机构ID不能为空!");
 
         if (ananUserDetailService.isUserRequest() && ananUserDetailService.hasSysAdminRole()) {
@@ -361,13 +361,17 @@ public class UserServiceImpl implements UserService {
 
             Specification<AnanUserEntity> condition = (root, query, cb) -> {
                 Path<Long> organizIdPath = root.get("organizId");
+                Path<Integer> statusPath = root.get("status");
                 Path<String> usercodePath = root.get("usercode");
-
+                Predicate predicate = cb.notEqual(usercodePath, SystemConstant.ANAN_USER_CODE);
                 CriteriaBuilder.In<Long> in = cb.in(organizIdPath);
                 for (AnanOrganizationEntity entity : organizs) {
                     in.value(entity.getId());
                 }
-                return cb.and(in, cb.notEqual(usercodePath, SystemConstant.ANAN_USER_CODE));
+                if (status != -1) {
+                    predicate = cb.and(predicate, cb.equal(statusPath, status));
+                }
+                return cb.and(in, predicate);
             };
             return userRepository.findAll(condition);
         }

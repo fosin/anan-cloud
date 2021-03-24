@@ -33,7 +33,7 @@ public class UserFeignFallbackServiceImpl implements UserFeignService {
     }
 
     @Override
-    public ResponseEntity<List<AnanUserEntity>> findAllUserByOrganizId(@PathVariable("organizId") Long organizId) {
+    public ResponseEntity<List<AnanUserEntity>> findAllUserByOrganizId(@PathVariable("organizId") Long organizId, @PathVariable("status") Integer status) {
         log.error("feign 远程查询机构及子机构下的用户信息失败:{}", organizId);
         return null;
     }

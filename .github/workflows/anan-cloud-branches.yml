@@ -11,7 +11,7 @@ on:
       - 'deploy/openjdk/**'
       - 'anan-configserver/**'
       - 'anan-eurekaserver/**'
-      - '.github/workflows/anan-cloud-branches.yml'
+#      - '.github/workflows/anan-cloud-branches.yml'
 jobs:
   release:
     runs-on: ubuntu-latest
@@ -26,7 +26,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           ref: ${{ env.BRANCHE_VERSION }}
-          fetch-depth: 20
+          fetch-depth: 2
 
       - name: Setup JDK
         uses: actions/setup-java@v1
@@ -35,10 +35,10 @@ jobs:
 
       - name: Set Build Modules
         run: |
-          MODIFY_FILES=$(git diff --name-only HEAD~4 HEAD)
+          MODIFY_FILES=$(git diff --name-only HEAD~ HEAD)
           MODULES=""
           echo MODIFY_FILES: $MODIFY_FILES
-          if [[ $MODIFY_FILES =~ " pom.xml" ]]; then
+          if [[ $MODIFY_FILES =~ "\npom.xml" || $MODIFY_FILES =~ "^pom.xml" || $MODIFY_FILES =~ " pom.xml" ]]; then
              MODULES=${MODULES}",com.github.fosin.anan:anan-cloud"
           fi
           if [[ $MODIFY_FILES =~ "anan-cloudresource" ]]; then

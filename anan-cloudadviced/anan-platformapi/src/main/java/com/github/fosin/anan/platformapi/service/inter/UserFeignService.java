@@ -28,8 +28,8 @@ public interface UserFeignService {
     @PostMapping("/usercode/{usercode}")
     ResponseEntity<AnanUserEntity> getByUsercode(@PathVariable("usercode") String usercode);
 
-    @PostMapping("/childList/organizId/{organizId}")
-    ResponseEntity<List<AnanUserEntity>> findAllUserByOrganizId(@PathVariable("organizId") Long organizId);
+    @PostMapping("/childList/organizId/{organizId}/{status}")
+    ResponseEntity<List<AnanUserEntity>> findAllUserByOrganizId(@PathVariable("organizId") Long organizId, @PathVariable("status") Integer status);
 
 }
 

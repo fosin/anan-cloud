@@ -1,5 +1,7 @@
 package com.github.fosin.anan.platform.controller;
 
+import com.github.fosin.anan.cloudresource.constant.UrlPrefixConstant;
+import com.github.fosin.anan.cloudresource.dto.request.*;
 import com.github.fosin.anan.core.exception.AnanControllerException;
 import com.github.fosin.anan.core.exception.AnanServiceException;
 import com.github.fosin.anan.model.controller.AbstractBaseController;
@@ -9,8 +11,6 @@ import com.github.fosin.anan.platform.service.inter.RoleService;
 import com.github.fosin.anan.platform.service.inter.UserPermissionService;
 import com.github.fosin.anan.platform.service.inter.UserRoleService;
 import com.github.fosin.anan.platform.service.inter.UserService;
-import com.github.fosin.anan.cloudresource.constant.UrlPrefixConstant;
-import com.github.fosin.anan.cloudresource.dto.request.*;
 import com.github.fosin.anan.platformapi.entity.AnanRoleEntity;
 import com.github.fosin.anan.platformapi.entity.AnanUserEntity;
 import com.github.fosin.anan.platformapi.entity.AnanUserPermissionEntity;
@@ -19,7 +19,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -59,7 +58,7 @@ public class UserController extends AbstractBaseController implements ISimpleCon
     @PostMapping("/changePassword")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "参数类型,取值于AnanUserEntity.id",
-            required = true, dataTypeClass = Long.class, paramType = "query"),
+                    required = true, dataTypeClass = Long.class, paramType = "query"),
             @ApiImplicitParam(name = "password", value = "原密码(未加密)",
                     required = true, dataTypeClass = String.class, paramType = "query"),
             @ApiImplicitParam(name = "confirmPassword1", value = "确认新密码1(未加密)",
@@ -150,12 +149,12 @@ public class UserController extends AbstractBaseController implements ISimpleCon
         return ResponseEntity.ok(roleService.findOtherUsersByRoleId(userId));
     }
 
-    @PostMapping({"/childList/organizId/{organizId}"})
+    @PostMapping({"/childList/organizId/{organizId}/{status}"})
     @ApiOperation("根据机构ID查询该机构及子机构的所有用户")
     @ApiImplicitParam(name = "organizId", value = "机构ID",
             required = true, dataTypeClass = Long.class, paramType = "path")
-    public ResponseEntity<List<AnanUserEntity>> findAllByOrganizId(@PathVariable("organizId") Long organizId) {
-        return ResponseEntity.ok(userService.findAllByOrganizId(organizId));
+    public ResponseEntity<List<AnanUserEntity>> findAllByOrganizId(@PathVariable("organizId") Long organizId, @PathVariable("status") Integer status) {
+        return ResponseEntity.ok(userService.findAllByOrganizId(organizId, status));
     }
 
     @Override
