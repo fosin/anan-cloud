@@ -35,13 +35,15 @@ public class AnanUserEntity extends AbstractOrganizIdJpaEntity<Long, Long> imple
     public AnanUserDto conert2Dto() {
         AnanUserDto userDto = new AnanUserDto();
         BeanUtils.copyProperties(this, userDto);
-
+        userDto.setId(this.getId());
         List<AnanUserRoleEntity> userRoles = this.getUserRoles();
         List<AnanRoleRetrieveDto> userRoles2 = new ArrayList<>();
         if (userRoles != null && userRoles.size() > 0) {
             userRoles.forEach(userRole -> {
                 AnanRoleRetrieveDto role2 = new AnanRoleRetrieveDto();
-                BeanUtils.copyProperties(userRole.getRole(), role2);
+                AnanRoleEntity role = userRole.getRole();
+                BeanUtils.copyProperties(role, role2);
+                role2.setId(role.getId());
                 userRoles2.add(role2);
             });
         }
