@@ -1,4 +1,4 @@
-name: anan-cloud Dockerfile CI
+name=anan-cloud Dockerfile CI
 on:
   push:
     tags:
@@ -35,58 +35,51 @@ jobs:
           docker login --username=${{ secrets.alidocker_username }} --password=${{ secrets.alidocker_secrect }} ${{ env.DOCKER_MIRROR_SERVER }}
 
       - name: Build and Push anan-authserver
-        env:
-          MODULE_PATH: anan-cloudadviced/anan-authserver
-          MODULE_NAME: anan-authserver
         run: |
+          MODULE_PATH=anan-cloudadviced/anan-authserver
+          MODULE_NAME=anan-authserver
           docker build ./$MODULE_PATH -t ${{ env.DOCKER_MIRROR_SERVER }}/${{ env.DOCKER_MIRROR_NS }}/$MODULE_NAME:$MODULE_VERSION -f ./$MODULE_PATH/Dockerfile
           docker push ${{ env.DOCKER_MIRROR_SERVER }}/${{ env.DOCKER_MIRROR_NS }}/$MODULE_NAME:$MODULE_VERSION
 
       - name: Build and Push anan-platformserver
-        env:
-          MODULE_PATH: anan-cloudadviced/anan-platformserver
-          MODULE_NAME: anan-platformserver
         run: |
+          MODULE_PATH=anan-cloudadviced/anan-platformserver
+          MODULE_NAME=anan-platformserver
           docker build ./$MODULE_PATH -t ${{ env.DOCKER_MIRROR_SERVER }}/${{ env.DOCKER_MIRROR_NS }}/$MODULE_NAME:$MODULE_VERSION -f ./$MODULE_PATH/Dockerfile
           docker push ${{ env.DOCKER_MIRROR_SERVER }}/${{ env.DOCKER_MIRROR_NS }}/$MODULE_NAME:$MODULE_VERSION
 
       - name: Build and Push anan-zuulgateway
-        env:
-          MODULE_PATH: anan-cloudadviced/anan-zuulgateway
-          MODULE_NAME: anan-zuulgateway
         run: |
+          MODULE_PATH=anan-cloudadviced/anan-zuulgateway
+          MODULE_NAME=anan-zuulgateway
           docker build ./$MODULE_PATH -t ${{ env.DOCKER_MIRROR_SERVER }}/${{ env.DOCKER_MIRROR_NS }}/$MODULE_NAME:$MODULE_VERSION -f ./$MODULE_PATH/Dockerfile
           docker push ${{ env.DOCKER_MIRROR_SERVER }}/${{ env.DOCKER_MIRROR_NS }}/$MODULE_NAME:$MODULE_VERSION
 
       - name: Build and Push anan-adminserver
-        env:
-          MODULE_PATH: anan-cloudadviced/anan-adminserver
-          MODULE_NAME: anan-adminserver
         run: |
+          MODULE_PATH=anan-cloudadviced/anan-adminserver
+          MODULE_NAME=anan-adminserver
           docker build ./$MODULE_PATH -t ${{ env.DOCKER_MIRROR_SERVER }}/${{ env.DOCKER_MIRROR_NS }}/$MODULE_NAME:$MODULE_VERSION -f ./$MODULE_PATH/Dockerfile
           docker push ${{ env.DOCKER_MIRROR_SERVER }}/${{ env.DOCKER_MIRROR_NS }}/$MODULE_NAME:$MODULE_VERSION
 
       - name: Build and Push anan-cloudgateway
-        env:
-          MODULE_PATH: anan-cloudgateway
-          MODULE_NAME: anan-cloudgateway
         run: |
+          MODULE_PATH=anan-cloudgateway
+          MODULE_NAME=anan-cloudgateway
           docker build ./$MODULE_PATH -t ${{ env.DOCKER_MIRROR_SERVER }}/${{ env.DOCKER_MIRROR_NS }}/$MODULE_NAME:$MODULE_VERSION -f ./$MODULE_PATH/Dockerfile
           docker push ${{ env.DOCKER_MIRROR_SERVER }}/${{ env.DOCKER_MIRROR_NS }}/$MODULE_NAME:$MODULE_VERSION
 
       - name: Build and Push anan-eurekaserver
-        env:
-          MODULE_PATH: anan-eurekaserver
-          MODULE_NAME: anan-eurekaserver
         run: |
+          MODULE_PATH=anan-eurekaserver
+          MODULE_NAME=anan-eurekaserver
           docker build ./$MODULE_PATH -t ${{ env.DOCKER_MIRROR_SERVER }}/${{ env.DOCKER_MIRROR_NS }}/$MODULE_NAME:$MODULE_VERSION -f ./$MODULE_PATH/Dockerfile
           docker push ${{ env.DOCKER_MIRROR_SERVER }}/${{ env.DOCKER_MIRROR_NS }}/$MODULE_NAME:$MODULE_VERSION
 
       - name: Build and Push anan-configserver
-        env:
-          MODULE_PATH: anan-configserver
-          MODULE_NAME: anan-configserver
         run: |
+          MODULE_PATH=anan-configserver
+          MODULE_NAME=anan-configserver
           docker build ./$MODULE_PATH -t ${{ env.DOCKER_MIRROR_SERVER }}/${{ env.DOCKER_MIRROR_NS }}/$MODULE_NAME:$MODULE_VERSION -f ./$MODULE_PATH/Dockerfile
           docker push ${{ env.DOCKER_MIRROR_SERVER }}/${{ env.DOCKER_MIRROR_NS }}/$MODULE_NAME:$MODULE_VERSION
           docker logout

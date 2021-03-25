@@ -1,6 +1,6 @@
 package com.github.fosin.anan.cloudresource.dto;
 
-import com.github.fosin.anan.cloudresource.dto.request.AnanUserRoleRetrieveDto;
+import com.github.fosin.anan.cloudresource.dto.request.AnanRoleRetrieveDto;
 import com.github.fosin.anan.util.DateTimeUtil;
 import com.github.fosin.anan.util.RegexUtil;
 import io.swagger.annotations.ApiModel;
@@ -26,7 +26,7 @@ public class AnanUserDto implements Serializable {
     private static final long serialVersionUID = -38545495043403316L;
 
     @ApiModelProperty(value = "用户拥有的角色")
-    private List<AnanUserRoleRetrieveDto> userRoles;
+    private List<AnanRoleRetrieveDto> userRoles;
 
     @NotNull(message = "用户ID" + "{javax.validation.constraints.NotNull.message}")
     @ApiModelProperty(value = "用户ID, 主键", required = true)

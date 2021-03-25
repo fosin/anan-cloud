@@ -1,13 +1,14 @@
 package com.github.fosin.anan.platformapi.entity;
 
 import com.github.fosin.anan.cloudresource.dto.AnanUserDto;
-import com.github.fosin.anan.cloudresource.dto.request.AnanUserRoleRetrieveDto;
+import com.github.fosin.anan.cloudresource.dto.request.AnanRoleRetrieveDto;
 import com.github.fosin.anan.jpa.entity.AbstractOrganizIdJpaEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.DynamicUpdate;
+import org.springframework.beans.BeanUtils;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -33,30 +34,14 @@ public class AnanUserEntity extends AbstractOrganizIdJpaEntity<Long, Long> imple
 
     public AnanUserDto conert2Dto() {
         AnanUserDto userDto = new AnanUserDto();
-        userDto.setId(this.getId());
-        userDto.setAvatar(this.getAvatar());
-        userDto.setPassword(this.getPassword());
-        userDto.setBirthday(this.getBirthday());
-        userDto.setEmail(this.getEmail());
-        userDto.setExpireTime(this.getExpireTime());
-        userDto.setOrganizId(this.getOrganizId());
-        userDto.setPhone(this.getPhone());
-        userDto.setSex(this.getSex());
-        userDto.setStatus(this.getStatus());
-        userDto.setUsercode(this.getUsercode());
-        userDto.setUsername(this.getUsername());
+        BeanUtils.copyProperties(this, userDto);
 
         List<AnanUserRoleEntity> userRoles = this.getUserRoles();
-        List<AnanUserRoleRetrieveDto> userRoles2 = new ArrayList<>();
+        List<AnanRoleRetrieveDto> userRoles2 = new ArrayList<>();
         if (userRoles != null && userRoles.size() > 0) {
-            userRoles.forEach(role -> {
-                AnanUserRoleRetrieveDto role2 = new AnanUserRoleRetrieveDto();
-                role2.setId(role.getId());
-                role2.setCreateBy(role.getCreateBy());
-                role2.setCreateTime(role.getCreateTime());
-                role2.setOrganizId(role.getOrganizId());
-                role2.setRoleId(role.getRole().getId());
-                role2.setUserId(role.getUserId());
+            userRoles.forEach(userRole -> {
+                AnanRoleRetrieveDto role2 = new AnanRoleRetrieveDto();
+                BeanUtils.copyProperties(userRole.getRole(), role2);
                 userRoles2.add(role2);
             });
         }

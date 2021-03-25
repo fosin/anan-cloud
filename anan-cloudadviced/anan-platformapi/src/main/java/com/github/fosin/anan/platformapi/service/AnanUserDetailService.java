@@ -3,7 +3,7 @@ package com.github.fosin.anan.platformapi.service;
 import com.github.fosin.anan.cloudresource.constant.SystemConstant;
 import com.github.fosin.anan.cloudresource.dto.AnanClient;
 import com.github.fosin.anan.cloudresource.dto.AnanUserDto;
-import com.github.fosin.anan.cloudresource.dto.request.AnanUserRoleRetrieveDto;
+import com.github.fosin.anan.cloudresource.dto.request.AnanRoleRetrieveDto;
 import com.github.fosin.anan.platformapi.dto.AnanUserDetail;
 import com.github.fosin.anan.security.util.AnanJwtTool;
 import lombok.extern.slf4j.Slf4j;
@@ -124,7 +124,7 @@ public class AnanUserDetailService extends AnanJwtTool<AnanUserDetail> {
      * @return boolean true：是 false：否
      */
     public boolean isAdminUser() {
-        return isAdminUser(this.getAnanUser().getUsercode());
+        return hasAdminRole();
     }
 
     /**
@@ -142,8 +142,12 @@ public class AnanUserDetailService extends AnanJwtTool<AnanUserDetail> {
      * @return boolean true：是 false：否
      */
     public boolean hasAdminRole() {
-        List<AnanUserRoleRetrieveDto> userRoles = this.getAnanUser().getUserRoles();
-        userRoles.forEach(ananUserRole -> ananUserRole.getRoleId().equals(SystemConstant.ADMIN_ROLE_ID));
+        List<AnanRoleRetrieveDto> userRoles = this.getAnanUser().getUserRoles();
+        for (AnanRoleRetrieveDto userRole : userRoles) {
+            if (SystemConstant.ADMIN_ROLE_NAME.equals(userRole.getValue())) {
+                return true;
+            }
+        }
         return false;
     }
 
@@ -153,9 +157,9 @@ public class AnanUserDetailService extends AnanJwtTool<AnanUserDetail> {
      * @return boolean true：是 false：否
      */
     public boolean hasSysAdminRole() {
-        List<AnanUserRoleRetrieveDto> userRoles = this.getAnanUser().getUserRoles();
-        for (AnanUserRoleRetrieveDto userRole : userRoles) {
-            if (userRole.getRoleId().equals(SystemConstant.ANAN_ROLE_ID)) {
+        List<AnanRoleRetrieveDto> userRoles = this.getAnanUser().getUserRoles();
+        for (AnanRoleRetrieveDto userRole : userRoles) {
+            if (SystemConstant.ANAN_ROLE_NAME.equals(userRole.getValue())) {
                 return true;
             }
         }
