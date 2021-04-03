@@ -10,7 +10,7 @@ bash ./check-config.sh
 
 # CentOS 7.x 系统自带的 3.10.x 内核存在一些 Bugs，导致运行的 Docker、Kubernetes 不稳定
 #rpm -Uvh http://www.elrepo.org/elrepo-release-7.0-3.el7.elrepo.noarch.rpm
-yum install https://www.elrepo.org/elrepo-release-7.el7.elrepo.noarch.rpm
+yum install -y https://www.elrepo.org/elrepo-release-7.el7.elrepo.noarch.rpm
 # 安装完成后检查 /boot/grub2/grub.cfg 中对应内核 menuentry 中是否包含 initrd16 配置，如果没有，再安装一次！
 yum --enablerepo=elrepo-kernel install -y kernel-lt
 
@@ -75,7 +75,7 @@ cat > /etc/docker/daemon.json <<EOF
   "log-level": "warn",
   "log-driver": "json-file",
   "log-opts": {"max-size":"50m", "max-file":"7"},
-  "registry-mirrors": ["https://dockerhub.azk8s.cn","https://c70a1b9z.mirror.aliyuncs.com","https://docker.mirrors.ustc.edu.cn/"],
+  "registry-mirrors": ["https://c70a1b9z.mirror.aliyuncs.com","https://mirror.ccs.tencentyun.com","https://docker.mirrors.ustc.edu.cn/"],
   "experimental": true,
   "data-root": "/var/lib/docker"
 }

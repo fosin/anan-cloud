@@ -692,6 +692,10 @@ anan:
       - /**/swagger-resources/**
       - /**/api-docs
       - /actuator/**
+      - /**/international/status/*
+      - /**/international/code/*
+      - /**/international/default
+      - /**/international/charset/internationalId/*
   swagger:
     enabled: true
     title: ${spring.application.name}
@@ -951,6 +955,22 @@ LOCK TABLES `his_config_info` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `permissions`
+--
+
+DROP TABLE IF EXISTS `permissions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+create table if not exists permissions
+(
+    role varchar(50) not null,
+    resource varchar(512) not null,
+    action varchar(8) not null,
+    constraint uk_role_permission
+        unique (role, resource, action)
+);
+
+--
 -- Table structure for table `roles`
 --
 
@@ -1033,7 +1053,7 @@ CREATE TABLE `tenant_info` (
 
 LOCK TABLES `tenant_info` WRITE;
 /*!40000 ALTER TABLE `tenant_info` DISABLE KEYS */;
-INSERT INTO `tenant_info` VALUES (1,'1','6138f451-2d5b-42fe-a793-df3744d7257c','local','本地开发环境','nacos',1573371901768,1573371901768);
+INSERT INTO `tenant_info` VALUES (1,'1','local','local','本地开发环境','nacos',1573371901768,1573371901768);
 /*!40000 ALTER TABLE `tenant_info` ENABLE KEYS */;
 UNLOCK TABLES;
 
