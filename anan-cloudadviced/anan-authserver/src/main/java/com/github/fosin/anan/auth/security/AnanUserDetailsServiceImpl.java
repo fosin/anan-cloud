@@ -2,7 +2,7 @@ package com.github.fosin.anan.auth.security;
 
 import com.github.fosin.anan.auth.service.inter.PermissionService;
 import com.github.fosin.anan.auth.service.inter.UserService;
-import com.github.fosin.anan.platformapi.dto.AnanUserDetail;
+import com.github.fosin.anan.cloudresource.dto.AnanUserDetail;
 import com.github.fosin.anan.platformapi.entity.AnanUserAllPermissionsEntity;
 import com.github.fosin.anan.platformapi.entity.AnanUserEntity;
 import lombok.extern.slf4j.Slf4j;

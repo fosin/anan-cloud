@@ -5,7 +5,7 @@ services:
     container_name: mysql-leader
     hostname: mysql-leader
     restart: always
-    image: registry.cn-hongkong.aliyuncs.com/fosin/mysql-leader:2.3
+    image: registry.cn-hongkong.aliyuncs.com/fosin/mysql-leader:2.4
     #    build:
     #      context: deploy/mysql/leader
     environment:
@@ -16,15 +16,12 @@ services:
       - MYSQL_DATABASE=nacos
       - MYSQL_USER=nacos
       - MYSQL_PASSWORD=local
-      - MYSQL_DATABASE2=anan_platform
-      - MYSQL_USER2=anan
-      - MYSQL_PASSWORD2=local
     volumes:
       - /root/deploy/nfs/mysql-leader1:/var/lib/mysql
     ports:
       - "3306:3306"
   nacos-0:
-    image: nacos/nacos-server:1.3.2
+    image: nacos/nacos-server:1.4.1
     container_name: nacos-0
     hostname: nacos-0
     restart: always
@@ -84,7 +81,6 @@ services:
     ports:
       - 80:80
       - 6478:6478
-
     depends_on:
       - nacos-0
 
@@ -102,13 +98,12 @@ services:
       - 6379:6379
     command: redis-server --appendonly yes --requirepass local
 
-
   mysql-follower:
     network_mode: host
     container_name: mysql-follower
     hostname: mysql-follower
     restart: always
-    image: registry.cn-hongkong.aliyuncs.com/fosin/mysql-follower:2.3
+    image: registry.cn-hongkong.aliyuncs.com/fosin/mysql-follower:2.4
     #    build:
     #      context: deploy/mysql/follower
     environment:
@@ -137,7 +132,6 @@ services:
       - 51400:51400
       #    volumes:
       #- /root/deploy/logs/anan:/logs
-
     depends_on:
       - rabbitmq
       - redis
@@ -157,7 +151,6 @@ services:
       - 9000:9000
       #    volumes:
       #- /root/deploy/logs/anan:/logs
-
     depends_on:
       - rabbitmq
       - nacos-0
@@ -175,7 +168,6 @@ services:
       #- /root/deploy/logs/anan:/logs
     ports:
       - 51500:51500
-
     depends_on:
       - rabbitmq
       - redis
@@ -195,7 +187,6 @@ services:
       #- /root/deploy/logs/anan:/logs
     ports:
       - 51700:51700
-
     depends_on:
       - rabbitmq
       - redis
@@ -209,7 +200,6 @@ services:
     restart: always
     environment:
       - JAVA_TOOL_OPTIONS=-Xmx200M -XX:MaxMetaspaceSize=160M -XX:MetaspaceSize=160M -XX:+DisableExplicitGC -XX:ErrorFile=/logs/hs_err_pid%p.log
-
       #    volumes:
       #- /root/deploy/logs/anan:/logs
     ports:
@@ -254,7 +244,6 @@ services:
     command: ["--strict.perms=false"]
     #    ports:
     #      - 5601:5601
-
     depends_on:
       - elasticsearch
 
@@ -311,7 +300,6 @@ services:
       - RABBIT_ADDRESSES=rabbitmq:7890
       - RABBIT_USER=anan
       - RABBIT_PASSWORD=local
-
     depends_on:
       - elasticsearch
       - rabbitmq
@@ -352,7 +340,6 @@ services:
       - node-exporter
     ports:
       - 9090:9090
-
 
   node-exporter:
     network_mode: host
@@ -413,7 +400,6 @@ services:
     ports:
       - 8080:8080
 
-
   alertmanager:
     network_mode: host
     image: prom/alertmanager
@@ -422,7 +408,6 @@ services:
     restart: always
     ports:
       - 9093:9093
-
     environment:
       - SLACK_URL=${SLACK_URL:-https://hooks.slack.com/services/TOKEN}
       - SLACK_CHANNEL=${SLACK_CHANNEL:-devops-alerts}
@@ -440,7 +425,6 @@ services:
     hostname: unsee
     image: cloudflare/unsee:v0.8.0
     restart: always
-
     environment:
       - TZ=Asia/Shanghai
       - "ALERTMANAGER_URIS=default:http://alertmanager:9093"
@@ -467,7 +451,6 @@ services:
       - 9001:9000
     environment:
       - SONARQUBE_JDBC_URL=jdbc:postgresql://postgresql:5432/sonar
-
     depends_on:
       - postgresql
 
@@ -482,6 +465,7 @@ services:
       - MYSQL_DATABASE=nacos
       - MYSQL_USER=nacos
       - MYSQL_PASSWORD=local
+      - MYSQL_SERVICE_PORT=3308
     volumes:
       - /root/deploy/mysql/nacos:/var/lib/mysql
     ports:

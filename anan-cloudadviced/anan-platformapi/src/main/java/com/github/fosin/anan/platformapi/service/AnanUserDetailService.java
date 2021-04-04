@@ -2,9 +2,9 @@ package com.github.fosin.anan.platformapi.service;
 
 import com.github.fosin.anan.cloudresource.constant.SystemConstant;
 import com.github.fosin.anan.cloudresource.dto.AnanClient;
+import com.github.fosin.anan.cloudresource.dto.AnanUserDetail;
 import com.github.fosin.anan.cloudresource.dto.AnanUserDto;
 import com.github.fosin.anan.cloudresource.dto.request.AnanRoleRetrieveDto;
-import com.github.fosin.anan.platformapi.dto.AnanUserDetail;
 import com.github.fosin.anan.security.util.AnanJwtTool;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.oauth2.jwt.JwtDecoder;

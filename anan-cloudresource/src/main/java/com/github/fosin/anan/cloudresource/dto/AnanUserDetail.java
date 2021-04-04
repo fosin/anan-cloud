@@ -1,7 +1,5 @@
-package com.github.fosin.anan.platformapi.dto;
+package com.github.fosin.anan.cloudresource.dto;
 
-import com.github.fosin.anan.cloudresource.dto.AnanClient;
-import com.github.fosin.anan.cloudresource.dto.AnanUserDto;
 import com.github.fosin.anan.util.ClientUtil;
 import lombok.Getter;
 import org.springframework.beans.BeanUtils;
