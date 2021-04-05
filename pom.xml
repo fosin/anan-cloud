@@ -54,7 +54,7 @@
                 <spring.cloud.config.server.git.uri>https://github.com/fosin/anan-cloud/deploy
                 </spring.cloud.config.server.git.uri>
                 <spring.cloud.config.server.git.search-paths>anan-config</spring.cloud.config.server.git.search-paths>
-                <spring.cloud.inetutils.preferred-networks>192.168.137.</spring.cloud.inetutils.preferred-networks>
+                <spring.cloud.inetutils.preferred-networks>100.100.,192.168.</spring.cloud.inetutils.preferred-networks>
                 <spring.rabbitmq.addresses>rabbitmq:5672</spring.rabbitmq.addresses>
                 <spring.rabbitmq.username>anan</spring.rabbitmq.username>
                 <spring.rabbitmq.password>local</spring.rabbitmq.password>
@@ -218,6 +218,7 @@
         <dependency>
             <groupId>${anan.groupId}</groupId>
             <artifactId>anan-cloudresource</artifactId>
+            <version>${revision}</version>
         </dependency>
         <!--spring boot 项目引入了 spring的devtools 会产生java.lang.ClassCastException 两个一样的类不能强转
         java.lang.ClassCastException: class com.github.fosin.anan.pojo.dto.AnanUserDetail cannot be
@@ -263,11 +264,6 @@
             <dependency>
                 <groupId>${anan.groupId}</groupId>
                 <artifactId>anan-platformapi</artifactId>
-                <version>${revision}</version>
-            </dependency>
-            <dependency>
-                <groupId>${anan.groupId}</groupId>
-                <artifactId>anan-cloudresource</artifactId>
                 <version>${revision}</version>
             </dependency>
         </dependencies>

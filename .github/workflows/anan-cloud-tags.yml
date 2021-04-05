@@ -1,4 +1,4 @@
-name=anan-cloud Dockerfile CI
+name: anan-cloud Dockerfile CI
 on:
   push:
     tags:

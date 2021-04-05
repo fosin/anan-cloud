@@ -237,6 +237,19 @@ spring:
     loadbalancer:
       ribbon:
         enabled: true
+    stream:
+      default:
+        group: ${spring.application.name}-${spring.cloud.client.ip-address}-${server.port}
+      rabbit:
+        bindings:
+          springCloudBusInput:
+            consumer:
+              # 队列声明重试次数
+              queue-declaration-retries: 2000
+              # 重试间隔(ms)
+              recovery-interval: 5000
+              # 为true时，使用‘group’作为配置刷新队列的名称
+              queue-name-group-only: true
   jpa:
     #Hibernate自动创建表的时候使用InnoDB存储引擎，不然就会以默认存储引擎MyISAM来建表，而MyISAM存储引擎是没有事务的。
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect

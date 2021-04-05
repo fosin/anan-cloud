@@ -158,7 +158,6 @@ services:
   anan-platformserver:
     network_mode: host
     image: registry.cn-hongkong.aliyuncs.com/fosin/anan-platformserver:2.4.0-SNAPSHOT
-    entrypoint: "sh /anan/wait-for.sh anan-authserver:51400 -t 3600 -- /anan/entrypoint.sh"
     container_name: anan-platformserver
     hostname: anan-platformserver
     restart: always
