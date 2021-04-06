@@ -1,15 +1,15 @@
 package com.github.fosin.anan.platform.service;
 
+import com.github.fosin.anan.cloudresource.constant.RedisConstant;
+import com.github.fosin.anan.cloudresource.dto.request.AnanRolePermissionUpdateDto;
 import com.github.fosin.anan.core.exception.AnanServiceException;
+import com.github.fosin.anan.core.util.BeanUtil;
 import com.github.fosin.anan.jpa.repository.IJpaRepository;
 import com.github.fosin.anan.jpa.service.batch.IUpdateInBatchJpaService;
 import com.github.fosin.anan.platform.service.inter.RolePermissionService;
-import com.github.fosin.anan.cloudresource.constant.RedisConstant;
 import com.github.fosin.anan.platformapi.entity.AnanRolePermissionEntity;
 import com.github.fosin.anan.platformapi.repository.RolePermissionRepository;
-import com.github.fosin.anan.cloudresource.dto.request.AnanRolePermissionUpdateDto;
 import com.github.fosin.anan.redis.cache.AnanCacheManger;
-import com.github.fosin.anan.util.BeanUtil;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;

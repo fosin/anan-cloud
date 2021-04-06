@@ -5,7 +5,7 @@ import com.github.fosin.anan.platform.dto.request.AnanOrganizationPermissionUpda
 import com.github.fosin.anan.platform.entity.AnanOrganizationPermissionEntity;
 import com.github.fosin.anan.platform.repository.AnanOrganizationPermissionRepository;
 import com.github.fosin.anan.platform.service.inter.AnanOrganizationPermissionService;
-import com.github.fosin.anan.util.BeanUtil;
+import com.github.fosin.anan.core.util.BeanUtil;
 
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;

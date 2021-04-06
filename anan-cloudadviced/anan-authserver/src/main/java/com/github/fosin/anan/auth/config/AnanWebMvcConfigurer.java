@@ -1,6 +1,6 @@
 package com.github.fosin.anan.auth.config;
 
-import com.github.fosin.anan.util.DateTimeUtil;
+import com.github.fosin.anan.core.util.DateTimeUtil;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.format.datetime.DateFormatter;

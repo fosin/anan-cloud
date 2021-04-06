@@ -12,7 +12,7 @@ import com.github.fosin.anan.platformapi.entity.AnanUserAllPermissionsEntity;
 import com.github.fosin.anan.platformapi.repository.AnanServiceRepository;
 import com.github.fosin.anan.platformapi.repository.PermissionRepository;
 import com.github.fosin.anan.platformapi.repository.UserAllPermissionsRepository;
-import com.github.fosin.anan.util.TreeUtil;
+import com.github.fosin.anan.core.util.TreeUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;

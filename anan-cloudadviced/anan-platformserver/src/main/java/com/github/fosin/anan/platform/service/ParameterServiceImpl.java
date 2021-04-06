@@ -17,7 +17,6 @@ import com.github.fosin.anan.platformapi.entity.AnanParameterEntity;
 import com.github.fosin.anan.platformapi.parameter.OrganStrategy;
 import com.github.fosin.anan.platformapi.service.AnanUserDetailService;
 import com.github.fosin.anan.redis.cache.AnanCacheManger;
-import com.github.fosin.anan.util.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -138,7 +137,7 @@ public class ParameterServiceImpl implements ParameterService {
     }
 
     public String getCacheKey(Integer type, String scope, String name) {
-        if (StringUtil.isEmpty(scope)) {
+        if (StringUtils.isEmpty(scope)) {
             scope = "";
         }
         return type + "-" + scope + "-" + name;
@@ -167,7 +166,7 @@ public class ParameterServiceImpl implements ParameterService {
     public AnanParameterEntity getNearestParameter(int type, String scope, String name) {
         AnanParameterEntity parameter = parameterRepository.findByTypeAndScopeAndName(type, scope, name);
         boolean finded = parameter != null && parameter.getId() != null;
-        if (StringUtil.isEmpty(scope)) {
+        if (StringUtils.isEmpty(scope)) {
             String info = "没有从参数[" + "type:" + type + " scope:" + scope + " name:" + name + "]中查询到参数";
             Assert.isTrue(finded, info);
             return parameter;

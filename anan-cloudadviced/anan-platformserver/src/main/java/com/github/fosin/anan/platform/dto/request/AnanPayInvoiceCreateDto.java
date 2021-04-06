@@ -8,7 +8,7 @@ import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
-import com.github.fosin.anan.util.DateTimeUtil;
+import com.github.fosin.anan.core.util.DateTimeUtil;
 
 /**
  * 系统支付发票表(AnanPayInvoice)创建DTO

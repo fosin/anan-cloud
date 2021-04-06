@@ -7,7 +7,7 @@ import com.github.fosin.anan.security.resource.AnanSecurityConstant;
 import com.github.fosin.anan.security.resource.AnanSecurityProperties;
 import com.github.fosin.anan.swagger.config.AnanSwaggerResourcesProvider;
 import com.github.fosin.anan.swagger.spring4all.SwaggerProperties;
-import com.github.fosin.anan.util.StringUtil;
+import org.springframework.util.StringUtils;
 import com.github.fosin.anan.zuul.service.inter.PermissionFeignService;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
@@ -52,10 +52,10 @@ public class AnanZuulAutoConfiguration {
             List<AnanPermissionRetrieveDto> entities = responseEntity.getBody();
             Objects.requireNonNull(entities).forEach(entity -> {
                 String entityPath = entity.getPath();
-                if (StringUtil.hasText(entityPath)) {
+                if (StringUtils.hasText(entityPath)) {
                     String method = entity.getMethod();
                     List<HttpMethod> httpMethods = new ArrayList<>();
-                    if (StringUtil.hasText(method)) {
+                    if (StringUtils.hasText(method)) {
                         String[] strings = method.split(",");
                         for (String string : strings) {
                             httpMethods.add(HttpMethod.resolve(string));

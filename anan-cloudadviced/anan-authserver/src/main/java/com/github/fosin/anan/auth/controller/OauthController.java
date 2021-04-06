@@ -1,6 +1,6 @@
 package com.github.fosin.anan.auth.controller;
 
-import com.github.fosin.anan.util.StringUtil;
+import org.springframework.util.StringUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -101,7 +101,7 @@ public class OauthController {
             if (principal instanceof AbstractOAuth2Token) {
                 token = ((AbstractOAuth2Token) principal).getTokenValue();
             }
-            Assert.isTrue(StringUtil.hasText(token), "token不能为空!");
+            Assert.isTrue(StringUtils.hasText(token), "token不能为空!");
             rc = consumerTokenServices.revokeToken(token);
         }
         return ResponseEntity.ok(rc);

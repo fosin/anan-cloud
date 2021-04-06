@@ -1,7 +1,7 @@
 package com.github.fosin.anan.platform.controller;
 
 import com.github.fosin.anan.platform.dto.PageURI;
-import com.github.fosin.anan.util.StringUtil;
+import org.springframework.util.StringUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -64,12 +64,12 @@ public class ApplicationController {
     })
     @RequestMapping(value = "/ui/url", method = {RequestMethod.POST})
     public ResponseEntity<PageURI> uiUrl(@RequestParam String serviceId, @RequestParam(value = "path", required = false) String path) {
-        Assert.isTrue(StringUtil.hasText(serviceId), "serviceId不能为空!");
+        Assert.isTrue(StringUtils.hasText(serviceId), "serviceId不能为空!");
         ServiceInstance serviceInstance = getServiceInstance(serviceId);
         Assert.notNull(serviceInstance, "未找到可用的服务实例!");
         String url = "http://" + serviceInstance.getHost() +
                 ":" + serviceInstance.getPort();
-        if (StringUtil.hasText(path)) {
+        if (StringUtils.hasText(path)) {
             url += "/" + path;
         }
 
@@ -113,7 +113,7 @@ public class ApplicationController {
         HttpHeaders headers = new HttpHeaders();
         String username = si.getMetadata().get("user.name");
         String password = si.getMetadata().get("user.password");
-        if (StringUtil.hasText(username) && StringUtil.hasText(password)) {
+        if (StringUtils.hasText(username) && StringUtils.hasText(password)) {
             headers.set(HttpHeaders.AUTHORIZATION, encode(username, password));
         }
         return headers;

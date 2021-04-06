@@ -9,7 +9,7 @@ import com.github.fosin.anan.platformapi.entity.AnanUserPermissionEntity;
 import com.github.fosin.anan.platformapi.repository.UserPermissionRepository;
 import com.github.fosin.anan.cloudresource.dto.request.AnanUserPermissionUpdateDto;
 import com.github.fosin.anan.redis.cache.AnanCacheManger;
-import com.github.fosin.anan.util.BeanUtil;
+import com.github.fosin.anan.core.util.BeanUtil;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;

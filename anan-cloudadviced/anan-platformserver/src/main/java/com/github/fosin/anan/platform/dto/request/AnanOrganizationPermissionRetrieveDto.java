@@ -6,7 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
-import com.github.fosin.anan.util.DateTimeUtil;
+import com.github.fosin.anan.core.util.DateTimeUtil;
 
 /**
  * 系统机构权限表(AnanOrganizationPermission)查询DTO

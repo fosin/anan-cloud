@@ -11,7 +11,7 @@ import com.github.fosin.anan.platformapi.entity.AnanPermissionEntity;
 import com.github.fosin.anan.cloudresource.dto.request.AnanPermissionCreateDto;
 import com.github.fosin.anan.cloudresource.dto.request.AnanPermissionRetrieveDto;
 import com.github.fosin.anan.cloudresource.dto.request.AnanPermissionUpdateDto;
-import com.github.fosin.anan.util.TreeUtil;
+import com.github.fosin.anan.core.util.TreeUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;

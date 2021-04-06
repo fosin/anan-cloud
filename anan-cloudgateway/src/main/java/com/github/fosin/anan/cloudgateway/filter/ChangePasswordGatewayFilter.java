@@ -1,7 +1,7 @@
 package com.github.fosin.anan.cloudgateway.filter;
 
-import com.github.fosin.anan.util.StringUtil;
-import com.github.fosin.anan.util.crypt.AesUtil;
+import org.springframework.util.StringUtils;
+import com.github.fosin.anan.core.util.crypt.AesUtil;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.core.Ordered;
@@ -31,24 +31,24 @@ public class ChangePasswordGatewayFilter implements GatewayFilter, Ordered {
         //只处理修改密码请求
         if (uri.contains("/user/changePassword")) {
             String id = getRequestParam(params, "i");
-            if (StringUtil.isEmpty(id)) {
+            if (StringUtils.isEmpty(id)) {
                 return null;
             }
 
             String password = getRequestParam(params, "a");
-            if (StringUtil.isEmpty(password)) {
+            if (StringUtils.isEmpty(password)) {
                 return null;
             }
             String confirmpassword1 = getRequestParam(params, "b");
-            if (StringUtil.isEmpty(confirmpassword1)) {
+            if (StringUtils.isEmpty(confirmpassword1)) {
                 return null;
             }
             String confirmpassword2 = getRequestParam(params, "h");
-            if (StringUtil.isEmpty(confirmpassword2)) {
+            if (StringUtils.isEmpty(confirmpassword2)) {
                 return null;
             }
             String passphrase = getRequestParam(params, "c");
-            if (StringUtil.isEmpty(passphrase)) {
+            if (StringUtils.isEmpty(passphrase)) {
                 return null;
             }
             int keysize = Integer.parseInt(Objects.requireNonNull(getRequestParam(params, "f")));
@@ -56,7 +56,7 @@ public class ChangePasswordGatewayFilter implements GatewayFilter, Ordered {
                 return null;
             }
             String iv = getRequestParam(params, "d");
-            if (StringUtil.isEmpty(iv)) {
+            if (StringUtils.isEmpty(iv)) {
                 return null;
             }
             int iterationcount = Integer.parseInt(Objects.requireNonNull(getRequestParam(params, "g")));
@@ -64,7 +64,7 @@ public class ChangePasswordGatewayFilter implements GatewayFilter, Ordered {
                 return null;
             }
             String salt = getRequestParam(params, "e");
-            if (StringUtil.isEmpty(salt)) {
+            if (StringUtils.isEmpty(salt)) {
                 return null;
             }
             AesUtil aesUtil = new AesUtil(keysize, iterationcount);

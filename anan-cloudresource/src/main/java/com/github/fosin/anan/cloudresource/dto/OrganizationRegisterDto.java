@@ -1,6 +1,6 @@
 package com.github.fosin.anan.cloudresource.dto;
 
-import com.github.fosin.anan.util.RegexUtil;
+import com.github.fosin.anan.core.util.RegexUtil;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;

@@ -1,6 +1,6 @@
 package com.github.fosin.anan.zuul.balance;
 
-import com.github.fosin.anan.util.IpAddressUtil;
+import com.github.fosin.anan.core.util.IpAddressUtil;
 import com.netflix.client.config.IClientConfig;
 import com.netflix.loadbalancer.AbstractLoadBalancerRule;
 import com.netflix.loadbalancer.ILoadBalancer;

@@ -1,6 +1,6 @@
 package com.github.fosin.anan.cloudresource.dto;
 
-import com.github.fosin.anan.util.ClientUtil;
+import com.github.fosin.anan.core.util.ClientUtil;
 import lombok.Getter;
 import org.springframework.beans.BeanUtils;
 import org.springframework.security.core.GrantedAuthority;

@@ -1,5 +1,6 @@
 package com.github.fosin.anan.platform.service;
 
+import cn.hutool.core.util.NumberUtil;
 import com.github.fosin.anan.cloudresource.constant.RedisConstant;
 import com.github.fosin.anan.cloudresource.constant.SystemConstant;
 import com.github.fosin.anan.cloudresource.dto.request.AnanUserCreateDto;
@@ -17,9 +18,7 @@ import com.github.fosin.anan.platformapi.entity.AnanUserRoleEntity;
 import com.github.fosin.anan.platformapi.repository.UserRepository;
 import com.github.fosin.anan.platformapi.service.AnanUserDetailService;
 import com.github.fosin.anan.redis.cache.AnanCacheManger;
-import com.github.fosin.anan.util.NumberUtil;
-import com.github.fosin.anan.util.RegexUtil;
-import com.github.fosin.anan.util.StringUtil;
+import com.github.fosin.anan.core.util.RegexUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -111,7 +110,7 @@ public class UserServiceImpl implements UserService {
     private String encryptBeforeSave(AnanUserEntity entity) {
         String password = entity.getPassword();
         //如果密码为空则随机生成4位以下密码
-        if (StringUtil.isEmpty(password)) {
+        if (StringUtils.isEmpty(password)) {
             password = getPassword();
         }
         entity.setPassword(passwordEncoder.encode(password));
@@ -279,8 +278,8 @@ public class UserServiceImpl implements UserService {
     )
     public AnanUserEntity changePassword(Long id, String password, String confirmPassword1, String confirmPassword2) {
         Assert.notNull(id, "用户ID不能为空!");
-        Assert.isTrue(!StringUtil.isEmpty(confirmPassword1) &&
-                !StringUtil.isEmpty(confirmPassword2) && confirmPassword1.equals(confirmPassword2), "新密码和确认新密码不能为空且必须一致!");
+        Assert.isTrue(!StringUtils.isEmpty(confirmPassword1) &&
+                !StringUtils.isEmpty(confirmPassword2) && confirmPassword1.equals(confirmPassword2), "新密码和确认新密码不能为空且必须一致!");
         Assert.isTrue(!confirmPassword1.equals(password), "新密码和原密码不能相同!");
         String passwordStrength = localOrganParameter.getOrCreateParameter("DefaultPasswordStrength", RegexUtil.PASSWORD_STRONG, "用户密码强度正则表达式,密码最少6位，包括至少1个大写字母，1个小写字母，1个数字，1个特殊字符");
         Assert.isTrue(RegexUtil.matcher(confirmPassword1, passwordStrength), "新密码强度不符合强度要求!");

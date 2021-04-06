@@ -2,7 +2,7 @@ package com.github.fosin.anan.auth.config;
 
 import com.github.fosin.anan.auth.security.AnanTokenServices;
 import com.github.fosin.anan.security.resource.AnanSecurityProperties;
-import com.github.fosin.anan.util.StringUtil;
+import org.springframework.util.StringUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -151,7 +151,7 @@ public class AnanJwtAuthorizationServerConfigurer extends AuthorizationServerCon
             converter.setKeyPair(keyPair);
         } else {
             String keyValue = jwt.getPublicKeyValue();
-            if (StringUtil.hasText(keyValue)) {
+            if (StringUtils.hasText(keyValue)) {
                 converter.setSigningKey(keyValue);
             }
         }

@@ -12,7 +12,7 @@ import com.github.fosin.anan.platform.repository.OrganizationRepository;
 import com.github.fosin.anan.platform.service.inter.OrganizationService;
 import com.github.fosin.anan.platformapi.entity.AnanOrganizationEntity;
 import com.github.fosin.anan.platformapi.service.AnanUserDetailService;
-import com.github.fosin.anan.util.TreeUtil;
+import com.github.fosin.anan.core.util.TreeUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.cache.annotation.CacheEvict;

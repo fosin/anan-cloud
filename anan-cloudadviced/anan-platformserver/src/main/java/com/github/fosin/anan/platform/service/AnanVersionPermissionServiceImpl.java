@@ -10,7 +10,7 @@ import com.github.fosin.anan.platformapi.entity.AnanRolePermissionEntity;
 import com.github.fosin.anan.platformapi.entity.AnanUserPermissionEntity;
 import com.github.fosin.anan.platformapi.repository.RolePermissionRepository;
 import com.github.fosin.anan.platformapi.repository.UserPermissionRepository;
-import com.github.fosin.anan.util.BeanUtil;
+import com.github.fosin.anan.core.util.BeanUtil;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

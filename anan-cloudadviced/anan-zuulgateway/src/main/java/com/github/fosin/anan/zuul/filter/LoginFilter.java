@@ -19,8 +19,8 @@ package com.github.fosin.anan.zuul.filter;
 
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
-import com.github.fosin.anan.util.StringUtil;
-import com.github.fosin.anan.util.crypt.AesUtil;
+import org.springframework.util.StringUtils;
+import com.github.fosin.anan.core.util.crypt.AesUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.netflix.zuul.filters.support.FilterConstants;
 import org.springframework.stereotype.Component;
@@ -64,15 +64,15 @@ public class LoginFilter extends ZuulFilter {
         }
 
         String cipheru = getRequestParam(params, "a");
-        if (StringUtil.isEmpty(cipheru)) {
+        if (StringUtils.isEmpty(cipheru)) {
             return null;
         }
         String cipherp = getRequestParam(params, "b");
-        if (StringUtil.isEmpty(cipherp)) {
+        if (StringUtils.isEmpty(cipherp)) {
             return null;
         }
         String passphrase = getRequestParam(params, "c");
-        if (StringUtil.isEmpty(passphrase)) {
+        if (StringUtils.isEmpty(passphrase)) {
             return null;
         }
         int keysize = Integer.parseInt(Objects.requireNonNull(getRequestParam(params, "f")));
@@ -80,7 +80,7 @@ public class LoginFilter extends ZuulFilter {
             return null;
         }
         String iv = getRequestParam(params, "d");
-        if (StringUtil.isEmpty(iv)) {
+        if (StringUtils.isEmpty(iv)) {
             return null;
         }
         int iterationcount = Integer.parseInt(Objects.requireNonNull(getRequestParam(params, "g")));
@@ -88,7 +88,7 @@ public class LoginFilter extends ZuulFilter {
             return null;
         }
         String salt = getRequestParam(params, "e");
-        if (StringUtil.isEmpty(salt)) {
+        if (StringUtils.isEmpty(salt)) {
             return null;
         }
         AesUtil aesUtil = new AesUtil(keysize, iterationcount);
