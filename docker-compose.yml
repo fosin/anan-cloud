@@ -76,11 +76,10 @@ services:
     environment:
       - TZ=Asia/Shanghai
     volumes:
-#      - /root/deploy/nginx/conf:/etc/nginx/conf.d/
-      - /root/deploy/nginx/conf/nginx.conf:/etc/nginx/nginx.conf
+      - /root/deploy/nginx/:/etc/nginx/conf.d/
+#      - /root/deploy/nginx/anan-vue.conf:/etc/nginx/nginx.conf
     ports:
       - 80:80
-      - 6478:6478
     depends_on:
       - nacos-0
 
@@ -121,7 +120,7 @@ services:
 
   anan-authserver:
     network_mode: host
-    image: registry.cn-hongkong.aliyuncs.com/fosin/anan-authserver:2.4.0-SNAPSHOT
+    image: registry.cn-hongkong.aliyuncs.com/fosin/anan-authserver:2.5.0-SNAPSHOT
     entrypoint: "sh /anan/wait-for.sh nacos-0:8848 -t 3600 -- /anan/entrypoint.sh"
     container_name: anan-authserver
     hostname: anan-authserver
@@ -140,7 +139,7 @@ services:
 
   anan-zuulgateway:
     network_mode: host
-    image: registry.cn-hongkong.aliyuncs.com/fosin/anan-zuulgateway:2.4.0-SNAPSHOT
+    image: registry.cn-hongkong.aliyuncs.com/fosin/anan-zuulgateway:2.5.0-SNAPSHOT
     entrypoint: "sh /anan/wait-for.sh anan-authserver:51400 -t 3600 -- /anan/entrypoint.sh"
     container_name: anan-zuulgateway
     hostname: anan-zuulgateway
@@ -157,7 +156,7 @@ services:
 
   anan-platformserver:
     network_mode: host
-    image: registry.cn-hongkong.aliyuncs.com/fosin/anan-platformserver:2.4.0-SNAPSHOT
+    image: registry.cn-hongkong.aliyuncs.com/fosin/anan-platformserver:2.5.0-SNAPSHOT
     container_name: anan-platformserver
     hostname: anan-platformserver
     restart: always
@@ -175,7 +174,7 @@ services:
 
   anan-adminserver:
     network_mode: host
-    image: registry.cn-hongkong.aliyuncs.com/fosin/anan-adminserver:2.4.0-SNAPSHOT
+    image: registry.cn-hongkong.aliyuncs.com/fosin/anan-adminserver:2.5.0-SNAPSHOT
     entrypoint: "sh /anan/wait-for.sh anan-zuulgateway:9000 -t 3600 -- /anan/entrypoint.sh"
     container_name: anan-adminserver
     hostname: anan-adminserver
@@ -193,7 +192,7 @@ services:
 
   anan-eurekaserver:
     network_mode: host
-    image: registry.cn-hongkong.aliyuncs.com/fosin/anan-eurekaserver:2.4.0-SNAPSHOT
+    image: registry.cn-hongkong.aliyuncs.com/fosin/anan-eurekaserver:2.5.0-SNAPSHOT
     container_name: anan-eurekaserver
     hostname: anan-eurekaserver
     restart: always
@@ -206,7 +205,7 @@ services:
 
   anan-configserver:
     network_mode: host
-    image: registry.cn-hongkong.aliyuncs.com/fosin/anan-configserver:2.4.0-SNAPSHOT
+    image: registry.cn-hongkong.aliyuncs.com/fosin/anan-configserver:2.5.0-SNAPSHOT
     entrypoint: "sh /anan/wait-for.sh anan-eurekaserver:51000 -t 3600 -- /anan/entrypoint.sh"
     container_name: anan-configserver
     hostname: anan-configserver
@@ -270,7 +269,7 @@ services:
     environment:
       #      - cluster.name=docker-cluster
       - bootstrap.memory_lock=true
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - "ES_JAVA_OPTS=-Xms1G -Xmx1G"
     ulimits:
       memlock:
         soft: -1
@@ -282,7 +281,7 @@ services:
 
   zipkin:
     network_mode: host
-    image: openzipkin/zipkin
+    image: openzipkin/zipkin:2
     container_name: zipkin
     hostname: zipkin
     restart: always
@@ -296,7 +295,7 @@ services:
       #      - RABBIT_QUEUE=zipkin
       # Uncomment to see requests to and from elasticsearch
       # - ES_HTTP_LOGGING=BODY
-      - RABBIT_ADDRESSES=rabbitmq:7890
+      - RABBIT_ADDRESSES=rabbitmq:5672
       - RABBIT_USER=anan
       - RABBIT_PASSWORD=local
     depends_on:

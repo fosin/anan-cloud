@@ -13,7 +13,7 @@
     <dependencies>
         <dependency>
             <groupId>${anan.groupId}</groupId>
-            <artifactId>anan-core</artifactId>
+            <artifactId>anan-cloudresource</artifactId>
         </dependency>
         <dependency>
             <groupId>${anan.groupId}</groupId>

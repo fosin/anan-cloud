@@ -17,11 +17,7 @@
     <dependencies>
         <dependency>
             <groupId>${anan.groupId}</groupId>
-            <artifactId>anan-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>${anan.groupId}</groupId>
-            <artifactId>anan-swagger</artifactId>
+            <artifactId>anan-cloudresource</artifactId>
         </dependency>
         <dependency>
             <groupId>${anan.groupId}</groupId>
