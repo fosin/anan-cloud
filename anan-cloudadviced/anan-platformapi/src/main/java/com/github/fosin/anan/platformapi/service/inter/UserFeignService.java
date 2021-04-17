@@ -2,6 +2,7 @@ package com.github.fosin.anan.platformapi.service.inter;
 
 
 import com.github.fosin.anan.cloudresource.constant.ServiceConstant;
+import com.github.fosin.anan.cloudresource.constant.SystemConstant;
 import com.github.fosin.anan.cloudresource.constant.UrlPrefixConstant;
 import com.github.fosin.anan.platformapi.entity.AnanUserEntity;
 import com.github.fosin.anan.platformapi.service.UserFeignFallbackServiceImpl;
@@ -23,7 +24,7 @@ import java.util.List;
 public interface UserFeignService {
     @PostMapping({"/{id}"})
     @ApiOperation("根据主键ID查询一条数据")
-    ResponseEntity<AnanUserEntity> findOne(@PathVariable("id") Long id);
+    ResponseEntity<AnanUserEntity> findOne(@PathVariable(SystemConstant.ID_NAME) Long id);
 
     @PostMapping("/usercode/{usercode}")
     ResponseEntity<AnanUserEntity> getByUsercode(@PathVariable("usercode") String usercode);

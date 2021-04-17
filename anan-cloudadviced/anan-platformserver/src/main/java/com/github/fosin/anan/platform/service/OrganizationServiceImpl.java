@@ -1,9 +1,11 @@
 package com.github.fosin.anan.platform.service;
 
 import com.github.fosin.anan.cloudresource.constant.RedisConstant;
+import com.github.fosin.anan.cloudresource.constant.SystemConstant;
 import com.github.fosin.anan.cloudresource.dto.request.AnanOrganizationCreateDto;
 import com.github.fosin.anan.cloudresource.dto.request.AnanOrganizationUpdateDto;
 import com.github.fosin.anan.cloudresource.dto.res.AnanOrganizationTreeDto;
+import com.github.fosin.anan.core.util.TreeUtil;
 import com.github.fosin.anan.jpa.repository.IJpaRepository;
 import com.github.fosin.anan.model.module.PageModule;
 import com.github.fosin.anan.model.result.Result;
@@ -12,7 +14,6 @@ import com.github.fosin.anan.platform.repository.OrganizationRepository;
 import com.github.fosin.anan.platform.service.inter.OrganizationService;
 import com.github.fosin.anan.platformapi.entity.AnanOrganizationEntity;
 import com.github.fosin.anan.platformapi.service.AnanUserDetailService;
-import com.github.fosin.anan.core.util.TreeUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.cache.annotation.CacheEvict;
@@ -138,7 +139,7 @@ public class OrganizationServiceImpl implements OrganizationService {
             if (StringUtils.isBlank(searchCondition)) {
                 return query.getRestriction();
             }
-            Path<String> id = root.get("id");
+            Path<String> id = root.get(SystemConstant.ID_NAME);
             Path<String> name = root.get("name");
             Path<String> fullname = root.get("fullname");
             Path<String> address = root.get("address");
@@ -188,7 +189,7 @@ public class OrganizationServiceImpl implements OrganizationService {
             dto.setId(entity.getId());
             dtoList.add(dto);
         }
-        AnanOrganizationTreeDto tree = TreeUtil.createTree(dtoList, rootId, "id", "pid", "children");
+        AnanOrganizationTreeDto tree = TreeUtil.createTree(dtoList, rootId, SystemConstant.ID_NAME, SystemConstant.PID_NAME, SystemConstant.CHILDREN_NAME);
         setLeaf(tree);
         return tree;
     }

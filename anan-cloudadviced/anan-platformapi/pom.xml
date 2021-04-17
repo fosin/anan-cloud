@@ -13,10 +13,6 @@
     <dependencies>
         <dependency>
             <groupId>${anan.groupId}</groupId>
-            <artifactId>anan-cloudresource</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>${anan.groupId}</groupId>
             <artifactId>anan-jpa</artifactId>
         </dependency>
         <dependency>

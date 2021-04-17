@@ -53,9 +53,7 @@ public class AnanOrganizationPermissionServiceImpl implements AnanOrganizationPe
     public List<AnanOrganizationPermissionEntity> updateInBatch(Long organizId, Collection<AnanOrganizationPermissionUpdateDto> entities) {
         Assert.notNull(organizId, "传入的版本ID不能为空!");
 
-        for (AnanOrganizationPermissionUpdateDto entity : entities) {
-            Assert.isTrue(entity.getOrganizId().equals(organizId), "需要更新的数据集中有与版本ID不匹配的数据!");
-        }
+        Assert.isTrue(entities.stream().allMatch(entity -> entity.getOrganizId().equals(organizId)), "需要更新的数据集中有与版本ID不匹配的数据!");
 
         ananSysOrganizationPermissionRepository.deleteByOrganizId(organizId);
 

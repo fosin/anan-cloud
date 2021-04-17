@@ -85,10 +85,7 @@ public class RolePermissionServiceImpl implements RolePermissionService {
     @Transactional
     public List<AnanRolePermissionEntity> updateInBatch(Long roleId, Collection<AnanRolePermissionUpdateDto> entities) {
         Assert.notNull(roleId, "传入的角色ID不能为空!");
-
-        for (AnanRolePermissionUpdateDto entity : entities) {
-            Assert.isTrue(entity.getRoleId().equals(roleId), "需要更新的数据集中有与角色ID不匹配的数据!");
-        }
+        Assert.isTrue(entities.stream().allMatch(entity -> entity.getRoleId().equals(roleId)), "需要更新的数据集中有与版本ID不匹配的数据!");
         Collection<AnanRolePermissionEntity> saveEntities = BeanUtil.copyCollectionProperties(this.getClass(), IUpdateInBatchJpaService.class, entities);
 
         rolePermissionRepository.deleteByRoleId(roleId);

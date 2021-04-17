@@ -68,11 +68,8 @@ public class AnanVersionRolePermissionServiceImpl implements AnanVersionRolePerm
     public List<AnanVersionRolePermissionEntity> updateInBatch(Long roleId, Collection<AnanVersionRolePermissionUpdateDto> entities) {
 
         Assert.isTrue(roleId != null && entities.size() > 0., "传入的版本ID或entities不能为空!");
-
-        for (AnanVersionRolePermissionUpdateDto entity : entities) {
-            Assert.isTrue(entity.getRoleId().equals(roleId), "需要更新的数据集中有与版本ID不匹配的数据!");
-        }
-        AnanVersionRoleEntity versionRoleEntity = versionRoleRepository.findById(roleId).get();
+        Assert.isTrue(entities.stream().allMatch(entity -> entity.getRoleId().equals(roleId)), "需要更新的数据集中有与版本ID不匹配的数据!");
+        AnanVersionRoleEntity versionRoleEntity = versionRoleRepository.findById(roleId).orElse(null);
         Long versionId = versionRoleEntity.getVersionId();
         String roleValue = versionRoleEntity.getValue();
 

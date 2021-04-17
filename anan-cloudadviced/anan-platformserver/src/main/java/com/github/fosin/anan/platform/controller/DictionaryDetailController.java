@@ -1,5 +1,9 @@
 package com.github.fosin.anan.platform.controller;
 
+import com.github.fosin.anan.cloudresource.constant.UrlPrefixConstant;
+import com.github.fosin.anan.cloudresource.dto.request.AnanDictionaryDetailCreateDto;
+import com.github.fosin.anan.cloudresource.dto.request.AnanDictionaryDetailRetrieveDto;
+import com.github.fosin.anan.cloudresource.dto.request.AnanDictionaryDetailUpdateDto;
 import com.github.fosin.anan.core.exception.AnanControllerException;
 import com.github.fosin.anan.model.constant.PathConstant;
 import com.github.fosin.anan.model.controller.ISimpleController;
@@ -7,16 +11,12 @@ import com.github.fosin.anan.model.module.PageModule;
 import com.github.fosin.anan.model.result.ListResult;
 import com.github.fosin.anan.model.result.ResultUtils;
 import com.github.fosin.anan.model.service.ISimpleService;
-import com.github.fosin.anan.cloudresource.dto.request.AnanDictionaryDetailCreateDto;
-import com.github.fosin.anan.cloudresource.dto.request.AnanDictionaryDetailRetrieveDto;
-import com.github.fosin.anan.cloudresource.dto.request.AnanDictionaryDetailUpdateDto;
-import com.github.fosin.anan.platformapi.entity.AnanDictionaryDetailEntity;
 import com.github.fosin.anan.platform.service.inter.DictionaryDetailService;
+import com.github.fosin.anan.platformapi.entity.AnanDictionaryDetailEntity;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -31,8 +31,8 @@ import java.util.List;
  * @author fosin
  */
 @RestController
-@RequestMapping("v1/dictionaryDetail")
-@Api(value = "v1/dictionaryDetail", tags = "通用字典明细管理(增删改查)")
+@RequestMapping(UrlPrefixConstant.DICTIONARY_DETAIL)
+@Api(value = UrlPrefixConstant.DICTIONARY_DETAIL, tags = "通用字典明细管理(增删改查)")
 public class DictionaryDetailController implements ISimpleController<AnanDictionaryDetailEntity, Long, AnanDictionaryDetailCreateDto, AnanDictionaryDetailRetrieveDto, AnanDictionaryDetailUpdateDto> {
     private final DictionaryDetailService dictionaryDetailService;
 

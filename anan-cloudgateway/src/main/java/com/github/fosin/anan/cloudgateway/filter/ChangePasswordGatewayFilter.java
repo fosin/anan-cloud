@@ -1,12 +1,13 @@
 package com.github.fosin.anan.cloudgateway.filter;
 
-import org.springframework.util.StringUtils;
+import com.github.fosin.anan.cloudresource.constant.SystemConstant;
 import com.github.fosin.anan.core.util.crypt.AesUtil;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.core.Ordered;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.util.MultiValueMap;
+import org.springframework.util.StringUtils;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
@@ -71,7 +72,7 @@ public class ChangePasswordGatewayFilter implements GatewayFilter, Ordered {
 
             List<String> idList = new ArrayList<>();
             idList.add(id);
-            params.put("id", idList);
+            params.put(SystemConstant.ID_NAME, idList);
 
             List<String> passwordList = new ArrayList<>();
             passwordList.add(aesUtil.decrypt(salt, iv, passphrase, password));

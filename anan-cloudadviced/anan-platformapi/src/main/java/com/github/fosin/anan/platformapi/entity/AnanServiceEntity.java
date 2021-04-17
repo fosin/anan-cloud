@@ -4,6 +4,7 @@ import com.github.fosin.anan.jpa.entity.AbstractCreateUpdateJpaEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.Basic;
@@ -19,6 +20,7 @@ import java.io.Serializable;
  * @date 2020-12-05 17:37:58
  * @since 1.0.0
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Entity
 @DynamicUpdate

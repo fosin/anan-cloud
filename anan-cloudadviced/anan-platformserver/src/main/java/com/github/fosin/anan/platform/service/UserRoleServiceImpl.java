@@ -78,9 +78,7 @@ public class UserRoleServiceImpl implements UserRoleService {
         Assert.notNull(userId, "传入的用户ID不能为空!");
 
         if (entities != null && entities.size() > 0) {
-            for (AnanUserRoleCreateDto entity : entities) {
-                Assert.isTrue(entity.getUserId().equals(userId), "需要更新的数据集中有与用户ID不匹配的数据!");
-            }
+            Assert.isTrue(entities.stream().allMatch(entity -> entity.getUserId().equals(userId)), "需要更新的数据集中有与用户ID不匹配的数据!");
         }
 
         userRoleRepository.deleteByUserId(userId);
@@ -119,9 +117,7 @@ public class UserRoleServiceImpl implements UserRoleService {
         Assert.notNull(roleId, "传入的角色ID不能为空!");
 
         if (entities != null && entities.size() > 0) {
-            for (AnanUserRoleCreateDto entity : entities) {
-                Assert.isTrue(entity.getRoleId().equals(roleId), "需要更新的数据集中有与角色ID不匹配的数据!");
-            }
+            Assert.isTrue(entities.stream().allMatch(entity -> entity.getRoleId().equals(roleId)), "需要更新的数据集中有与角色ID不匹配的数据!");
             //如果是角色用户，则需要删除所有角色相关用户的缓存
             for (AnanUserRoleCreateDto entity : entities) {
                 Long userId = entity.getUserId();

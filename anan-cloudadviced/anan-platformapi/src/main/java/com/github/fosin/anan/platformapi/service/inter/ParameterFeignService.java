@@ -1,12 +1,13 @@
 package com.github.fosin.anan.platformapi.service.inter;
 
 import com.github.fosin.anan.cloudresource.constant.ServiceConstant;
+import com.github.fosin.anan.cloudresource.constant.SystemConstant;
 import com.github.fosin.anan.cloudresource.constant.UrlPrefixConstant;
-import com.github.fosin.anan.cloudresource.dto.request.AnanParameterRetrieveDto;
-import com.github.fosin.anan.platformapi.service.ParameterFeignFallbackServiceImpl;
 import com.github.fosin.anan.cloudresource.dto.request.AnanParameterCreateDto;
+import com.github.fosin.anan.cloudresource.dto.request.AnanParameterRetrieveDto;
 import com.github.fosin.anan.cloudresource.dto.request.AnanParameterUpdateDto;
 import com.github.fosin.anan.platformapi.entity.AnanParameterEntity;
+import com.github.fosin.anan.platformapi.service.ParameterFeignFallbackServiceImpl;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,7 +41,7 @@ public interface ParameterFeignService {
     ResponseEntity<String> getOrCreateParameter(@RequestBody AnanParameterRetrieveDto retrieveDto);
 
     @PostMapping("/apply/{id}")
-    ResponseEntity<Boolean> apply(@PathVariable("id") Long id);
+    ResponseEntity<Boolean> apply(@PathVariable(SystemConstant.ID_NAME) Long id);
 
     @PostMapping("/applys")
     ResponseEntity<Boolean> applys();

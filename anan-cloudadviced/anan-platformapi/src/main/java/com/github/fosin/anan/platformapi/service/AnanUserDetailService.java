@@ -143,12 +143,7 @@ public class AnanUserDetailService extends AnanJwtTool<AnanUserDetail> {
      */
     public boolean hasAdminRole() {
         List<AnanRoleRetrieveDto> userRoles = this.getAnanUser().getUserRoles();
-        for (AnanRoleRetrieveDto userRole : userRoles) {
-            if (SystemConstant.ADMIN_ROLE_NAME.equals(userRole.getValue())) {
-                return true;
-            }
-        }
-        return false;
+        return userRoles.stream().anyMatch(userRole -> SystemConstant.ADMIN_ROLE_NAME.equals(userRole.getValue()));
     }
 
     /**
@@ -158,11 +153,6 @@ public class AnanUserDetailService extends AnanJwtTool<AnanUserDetail> {
      */
     public boolean hasSysAdminRole() {
         List<AnanRoleRetrieveDto> userRoles = this.getAnanUser().getUserRoles();
-        for (AnanRoleRetrieveDto userRole : userRoles) {
-            if (SystemConstant.ANAN_ROLE_NAME.equals(userRole.getValue())) {
-                return true;
-            }
-        }
-        return false;
+        return userRoles.stream().anyMatch(userRole -> SystemConstant.ANAN_ROLE_NAME.equals(userRole.getValue()));
     }
 }

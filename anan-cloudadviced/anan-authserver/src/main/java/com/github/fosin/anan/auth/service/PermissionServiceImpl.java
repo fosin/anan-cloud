@@ -99,7 +99,7 @@ public class PermissionServiceImpl implements PermissionService {
             }
         }
         Assert.isTrue(userPermissions.stream().anyMatch(ananUserAllPermissionDto -> SystemConstant.ROOT_PERMISSION_ID.equals(ananUserAllPermissionDto.getId())), "未分配根节点权限,请联系管理员核对权限!");
-        return TreeUtil.createTree(userPermissions, SystemConstant.ROOT_PERMISSION_ID, "id", "pid", "children");
+        return TreeUtil.createTree(userPermissions, SystemConstant.ROOT_PERMISSION_ID, SystemConstant.ID_NAME, SystemConstant.PID_NAME, SystemConstant.CHILDREN_NAME);
     }
 
     @Override

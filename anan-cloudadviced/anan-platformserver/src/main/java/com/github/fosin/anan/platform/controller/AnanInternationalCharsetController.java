@@ -1,5 +1,6 @@
 package com.github.fosin.anan.platform.controller;
 
+import com.github.fosin.anan.cloudresource.constant.UrlPrefixConstant;
 import com.github.fosin.anan.model.controller.ISimpleController;
 import com.github.fosin.anan.model.module.PageModule;
 import com.github.fosin.anan.model.result.ListResult;
@@ -25,8 +26,8 @@ import java.util.List;
  * @date 2020-12-04 11:05:46
  */
 @RestController
-@RequestMapping("v1/international/charset")
-@Api(value = "v1/international/charset", tags = "国际化明显(anan_international_charset)接入层API")
+@RequestMapping(UrlPrefixConstant.INTERNATIONAL_CHARSET)
+@Api(value = UrlPrefixConstant.INTERNATIONAL_CHARSET, tags = "国际化明显(anan_international_charset)接入层API")
 public class AnanInternationalCharsetController implements ISimpleController<AnanInternationalCharsetEntity, Long,
         AnanInternationalCharsetCreateDto, AnanInternationalCharsetRetrieveDto, AnanInternationalCharsetUpdateDto> {
 

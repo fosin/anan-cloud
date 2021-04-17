@@ -1,5 +1,6 @@
 package com.github.fosin.anan.platform.controller;
 
+import com.github.fosin.anan.cloudresource.constant.SystemConstant;
 import com.github.fosin.anan.cloudresource.constant.UrlPrefixConstant;
 import com.github.fosin.anan.cloudresource.dto.request.*;
 import com.github.fosin.anan.core.exception.AnanControllerException;
@@ -57,7 +58,7 @@ public class UserController extends AbstractBaseController implements ISimpleCon
     @ApiOperation("修改用户帐号密码")
     @PostMapping("/changePassword")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "id", value = "参数类型,取值于AnanUserEntity.id",
+            @ApiImplicitParam(name = SystemConstant.ID_NAME, value = "参数类型,取值于AnanUserEntity.id",
                     required = true, dataTypeClass = Long.class, paramType = "query"),
             @ApiImplicitParam(name = "password", value = "原密码(未加密)",
                     required = true, dataTypeClass = String.class, paramType = "query"),
@@ -66,7 +67,7 @@ public class UserController extends AbstractBaseController implements ISimpleCon
             @ApiImplicitParam(name = "confirmPassword2", value = "确认新密码2(未加密)",
                     required = true, dataTypeClass = String.class, paramType = "query"),
     })
-    public ResponseEntity<String> changePassword(@RequestParam("id") Long id,
+    public ResponseEntity<String> changePassword(@RequestParam(SystemConstant.ID_NAME) Long id,
                                                  @RequestParam("password") String password,
                                                  @RequestParam("confirmPassword1") String confirmPassword1,
                                                  @RequestParam("confirmPassword2") String confirmPassword2) throws AnanControllerException, AnanServiceException {
@@ -112,7 +113,7 @@ public class UserController extends AbstractBaseController implements ISimpleCon
     }
 
     @ApiOperation(value = "根据用户ID重置用户密码", notes = "重置后的密码或是固定密码或是随机密码，具体由机构参数UserResetPasswordType决定")
-    @ApiImplicitParam(name = "id", value = "用户ID,取值于AnanUserEntity.id",
+    @ApiImplicitParam(name = SystemConstant.ID_NAME, value = "用户ID,取值于AnanUserEntity.id",
             required = true, dataTypeClass = Long.class, paramType = "path")
     @PostMapping("/resetPassword/{id}")
     public ResponseEntity<String> resetPassword(@PathVariable() Long id) {

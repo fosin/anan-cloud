@@ -1,6 +1,7 @@
 package com.github.fosin.anan.platformapi.service;
 
 
+import com.github.fosin.anan.cloudresource.constant.SystemConstant;
 import com.github.fosin.anan.platformapi.entity.AnanUserEntity;
 import com.github.fosin.anan.platformapi.service.inter.UserFeignService;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +22,7 @@ import java.util.List;
 public class UserFeignFallbackServiceImpl implements UserFeignService {
 
     @Override
-    public ResponseEntity<AnanUserEntity> findOne(@PathVariable("id") Long id) {
+    public ResponseEntity<AnanUserEntity> findOne(@PathVariable(SystemConstant.ID_NAME) Long id) {
         log.error("feign 远程获取用户信息失败:{}", id);
         return null;
     }

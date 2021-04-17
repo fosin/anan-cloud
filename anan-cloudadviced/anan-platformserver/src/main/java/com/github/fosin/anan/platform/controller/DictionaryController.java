@@ -1,5 +1,6 @@
 package com.github.fosin.anan.platform.controller;
 
+import com.github.fosin.anan.cloudresource.constant.UrlPrefixConstant;
 import com.github.fosin.anan.model.controller.ISimpleController;
 import com.github.fosin.anan.model.service.ISimpleService;
 import com.github.fosin.anan.cloudresource.dto.request.AnanDictionaryCreateDto;
@@ -18,8 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
  * @author fosin
  */
 @RestController
-@RequestMapping("v1/dictionary")
-@Api(value = "v1/dictionary", tags = "通用字典管理(增删改查)")
+@RequestMapping(UrlPrefixConstant.DICTIONARY)
+@Api(value = UrlPrefixConstant.DICTIONARY, tags = "通用字典管理(增删改查)")
 public class DictionaryController implements ISimpleController<AnanDictionaryEntity, Long, AnanDictionaryCreateDto, AnanDictionaryRetrieveDto, AnanDictionaryUpdateDto> {
     private final DictionaryService dictionaryService;
 

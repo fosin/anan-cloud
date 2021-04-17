@@ -1,6 +1,7 @@
 package com.github.fosin.anan.platform.controller;
 
 
+import com.github.fosin.anan.cloudresource.constant.SystemConstant;
 import com.github.fosin.anan.model.controller.ISimpleController;
 import com.github.fosin.anan.model.service.ISimpleService;
 import com.github.fosin.anan.platform.dto.request.*;
@@ -8,12 +9,11 @@ import com.github.fosin.anan.platform.entity.AnanOrganizationAuthEntity;
 import com.github.fosin.anan.platform.entity.AnanVersionEntity;
 import com.github.fosin.anan.platform.entity.AnanVersionPermissionEntity;
 import com.github.fosin.anan.platform.service.inter.*;
-import com.github.fosin.anan.platformapi.entity.*;
+import com.github.fosin.anan.platformapi.entity.AnanPermissionEntity;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -52,7 +52,7 @@ public class AnanVersionController implements ISimpleController<AnanVersionEntit
     @RequestMapping(value = "/listChild/{pid}", method = {RequestMethod.POST})
     @ApiImplicitParams({
             @ApiImplicitParam(name = "versionId", required = true, dataTypeClass = Long.class, value = "版本ID,取值于AnanVersionEntity.id", paramType = "query"),
-            @ApiImplicitParam(name = "pid", required = true, dataTypeClass = Long.class, value = "父权限ID,AnanVersionPermissionEntity.id", paramType = "path")
+            @ApiImplicitParam(name = SystemConstant.PID_NAME, required = true, dataTypeClass = Long.class, value = "父权限ID,AnanVersionPermissionEntity.id", paramType = "path")
     })
     public ResponseEntity<List<AnanPermissionEntity>> getListChild(@PathVariable Long pid, @RequestParam Long versionId) {
         List<AnanPermissionEntity> list = permissionService.findByPid(pid, versionId);

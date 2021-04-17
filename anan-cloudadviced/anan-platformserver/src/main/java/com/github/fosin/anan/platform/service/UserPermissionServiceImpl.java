@@ -90,9 +90,7 @@ public class UserPermissionServiceImpl implements UserPermissionService {
     @Transactional
     public List<AnanUserPermissionEntity> updateInBatch(Long userId, Collection<AnanUserPermissionUpdateDto> entities) {
         Assert.notNull(userId, "传入的用户ID不能为空!");
-        for (AnanUserPermissionUpdateDto entity : entities) {
-            Assert.isTrue(entity.getUserId().equals(userId), "需要更新的数据集中有与用户ID不匹配的数据!");
-        }
+        Assert.isTrue(entities.stream().allMatch(entity -> entity.getUserId().equals(userId)), "需要更新的数据集中有与用户ID不匹配的数据!");
 
         Collection<AnanUserPermissionEntity> saveEntities = BeanUtil.copyCollectionProperties(this.getClass(), IUpdateInBatchJpaService.class, entities);
 

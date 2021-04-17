@@ -1,5 +1,6 @@
 package com.github.fosin.anan.platformapi.repository;
 
+import com.github.fosin.anan.cloudresource.constant.SystemConstant;
 import com.github.fosin.anan.jpa.repository.IJpaRepository;
 import com.github.fosin.anan.platformapi.entity.AnanPermissionEntity;
 import org.springframework.context.annotation.Lazy;
@@ -30,7 +31,7 @@ public interface PermissionRepository extends IJpaRepository<AnanPermissionEntit
     List<AnanPermissionEntity> findAllByPid(Long pid, Sort sort);
 
     @Query(value = "select * from anan_permission where p_id = :pid and id in (select permission_id from anan_version_permission where version_id = :versionId) order by sort", nativeQuery = true)
-    List<AnanPermissionEntity> findAllByPidAndVersionId(@Param(value = "pid") Long pid, @Param(value = "versionId") Long versionId);
+    List<AnanPermissionEntity> findAllByPidAndVersionId(@Param(value = SystemConstant.PID_NAME) Long pid, @Param(value = "versionId") Long versionId);
 
     List<AnanPermissionEntity> findAllByType(Integer type);
 

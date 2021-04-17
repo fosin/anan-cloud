@@ -1,5 +1,6 @@
 package com.github.fosin.anan.platform.controller;
 
+import com.github.fosin.anan.cloudresource.constant.UrlPrefixConstant;
 import com.github.fosin.anan.platform.dto.PageURI;
 import org.springframework.util.StringUtils;
 import io.swagger.annotations.Api;
@@ -30,8 +31,8 @@ import java.util.Random;
  * @date 2018.8.20
  */
 @RestController
-@RequestMapping("v1/application")
-@Api(value = "v1/application", tags = "用于应用集群相关的信息获取")
+@RequestMapping(UrlPrefixConstant.APPLICATION)
+@Api(value = UrlPrefixConstant.APPLICATION, tags = "用于应用集群相关的信息获取")
 public class ApplicationController {
     private final DiscoveryClient discoveryClient;
 
@@ -57,10 +58,10 @@ public class ApplicationController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "serviceId",
                     value = "注册Eureka注册中心的服务名称，一般等于spring.application.name",
-                    required = true, dataTypeClass = String.class,paramType = "query"),
+                    required = true, dataTypeClass = String.class, paramType = "query"),
             @ApiImplicitParam(name = "path",
                     value = "当前服务节点管理端点的url",
-                    required = false, dataTypeClass = String.class,paramType = "query")
+                    required = false, dataTypeClass = String.class, paramType = "query")
     })
     @RequestMapping(value = "/ui/url", method = {RequestMethod.POST})
     public ResponseEntity<PageURI> uiUrl(@RequestParam String serviceId, @RequestParam(value = "path", required = false) String path) {

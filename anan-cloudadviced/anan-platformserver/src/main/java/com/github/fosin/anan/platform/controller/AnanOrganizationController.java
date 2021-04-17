@@ -1,5 +1,6 @@
 package com.github.fosin.anan.platform.controller;
 
+import com.github.fosin.anan.cloudresource.constant.SystemConstant;
 import com.github.fosin.anan.cloudresource.constant.UrlPrefixConstant;
 import com.github.fosin.anan.cloudresource.dto.RegisterDto;
 import com.github.fosin.anan.cloudresource.dto.request.AnanOrganizationCreateDto;
@@ -73,22 +74,22 @@ public class AnanOrganizationController extends AbstractBaseController
 
     @ApiOperation("根据父机构ID获取其孩子节点数据")
     @PostMapping("/listChild/{pid}")
-    @ApiImplicitParam(name = "pid", required = true, dataTypeClass = Long.class, value = "父节点ID,AnanOrganizationEntity.id", paramType = "path")
-    public ResponseEntity<List<AnanOrganizationEntity>> findChildByPid(@PathVariable("pid") Long pid) {
+    @ApiImplicitParam(name = SystemConstant.PID_NAME, required = true, dataTypeClass = Long.class, value = "父节点ID,AnanOrganizationEntity.id", paramType = "path")
+    public ResponseEntity<List<AnanOrganizationEntity>> findChildByPid(@PathVariable(SystemConstant.PID_NAME) Long pid) {
         return ResponseEntity.ok(organizationService.findChildByPid(pid));
     }
 
     @ApiOperation("根据父机构ID获取其所有后代节点数据")
-    @ApiImplicitParam(name = "pid", required = true, dataTypeClass = Long.class, value = "父节点ID,AnanOrganizationEntity.id", paramType = "path")
+    @ApiImplicitParam(name = SystemConstant.PID_NAME, required = true, dataTypeClass = Long.class, value = "父节点ID,AnanOrganizationEntity.id", paramType = "path")
     @PostMapping("/listAllChild/{pid}")
-    public ResponseEntity<List<AnanOrganizationEntity>> findAllChildByPid(@PathVariable("pid") Long pid) {
+    public ResponseEntity<List<AnanOrganizationEntity>> findAllChildByPid(@PathVariable(SystemConstant.PID_NAME) Long pid) {
         return ResponseEntity.ok(organizationService.findAllChildByPid(pid));
     }
 
     @ApiOperation("根据机构ID获取其以及后代节点数据，树形结构")
-    @ApiImplicitParam(name = "id", required = true, dataTypeClass = Long.class, value = "父节点ID,AnanOrganizationEntity.id", paramType = "path")
+    @ApiImplicitParam(name = SystemConstant.ID_NAME, required = true, dataTypeClass = Long.class, value = "父节点ID,AnanOrganizationEntity.id", paramType = "path")
     @PostMapping("/treeAllChild/{id}")
-    public ResponseEntity<AnanOrganizationTreeDto> treeAllChildByid(@PathVariable("id") Long id) {
+    public ResponseEntity<AnanOrganizationTreeDto> treeAllChildByid(@PathVariable(SystemConstant.ID_NAME) Long id) {
         return ResponseEntity.ok(organizationService.treeAllChildByid(id));
     }
 

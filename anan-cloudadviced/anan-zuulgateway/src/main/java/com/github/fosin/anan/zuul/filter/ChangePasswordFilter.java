@@ -17,13 +17,14 @@
 
 package com.github.fosin.anan.zuul.filter;
 
+import com.github.fosin.anan.cloudresource.constant.SystemConstant;
+import com.github.fosin.anan.core.util.crypt.AesUtil;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
-import org.springframework.util.StringUtils;
-import com.github.fosin.anan.core.util.crypt.AesUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.netflix.zuul.filters.support.FilterConstants;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -102,7 +103,7 @@ public class ChangePasswordFilter extends ZuulFilter {
 
         List<String> idList = new ArrayList<>();
         idList.add(id);
-        params.put("id",idList);
+        params.put(SystemConstant.ID_NAME,idList);
 
         List<String> passwordList = new ArrayList<>();
         passwordList.add(aesUtil.decrypt(salt,iv,passphrase,password));

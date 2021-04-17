@@ -1,6 +1,7 @@
 package com.github.fosin.anan.platform.controller;
 
 
+import com.github.fosin.anan.cloudresource.constant.UrlPrefixConstant;
 import com.github.fosin.anan.model.controller.ISimpleController;
 import com.github.fosin.anan.model.service.ISimpleService;
 import com.github.fosin.anan.platform.dto.request.AnanVersionRoleCreateDto;
@@ -28,8 +29,8 @@ import java.util.List;
  * @date 2018-11-18 17:50:28
  */
 @RestController
-@RequestMapping("v1/version/role")
-@Api(value = "v1/version/role", tags = "系统版本角色表(anan_version_role)接入层API")
+@RequestMapping(UrlPrefixConstant.VERSION_ROLE)
+@Api(value = UrlPrefixConstant.VERSION_ROLE, tags = "系统版本角色表(anan_version_role)接入层API")
 public class AnanVersionRoleController implements ISimpleController<AnanVersionRoleEntity, Long, AnanVersionRoleCreateDto, AnanVersionRoleRetrieveDto, AnanVersionRoleUpdateDto> {
     /**
      * 服务对象

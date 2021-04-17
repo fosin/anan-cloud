@@ -79,10 +79,7 @@ public class AnanVersionPermissionServiceImpl implements AnanVersionPermissionSe
     public Collection<AnanVersionPermissionEntity> updateInBatch(Long versionId, Collection<AnanVersionPermissionUpdateDto> entities) {
 
         Assert.notNull(versionId, "传入的版本ID不能为空!");
-
-        for (AnanVersionPermissionUpdateDto entity : entities) {
-            Assert.isTrue(entity.getVersionId().equals(versionId), "需要更新的数据集中有与版本ID不匹配的数据!");
-        }
+        Assert.isTrue(entities.stream().allMatch(entity -> entity.getVersionId().equals(versionId)), "需要更新的数据集中有与版本ID不匹配的数据!");
 
         Collection<AnanVersionPermissionEntity> versionPermissionEntities = BeanUtil.copyCollectionProperties(this.getClass(), IUpdateInBatchJpaService.class, entities);
 
@@ -96,13 +93,7 @@ public class AnanVersionPermissionServiceImpl implements AnanVersionPermissionSe
                 Long roleId = role.getId();
                 List<AnanRolePermissionEntity> rolePermissionEntities = rolePermissionRepository.findByRoleId(roleId);
                 rolePermissionEntities.forEach(rolePermission -> {
-                    boolean find = false;
-                    for (AnanVersionPermissionEntity versionPermissionEntity : versionPermissionEntities) {
-                        if (versionPermissionEntity.getPermissionId().equals(rolePermission.getPermissionId())) {
-                            find = true;
-                            break;
-                        }
-                    }
+                    boolean find = versionPermissionEntities.stream().anyMatch(entity -> entity.getPermissionId().equals(rolePermission.getPermissionId()));
                     if (!find) {
                         rolePermissionRepository.deleteById(rolePermission.getId());
                     }
@@ -112,13 +103,7 @@ public class AnanVersionPermissionServiceImpl implements AnanVersionPermissionSe
             //同步删除用户权限中删除的版本权限
             List<AnanUserPermissionEntity> userEntities = userPermissionRepository.findByOrganizId(organizId);
             userEntities.forEach(userPermission -> {
-                boolean find = false;
-                for (AnanVersionPermissionEntity versionPermissionEntity : versionPermissionEntities) {
-                    if (versionPermissionEntity.getPermissionId().equals(userPermission.getPermissionId())) {
-                        find = true;
-                        break;
-                    }
-                }
+                boolean find = versionPermissionEntities.stream().anyMatch(entity -> entity.getPermissionId().equals(userPermission.getPermissionId()));
                 if (!find) {
                     userPermissionRepository.deleteById(userPermission.getId());
                 }
@@ -143,13 +128,7 @@ public class AnanVersionPermissionServiceImpl implements AnanVersionPermissionSe
             Long versionRoleId = versionRoleEntity.getId();
             List<AnanVersionRolePermissionEntity> versionRolePermissionEntities = versionRolePermissionRepository.findByRoleId(versionRoleId);
             versionRolePermissionEntities.forEach(versionRolePermissionEntity -> {
-                boolean find = false;
-                for (AnanVersionPermissionEntity versionPermissionEntity : versionPermissionEntities) {
-                    if (versionPermissionEntity.getPermissionId().equals(versionRolePermissionEntity.getPermissionId())) {
-                        find = true;
-                        break;
-                    }
-                }
+                boolean find = versionPermissionEntities.stream().anyMatch(entity -> entity.getPermissionId().equals(versionRolePermissionEntity.getPermissionId()));
                 if (!find) {
                     versionRolePermissionRepository.deleteById(versionRolePermissionEntity.getId());
                 }

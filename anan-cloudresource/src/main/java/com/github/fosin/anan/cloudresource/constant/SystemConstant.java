@@ -17,4 +17,8 @@ public class SystemConstant {
     public static final Long ROOT_PERMISSION_PID = 0L;
     public static final Long ROOT_PERMISSION_ID = 1L;
     public static final Integer SYSTEM_DICTIONARY_TYPE = 1;
+
+    public static final String ID_NAME = "id";
+    public static final String PID_NAME = "pid";
+    public static final String CHILDREN_NAME = "children";
 }

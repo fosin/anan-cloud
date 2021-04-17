@@ -16,6 +16,9 @@ public class UrlPrefixConstant {
     public static final String DICTIONARY = "v1/dictionary";
     public static final String CLIENT = "v1/client";
     public static final String APPLICATION = "v1/application";
-    public static final String VERSIONROLE = "v1/versionrole";
+    public static final String SERVICE = "v1/service";
+    public static final String VERSION_ROLE = "v1/version/role";
+    public static final String INTERNATIONAL_CHARSET = "v1/international/charset";
+    public static final String INTERNATIONAL = "v1/international";
 
 }

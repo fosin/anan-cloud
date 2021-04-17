@@ -1,5 +1,6 @@
 package com.github.fosin.anan.platform.controller;
 
+import com.github.fosin.anan.cloudresource.constant.UrlPrefixConstant;
 import com.github.fosin.anan.model.controller.ISimpleController;
 import com.github.fosin.anan.model.service.ISimpleService;
 import com.github.fosin.anan.platform.dto.request.AnanInternationalCreateDto;
@@ -24,8 +25,8 @@ import java.util.List;
  * @date 2020-12-04 11:05:46
  */
 @RestController
-@RequestMapping("v1/international")
-@Api(value = "v1/international", tags = "国际化(anan_international)接入层API")
+@RequestMapping(UrlPrefixConstant.INTERNATIONAL)
+@Api(value = UrlPrefixConstant.INTERNATIONAL, tags = "国际化(anan_international)接入层API")
 public class AnanInternationalController implements ISimpleController<AnanInternationalEntity, Integer,
         AnanInternationalCreateDto, AnanInternationalRetrieveDto, AnanInternationalUpdateDto> {
 

@@ -234,7 +234,7 @@ public class UserServiceImpl implements UserService {
                 //从哪张表查询
                 Root<AnanOrganizationEntity> celluseRoot = subQuery.from(AnanOrganizationEntity.class);
                 //查询出什么
-                subQuery.select(celluseRoot.get("id"));
+                subQuery.select(celluseRoot.get(SystemConstant.ID_NAME));
                 //条件是什么
                 Predicate p = cb.like(celluseRoot.get("code"), Objects.requireNonNull(organizationEntity, "通过organizId：" + organizId + "未能找到对应的数据!").getCode() + "%");
                 subQuery.where(p);

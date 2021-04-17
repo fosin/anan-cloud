@@ -1,5 +1,6 @@
 package com.github.fosin.anan.platform.controller;
 
+import com.github.fosin.anan.cloudresource.constant.UrlPrefixConstant;
 import com.github.fosin.anan.model.controller.ISimpleController;
 import com.github.fosin.anan.model.service.ISimpleService;
 import com.github.fosin.anan.platform.dto.request.AnanServiceCreateDto;
@@ -24,8 +25,8 @@ import java.util.List;
  * @date 2020-12-04 17:48:02
  */
 @RestController
-@RequestMapping("v1/service")
-@Api(value = "v1/service", tags = "系统服务表(anan_service)接入层API")
+@RequestMapping(UrlPrefixConstant.SERVICE)
+@Api(value = UrlPrefixConstant.SERVICE, tags = "系统服务表(anan_service)接入层API")
 public class AnanServiceController implements ISimpleController<AnanServiceEntity, Integer,
         AnanServiceCreateDto, AnanServiceRetrieveDto, AnanServiceUpdateDto> {
 
