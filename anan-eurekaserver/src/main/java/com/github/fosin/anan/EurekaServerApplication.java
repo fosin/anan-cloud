@@ -1,7 +1,6 @@
 package com.github.fosin.anan;
 
 import com.github.fosin.anan.core.banner.AnanBanner;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer;
@@ -15,7 +14,6 @@ import org.springframework.web.filter.CorsFilter;
  */
 @SpringBootApplication
 @EnableEurekaServer
-@Slf4j
 public class EurekaServerApplication {
     public static void main(String[] args) {
         new SpringApplicationBuilder(EurekaServerApplication.class)

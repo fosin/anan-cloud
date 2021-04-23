@@ -11,7 +11,6 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -27,7 +26,7 @@ import java.util.Date;
 @DynamicUpdate
 @Table(name = "anan_pay_invoice")
 @ApiModel(value = "系统支付发票表实体类", description = "表(anan_pay_invoice)的对应的实体类")
-public class AnanPayInvoiceEntity  extends AbstractIdJpaEntity<Long> implements Serializable {
+public class AnanPayInvoiceEntity  extends AbstractIdJpaEntity<Long> {
     private static final long serialVersionUID = 120666820121378212L;
 
     @Basic

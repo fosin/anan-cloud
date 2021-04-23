@@ -100,3 +100,6 @@ local.properties
 /**/*.iml
 .idea/
 rebel.xml
+docker-compose-dev.yml
+.project
+.classpath

@@ -1,5 +1,6 @@
 package com.github.fosin.anan.platform.service;
 
+import com.github.fosin.anan.core.util.BeanUtil;
 import com.github.fosin.anan.jpa.service.batch.IUpdateInBatchJpaService;
 import com.github.fosin.anan.platform.dto.request.AnanVersionPermissionUpdateDto;
 import com.github.fosin.anan.platform.entity.*;
@@ -10,15 +11,14 @@ import com.github.fosin.anan.platformapi.entity.AnanRolePermissionEntity;
 import com.github.fosin.anan.platformapi.entity.AnanUserPermissionEntity;
 import com.github.fosin.anan.platformapi.repository.RolePermissionRepository;
 import com.github.fosin.anan.platformapi.repository.UserPermissionRepository;
-import com.github.fosin.anan.core.util.BeanUtil;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 系统版本权限表(anan_version_permission)表服务实现类
@@ -110,13 +110,12 @@ public class AnanVersionPermissionServiceImpl implements AnanVersionPermissionSe
             });
 
             //重建机构权限
-            Collection<AnanOrganizationPermissionEntity> organizationPermissionEntities = new ArrayList<>();
-            versionPermissionEntities.forEach(versionPermissionEntity -> {
+            Collection<AnanOrganizationPermissionEntity> organizationPermissionEntities = versionPermissionEntities.stream().map(versionPermissionEntity -> {
                 AnanOrganizationPermissionEntity entity = new AnanOrganizationPermissionEntity();
                 entity.setOrganizId(organizId);
                 entity.setPermissionId(versionPermissionEntity.getPermissionId());
-                organizationPermissionEntities.add(entity);
-            });
+                return entity;
+            }).collect(Collectors.toList());
             organizationPermissionRepository.deleteByOrganizId(organizId);
             organizationPermissionRepository.saveAll(organizationPermissionEntities);
 

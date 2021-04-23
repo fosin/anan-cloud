@@ -1,20 +1,22 @@
 package com.github.fosin.anan.platformapi.entity;
 
-import com.github.fosin.anan.jpa.entity.AbstractSoftDeleteJpaEntity;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
+import java.util.Date;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-import java.io.Serializable;
-import java.util.Date;
+
+import com.github.fosin.anan.jpa.entity.AbstractSoftDeleteJpaEntity;
+
+import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
+
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * 用于存放各种分类分组的个性化参数(AnanParameter)实体类
@@ -31,7 +33,7 @@ import java.util.Date;
 @Where(clause = "deleted = 0")
 @Table(name = "anan_parameter")
 @ApiModel(value = "用于存放各种分类分组的个性化参数实体类", description = "表(anan_parameter)的对应的实体类")
-public class AnanParameterEntity extends AbstractSoftDeleteJpaEntity<Long, Long> implements Serializable {
+public class AnanParameterEntity extends AbstractSoftDeleteJpaEntity<Long, Long> {
     private static final long serialVersionUID = 301081721804164443L;
 
     @Basic

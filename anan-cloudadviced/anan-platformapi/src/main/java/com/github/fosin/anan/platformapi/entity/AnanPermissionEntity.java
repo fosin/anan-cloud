@@ -9,7 +9,6 @@ import org.hibernate.annotations.DynamicUpdate;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -25,7 +24,7 @@ import java.util.List;
 @DynamicUpdate
 @Table(name = "anan_permission")
 @ApiModel(value = "包含菜单、按钮两种权限实体类", description = "表(anan_permission)的对应的实体类")
-public class AnanPermissionEntity extends AbstractCreateUpdateJpaEntity<Long, Long> implements Serializable {
+public class AnanPermissionEntity extends AbstractCreateUpdateJpaEntity<Long, Long> {
     private static final long serialVersionUID = -77218975959330473L;
 
     @Transient

@@ -6,7 +6,6 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -35,7 +34,6 @@ import java.util.Map;
  * @author fosin
  */
 @RestController
-@Slf4j
 @RequestMapping("/oauth")
 @AllArgsConstructor
 @Api(value = "/oauth", tags = "OAuth认证相关,获取令牌、刷新令牌、注销令牌")

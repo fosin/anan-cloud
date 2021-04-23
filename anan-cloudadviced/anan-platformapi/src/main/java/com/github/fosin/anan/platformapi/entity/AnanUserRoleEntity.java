@@ -8,7 +8,6 @@ import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
-import java.io.Serializable;
 
 /**
  * 系统用户角色表(AnanUserRole)实体类
@@ -23,7 +22,7 @@ import java.io.Serializable;
 @DynamicUpdate
 @Table(name = "anan_user_role")
 @ApiModel(value = "系统用户角色表实体类", description = "表(anan_user_role)的对应的实体类")
-public class AnanUserRoleEntity extends AbstractOrganizIdCreateJpaEntity<Long, Long> implements Serializable {
+public class AnanUserRoleEntity extends AbstractOrganizIdCreateJpaEntity<Long, Long> {
     private static final long serialVersionUID = 907700875932623662L;
 
     @ManyToOne(cascade = CascadeType.REFRESH)

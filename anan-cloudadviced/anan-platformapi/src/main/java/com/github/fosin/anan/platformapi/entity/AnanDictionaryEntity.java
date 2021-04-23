@@ -13,7 +13,6 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-import java.io.Serializable;
 
 /**
  * 系统通用字典表(AnanDictionary)实体类
@@ -30,7 +29,7 @@ import java.io.Serializable;
 @Where(clause = "deleted = 0")
 @Table(name = "anan_dictionary")
 @ApiModel(value = "系统通用字典表实体类", description = "表(anan_dictionary)的对应的实体类")
-public class AnanDictionaryEntity extends AbstractSoftDeleteJpaEntity<Long, Long> implements Serializable {
+public class AnanDictionaryEntity extends AbstractSoftDeleteJpaEntity<Long, Long> {
     private static final long serialVersionUID = -48637204028516104L;
 
     @Basic

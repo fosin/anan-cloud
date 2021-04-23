@@ -11,7 +11,6 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-import java.io.Serializable;
 
 /**
  * 国际化语言集(AnanInternational)实体类
@@ -26,7 +25,7 @@ import java.io.Serializable;
 @DynamicUpdate
 @Table(name = "anan_international")
 @ApiModel(value = "表(anan_international)的对应的实体类", description = "表(anan_international)的对应的实体类")
-public class AnanInternationalEntity extends AbstractCreateUpdateJpaEntity<Long, Integer> implements Serializable {
+public class AnanInternationalEntity extends AbstractCreateUpdateJpaEntity<Long, Integer> {
     private static final long serialVersionUID = 717249075172389735L;
 
     @Basic

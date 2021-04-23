@@ -1,6 +1,7 @@
 package com.github.fosin.anan.platform.service;
 
 import com.github.fosin.anan.cloudresource.constant.RedisConstant;
+import com.github.fosin.anan.core.util.BeanUtil;
 import com.github.fosin.anan.jpa.service.batch.IUpdateInBatchJpaService;
 import com.github.fosin.anan.platform.dto.request.AnanVersionRolePermissionUpdateDto;
 import com.github.fosin.anan.platform.entity.AnanOrganizationAuthEntity;
@@ -15,15 +16,14 @@ import com.github.fosin.anan.platformapi.entity.AnanRoleEntity;
 import com.github.fosin.anan.platformapi.entity.AnanRolePermissionEntity;
 import com.github.fosin.anan.platformapi.repository.RolePermissionRepository;
 import com.github.fosin.anan.redis.cache.AnanCacheManger;
-import com.github.fosin.anan.core.util.BeanUtil;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 系统版本角色权限表(anan_version_role_permission)表服务实现类
@@ -79,14 +79,12 @@ public class AnanVersionRolePermissionServiceImpl implements AnanVersionRolePerm
 
             AnanRoleEntity role = roleRepository.findByOrganizIdAndValue(organizId, roleValue);
             Long roleId1 = role.getId();
-            Collection<AnanRolePermissionEntity> rolePermissionEntities = new ArrayList<>();
-            entities.forEach(versionPermissionEntity -> {
+            Collection<AnanRolePermissionEntity> rolePermissionEntities = entities.stream().map(versionPermissionEntity -> {
                 AnanRolePermissionEntity entity = new AnanRolePermissionEntity();
                 entity.setRoleId(roleId1);
                 entity.setPermissionId(versionPermissionEntity.getPermissionId());
-                rolePermissionEntities.add(entity);
-            });
-
+                return entity;
+            }).collect(Collectors.toList());
             ananCacheManger.evict(RedisConstant.ANAN_ROLE_PERMISSION, roleId1 + "");
 
             rolePermissionRepository.deleteByRoleId(roleId1);

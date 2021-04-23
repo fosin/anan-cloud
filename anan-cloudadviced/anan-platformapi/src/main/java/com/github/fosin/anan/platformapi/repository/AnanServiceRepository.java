@@ -2,7 +2,6 @@ package com.github.fosin.anan.platformapi.repository;
 
 import com.github.fosin.anan.jpa.repository.IJpaRepository;
 import com.github.fosin.anan.platformapi.entity.AnanServiceEntity;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -14,7 +13,7 @@ import java.util.List;
  * @date 2020-12-04 17:48:02
  */
 @Repository
-public interface AnanServiceRepository extends IJpaRepository<AnanServiceEntity, Integer>, JpaSpecificationExecutor<AnanServiceEntity> {
+public interface AnanServiceRepository extends IJpaRepository<AnanServiceEntity, Integer> {
     /**
      * 根据状态码查找所有服务数据
      *

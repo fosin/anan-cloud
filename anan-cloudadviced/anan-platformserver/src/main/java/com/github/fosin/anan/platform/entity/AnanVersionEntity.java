@@ -8,7 +8,6 @@ import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -24,7 +23,7 @@ import java.util.Date;
 @DynamicUpdate
 @Table(name = "anan_version")
 @ApiModel(value = "系统版本表实体类", description = "表(anan_version)的对应的实体类")
-public class AnanVersionEntity extends AbstractCreateUpdateJpaEntity<Long, Long> implements Serializable {
+public class AnanVersionEntity extends AbstractCreateUpdateJpaEntity<Long, Long> {
     private static final long serialVersionUID = -54459367678395780L;
 
     @Basic

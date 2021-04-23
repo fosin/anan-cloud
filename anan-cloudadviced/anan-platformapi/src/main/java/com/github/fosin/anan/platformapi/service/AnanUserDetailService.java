@@ -6,7 +6,6 @@ import com.github.fosin.anan.cloudresource.dto.AnanUserDetail;
 import com.github.fosin.anan.cloudresource.dto.AnanUserDto;
 import com.github.fosin.anan.cloudresource.dto.request.AnanRoleRetrieveDto;
 import com.github.fosin.anan.security.util.AnanJwtTool;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.util.Assert;
 
@@ -21,7 +20,6 @@ import java.util.Set;
  * @author fosin
  * @date 2018.7.23
  */
-@Slf4j
 public class AnanUserDetailService extends AnanJwtTool<AnanUserDetail> {
 
     public AnanUserDetailService(JwtDecoder jwtDecoder) {

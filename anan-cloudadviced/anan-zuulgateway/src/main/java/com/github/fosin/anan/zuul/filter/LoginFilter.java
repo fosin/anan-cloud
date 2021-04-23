@@ -21,7 +21,6 @@ import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import org.springframework.util.StringUtils;
 import com.github.fosin.anan.core.util.crypt.AesUtil;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.netflix.zuul.filters.support.FilterConstants;
 import org.springframework.stereotype.Component;
 
@@ -36,7 +35,6 @@ import java.util.Objects;
  *
  * @author fosin
  */
-@Slf4j
 @Component
 public class LoginFilter extends ZuulFilter {
     @Override

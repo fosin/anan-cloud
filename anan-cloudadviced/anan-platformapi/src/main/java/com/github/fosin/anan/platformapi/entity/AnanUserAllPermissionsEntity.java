@@ -11,7 +11,6 @@ import org.springframework.beans.BeanUtils;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +27,7 @@ import java.util.List;
 @DynamicUpdate
 @Table(name = "anan_user_all_permissions")
 @ApiModel(value = "用户的所有权限，包含角色权限、用户增减权限", description = "试图(anan_user_all_permissions)用户的所有权限，包含角色权限、用户增减权限")
-public class AnanUserAllPermissionsEntity extends AbstractCreateUpdateJpaEntity<Long, Long> implements Serializable {
+public class AnanUserAllPermissionsEntity extends AbstractCreateUpdateJpaEntity<Long, Long> {
     private static final long serialVersionUID = 5284105099273855621L;
 
     public AnanUserAllPermissionDto convert2Dto() {

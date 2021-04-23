@@ -8,7 +8,6 @@ import org.hibernate.annotations.DynamicUpdate;
 import com.github.fosin.anan.jpa.entity.AbstractIdJpaEntity;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.Date;
 /**
  * 系统支付订单表(AnanPayOrder)实体类
@@ -23,7 +22,7 @@ import java.util.Date;
 @DynamicUpdate
 @Table(name = "anan_pay_order")
 @ApiModel(value = "系统支付订单表实体类", description = "表(anan_pay_order)的对应的实体类")
-public class AnanPayOrderEntity  extends AbstractIdJpaEntity<Long> implements Serializable {
+public class AnanPayOrderEntity  extends AbstractIdJpaEntity<Long> {
     private static final long serialVersionUID = -88896111334285360L;
 
     @Basic

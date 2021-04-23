@@ -4,9 +4,8 @@ import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.core.Ordered;
 import org.springframework.http.server.reactive.ServerHttpRequest;
-import org.springframework.http.server.reactive.ServerHttpResponse;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.server.ServerWebExchange;
+
 import reactor.core.publisher.Mono;
 
 /**
@@ -19,8 +18,8 @@ public class RealErrorGatewayFilter implements GatewayFilter, Ordered {
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
-        ServerHttpResponse response = exchange.getResponse();
-        MultiValueMap<String, String> params = request.getQueryParams();
+        // ServerHttpResponse response = exchange.getResponse();
+        // MultiValueMap<String, String> params = request.getQueryParams();
         String uri = request.getURI().toString();
         //只处理修改密码请求
         if (uri.contains("/user/changePassword")) {
@@ -56,11 +55,11 @@ public class RealErrorGatewayFilter implements GatewayFilter, Ordered {
         return 0;
     }
 
-    private Throwable getRealCause(Throwable throwable) {
-        Throwable cause = throwable.getCause();
-        if (cause != null) {
-            return getRealCause(cause);
-        }
-        return throwable;
-    }
+    // private Throwable getRealCause(Throwable throwable) {
+    //     Throwable cause = throwable.getCause();
+    //     if (cause != null) {
+    //         return getRealCause(cause);
+    //     }
+    //     return throwable;
+    // }
 }

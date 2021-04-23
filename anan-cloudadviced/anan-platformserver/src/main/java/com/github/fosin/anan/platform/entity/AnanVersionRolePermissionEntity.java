@@ -8,7 +8,6 @@ import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
-import java.io.Serializable;
 /**
  * 系统版本角色权限表(AnanVersionRolePermission)实体类
  *
@@ -22,7 +21,7 @@ import java.io.Serializable;
 @DynamicUpdate
 @Table(name = "anan_version_role_permission")
 @ApiModel(value = "系统版本角色权限表实体类", description = "表(anan_version_role_permission)的对应的实体类")
-public class AnanVersionRolePermissionEntity extends AbstractCreateJpaEntity<Long, Long> implements Serializable {
+public class AnanVersionRolePermissionEntity extends AbstractCreateJpaEntity<Long, Long> {
     private static final long serialVersionUID = -46739456017788098L;
 
     @Basic

@@ -11,7 +11,6 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-import java.io.Serializable;
 /**
  * 系统机构授权表(AnanOrganizationAuth)实体类
  *
@@ -25,7 +24,7 @@ import java.io.Serializable;
 @DynamicUpdate
 @Table(name = "anan_organization_auth")
 @ApiModel(value = "系统机构授权表实体类", description = "表(anan_organization_auth)的对应的实体类")
-public class AnanOrganizationAuthEntity extends AbstractOrganizIdCreateJpaEntity<Long, Long> implements Serializable {
+public class AnanOrganizationAuthEntity extends AbstractOrganizIdCreateJpaEntity<Long, Long> {
     private static final long serialVersionUID = -99392087741484947L;
 
     @Basic

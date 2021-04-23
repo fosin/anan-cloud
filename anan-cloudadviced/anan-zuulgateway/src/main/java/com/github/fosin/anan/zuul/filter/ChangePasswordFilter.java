@@ -21,7 +21,6 @@ import com.github.fosin.anan.cloudresource.constant.SystemConstant;
 import com.github.fosin.anan.core.util.crypt.AesUtil;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.netflix.zuul.filters.support.FilterConstants;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -36,7 +35,6 @@ import java.util.Objects;
  * Description 解密前端传过来的密码信息
  * @author fosin
  */
-@Slf4j
 @Component
 public class ChangePasswordFilter extends ZuulFilter {
     @Override

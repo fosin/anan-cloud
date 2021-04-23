@@ -18,8 +18,8 @@ services:
       - MYSQL_PASSWORD=local
     volumes:
       - /root/deploy/nfs/mysql-leader1:/var/lib/mysql
-    ports:
-      - "3306:3306"
+#    ports:
+#      - "3306:3306"
   nacos-0:
     image: nacos/nacos-server:1.4.1
     container_name: nacos-0
@@ -43,9 +43,9 @@ services:
       - JVM_MMS=160M
     volumes:
       -  /root/deploy/nacos/logs/:/home/nacos/logs
-    ports:
-      - "8848:8848"
-      - "9555:9555"
+#    ports:
+#      - "8848:8848"
+#      - "9555:9555"
     depends_on:
       - mysql-leader
 
@@ -63,9 +63,9 @@ services:
     #    volumes: TODO 启动后报错cookie file /var/lib/rabbitmq/.erlang.cookie must be accessible by owner only
     #      - /root/deploy/rabbitmq:/var/lib/rabbitmq
     restart: always
-    ports:
-      - 15672:15672
-      - 5672:5672
+#    ports:
+#      - 15672:15672
+#      - 5672:5672
 
   anan-vue:
     network_mode: host
@@ -78,8 +78,8 @@ services:
     volumes:
       - /root/deploy/nginx/:/etc/nginx/conf.d/
 #      - /root/deploy/nginx/anan-vue.conf:/etc/nginx/nginx.conf
-    ports:
-      - 80:80
+#    ports:
+#      - 80:80
     depends_on:
       - nacos-0
 
@@ -93,8 +93,8 @@ services:
     volumes:
       - /root/deploy/redis:/data
     restart: always
-    ports:
-      - 6379:6379
+#    ports:
+#      - 6379:6379
     command: redis-server --appendonly yes --requirepass local
 
   mysql-follower:
@@ -113,8 +113,8 @@ services:
       - MYSQL_SERVICE_HOST=mysql-leader
     volumes:
       - /root/deploy/nfs/mysql-follower2:/var/lib/mysql
-    ports:
-      - "3305:3306"
+#    ports:
+#      - "3305:3306"
     depends_on:
       - mysql-leader
 
@@ -127,8 +127,8 @@ services:
     restart: always
     environment:
       - JAVA_TOOL_OPTIONS=-Xmx200M -XX:MaxMetaspaceSize=160M -XX:MetaspaceSize=160M -XX:+DisableExplicitGC -XX:ErrorFile=/logs/hs_err_pid%p.log
-    ports:
-      - 51400:51400
+#    ports:
+#      - 51400:51400
       #    volumes:
       #- /root/deploy/logs/anan:/logs
     depends_on:
@@ -146,10 +146,6 @@ services:
     restart: always
     environment:
       - JAVA_TOOL_OPTIONS=-Xmx200M -XX:MaxMetaspaceSize=160M -XX:MetaspaceSize=160M -XX:+DisableExplicitGC -XX:ErrorFile=/logs/hs_err_pid%p.log
-    ports:
-      - 9000:9000
-      #    volumes:
-      #- /root/deploy/logs/anan:/logs
     depends_on:
       - rabbitmq
       - nacos-0
@@ -164,8 +160,6 @@ services:
       - JAVA_TOOL_OPTIONS=-Xmx200M -XX:MaxMetaspaceSize=160M -XX:MetaspaceSize=160M -XX:+DisableExplicitGC -XX:ErrorFile=/logs/hs_err_pid%p.log
       #    volumes:
       #- /root/deploy/logs/anan:/logs
-    ports:
-      - 51500:51500
     depends_on:
       - rabbitmq
       - redis
@@ -181,10 +175,6 @@ services:
     restart: always
     environment:
       - JAVA_TOOL_OPTIONS=-Xmx200M -XX:MaxMetaspaceSize=160M -XX:MetaspaceSize=160M -XX:+DisableExplicitGC -XX:ErrorFile=/logs/hs_err_pid%p.log
-      #    volumes:
-      #- /root/deploy/logs/anan:/logs
-    ports:
-      - 51700:51700
     depends_on:
       - rabbitmq
       - redis
@@ -198,10 +188,6 @@ services:
     restart: always
     environment:
       - JAVA_TOOL_OPTIONS=-Xmx200M -XX:MaxMetaspaceSize=160M -XX:MetaspaceSize=160M -XX:+DisableExplicitGC -XX:ErrorFile=/logs/hs_err_pid%p.log
-      #    volumes:
-      #- /root/deploy/logs/anan:/logs
-    ports:
-      - 51000:51000
 
   anan-configserver:
     network_mode: host
@@ -210,8 +196,6 @@ services:
     container_name: anan-configserver
     hostname: anan-configserver
     restart: always
-    ports:
-      - 51100:51100
     environment:
       - JAVA_TOOL_OPTIONS=-Xmx200M -XX:MaxMetaspaceSize=160M -XX:MetaspaceSize=160M -XX:+DisableExplicitGC -XX:ErrorFile=/logs/hs_err_pid%p.log
       - spring.cloud.config.server.native.search-locations=file:/anan-config
@@ -240,8 +224,6 @@ services:
     #      - setup.kibana.host=kibana:5601
     # disable strict permission checks
     command: ["--strict.perms=false"]
-    #    ports:
-    #      - 5601:5601
     depends_on:
       - elasticsearch
 
@@ -255,8 +237,6 @@ services:
       - I18N_LOCALE=zh-CN
       #      -SERVER_NAME=kibana.example.org
       - ELASTICSEARCH_URL=http://elasticsearch:9200
-    ports:
-      - 5601:5601
     depends_on:
       - elasticsearch
 
@@ -276,8 +256,6 @@ services:
         hard: -1
     volumes:
       - /root/deploy/elasticsearch/data:/usr/share/elasticsearch/data
-    ports:
-      - 9200:9200
 
   zipkin:
     network_mode: host
@@ -301,11 +279,6 @@ services:
     depends_on:
       - elasticsearch
       - rabbitmq
-    ports:
-      # Port used for the Zipkin UI and HTTP Api
-      - 9411:9411
-      # Uncomment if you set SCRIBE_ENABLED=true
-      # - 9410:9410
 
   mongodb:
     network_mode: host
@@ -319,8 +292,6 @@ services:
     volumes:
       - /root/deploy/mongodb/db:/data/db
     restart: always
-    ports:
-      - 27017:27017
 
   prometheus:
     network_mode: host
@@ -336,8 +307,6 @@ services:
     depends_on:
       - cadvisor
       - node-exporter
-    ports:
-      - 9090:9090
 
   node-exporter:
     network_mode: host
@@ -349,8 +318,6 @@ services:
       - NODE_ID={{.Node.ID}}
     cap_add:
       - SYS_TIME
-    ports:
-      - '9100:9100'
     volumes:
       - /proc:/host/proc:ro
       - /sys:/host/sys:ro
@@ -375,8 +342,6 @@ services:
       - GF_SECURITY_ADMIN_PASSWORD=local
       - GF_USERS_ALLOW_SIGN_UP='false'
     restart: always
-    ports:
-      - 3000:3000
 
   cadvisor:
     network_mode: host
@@ -395,8 +360,6 @@ services:
       - /var/run:/var/run:rw
       - /sys:/sys:ro
       - /var/lib/docker:/var/lib/docker:ro
-    ports:
-      - 8080:8080
 
   alertmanager:
     network_mode: host
@@ -433,8 +396,6 @@ services:
     container_name: postgresql
     hostname: postgresql
     restart: always
-    ports:
-      - 5432:5432
     environment:
       - POSTGRES_USER=sonar
       - POSTGRES_PASSWORD=sonar
@@ -445,8 +406,6 @@ services:
     container_name: sonarqube
     hostname: sonarqube
     restart: always
-    ports:
-      - 9001:9000
     environment:
       - SONARQUBE_JDBC_URL=jdbc:postgresql://postgresql:5432/sonar
     depends_on:
@@ -466,8 +425,6 @@ services:
       - MYSQL_SERVICE_PORT=3308
     volumes:
       - /root/deploy/mysql/nacos:/var/lib/mysql
-    ports:
-      - "3308:3306"
 
   phpredisadmin:
     network_mode: host
@@ -479,5 +436,3 @@ services:
       - REDIS_1_AUTH=local
       - REDIS_1_HOST=redis
       - REDIS_1_PORT=6379
-    ports:
-      - 6380:80

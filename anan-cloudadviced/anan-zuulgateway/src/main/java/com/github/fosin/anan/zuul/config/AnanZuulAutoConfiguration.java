@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * @author fosin
@@ -119,14 +120,13 @@ public class AnanZuulAutoConfiguration {
     @Primary
     public AnanSwaggerResourcesProvider ananSwaggerResourcesProvider(RouteLocator routeLocator, SwaggerProperties swaggerProperties) {
         List<Route> routes = routeLocator.getRoutes();
-        List<SwaggerResource> swaggerResources = new ArrayList<>();
-        routes.forEach(route -> {
+        List<SwaggerResource> swaggerResources = routes.stream().map(route -> {
             SwaggerResource swaggerResource = new SwaggerResource();
             swaggerResource.setName(route.getId());
             swaggerResource.setLocation(route.getFullPath().replace("**", "v2/api-docs"));
             swaggerResource.setSwaggerVersion("2.0");
-            swaggerResources.add(swaggerResource);
-        });
+            return swaggerResource;
+        }).collect(Collectors.toList());
         return new AnanSwaggerResourcesProvider(swaggerResources, swaggerProperties);
     }
 
