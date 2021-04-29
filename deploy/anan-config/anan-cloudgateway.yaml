@@ -103,7 +103,7 @@ anan:
     title: ${spring.application.name}
     description: ${info.description}
     version: ${info.version}
-    base-package: com.github.fosin.anan.cloudgateway
+    base-package: top.fosin.anan.cloudgateway
     authorization:
       name: Oauth2.0 Authorization
       keyName: Authorization

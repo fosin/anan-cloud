@@ -64,20 +64,20 @@ anan:
       - /**/swagger-resources/**
       - /**/api-docs
       - /actuator/**
-      - /v1/permission/**  
+      - /v1/permission/**
   swagger:
     enabled: true
     title: ${spring.application.name}
     description: ${info.description}
     version: ${info.version}
-    base-package: com.github.fosin.anan.auth
+    base-package: top.fosin.anan.auth
     authorization:
       name: Oauth2.0 Authorization
       keyName: Authorization
 #      authRegex: ^[^/oauth/token]$
     contact:
       name: fosin
-      email: 28860823@qq.com       
+      email: 28860823@qq.com
   redis:
     idempotent:
       enabled: false

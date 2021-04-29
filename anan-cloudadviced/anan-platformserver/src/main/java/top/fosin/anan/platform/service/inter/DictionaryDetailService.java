@@ -1,0 +1,23 @@
+package top.fosin.anan.platform.service.inter;
+
+import top.fosin.anan.cloudresource.dto.request.AnanDictionaryDetailCreateDto;
+import top.fosin.anan.cloudresource.dto.request.AnanDictionaryDetailRetrieveDto;
+import top.fosin.anan.cloudresource.dto.request.AnanDictionaryDetailUpdateDto;
+import top.fosin.anan.platformapi.entity.AnanDictionaryDetailEntity;
+import top.fosin.anan.jpa.service.ISimpleJpaService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
+import java.util.List;
+
+/**
+ * 2017/12/29.
+ * Time:12:30
+ *
+ * @author fosin
+ */
+public interface DictionaryDetailService extends ISimpleJpaService<AnanDictionaryDetailEntity, Long, AnanDictionaryDetailCreateDto, AnanDictionaryDetailRetrieveDto, AnanDictionaryDetailUpdateDto> {
+    Page<AnanDictionaryDetailEntity> findAll(String searchCondition, Pageable pageable, Long code);
+
+    List<AnanDictionaryDetailEntity> findByDictionaryId(Long dictionaryId);
+}

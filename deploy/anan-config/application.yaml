@@ -17,12 +17,12 @@ logging:
     #打印SQL语句参数
     org.hibernate.type.descriptor.sql.BasicBinder: info
     #打印SQL执行结果
-    org.hibernate.type.descriptor.sql.BasicExtractor: info 
+    org.hibernate.type.descriptor.sql.BasicExtractor: info
     #打印查询中命名参数的值
     org.hibernate.engine.spi.QueryParameters: info
     org.hibernate.engine.query.spi.HQLQueryPlan: info
 #    zipkin2: debug
-    # com.github.fosin.anan.security: DEBUG
+    # top.fosin.anan.security: DEBUG
     # org.springframework.security: DEBUG
 spring:
   datasource:
@@ -62,7 +62,7 @@ spring:
   #      maxPoolPreparedStatementPerConnectionSize: 20
   #      filters: stat,wall,log4j
   #      connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
-  #      useGlobalDataSourceStat: true 
+  #      useGlobalDataSourceStat: true
   #    platform: mysql
   #    continue-on-error: true
   redis:
@@ -121,7 +121,7 @@ spring:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
     # serialization:
-    #    #格式化输出 
+    #    #格式化输出
     #   indent_output: true
     #   #忽略无法转换的对象
     #   fail_on_empty_beans: false
@@ -200,7 +200,7 @@ security:
     resource:
       loadBalanced: true
       user-info-uri: http://anan-authserver/oauth/userinfo/principal
-      prefer-token-info: false  
+      prefer-token-info: false
 eureka:
   client:
     healthcheck:

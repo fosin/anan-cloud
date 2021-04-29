@@ -131,7 +131,7 @@ anan:
     title: ${spring.application.name}
     description: ${info.description}
     version: ${info.version}
-    base-package: com.github.fosin.anan.auth
+    base-package: top.fosin.anan.auth
     authorization:
       name: Oauth2.0 Authorization
       keyName: Authorization
@@ -171,7 +171,7 @@ VALUES (7, 'application.yaml', 'DEFAULT_GROUP', 'logging:
     org.hibernate.engine.spi.QueryParameters: info
     org.hibernate.engine.query.spi.HQLQueryPlan: info
 #    zipkin2: debug
-    # com.github.fosin.anan.security: DEBUG
+    # top.fosin.anan.security: DEBUG
     # org.springframework.security: DEBUG
 spring:
   datasource:
@@ -488,7 +488,7 @@ anan:
     title: ${spring.application.name}
     description: ${info.description}
     version: ${info.version}
-    base-package: com.github.fosin.anan.cloudgateway
+    base-package: top.fosin.anan.cloudgateway
     authorization:
       name: Oauth2.0 Authorization
       keyName: Authorization
@@ -714,7 +714,7 @@ anan:
     title: ${spring.application.name}
     description: ${info.description}
     version: ${info.version}
-    base-package: com.github.fosin.anan.zuulgateway
+    base-package: top.fosin.anan.zuulgateway
     authorization:
       name: Oauth2.0 Authorization
       keyName: Authorization
@@ -754,7 +754,7 @@ anan:
     title: ${spring.application.name}
     description: ${info.description}
     version: ${info.version}
-    base-package: com.github.fosin.anan.platform
+    base-package: top.fosin.anan.platform
     authorization:
       name: Oauth2.0 Authorization
       keyName: Authorization
