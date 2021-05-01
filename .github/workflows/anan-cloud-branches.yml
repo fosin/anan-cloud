@@ -26,7 +26,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           ref: ${{ env.BRANCHE_VERSION }}
-          fetch-depth: 2
+          fetch-depth: 10
 
       - name: Setup JDK
         uses: actions/setup-java@v1
@@ -35,20 +35,20 @@ jobs:
 
       - name: Set Build Modules
         run: |
-          MODIFY_FILES=$(git diff --name-only HEAD~ HEAD)
+          MODIFY_FILES=$(git diff --name-only HEAD~2 HEAD)
           MODULES=""
           echo MODIFY_FILES: $MODIFY_FILES
           if [[ $MODIFY_FILES =~ "\npom.xml" || $MODIFY_FILES =~ "^pom.xml" || $MODIFY_FILES =~ " pom.xml" ]]; then
-             MODULES=${MODULES}",top.fosin:anan-cloud"
+             MODULES=${MODULES}",top.fosin.anan:anan-cloud"
           fi
           if [[ $MODIFY_FILES =~ "anan-cloudresource" ]]; then
-             MODULES=${MODULES}",top.fosin:anan-cloudresource"
+             MODULES=${MODULES}",top.fosin.anan:anan-cloudresource"
           fi
           if [[ $MODIFY_FILES =~ "anan-cloudadviced/pom.xml" ]]; then
-            MODULES=${MODULES}",top.fosin:anan-cloudadviced"
+            MODULES=${MODULES}",top.fosin.anan:anan-cloudadviced"
           fi
           if [[ $MODIFY_FILES =~ "anan-platformapi" ]]; then
-            MODULES=${MODULES}",top.fosin:anan-platformapi"
+            MODULES=${MODULES}",top.fosin.anan:anan-platformapi"
           fi
           echo MODIFY_FILES=$MODIFY_FILES >> $GITHUB_ENV
           echo MODULE_LIST=${MODULES:1} >> $GITHUB_ENV
