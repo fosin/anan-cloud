@@ -6,7 +6,7 @@ import top.fosin.anan.security.resource.AnanProgramAuthorities;
 import top.fosin.anan.security.resource.AnanSecurityConstant;
 import top.fosin.anan.security.resource.AnanSecurityProperties;
 import top.fosin.anan.swagger.config.AnanSwaggerResourcesProvider;
-import top.fosin.anan.swagger.spring4all.SwaggerProperties;
+import top.fosin.anan.swagger.config.SwaggerProperties;
 import org.springframework.util.StringUtils;
 import top.fosin.anan.zuul.service.inter.PermissionFeignService;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
