@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 import top.fosin.anan.cloudresource.dto.request.AnanRoleRetrieveDto;
+import top.fosin.anan.cloudresource.dto.request.AnanUserRoleDto;
 import top.fosin.anan.core.util.DateTimeUtil;
 import top.fosin.anan.core.util.RegexUtil;
 
@@ -26,7 +27,7 @@ public class AnanUserDto implements Serializable {
     private static final long serialVersionUID = -38545495043403316L;
 
     @ApiModelProperty(value = "用户拥有的角色")
-    private List<AnanRoleRetrieveDto> userRoles;
+    private List<AnanUserRoleDto> userRoles;
 
     @NotNull(message = "用户ID" + "{javax.validation.constraints.NotNull.message}")
     @ApiModelProperty(value = "用户ID, 主键", required = true)

@@ -17,7 +17,5 @@ import java.util.List;
  * @author fosin
  */
 public interface DictionaryDetailService extends ISimpleJpaService<AnanDictionaryDetailEntity, Long, AnanDictionaryDetailCreateDto, AnanDictionaryDetailRetrieveDto, AnanDictionaryDetailUpdateDto> {
-    Page<AnanDictionaryDetailEntity> findAll(String searchCondition, Pageable pageable, Long code);
-
     List<AnanDictionaryDetailEntity> findByDictionaryId(Long dictionaryId);
 }

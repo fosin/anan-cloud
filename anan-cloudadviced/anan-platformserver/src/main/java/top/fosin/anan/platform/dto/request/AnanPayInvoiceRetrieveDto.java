@@ -1,10 +1,14 @@
 package top.fosin.anan.platform.dto.request;
 
+import lombok.EqualsAndHashCode;
 import top.fosin.anan.core.util.DateTimeUtil;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
+import top.fosin.anan.model.module.QuerySortRuleEntity;
+import top.fosin.anan.model.module.SortRule;
+import top.fosin.anan.model.module.QueryRule;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -16,9 +20,10 @@ import java.util.Date;
  * @date 2019-02-19 18:14:31
  * @since 1.0.0
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 @ApiModel(value = "系统支付发票表查询DTO", description = "表(anan_pay_invoice)的对应的查询DTO")
-public class AnanPayInvoiceRetrieveDto implements Serializable {
+public class AnanPayInvoiceRetrieveDto extends QuerySortRuleEntity<QueryRule,SortRule> implements Serializable {
     private static final long serialVersionUID = 805808354567024792L;
 
     @ApiModelProperty(value = "发票ID, 主键")

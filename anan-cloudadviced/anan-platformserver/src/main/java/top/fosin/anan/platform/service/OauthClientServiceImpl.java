@@ -1,27 +1,21 @@
 package top.fosin.anan.platform.service;
 
 
-import top.fosin.anan.jpa.repository.IJpaRepository;
-import top.fosin.anan.model.module.PageModule;
-import top.fosin.anan.model.result.Result;
-import top.fosin.anan.model.result.ResultUtils;
-import top.fosin.anan.platform.entity.OauthClientDetailsEntity;
-import top.fosin.anan.platform.repository.OauthClientRepository;
-import top.fosin.anan.platform.service.inter.OauthClientService;
-
+import org.springframework.beans.BeanUtils;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
+import top.fosin.anan.core.util.BeanUtil;
+import top.fosin.anan.jpa.repository.IJpaRepository;
+import top.fosin.anan.platform.dto.request.OauthClientDetailsCreateDto;
+import top.fosin.anan.platform.dto.request.OauthClientDetailsUpdateDto;
+import top.fosin.anan.platform.entity.OauthClientDetailsEntity;
+import top.fosin.anan.platform.repository.OauthClientRepository;
+import top.fosin.anan.platform.service.inter.OauthClientService;
 
-import javax.persistence.criteria.Path;
 import java.util.Objects;
-import java.util.Optional;
 
 /**
  * 2017/12/29.
@@ -42,48 +36,34 @@ public class OauthClientServiceImpl implements OauthClientService {
     }
 
     @Override
-    public OauthClientDetailsEntity create(OauthClientDetailsEntity entity) {
-        Assert.notNull(entity, "传入了空对象!");
+    public OauthClientDetailsEntity create(OauthClientDetailsCreateDto entity) {
+        Assert.notNull(entity, "传入的创建数据实体对象不能为空!");
         String id = entity.getClientId();
-        Optional<OauthClientDetailsEntity> entityOptional = oauthClientRepository.findById(id);
-        Assert.isTrue(entityOptional.isPresent(), "该数据已存在，请重新设置客户端标识以区分");
-        entity.setClientSecret(passwordEncoder.encode(entity.getClientSecret()));
-        return oauthClientRepository.save(entity);
+        OauthClientDetailsEntity createEntity = oauthClientRepository.findById(id).orElse(null);
+        Assert.isNull(createEntity, "该数据已存在，请重新设置客户端标识以区分");
+        createEntity = new OauthClientDetailsEntity();
+        BeanUtils.copyProperties(entity, createEntity);
+        createEntity.setClientSecret(passwordEncoder.encode(createEntity.getClientSecret()));
+        return oauthClientRepository.save(createEntity);
     }
 
     @Override
-    public OauthClientDetailsEntity update(OauthClientDetailsEntity entity) {
-        Assert.notNull(entity, "传入了空对象!");
+    public OauthClientDetailsEntity update(OauthClientDetailsUpdateDto entity) {
+        Assert.notNull(entity, "传入的更新数据实体对象不能为空!");
+
         String id = entity.getClientId();
         Assert.isTrue(StringUtils.hasText(id), "更新数据时ClientId不能为空!");
-        OauthClientDetailsEntity existsEntity = oauthClientRepository.findById(id).orElse(null);
-        Assert.isTrue(existsEntity != null, "没有找到对应的数据!");
+        OauthClientDetailsEntity updateEntiy = oauthClientRepository.findById(id).orElse(null);
+        Assert.notNull(updateEntiy, "没有找到对应的数据!");
+
+        //复制新数据到当前数据实体类中，忽略空值
+        BeanUtils.copyProperties(entity, updateEntiy, BeanUtil.getNullProperties(entity));
+
         //如果密码与数据库中的不一致则需要加密
-        if (!Objects.equals(entity.getClientSecret(), existsEntity.getClientSecret())) {
-            entity.setClientSecret(passwordEncoder.encode(entity.getClientSecret()));
+        if (!Objects.equals(entity.getClientSecret(), updateEntiy.getClientSecret())) {
+            updateEntiy.setClientSecret(passwordEncoder.encode(updateEntiy.getClientSecret()));
         }
-        return oauthClientRepository.save(entity);
-    }
-
-    @Override
-    public Result findAllByPageSort(PageModule pageModule) {
-        PageRequest pageable = PageRequest.of(pageModule.getPageNumber() - 1, pageModule.getPageSize(), Sort.Direction.fromString(pageModule.getSortOrder()), pageModule.getSortName());
-        String searchCondition = pageModule.getSearchText();
-
-        Specification<OauthClientDetailsEntity> condition = (Specification<OauthClientDetailsEntity>) (root, query, cb) -> {
-            Path<String> clientId = root.get("clientId");
-            Path<String> clientSecret = root.get("clientSecret");
-
-            if (StringUtils.isEmpty(searchCondition)) {
-                return query.getRestriction();
-            }
-            return cb.or(cb.like(clientId, "%" + searchCondition + "%"), cb.like(clientSecret, "%" + searchCondition + "%"));
-
-        };
-        //分页查找
-        Page<OauthClientDetailsEntity> page = oauthClientRepository.findAll(condition, pageable);
-
-        return ResultUtils.success(page.getTotalElements(), page.getContent());
+        return oauthClientRepository.save(updateEntiy);
     }
 
     @Override

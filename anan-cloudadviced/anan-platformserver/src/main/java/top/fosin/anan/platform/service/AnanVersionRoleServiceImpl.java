@@ -1,25 +1,15 @@
 package top.fosin.anan.platform.service;
 
-import top.fosin.anan.model.module.PageModule;
-import top.fosin.anan.model.result.Result;
-import top.fosin.anan.model.result.ResultUtils;
+import org.springframework.beans.BeanUtils;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
+import top.fosin.anan.cloudresource.constant.SystemConstant;
 import top.fosin.anan.platform.dto.request.AnanVersionRoleCreateDto;
 import top.fosin.anan.platform.dto.request.AnanVersionRoleUpdateDto;
 import top.fosin.anan.platform.entity.AnanVersionRoleEntity;
 import top.fosin.anan.platform.repository.AnanVersionRoleRepository;
 import top.fosin.anan.platform.service.inter.AnanVersionRoleService;
-import top.fosin.anan.cloudresource.constant.SystemConstant;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.BeanUtils;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
-
-import javax.persistence.criteria.Path;
 
 /**
  * 系统版本角色表(anan_version_role)表服务实现类
@@ -83,22 +73,22 @@ public class AnanVersionRoleServiceImpl implements AnanVersionRoleService {
      * @param pageModule 分页排序条件
      * @return Result结果集
      */
-    @Override
-    public Result findAllByPageSort(PageModule pageModule) {
-        PageRequest pageable = PageRequest.of(pageModule.getPageNumber() - 1, pageModule.getPageSize(), Sort.Direction.fromString(pageModule.getSortOrder()), pageModule.getSortName());
-        String searchCondition = pageModule.getSearchText();
-        Specification<AnanVersionRoleEntity> condition = (root, query, cb) -> {
-            Path<String> roleName = root.get("name");
-            Path<String> roleValue = root.get("value");
-            if (StringUtils.isBlank(searchCondition)) {
-                return query.getRestriction();
-            }
-            return cb.or(cb.like(roleName, "%" + searchCondition + "%"), cb.like(roleValue, "%" + searchCondition + "%"));
-        };
-
-        //分页查找
-        Page<AnanVersionRoleEntity> page = getRepository().findAll(condition, pageable);
-
-        return ResultUtils.success(page.getTotalElements(), page.getContent());
-    }
+//    @Override
+//    public Result findAllByPageSort(PageModule pageModule) {
+//        PageRequest pageable = PageRequest.of(pageModule.getPageNumber() - 1, pageModule.getPageSize(), Sort.Direction.fromString(pageModule.getSortOrder()), pageModule.getSortName());
+//        String searchCondition = pageModule.getSearchText();
+//        Specification<AnanVersionRoleEntity> condition = (root, query, cb) -> {
+//            Path<String> roleName = root.get("name");
+//            Path<String> roleValue = root.get("value");
+//            if (StringUtils.isBlank(searchCondition)) {
+//                return query.getRestriction();
+//            }
+//            return cb.or(cb.like(roleName, "%" + searchCondition + "%"), cb.like(roleValue, "%" + searchCondition + "%"));
+//        };
+//
+//        //分页查找
+//        Page<AnanVersionRoleEntity> page = getRepository().findAll(condition, pageable);
+//
+//        return ResultUtils.success(page.getTotalElements(), page.getContent());
+//    }
 }

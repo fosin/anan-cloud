@@ -3,6 +3,10 @@ package top.fosin.anan.platform.dto.request;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import top.fosin.anan.model.module.QuerySortRuleEntity;
+import top.fosin.anan.model.module.SortRule;
+import top.fosin.anan.model.module.QueryRule;
 
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -14,9 +18,10 @@ import java.io.Serializable;
  * @date 2020-12-09 10:34:35
  * @since 1.0.0
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 @ApiModel(value = "国际化语言字符集查询DTO", description = "表(anan_international_charset)的对应的查询DTO")
-public class AnanInternationalCharsetRetrieveDto implements Serializable {
+public class AnanInternationalCharsetRetrieveDto extends QuerySortRuleEntity<QueryRule, SortRule> implements Serializable {
     private static final long serialVersionUID = 329752756986005664L;
 
     @NotNull(message = "主键" + "{javax.validation.constraints.NotNull.message}")

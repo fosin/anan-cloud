@@ -3,8 +3,15 @@ package top.fosin.anan.cloudresource.dto.request;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import org.springframework.format.annotation.DateTimeFormat;
+import top.fosin.anan.core.util.DateTimeUtil;
+import top.fosin.anan.model.module.QuerySortRuleEntity;
+import top.fosin.anan.model.module.SortRule;
+import top.fosin.anan.model.module.QueryRule;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * 包含菜单、按钮两种权限(AnanPermission)查询DTO
@@ -13,9 +20,10 @@ import java.io.Serializable;
  * @date 2019-01-27 18:27:20
  * @since 1.0.0
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 @ApiModel(value = "包含菜单、按钮两种权限查询DTO", description = "表(anan_permission)的对应的查询DTO")
-public class AnanPermissionRetrieveDto implements Serializable {
+public class AnanPermissionRetrieveDto extends QuerySortRuleEntity<QueryRule,SortRule> implements Serializable {
     private static final long serialVersionUID = -61984917164013694L;
 
     @ApiModelProperty(value = "权限ID, 主键")
@@ -59,4 +67,18 @@ public class AnanPermissionRetrieveDto implements Serializable {
 
     @ApiModelProperty(value = "一般用于前端菜单选项前的图标")
     private String icon;
+
+    @ApiModelProperty(value = "创建人", example = "Long")
+    private Long createBy;
+
+    @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
+    @ApiModelProperty(value = "创建日期", example = "Date")
+    private Date createTime;
+
+    @ApiModelProperty(value = "修改人", example = "Long")
+    private Long updateBy;
+
+    @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
+    @ApiModelProperty(value = "修改日期", example = "Date")
+    private Date updateTime;
 }

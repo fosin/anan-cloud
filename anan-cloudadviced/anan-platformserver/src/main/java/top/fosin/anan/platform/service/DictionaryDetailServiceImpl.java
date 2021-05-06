@@ -1,36 +1,26 @@
 package top.fosin.anan.platform.service;
 
+import org.springframework.beans.BeanUtils;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 import top.fosin.anan.cloudresource.constant.RedisConstant;
 import top.fosin.anan.cloudresource.constant.SystemConstant;
 import top.fosin.anan.cloudresource.dto.request.AnanDictionaryDetailCreateDto;
+import top.fosin.anan.cloudresource.dto.request.AnanDictionaryDetailRetrieveDto;
 import top.fosin.anan.cloudresource.dto.request.AnanDictionaryDetailUpdateDto;
 import top.fosin.anan.core.exception.AnanServiceException;
 import top.fosin.anan.jpa.repository.IJpaRepository;
-import top.fosin.anan.model.module.PageModule;
-import top.fosin.anan.model.result.Result;
-import top.fosin.anan.model.result.ResultUtils;
 import top.fosin.anan.platform.repository.DictionaryDetailRepository;
 import top.fosin.anan.platform.repository.DictionaryRepository;
 import top.fosin.anan.platform.service.inter.DictionaryDetailService;
 import top.fosin.anan.platformapi.entity.AnanDictionaryDetailEntity;
 import top.fosin.anan.platformapi.entity.AnanDictionaryEntity;
 import top.fosin.anan.platformapi.service.AnanUserDetailService;
-import cn.hutool.core.util.NumberUtil;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.BeanUtils;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
 
-import javax.persistence.criteria.Path;
-import javax.persistence.criteria.Predicate;
 import java.util.List;
 
 /**
@@ -104,52 +94,14 @@ public class DictionaryDetailServiceImpl implements DictionaryDetailService {
 
     @Override
     @CacheEvict(value = RedisConstant.ANAN_DICTIONARY_DETAIL, key = "#entity.dictionaryId")
-    public AnanDictionaryDetailEntity deleteByEntity(AnanDictionaryDetailEntity entity) {
+    public AnanDictionaryDetailEntity deleteByEntity(AnanDictionaryDetailRetrieveDto entity) {
         Assert.notNull(entity, "传入了空的对象!");
         hasModifiedPrivileges(entity.getDictionaryId());
-        dictionaryDetailRepository.delete(entity);
-        return entity;
-    }
-
-    @Override
-    public Result findAllByPageSort(PageModule pageModule) {
-        PageRequest pageable = PageRequest.of(pageModule.getPageNumber() - 1, pageModule.getPageSize(), Sort.Direction.fromString(pageModule.getSortOrder()), pageModule.getSortName());
-        String searchCondition = pageModule.getSearchText();
-
-        Specification<AnanDictionaryDetailEntity> condition = (root, query, cb) -> {
-            Path<String> name = root.get("name");
-            Path<String> value = root.get("value");
-            Path<String> code = root.get("dictionaryId");
-            if (StringUtils.isBlank(searchCondition)) {
-                return query.getRestriction();
-            }
-            return cb.or(cb.like(code, "%" + searchCondition + "%"), cb.like(name, "%" + searchCondition + "%"), cb.like(value, "%" + searchCondition + "%"));
-
-        };
-        //分页查找
-        Page<AnanDictionaryDetailEntity> page = dictionaryDetailRepository.findAll(condition, pageable);
-
-        return ResultUtils.success(page.getTotalElements(), page.getContent());
-    }
-
-    @Override
-    public Page<AnanDictionaryDetailEntity> findAll(String searchCondition, Pageable pageable, Long dictionaryId) {
-        Specification<AnanDictionaryDetailEntity> condition = (root, query, cb) -> {
-            Path<String> name = root.get("name");
-            Path<String> value = root.get("value");
-            Path<String> dictionaryIdPath = root.get("dictionaryId");
-            Predicate predicate1 = cb.equal(dictionaryIdPath, dictionaryId);
-            Predicate predicate2 = cb.or(cb.like(value, "%" + searchCondition + "%"));
-            if (StringUtils.isBlank(searchCondition)) {
-                return predicate1;
-            }
-            if (NumberUtil.isInteger(searchCondition)) {
-                predicate2 = cb.or(cb.like(name, "%" + searchCondition + "%"), cb.like(dictionaryIdPath, "%" + searchCondition + "%"), predicate2);
-            }
-
-            return cb.and(predicate1, predicate2);
-        };
-        return dictionaryDetailRepository.findAll(condition, pageable);
+        AnanDictionaryDetailEntity deleteEntity = dictionaryDetailRepository.findById(entity.getId()).orElse(null);
+        if (deleteEntity != null) {
+            dictionaryDetailRepository.delete(deleteEntity);
+        }
+        return deleteEntity;
     }
 
     @Override

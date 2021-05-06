@@ -3,6 +3,8 @@ package top.fosin.anan.platformapi.parameter;
 import top.fosin.anan.platformapi.service.AnanUserDetailService;
 
 /**
+ * 用户参数
+ *
  * @author fosin
  * @date 2019/5/13
  */
@@ -15,7 +17,7 @@ public class UserStrategy implements IParameterStrategy {
 
     @Override
     public int getType() {
-        return 2;
+        return ParameterType.User.getTypeValue();
     }
 
     @Override

@@ -15,11 +15,7 @@
     <dependencies>
         <dependency>
             <groupId>top.fosin.anan</groupId>
-            <artifactId>anan-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>top.fosin.anan</groupId>
-            <artifactId>anan-swagger</artifactId>
+            <artifactId>anan-model</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.security</groupId>

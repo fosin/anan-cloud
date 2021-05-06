@@ -1,12 +1,5 @@
 package top.fosin.anan.platform.service;
 
-import top.fosin.anan.cloudresource.constant.RedisConstant;
-import top.fosin.anan.jpa.util.JpaUtil;
-import top.fosin.anan.platform.dto.request.AnanInternationalCreateDto;
-import top.fosin.anan.platform.dto.request.AnanInternationalUpdateDto;
-import top.fosin.anan.platform.entity.AnanInternationalEntity;
-import top.fosin.anan.platform.repository.AnanInternationalRepository;
-import top.fosin.anan.platform.service.inter.AnanInternationalService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -14,6 +7,13 @@ import org.springframework.cache.annotation.Caching;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+import top.fosin.anan.cloudresource.constant.RedisConstant;
+import top.fosin.anan.platform.dto.request.AnanInternationalCreateDto;
+import top.fosin.anan.platform.dto.request.AnanInternationalRetrieveDto;
+import top.fosin.anan.platform.dto.request.AnanInternationalUpdateDto;
+import top.fosin.anan.platform.entity.AnanInternationalEntity;
+import top.fosin.anan.platform.repository.AnanInternationalRepository;
+import top.fosin.anan.platform.service.inter.AnanInternationalService;
 
 import java.util.List;
 
@@ -59,7 +59,7 @@ public class AnanInternationalServiceImpl implements AnanInternationalService {
     )
     public AnanInternationalEntity create(AnanInternationalCreateDto entity) {
         Assert.notNull(entity, "传入的创建数据实体对象不能为空!");
-        AnanInternationalEntity entityDynamic = JpaUtil.findOneByEntityDynamic(defaultRepository, entity);
+        AnanInternationalEntity entityDynamic = findOneByEntity(entity);
         if (entityDynamic == null) {
             AnanInternationalEntity createEntiy = new AnanInternationalEntity();
             BeanUtils.copyProperties(entity, createEntiy);
@@ -92,13 +92,13 @@ public class AnanInternationalServiceImpl implements AnanInternationalService {
                     @CacheEvict(value = RedisConstant.ANAN_INTERNATIONAL_CODE, allEntries = true)
             }
     )
-    public AnanInternationalEntity deleteByEntity(AnanInternationalEntity entity) {
+    public AnanInternationalEntity deleteByEntity(AnanInternationalRetrieveDto entity) {
         Assert.notNull(entity, "删除数据的实体对象不能为空!");
-        AnanInternationalEntity deleteEntity = JpaUtil.findOneByEntityDynamic(defaultRepository, entity);
+        AnanInternationalEntity deleteEntity = defaultRepository.findById(entity.getId()).orElse(null);
         if (deleteEntity != null) {
-            defaultRepository.delete(entity);
+            defaultRepository.delete(deleteEntity);
         }
-        return entity;
+        return deleteEntity;
     }
 
     @Override

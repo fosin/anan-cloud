@@ -5,8 +5,12 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.springframework.format.annotation.DateTimeFormat;
 import top.fosin.anan.core.util.DateTimeUtil;
+import top.fosin.anan.model.module.QuerySortRuleEntity;
+import top.fosin.anan.model.module.SortRule;
+import top.fosin.anan.model.module.QueryRule;
 
 /**
  * 系统版本角色权限表(AnanVersionRolePermission)查询DTO
@@ -15,9 +19,10 @@ import top.fosin.anan.core.util.DateTimeUtil;
  * @date 2019-02-19 18:14:31
  * @since 1.0.0
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 @ApiModel(value = "系统版本角色权限表查询DTO", description = "表(anan_version_role_permission)的对应的查询DTO")
-public class AnanVersionRolePermissionRetrieveDto implements Serializable {
+public class AnanVersionRolePermissionRetrieveDto extends QuerySortRuleEntity<QueryRule,SortRule> implements Serializable {
     private static final long serialVersionUID = -42309427704059941L;
 
     @ApiModelProperty(value = "角色权限ID, 主键")

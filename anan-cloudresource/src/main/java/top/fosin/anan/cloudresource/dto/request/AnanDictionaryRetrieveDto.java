@@ -1,12 +1,19 @@
 package top.fosin.anan.cloudresource.dto.request;
 
+import lombok.EqualsAndHashCode;
+import org.springframework.format.annotation.DateTimeFormat;
+import top.fosin.anan.core.util.DateTimeUtil;
 import top.fosin.anan.core.util.RegexUtil;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import top.fosin.anan.model.module.QuerySortRuleEntity;
+import top.fosin.anan.model.module.SortRule;
+import top.fosin.anan.model.module.QueryRule;
 
 import javax.validation.constraints.Pattern;
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * 系统通用字典表(AnanDictionary)查询DTO
@@ -15,9 +22,10 @@ import java.io.Serializable;
  * @date 2019-01-27 18:34:10
  * @since 1.0.0
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 @ApiModel(value = "系统通用字典表查询DTO", description = "表(anan_dictionary)的对应的查询DTO")
-public class AnanDictionaryRetrieveDto implements Serializable {
+public class AnanDictionaryRetrieveDto extends QuerySortRuleEntity<QueryRule,SortRule> implements Serializable {
     private static final long serialVersionUID = 480249603699448721L;
 
     @ApiModelProperty(value = "字典代码")
@@ -37,4 +45,17 @@ public class AnanDictionaryRetrieveDto implements Serializable {
     @ApiModelProperty(value = "字典说明")
     private String description;
 
+    @ApiModelProperty(value = "创建人", example = "Long")
+    private Long createBy;
+
+    @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
+    @ApiModelProperty(value = "创建日期", example = "Date")
+    private Date createTime;
+
+    @ApiModelProperty(value = "修改人", example = "Long")
+    private Long updateBy;
+
+    @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
+    @ApiModelProperty(value = "修改日期", example = "Date")
+    private Date updateTime;
 }

@@ -1,10 +1,14 @@
 package top.fosin.anan.cloudresource.dto.request;
 
+import lombok.EqualsAndHashCode;
 import top.fosin.anan.core.util.DateTimeUtil;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
+import top.fosin.anan.model.module.QuerySortRuleEntity;
+import top.fosin.anan.model.module.SortRule;
+import top.fosin.anan.model.module.QueryRule;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -16,9 +20,10 @@ import java.util.Date;
  * @date 2019-01-27 19:33:26
  * @since 1.0.0
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 @ApiModel(value = "用于增减用户的单项权限，通常实在角色的基础上增减单项权限查询DTO", description = "表(anan_user_permission)的对应的查询DTO")
-public class AnanUserPermissionRetrieveDto implements Serializable {
+public class AnanUserPermissionRetrieveDto extends QuerySortRuleEntity<QueryRule,SortRule> implements Serializable {
     private static final long serialVersionUID = 989390435758584592L;
 
     @ApiModelProperty(value = "用户权限ID, 主键")

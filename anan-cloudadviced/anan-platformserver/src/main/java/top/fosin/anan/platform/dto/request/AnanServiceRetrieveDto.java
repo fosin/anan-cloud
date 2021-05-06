@@ -3,6 +3,10 @@ package top.fosin.anan.platform.dto.request;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import top.fosin.anan.model.module.QuerySortRuleEntity;
+import top.fosin.anan.model.module.SortRule;
+import top.fosin.anan.model.module.QueryRule;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -15,9 +19,10 @@ import java.io.Serializable;
  * @date 2020-12-04 17:48:21
  * @since 1.0.0
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 @ApiModel(value = "系统服务表查询DTO", description = "表(anan_service)的对应的查询DTO")
-public class AnanServiceRetrieveDto implements Serializable {
+public class AnanServiceRetrieveDto extends QuerySortRuleEntity<QueryRule,SortRule> implements Serializable {
     private static final long serialVersionUID = -95213722807513308L;
 
     @NotNull(message = "主键" + "{javax.validation.constraints.NotNull.message}")

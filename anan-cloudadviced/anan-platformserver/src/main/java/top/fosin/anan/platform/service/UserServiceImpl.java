@@ -1,13 +1,29 @@
 package top.fosin.anan.platform.service;
 
 import cn.hutool.core.util.NumberUtil;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 import top.fosin.anan.cloudresource.constant.RedisConstant;
 import top.fosin.anan.cloudresource.constant.SystemConstant;
 import top.fosin.anan.cloudresource.dto.request.AnanUserCreateDto;
+import top.fosin.anan.cloudresource.dto.request.AnanUserRetrieveDto;
 import top.fosin.anan.cloudresource.dto.request.AnanUserUpdateDto;
+import top.fosin.anan.core.util.RegexUtil;
 import top.fosin.anan.jpa.repository.IJpaRepository;
 import top.fosin.anan.model.module.PageModule;
-import top.fosin.anan.model.result.Result;
+import top.fosin.anan.model.result.ListResult;
 import top.fosin.anan.model.result.ResultUtils;
 import top.fosin.anan.platform.repository.OrganizationRepository;
 import top.fosin.anan.platform.repository.UserRoleRepository;
@@ -18,22 +34,6 @@ import top.fosin.anan.platformapi.entity.AnanUserRoleEntity;
 import top.fosin.anan.platformapi.repository.UserRepository;
 import top.fosin.anan.platformapi.service.AnanUserDetailService;
 import top.fosin.anan.redis.cache.AnanCacheManger;
-import top.fosin.anan.core.util.RegexUtil;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.BeanUtils;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.cache.annotation.Caching;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
 
 import javax.persistence.criteria.*;
 import java.util.ArrayList;
@@ -203,26 +203,28 @@ public class UserServiceImpl implements UserService {
                     @CacheEvict(value = RedisConstant.ANAN_USER_ALL_PERMISSIONS, key = "#entity.id")
             }
     )
-    public AnanUserEntity deleteByEntity(AnanUserEntity entity) {
+    public AnanUserEntity deleteByEntity(AnanUserRetrieveDto entity) {
         Assert.notNull(entity, "不能删除空的用户对象!");
         Assert.isTrue(!ananUserDetailService.isSysAdminUser(entity.getUsercode())
                 && !ananUserDetailService.isAdminUser(entity.getUsercode()), "不能删除管理员帐号!");
         List<AnanUserRoleEntity> userRoles = userRoleRepository.findByUserId(entity.getId());
         Assert.isTrue(userRoles.size() == 0, "该用户下还存在角色信息,不能直接删除用户!");
-        userRepository.delete(entity);
-        return entity;
+        AnanUserEntity deleteEntity = findOneByEntity(entity);
+        if (deleteEntity != null) {
+            getRepository().delete(deleteEntity);
+        }
+        return deleteEntity;
     }
 
     @Override
-    public Result findAllByPageSort(PageModule pageModule) {
-        PageRequest pageable = PageRequest.of(pageModule.getPageNumber() - 1, pageModule.getPageSize(), Sort.Direction.fromString(pageModule.getSortOrder()), pageModule.getSortName());
-        String searchCondition = pageModule.getSearchText();
+    public ListResult<AnanUserEntity> findPage(PageModule<AnanUserRetrieveDto> pageModule) {
+        PageRequest pageable = getPageObject(pageModule);
 
         Specification<AnanUserEntity> condition = (root, query, cb) -> {
-            Path<String> usercode = root.get("usercode");
-            Path<String> username = root.get("username");
-            Path<String> phone = root.get("phone");
-            Path<String> email = root.get("email");
+            Path<String> usercodePath = root.get("usercode");
+            Path<String> usernamePath = root.get("username");
+            Path<String> phonePath = root.get("phone");
+            Path<String> emailPath = root.get("email");
 
             CriteriaBuilder.In<Object> organizId1 = null;
             boolean sysAdminUser = ananUserDetailService.isSysAdminUser();
@@ -241,22 +243,39 @@ public class UserServiceImpl implements UserService {
 
                 organizId1 = cb.in(root.get("organizId")).value(subQuery);
             }
+            AnanUserRetrieveDto params = pageModule.getParams();
 
-            if (StringUtils.isBlank(searchCondition)) {
+            if (params == null) {
                 if (sysAdminUser) {
                     return query.getRestriction();
                 } else {
-                    return cb.and(cb.notEqual(usercode, SystemConstant.ANAN_USER_CODE), organizId1);
+                    return cb.and(cb.notEqual(usercodePath, SystemConstant.ANAN_USER_CODE), organizId1);
                 }
-            }
-            Predicate predicate = cb.or(cb.like(username, "%" + searchCondition + "%"),
-                    cb.like(usercode, "%" + searchCondition + "%"),
-                    cb.like(phone, "%" + searchCondition + "%"),
-                    cb.like(email, "%" + searchCondition + "%"));
-            if (sysAdminUser) {
-                return predicate;
             } else {
-                return cb.and(cb.notEqual(usercode, SystemConstant.ANAN_USER_CODE), predicate, organizId1);
+                String username = params.getUsername();
+                String usercode = params.getUsercode();
+                String phone = params.getPhone();
+                String email = params.getEmail();
+                if (StringUtils.isEmpty(username)
+                        && StringUtils.isEmpty(usercode)
+                        && StringUtils.isEmpty(phone)
+                        && StringUtils.isEmpty(email)
+                ) {
+                    if (sysAdminUser) {
+                        return query.getRestriction();
+                    } else {
+                        return cb.and(cb.notEqual(usercodePath, SystemConstant.ANAN_USER_CODE), organizId1);
+                    }
+                }
+                Predicate predicate = cb.or(cb.like(usernamePath, "%" + username + "%"),
+                        cb.like(usercodePath, "%" + usercode + "%"),
+                        cb.like(phonePath, "%" + phone + "%"),
+                        cb.like(emailPath, "%" + email + "%"));
+                if (sysAdminUser) {
+                    return predicate;
+                } else {
+                    return cb.and(cb.notEqual(usercodePath, SystemConstant.ANAN_USER_CODE), predicate, organizId1);
+                }
             }
         };
         //分页查找
@@ -265,7 +284,7 @@ public class UserServiceImpl implements UserService {
         for (AnanUserEntity user : page) {
             user.setUserRoles(null);
         }
-        return ResultUtils.success(page.getTotalElements(), page.getContent());
+        return ResultUtils.success(page.getTotalElements(), page.getTotalPages(), page.getContent());
     }
 
     @Transactional(rollbackFor = Exception.class)

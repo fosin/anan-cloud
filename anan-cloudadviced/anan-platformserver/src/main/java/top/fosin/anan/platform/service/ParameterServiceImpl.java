@@ -1,14 +1,22 @@
 package top.fosin.anan.platform.service;
 
 
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 import top.fosin.anan.cloudresource.constant.RedisConstant;
 import top.fosin.anan.cloudresource.dto.request.AnanParameterCreateDto;
+import top.fosin.anan.cloudresource.dto.request.AnanParameterRetrieveDto;
 import top.fosin.anan.cloudresource.dto.request.AnanParameterUpdateDto;
 import top.fosin.anan.core.exception.AnanServiceException;
 import top.fosin.anan.jpa.repository.IJpaRepository;
-import top.fosin.anan.model.module.PageModule;
-import top.fosin.anan.model.result.Result;
-import top.fosin.anan.model.result.ResultUtils;
 import top.fosin.anan.platform.repository.OrganizationRepository;
 import top.fosin.anan.platform.repository.ParameterRepository;
 import top.fosin.anan.platform.service.inter.ParameterService;
@@ -17,22 +25,7 @@ import top.fosin.anan.platformapi.entity.AnanParameterEntity;
 import top.fosin.anan.platformapi.parameter.OrganStrategy;
 import top.fosin.anan.platformapi.service.AnanUserDetailService;
 import top.fosin.anan.redis.cache.AnanCacheManger;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.BeanUtils;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
 
-import javax.persistence.criteria.Path;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -105,31 +98,13 @@ public class ParameterServiceImpl implements ParameterService {
 
     @Override
     @CacheEvict(value = RedisConstant.ANAN_PARAMETER, key = "#root.target.getCacheKey(#entity)")
-    public AnanParameterEntity deleteByEntity(AnanParameterEntity entity) {
+    public AnanParameterEntity deleteByEntity(AnanParameterRetrieveDto entity) {
         Assert.notNull(entity, "传入了空对象!");
-        parameterRepository.delete(entity);
-        return entity;
-    }
-
-    @Override
-    public Result findAllByPageSort(PageModule pageModule) {
-        PageRequest pageable = PageRequest.of(pageModule.getPageNumber() - 1, pageModule.getPageSize(), Sort.Direction.fromString(pageModule.getSortOrder()), pageModule.getSortName());
-        String searchCondition = pageModule.getSearchText();
-
-        Specification<AnanParameterEntity> condition = (Specification<AnanParameterEntity>) (root, query, cb) -> {
-            Path<String> name = root.get("name");
-            Path<String> scope = root.get("scope");
-            Path<String> value = root.get("value");
-            if (StringUtils.isBlank(searchCondition)) {
-                return query.getRestriction();
-            }
-            return cb.or(cb.like(scope, "%" + searchCondition + "%"), cb.like(name, "%" + searchCondition + "%"), cb.like(value, "%" + searchCondition + "%"));
-
-        };
-        //分页查找
-        Page<AnanParameterEntity> page = parameterRepository.findAll(condition, pageable);
-
-        return ResultUtils.success(page.getTotalElements(), page.getContent());
+        AnanParameterEntity deleteEntity = parameterRepository.findById(entity.getId()).orElse(null);
+        if (deleteEntity != null) {
+            parameterRepository.delete(deleteEntity);
+        }
+        return deleteEntity;
     }
 
     public String getCacheKey(AnanParameterEntity entity) {

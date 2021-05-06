@@ -45,23 +45,6 @@ public class DictionaryDetailController implements ISimpleController<AnanDiction
         return dictionaryDetailService;
     }
 
-    @ApiOperation("根据字典代码获取对应的字典明细并分页排序")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "pageModule", value = "分页排序实体类",
-                    required = true, dataTypeClass = PageModule.class, paramType = "body"),
-            @ApiImplicitParam(name = "dictionaryId", value = "字典代码,取值于AnanDictionaryEntity.id",
-                    required = true, dataTypeClass = Long.class, paramType = "query"),
-    })
-    @RequestMapping(value = PathConstant.PATH_PAGE_LIST + "/{dictionaryId}", method = {RequestMethod.POST, RequestMethod.GET})
-    public ResponseEntity<ListResult<AnanDictionaryDetailEntity>> pageList(@RequestBody PageModule pageModule, @PathVariable Long dictionaryId) {
-        PageRequest pageRequest = PageRequest.of(pageModule.getPageNumber() - 1, pageModule.getPageSize(), Sort.Direction.fromString(pageModule.getSortOrder()), pageModule.getSortName());
-        //分页查找
-        Page<AnanDictionaryDetailEntity> page;
-        page = dictionaryDetailService.findAll(pageModule.getSearchText(), pageRequest, dictionaryId);
-
-        return ResponseEntity.ok(ResultUtils.success(page.getTotalElements(), page.getContent()));
-    }
-
     @ApiOperation("根据字典代码获取对应的字典明细")
     @RequestMapping(value = "/byCode/{dictionaryId}", method = {RequestMethod.GET, RequestMethod.POST})
     @ApiImplicitParam(name = "dictionaryId", value = "字典代码,取值于AnanDictionaryEntity.id",

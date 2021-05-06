@@ -1,12 +1,20 @@
 package top.fosin.anan.platform.service;
 
+import org.springframework.beans.BeanUtils;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 import top.fosin.anan.cloudresource.constant.RedisConstant;
 import top.fosin.anan.cloudresource.dto.request.AnanPermissionCreateDto;
+import top.fosin.anan.cloudresource.dto.request.AnanPermissionRetrieveDto;
 import top.fosin.anan.cloudresource.dto.request.AnanPermissionUpdateDto;
 import top.fosin.anan.jpa.repository.IJpaRepository;
-import top.fosin.anan.model.module.PageModule;
-import top.fosin.anan.model.result.Result;
-import top.fosin.anan.model.result.ResultUtils;
 import top.fosin.anan.platform.repository.AnanOrganizationPermissionRepository;
 import top.fosin.anan.platform.repository.AnanVersionPermissionRepository;
 import top.fosin.anan.platform.repository.AnanVersionRolePermissionRepository;
@@ -16,22 +24,7 @@ import top.fosin.anan.platformapi.repository.AnanServiceRepository;
 import top.fosin.anan.platformapi.repository.PermissionRepository;
 import top.fosin.anan.platformapi.repository.RolePermissionRepository;
 import top.fosin.anan.platformapi.repository.UserPermissionRepository;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.BeanUtils;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.cache.annotation.Caching;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
 
-import javax.persistence.criteria.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -154,11 +147,12 @@ public class PermissionServiceImpl implements PermissionService {
     public AnanPermissionEntity deleteById(Long id) {
         Assert.notNull(id, "传入了空ID!");
         AnanPermissionEntity entity = permissionRepository.findById(id).orElse(null);
-        deleteById(id, Objects.requireNonNull(entity, "通过ID：" + id + "未能找到对应的数据!"));
+        deleteByEntity(Objects.requireNonNull(entity, "通过ID：" + id + "未能找到对应的数据!"));
         return null;
     }
 
-    private void deleteById(Long id, AnanPermissionEntity entity) {
+    private void deleteByEntity(AnanPermissionEntity entity) {
+        long id = entity.getId();
         long countByPermissionId = userPermissionRepository.countByPermissionId(id);
         Assert.isTrue(countByPermissionId == 0, "还有用户在使用该权限，不能直接删除!");
         countByPermissionId = versionRolePermissionRepository.countByPermissionId(id);
@@ -183,33 +177,10 @@ public class PermissionServiceImpl implements PermissionService {
                     @CacheEvict(value = RedisConstant.ANAN_ROLE_PERMISSION, allEntries = true)
             }
     )
-    public AnanPermissionEntity deleteByEntity(AnanPermissionEntity entity) {
-        Assert.notNull(entity, "传入了空对象!");
-        Long id = entity.getId();
-        Assert.notNull(id, "传入了空ID!");
-        deleteById(id, entity);
-        return entity;
-    }
-
-    @Override
-    public Result findAllByPageSort(PageModule pageModule) {
-        PageRequest pageable = PageRequest.of(pageModule.getPageNumber() - 1, pageModule.getPageSize(), Sort.Direction.fromString(pageModule.getSortOrder()), pageModule.getSortName());
-        String searchCondition = pageModule.getSearchText();
-
-        Specification<AnanPermissionEntity> condition = (Specification<AnanPermissionEntity>) (root, query, cb) -> {
-            if (StringUtils.isBlank(searchCondition)) {
-                return query.getRestriction();
-            }
-            Path<String> name = root.get("name");
-            Path<String> code = root.get("code");
-            Path<String> url = root.get("url");
-            Path<String> type = root.get("type");
-            return cb.or(cb.like(name, "%" + searchCondition + "%"), cb.like(code, "%" + searchCondition + "%"), cb.like(url, "%" + searchCondition + "%"), cb.like(type, "%" + searchCondition + "%"));
-        };
-        //分页查找
-        Page<AnanPermissionEntity> page = permissionRepository.findAll(condition, pageable);
-
-        return ResultUtils.success(page.getTotalElements(), page.getContent());
+    public AnanPermissionEntity deleteByEntity(AnanPermissionRetrieveDto entity) {
+        AnanPermissionEntity deleteEntity = permissionRepository.findById(entity.getId()).orElse(null);
+        deleteByEntity(Objects.requireNonNull(deleteEntity, "传入了空对象!"));
+        return deleteEntity;
     }
 
     @Override

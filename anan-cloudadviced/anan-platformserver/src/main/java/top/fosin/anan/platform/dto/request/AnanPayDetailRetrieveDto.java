@@ -3,6 +3,10 @@ package top.fosin.anan.platform.dto.request;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import top.fosin.anan.model.module.QuerySortRuleEntity;
+import top.fosin.anan.model.module.SortRule;
+import top.fosin.anan.model.module.QueryRule;
 
 import java.io.Serializable;
 
@@ -13,9 +17,10 @@ import java.io.Serializable;
  * @date 2019-02-19 18:14:31
  * @since 1.0.0
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 @ApiModel(value = "系统支付明细表查询DTO", description = "表(anan_pay_detail)的对应的查询DTO")
-public class AnanPayDetailRetrieveDto implements Serializable {
+public class AnanPayDetailRetrieveDto extends QuerySortRuleEntity<QueryRule,SortRule> implements Serializable {
     private static final long serialVersionUID = 318623987516262809L;
 
     @ApiModelProperty(value = "付款明细ID, 主键")

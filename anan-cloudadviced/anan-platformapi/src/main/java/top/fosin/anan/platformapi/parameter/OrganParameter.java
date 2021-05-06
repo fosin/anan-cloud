@@ -4,6 +4,8 @@ import top.fosin.anan.platformapi.service.inter.ParameterFeignService;
 import top.fosin.anan.platformapi.service.AnanUserDetailService;
 
 /**
+ * 机构参数
+ *
  * @author fosin
  * @date 2019/5/13
  */

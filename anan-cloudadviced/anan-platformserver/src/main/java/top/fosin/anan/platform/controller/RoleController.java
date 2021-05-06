@@ -31,7 +31,8 @@ import java.util.List;
 @RestController
 @RequestMapping(UrlPrefixConstant.ROLE)
 @Api(value = UrlPrefixConstant.ROLE, tags = "角色管理相关操作")
-public class RoleController implements ISimpleController<AnanRoleEntity, Long, AnanRoleCreateDto, AnanRoleRetrieveDto, AnanRoleUpdateDto> {
+public class RoleController implements ISimpleController<AnanRoleEntity, Long,
+        AnanRoleCreateDto, AnanRoleRetrieveDto, AnanRoleUpdateDto> {
     private final RoleService roleService;
     private final RolePermissionService rolePermissionService;
     private final UserRoleService userRoleService;
@@ -93,19 +94,6 @@ public class RoleController implements ISimpleController<AnanRoleEntity, Long, A
     @RequestMapping(value = "/otherUsers/{roleId}", method = {RequestMethod.POST})
     public ResponseEntity<List<AnanUserEntity>> getOtherUsers(@PathVariable("roleId") Long roleId) throws AnanControllerException {
         return ResponseEntity.ok(userService.findOtherUsersByRoleId(roleId));
-    }
-
-    @ApiOperation("根据机构ID获取该机构及下级机构的角色分页列表")
-    @RequestMapping(value = "/pageList/organizId/{organizId}", method = {RequestMethod.POST})
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "pageModule", value = "角色用户集合(List<AnanUserRoleEntity>)",
-                    required = true, dataTypeClass = PageModule.class, paramType = "body"),
-            @ApiImplicitParam(name = "organizId", value = "机构ID",
-                    required = true, dataTypeClass = Long.class, paramType = "path")
-    })
-    public ResponseEntity<Result> findAllByOrganizId(@PathVariable("organizId") Long organizId,
-                                                     @RequestBody PageModule pageModule) throws AnanControllerException {
-        return ResponseEntity.ok(roleService.findAllByOrganizId(organizId, pageModule));
     }
 
     @PostMapping({"/childList/organizId/{organizId}"})

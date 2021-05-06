@@ -72,28 +72,6 @@ public class AnanInternationalCharsetController implements ISimpleController<Ana
         return ResponseEntity.ok(ananInternationalCharsetService.findAllByInternationalIdAndServiceId(internationalId, serviceId));
     }
 
-    @PostMapping({"/pageList/internationalId/{internationalId}"})
-    @ApiOperation("根据分页条件查找分页信息")
-    @ApiImplicitParams({
-            @ApiImplicitParam(
-                    name = "pageModule",
-                    value = "分页条件实体类",
-                    paramType = "body",
-                    required = true,
-                    dataTypeClass = PageModule.class
-            ),
-            @ApiImplicitParam(
-                    name = "internationalId",
-                    value = "语言ID，对应anan_international.id",
-                    paramType = "path",
-                    required = true,
-                    dataTypeClass = Integer.class
-            )
-    })
-    public ResponseEntity<ListResult<AnanInternationalCharsetEntity>> findAllCharsetPageByinternationalId(@RequestBody PageModule pageModule, @PathVariable Integer internationalId) {
-        return ResponseEntity.ok(ananInternationalCharsetService.findAllCharsetPageByinternationalId(pageModule, internationalId));
-    }
-
     @Override
     public ISimpleService<AnanInternationalCharsetEntity, Long, AnanInternationalCharsetCreateDto, AnanInternationalCharsetRetrieveDto, AnanInternationalCharsetUpdateDto> getService() {
         return ananInternationalCharsetService;

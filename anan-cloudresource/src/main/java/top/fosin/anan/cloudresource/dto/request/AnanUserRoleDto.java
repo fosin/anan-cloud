@@ -6,9 +6,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.format.annotation.DateTimeFormat;
 import top.fosin.anan.core.util.DateTimeUtil;
+import top.fosin.anan.model.module.QueryRule;
 import top.fosin.anan.model.module.QuerySortRuleEntity;
 import top.fosin.anan.model.module.SortRule;
-import top.fosin.anan.model.module.QueryRule;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -20,10 +20,9 @@ import java.util.Date;
  * @date 2019-01-27 18:27:18
  * @since 1.0.0
  */
-@EqualsAndHashCode(callSuper = true)
 @Data
 @ApiModel(value = "系统角色表查询DTO", description = "表(anan_role)的对应的查询DTO")
-public class AnanRoleRetrieveDto extends QuerySortRuleEntity<QueryRule,SortRule> implements Serializable {
+public class AnanUserRoleDto implements Serializable {
     private static final long serialVersionUID = 431913654589649616L;
 
     @ApiModelProperty(value = "角色ID, 主键")
@@ -47,17 +46,4 @@ public class AnanRoleRetrieveDto extends QuerySortRuleEntity<QueryRule,SortRule>
     @ApiModelProperty(value = "内置标志：是否是系统内置角色，内置角色不能被用户删除和修改，0=不是 1=是")
     private Integer builtIn;
 
-    @ApiModelProperty(value = "创建人", example = "Long")
-    private Long createBy;
-
-    @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
-    @ApiModelProperty(value = "创建日期", example = "Date")
-    private Date createTime;
-
-    @ApiModelProperty(value = "修改人", example = "Long")
-    private Long updateBy;
-
-    @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
-    @ApiModelProperty(value = "修改日期", example = "Date")
-    private Date updateTime;
 }

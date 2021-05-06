@@ -16,7 +16,12 @@ public enum ParameterType {
     /**
      * 用户参数
      */
-    User(2);
+    User(2),
+
+    /**
+     * 服务参数
+     */
+    Service(3);
 
     private final int type;
 
@@ -34,6 +39,8 @@ public enum ParameterType {
                 return Organization;
             case 2:
                 return User;
+            case 3:
+                return Service;
             default:
                 return null;
         }

@@ -1,12 +1,21 @@
 package top.fosin.anan.platform.service;
 
 
+import org.springframework.beans.BeanUtils;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 import top.fosin.anan.cloudresource.constant.SystemConstant;
 import top.fosin.anan.cloudresource.dto.request.AnanRoleCreateDto;
+import top.fosin.anan.cloudresource.dto.request.AnanRoleRetrieveDto;
 import top.fosin.anan.cloudresource.dto.request.AnanRoleUpdateDto;
 import top.fosin.anan.jpa.repository.IJpaRepository;
 import top.fosin.anan.model.module.PageModule;
-import top.fosin.anan.model.result.Result;
+import top.fosin.anan.model.result.ListResult;
 import top.fosin.anan.model.result.ResultUtils;
 import top.fosin.anan.platform.repository.OrganizationRepository;
 import top.fosin.anan.platform.repository.RoleRepository;
@@ -16,15 +25,6 @@ import top.fosin.anan.platformapi.entity.AnanOrganizationEntity;
 import top.fosin.anan.platformapi.entity.AnanRoleEntity;
 import top.fosin.anan.platformapi.entity.AnanUserRoleEntity;
 import top.fosin.anan.platformapi.service.AnanUserDetailService;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.BeanUtils;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Path;
@@ -104,7 +104,7 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public AnanRoleEntity deleteByEntity(AnanRoleEntity entity) {
+    public AnanRoleEntity deleteByEntity(AnanRoleRetrieveDto entity) {
         Assert.notNull(entity, "传入了空对象!");
         Assert.isTrue(!SystemConstant.ANAN_ROLE_NAME.equals(entity.getValue())
                         && !SystemConstant.ADMIN_ROLE_NAME.equals(entity.getValue()),
@@ -112,37 +112,11 @@ public class RoleServiceImpl implements RoleService {
         List<AnanUserRoleEntity> roleUsers = userRoleRepository.findByRoleId(entity.getId());
         Assert.isTrue(roleUsers.size() == 0,
                 "该角色下还存在用户,不能直接删除角色!");
-        roleRepository.delete(entity);
-        return entity;
-    }
-
-    @Override
-    public Result findAllByPageSort(PageModule pageModule) {
-        PageRequest pageable = PageRequest.of(pageModule.getPageNumber() - 1, pageModule.getPageSize(), Sort.Direction.fromString(pageModule.getSortOrder()), pageModule.getSortName());
-        String searchCondition = pageModule.getSearchText();
-
-
-        Specification<AnanRoleEntity> condition = (Specification<AnanRoleEntity>) (root, query, cb) -> {
-            Path<String> roleName = root.get("name");
-            Path<String> roleValue = root.get("value");
-            if (StringUtils.isBlank(searchCondition)) {
-                if (ananUserDetailService.hasSysAdminRole()) {
-                    return query.getRestriction();
-                } else {
-                    return cb.and(cb.notEqual(roleValue, SystemConstant.ANAN_ROLE_NAME));
-                }
-            }
-            Predicate predicate = cb.or(cb.like(roleName, "%" + searchCondition + "%"), cb.like(roleValue, "%" + searchCondition + "%"));
-            if (ananUserDetailService.hasSysAdminRole()) {
-                return predicate;
-            } else {
-                return cb.and(cb.notEqual(roleValue, SystemConstant.ANAN_ROLE_NAME), predicate);
-            }
-        };
-        //分页查找
-        Page<AnanRoleEntity> page = roleRepository.findAll(condition, pageable);
-
-        return ResultUtils.success(page.getTotalElements(), page.getContent());
+        AnanRoleEntity deleteEntity = findOneByEntity(entity);
+        if (deleteEntity != null) {
+            getRepository().delete(deleteEntity);
+        }
+        return deleteEntity;
     }
 
     @Override
@@ -156,30 +130,27 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public Result findAllByOrganizId(Long organizId, PageModule pageModule) {
+    public ListResult<AnanRoleEntity> findPage(PageModule<AnanRoleRetrieveDto> pageModule) {
         Assert.notNull(pageModule, "传入的分页信息不能为空!");
-        Assert.notNull(organizId, "机构ID不能为空!");
-        String searchCondition = pageModule.getSearchText();
+        AnanRoleRetrieveDto params = pageModule.getParams();
 
-        PageRequest pageable = PageRequest.of(pageModule.getPageNumber() - 1, pageModule.getPageSize(), Sort.Direction.fromString(pageModule.getSortOrder()), pageModule.getSortName());
+        PageRequest pageable = getPageObject(pageModule);
 
         Page<AnanRoleEntity> page;
+        Specification<AnanRoleEntity> condition;
         if (ananUserDetailService.hasSysAdminRole()) {
-            Specification<AnanRoleEntity> condition = (root, query, cb) -> {
-                Path<String> roleName = root.get("name");
-                Path<String> roleValue = root.get("value");
-                if (StringUtils.isBlank(searchCondition)) {
-                    return query.getRestriction();
-                }
-                return cb.or(cb.like(roleName, "%" + searchCondition + "%"), cb.like(roleValue, "%" + searchCondition + "%"));
-            };
-            page = roleRepository.findAll(condition, pageable);
+            condition = buildQueryCondition(params, false);
         } else {
+            Assert.notNull(params, "传入的分页信息不能为空!");
+            Long organizId = params.getOrganizId();
+            String name = params.getName();
+            String value = params.getValue();
+            Assert.notNull(organizId, "机构ID不能为空!");
             AnanOrganizationEntity organiz = organizationRepository.findById(organizId).orElse(null);
             Assert.notNull(organiz, "根据传入的机构编码没有找到任何数据!");
             List<AnanOrganizationEntity> organizs = organizationRepository.findByTopIdAndCodeStartingWithOrderByCodeAsc(organiz.getTopId(), organiz.getCode());
 
-            Specification<AnanRoleEntity> condition = (root, query, cb) -> {
+            condition = (root, query, cb) -> {
                 Path<Long> organizIdPath = root.get("organizId");
                 Path<String> roleName = root.get("name");
                 Path<String> roleValue = root.get("value");
@@ -190,18 +161,14 @@ public class RoleServiceImpl implements RoleService {
                 }
 
                 Predicate predicate = cb.and(in, cb.notEqual(roleValue, SystemConstant.ANAN_ROLE_NAME));
-                if (StringUtils.isBlank(searchCondition)) {
-                    return predicate;
+                if (StringUtils.hasText(name) || StringUtils.hasText(value)) {
+                    predicate = cb.and(predicate, cb.or(cb.like(roleName, "%" + name + "%"), cb.like(roleValue, "%" + value + "%")));
                 }
-                predicate = cb.or(cb.like(roleName, "%" + searchCondition + "%"), cb.like(roleValue, "%" + searchCondition + "%"));
                 return predicate;
             };
-            //分页查找
-            page = roleRepository.findAll(condition, pageable);
         }
-
-
-        return ResultUtils.success(page.getTotalElements(), page.getContent());
+        page = roleRepository.findAll(condition, pageable);
+        return ResultUtils.success(page.getTotalElements(), page.getTotalPages(), page.getContent());
     }
 
     @Override

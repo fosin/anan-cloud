@@ -22,5 +22,4 @@ public interface AnanInternationalCharsetService extends ISimpleJpaService<AnanI
 
     List<AnanInternationalCharsetEntity> findAllByInternationalIdAndServiceId(Integer internationalId, Integer serviceId);
 
-    ListResult<AnanInternationalCharsetEntity> findAllCharsetPageByinternationalId(PageModule pageModule, Integer internationalId);
 }

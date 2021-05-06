@@ -1,10 +1,14 @@
 package top.fosin.anan.cloudresource.dto.request;
 
+import lombok.EqualsAndHashCode;
 import top.fosin.anan.core.util.DateTimeUtil;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
+import top.fosin.anan.model.module.QuerySortRuleEntity;
+import top.fosin.anan.model.module.SortRule;
+import top.fosin.anan.model.module.QueryRule;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -16,9 +20,10 @@ import java.util.Date;
  * @date 2019-01-27 18:27:19
  * @since 1.0.0
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 @ApiModel(value = "系统用户表查询DTO", description = "表(anan_user)的对应的查询DTO")
-public class AnanUserRetrieveDto implements Serializable {
+public class AnanUserRetrieveDto extends QuerySortRuleEntity<QueryRule,SortRule> implements Serializable {
     private static final long serialVersionUID = -24340282458700184L;
 
     @ApiModelProperty(value = "用户ID, 主键")
@@ -59,4 +64,18 @@ public class AnanUserRetrieveDto implements Serializable {
     @ApiModelProperty(value = "过期时间，账户过期后用户被锁定切不能登录系统")
     private Date expireTime;
 
+
+    @ApiModelProperty(value = "创建人", example = "Long")
+    private Long createBy;
+
+    @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
+    @ApiModelProperty(value = "创建日期", example = "Date")
+    private Date createTime;
+
+    @ApiModelProperty(value = "修改人", example = "Long")
+    private Long updateBy;
+
+    @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
+    @ApiModelProperty(value = "修改日期", example = "Date")
+    private Date updateTime;
 }

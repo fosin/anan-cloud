@@ -1,33 +1,25 @@
 package top.fosin.anan.platform.service;
 
-import top.fosin.anan.cloudresource.constant.RedisConstant;
-import top.fosin.anan.cloudresource.constant.SystemConstant;
-import top.fosin.anan.cloudresource.dto.request.AnanOrganizationCreateDto;
-import top.fosin.anan.cloudresource.dto.request.AnanOrganizationUpdateDto;
-import top.fosin.anan.cloudresource.dto.res.AnanOrganizationTreeDto;
-import top.fosin.anan.core.util.TreeUtil;
-import top.fosin.anan.jpa.repository.IJpaRepository;
-import top.fosin.anan.model.module.PageModule;
-import top.fosin.anan.model.result.Result;
-import top.fosin.anan.model.result.ResultUtils;
-import top.fosin.anan.platform.repository.OrganizationRepository;
-import top.fosin.anan.platform.service.inter.OrganizationService;
-import top.fosin.anan.platformapi.entity.AnanOrganizationEntity;
-import top.fosin.anan.platformapi.service.AnanUserDetailService;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+import top.fosin.anan.cloudresource.constant.RedisConstant;
+import top.fosin.anan.cloudresource.constant.SystemConstant;
+import top.fosin.anan.cloudresource.dto.request.AnanOrganizationCreateDto;
+import top.fosin.anan.cloudresource.dto.request.AnanOrganizationRetrieveDto;
+import top.fosin.anan.cloudresource.dto.request.AnanOrganizationUpdateDto;
+import top.fosin.anan.cloudresource.dto.res.AnanOrganizationTreeDto;
+import top.fosin.anan.core.util.TreeUtil;
+import top.fosin.anan.jpa.repository.IJpaRepository;
+import top.fosin.anan.platform.repository.OrganizationRepository;
+import top.fosin.anan.platform.service.inter.OrganizationService;
+import top.fosin.anan.platformapi.entity.AnanOrganizationEntity;
+import top.fosin.anan.platformapi.service.AnanUserDetailService;
 
-import javax.persistence.criteria.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -111,13 +103,17 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     @Override
     @CacheEvict(value = RedisConstant.ANAN_ORGANIZATION, key = "#entity.id")
-    public AnanOrganizationEntity deleteByEntity(AnanOrganizationEntity entity) {
+    public AnanOrganizationEntity deleteByEntity(AnanOrganizationRetrieveDto entity) {
         Assert.notNull(entity, "传入了空对象!");
-        Assert.notNull(entity.getId(), "传入了空ID!");
-        List<AnanOrganizationEntity> entities = findChildByPid(entity.getId());
+        Long id = entity.getId();
+        Assert.notNull(id, "传入了空ID!");
+        List<AnanOrganizationEntity> entities = findChildByPid(id);
         Assert.isTrue(entities == null || entities.size() == 0, "该节点还存在子节点不能直接删除!");
-        organizationRepository.delete(entity);
-        return entity;
+        AnanOrganizationEntity deleteEntity = organizationRepository.findById(id).orElse(null);
+        if (deleteEntity != null) {
+            organizationRepository.delete(deleteEntity);
+        }
+        return deleteEntity;
     }
 
     @Override
@@ -130,26 +126,26 @@ public class OrganizationServiceImpl implements OrganizationService {
         return "AllData";
     }
 
-    @Override
-    public Result findAllByPageSort(PageModule pageModule) {
-        PageRequest pageable = PageRequest.of(pageModule.getPageNumber() - 1, pageModule.getPageSize(), Sort.Direction.fromString(pageModule.getSortOrder()), pageModule.getSortName());
-        String searchCondition = pageModule.getSearchText();
-
-        Specification<AnanOrganizationEntity> condition = (Specification<AnanOrganizationEntity>) (root, query, cb) -> {
-            if (StringUtils.isBlank(searchCondition)) {
-                return query.getRestriction();
-            }
-            Path<String> id = root.get(SystemConstant.ID_NAME);
-            Path<String> name = root.get("name");
-            Path<String> fullname = root.get("fullname");
-            Path<String> address = root.get("address");
-            return cb.or(cb.like(id, "%" + searchCondition + "%"), cb.like(name, "%" + searchCondition + "%"), cb.like(fullname, "%" + searchCondition + "%"), cb.like(address, "%" + searchCondition + "%"));
-        };
-        //分页查找
-        Page<AnanOrganizationEntity> page = organizationRepository.findAll(condition, pageable);
-
-        return ResultUtils.success(page.getTotalElements(), page.getContent());
-    }
+//    @Override
+//    public Result findAllByPageSort(PageModule pageModule) {
+//        PageRequest pageable = PageRequest.of(pageModule.getPageNumber() - 1, pageModule.getPageSize(), Sort.Direction.fromString(pageModule.getSortOrder()), pageModule.getSortName());
+//        String searchCondition = pageModule.getSearchText();
+//
+//        Specification<AnanOrganizationEntity> condition = (Specification<AnanOrganizationEntity>) (root, query, cb) -> {
+//            if (StringUtils.isBlank(searchCondition)) {
+//                return query.getRestriction();
+//            }
+//            Path<String> id = root.get(SystemConstant.ID_NAME);
+//            Path<String> name = root.get("name");
+//            Path<String> fullname = root.get("fullname");
+//            Path<String> address = root.get("address");
+//            return cb.or(cb.like(id, "%" + searchCondition + "%"), cb.like(name, "%" + searchCondition + "%"), cb.like(fullname, "%" + searchCondition + "%"), cb.like(address, "%" + searchCondition + "%"));
+//        };
+//        //分页查找
+//        Page<AnanOrganizationEntity> page = organizationRepository.findAll(condition, pageable);
+//
+//        return ResultUtils.success(page.getTotalElements(), page.getContent());
+//    }
 
     @Override
     public List<AnanOrganizationEntity> findChildByPid(Long pid) {
