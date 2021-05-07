@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.format.annotation.DateTimeFormat;
 import top.fosin.anan.core.util.DateTimeUtil;
-import top.fosin.anan.model.module.QuerySortRuleEntity;
+import top.fosin.anan.model.module.QuerySortRuleDto;
 import top.fosin.anan.model.module.SortRule;
 import top.fosin.anan.model.module.QueryRule;
 
@@ -25,7 +25,7 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @ApiModel(value = "用于存放各种分类分组的个性化参数查询DTO", description = "表(anan_parameter)的对应的查询DTO")
-public class AnanParameterRetrieveDto extends QuerySortRuleEntity<QueryRule, SortRule> implements Serializable {
+public class AnanParameterRetrieveDto extends QuerySortRuleDto<QueryRule, SortRule> implements Serializable {
     private static final long serialVersionUID = -95372770044687456L;
 
     @ApiModelProperty(value = "参数ID, 主键")

@@ -35,7 +35,7 @@ public interface PermissionFeignService {
      *
      * @return 应用权限列表
      */
-    @PostMapping(PathConstant.PATH_LIST)
+    @PostMapping(PathConstant.PATH_DYNAMIC_LIST)
     ResponseEntity<List<AnanPermissionRetrieveDto>> findAll();
 
 }

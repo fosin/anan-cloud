@@ -3,15 +3,8 @@ package top.fosin.anan.cloudresource.dto.request;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import org.springframework.format.annotation.DateTimeFormat;
-import top.fosin.anan.core.util.DateTimeUtil;
-import top.fosin.anan.model.module.QueryRule;
-import top.fosin.anan.model.module.QuerySortRuleEntity;
-import top.fosin.anan.model.module.SortRule;
 
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * 系统角色表(AnanRole)查询DTO

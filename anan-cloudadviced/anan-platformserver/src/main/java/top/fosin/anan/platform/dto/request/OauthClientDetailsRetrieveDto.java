@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import top.fosin.anan.model.module.QueryRule;
-import top.fosin.anan.model.module.QuerySortRuleEntity;
+import top.fosin.anan.model.module.QuerySortRuleDto;
 import top.fosin.anan.model.module.SortRule;
 
 import java.io.Serializable;
@@ -20,7 +20,7 @@ import java.io.Serializable;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @ApiModel(value = "$tableInfo.comment查询DTO", description = "表(oauth_client_details)的对应的查询DTO")
-public class OauthClientDetailsRetrieveDto extends QuerySortRuleEntity<QueryRule,SortRule> implements Serializable {
+public class OauthClientDetailsRetrieveDto extends QuerySortRuleDto<QueryRule,SortRule> implements Serializable {
     private static final long serialVersionUID = 890552174384794357L;
 
     @ApiModelProperty(value = "${column.comment}", example = "String")

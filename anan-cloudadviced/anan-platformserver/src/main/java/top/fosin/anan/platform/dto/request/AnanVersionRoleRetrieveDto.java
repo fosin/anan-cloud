@@ -6,7 +6,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
-import top.fosin.anan.model.module.QuerySortRuleEntity;
+import top.fosin.anan.model.module.QuerySortRuleDto;
 import top.fosin.anan.model.module.SortRule;
 import top.fosin.anan.model.module.QueryRule;
 
@@ -23,7 +23,7 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @ApiModel(value = "系统版本角色表查询DTO", description = "表(anan_version_role)的对应的查询DTO")
-public class AnanVersionRoleRetrieveDto extends QuerySortRuleEntity<QueryRule,SortRule> implements Serializable {
+public class AnanVersionRoleRetrieveDto extends QuerySortRuleDto<QueryRule,SortRule> implements Serializable {
     private static final long serialVersionUID = -49705835224748973L;
 
     @ApiModelProperty(value = "角色ID, 主键")

@@ -44,7 +44,7 @@ public class PermissionController {
         return ResponseEntity.ok(permissionService.findByServiceCode(serviceCode));
     }
 
-    @RequestMapping(value = PathConstant.PATH_LIST, method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = PathConstant.PATH_DYNAMIC_LIST, method = {RequestMethod.GET, RequestMethod.POST})
     @ApiOperation(value = "查询应用权限", notes = "查询所有权限列表")
     public ResponseEntity<List<AnanPermissionRetrieveDto>> findAll() {
         Collection<AnanPermissionEntity> all = permissionService.findAll();

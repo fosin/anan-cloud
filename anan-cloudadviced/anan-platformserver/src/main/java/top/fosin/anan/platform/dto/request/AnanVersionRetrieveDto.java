@@ -8,7 +8,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.format.annotation.DateTimeFormat;
 import top.fosin.anan.core.util.DateTimeUtil;
-import top.fosin.anan.model.module.QuerySortRuleEntity;
+import top.fosin.anan.model.module.QuerySortRuleDto;
 import top.fosin.anan.model.module.SortRule;
 import top.fosin.anan.model.module.QueryRule;
 
@@ -22,7 +22,7 @@ import top.fosin.anan.model.module.QueryRule;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @ApiModel(value = "系统版本表查询DTO", description = "表(anan_version)的对应的查询DTO")
-public class AnanVersionRetrieveDto extends QuerySortRuleEntity<QueryRule,SortRule> implements Serializable {
+public class AnanVersionRetrieveDto extends QuerySortRuleDto<QueryRule,SortRule> implements Serializable {
     private static final long serialVersionUID = -91727267823167686L;
 
     @ApiModelProperty(value = "版本ID, 主键")

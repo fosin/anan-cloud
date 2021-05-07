@@ -7,7 +7,7 @@ import top.fosin.anan.core.util.RegexUtil;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import top.fosin.anan.model.module.QuerySortRuleEntity;
+import top.fosin.anan.model.module.QuerySortRuleDto;
 import top.fosin.anan.model.module.SortRule;
 import top.fosin.anan.model.module.QueryRule;
 
@@ -25,7 +25,7 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @ApiModel(value = "系统通用字典表查询DTO", description = "表(anan_dictionary)的对应的查询DTO")
-public class AnanDictionaryRetrieveDto extends QuerySortRuleEntity<QueryRule,SortRule> implements Serializable {
+public class AnanDictionaryRetrieveDto extends QuerySortRuleDto<QueryRule,SortRule> implements Serializable {
     private static final long serialVersionUID = 480249603699448721L;
 
     @ApiModelProperty(value = "字典代码")

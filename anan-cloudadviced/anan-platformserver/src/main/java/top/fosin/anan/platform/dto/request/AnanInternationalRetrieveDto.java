@@ -4,7 +4,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import top.fosin.anan.model.module.QuerySortRuleEntity;
+import top.fosin.anan.model.module.QuerySortRuleDto;
 import top.fosin.anan.model.module.SortRule;
 import top.fosin.anan.model.module.QueryRule;
 
@@ -22,7 +22,7 @@ import java.io.Serializable;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @ApiModel(value = "国际化语言集查询DTO", description = "表(anan_international)的对应的查询DTO")
-public class AnanInternationalRetrieveDto extends QuerySortRuleEntity<QueryRule,SortRule> implements Serializable {
+public class AnanInternationalRetrieveDto extends QuerySortRuleDto<QueryRule,SortRule> implements Serializable {
     private static final long serialVersionUID = 380520117161696142L;
 
     @NotNull(message = "主键" + "{javax.validation.constraints.NotNull.message}")

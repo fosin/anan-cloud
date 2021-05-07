@@ -7,7 +7,7 @@ import top.fosin.anan.core.util.RegexUtil;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import top.fosin.anan.model.module.QuerySortRuleEntity;
+import top.fosin.anan.model.module.QuerySortRuleDto;
 import top.fosin.anan.model.module.SortRule;
 import top.fosin.anan.model.module.QueryRule;
 
@@ -25,7 +25,7 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @ApiModel(value = "系统机构表查询DTO", description = "表(anan_organization)的对应的查询DTO")
-public class AnanOrganizationRetrieveDto extends QuerySortRuleEntity<QueryRule,SortRule> implements Serializable {
+public class AnanOrganizationRetrieveDto extends QuerySortRuleDto<QueryRule,SortRule> implements Serializable {
     private static final long serialVersionUID = 755956109753090820L;
 
     @ApiModelProperty(value = "机构ID, 主键")
