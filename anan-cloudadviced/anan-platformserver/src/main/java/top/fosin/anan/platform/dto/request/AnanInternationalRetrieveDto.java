@@ -26,7 +26,7 @@ public class AnanInternationalRetrieveDto extends QuerySortRuleDto<QueryRule,Sor
     private static final long serialVersionUID = 380520117161696142L;
 
     @NotNull(message = "主键" + "{javax.validation.constraints.NotNull.message}")
-    @ApiModelProperty(value = "主键", example = "Integer")
+    @ApiModelProperty(value = "主键", example = "0")
     private Integer id;
 
     @NotBlank(message = "标识" + "{javax.validation.constraints.NotBlank.message}")
@@ -41,11 +41,11 @@ public class AnanInternationalRetrieveDto extends QuerySortRuleDto<QueryRule,Sor
     private String icon;
 
     @NotNull(message = "状态：0=启用，1=禁用" + "{javax.validation.constraints.NotNull.message}")
-    @ApiModelProperty(value = "状态：0=启用，1=禁用", example = "Integer")
+    @ApiModelProperty(value = "状态：0=启用，1=禁用", example = "0")
     private Integer status;
 
     @NotNull(message = "默认标志" + "{javax.validation.constraints.NotNull.message}")
-    @ApiModelProperty(value = "默认标志", example = "Integer")
+    @ApiModelProperty(value = "默认标志", example = "0")
     private Integer defaultFlag;
 
 }

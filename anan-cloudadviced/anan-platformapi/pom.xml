@@ -31,10 +31,11 @@
             <groupId>com.squareup.okhttp3</groupId>
             <artifactId>okhttp</artifactId>
         </dependency>
-        <dependency>
+
+        <!--<dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-rest</artifactId>
-        </dependency>
+        </dependency>-->
         <!--当前druid有bug，会报错，先使用springboot自带的hikari-->
         <!--<dependency>
             <groupId>com.alibaba</groupId>

@@ -20,22 +20,22 @@ public class AnanInternationalCharsetUpdateDto implements Serializable {
     private static final long serialVersionUID = -22137097820187644L;
 
     @NotNull(message = "主键" + "{javax.validation.constraints.NotNull.message}")
-    @ApiModelProperty(value = "主键", example = "Long")
+    @ApiModelProperty(value = "主键", example = "1")
     private Long id;
 
     @NotNull(message = "国际化语言ID" + "{javax.validation.constraints.NotNull.message}")
-    @ApiModelProperty(value = "国际化语言ID", example = "Integer")
+    @ApiModelProperty(value = "国际化语言ID", example = "0")
     private Integer internationalId;
 
     @NotNull(message = "服务ID" + "{javax.validation.constraints.NotNull.message}")
-    @ApiModelProperty(value = "服务ID", example = "Integer")
+    @ApiModelProperty(value = "服务ID", example = "0")
     private Integer serviceId;
 
     @ApiModelProperty(value = "自定义字符集", example = "String")
     private String charset;
 
     @NotNull(message = "状态：0=启用，1=禁用" + "{javax.validation.constraints.NotNull.message}")
-    @ApiModelProperty(value = "状态：0=启用，1=禁用", example = "Integer")
+    @ApiModelProperty(value = "状态：0=启用，1=禁用", example = "0")
     private Integer status;
 
 }

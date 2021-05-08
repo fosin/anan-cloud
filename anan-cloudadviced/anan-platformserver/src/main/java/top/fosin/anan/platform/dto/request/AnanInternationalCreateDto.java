@@ -32,11 +32,11 @@ public class AnanInternationalCreateDto implements Serializable {
     private String icon;
 
     @NotNull(message = "状态：0=启用，1=禁用" + "{javax.validation.constraints.NotNull.message}")
-    @ApiModelProperty(value = "状态：0=启用，1=禁用", example = "Integer")
+    @ApiModelProperty(value = "状态：0=启用，1=禁用", example = "0")
     private Integer status;
 
     @NotNull(message = "默认标志" + "{javax.validation.constraints.NotNull.message}")
-    @ApiModelProperty(value = "默认标志", example = "Integer")
+    @ApiModelProperty(value = "默认标志", example = "0")
     private Integer defaultFlag;
 
 }

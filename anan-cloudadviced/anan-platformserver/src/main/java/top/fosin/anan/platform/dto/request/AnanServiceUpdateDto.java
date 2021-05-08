@@ -21,7 +21,7 @@ public class AnanServiceUpdateDto implements Serializable {
     private static final long serialVersionUID = -36886476405187311L;
 
     @NotNull(message = "主键" + "{javax.validation.constraints.NotNull.message}")
-    @ApiModelProperty(value = "主键", example = "Integer")
+    @ApiModelProperty(value = "主键", example = "0")
     private Integer id;
 
     @NotBlank(message = "服务标识" + "{javax.validation.constraints.NotBlank.message}")
@@ -33,7 +33,7 @@ public class AnanServiceUpdateDto implements Serializable {
     private String name;
 
     @NotNull(message = "状态码：0：禁用 1：启用" + "{javax.validation.constraints.NotNull.message}")
-    @ApiModelProperty(value = "状态码：0：禁用 1：启用", example = "Integer")
+    @ApiModelProperty(value = "状态码：0：禁用 1：启用", example = "0")
     private Integer status;
 
 }

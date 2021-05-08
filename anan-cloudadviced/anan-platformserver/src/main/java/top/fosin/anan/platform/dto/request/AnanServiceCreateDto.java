@@ -29,7 +29,7 @@ public class AnanServiceCreateDto implements Serializable {
     private String name;
 
     @NotNull(message = "状态码：0：禁用 1：启用" + "{javax.validation.constraints.NotNull.message}")
-    @ApiModelProperty(value = "状态码：0：禁用 1：启用", example = "Integer")
+    @ApiModelProperty(value = "状态码：0：禁用 1：启用", example = "0")
     private Integer status;
 
 }

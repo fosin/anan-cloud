@@ -11,49 +11,49 @@ import top.fosin.anan.model.module.SortRule;
 import java.io.Serializable;
 
 /**
- * (OauthClientDetails)查询DTO
+ * OAuth2客户端接入配置(OauthClientDetails)查询DTO
  *
  * @author fosin
- * @date 2021-05-03 19:01:57
+ * @date 2021-05-08 13:12:17
  * @since 1.0.0
  */
-@EqualsAndHashCode(callSuper = true)
 @Data
-@ApiModel(value = "$tableInfo.comment查询DTO", description = "表(oauth_client_details)的对应的查询DTO")
-public class OauthClientDetailsRetrieveDto extends QuerySortRuleDto<QueryRule,SortRule> implements Serializable {
-    private static final long serialVersionUID = 890552174384794357L;
+@EqualsAndHashCode(callSuper = true)
+@ApiModel(value = "OAuth2客户端接入配置查询DTO", description = "表(oauth_client_details)的对应的查询DTO")
+public class OauthClientDetailsRetrieveDto extends QuerySortRuleDto<QueryRule, SortRule> implements Serializable {
+    private static final long serialVersionUID = 326033612155817845L;
 
-    @ApiModelProperty(value = "${column.comment}", example = "String")
+    @ApiModelProperty(value = "客户端ID", example = "String")
     private String clientId;
 
-    @ApiModelProperty(value = "${column.comment}", example = "String")
+    @ApiModelProperty(value = "权限资源ID清单", example = "String")
     private String resourceIds;
 
-    @ApiModelProperty(value = "${column.comment}", example = "String")
+    @ApiModelProperty(value = "客户端密钥", example = "String")
     private String clientSecret;
 
-    @ApiModelProperty(value = "${column.comment}", example = "String")
+    @ApiModelProperty(value = "权限作用域", example = "String")
     private String scope;
 
-    @ApiModelProperty(value = "${column.comment}", example = "String")
+    @ApiModelProperty(value = "授权类型清单", example = "String")
     private String authorizedGrantTypes;
 
-    @ApiModelProperty(value = "${column.comment}", example = "String")
+    @ApiModelProperty(value = "跳转地址", example = "String")
     private String webServerRedirectUri;
 
-    @ApiModelProperty(value = "${column.comment}", example = "String")
+    @ApiModelProperty(value = "授权ID清单", example = "String")
     private String authorities;
 
-    @ApiModelProperty(value = "${column.comment}", example = "Integer")
+    @ApiModelProperty(value = "访问Token有效期", example = "0")
     private Integer accessTokenValidity;
 
-    @ApiModelProperty(value = "${column.comment}", example = "Integer")
+    @ApiModelProperty(value = "刷新Token有效期", example = "0")
     private Integer refreshTokenValidity;
 
-    @ApiModelProperty(value = "${column.comment}", example = "String")
+    @ApiModelProperty(value = "附加信息", example = "String")
     private String additionalInformation;
 
-    @ApiModelProperty(value = "${column.comment}", example = "String")
+    @ApiModelProperty(value = "自动授权", example = "String")
     private String autoapprove;
 
 }

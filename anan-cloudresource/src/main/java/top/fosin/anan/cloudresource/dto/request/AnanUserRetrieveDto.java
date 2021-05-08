@@ -65,17 +65,17 @@ public class AnanUserRetrieveDto extends QuerySortRuleDto<QueryRule,SortRule> im
     private Date expireTime;
 
 
-    @ApiModelProperty(value = "创建人", example = "Long")
+    @ApiModelProperty(value = "创建人", example = "1")
     private Long createBy;
 
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
-    @ApiModelProperty(value = "创建日期", example = "Date")
+    @ApiModelProperty(value = "创建日期", example = "2021-05-08 13:25:11")
     private Date createTime;
 
-    @ApiModelProperty(value = "修改人", example = "Long")
+    @ApiModelProperty(value = "修改人", example = "1")
     private Long updateBy;
 
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
-    @ApiModelProperty(value = "修改日期", example = "Date")
+    @ApiModelProperty(value = "修改日期", example = "2021-05-08 13:25:11")
     private Date updateTime;
 }

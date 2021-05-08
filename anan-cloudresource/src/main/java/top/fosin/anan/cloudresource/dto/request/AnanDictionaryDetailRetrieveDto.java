@@ -60,25 +60,25 @@ public class AnanDictionaryDetailRetrieveDto extends QuerySortRuleDto<QueryRule,
     @ApiModelProperty(value = "字典说明")
     private String description;
 
-    @ApiModelProperty(value = "创建人", example = "Long")
+    @ApiModelProperty(value = "创建人", example = "1")
     private Long createBy;
 
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
-    @ApiModelProperty(value = "创建日期", example = "Date")
+    @ApiModelProperty(value = "创建日期", example = "2021-05-08 13:25:11")
     private Date createTime;
 
-    @ApiModelProperty(value = "修改人", example = "Long")
+    @ApiModelProperty(value = "修改人", example = "1")
     private Long updateBy;
 
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
-    @ApiModelProperty(value = "修改日期", example = "Date")
+    @ApiModelProperty(value = "修改日期", example = "2021-05-08 13:25:11")
     private Date updateTime;
 
-    @ApiModelProperty(value = "删除人", example = "Long")
+    @ApiModelProperty(value = "删除人", example = "1")
     private Long deleteBy;
 
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
-    @ApiModelProperty(value = "删除日期", example = "Date")
+    @ApiModelProperty(value = "删除日期", example = "2021-05-08 13:25:11")
     private Date deleteime;
 
     @ApiModelProperty(value = "删除标志")
