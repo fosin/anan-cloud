@@ -1,16 +1,14 @@
 package top.fosin.anan.platform.controller;
 
+import io.swagger.annotations.Api;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import top.fosin.anan.model.controller.ISimpleController;
-import top.fosin.anan.model.service.ISimpleService;
 import top.fosin.anan.platform.dto.request.OauthClientDetailsCreateDto;
 import top.fosin.anan.platform.dto.request.OauthClientDetailsRetrieveDto;
 import top.fosin.anan.platform.dto.request.OauthClientDetailsUpdateDto;
 import top.fosin.anan.platform.entity.OauthClientDetailsEntity;
 import top.fosin.anan.platform.service.inter.OauthClientService;
-import io.swagger.annotations.Api;
-
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Description 授权客户端控制器
@@ -29,7 +27,7 @@ public class ClientController implements ISimpleController<OauthClientDetailsEnt
     }
 
     @Override
-    public ISimpleService<OauthClientDetailsEntity, String, OauthClientDetailsCreateDto, OauthClientDetailsRetrieveDto, OauthClientDetailsUpdateDto> getService() {
+    public OauthClientService getService() {
         return oauthClientService;
     }
 }

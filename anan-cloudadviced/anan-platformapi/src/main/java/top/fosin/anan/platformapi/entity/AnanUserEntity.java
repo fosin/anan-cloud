@@ -11,6 +11,7 @@ import top.fosin.anan.cloudresource.dto.request.AnanUserRoleDto;
 import top.fosin.anan.jpa.entity.AbstractOrganizIdJpaEntity;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -28,7 +29,7 @@ import java.util.List;
 @DynamicUpdate
 @Table(name = "anan_user")
 @ApiModel(value = "系统用户表实体类", description = "表(anan_user)的对应的实体类")
-public class AnanUserEntity extends AbstractOrganizIdJpaEntity<Long, Long> {
+public class AnanUserEntity extends AbstractOrganizIdJpaEntity<Long, Long> implements Serializable {
     private static final long serialVersionUID = 897030139778409164L;
 
     public AnanUserDto conert2Dto() {

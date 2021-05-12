@@ -1,16 +1,17 @@
 package top.fosin.anan.platformapi.entity;
 
-import top.fosin.anan.jpa.entity.AbstractCreateUpdateJpaEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.DynamicUpdate;
+import top.fosin.anan.jpa.entity.AbstractCreateUpdateJpaEntity;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import java.io.Serializable;
 
 /**
  * 系统服务表(AnanService)实体类
@@ -25,7 +26,7 @@ import javax.persistence.Table;
 @DynamicUpdate
 @Table(name = "anan_service")
 @ApiModel(value = "表(anan_service)的对应的实体类", description = "表(anan_service)的对应的实体类")
-public class AnanServiceEntity extends AbstractCreateUpdateJpaEntity<Long, Integer> {
+public class AnanServiceEntity extends AbstractCreateUpdateJpaEntity<Long, Integer> implements Serializable {
     private static final long serialVersionUID = -94381323292251990L;
 
     @Basic

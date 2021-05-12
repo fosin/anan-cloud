@@ -1,7 +1,5 @@
 package top.fosin.anan.platformapi.entity;
 
-import top.fosin.anan.jpa.entity.AbstractCreateUpdateJpaEntity;
-import top.fosin.anan.cloudresource.dto.AnanUserAllPermissionDto;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -9,8 +7,11 @@ import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.beans.BeanUtils;
 import springfox.documentation.annotations.ApiIgnore;
+import top.fosin.anan.cloudresource.dto.AnanUserAllPermissionDto;
+import top.fosin.anan.jpa.entity.AbstractCreateUpdateJpaEntity;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +28,7 @@ import java.util.List;
 @DynamicUpdate
 @Table(name = "anan_user_all_permissions")
 @ApiModel(value = "用户的所有权限，包含角色权限、用户增减权限", description = "试图(anan_user_all_permissions)用户的所有权限，包含角色权限、用户增减权限")
-public class AnanUserAllPermissionsEntity extends AbstractCreateUpdateJpaEntity<Long, Long> {
+public class AnanUserAllPermissionsEntity extends AbstractCreateUpdateJpaEntity<Long, Long> implements Serializable {
     private static final long serialVersionUID = 5284105099273855621L;
 
     public AnanUserAllPermissionDto convert2Dto() {

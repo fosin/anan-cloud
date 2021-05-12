@@ -1,9 +1,14 @@
 package top.fosin.anan.platform.controller;
 
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
 import top.fosin.anan.model.controller.ISimpleController;
-import top.fosin.anan.model.service.ISimpleService;
 import top.fosin.anan.platform.dto.request.AnanVersionRoleCreateDto;
 import top.fosin.anan.platform.dto.request.AnanVersionRolePermissionUpdateDto;
 import top.fosin.anan.platform.dto.request.AnanVersionRoleRetrieveDto;
@@ -12,13 +17,6 @@ import top.fosin.anan.platform.entity.AnanVersionRoleEntity;
 import top.fosin.anan.platform.entity.AnanVersionRolePermissionEntity;
 import top.fosin.anan.platform.service.inter.AnanVersionRolePermissionService;
 import top.fosin.anan.platform.service.inter.AnanVersionRoleService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
-
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -64,7 +62,7 @@ public class AnanVersionRoleController implements ISimpleController<AnanVersionR
     }
 
     @Override
-    public ISimpleService<AnanVersionRoleEntity, Long, AnanVersionRoleCreateDto, AnanVersionRoleRetrieveDto, AnanVersionRoleUpdateDto> getService() {
+    public AnanVersionRoleService getService() {
         return ananSysVersionRoleService;
     }
 }

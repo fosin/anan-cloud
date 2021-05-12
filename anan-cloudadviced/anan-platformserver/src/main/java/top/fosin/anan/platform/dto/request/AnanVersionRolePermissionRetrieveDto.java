@@ -1,16 +1,17 @@
 package top.fosin.anan.platform.dto.request;
 
-import java.util.Date;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.format.annotation.DateTimeFormat;
 import top.fosin.anan.core.util.DateTimeUtil;
-import top.fosin.anan.model.module.QuerySortRuleDto;
-import top.fosin.anan.model.module.SortRule;
+import top.fosin.anan.model.dto.QuerySortRuleDto;
 import top.fosin.anan.model.module.QueryRule;
+import top.fosin.anan.model.module.SortRule;
+
+import java.io.Serializable;
+import java.util.Date;
 
 /**
  * 系统版本角色权限表(AnanVersionRolePermission)查询DTO

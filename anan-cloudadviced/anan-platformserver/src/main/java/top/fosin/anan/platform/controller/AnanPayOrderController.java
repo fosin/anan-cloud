@@ -1,16 +1,14 @@
 package top.fosin.anan.platform.controller;
 
+import io.swagger.annotations.Api;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import top.fosin.anan.model.controller.ISimpleController;
-import top.fosin.anan.model.service.ISimpleService;
 import top.fosin.anan.platform.dto.request.AnanPayOrderCreateDto;
 import top.fosin.anan.platform.dto.request.AnanPayOrderRetrieveDto;
 import top.fosin.anan.platform.dto.request.AnanPayOrderUpdateDto;
 import top.fosin.anan.platform.entity.AnanPayOrderEntity;
 import top.fosin.anan.platform.service.inter.AnanPayOrderService;
-import io.swagger.annotations.Api;
-
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 /**
  * 系统支付订单表(table:anan_pay_order)表控制层
@@ -31,7 +29,7 @@ public class AnanPayOrderController implements ISimpleController<AnanPayOrderEnt
     }
 
     @Override
-    public ISimpleService<AnanPayOrderEntity, Long, AnanPayOrderCreateDto, AnanPayOrderRetrieveDto, AnanPayOrderUpdateDto> getService() {
+    public AnanPayOrderService getService() {
         return ananSysPayOrderService;
     }
 }

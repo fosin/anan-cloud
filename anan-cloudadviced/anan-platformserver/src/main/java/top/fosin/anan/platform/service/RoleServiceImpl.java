@@ -134,12 +134,12 @@ public class RoleServiceImpl implements RoleService {
         Assert.notNull(pageModule, "传入的分页信息不能为空!");
         AnanRoleRetrieveDto params = pageModule.getParams();
 
-        PageRequest pageable = getPageObject(pageModule);
+        PageRequest pageable = PageRequest.of(pageModule.getPageNumber() - 1, pageModule.getPageSize(), this.buildSortRules(params.getSortRules()));
 
         Page<AnanRoleEntity> page;
         Specification<AnanRoleEntity> condition;
         if (ananUserDetailService.hasSysAdminRole()) {
-            condition = buildQueryCondition(params, false);
+            condition = buildQueryRules(params, false);
         } else {
             Assert.notNull(params, "传入的分页信息不能为空!");
             Long organizId = params.getOrganizId();

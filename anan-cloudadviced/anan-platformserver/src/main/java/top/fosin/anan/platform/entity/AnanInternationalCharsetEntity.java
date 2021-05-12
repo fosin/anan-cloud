@@ -1,16 +1,17 @@
 package top.fosin.anan.platform.entity;
 
-import top.fosin.anan.jpa.entity.AbstractCreateUpdateJpaEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.DynamicUpdate;
+import top.fosin.anan.jpa.entity.AbstractCreateUpdateJpaEntity;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import java.io.Serializable;
 
 /**
  * 国际化语言字符集(AnanInternationalCharset)实体类
@@ -25,7 +26,7 @@ import javax.persistence.Table;
 @DynamicUpdate
 @Table(name = "anan_international_charset")
 @ApiModel(value = "表(anan_international_charset)的对应的实体类", description = "表(anan_international_charset)的对应的实体类")
-public class AnanInternationalCharsetEntity extends AbstractCreateUpdateJpaEntity<Long, Long> {
+public class AnanInternationalCharsetEntity extends AbstractCreateUpdateJpaEntity<Long, Long> implements Serializable {
     private static final long serialVersionUID = -47422702414130736L;
 
     @Basic

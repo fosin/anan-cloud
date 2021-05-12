@@ -1,21 +1,21 @@
 package top.fosin.anan.platform.controller;
 
-import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
-import top.fosin.anan.model.controller.ISimpleController;
-import top.fosin.anan.model.module.PageModule;
-import top.fosin.anan.model.result.ListResult;
-import top.fosin.anan.model.service.ISimpleService;
-import top.fosin.anan.platform.dto.request.AnanInternationalCharsetCreateDto;
-import top.fosin.anan.platform.dto.request.AnanInternationalCharsetRetrieveDto;
-import top.fosin.anan.platform.dto.request.AnanInternationalCharsetUpdateDto;
-import top.fosin.anan.platform.entity.AnanInternationalCharsetEntity;
-import top.fosin.anan.platform.service.inter.AnanInternationalCharsetService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
+import top.fosin.anan.model.controller.ISimpleController;
+import top.fosin.anan.platform.dto.request.AnanInternationalCharsetCreateDto;
+import top.fosin.anan.platform.dto.request.AnanInternationalCharsetRetrieveDto;
+import top.fosin.anan.platform.dto.request.AnanInternationalCharsetUpdateDto;
+import top.fosin.anan.platform.entity.AnanInternationalCharsetEntity;
+import top.fosin.anan.platform.service.inter.AnanInternationalCharsetService;
 
 import java.util.List;
 
@@ -73,7 +73,7 @@ public class AnanInternationalCharsetController implements ISimpleController<Ana
     }
 
     @Override
-    public ISimpleService<AnanInternationalCharsetEntity, Long, AnanInternationalCharsetCreateDto, AnanInternationalCharsetRetrieveDto, AnanInternationalCharsetUpdateDto> getService() {
+    public AnanInternationalCharsetService getService() {
         return ananInternationalCharsetService;
     }
 }

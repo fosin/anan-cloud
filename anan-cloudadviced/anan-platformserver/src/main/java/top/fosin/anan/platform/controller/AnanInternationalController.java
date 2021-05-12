@@ -1,13 +1,5 @@
 package top.fosin.anan.platform.controller;
 
-import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
-import top.fosin.anan.model.controller.ISimpleController;
-import top.fosin.anan.model.service.ISimpleService;
-import top.fosin.anan.platform.dto.request.AnanInternationalCreateDto;
-import top.fosin.anan.platform.dto.request.AnanInternationalRetrieveDto;
-import top.fosin.anan.platform.dto.request.AnanInternationalUpdateDto;
-import top.fosin.anan.platform.entity.AnanInternationalEntity;
-import top.fosin.anan.platform.service.inter.AnanInternationalService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -15,6 +7,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
+import top.fosin.anan.model.controller.ISimpleController;
+import top.fosin.anan.platform.dto.request.AnanInternationalCreateDto;
+import top.fosin.anan.platform.dto.request.AnanInternationalRetrieveDto;
+import top.fosin.anan.platform.dto.request.AnanInternationalUpdateDto;
+import top.fosin.anan.platform.entity.AnanInternationalEntity;
+import top.fosin.anan.platform.service.inter.AnanInternationalService;
 
 import java.util.List;
 
@@ -69,7 +68,7 @@ public class AnanInternationalController implements ISimpleController<AnanIntern
     }
 
     @Override
-    public ISimpleService<AnanInternationalEntity, Integer, AnanInternationalCreateDto, AnanInternationalRetrieveDto, AnanInternationalUpdateDto> getService() {
+    public AnanInternationalService getService() {
         return ananInternationalService;
     }
 }

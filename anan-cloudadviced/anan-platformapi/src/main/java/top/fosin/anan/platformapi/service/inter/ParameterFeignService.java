@@ -1,17 +1,17 @@
 package top.fosin.anan.platformapi.service.inter;
 
-import top.fosin.anan.cloudresource.constant.ServiceConstant;
-import top.fosin.anan.cloudresource.constant.SystemConstant;
-import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
-import top.fosin.anan.cloudresource.dto.request.AnanParameterCreateDto;
-import top.fosin.anan.cloudresource.dto.request.AnanParameterRetrieveDto;
-import top.fosin.anan.cloudresource.dto.request.AnanParameterUpdateDto;
-import top.fosin.anan.platformapi.entity.AnanParameterEntity;
-import top.fosin.anan.platformapi.service.ParameterFeignFallbackServiceImpl;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import top.fosin.anan.cloudresource.constant.ServiceConstant;
+import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
+import top.fosin.anan.cloudresource.dto.request.AnanParameterCreateDto;
+import top.fosin.anan.cloudresource.dto.request.AnanParameterRetrieveDto;
+import top.fosin.anan.cloudresource.dto.request.AnanParameterUpdateDto;
+import top.fosin.anan.model.dto.TreeDto;
+import top.fosin.anan.platformapi.entity.AnanParameterEntity;
+import top.fosin.anan.platformapi.service.ParameterFeignFallbackServiceImpl;
 
 /**
  * @author fosin
@@ -41,7 +41,7 @@ public interface ParameterFeignService {
     ResponseEntity<String> getOrCreateParameter(@RequestBody AnanParameterRetrieveDto retrieveDto);
 
     @PostMapping("/apply/{id}")
-    ResponseEntity<Boolean> apply(@PathVariable(SystemConstant.ID_NAME) Long id);
+    ResponseEntity<Boolean> apply(@PathVariable(TreeDto.ID_NAME) Long id);
 
     @PostMapping("/applys")
     ResponseEntity<Boolean> applys();

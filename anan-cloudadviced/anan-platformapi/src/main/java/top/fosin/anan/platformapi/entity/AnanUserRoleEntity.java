@@ -1,13 +1,14 @@
 package top.fosin.anan.platformapi.entity;
 
-import top.fosin.anan.jpa.entity.AbstractOrganizIdCreateJpaEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.DynamicUpdate;
+import top.fosin.anan.jpa.entity.AbstractOrganizIdCreateJpaEntity;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * 系统用户角色表(AnanUserRole)实体类
@@ -22,7 +23,7 @@ import javax.persistence.*;
 @DynamicUpdate
 @Table(name = "anan_user_role")
 @ApiModel(value = "系统用户角色表实体类", description = "表(anan_user_role)的对应的实体类")
-public class AnanUserRoleEntity extends AbstractOrganizIdCreateJpaEntity<Long, Long> {
+public class AnanUserRoleEntity extends AbstractOrganizIdCreateJpaEntity<Long, Long> implements Serializable {
     private static final long serialVersionUID = 907700875932623662L;
 
     @ManyToOne(cascade = CascadeType.REFRESH)

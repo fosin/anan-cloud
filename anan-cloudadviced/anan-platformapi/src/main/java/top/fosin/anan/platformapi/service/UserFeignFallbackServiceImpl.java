@@ -1,13 +1,13 @@
 package top.fosin.anan.platformapi.service;
 
 
-import top.fosin.anan.cloudresource.constant.SystemConstant;
-import top.fosin.anan.platformapi.entity.AnanUserEntity;
-import top.fosin.anan.platformapi.service.inter.UserFeignService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
+import top.fosin.anan.model.dto.TreeDto;
+import top.fosin.anan.platformapi.entity.AnanUserEntity;
+import top.fosin.anan.platformapi.service.inter.UserFeignService;
 
 import java.util.List;
 
@@ -22,7 +22,7 @@ import java.util.List;
 public class UserFeignFallbackServiceImpl implements UserFeignService {
 
     @Override
-    public ResponseEntity<AnanUserEntity> findOne(@PathVariable(SystemConstant.ID_NAME) Long id) {
+    public ResponseEntity<AnanUserEntity> findOne(@PathVariable(TreeDto.ID_NAME) Long id) {
         log.error("feign 远程获取用户信息失败:{}", id);
         return null;
     }

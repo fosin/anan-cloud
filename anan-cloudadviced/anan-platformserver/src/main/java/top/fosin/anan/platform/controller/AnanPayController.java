@@ -33,7 +33,7 @@ public class AnanPayController implements ISimpleController<AnanPayEntity, Long,
     }
 
     @Override
-    public ISimpleService<AnanPayEntity, Long, AnanPayCreateDto, AnanPayRetrieveDto, AnanPayUpdateDto> getService() {
+    public AnanPayService getService() {
         return ananSysPayService;
     }
 }

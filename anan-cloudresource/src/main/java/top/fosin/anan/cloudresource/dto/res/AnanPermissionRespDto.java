@@ -1,39 +1,28 @@
-package top.fosin.anan.cloudresource.dto.request;
+package top.fosin.anan.cloudresource.dto.res;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.springframework.format.annotation.DateTimeFormat;
-import top.fosin.anan.core.util.DateTimeUtil;
-import top.fosin.anan.model.dto.QuerySortRuleDto;
-import top.fosin.anan.model.module.SortRule;
-import top.fosin.anan.model.module.QueryRule;
+import top.fosin.anan.model.dto.TreeDto;
 
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * 包含菜单、按钮两种权限(AnanPermission)查询DTO
  *
  * @author fosin
- * @date 2019-01-27 18:27:20
- * @since 1.0.0
+ * @date 2021-05-10
+ * @since 2.0.0
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-@ApiModel(value = "包含菜单、按钮两种权限查询DTO", description = "表(anan_permission)的对应的查询DTO")
-public class AnanPermissionRetrieveDto extends QuerySortRuleDto<QueryRule,SortRule> implements Serializable {
+@ApiModel(value = "权限树响应DTO", description = "表(anan_permission)权限树响应DTO")
+public class AnanPermissionRespDto extends TreeDto<AnanPermissionRespDto, Long> implements Serializable {
     private static final long serialVersionUID = -61984917164013694L;
-
-    @ApiModelProperty(value = "权限ID, 主键")
-    private Long id;
 
     @ApiModelProperty(value = "权限编码，不能重复 不能为空")
     private String code;
-
-    @ApiModelProperty(value = "父权限ID，取值于id，表示当前数据的父类权限")
-    private Long pid;
 
     @ApiModelProperty(value = "权限名称")
     private String name;
@@ -68,17 +57,4 @@ public class AnanPermissionRetrieveDto extends QuerySortRuleDto<QueryRule,SortRu
     @ApiModelProperty(value = "一般用于前端菜单选项前的图标")
     private String icon;
 
-    @ApiModelProperty(value = "创建人", example = "1")
-    private Long createBy;
-
-    @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
-    @ApiModelProperty(value = "创建日期", example = "2021-05-08 13:25:11")
-    private Date createTime;
-
-    @ApiModelProperty(value = "修改人", example = "1")
-    private Long updateBy;
-
-    @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
-    @ApiModelProperty(value = "修改日期", example = "2021-05-08 13:25:11")
-    private Date updateTime;
 }

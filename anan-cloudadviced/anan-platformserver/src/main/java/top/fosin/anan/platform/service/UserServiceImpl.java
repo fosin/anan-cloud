@@ -22,6 +22,7 @@ import top.fosin.anan.cloudresource.dto.request.AnanUserRetrieveDto;
 import top.fosin.anan.cloudresource.dto.request.AnanUserUpdateDto;
 import top.fosin.anan.core.util.RegexUtil;
 import top.fosin.anan.jpa.repository.IJpaRepository;
+import top.fosin.anan.model.dto.TreeDto;
 import top.fosin.anan.model.module.PageModule;
 import top.fosin.anan.model.result.ListResult;
 import top.fosin.anan.model.result.ResultUtils;
@@ -218,7 +219,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ListResult<AnanUserEntity> findPage(PageModule<AnanUserRetrieveDto> pageModule) {
-        PageRequest pageable = getPageObject(pageModule);
+        PageRequest pageable = PageRequest.of(pageModule.getPageNumber() - 1, pageModule.getPageSize(), this.buildSortRules(pageModule.getParams().getSortRules()));
 
         Specification<AnanUserEntity> condition = (root, query, cb) -> {
             Path<String> usercodePath = root.get("usercode");
@@ -236,7 +237,7 @@ public class UserServiceImpl implements UserService {
                 //从哪张表查询
                 Root<AnanOrganizationEntity> celluseRoot = subQuery.from(AnanOrganizationEntity.class);
                 //查询出什么
-                subQuery.select(celluseRoot.get(SystemConstant.ID_NAME));
+                subQuery.select(celluseRoot.get(TreeDto.ID_NAME));
                 //条件是什么
                 Predicate p = cb.like(celluseRoot.get("code"), Objects.requireNonNull(organizationEntity, "通过organizId：" + organizId + "未能找到对应的数据!").getCode() + "%");
                 subQuery.where(p);

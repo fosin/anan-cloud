@@ -1,15 +1,17 @@
 package top.fosin.anan.platformapi.entity;
 
-import top.fosin.anan.jpa.entity.AbstractCreateUpdateJpaEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.DynamicUpdate;
-import springfox.documentation.annotations.ApiIgnore;
+import top.fosin.anan.jpa.entity.AbstractTreeCreateUpdateJpaEntity;
 
-import javax.persistence.*;
-import java.util.List;
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import java.io.Serializable;
 
 /**
  * 包含菜单、按钮两种权限(AnanPermission)实体类
@@ -24,40 +26,13 @@ import java.util.List;
 @DynamicUpdate
 @Table(name = "anan_permission")
 @ApiModel(value = "包含菜单、按钮两种权限实体类", description = "表(anan_permission)的对应的实体类")
-public class AnanPermissionEntity extends AbstractCreateUpdateJpaEntity<Long, Long> {
+public class AnanPermissionEntity extends AbstractTreeCreateUpdateJpaEntity<Long, Long> implements Serializable {
     private static final long serialVersionUID = -77218975959330473L;
-
-    @Transient
-    @ApiModelProperty(value = "孩子节点，虚拟字段，增删改时不需要关心", notes = "孩子节点，虚拟字段，增删改时不需要关心")
-    private List<AnanPermissionEntity> children;
-
-
-    @Transient
-    @ApiModelProperty(value = "是否叶子节点，虚拟字段，增删改时不需要关心", notes = "是否叶子节点，虚拟字段，增删改时不需要关心")
-    private Boolean leaf;
-
-    /**
-     * 当权限类型是1：组件菜单 3：目录菜单 表示该节点不是一个叶子节点
-     */
-    @ApiIgnore
-    public Boolean getLeaf() {
-        this.leaf = this.type != 1 && this.type != 3;
-        return leaf;
-    }
-
-    public void setLeaf(Boolean leaf) {
-        this.leaf = leaf;
-    }
 
     @Basic
     @ApiModelProperty(value = "权限编码，不能重复 不能为空", required = true)
     @Column(name = "code", nullable = false, length = 64)
     private String code;
-
-    @Basic
-    @ApiModelProperty(value = "父权限ID，取值于id，表示当前数据的父类权限", required = true)
-    @Column(name = "p_id", nullable = false)
-    private Long pid;
 
     @Basic
     @ApiModelProperty(value = "权限名称", required = true)

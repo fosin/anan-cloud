@@ -1,15 +1,16 @@
 package top.fosin.anan.cloudresource.dto;
 
-import top.fosin.anan.core.util.RegexUtil;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import top.fosin.anan.core.util.RegexUtil;
+import top.fosin.anan.model.dto.TreeDto;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * 包含菜单、按钮两种权限(AnanPermission)更新DTO
@@ -18,29 +19,16 @@ import java.util.List;
  * @date 2019-01-27 16:58:27
  * @since 1.0.0
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 @ApiModel(value = "用户所有的权限", description = "用户所有的权限，包含用户权限和角色权限")
-public class AnanUserAllPermissionDto implements Serializable {
+public class AnanUserAllPermissionDto extends TreeDto<AnanUserAllPermissionDto, Long> implements Serializable {
     private static final long serialVersionUID = 900297768117165756L;
-
-    @ApiModelProperty(value = "孩子节点，虚拟字段，增删改时不需要关心", notes = "孩子节点，虚拟字段，增删改时不需要关心")
-    private List<AnanUserAllPermissionDto> children;
-
-    @ApiModelProperty(value = "是否叶子节点，虚拟字段，增删改时不需要关心", notes = "是否叶子节点，虚拟字段，增删改时不需要关心")
-    private Boolean leaf;
-
-    @NotNull(message = "权限ID" + "{javax.validation.constraints.NotNull.message}")
-    @ApiModelProperty(value = "权限ID, 主键", required = true)
-    private Long id;
 
     @NotBlank(message = "权限编码" + "{javax.validation.constraints.NotBlank.message}")
     @ApiModelProperty(value = "权限编码，不能重复 不能为空", required = true)
     @Pattern(regexp = "[A-Z][a-zA-Z0-9]{1,64}", message = "权限编码只能大写字母开始，大小写字母、数字组合而成,长度不超过64位")
     private String code;
-
-    @NotNull(message = "父权限ID" + "{javax.validation.constraints.NotNull.message}")
-    @ApiModelProperty(value = "父权限ID，取值于id，表示当前数据的父类权限", required = true)
-    private Long pid;
 
     @NotBlank(message = "权限名称" + "{javax.validation.constraints.NotBlank.message}")
     @ApiModelProperty(value = "权限名称", required = true)

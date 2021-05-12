@@ -50,7 +50,7 @@ public class AnanServiceController implements ISimpleController<AnanServiceEntit
     }
 
     @Override
-    public ISimpleService<AnanServiceEntity, Integer, AnanServiceCreateDto, AnanServiceRetrieveDto, AnanServiceUpdateDto> getService() {
+    public AnanServiceService getService() {
         return ananServiceService;
     }
 }

@@ -1,22 +1,23 @@
 package top.fosin.anan.auth.service;
 
+import org.springframework.beans.BeanUtils;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 import top.fosin.anan.auth.service.inter.PermissionService;
 import top.fosin.anan.cloudresource.constant.RedisConstant;
 import top.fosin.anan.cloudresource.constant.SystemConstant;
 import top.fosin.anan.cloudresource.dto.AnanUserAllPermissionDto;
 import top.fosin.anan.cloudresource.dto.request.AnanPermissionRetrieveDto;
+import top.fosin.anan.core.util.TreeUtil;
 import top.fosin.anan.jpa.repository.IJpaRepository;
+import top.fosin.anan.model.dto.TreeDto;
 import top.fosin.anan.platformapi.entity.AnanPermissionEntity;
 import top.fosin.anan.platformapi.entity.AnanServiceEntity;
 import top.fosin.anan.platformapi.entity.AnanUserAllPermissionsEntity;
 import top.fosin.anan.platformapi.repository.AnanServiceRepository;
 import top.fosin.anan.platformapi.repository.PermissionRepository;
 import top.fosin.anan.platformapi.repository.UserAllPermissionsRepository;
-import top.fosin.anan.core.util.TreeUtil;
-import org.springframework.beans.BeanUtils;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -99,7 +100,7 @@ public class PermissionServiceImpl implements PermissionService {
             }
         }
         Assert.isTrue(userPermissions.stream().anyMatch(ananUserAllPermissionDto -> SystemConstant.ROOT_PERMISSION_ID.equals(ananUserAllPermissionDto.getId())), "未分配根节点权限,请联系管理员核对权限!");
-        return TreeUtil.createTree(userPermissions, SystemConstant.ROOT_PERMISSION_ID, SystemConstant.ID_NAME, SystemConstant.PID_NAME, SystemConstant.CHILDREN_NAME);
+        return TreeUtil.createTree(userPermissions, SystemConstant.ROOT_PERMISSION_ID, TreeDto.ID_NAME, TreeDto.PID_NAME, TreeDto.CHILDREN_NAME);
     }
 
     @Override

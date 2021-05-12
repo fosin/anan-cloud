@@ -1,13 +1,18 @@
 package top.fosin.anan.platform.entity;
 
-import top.fosin.anan.jpa.entity.AbstractCreateJpaEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.DynamicUpdate;
+import top.fosin.anan.jpa.entity.AbstractCreateJpaEntity;
 
-import javax.persistence.*;
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import java.io.Serializable;
+
 /**
  * 系统版本角色权限表(AnanVersionRolePermission)实体类
  *
@@ -21,7 +26,7 @@ import javax.persistence.*;
 @DynamicUpdate
 @Table(name = "anan_version_role_permission")
 @ApiModel(value = "系统版本角色权限表实体类", description = "表(anan_version_role_permission)的对应的实体类")
-public class AnanVersionRolePermissionEntity extends AbstractCreateJpaEntity<Long, Long> {
+public class AnanVersionRolePermissionEntity extends AbstractCreateJpaEntity<Long, Long> implements Serializable {
     private static final long serialVersionUID = -46739456017788098L;
 
     @Basic

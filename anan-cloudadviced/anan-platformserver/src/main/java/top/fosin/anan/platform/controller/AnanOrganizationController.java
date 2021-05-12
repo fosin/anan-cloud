@@ -1,22 +1,5 @@
 package top.fosin.anan.platform.controller;
 
-import top.fosin.anan.cloudresource.constant.SystemConstant;
-import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
-import top.fosin.anan.cloudresource.dto.RegisterDto;
-import top.fosin.anan.cloudresource.dto.request.AnanOrganizationCreateDto;
-import top.fosin.anan.cloudresource.dto.request.AnanOrganizationRetrieveDto;
-import top.fosin.anan.cloudresource.dto.request.AnanOrganizationUpdateDto;
-import top.fosin.anan.cloudresource.dto.res.AnanOrganizationTreeDto;
-import top.fosin.anan.model.controller.AbstractBaseController;
-import top.fosin.anan.model.controller.ISimpleController;
-import top.fosin.anan.model.service.ISimpleService;
-import top.fosin.anan.platform.dto.request.AnanOrganizationPermissionUpdateDto;
-import top.fosin.anan.platform.entity.AnanOrganizationAuthEntity;
-import top.fosin.anan.platform.entity.AnanOrganizationPermissionEntity;
-import top.fosin.anan.platform.service.inter.AnanOrganizationAuthService;
-import top.fosin.anan.platform.service.inter.AnanOrganizationPermissionService;
-import top.fosin.anan.platform.service.inter.OrganizationService;
-import top.fosin.anan.platformapi.entity.AnanOrganizationEntity;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -25,6 +8,23 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
+import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
+import top.fosin.anan.cloudresource.dto.RegisterDto;
+import top.fosin.anan.cloudresource.dto.request.AnanOrganizationCreateDto;
+import top.fosin.anan.cloudresource.dto.request.AnanOrganizationRetrieveDto;
+import top.fosin.anan.cloudresource.dto.request.AnanOrganizationUpdateDto;
+import top.fosin.anan.cloudresource.dto.res.AnanOrganizationTreeDto;
+import top.fosin.anan.model.controller.AbstractBaseController;
+import top.fosin.anan.model.controller.ISimpleController;
+import top.fosin.anan.model.dto.TreeDto;
+import top.fosin.anan.model.service.ISimpleService;
+import top.fosin.anan.platform.dto.request.AnanOrganizationPermissionUpdateDto;
+import top.fosin.anan.platform.entity.AnanOrganizationAuthEntity;
+import top.fosin.anan.platform.entity.AnanOrganizationPermissionEntity;
+import top.fosin.anan.platform.service.inter.AnanOrganizationAuthService;
+import top.fosin.anan.platform.service.inter.AnanOrganizationPermissionService;
+import top.fosin.anan.platform.service.inter.OrganizationService;
+import top.fosin.anan.platformapi.entity.AnanOrganizationEntity;
 
 import java.util.Collection;
 import java.util.List;
@@ -39,7 +39,9 @@ import java.util.List;
 @RequestMapping(UrlPrefixConstant.ORGANIZATION)
 @Api(value = UrlPrefixConstant.ORGANIZATION, tags = "机构管理相关操作(增删改查)")
 public class AnanOrganizationController extends AbstractBaseController
-        implements ISimpleController<AnanOrganizationEntity, Long, AnanOrganizationCreateDto, AnanOrganizationRetrieveDto, AnanOrganizationUpdateDto> {
+        implements ISimpleController<AnanOrganizationEntity, Long,
+        AnanOrganizationCreateDto, AnanOrganizationRetrieveDto,
+        AnanOrganizationUpdateDto> {
     private final OrganizationService organizationService;
     private final AnanOrganizationAuthService organizationAuthService;
     private final AnanOrganizationPermissionService organizationPermissionService;
@@ -74,22 +76,22 @@ public class AnanOrganizationController extends AbstractBaseController
 
     @ApiOperation("根据父机构ID获取其孩子节点数据")
     @PostMapping("/listChild/{pid}")
-    @ApiImplicitParam(name = SystemConstant.PID_NAME, required = true, dataTypeClass = Long.class, value = "父节点ID,AnanOrganizationEntity.id", paramType = "path")
-    public ResponseEntity<List<AnanOrganizationEntity>> findChildByPid(@PathVariable(SystemConstant.PID_NAME) Long pid) {
+    @ApiImplicitParam(name = TreeDto.PID_NAME, required = true, dataTypeClass = Long.class, value = "父节点ID,AnanOrganizationEntity.id", paramType = "path")
+    public ResponseEntity<List<AnanOrganizationEntity>> findChildByPid(@PathVariable(TreeDto.PID_NAME) Long pid) {
         return ResponseEntity.ok(organizationService.findChildByPid(pid));
     }
 
     @ApiOperation("根据父机构ID获取其所有后代节点数据")
-    @ApiImplicitParam(name = SystemConstant.PID_NAME, required = true, dataTypeClass = Long.class, value = "父节点ID,AnanOrganizationEntity.id", paramType = "path")
+    @ApiImplicitParam(name = TreeDto.PID_NAME, required = true, dataTypeClass = Long.class, value = "父节点ID,AnanOrganizationEntity.id", paramType = "path")
     @PostMapping("/listAllChild/{pid}")
-    public ResponseEntity<List<AnanOrganizationEntity>> findAllChildByPid(@PathVariable(SystemConstant.PID_NAME) Long pid) {
+    public ResponseEntity<List<AnanOrganizationEntity>> findAllChildByPid(@PathVariable(TreeDto.PID_NAME) Long pid) {
         return ResponseEntity.ok(organizationService.findAllChildByPid(pid));
     }
 
     @ApiOperation("根据机构ID获取其以及后代节点数据，树形结构")
-    @ApiImplicitParam(name = SystemConstant.ID_NAME, required = true, dataTypeClass = Long.class, value = "父节点ID,AnanOrganizationEntity.id", paramType = "path")
+    @ApiImplicitParam(name = TreeDto.ID_NAME, required = true, dataTypeClass = Long.class, value = "父节点ID,AnanOrganizationEntity.id", paramType = "path")
     @PostMapping("/treeAllChild/{id}")
-    public ResponseEntity<AnanOrganizationTreeDto> treeAllChildByid(@PathVariable(SystemConstant.ID_NAME) Long id) {
+    public ResponseEntity<AnanOrganizationTreeDto> treeAllChildByid(@PathVariable(TreeDto.ID_NAME) Long id) {
         return ResponseEntity.ok(organizationService.treeAllChildByid(id));
     }
 
@@ -113,7 +115,7 @@ public class AnanOrganizationController extends AbstractBaseController
     }
 
     @Override
-    public ISimpleService<AnanOrganizationEntity, Long, AnanOrganizationCreateDto, AnanOrganizationRetrieveDto, AnanOrganizationUpdateDto> getService() {
+    public OrganizationService getService() {
         return organizationService;
     }
 }

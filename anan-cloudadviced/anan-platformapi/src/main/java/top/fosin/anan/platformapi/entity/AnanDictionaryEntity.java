@@ -1,6 +1,5 @@
 package top.fosin.anan.platformapi.entity;
 
-import top.fosin.anan.jpa.entity.AbstractSoftDeleteJpaEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -8,11 +7,13 @@ import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
+import top.fosin.anan.jpa.entity.AbstractSoftDeleteJpaEntity;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import java.io.Serializable;
 
 /**
  * 系统通用字典表(AnanDictionary)实体类
@@ -29,7 +30,7 @@ import javax.persistence.Table;
 @Where(clause = "deleted = 0")
 @Table(name = "anan_dictionary")
 @ApiModel(value = "系统通用字典表实体类", description = "表(anan_dictionary)的对应的实体类")
-public class AnanDictionaryEntity extends AbstractSoftDeleteJpaEntity<Long, Long> {
+public class AnanDictionaryEntity extends AbstractSoftDeleteJpaEntity<Long, Long> implements Serializable {
     private static final long serialVersionUID = -48637204028516104L;
 
     @Basic

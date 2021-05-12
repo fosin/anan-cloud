@@ -1,16 +1,16 @@
 package top.fosin.anan.platformapi.service.inter;
 
 
-import top.fosin.anan.cloudresource.constant.ServiceConstant;
-import top.fosin.anan.cloudresource.constant.SystemConstant;
-import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
-import top.fosin.anan.platformapi.entity.AnanOrganizationEntity;
-import top.fosin.anan.platformapi.service.OrganizationFeignFallbackServiceImpl;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import top.fosin.anan.cloudresource.constant.ServiceConstant;
+import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
+import top.fosin.anan.model.dto.TreeDto;
+import top.fosin.anan.platformapi.entity.AnanOrganizationEntity;
+import top.fosin.anan.platformapi.service.OrganizationFeignFallbackServiceImpl;
 
 import java.util.List;
 
@@ -24,13 +24,13 @@ import java.util.List;
 public interface OrganizationFeignService {
     @PostMapping({"/{id}"})
     @ApiOperation("根据主键ID查询一条数据")
-    ResponseEntity<AnanOrganizationEntity> findOne(@PathVariable(SystemConstant.ID_NAME) Long id);
+    ResponseEntity<AnanOrganizationEntity> findOne(@PathVariable(TreeDto.ID_NAME) Long id);
 
     @PostMapping("/listChild/{pid}")
-    ResponseEntity<List<AnanOrganizationEntity>> listChild(@PathVariable(SystemConstant.PID_NAME) Long pid);
+    ResponseEntity<List<AnanOrganizationEntity>> listChild(@PathVariable(TreeDto.PID_NAME) Long pid);
 
     @PostMapping("/listAllChild/{pid}")
-    ResponseEntity<List<AnanOrganizationEntity>> listAllChild(@PathVariable(SystemConstant.PID_NAME) Long pid);
+    ResponseEntity<List<AnanOrganizationEntity>> listAllChild(@PathVariable(TreeDto.PID_NAME) Long pid);
 
     @PostMapping("/tree/{topId}")
     ResponseEntity<List<AnanOrganizationEntity>> tree(@PathVariable("topId") Long topId);

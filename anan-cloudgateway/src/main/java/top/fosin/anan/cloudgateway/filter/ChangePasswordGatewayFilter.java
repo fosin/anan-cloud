@@ -1,7 +1,5 @@
 package top.fosin.anan.cloudgateway.filter;
 
-import top.fosin.anan.cloudresource.constant.SystemConstant;
-import top.fosin.anan.core.util.crypt.AesUtil;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.core.Ordered;
@@ -10,6 +8,8 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.util.StringUtils;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
+import top.fosin.anan.core.util.crypt.AesUtil;
+import top.fosin.anan.model.dto.TreeDto;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,7 +72,7 @@ public class ChangePasswordGatewayFilter implements GatewayFilter, Ordered {
 
             List<String> idList = new ArrayList<>();
             idList.add(id);
-            params.put(SystemConstant.ID_NAME, idList);
+            params.put(TreeDto.ID_NAME, idList);
 
             List<String> passwordList = new ArrayList<>();
             passwordList.add(aesUtil.decrypt(salt, iv, passphrase, password));

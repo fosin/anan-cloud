@@ -1,18 +1,18 @@
 package top.fosin.anan.platformapi.entity;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
-
-import top.fosin.anan.jpa.entity.AbstractCreateUpdateJpaEntity;
-
-import org.hibernate.annotations.DynamicUpdate;
-
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.hibernate.annotations.DynamicUpdate;
+import top.fosin.anan.jpa.entity.AbstractTreeCreateUpdateJpaEntity;
+
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import java.io.Serializable;
+
 /**
  * 系统机构表(AnanOrganization)实体类
  *
@@ -26,13 +26,8 @@ import lombok.EqualsAndHashCode;
 @DynamicUpdate
 @Table(name = "anan_organization")
 @ApiModel(value = "系统机构表实体类", description = "表(anan_organization)的对应的实体类")
-public class AnanOrganizationEntity extends AbstractCreateUpdateJpaEntity<Long, Long> {
+public class AnanOrganizationEntity extends AbstractTreeCreateUpdateJpaEntity<Long, Long> implements Serializable {
     private static final long serialVersionUID = -27331190994806707L;
-
-    @Basic
-    @ApiModelProperty(value = "父机构编号，取值于id，表示当前数据所属的父类机构", required = true)
-    @Column(name = "p_id", nullable = false)
-    private Long pid;
 
     @Basic
     @ApiModelProperty(value = "顶级机构编号：一般指用户注册的机构，通常是一个集团组的最高级别机构，取值于id", required = true)

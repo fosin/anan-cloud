@@ -1,8 +1,14 @@
 package top.fosin.anan.platform.controller;
 
 
-import top.fosin.anan.cloudresource.constant.SystemConstant;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import top.fosin.anan.model.controller.ISimpleController;
+import top.fosin.anan.model.dto.TreeDto;
 import top.fosin.anan.model.service.ISimpleService;
 import top.fosin.anan.platform.dto.request.*;
 import top.fosin.anan.platform.entity.AnanOrganizationAuthEntity;
@@ -10,12 +16,6 @@ import top.fosin.anan.platform.entity.AnanVersionEntity;
 import top.fosin.anan.platform.entity.AnanVersionPermissionEntity;
 import top.fosin.anan.platform.service.inter.*;
 import top.fosin.anan.platformapi.entity.AnanPermissionEntity;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -52,10 +52,10 @@ public class AnanVersionController implements ISimpleController<AnanVersionEntit
     @RequestMapping(value = "/listChild/{pid}", method = {RequestMethod.POST})
     @ApiImplicitParams({
             @ApiImplicitParam(name = "versionId", required = true, dataTypeClass = Long.class, value = "版本ID,取值于AnanVersionEntity.id", paramType = "query"),
-            @ApiImplicitParam(name = SystemConstant.PID_NAME, required = true, dataTypeClass = Long.class, value = "父权限ID,AnanVersionPermissionEntity.id", paramType = "path")
+            @ApiImplicitParam(name = TreeDto.PID_NAME, required = true, dataTypeClass = Long.class, value = "父权限ID,AnanVersionPermissionEntity.id", paramType = "path")
     })
     public ResponseEntity<List<AnanPermissionEntity>> getListChild(@PathVariable Long pid, @RequestParam Long versionId) {
-        List<AnanPermissionEntity> list = permissionService.findByPid(pid, versionId);
+        List<AnanPermissionEntity> list = permissionService.findByPidAndVersionId(pid, versionId);
         return ResponseEntity.ok(list);
     }
 
@@ -103,7 +103,7 @@ public class AnanVersionController implements ISimpleController<AnanVersionEntit
     }
 
     @Override
-    public ISimpleService<AnanVersionEntity, Long, AnanVersionCreateDto, AnanVersionRetrieveDto, AnanVersionUpdateDto> getService() {
+    public AnanVersionService getService() {
         return ananSysVersionService;
     }
 }

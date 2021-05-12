@@ -26,6 +26,7 @@ import top.fosin.anan.platformapi.repository.RolePermissionRepository;
 import top.fosin.anan.platformapi.repository.UserPermissionRepository;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
@@ -122,7 +123,7 @@ public class PermissionServiceImpl implements PermissionService {
     protected List<AnanPermissionEntity> getUpdateCascadeChild(AnanPermissionUpdateDto originEntity, AnanPermissionEntity updateEntity) {
         Long id = updateEntity.getId();
         Sort sort = Sort.by(Sort.Direction.fromString("ASC"), "sort");
-        List<AnanPermissionEntity> allByPid = permissionRepository.findAllByPid(id, sort);
+        Collection<AnanPermissionEntity> allByPid = findByPid(id);
         List<AnanPermissionEntity> saves = new ArrayList<>();
         allByPid.forEach(entity -> {
             AnanPermissionUpdateDto entity2 = new AnanPermissionUpdateDto();
@@ -163,7 +164,7 @@ public class PermissionServiceImpl implements PermissionService {
         Assert.isTrue(countByPermissionId == 0, "还有角色在使用该权限，不能直接删除!");
         countByPermissionId = organizationPermissionRepository.countByPermissionId(id);
         Assert.isTrue(countByPermissionId == 0, "还有机构在使用该权限，不能直接删除!");
-        List<AnanPermissionEntity> entities = findByPid(id);
+        Collection<AnanPermissionEntity> entities = findByPid(id);
         Assert.isTrue(entities == null || entities.size() == 0, "该节点还存在子节点不能直接删除!");
         permissionRepository.delete(entity);
     }
@@ -190,19 +191,8 @@ public class PermissionServiceImpl implements PermissionService {
     }
 
     @Override
-    public List<AnanPermissionEntity> findByPid(Long pid) {
-        Sort sort = Sort.by(Sort.Direction.fromString("ASC"), "sort");
-        return permissionRepository.findAllByPid(pid, sort);
-    }
-
-    @Override
-    public List<AnanPermissionEntity> findByPid(Long pid, Long versionId) {
+    public List<AnanPermissionEntity> findByPidAndVersionId(Long pid, Long versionId) {
         return permissionRepository.findAllByPidAndVersionId(pid, versionId);
-    }
-
-    @Override
-    public List<AnanPermissionEntity> findByType(Integer type) {
-        return permissionRepository.findAllByType(type);
     }
 
     @Override

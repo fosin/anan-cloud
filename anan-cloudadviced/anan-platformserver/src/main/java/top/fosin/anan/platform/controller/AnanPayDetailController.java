@@ -1,17 +1,15 @@
 package top.fosin.anan.platform.controller;
 
+import io.swagger.annotations.Api;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
 import top.fosin.anan.model.controller.ISimpleController;
-import top.fosin.anan.model.service.ISimpleService;
 import top.fosin.anan.platform.dto.request.AnanPayDetailCreateDto;
 import top.fosin.anan.platform.dto.request.AnanPayDetailRetrieveDto;
 import top.fosin.anan.platform.dto.request.AnanPayDetailUpdateDto;
 import top.fosin.anan.platform.entity.AnanPayDetailEntity;
 import top.fosin.anan.platform.service.inter.AnanPayDetailService;
-import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
-import io.swagger.annotations.Api;
-
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 /**
  * 系统支付明细表(table:anan_pay_detail)表控制层
@@ -32,7 +30,7 @@ public class AnanPayDetailController implements ISimpleController<AnanPayDetailE
     }
 
     @Override
-    public ISimpleService<AnanPayDetailEntity, Long, AnanPayDetailCreateDto, AnanPayDetailRetrieveDto, AnanPayDetailUpdateDto> getService() {
+    public AnanPayDetailService getService() {
         return ananSysPayDetailService;
     }
 }

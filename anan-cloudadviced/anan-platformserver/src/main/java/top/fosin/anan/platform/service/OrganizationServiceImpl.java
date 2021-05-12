@@ -8,13 +8,13 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import top.fosin.anan.cloudresource.constant.RedisConstant;
-import top.fosin.anan.cloudresource.constant.SystemConstant;
 import top.fosin.anan.cloudresource.dto.request.AnanOrganizationCreateDto;
 import top.fosin.anan.cloudresource.dto.request.AnanOrganizationRetrieveDto;
 import top.fosin.anan.cloudresource.dto.request.AnanOrganizationUpdateDto;
 import top.fosin.anan.cloudresource.dto.res.AnanOrganizationTreeDto;
-import top.fosin.anan.core.util.TreeUtil;
 import top.fosin.anan.jpa.repository.IJpaRepository;
+import top.fosin.anan.model.module.OperatorMode;
+import top.fosin.anan.model.module.QueryRule;
 import top.fosin.anan.platform.repository.OrganizationRepository;
 import top.fosin.anan.platform.service.inter.OrganizationService;
 import top.fosin.anan.platformapi.entity.AnanOrganizationEntity;
@@ -116,36 +116,9 @@ public class OrganizationServiceImpl implements OrganizationService {
         return deleteEntity;
     }
 
-    @Override
-    public List<AnanOrganizationEntity> findAllByTopId(Long topId) {
-        Assert.isTrue(topId != null && topId >= 0, "顶级机构编号无效!");
-        return organizationRepository.findAllByTopId(topId);
-    }
-
     public String getCacheName() {
         return "AllData";
     }
-
-//    @Override
-//    public Result findAllByPageSort(PageModule pageModule) {
-//        PageRequest pageable = PageRequest.of(pageModule.getPageNumber() - 1, pageModule.getPageSize(), Sort.Direction.fromString(pageModule.getSortOrder()), pageModule.getSortName());
-//        String searchCondition = pageModule.getSearchText();
-//
-//        Specification<AnanOrganizationEntity> condition = (Specification<AnanOrganizationEntity>) (root, query, cb) -> {
-//            if (StringUtils.isBlank(searchCondition)) {
-//                return query.getRestriction();
-//            }
-//            Path<String> id = root.get(SystemConstant.ID_NAME);
-//            Path<String> name = root.get("name");
-//            Path<String> fullname = root.get("fullname");
-//            Path<String> address = root.get("address");
-//            return cb.or(cb.like(id, "%" + searchCondition + "%"), cb.like(name, "%" + searchCondition + "%"), cb.like(fullname, "%" + searchCondition + "%"), cb.like(address, "%" + searchCondition + "%"));
-//        };
-//        //分页查找
-//        Page<AnanOrganizationEntity> page = organizationRepository.findAll(condition, pageable);
-//
-//        return ResultUtils.success(page.getTotalElements(), page.getContent());
-//    }
 
     @Override
     public List<AnanOrganizationEntity> findChildByPid(Long pid) {
@@ -173,31 +146,15 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     @Override
     public AnanOrganizationTreeDto treeAllChildByid(Long id) {
-        Assert.isTrue(id > 0, "传入ID不能小于1");
-        AnanOrganizationEntity organizationEntity = organizationRepository.findById(id).orElse(null);
-        List<AnanOrganizationEntity> list = organizationRepository.findByTopIdAndCodeStartingWithOrderByCodeAsc(Objects.requireNonNull(organizationEntity).getTopId(), organizationEntity.getCode());
-        Assert.isTrue(list.size() > 0, "没有找到任何机构数据");
-        Long rootId = organizationEntity.getId();
-        List<AnanOrganizationTreeDto> dtoList = new ArrayList<>(list.size());
-        for (AnanOrganizationEntity entity : list) {
-            AnanOrganizationTreeDto dto = new AnanOrganizationTreeDto();
-            BeanUtils.copyProperties(entity, dto);
-            dto.setId(entity.getId());
-            dtoList.add(dto);
-        }
-        AnanOrganizationTreeDto tree = TreeUtil.createTree(dtoList, rootId, SystemConstant.ID_NAME, SystemConstant.PID_NAME, SystemConstant.CHILDREN_NAME);
-        setLeaf(tree);
-        return tree;
-    }
-
-    private void setLeaf(AnanOrganizationTreeDto tree) {
-        List<AnanOrganizationTreeDto> children = tree.getChildren();
-        tree.setLeaf(children == null || children.size() == 0);
-        if (children != null) {
-            for (AnanOrganizationTreeDto child : children) {
-                setLeaf(child);
-            }
-        }
+        AnanOrganizationEntity entity = organizationRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("根据ID查询不到数据!"));
+        AnanOrganizationRetrieveDto dto = new AnanOrganizationRetrieveDto();
+        dto.setTopId(entity.getTopId());
+        dto.setCode(entity.getCode());
+        ArrayList<QueryRule> queryRules = new ArrayList<>();
+        queryRules.add(new QueryRule(OperatorMode.rightLike, "code"));
+        queryRules.add(new QueryRule(OperatorMode.equal, "topId"));
+        dto.setQueryRules(queryRules);
+        return this.findTree(dto, id);
     }
 
     @Override

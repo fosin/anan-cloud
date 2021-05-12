@@ -105,7 +105,7 @@ public class RoleController implements ISimpleController<AnanRoleEntity, Long,
     }
 
     @Override
-    public ISimpleService<AnanRoleEntity, Long, AnanRoleCreateDto, AnanRoleRetrieveDto, AnanRoleUpdateDto> getService() {
+    public RoleService getService() {
         return roleService;
     }
 }
