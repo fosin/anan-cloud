@@ -1,16 +1,17 @@
 package top.fosin.anan.platform.dto.request;
 
-import java.util.Date;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.format.annotation.DateTimeFormat;
 import top.fosin.anan.core.util.DateTimeUtil;
 import top.fosin.anan.model.dto.QuerySortRuleDto;
-import top.fosin.anan.model.module.SortRule;
 import top.fosin.anan.model.module.QueryRule;
+import top.fosin.anan.model.module.SortRule;
+
+import java.io.Serializable;
+import java.util.Date;
 
 /**
  * 系统机构权限表(AnanOrganizationPermission)查询DTO
@@ -22,11 +23,8 @@ import top.fosin.anan.model.module.QueryRule;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @ApiModel(value = "系统机构权限表查询DTO", description = "表(anan_organization_permission)的对应的查询DTO")
-public class AnanOrganizationPermissionRetrieveDto extends QuerySortRuleDto<QueryRule,SortRule> implements Serializable {
+public class AnanOrganizationPermissionRetrieveDto extends QuerySortRuleDto<QueryRule,SortRule,Long> implements Serializable {
     private static final long serialVersionUID = 258891966081450196L;
-
-    @ApiModelProperty(value = "机构权限ID, 主键")
-    private Long id;
 
     @ApiModelProperty(value = "机构ID")
     private Long organizId;

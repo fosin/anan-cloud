@@ -21,12 +21,8 @@ import java.io.Serializable;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @ApiModel(value = "国际化语言字符集查询DTO", description = "表(anan_international_charset)的对应的查询DTO")
-public class AnanInternationalCharsetRetrieveDto extends QuerySortRuleDto<QueryRule, SortRule> implements Serializable {
+public class AnanInternationalCharsetRetrieveDto extends QuerySortRuleDto<QueryRule, SortRule, Long> implements Serializable {
     private static final long serialVersionUID = 329752756986005664L;
-
-    @NotNull(message = "主键" + "{javax.validation.constraints.NotNull.message}")
-    @ApiModelProperty(value = "主键", example = "1")
-    private Long id;
 
     @NotNull(message = "国际化语言ID" + "{javax.validation.constraints.NotNull.message}")
     @ApiModelProperty(value = "国际化语言ID", example = "0")

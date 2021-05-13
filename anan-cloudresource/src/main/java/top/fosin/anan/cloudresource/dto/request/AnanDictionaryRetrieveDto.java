@@ -25,11 +25,8 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @ApiModel(value = "系统通用字典表查询DTO", description = "表(anan_dictionary)的对应的查询DTO")
-public class AnanDictionaryRetrieveDto extends QuerySortRuleDto<QueryRule,SortRule> implements Serializable {
+public class AnanDictionaryRetrieveDto extends QuerySortRuleDto<QueryRule,SortRule,Long> implements Serializable {
     private static final long serialVersionUID = 480249603699448721L;
-
-    @ApiModelProperty(value = "字典代码")
-    private Long id;
 
     @ApiModelProperty(value = "字典名称")
     @Pattern(regexp = RegexUtil.SPECIAL, message = "名称不能包含特殊字符")

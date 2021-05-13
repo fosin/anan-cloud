@@ -28,6 +28,12 @@ public class UserFeignFallbackServiceImpl implements UserFeignService {
     }
 
     @Override
+    public ResponseEntity<List<AnanUserEntity>> findAllByIds(List<Long> ids) {
+        log.error("feign 远程获取用户信息失败:{}", ids);
+        return null;
+    }
+
+    @Override
     public ResponseEntity<AnanUserEntity> getByUsercode(@PathVariable("usercode") String usercode) {
         log.error("feign 远程获取用户信息失败:{}", usercode);
         return null;

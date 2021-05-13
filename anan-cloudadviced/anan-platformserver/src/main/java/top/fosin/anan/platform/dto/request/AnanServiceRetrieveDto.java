@@ -22,12 +22,8 @@ import java.io.Serializable;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @ApiModel(value = "系统服务表查询DTO", description = "表(anan_service)的对应的查询DTO")
-public class AnanServiceRetrieveDto extends QuerySortRuleDto<QueryRule,SortRule> implements Serializable {
+public class AnanServiceRetrieveDto extends QuerySortRuleDto<QueryRule, SortRule, Integer> implements Serializable {
     private static final long serialVersionUID = -95213722807513308L;
-
-    @NotNull(message = "主键" + "{javax.validation.constraints.NotNull.message}")
-    @ApiModelProperty(value = "主键", example = "0")
-    private Integer id;
 
     @NotBlank(message = "服务标识" + "{javax.validation.constraints.NotBlank.message}")
     @ApiModelProperty(value = "服务标识", example = "String")

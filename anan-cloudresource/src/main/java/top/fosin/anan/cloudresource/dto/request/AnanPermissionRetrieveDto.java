@@ -23,11 +23,8 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @ApiModel(value = "包含菜单、按钮两种权限查询DTO", description = "表(anan_permission)的对应的查询DTO")
-public class AnanPermissionRetrieveDto extends QuerySortRuleDto<QueryRule,SortRule> implements Serializable {
+public class AnanPermissionRetrieveDto extends QuerySortRuleDto<QueryRule,SortRule,Long> implements Serializable {
     private static final long serialVersionUID = -61984917164013694L;
-
-    @ApiModelProperty(value = "权限ID, 主键")
-    private Long id;
 
     @ApiModelProperty(value = "权限编码，不能重复 不能为空")
     private String code;

@@ -25,12 +25,9 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @ApiModel(value = "用于存放各种分类分组的个性化参数查询DTO", description = "表(anan_parameter)的对应的查询DTO")
-public class AnanParameterRetrieveDto extends QuerySortRuleDto<QueryRule, SortRule> implements Serializable {
+public class AnanParameterRetrieveDto extends QuerySortRuleDto<QueryRule,SortRule,Long> implements Serializable {
     private static final long serialVersionUID = -95372770044687456L;
-
-    @ApiModelProperty(value = "参数ID, 主键")
-    private Long id;
-
+    
     @ApiModelProperty(value = "参数键")
     @NotBlank(message = "参数键{javax.validation.constraints.NotBlank.message}")
     private String name;

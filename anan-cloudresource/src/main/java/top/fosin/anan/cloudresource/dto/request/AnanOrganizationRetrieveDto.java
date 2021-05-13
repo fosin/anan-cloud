@@ -25,11 +25,8 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @ApiModel(value = "系统机构表查询DTO", description = "表(anan_organization)的对应的查询DTO")
-public class AnanOrganizationRetrieveDto extends QuerySortRuleDto<QueryRule,SortRule> implements Serializable {
+public class AnanOrganizationRetrieveDto extends QuerySortRuleDto<QueryRule,SortRule,Long> implements Serializable {
     private static final long serialVersionUID = 755956109753090820L;
-
-    @ApiModelProperty(value = "机构ID, 主键")
-    private Long id;
 
     @ApiModelProperty(value = "父机构编号，取值于id，表示当前数据所属的父类机构")
     private Long pid;

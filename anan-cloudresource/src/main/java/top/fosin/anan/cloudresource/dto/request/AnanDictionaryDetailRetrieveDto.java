@@ -25,12 +25,9 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @ApiModel(value = "系统通用字典明细表查询DTO", description = "表(anan_dictionary_detail)的对应的查询DTO")
-public class AnanDictionaryDetailRetrieveDto extends QuerySortRuleDto<QueryRule, SortRule> implements Serializable {
+public class AnanDictionaryDetailRetrieveDto extends QuerySortRuleDto<QueryRule,SortRule,Long> implements Serializable {
     private static final long serialVersionUID = 507206776709737910L;
-
-    @ApiModelProperty(value = "字典明细ID, 主键")
-    private Long id;
-
+    
     @ApiModelProperty(value = "字典明细键，不能重复，字典内明细项唯一代码")
     private Long name;
 

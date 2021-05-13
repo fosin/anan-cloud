@@ -20,11 +20,8 @@ import java.io.Serializable;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @ApiModel(value = "系统支付明细表查询DTO", description = "表(anan_pay_detail)的对应的查询DTO")
-public class AnanPayDetailRetrieveDto extends QuerySortRuleDto<QueryRule,SortRule> implements Serializable {
+public class AnanPayDetailRetrieveDto extends QuerySortRuleDto<QueryRule,SortRule,Long> implements Serializable {
     private static final long serialVersionUID = 318623987516262809L;
-
-    @ApiModelProperty(value = "付款明细ID, 主键")
-    private Long id;
 
     @ApiModelProperty(value = "支付ID")
     private Long payId;

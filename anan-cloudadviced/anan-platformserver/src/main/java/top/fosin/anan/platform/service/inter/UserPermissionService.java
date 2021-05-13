@@ -15,7 +15,9 @@ import java.util.List;
  *
  * @author fosin
  */
-public interface UserPermissionService extends ICrudBatchJpaService<AnanUserPermissionEntity, Long, Long, AnanUserPermissionCreateDto, AnanUserPermissionRetrieveDto, AnanUserPermissionUpdateDto> {
+public interface UserPermissionService extends
+        ICrudBatchJpaService<AnanUserPermissionEntity, Long, Long, AnanUserPermissionCreateDto,
+                AnanUserPermissionRetrieveDto, AnanUserPermissionUpdateDto> {
     List<AnanUserPermissionEntity> findByUserIdAndOrganizId(Long userId, Long organizId);
 
     List<AnanUserPermissionEntity> findByUserId(Long userId);

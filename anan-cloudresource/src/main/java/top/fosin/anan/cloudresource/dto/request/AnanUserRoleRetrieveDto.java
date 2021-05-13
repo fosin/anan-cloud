@@ -23,11 +23,8 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @ApiModel(value = "系统用户角色表查询DTO", description = "表(anan_user_role)的对应的查询DTO")
-public class AnanUserRoleRetrieveDto extends QuerySortRuleDto<QueryRule,SortRule> implements Serializable {
+public class AnanUserRoleRetrieveDto extends QuerySortRuleDto<QueryRule,SortRule,Long> implements Serializable {
     private static final long serialVersionUID = 818450290607468187L;
-
-    @ApiModelProperty(value = "用户角色ID, 主键")
-    private Long id;
 
     @ApiModelProperty(value = "机构ID")
     private Long organizId;
