@@ -12,7 +12,7 @@ import top.fosin.anan.platform.service.inter.DictionaryService;
 import top.fosin.anan.platformapi.entity.AnanDictionaryEntity;
 
 /**
- * Description 字典控制器
+ *  字典控制器
  *
  * @author fosin
  */

@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.Objects;
 
 /**
- * Description: 数据库参数工具类
+ *  数据库参数工具类
  *
  * @author fosin
  * @date 2018.8.1

@@ -12,7 +12,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * Description:
+ * 
  *
  * @author fosin
  * @date 2018.12.5

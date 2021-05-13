@@ -11,7 +11,7 @@ import top.fosin.anan.platform.entity.OauthClientDetailsEntity;
 import top.fosin.anan.platform.service.inter.OauthClientService;
 
 /**
- * Description 授权客户端控制器
+ *  授权客户端控制器
  *
  * @author fosin
  */

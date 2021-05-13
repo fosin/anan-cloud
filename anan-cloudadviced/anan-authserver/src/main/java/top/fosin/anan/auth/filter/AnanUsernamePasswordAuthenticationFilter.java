@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Description
+ * 
  * @author fosin
  */
 public class AnanUsernamePasswordAuthenticationFilter extends UsernamePasswordAuthenticationFilter {

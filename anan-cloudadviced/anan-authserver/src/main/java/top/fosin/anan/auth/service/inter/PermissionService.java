@@ -15,7 +15,7 @@ import java.util.List;
  *
  * @author fosin
  */
-public interface PermissionService extends IRetrieveJpaService<AnanPermissionEntity, Long, AnanPermissionEntity> {
+public interface PermissionService extends IRetrieveJpaService<AnanPermissionEntity, Long, AnanPermissionRetrieveDto> {
     List<AnanPermissionRetrieveDto> findByServiceCode(String serviceCode);
 
     List<AnanUserAllPermissionsEntity> findByUserId(Long userId);

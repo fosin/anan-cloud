@@ -16,7 +16,7 @@ import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 import java.util.List;
 
 /**
- * Description
+ * 
  * WebMvcConfigurationSupport、@EnableWebMvc、WebMvcConfigurer、WebMvcConfigurationAdapter区别：
  * 1、implements WebMvcConfigurer ： 不会覆盖@EnableAutoConfiguration关于WebMvcAutoConfiguration的配置
  * 2、implements WebMvcConfigurer + @EnableWebMvc ： 会覆盖@EnableAutoConfiguration关于WebMvcAutoConfiguration的配置

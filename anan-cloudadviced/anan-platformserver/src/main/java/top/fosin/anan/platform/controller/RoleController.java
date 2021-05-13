@@ -24,7 +24,7 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * Description 角色控制器
+ *  角色控制器
  *
  * @author fosin
  */

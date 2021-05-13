@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import java.util.List;
 
 /**
- * Description: 开发模式下优先找同IP的服务，其次找同网段的服务，优先使用该负载模式
+ *  开发模式下优先找同IP的服务，其次找同网段的服务，优先使用该负载模式
  *
  * @author fosin
  * @date 2018.9.25

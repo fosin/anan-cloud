@@ -20,7 +20,7 @@ import top.fosin.anan.platformapi.entity.AnanDictionaryDetailEntity;
 import java.util.List;
 
 /**
- * Description 字典明细控制器
+ * 字典明细控制器
  *
  * @author fosin
  */

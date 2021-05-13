@@ -11,7 +11,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**
- * DescriptionThe type Custom authentication provider.
+ * The type Custom authentication provider.
  *
  * @author fosin
  */

@@ -10,7 +10,7 @@ import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 
 /**
- * Description:
+ * 
  *
  * @author fosin
  * @date 2018.12.5

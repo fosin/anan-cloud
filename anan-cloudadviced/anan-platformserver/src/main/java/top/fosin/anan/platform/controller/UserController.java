@@ -26,7 +26,7 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * Description 用户控制器
+ *  用户控制器
  *
  * @author fosin
  */

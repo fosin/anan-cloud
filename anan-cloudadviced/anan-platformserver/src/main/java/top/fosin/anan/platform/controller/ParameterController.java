@@ -17,7 +17,7 @@ import top.fosin.anan.platform.service.inter.ParameterService;
 import top.fosin.anan.platformapi.entity.AnanParameterEntity;
 
 /**
- * Description 参数控制器
+ *  参数控制器
  *
  * @author fosin
  */

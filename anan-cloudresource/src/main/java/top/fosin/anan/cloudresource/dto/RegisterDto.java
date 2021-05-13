@@ -8,7 +8,7 @@ import lombok.Data;
 import java.io.Serializable;
 
 /**
- * Description:
+ * 
  *
  * @author fosin
  * @date 2018.12.5
