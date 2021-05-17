@@ -7,16 +7,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import top.fosin.anan.cloudresource.constant.SystemConstant;
-import top.fosin.anan.cloudresource.dto.request.AnanDictionaryCreateDto;
-import top.fosin.anan.cloudresource.dto.request.AnanDictionaryRetrieveDto;
-import top.fosin.anan.cloudresource.dto.request.AnanDictionaryUpdateDto;
+import top.fosin.anan.platform.dto.request.AnanDictionaryCreateDto;
+import top.fosin.anan.platform.dto.request.AnanDictionaryUpdateDto;
+import top.fosin.anan.cloudresource.dto.res.AnanDictionaryRespDto;
 import top.fosin.anan.core.exception.AnanServiceException;
-import top.fosin.anan.jpa.repository.IJpaRepository;
+import top.fosin.anan.core.util.BeanUtil;
+import top.fosin.anan.platform.entity.AnanDictionaryEntity;
 import top.fosin.anan.platform.repository.DictionaryDetailRepository;
 import top.fosin.anan.platform.repository.DictionaryRepository;
 import top.fosin.anan.platform.service.inter.DictionaryService;
-import top.fosin.anan.platformapi.entity.AnanDictionaryEntity;
-import top.fosin.anan.platformapi.service.AnanUserDetailService;
+import top.fosin.anan.cloudresource.service.AnanUserDetailService;
 
 /**
  * 字典表服务
@@ -38,12 +38,12 @@ public class DictionaryServiceImpl implements DictionaryService {
     }
 
     @Override
-    public AnanDictionaryEntity create(AnanDictionaryCreateDto entity) {
+    public AnanDictionaryRespDto create(AnanDictionaryCreateDto entity) {
         Assert.notNull(entity, "传入的创建数据实体对象不能为空!");
         AnanDictionaryEntity createEntity = new AnanDictionaryEntity();
         BeanUtils.copyProperties(entity, createEntity);
         hasModifiedPrivileges(createEntity.getType());
-        return dictionaryRepository.save(createEntity);
+        return BeanUtil.copyProperties(dictionaryRepository.save(createEntity), AnanDictionaryRespDto.class);
     }
 
     private void hasModifiedPrivileges(int type) {
@@ -54,7 +54,7 @@ public class DictionaryServiceImpl implements DictionaryService {
     }
 
     @Override
-    public AnanDictionaryEntity update(AnanDictionaryUpdateDto entity) {
+    public void update(AnanDictionaryUpdateDto entity) {
         Assert.notNull(entity, "无效的更新数据");
         Long id = entity.getId();
         Assert.notNull(id, "无效的字典代码id");
@@ -62,39 +62,33 @@ public class DictionaryServiceImpl implements DictionaryService {
         Assert.notNull(updateEntity, "根据传入的字典code" + id + "在数据库中未能找到对于数据!");
         BeanUtils.copyProperties(entity, updateEntity);
         hasModifiedPrivileges(updateEntity.getType());
-        return dictionaryRepository.save(updateEntity);
+        dictionaryRepository.save(updateEntity);
     }
 
     @Override
-    @Transactional(rollbackFor = AnanServiceException.class)
-    public AnanDictionaryEntity deleteById(Long code) {
-        if (code == null) {
+    @Transactional(rollbackFor = Exception.class)
+    public void deleteById(Long id) {
+        if (id == null) {
             throw new AnanServiceException("传入的code无效!");
         }
-        AnanDictionaryEntity entity = dictionaryRepository.findById(code).orElse(null);
-        if (entity != null) {
+        dictionaryRepository.findById(id).ifPresent(entity -> {
             hasModifiedPrivileges(entity.getType());
             dictionaryDetailRepository.deleteAllByDictionaryId(entity.getId());
-            dictionaryRepository.deleteById(code);
-        }
-        return null;
+            dictionaryRepository.deleteById(id);
+        });
     }
 
     @Override
-    @Transactional(rollbackFor = AnanServiceException.class)
-    public AnanDictionaryEntity deleteByEntity(AnanDictionaryRetrieveDto entity) {
-        Assert.notNull(entity, "传入了空的对象!");
-        hasModifiedPrivileges(entity.getType());
-        dictionaryDetailRepository.deleteAllByDictionaryId(entity.getId());
-        AnanDictionaryEntity deleteEntity = dictionaryRepository.findById(entity.getId()).orElse(null);
-        if (deleteEntity != null) {
-            dictionaryRepository.delete(deleteEntity);
-        }
-        return deleteEntity;
+    @Transactional(rollbackFor = Exception.class)
+    public void deleteByDto(AnanDictionaryUpdateDto dto) {
+        Assert.isTrue(dto != null && dto.getId() > 0, "传入了空的对象!");
+        hasModifiedPrivileges(dto.getType());
+        dictionaryDetailRepository.deleteAllByDictionaryId(dto.getId());
+        dictionaryRepository.findById(dto.getId()).ifPresent(dictionaryRepository::delete);
     }
 
     @Override
-    public IJpaRepository<AnanDictionaryEntity, Long> getRepository() {
+    public DictionaryRepository getRepository() {
         return dictionaryRepository;
     }
 }

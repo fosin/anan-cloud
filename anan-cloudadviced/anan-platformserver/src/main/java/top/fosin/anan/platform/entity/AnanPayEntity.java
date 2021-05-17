@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.DynamicUpdate;
-import top.fosin.anan.jpa.entity.AbstractIdJpaEntity;
+import top.fosin.anan.jpa.entity.IdEntity;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -27,7 +27,7 @@ import java.util.Date;
 @DynamicUpdate
 @Table(name = "anan_pay")
 @ApiModel(value = "系统支付表实体类", description = "表(anan_pay)的对应的实体类")
-public class AnanPayEntity extends AbstractIdJpaEntity<Long> implements Serializable {
+public class AnanPayEntity extends IdEntity<Long> implements Serializable {
     private static final long serialVersionUID = 197340387949290400L;
 
     @Basic

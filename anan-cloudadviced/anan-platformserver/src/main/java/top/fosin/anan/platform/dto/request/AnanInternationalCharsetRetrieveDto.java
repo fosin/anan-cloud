@@ -5,10 +5,9 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import top.fosin.anan.model.dto.QuerySortRuleDto;
-import top.fosin.anan.model.module.SortRule;
 import top.fosin.anan.model.module.QueryRule;
+import top.fosin.anan.model.module.SortRule;
 
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
@@ -21,21 +20,18 @@ import java.io.Serializable;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @ApiModel(value = "国际化语言字符集查询DTO", description = "表(anan_international_charset)的对应的查询DTO")
-public class AnanInternationalCharsetRetrieveDto extends QuerySortRuleDto<QueryRule, SortRule, Long> implements Serializable {
+public class AnanInternationalCharsetRetrieveDto extends QuerySortRuleDto<QueryRule, SortRule> implements Serializable {
     private static final long serialVersionUID = 329752756986005664L;
 
-    @NotNull(message = "国际化语言ID" + "{javax.validation.constraints.NotNull.message}")
     @ApiModelProperty(value = "国际化语言ID", example = "0")
-    private Integer internationalId;
+    private Long internationalId;
 
-    @NotNull(message = "服务ID" + "{javax.validation.constraints.NotNull.message}")
     @ApiModelProperty(value = "服务ID", example = "0")
-    private Integer serviceId;
+    private Long serviceId;
 
     @ApiModelProperty(value = "自定义字符集", example = "String")
     private String charset;
 
-    @NotNull(message = "状态：0=启用，1=禁用" + "{javax.validation.constraints.NotNull.message}")
     @ApiModelProperty(value = "状态：0=启用，1=禁用", example = "0")
     private Integer status;
 

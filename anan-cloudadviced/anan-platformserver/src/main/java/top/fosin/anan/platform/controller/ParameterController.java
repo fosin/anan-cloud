@@ -7,24 +7,23 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
-import top.fosin.anan.cloudresource.dto.request.AnanParameterCreateDto;
-import top.fosin.anan.cloudresource.dto.request.AnanParameterRetrieveDto;
-import top.fosin.anan.cloudresource.dto.request.AnanParameterUpdateDto;
-import top.fosin.anan.model.dto.TreeDto;
+import top.fosin.anan.cloudresource.dto.req.AnanParameterCreateDto;
+import top.fosin.anan.cloudresource.dto.req.AnanParameterRetrieveDto;
+import top.fosin.anan.cloudresource.dto.req.AnanParameterUpdateDto;
+import top.fosin.anan.cloudresource.dto.res.AnanParameterRespDto;
 import top.fosin.anan.model.controller.ISimpleController;
-import top.fosin.anan.model.service.ISimpleService;
+import top.fosin.anan.model.dto.TreeDto;
 import top.fosin.anan.platform.service.inter.ParameterService;
-import top.fosin.anan.platformapi.entity.AnanParameterEntity;
 
 /**
- *  参数控制器
+ * 参数控制器
  *
  * @author fosin
  */
 @RestController
 @RequestMapping(UrlPrefixConstant.PARAMETER)
 @Api(value = UrlPrefixConstant.PARAMETER, tags = "通用参数管理相关操作(参数获取、自动创建)")
-public class ParameterController implements ISimpleController<AnanParameterEntity, Long, AnanParameterCreateDto, AnanParameterRetrieveDto, AnanParameterUpdateDto> {
+public class ParameterController implements ISimpleController<AnanParameterRespDto, Long, AnanParameterCreateDto, AnanParameterRetrieveDto, AnanParameterUpdateDto> {
     private final ParameterService parameterService;
 
     public ParameterController(ParameterService parameterService) {
@@ -41,9 +40,9 @@ public class ParameterController implements ISimpleController<AnanParameterEntit
             @ApiImplicitParam(name = "name", value = "字典名称,取值于AnanParameterEntity.name",
                     required = true, dataTypeClass = String.class, paramType = "query")
     })
-    public ResponseEntity<AnanParameterEntity> getNearestParameter(@RequestParam("type") Integer type,
-                                                                   @RequestParam("scope") String scope,
-                                                                   @RequestParam("name") String name) {
+    public ResponseEntity<AnanParameterRespDto> getNearestParameter(@RequestParam("type") Integer type,
+                                                                    @RequestParam("scope") String scope,
+                                                                    @RequestParam("name") String name) {
         return ResponseEntity.ok(parameterService.getNearestParameter(type, scope, name));
     }
 
@@ -57,9 +56,9 @@ public class ParameterController implements ISimpleController<AnanParameterEntit
             @ApiImplicitParam(name = "name", value = "字典名称,取值于AnanParameterEntity.name",
                     required = true, dataTypeClass = String.class, paramType = "query")
     })
-    public ResponseEntity<AnanParameterEntity> getParameter(@RequestParam("type") Integer type,
-                                                            @RequestParam("scope") String scope,
-                                                            @RequestParam("name") String name) {
+    public ResponseEntity<AnanParameterRespDto> getParameter(@RequestParam("type") Integer type,
+                                                             @RequestParam("scope") String scope,
+                                                             @RequestParam("name") String name) {
         return ResponseEntity.ok(parameterService.getParameter(type, scope, name));
     }
 

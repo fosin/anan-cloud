@@ -14,7 +14,7 @@ import org.springframework.stereotype.Repository;
  * @date 2020-12-04 11:05:40
  */
 @Repository
-public interface AnanInternationalRepository extends IJpaRepository<AnanInternationalEntity, Integer> {
+public interface AnanInternationalRepository extends IJpaRepository<AnanInternationalEntity, Long> {
     List<AnanInternationalEntity> findAllByStatus(Integer status);
 
     AnanInternationalEntity findByCode(String code);

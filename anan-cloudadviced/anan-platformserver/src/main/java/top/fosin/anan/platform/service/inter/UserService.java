@@ -1,10 +1,12 @@
 package top.fosin.anan.platform.service.inter;
 
-import top.fosin.anan.cloudresource.dto.request.AnanUserCreateDto;
-import top.fosin.anan.cloudresource.dto.request.AnanUserRetrieveDto;
-import top.fosin.anan.cloudresource.dto.request.AnanUserUpdateDto;
+import top.fosin.anan.cloudresource.dto.req.AnanUserRetrieveDto;
+import top.fosin.anan.cloudresource.dto.res.AnanUserRespDto;
 import top.fosin.anan.jpa.service.ISimpleJpaService;
-import top.fosin.anan.platformapi.entity.AnanUserEntity;
+import top.fosin.anan.platform.dto.request.AnanUserCreateDto;
+import top.fosin.anan.platform.dto.request.AnanUserUpdateDto;
+import top.fosin.anan.platform.dto.res.AnanUserRespPassDto;
+import top.fosin.anan.platform.entity.AnanUserEntity;
 
 import java.util.List;
 
@@ -14,17 +16,19 @@ import java.util.List;
  *
  * @author fosin
  */
-public interface UserService extends ISimpleJpaService<AnanUserEntity, Long,
+public interface UserService extends ISimpleJpaService<AnanUserEntity,
+        AnanUserRespDto,
+        Long,
         AnanUserCreateDto, AnanUserRetrieveDto, AnanUserUpdateDto> {
-    AnanUserEntity findByUsercode(String usercode);
+    AnanUserRespDto findByUsercode(String usercode);
 
-    AnanUserEntity changePassword(Long id, String password, String confirmPassword1, String confirmPassword2);
+    AnanUserRespDto changePassword(Long id, String password, String confirmPassword1, String confirmPassword2);
 
-    AnanUserEntity resetPassword(Long id);
+    AnanUserRespPassDto resetPassword(Long id);
 
-    List<AnanUserEntity> findOtherUsersByRoleId(Long roleId);
+    List<AnanUserRespDto> findOtherUsersByRoleId(Long roleId);
 
-    List<AnanUserEntity> findRoleUsersByRoleId(Long roleId);
+    List<AnanUserRespDto> findRoleUsersByRoleId(Long roleId);
 
-    List<AnanUserEntity> findAllByOrganizId(Long organizId, Integer status);
+    List<AnanUserRespDto> findAllByOrganizId(Long organizId, Integer status);
 }

@@ -890,19 +890,19 @@ DROP TABLE IF EXISTS `oauth_client_details`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `oauth_client_details` (
-    `client_id` varchar(48) COLLATE utf8mb4_unicode_ci NOT NULL,
-    `resource_ids` varchar(256) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-    `client_secret` varchar(256) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-    `scope` varchar(256) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-    `authorized_grant_types` varchar(256) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-    `web_server_redirect_uri` varchar(256) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-    `authorities` varchar(256) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-    `access_token_validity` int(11) DEFAULT NULL,
-    `refresh_token_validity` int(11) DEFAULT NULL,
-    `additional_information` varchar(4096) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-    `autoapprove` varchar(256) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+    `client_id` varchar(48) COLLATE utf8mb4_unicode_ci NOT NULL comment '客户端ID',
+    `resource_ids` varchar(256) COLLATE utf8mb4_unicode_ci DEFAULT NULL comment '权限资源ID清单',
+    `client_secret` varchar(256) COLLATE utf8mb4_unicode_ci DEFAULT NULL comment '客户端密钥',
+    `scope` varchar(256) COLLATE utf8mb4_unicode_ci DEFAULT NULL comment '权限作用域',
+    `authorized_grant_types` varchar(256) COLLATE utf8mb4_unicode_ci DEFAULT NULL comment '授权类型清单',
+    `web_server_redirect_uri` varchar(256) COLLATE utf8mb4_unicode_ci DEFAULT NULL null comment '跳转地址',
+    `authorities` varchar(256) COLLATE utf8mb4_unicode_ci DEFAULT NULL comment '授权ID清单',
+    `access_token_validity` int(11) DEFAULT NULL comment '访问Token有效期',
+    `refresh_token_validity` int(11) DEFAULT NULL comment '刷新Token有效期',
+    `additional_information` varchar(4096) COLLATE utf8mb4_unicode_ci DEFAULT NULL comment '附加信息',
+    `autoapprove` varchar(256) COLLATE utf8mb4_unicode_ci DEFAULT NULL comment '自动授权',
     PRIMARY KEY (`client_id`)
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci comment 'OAuth2客户端接入配置';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --

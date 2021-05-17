@@ -1,25 +1,25 @@
 package top.fosin.anan.platform.service;
 
-import top.fosin.anan.platform.dto.request.AnanOrganizationAuthCreateDto;
-import top.fosin.anan.platform.dto.request.AnanPayOrderCreateDto;
-import top.fosin.anan.platform.entity.AnanOrganizationAuthEntity;
-import top.fosin.anan.platform.entity.AnanPayOrderEntity;
-import top.fosin.anan.platform.entity.AnanVersionEntity;
-import top.fosin.anan.platform.repository.AnanOrganizationAuthRepository;
-import top.fosin.anan.platform.service.inter.*;
-import top.fosin.anan.platformapi.entity.AnanOrganizationEntity;
-import top.fosin.anan.platformapi.entity.AnanUserEntity;
-import top.fosin.anan.cloudresource.dto.RegisterDto;
-import top.fosin.anan.cloudresource.dto.request.AnanOrganizationCreateDto;
-import top.fosin.anan.cloudresource.dto.request.AnanOrganizationUpdateDto;
-import top.fosin.anan.cloudresource.dto.request.AnanUserCreateDto;
-import top.fosin.anan.cloudresource.dto.request.AnanUserRegisterDto;
-import top.fosin.anan.core.util.DateTimeUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import top.fosin.anan.cloudresource.dto.req.RegisterDto;
+import top.fosin.anan.platform.dto.request.AnanOrganizationCreateDto;
+import top.fosin.anan.platform.dto.request.AnanOrganizationUpdateDto;
+import top.fosin.anan.platform.dto.request.AnanUserCreateDto;
+import top.fosin.anan.cloudresource.dto.req.AnanUserRegisterDto;
+import top.fosin.anan.cloudresource.dto.res.*;
+import top.fosin.anan.core.util.BeanUtil;
+import top.fosin.anan.core.util.DateTimeUtil;
+import top.fosin.anan.platform.dto.request.AnanOrganizationAuthCreateDto;
+import top.fosin.anan.platform.dto.request.AnanPayOrderCreateDto;
+import top.fosin.anan.platform.dto.res.AnanOrganizationAuthRespDto;
+import top.fosin.anan.platform.dto.res.AnanPayOrderRespDto;
+import top.fosin.anan.platform.dto.res.AnanVersionRespDto;
+import top.fosin.anan.platform.repository.AnanOrganizationAuthRepository;
+import top.fosin.anan.platform.service.inter.*;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -64,13 +64,15 @@ public class AnanOrganizationAuthServiceImpl implements AnanOrganizationAuthServ
     }
 
     @Override
-    public List<AnanOrganizationAuthEntity> findAllByVersionId(Long versionId) {
-        return getRepository().findAllByVersionId(versionId);
+    public List<AnanOrganizationAuthRespDto> findAllByVersionId(Long versionId) {
+        return BeanUtil.copyCollectionProperties(getRepository().findAllByVersionId(versionId),
+                AnanOrganizationAuthRespDto.class);
     }
 
     @Override
-    public List<AnanOrganizationAuthEntity> findAllByOrganizId(Long organizId) {
-        return getRepository().findAllByOrganizId(organizId);
+    public List<AnanOrganizationAuthRespDto> findAllByOrganizId(Long organizId) {
+        return BeanUtil.copyCollectionProperties(getRepository().findAllByOrganizId(organizId),
+                AnanOrganizationAuthRespDto.class);
     }
 
     @Override
@@ -84,7 +86,7 @@ public class AnanOrganizationAuthServiceImpl implements AnanOrganizationAuthServ
         organization.setPid(0L);
         organization.setTopId(0L);
         organization.setStatus(0);
-        AnanOrganizationEntity organizationEntity = organizationService.create(organization);
+        AnanOrganizationRespDto organizationEntity = organizationService.create(organization);
         AnanOrganizationUpdateDto updateDto = new AnanOrganizationUpdateDto();
         BeanUtils.copyProperties(organizationEntity, updateDto);
         updateDto.setTopId(organizationEntity.getId());
@@ -102,38 +104,38 @@ public class AnanOrganizationAuthServiceImpl implements AnanOrganizationAuthServ
             e.printStackTrace();
         }
 //        Assert.isTrue(createDTO.getPassword().equals(createDTO.getConfirmPassword()), "密码和确认密码必须一致!");
-        AnanUserEntity user = userService.create(createDTO);
+        AnanUserRespDto user = userService.create(createDTO);
 
 
         Long versionId = registerDto.getVersionId();
-        AnanVersionEntity versionEntity = versionService.findById(versionId);
+        AnanVersionRespDto respDto = versionService.findOneById(versionId);
 
         //创建订单
         AnanPayOrderCreateDto orderEntity = new AnanPayOrderCreateDto();
-        orderEntity.setMoney(versionEntity.getPrice());
+        orderEntity.setMoney(respDto.getPrice());
         orderEntity.setOrderTime(now);
         orderEntity.setVersionId(versionId);
         orderEntity.setOrganizId(organizationEntity.getId());
         orderEntity.setUserId(user.getId());
-        if (versionEntity.getPrice() == 0) {
+        if (respDto.getPrice() == 0) {
             orderEntity.setStatus(1);
             orderEntity.setPayTime(now);
         } else {
             orderEntity.setStatus(0);
         }
-        AnanPayOrderEntity orderSaveEntity = payOrderService.create(orderEntity);
+        AnanPayOrderRespDto payOrderRespDto = payOrderService.create(orderEntity);
 
         //创建机构认证信息
         AnanOrganizationAuthCreateDto auth = new AnanOrganizationAuthCreateDto();
         auth.setVersionId(versionId);
-        auth.setOrderId(orderSaveEntity.getId());
-        auth.setMaxOrganizs(versionEntity.getMaxOrganizs());
-        auth.setMaxUsers(versionEntity.getMaxUsers());
+        auth.setOrderId(payOrderRespDto.getId());
+        auth.setMaxOrganizs(respDto.getMaxOrganizs());
+        auth.setMaxUsers(respDto.getMaxUsers());
         auth.setOrganizId(organizationEntity.getId());
-        auth.setProtectDays(versionEntity.getProtectDays());
-        auth.setTryout(versionEntity.getTryout());
-        auth.setTryoutDays(versionEntity.getTryoutDays());
-        auth.setValidity(versionEntity.getValidity());
+        auth.setProtectDays(respDto.getProtectDays());
+        auth.setTryout(respDto.getTryout());
+        auth.setTryoutDays(respDto.getTryoutDays());
+        auth.setValidity(respDto.getValidity());
         auth.setAuthorizationCode(getAuthCode(auth));
         this.create(auth);
 

@@ -12,23 +12,22 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import top.fosin.anan.cloudresource.constant.RedisConstant;
-import top.fosin.anan.cloudresource.dto.request.AnanParameterCreateDto;
-import top.fosin.anan.cloudresource.dto.request.AnanParameterRetrieveDto;
-import top.fosin.anan.cloudresource.dto.request.AnanParameterUpdateDto;
+import top.fosin.anan.cloudresource.dto.req.AnanParameterCreateDto;
+import top.fosin.anan.cloudresource.dto.req.AnanParameterUpdateDto;
+import top.fosin.anan.cloudresource.dto.res.AnanParameterRespDto;
 import top.fosin.anan.core.exception.AnanServiceException;
-import top.fosin.anan.jpa.repository.IJpaRepository;
+import top.fosin.anan.core.util.BeanUtil;
+import top.fosin.anan.platform.entity.AnanOrganizationEntity;
+import top.fosin.anan.platform.entity.AnanParameterEntity;
 import top.fosin.anan.platform.repository.OrganizationRepository;
 import top.fosin.anan.platform.repository.ParameterRepository;
 import top.fosin.anan.platform.service.inter.ParameterService;
-import top.fosin.anan.platformapi.entity.AnanOrganizationEntity;
-import top.fosin.anan.platformapi.entity.AnanParameterEntity;
-import top.fosin.anan.platformapi.parameter.OrganStrategy;
-import top.fosin.anan.platformapi.service.AnanUserDetailService;
+import top.fosin.anan.cloudresource.parameter.OrganStrategy;
+import top.fosin.anan.cloudresource.service.AnanUserDetailService;
 import top.fosin.anan.redis.cache.AnanCacheManger;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * 字典表服务
@@ -54,34 +53,36 @@ public class ParameterServiceImpl implements ParameterService {
 
     @Override
     @CachePut(value = RedisConstant.ANAN_PARAMETER, key = "#root.target.getCacheKey(#result)")
-    public AnanParameterEntity create(AnanParameterCreateDto entity) {
+    public AnanParameterRespDto create(AnanParameterCreateDto entity) {
         Assert.notNull(entity, "传入的创建数据实体对象不能为空!");
         AnanParameterEntity createEntiy = new AnanParameterEntity();
         BeanUtils.copyProperties(entity, createEntiy);
-        return getRepository().save(createEntiy);
+        return BeanUtil.copyProperties(getRepository().save(createEntiy), AnanParameterRespDto.class);
     }
 
     @Override
-    public AnanParameterEntity update(AnanParameterUpdateDto entity) {
+    public void update(AnanParameterUpdateDto entity) {
         Assert.notNull(entity, "传入了空对象!");
         Long id = entity.getId();
         Assert.notNull(id, "ID不能为空!");
-        AnanParameterEntity cEntity = parameterRepository.findById(id).orElse(null);
-        BeanUtils.copyProperties(entity, Objects.requireNonNull(cEntity, "通过ID：" + id + "未能找到对应的数据!"));
-        AnanParameterEntity save = parameterRepository.save(cEntity);
-        String cCacheKey = getCacheKey(cEntity);
-        String cacheKey = getCacheKey(entity.getType(), entity.getScope(), entity.getName());
+        AnanParameterEntity cEntity = parameterRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("通过ID：" + id + "未能找到对应的数据!"));
+        String oldCacheKey = getCacheKey(cEntity);
+        String newCacheKey = getCacheKey(entity.getType(), entity.getScope(), entity.getName());
+
+        BeanUtils.copyProperties(entity, cEntity,
+                BeanUtil.getNullProperties(entity));
+        parameterRepository.save(cEntity);
         //如果修改了type、scope、name则需要删除以前的缓存并设置新缓存
-        if (!cCacheKey.equals(cacheKey)) {
+        if (!oldCacheKey.equals(newCacheKey)) {
             //新key设置旧值，需要发布以后才刷新缓存换成本次更新的新值
-            ananCacheManger.put(RedisConstant.ANAN_PARAMETER, cacheKey, cEntity);
-            ananCacheManger.evict(RedisConstant.ANAN_PARAMETER, cCacheKey);
+            ananCacheManger.put(RedisConstant.ANAN_PARAMETER, newCacheKey, ananCacheManger.getCache(oldCacheKey));
+            ananCacheManger.evict(RedisConstant.ANAN_PARAMETER, oldCacheKey);
         }
-        return save;
     }
 
     @Override
-    public AnanParameterEntity deleteById(Long id) {
+    public void deleteById(Long id) {
         AnanParameterEntity entity = parameterRepository.findById(id).orElse(null);
         Assert.notNull(entity, "通过ID没有能找到参数数据,删除被取消!");
         String cacheKey = getCacheKey(entity);
@@ -93,18 +94,13 @@ public class ParameterServiceImpl implements ParameterService {
             throw new AnanServiceException(e);
         }
         ananCacheManger.evict(RedisConstant.ANAN_PARAMETER, cacheKey);
-        return null;
     }
 
     @Override
     @CacheEvict(value = RedisConstant.ANAN_PARAMETER, key = "#root.target.getCacheKey(#entity)")
-    public AnanParameterEntity deleteByEntity(AnanParameterRetrieveDto entity) {
+    public void deleteByDto(AnanParameterUpdateDto entity) {
         Assert.notNull(entity, "传入了空对象!");
-        AnanParameterEntity deleteEntity = parameterRepository.findById(entity.getId()).orElse(null);
-        if (deleteEntity != null) {
-            parameterRepository.delete(deleteEntity);
-        }
-        return deleteEntity;
+        parameterRepository.findById(entity.getId()).ifPresent(parameterRepository::delete);
     }
 
     public String getCacheKey(AnanParameterEntity entity) {
@@ -120,13 +116,14 @@ public class ParameterServiceImpl implements ParameterService {
 
     @Override
     @Cacheable(value = RedisConstant.ANAN_PARAMETER, key = "#root.target.getCacheKey(#type,#scope,#name)")
-    public AnanParameterEntity getParameter(Integer type, String scope, String name) {
+    public AnanParameterRespDto getParameter(Integer type, String scope, String name) {
         AnanParameterEntity entity = parameterRepository.findByTypeAndScopeAndName(type, scope, name);
+        AnanParameterRespDto respDto = BeanUtil.copyProperties(entity, AnanParameterRespDto.class);
         //因为参数会逐级上上级机构查找，为减少没有必要的查询，该代码为解决Spring Cache默认不缓存null值问题
-        if (entity == null) {
-            entity = new AnanParameterEntity();
+        if (respDto == null) {
+            respDto = new AnanParameterRespDto();
         }
-        return entity;
+        return respDto;
     }
 
     /**
@@ -138,21 +135,19 @@ public class ParameterServiceImpl implements ParameterService {
      */
     @Override
     @Cacheable(value = RedisConstant.ANAN_PARAMETER, key = "#root.target.getCacheKey(#type,#scope,#name)")
-    public AnanParameterEntity getNearestParameter(int type, String scope, String name) {
+    public AnanParameterRespDto getNearestParameter(int type, String scope, String name) {
         AnanParameterEntity parameter = parameterRepository.findByTypeAndScopeAndName(type, scope, name);
         boolean finded = parameter != null && parameter.getId() != null;
-        if (StringUtils.isEmpty(scope)) {
-            String info = "没有从参数[" + "type:" + type + " scope:" + scope + " name:" + name + "]中查询到参数";
-            Assert.isTrue(finded, info);
-            return parameter;
+        AnanParameterRespDto respDto;
+        if (finded) {
+            respDto = BeanUtil.copyProperties(parameter, AnanParameterRespDto.class);
+        } else {
+            //parameter为空表示没有参数记录，则依次向上找父机构的参数
+            Assert.isTrue(!StringUtils.isEmpty(scope), "没有从参数[" + "type:" + type + " scope:" + scope + " name:" + name + "]中查询到参数");
+            respDto = getNearestParameter(type, getNearestScope(type, scope), name);
         }
 
-        //parameter为空表示没有参数记录，则依次向上找父机构的参数
-        if (!finded) {
-            parameter = getNearestParameter(type, getNearestScope(type, scope), name);
-        }
-
-        return parameter;
+        return respDto;
     }
 
     private String getNearestScope(int type, String scope) {
@@ -170,10 +165,10 @@ public class ParameterServiceImpl implements ParameterService {
 
     @Override
     @Cacheable(value = RedisConstant.ANAN_PARAMETER, key = "#root.target.getCacheKey(#type,#scope,#name)")
-    public AnanParameterEntity getOrCreateParameter(int type, String scope, String name, String defaultValue, String description) {
-        AnanParameterEntity entity;
+    public AnanParameterRespDto getOrCreateParameter(int type, String scope, String name, String defaultValue, String description) {
+        AnanParameterRespDto respDto;
         try {
-            entity = getNearestParameter(type, scope, name);
+            respDto = getNearestParameter(type, scope, name);
         } catch (IllegalArgumentException e) {
             log.debug("报异常说明没有找到任何相关参数，则需要创建一个无域参数，这样默认所有机构共享这一个参数，如果需要设置机构个性化参数则需要在前端手动创建");
             AnanParameterCreateDto createDto = new AnanParameterCreateDto();
@@ -184,16 +179,16 @@ public class ParameterServiceImpl implements ParameterService {
             createDto.setDefaultValue(defaultValue);
             createDto.setDescription(description);
             createDto.setStatus(0);
-            entity = create(createDto);
+            respDto = create(createDto);
         }
-        return entity;
+        return respDto;
     }
 
     @Override
     @Transactional(rollbackFor = AnanServiceException.class)
     public Boolean applyChange(Long id) {
-        AnanParameterEntity entity = parameterRepository.findById(id).orElse(null);
-        Assert.notNull(entity, "该参数已经不存在!");
+        AnanParameterEntity entity = parameterRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("该参数已经不存在!"));
         String cacheKey = getCacheKey(entity);
         boolean success;
         switch (entity.getStatus()) {
@@ -201,7 +196,7 @@ public class ParameterServiceImpl implements ParameterService {
                 entity.setApplyBy(ananUserDetailService.getAnanUserId());
                 entity.setApplyTime(new Date());
                 entity.setStatus(0);
-                success = ananCacheManger.put(RedisConstant.ANAN_PARAMETER, cacheKey, entity);
+                success = ananCacheManger.put(RedisConstant.ANAN_PARAMETER, cacheKey, BeanUtil.copyProperties(entity, AnanParameterRespDto.class));
                 if (success) {
                     parameterRepository.save(entity);
                 }
@@ -219,7 +214,7 @@ public class ParameterServiceImpl implements ParameterService {
                 }
                 break;
             default:
-                success = ananCacheManger.put(RedisConstant.ANAN_PARAMETER, cacheKey, entity);
+                success = ananCacheManger.put(RedisConstant.ANAN_PARAMETER, cacheKey, BeanUtil.copyProperties(entity, AnanParameterRespDto.class));
         }
         return success;
     }
@@ -236,7 +231,7 @@ public class ParameterServiceImpl implements ParameterService {
     }
 
     @Override
-    public IJpaRepository<AnanParameterEntity, Long> getRepository() {
+    public ParameterRepository getRepository() {
         return parameterRepository;
     }
 }

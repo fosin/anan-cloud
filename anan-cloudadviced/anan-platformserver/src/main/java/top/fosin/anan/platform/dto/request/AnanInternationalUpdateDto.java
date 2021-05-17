@@ -3,6 +3,9 @@ package top.fosin.anan.platform.dto.request;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+import top.fosin.anan.model.dto.IdDto;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -16,13 +19,11 @@ import java.io.Serializable;
  * @since 1.0.0
  */
 @Data
+@ToString
+@EqualsAndHashCode(callSuper = true)
 @ApiModel(value = "国际化语言集更新DTO", description = "表(anan_international)的对应的更新DTO")
-public class AnanInternationalUpdateDto implements Serializable {
+public class AnanInternationalUpdateDto extends IdDto<Long> implements Serializable {
     private static final long serialVersionUID = -76433218731003447L;
-
-    @NotNull(message = "主键" + "{javax.validation.constraints.NotNull.message}")
-    @ApiModelProperty(value = "主键", example = "0")
-    private Integer id;
 
     @NotBlank(message = "标识" + "{javax.validation.constraints.NotBlank.message}")
     @ApiModelProperty(value = "标识", example = "String")

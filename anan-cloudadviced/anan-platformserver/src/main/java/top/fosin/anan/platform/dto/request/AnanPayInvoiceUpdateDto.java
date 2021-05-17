@@ -1,14 +1,18 @@
 package top.fosin.anan.platform.dto.request;
 
-import java.util.Date;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+import org.springframework.format.annotation.DateTimeFormat;
+import top.fosin.anan.core.util.DateTimeUtil;
+import top.fosin.anan.model.dto.IdDto;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import lombok.Data;
-import org.springframework.format.annotation.DateTimeFormat;
-import top.fosin.anan.core.util.DateTimeUtil;
+import java.util.Date;
 
 /**
  * 系统支付发票表(AnanPayInvoice)更新DTO
@@ -18,13 +22,11 @@ import top.fosin.anan.core.util.DateTimeUtil;
  * @since 1.0.0
  */
 @Data
+@ToString
+@EqualsAndHashCode(callSuper = true)
 @ApiModel(value = "系统支付发票表更新DTO", description = "表(anan_pay_invoice)的对应的更新DTO")
-public class AnanPayInvoiceUpdateDto implements Serializable {
+public class AnanPayInvoiceUpdateDto extends IdDto<Long> implements Serializable {
     private static final long serialVersionUID = 595865760081308395L;
-
-    @NotNull(message = "发票ID" + "{javax.validation.constraints.NotNull.message}")
-    @ApiModelProperty(value = "发票ID, 主键", required = true)
-    private Long id;
 
     @NotNull(message = "支付ID" + "{javax.validation.constraints.NotNull.message}")
     @ApiModelProperty(value = "支付ID", required = true)

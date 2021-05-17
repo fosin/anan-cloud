@@ -1,5 +1,6 @@
 package top.fosin.anan.platform.service.inter;
 
+import top.fosin.anan.platform.dto.res.AnanPayInvoiceRespDto;
 import top.fosin.anan.platform.dto.request.AnanPayInvoiceCreateDto;
 import top.fosin.anan.platform.dto.request.AnanPayInvoiceRetrieveDto;
 import top.fosin.anan.platform.dto.request.AnanPayInvoiceUpdateDto;
@@ -12,5 +13,6 @@ import top.fosin.anan.jpa.service.ISimpleJpaService;
  * @author fosin
  * @date 2018-11-18 17:26:40
  */
-public interface AnanPayInvoiceService extends ISimpleJpaService<AnanPayInvoiceEntity, Long, AnanPayInvoiceCreateDto, AnanPayInvoiceRetrieveDto, AnanPayInvoiceUpdateDto> {
+public interface AnanPayInvoiceService extends ISimpleJpaService<AnanPayInvoiceEntity, AnanPayInvoiceRespDto,
+        Long, AnanPayInvoiceCreateDto, AnanPayInvoiceRetrieveDto, AnanPayInvoiceUpdateDto> {
 }

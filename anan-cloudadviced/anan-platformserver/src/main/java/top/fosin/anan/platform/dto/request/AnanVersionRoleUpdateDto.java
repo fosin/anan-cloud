@@ -3,6 +3,9 @@ package top.fosin.anan.platform.dto.request;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+import top.fosin.anan.model.dto.IdDto;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -16,13 +19,11 @@ import java.io.Serializable;
  * @since 1.0.0
  */
 @Data
+@ToString
+@EqualsAndHashCode(callSuper = true)
 @ApiModel(value = "系统版本角色表更新DTO", description = "表(anan_version_role)的对应的更新DTO")
-public class AnanVersionRoleUpdateDto implements Serializable {
+public class AnanVersionRoleUpdateDto extends IdDto<Long> implements Serializable {
     private static final long serialVersionUID = 574007298574981650L;
-
-    @NotNull(message = "角色ID" + "{javax.validation.constraints.NotNull.message}")
-    @ApiModelProperty(value = "角色ID, 主键", required = true)
-    private Long id;
 
     @NotNull(message = "版本ID" + "{javax.validation.constraints.NotNull.message}")
     @ApiModelProperty(value = "版本ID", required = true)

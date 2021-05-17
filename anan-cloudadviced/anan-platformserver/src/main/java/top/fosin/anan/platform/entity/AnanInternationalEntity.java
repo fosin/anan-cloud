@@ -1,6 +1,6 @@
 package top.fosin.anan.platform.entity;
 
-import top.fosin.anan.jpa.entity.AbstractCreateUpdateJpaEntity;
+import top.fosin.anan.jpa.entity.CreateUpdateEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -26,7 +26,7 @@ import java.io.Serializable;
 @DynamicUpdate
 @Table(name = "anan_international")
 @ApiModel(value = "表(anan_international)的对应的实体类", description = "表(anan_international)的对应的实体类")
-public class AnanInternationalEntity extends AbstractCreateUpdateJpaEntity<Long, Integer> implements Serializable {
+public class AnanInternationalEntity extends CreateUpdateEntity<Long> implements Serializable {
     private static final long serialVersionUID = 717249075172389735L;
 
     @Basic

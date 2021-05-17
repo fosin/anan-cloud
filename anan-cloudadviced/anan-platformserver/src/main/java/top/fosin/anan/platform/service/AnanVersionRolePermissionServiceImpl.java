@@ -1,25 +1,17 @@
 package top.fosin.anan.platform.service;
 
-import top.fosin.anan.cloudresource.constant.RedisConstant;
-import top.fosin.anan.core.util.BeanUtil;
-import top.fosin.anan.jpa.service.batch.IUpdateInBatchJpaService;
-import top.fosin.anan.platform.dto.request.AnanVersionRolePermissionUpdateDto;
-import top.fosin.anan.platform.entity.AnanOrganizationAuthEntity;
-import top.fosin.anan.platform.entity.AnanVersionRoleEntity;
-import top.fosin.anan.platform.entity.AnanVersionRolePermissionEntity;
-import top.fosin.anan.platform.repository.AnanOrganizationAuthRepository;
-import top.fosin.anan.platform.repository.AnanVersionRolePermissionRepository;
-import top.fosin.anan.platform.repository.AnanVersionRoleRepository;
-import top.fosin.anan.platform.repository.RoleRepository;
-import top.fosin.anan.platform.service.inter.AnanVersionRolePermissionService;
-import top.fosin.anan.platformapi.entity.AnanRoleEntity;
-import top.fosin.anan.platformapi.entity.AnanRolePermissionEntity;
-import top.fosin.anan.platformapi.repository.RolePermissionRepository;
-import top.fosin.anan.redis.cache.AnanCacheManger;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+import top.fosin.anan.cloudresource.constant.RedisConstant;
+import top.fosin.anan.platform.dto.res.AnanVersionRolePermissionRespDto;
+import top.fosin.anan.core.util.BeanUtil;
+import top.fosin.anan.platform.dto.request.AnanVersionRolePermissionCreateDto;
+import top.fosin.anan.platform.entity.*;
+import top.fosin.anan.platform.repository.*;
+import top.fosin.anan.platform.service.inter.AnanVersionRolePermissionService;
+import top.fosin.anan.redis.cache.AnanCacheManger;
 
 import java.util.Collection;
 import java.util.List;
@@ -59,44 +51,42 @@ public class AnanVersionRolePermissionServiceImpl implements AnanVersionRolePerm
     }
 
     @Override
-    public List<AnanVersionRolePermissionEntity> findByRoleId(Long roleId) {
-        return getRepository().findByRoleId(roleId);
+    public List<AnanVersionRolePermissionRespDto> findByRoleId(Long roleId) {
+        return BeanUtil.copyCollectionProperties(getRepository().findByRoleId(roleId), AnanVersionRolePermissionRespDto.class);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public List<AnanVersionRolePermissionEntity> updateInBatch(Long roleId, Collection<AnanVersionRolePermissionUpdateDto> entities) {
+    public List<AnanVersionRolePermissionRespDto> updateInBatch(String deleteCol, Long roleId, Collection<AnanVersionRolePermissionCreateDto> dtos) {
+        Assert.isTrue(roleId != null && dtos.size() > 0., "传入的版本ID或entities不能为空!");
+        Assert.isTrue(dtos.stream().allMatch(entity -> entity.getRoleId().equals(roleId)), "需要更新的数据集中有与版本ID不匹配的数据!");
+        versionRoleRepository.findById(roleId).ifPresent(versionRoleEntity -> {
+            Long versionId = versionRoleEntity.getVersionId();
+            String roleValue = versionRoleEntity.getValue();
 
-        Assert.isTrue(roleId != null && entities.size() > 0., "传入的版本ID或entities不能为空!");
-        Assert.isTrue(entities.stream().allMatch(entity -> entity.getRoleId().equals(roleId)), "需要更新的数据集中有与版本ID不匹配的数据!");
-        AnanVersionRoleEntity versionRoleEntity = versionRoleRepository.findById(roleId).orElse(null);
-        Long versionId = versionRoleEntity.getVersionId();
-        String roleValue = versionRoleEntity.getValue();
+            List<AnanOrganizationAuthEntity> organizationAuthEntities = organizationAuthRepository.findAllByVersionId(versionId);
+            organizationAuthEntities.forEach(authEntity -> {
+                Long organizId = authEntity.getOrganizId();
 
-        List<AnanOrganizationAuthEntity> organizationAuthEntities = organizationAuthRepository.findAllByVersionId(versionId);
-        organizationAuthEntities.forEach(authEntity -> {
-            Long organizId = authEntity.getOrganizId();
+                AnanRoleEntity role = roleRepository.findByOrganizIdAndValue(organizId, roleValue);
+                Long roleId1 = role.getId();
+                Collection<AnanRolePermissionEntity> rolePermissionEntities = dtos.stream().map(versionPermissionEntity -> {
+                    AnanRolePermissionEntity entity = new AnanRolePermissionEntity();
+                    entity.setRoleId(roleId1);
+                    entity.setPermissionId(versionPermissionEntity.getPermissionId());
+                    return entity;
+                }).collect(Collectors.toList());
+                ananCacheManger.evict(RedisConstant.ANAN_ROLE_PERMISSION, roleId1 + "");
 
-            AnanRoleEntity role = roleRepository.findByOrganizIdAndValue(organizId, roleValue);
-            Long roleId1 = role.getId();
-            Collection<AnanRolePermissionEntity> rolePermissionEntities = entities.stream().map(versionPermissionEntity -> {
-                AnanRolePermissionEntity entity = new AnanRolePermissionEntity();
-                entity.setRoleId(roleId1);
-                entity.setPermissionId(versionPermissionEntity.getPermissionId());
-                return entity;
-            }).collect(Collectors.toList());
-            ananCacheManger.evict(RedisConstant.ANAN_ROLE_PERMISSION, roleId1 + "");
+                rolePermissionRepository.deleteByRoleId(roleId1);
+                rolePermissionRepository.saveAll(rolePermissionEntities);
+                ananCacheManger.clear(RedisConstant.ANAN_USER_ALL_PERMISSIONS);
 
-            rolePermissionRepository.deleteByRoleId(roleId1);
-            rolePermissionRepository.saveAll(rolePermissionEntities);
+                versionRolePermissionRepository.deleteByRoleId(roleId);
+            });
         });
 
-        ananCacheManger.clear(RedisConstant.ANAN_USER_ALL_PERMISSIONS);
-
-        versionRolePermissionRepository.deleteByRoleId(roleId);
-
-        Collection<AnanVersionRolePermissionEntity> saveEntities = BeanUtil.copyCollectionProperties(this.getClass(), IUpdateInBatchJpaService.class, entities);
-
-        return versionRolePermissionRepository.saveAll(saveEntities);
+        return BeanUtil.copyCollectionProperties
+                (dtos, AnanVersionRolePermissionRespDto.class);
     }
 }

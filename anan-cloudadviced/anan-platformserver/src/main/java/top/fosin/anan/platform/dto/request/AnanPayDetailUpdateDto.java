@@ -2,10 +2,13 @@ package top.fosin.anan.platform.dto.request;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+import top.fosin.anan.model.dto.IdDto;
 
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import lombok.Data;
 
 /**
  * 系统支付明细表(AnanPayDetail)更新DTO
@@ -15,13 +18,11 @@ import lombok.Data;
  * @since 1.0.0
  */
 @Data
+@ToString
+@EqualsAndHashCode(callSuper = true)
 @ApiModel(value = "系统支付明细表更新DTO", description = "表(anan_pay_detail)的对应的更新DTO")
-public class AnanPayDetailUpdateDto implements Serializable {
+public class AnanPayDetailUpdateDto extends IdDto<Long> implements Serializable {
     private static final long serialVersionUID = -84127296586986403L;
-
-    @NotNull(message = "付款明细ID" + "{javax.validation.constraints.NotNull.message}")
-    @ApiModelProperty(value = "付款明细ID, 主键", required = true)
-    private Long id;
 
     @NotNull(message = "支付ID" + "{javax.validation.constraints.NotNull.message}")
     @ApiModelProperty(value = "支付ID", required = true)

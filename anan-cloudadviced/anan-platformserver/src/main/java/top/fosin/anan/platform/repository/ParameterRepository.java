@@ -1,6 +1,6 @@
 package top.fosin.anan.platform.repository;
 
-import top.fosin.anan.platformapi.entity.AnanParameterEntity;
+import top.fosin.anan.platform.entity.AnanParameterEntity;
 import org.springframework.context.annotation.Lazy;
 import top.fosin.anan.jpa.repository.IJpaRepository;
 import org.springframework.stereotype.Repository;

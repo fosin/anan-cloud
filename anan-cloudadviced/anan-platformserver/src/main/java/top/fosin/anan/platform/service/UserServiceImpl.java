@@ -17,23 +17,26 @@ import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 import top.fosin.anan.cloudresource.constant.RedisConstant;
 import top.fosin.anan.cloudresource.constant.SystemConstant;
-import top.fosin.anan.cloudresource.dto.request.AnanUserCreateDto;
-import top.fosin.anan.cloudresource.dto.request.AnanUserRetrieveDto;
-import top.fosin.anan.cloudresource.dto.request.AnanUserUpdateDto;
+import top.fosin.anan.cloudresource.dto.req.AnanUserRetrieveDto;
+import top.fosin.anan.cloudresource.dto.res.AnanUserRespDto;
+import top.fosin.anan.cloudresource.service.AnanUserDetailService;
+import top.fosin.anan.core.util.BeanUtil;
 import top.fosin.anan.core.util.RegexUtil;
 import top.fosin.anan.jpa.repository.IJpaRepository;
 import top.fosin.anan.model.dto.TreeDto;
 import top.fosin.anan.model.module.PageModule;
 import top.fosin.anan.model.result.ListResult;
 import top.fosin.anan.model.result.ResultUtils;
+import top.fosin.anan.platform.dto.request.AnanUserCreateDto;
+import top.fosin.anan.platform.dto.request.AnanUserUpdateDto;
+import top.fosin.anan.platform.dto.res.AnanUserRespPassDto;
+import top.fosin.anan.platform.entity.AnanOrganizationEntity;
+import top.fosin.anan.platform.entity.AnanUserEntity;
+import top.fosin.anan.platform.entity.AnanUserRoleEntity;
 import top.fosin.anan.platform.repository.OrganizationRepository;
+import top.fosin.anan.platform.repository.UserRepository;
 import top.fosin.anan.platform.repository.UserRoleRepository;
 import top.fosin.anan.platform.service.inter.UserService;
-import top.fosin.anan.platformapi.entity.AnanOrganizationEntity;
-import top.fosin.anan.platformapi.entity.AnanUserEntity;
-import top.fosin.anan.platformapi.entity.AnanUserRoleEntity;
-import top.fosin.anan.platformapi.repository.UserRepository;
-import top.fosin.anan.platformapi.service.AnanUserDetailService;
 import top.fosin.anan.redis.cache.AnanCacheManger;
 
 import javax.persistence.criteria.*;
@@ -73,38 +76,20 @@ public class UserServiceImpl implements UserService {
     @Override
     @Cacheable(value = RedisConstant.ANAN_USER, key = "#usercode", condition = "#result != null")
     @Transactional(readOnly = true)
-    public AnanUserEntity findByUsercode(String usercode) {
+    public AnanUserRespDto findByUsercode(String usercode) {
         Assert.notNull(usercode, "用户工号不能为空!");
-
         AnanUserEntity userEntity = userRepository.findByUsercode(usercode);
-
-        if (userEntity != null) {
-            List<AnanUserRoleEntity> userRoles = userEntity.getUserRoles();
-            //该代码看似无用，其实是为了解决懒加载和缓存先后问题
-            log.debug(userRoles.toString());
-        } else {
-            log.debug("通过UserCode：" + usercode + "未能找到对应的数据!");
-        }
-        return userEntity;
+        AnanUserRespDto respDto = new AnanUserRespDto();
+        BeanUtils.copyProperties(userEntity, respDto);
+        return respDto;
     }
 
 
     @Override
     @Cacheable(value = RedisConstant.ANAN_USER, key = "#id", condition = "#result != null")
     @Transactional(readOnly = true)
-    public AnanUserEntity findById(Long id) {
-        Assert.isTrue(id != null && id > 0, "传入的用户ID无效！");
-
-        AnanUserEntity userEntity = userRepository.findById(id).orElse(null);
-        if (userEntity != null) {
-            List<AnanUserRoleEntity> userRoles = userEntity.getUserRoles();
-            //该代码看似无用，其实是为了解决懒加载和缓存先后问题
-            log.debug(userRoles.toString());
-        } else {
-            log.debug("通过ID：" + id + "未能找到对应的数据!");
-        }
-
-        return userEntity;
+    public AnanUserRespDto findOneById(Long id) {
+        return UserService.super.findOneById(id);
     }
 
 
@@ -119,7 +104,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public AnanUserEntity create(AnanUserCreateDto entity) {
+    public AnanUserRespPassDto create(AnanUserCreateDto entity) {
         AnanUserEntity createUser = new AnanUserEntity();
         BeanUtils.copyProperties(entity, createUser);
 
@@ -127,29 +112,27 @@ public class UserServiceImpl implements UserService {
 //        Assert.isTrue(RegexUtil.matcher(createUser.getPassword(), passwordStrength), "用户密码强度正则表达式,密码最少6位，包括至少1个大写字母，1个小写字母，1个数字，1个特殊字符!");
         String password = encryptBeforeSave(createUser);
         AnanUserEntity savedEntity = userRepository.save(createUser);
-        AnanUserEntity rcEntity = new AnanUserEntity();
-        BeanUtils.copyProperties(savedEntity, rcEntity);
-        rcEntity.setPassword(password);
-        return rcEntity;
+        savedEntity.setPassword(password);
+        return BeanUtil.copyProperties(savedEntity, AnanUserRespPassDto.class);
     }
 
     @Override
-    public AnanUserEntity update(AnanUserUpdateDto entity) {
-        Long id = entity.getId();
+    public void update(AnanUserUpdateDto dto) {
+        Long id = dto.getId();
         Assert.notNull(id, "更新的数据id不能为空或者小于1!");
         AnanUserEntity createUser = userRepository.findById(id).orElse(null);
         String usercode = Objects.requireNonNull(createUser, "通过ID：" + id + "未能找到对应的数据!").getUsercode().toLowerCase();
         if (ananUserDetailService.isAdminUser(usercode) &&
-                !ananUserDetailService.isAdminUser(entity.getUsercode().toLowerCase())) {
+                !ananUserDetailService.isAdminUser(dto.getUsercode().toLowerCase())) {
             throw new IllegalArgumentException("不能修改管理员" + SystemConstant.ADMIN_USER_CODE + "的帐号名称!");
         }
         Assert.isTrue(!ananUserDetailService.isSysAdminUser(usercode),
                 "不能修改超级管理员帐号信息!");
-        BeanUtils.copyProperties(entity, createUser);
+        BeanUtils.copyProperties(dto, createUser);
         ananCacheManger.evict(RedisConstant.ANAN_USER, usercode);
         ananCacheManger.evict(RedisConstant.ANAN_USER, id + "");
         ananCacheManger.evict(RedisConstant.ANAN_USER_PERMISSION, id + "");
-        return userRepository.save(createUser);
+        userRepository.save(createUser);
     }
 
     public List<AnanUserEntity> findAll(Iterable<Long> ids) {
@@ -180,7 +163,7 @@ public class UserServiceImpl implements UserService {
                     @CacheEvict(value = RedisConstant.ANAN_USER_ALL_PERMISSIONS, key = "#id")
             }
     )
-    public AnanUserEntity deleteById(Long id) {
+    public void deleteById(Long id) {
         Assert.isTrue(id != null && id > 0, "传入的用户ID无效！");
         AnanUserEntity entity = ananCacheManger.get(RedisConstant.ANAN_USER, id + "", AnanUserEntity.class);
         if (entity == null) {
@@ -189,10 +172,9 @@ public class UserServiceImpl implements UserService {
         Assert.notNull(entity, "通过该ID没有找到相应的用户数据!");
         Assert.isTrue(!ananUserDetailService.isSysAdminUser(entity.getUsercode())
                 && !ananUserDetailService.isAdminUser(entity.getUsercode()), "不能删除管理员帐号!");
-//        List<AnanUserRoleEntity> userRoles = userRoleRepository.findByUserId(id);
-//        Assert.isTrue(userRoles.size() == 0, "该用户下还存在角色信息,不能直接删除用户!");
+        List<AnanUserRoleEntity> userRoles = userRoleRepository.findByUserId(id);
+        Assert.isTrue(userRoles.size() == 0, "该用户下还存在角色信息,不能直接删除用户!");
         userRepository.deleteById(id);
-        return entity;
     }
 
     @Override
@@ -204,21 +186,19 @@ public class UserServiceImpl implements UserService {
                     @CacheEvict(value = RedisConstant.ANAN_USER_ALL_PERMISSIONS, key = "#entity.id")
             }
     )
-    public AnanUserEntity deleteByEntity(AnanUserRetrieveDto entity) {
+    public void deleteByDto(AnanUserUpdateDto entity) {
         Assert.notNull(entity, "不能删除空的用户对象!");
         Assert.isTrue(!ananUserDetailService.isSysAdminUser(entity.getUsercode())
                 && !ananUserDetailService.isAdminUser(entity.getUsercode()), "不能删除管理员帐号!");
         List<AnanUserRoleEntity> userRoles = userRoleRepository.findByUserId(entity.getId());
         Assert.isTrue(userRoles.size() == 0, "该用户下还存在角色信息,不能直接删除用户!");
-        AnanUserEntity deleteEntity = findOneByEntity(entity);
-        if (deleteEntity != null) {
-            getRepository().delete(deleteEntity);
-        }
-        return deleteEntity;
+        AnanUserEntity deleteEntity = queryOneByDto(entity);
+        Assert.notNull(deleteEntity, "未找到需要删除的数据!");
+        getRepository().delete(deleteEntity);
     }
 
     @Override
-    public ListResult<AnanUserEntity> findPage(PageModule<AnanUserRetrieveDto> pageModule) {
+    public ListResult<AnanUserRespDto> findPage(PageModule<AnanUserRetrieveDto> pageModule) {
         PageRequest pageable = PageRequest.of(pageModule.getPageNumber() - 1, pageModule.getPageSize(), this.buildSortRules(pageModule.getParams().getSortRules()));
 
         Specification<AnanUserEntity> condition = (root, query, cb) -> {
@@ -281,11 +261,8 @@ public class UserServiceImpl implements UserService {
         };
         //分页查找
         Page<AnanUserEntity> page = userRepository.findAll(condition, pageable);
-        //主动清空用户角色属性，防止JPA懒加载加载这些数据，因为前端不需要角色信息，这样也可以提高性能
-        for (AnanUserEntity user : page) {
-            user.setUserRoles(null);
-        }
-        return ResultUtils.success(page.getTotalElements(), page.getTotalPages(), page.getContent());
+        return ResultUtils.success(page.getTotalElements(), page.getTotalPages(),
+                BeanUtil.copyCollectionProperties(page.getContent(), AnanUserRespDto.class));
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -296,7 +273,7 @@ public class UserServiceImpl implements UserService {
                     @CacheEvict(value = RedisConstant.ANAN_USER, key = "#result.usercode")
             }
     )
-    public AnanUserEntity changePassword(Long id, String password, String confirmPassword1, String confirmPassword2) {
+    public AnanUserRespDto changePassword(Long id, String password, String confirmPassword1, String confirmPassword2) {
         Assert.notNull(id, "用户ID不能为空!");
         Assert.isTrue(!StringUtils.isEmpty(confirmPassword1) &&
                 !StringUtils.isEmpty(confirmPassword2) && confirmPassword1.equals(confirmPassword2), "新密码和确认新密码不能为空且必须一致!");
@@ -308,7 +285,7 @@ public class UserServiceImpl implements UserService {
         Assert.isTrue(passwordEncoder.matches(password, Objects.requireNonNull(user, "通过ID：" + id + "未找到对应的用户信息!").getPassword()), "原密码不正确!");
         user.setPassword(confirmPassword1);
         encryptBeforeSave(user);
-        return userRepository.save(user);
+        return BeanUtil.copyProperties(userRepository.save(user), AnanUserRespDto.class);
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -319,7 +296,7 @@ public class UserServiceImpl implements UserService {
                     @CacheEvict(value = RedisConstant.ANAN_USER, key = "#result.usercode")
             }
     )
-    public AnanUserEntity resetPassword(Long id) {
+    public AnanUserRespPassDto resetPassword(Long id) {
         Assert.notNull(id, "用户ID不能为空!");
 
         Long loginId = ananUserDetailService.getAnanUserId();
@@ -329,10 +306,9 @@ public class UserServiceImpl implements UserService {
         Objects.requireNonNull(user, "通过ID：" + id + "未找到对应的用户信息!").setPassword(password);
         encryptBeforeSave(user);
         userRepository.save(user);
-        AnanUserEntity rcEntity = new AnanUserEntity();
-        BeanUtils.copyProperties(user, rcEntity);
-        rcEntity.setPassword(password);
-        return rcEntity;
+        AnanUserRespPassDto respPassDto = BeanUtil.copyProperties(user, AnanUserRespPassDto.class);
+        respPassDto.setPassword(password);
+        return respPassDto;
     }
 
     public String getPassword() {
@@ -356,21 +332,23 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<AnanUserEntity> findOtherUsersByRoleId(Long roleId) {
-        return userRepository.findOtherUsersByRoleId(roleId);
+    public List<AnanUserRespDto> findOtherUsersByRoleId(Long roleId) {
+        return BeanUtil.copyCollectionProperties(
+                userRepository.findOtherUsersByRoleId(roleId), AnanUserRespDto.class);
     }
 
     @Override
-    public List<AnanUserEntity> findRoleUsersByRoleId(Long roleId) {
-        return userRepository.findRoleUsersByRoleId(roleId);
+    public List<AnanUserRespDto> findRoleUsersByRoleId(Long roleId) {
+        return BeanUtil.copyCollectionProperties(
+                userRepository.findRoleUsersByRoleId(roleId), AnanUserRespDto.class);
     }
 
     @Override
-    public List<AnanUserEntity> findAllByOrganizId(Long organizId, Integer status) {
+    public List<AnanUserRespDto> findAllByOrganizId(Long organizId, Integer status) {
         Assert.notNull(organizId, "机构ID不能为空!");
-
+        List<AnanUserEntity> entities;
         if (ananUserDetailService.isUserRequest() && ananUserDetailService.hasSysAdminRole()) {
-            return userRepository.findAll();
+            entities = userRepository.findAll();
         } else {
             AnanOrganizationEntity organiz = organizationRepository.findById(organizId).orElse(null);
             Assert.notNull(organiz, "根据传入的机构编码没有找到任何数据!");
@@ -392,8 +370,9 @@ public class UserServiceImpl implements UserService {
                 }
                 return cb.and(in, predicate);
             };
-            return userRepository.findAll(condition);
+            entities = userRepository.findAll(condition);
         }
+        return BeanUtil.copyCollectionProperties(entities, AnanUserRespDto.class);
     }
 
     @Override

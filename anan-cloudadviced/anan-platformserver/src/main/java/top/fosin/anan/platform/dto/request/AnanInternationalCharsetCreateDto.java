@@ -21,11 +21,11 @@ public class AnanInternationalCharsetCreateDto implements Serializable {
 
     @NotNull(message = "国际化语言ID" + "{javax.validation.constraints.NotNull.message}")
     @ApiModelProperty(value = "国际化语言ID", example = "0")
-    private Integer internationalId;
+    private Long internationalId;
 
     @NotNull(message = "服务ID" + "{javax.validation.constraints.NotNull.message}")
     @ApiModelProperty(value = "服务ID", example = "0")
-    private Integer serviceId;
+    private Long serviceId;
 
     @ApiModelProperty(value = "自定义字符集", example = "String")
     private String charset;

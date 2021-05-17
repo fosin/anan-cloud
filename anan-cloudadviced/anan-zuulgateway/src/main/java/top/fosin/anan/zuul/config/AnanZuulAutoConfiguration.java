@@ -1,14 +1,5 @@
 package top.fosin.anan.zuul.config;
 
-import top.fosin.anan.cloudresource.dto.request.AnanPermissionRetrieveDto;
-import top.fosin.anan.security.resource.AnanAuthorityPermission;
-import top.fosin.anan.security.resource.AnanProgramAuthorities;
-import top.fosin.anan.security.resource.AnanSecurityConstant;
-import top.fosin.anan.security.resource.AnanSecurityProperties;
-import top.fosin.anan.swagger.config.AnanSwaggerResourcesProvider;
-import top.fosin.anan.swagger.config.SwaggerProperties;
-import org.springframework.util.StringUtils;
-import top.fosin.anan.zuul.service.inter.PermissionFeignService;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
@@ -19,12 +10,21 @@ import org.springframework.cloud.netflix.zuul.filters.RouteLocator;
 import org.springframework.cloud.netflix.zuul.filters.ZuulProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 import springfox.documentation.swagger.web.SwaggerResource;
+import top.fosin.anan.cloudresource.dto.res.AnanPermissionRespDto;
+import top.fosin.anan.cloudresource.service.inter.PermissionFeignService;
+import top.fosin.anan.security.resource.AnanAuthorityPermission;
+import top.fosin.anan.security.resource.AnanProgramAuthorities;
+import top.fosin.anan.security.resource.AnanSecurityConstant;
+import top.fosin.anan.security.resource.AnanSecurityProperties;
+import top.fosin.anan.swagger.config.AnanSwaggerResourcesProvider;
+import top.fosin.anan.swagger.config.SwaggerProperties;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -39,8 +39,8 @@ import java.util.stream.Collectors;
 @Configuration
 public class AnanZuulAutoConfiguration {
 
-    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     @Bean
+    @Lazy
     @ConditionalOnBean(PermissionFeignService.class)
     public AnanProgramAuthorities ananProgramAuthorities(RouteLocator routeLocator, PermissionFeignService permissionService) {
         List<Route> routes = routeLocator.getRoutes();
@@ -49,12 +49,11 @@ public class AnanZuulAutoConfiguration {
             String fullPath = route.getFullPath();
             String location = route.getLocation();
 
-            ResponseEntity<List<AnanPermissionRetrieveDto>> responseEntity = permissionService.findByServiceCode(location);
-            List<AnanPermissionRetrieveDto> entities = responseEntity.getBody();
-            Objects.requireNonNull(entities).forEach(entity -> {
-                String entityPath = entity.getPath();
+            List<AnanPermissionRespDto> dtos = permissionService.findByServiceCode(location).getBody();
+            Objects.requireNonNull(dtos).forEach(dto -> {
+                String entityPath = dto.getPath();
                 if (StringUtils.hasText(entityPath)) {
-                    String method = entity.getMethod();
+                    String method = dto.getMethod();
                     List<HttpMethod> httpMethods = new ArrayList<>();
                     if (StringUtils.hasText(method)) {
                         String[] strings = method.split(",");
@@ -62,7 +61,7 @@ public class AnanZuulAutoConfiguration {
                             httpMethods.add(HttpMethod.resolve(string));
                         }
                     }
-                    Long id = entity.getId();
+                    Long id = dto.getId();
                     String joinPath = joinPath(fullPath, entityPath);
                     Assert.isTrue(id != null && id > 0, "无效的权限ID：" + id);
                     String authority = AnanSecurityConstant.PREFIX_ROLE + id;

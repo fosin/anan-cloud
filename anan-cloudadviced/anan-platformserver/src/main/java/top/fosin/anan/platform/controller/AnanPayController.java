@@ -1,17 +1,15 @@
 package top.fosin.anan.platform.controller;
 
+import io.swagger.annotations.Api;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
+import top.fosin.anan.platform.dto.res.AnanPayRespDto;
 import top.fosin.anan.model.controller.ISimpleController;
-import top.fosin.anan.model.service.ISimpleService;
 import top.fosin.anan.platform.dto.request.AnanPayCreateDto;
 import top.fosin.anan.platform.dto.request.AnanPayRetrieveDto;
 import top.fosin.anan.platform.dto.request.AnanPayUpdateDto;
-import top.fosin.anan.platform.entity.AnanPayEntity;
 import top.fosin.anan.platform.service.inter.AnanPayService;
-import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
-import io.swagger.annotations.Api;
-
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 /**
  * 系统支付表(table:anan_pay)表控制层
@@ -22,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(UrlPrefixConstant.PAY)
 @Api(value = UrlPrefixConstant.PAY, tags = "系统支付表(anan_pay)接入层API")
-public class AnanPayController implements ISimpleController<AnanPayEntity, Long, AnanPayCreateDto, AnanPayRetrieveDto, AnanPayUpdateDto> {
+public class AnanPayController implements ISimpleController<AnanPayRespDto, Long, AnanPayCreateDto, AnanPayRetrieveDto, AnanPayUpdateDto> {
     /**
      * 服务对象
      */

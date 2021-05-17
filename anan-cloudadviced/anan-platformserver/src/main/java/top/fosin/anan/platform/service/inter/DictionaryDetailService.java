@@ -1,10 +1,11 @@
 package top.fosin.anan.platform.service.inter;
 
-import top.fosin.anan.cloudresource.dto.request.AnanDictionaryDetailCreateDto;
-import top.fosin.anan.cloudresource.dto.request.AnanDictionaryDetailRetrieveDto;
-import top.fosin.anan.cloudresource.dto.request.AnanDictionaryDetailUpdateDto;
+import top.fosin.anan.platform.dto.request.AnanDictionaryDetailCreateDto;
+import top.fosin.anan.cloudresource.dto.req.AnanDictionaryDetailRetrieveDto;
+import top.fosin.anan.platform.dto.request.AnanDictionaryDetailUpdateDto;
+import top.fosin.anan.cloudresource.dto.res.AnanDictionaryDetailRespDto;
 import top.fosin.anan.jpa.service.ISimpleJpaService;
-import top.fosin.anan.platformapi.entity.AnanDictionaryDetailEntity;
+import top.fosin.anan.platform.entity.AnanDictionaryDetailEntity;
 
 import java.util.List;
 
@@ -14,7 +15,7 @@ import java.util.List;
  *
  * @author fosin
  */
-public interface DictionaryDetailService extends ISimpleJpaService<AnanDictionaryDetailEntity,
+public interface DictionaryDetailService extends ISimpleJpaService<AnanDictionaryDetailEntity, AnanDictionaryDetailRespDto,
         Long, AnanDictionaryDetailCreateDto, AnanDictionaryDetailRetrieveDto, AnanDictionaryDetailUpdateDto> {
-    List<AnanDictionaryDetailEntity> findByDictionaryId(Long dictionaryId);
+    List<AnanDictionaryDetailRespDto> findByDictionaryId(Long dictionaryId);
 }

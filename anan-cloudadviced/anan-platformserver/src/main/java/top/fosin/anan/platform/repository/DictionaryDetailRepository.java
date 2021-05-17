@@ -1,6 +1,6 @@
 package top.fosin.anan.platform.repository;
 
-import top.fosin.anan.platformapi.entity.AnanDictionaryDetailEntity;
+import top.fosin.anan.platform.entity.AnanDictionaryDetailEntity;
 import top.fosin.anan.jpa.repository.IJpaRepository;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;

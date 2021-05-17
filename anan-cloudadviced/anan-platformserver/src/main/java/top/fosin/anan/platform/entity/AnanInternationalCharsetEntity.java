@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.DynamicUpdate;
-import top.fosin.anan.jpa.entity.AbstractCreateUpdateJpaEntity;
+import top.fosin.anan.jpa.entity.CreateUpdateEntity;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -26,18 +26,18 @@ import java.io.Serializable;
 @DynamicUpdate
 @Table(name = "anan_international_charset")
 @ApiModel(value = "表(anan_international_charset)的对应的实体类", description = "表(anan_international_charset)的对应的实体类")
-public class AnanInternationalCharsetEntity extends AbstractCreateUpdateJpaEntity<Long, Long> implements Serializable {
+public class AnanInternationalCharsetEntity extends CreateUpdateEntity<Long> implements Serializable {
     private static final long serialVersionUID = -47422702414130736L;
 
     @Basic
     @Column(name = "international_id")
     @ApiModelProperty(value = "国际化语言ID")
-    private Integer internationalId;
+    private Long internationalId;
 
     @Basic
     @Column(name = "service_id")
     @ApiModelProperty(value = "服务ID")
-    private Integer serviceId;
+    private Long serviceId;
 
     @Basic
     @Column(name = "charset")

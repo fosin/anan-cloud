@@ -1,11 +1,10 @@
 package top.fosin.anan.platform.controller;
 
+import top.fosin.anan.platform.dto.res.AnanPayInvoiceRespDto;
 import top.fosin.anan.model.controller.ISimpleController;
-import top.fosin.anan.model.service.ISimpleService;
 import top.fosin.anan.platform.dto.request.AnanPayInvoiceCreateDto;
 import top.fosin.anan.platform.dto.request.AnanPayInvoiceRetrieveDto;
 import top.fosin.anan.platform.dto.request.AnanPayInvoiceUpdateDto;
-import top.fosin.anan.platform.entity.AnanPayInvoiceEntity;
 import top.fosin.anan.platform.service.inter.AnanPayInvoiceService;
 import io.swagger.annotations.Api;
 
@@ -21,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("v1/invoice")
 @Api(value = "v1/invoice", tags = "系统支付发票表(anan_pay_invoice)接入层API")
-public class AnanPayInvoiceController implements ISimpleController<AnanPayInvoiceEntity, Long, AnanPayInvoiceCreateDto, AnanPayInvoiceRetrieveDto, AnanPayInvoiceUpdateDto> {
+public class AnanPayInvoiceController implements ISimpleController<AnanPayInvoiceRespDto, Long, AnanPayInvoiceCreateDto, AnanPayInvoiceRetrieveDto, AnanPayInvoiceUpdateDto> {
     /**
      * 服务对象
      */

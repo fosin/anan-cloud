@@ -26,19 +26,19 @@ mvn clean compile jar:jar spring-boot:repackage ^
 ```
 
 ## 5、按顺序启动jar
-    假设anan-cloud当前版本是2.6.0-SNAPSHOT
+    假设anan-cloud当前版本是2.7.0-SNAPSHOT
     Profile是dev
 ```shell script
 # 如果使用了nacos作为服务注册和配置中心，则不需要启动erueka和config
-./anan-eurekaserver-2.6.0-SNAPSHOT-{activeProfile}.jar
-./anan-configserver-2.6.0-SNAPSHOT-{activeProfile}.jar
+./anan-eurekaserver-2.7.0-SNAPSHOT-{activeProfile}.jar
+./anan-configserver-2.7.0-SNAPSHOT-{activeProfile}.jar
 
-./anan-authserver-2.6.0-SNAPSHOT-{activeProfile}.jar
-./anan-platformserver-2.6.0-SNAPSHOT-{activeProfile}.jar
-./anan-adminserver-2.6.0-SNAPSHOT-{activeProfile}.jar
+./anan-authserver-2.7.0-SNAPSHOT-{activeProfile}.jar
+./anan-platformserver-2.7.0-SNAPSHOT-{activeProfile}.jar
+./anan-adminserver-2.7.0-SNAPSHOT-{activeProfile}.jar
 
 # 网关选择zuul或者gateway其一即可
-./anan-zuulgateway-2.6.0-SNAPSHOT-{activeProfile}.jar
-./anan-cloudgateway-2.6.0-SNAPSHOT-{activeProfile}.jar
+./anan-zuulgateway-2.7.0-SNAPSHOT-{activeProfile}.jar
+./anan-cloudgateway-2.7.0-SNAPSHOT-{activeProfile}.jar
 
 ```

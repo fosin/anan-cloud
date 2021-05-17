@@ -10,11 +10,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
+import top.fosin.anan.platform.dto.res.AnanInternationalCharsetRespDto;
 import top.fosin.anan.model.controller.ISimpleController;
 import top.fosin.anan.platform.dto.request.AnanInternationalCharsetCreateDto;
 import top.fosin.anan.platform.dto.request.AnanInternationalCharsetRetrieveDto;
 import top.fosin.anan.platform.dto.request.AnanInternationalCharsetUpdateDto;
-import top.fosin.anan.platform.entity.AnanInternationalCharsetEntity;
 import top.fosin.anan.platform.service.inter.AnanInternationalCharsetService;
 
 import java.util.List;
@@ -28,8 +28,11 @@ import java.util.List;
 @RestController
 @RequestMapping(UrlPrefixConstant.INTERNATIONAL_CHARSET)
 @Api(value = UrlPrefixConstant.INTERNATIONAL_CHARSET, tags = "国际化明显(anan_international_charset)接入层API")
-public class AnanInternationalCharsetController implements ISimpleController<AnanInternationalCharsetEntity, Long,
-        AnanInternationalCharsetCreateDto, AnanInternationalCharsetRetrieveDto, AnanInternationalCharsetUpdateDto> {
+public class AnanInternationalCharsetController implements ISimpleController<AnanInternationalCharsetRespDto,
+        Long,
+        AnanInternationalCharsetCreateDto,
+        AnanInternationalCharsetRetrieveDto,
+        AnanInternationalCharsetUpdateDto> {
 
     private final AnanInternationalCharsetService ananInternationalCharsetService;
 
@@ -46,7 +49,7 @@ public class AnanInternationalCharsetController implements ISimpleController<Ana
             required = true,
             dataTypeClass = Integer.class
     )
-    public ResponseEntity<List<AnanInternationalCharsetEntity>> findAllByInternationalId(@PathVariable Integer internationalId) {
+    public ResponseEntity<List<AnanInternationalCharsetRespDto>> findAllByInternationalId(@PathVariable Long internationalId) {
         return ResponseEntity.ok(ananInternationalCharsetService.findAllByInternationalId(internationalId));
     }
 
@@ -68,7 +71,7 @@ public class AnanInternationalCharsetController implements ISimpleController<Ana
                     dataTypeClass = Integer.class
             )
     })
-    public ResponseEntity<List<AnanInternationalCharsetEntity>> findAllByInternationalIdAndServiceId(@PathVariable Integer internationalId, @PathVariable Integer serviceId) {
+    public ResponseEntity<List<AnanInternationalCharsetRespDto>> findAllByInternationalIdAndServiceId(@PathVariable Long internationalId, @PathVariable Long serviceId) {
         return ResponseEntity.ok(ananInternationalCharsetService.findAllByInternationalIdAndServiceId(internationalId, serviceId));
     }
 

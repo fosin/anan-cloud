@@ -11,19 +11,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import top.fosin.anan.cloudresource.constant.RedisConstant;
-import top.fosin.anan.cloudresource.dto.request.AnanPermissionCreateDto;
-import top.fosin.anan.cloudresource.dto.request.AnanPermissionRetrieveDto;
-import top.fosin.anan.cloudresource.dto.request.AnanPermissionUpdateDto;
-import top.fosin.anan.jpa.repository.IJpaRepository;
-import top.fosin.anan.platform.repository.AnanOrganizationPermissionRepository;
-import top.fosin.anan.platform.repository.AnanVersionPermissionRepository;
-import top.fosin.anan.platform.repository.AnanVersionRolePermissionRepository;
+import top.fosin.anan.platform.dto.request.AnanPermissionCreateDto;
+import top.fosin.anan.platform.dto.request.AnanPermissionUpdateDto;
+import top.fosin.anan.cloudresource.dto.res.AnanPermissionRespDto;
+import top.fosin.anan.core.util.BeanUtil;
+import top.fosin.anan.platform.entity.AnanPermissionEntity;
+import top.fosin.anan.platform.repository.*;
 import top.fosin.anan.platform.service.inter.PermissionService;
-import top.fosin.anan.platformapi.entity.AnanPermissionEntity;
-import top.fosin.anan.platformapi.repository.AnanServiceRepository;
-import top.fosin.anan.platformapi.repository.PermissionRepository;
-import top.fosin.anan.platformapi.repository.RolePermissionRepository;
-import top.fosin.anan.platformapi.repository.UserPermissionRepository;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -65,7 +59,7 @@ public class PermissionServiceImpl implements PermissionService {
 
     @Override
     @CachePut(value = RedisConstant.ANAN_PERMISSION, key = "#result.id")
-    public AnanPermissionEntity create(AnanPermissionCreateDto entity) {
+    public AnanPermissionRespDto create(AnanPermissionCreateDto entity) {
         Assert.notNull(entity, "传入的创建数据实体对象不能为空!");
 
         AnanPermissionEntity createEntity = new AnanPermissionEntity();
@@ -79,7 +73,9 @@ public class PermissionServiceImpl implements PermissionService {
             level = parentEntity.getLevel() + 1;
         }
         createEntity.setLevel(level);
-        return permissionRepository.save(createEntity);
+        AnanPermissionRespDto respDto = new AnanPermissionRespDto();
+        BeanUtils.copyProperties(permissionRepository.save(createEntity), respDto);
+        return respDto;
     }
 
     @Override
@@ -90,7 +86,7 @@ public class PermissionServiceImpl implements PermissionService {
             }
     )
     @Transactional(rollbackFor = Exception.class)
-    public AnanPermissionEntity update(AnanPermissionUpdateDto entity) {
+    public void update(AnanPermissionUpdateDto entity) {
         Assert.notNull(entity, "传入了空对象!");
         Long id = entity.getId();
         Assert.notNull(id, "传入了空ID!");
@@ -117,13 +113,17 @@ public class PermissionServiceImpl implements PermissionService {
         saveEntities.add(updateEntity);
 
         permissionRepository.saveAll(saveEntities);
-        return updateEntity;
+    }
+
+    @Override
+    public Collection<AnanPermissionRespDto> findByPid(Long pid) {
+        return BeanUtil.copyCollectionProperties(permissionRepository.findByPid(pid), AnanPermissionRespDto.class);
     }
 
     protected List<AnanPermissionEntity> getUpdateCascadeChild(AnanPermissionUpdateDto originEntity, AnanPermissionEntity updateEntity) {
         Long id = updateEntity.getId();
         Sort sort = Sort.by(Sort.Direction.fromString("ASC"), "sort");
-        Collection<AnanPermissionEntity> allByPid = findByPid(id);
+        Collection<AnanPermissionEntity> allByPid = permissionRepository.findByPid(id);
         List<AnanPermissionEntity> saves = new ArrayList<>();
         allByPid.forEach(entity -> {
             AnanPermissionUpdateDto entity2 = new AnanPermissionUpdateDto();
@@ -145,14 +145,13 @@ public class PermissionServiceImpl implements PermissionService {
                     @CacheEvict(value = RedisConstant.ANAN_ROLE_PERMISSION, allEntries = true)
             }
     )
-    public AnanPermissionEntity deleteById(Long id) {
+    public void deleteById(Long id) {
         Assert.notNull(id, "传入了空ID!");
         AnanPermissionEntity entity = permissionRepository.findById(id).orElse(null);
-        deleteByEntity(Objects.requireNonNull(entity, "通过ID：" + id + "未能找到对应的数据!"));
-        return null;
+        deleteByDto(Objects.requireNonNull(entity, "通过ID：" + id + "未能找到对应的数据!"));
     }
 
-    private void deleteByEntity(AnanPermissionEntity entity) {
+    private void deleteByDto(AnanPermissionEntity entity) {
         long id = entity.getId();
         long countByPermissionId = userPermissionRepository.countByPermissionId(id);
         Assert.isTrue(countByPermissionId == 0, "还有用户在使用该权限，不能直接删除!");
@@ -164,7 +163,7 @@ public class PermissionServiceImpl implements PermissionService {
         Assert.isTrue(countByPermissionId == 0, "还有角色在使用该权限，不能直接删除!");
         countByPermissionId = organizationPermissionRepository.countByPermissionId(id);
         Assert.isTrue(countByPermissionId == 0, "还有机构在使用该权限，不能直接删除!");
-        Collection<AnanPermissionEntity> entities = findByPid(id);
+        Collection<AnanPermissionRespDto> entities = findByPid(id);
         Assert.isTrue(entities == null || entities.size() == 0, "该节点还存在子节点不能直接删除!");
         permissionRepository.delete(entity);
     }
@@ -178,30 +177,31 @@ public class PermissionServiceImpl implements PermissionService {
                     @CacheEvict(value = RedisConstant.ANAN_ROLE_PERMISSION, allEntries = true)
             }
     )
-    public AnanPermissionEntity deleteByEntity(AnanPermissionRetrieveDto entity) {
+    public void deleteByDto(AnanPermissionUpdateDto entity) {
         AnanPermissionEntity deleteEntity = permissionRepository.findById(entity.getId()).orElse(null);
-        deleteByEntity(Objects.requireNonNull(deleteEntity, "传入了空对象!"));
-        return deleteEntity;
+        deleteByDto(Objects.requireNonNull(deleteEntity, "传入了空对象!"));
     }
 
     @Override
     @Cacheable(value = RedisConstant.ANAN_PERMISSION, key = "#id")
-    public AnanPermissionEntity findById(Long id) {
-        return permissionRepository.findById(id).orElse(null);
+    public AnanPermissionRespDto findOneById(Long id) {
+        return PermissionService.super.findOneById(id);
     }
 
     @Override
-    public List<AnanPermissionEntity> findByPidAndVersionId(Long pid, Long versionId) {
-        return permissionRepository.findAllByPidAndVersionId(pid, versionId);
+    public List<AnanPermissionRespDto> findByPidAndVersionId(Long pid, Long versionId) {
+        List<AnanPermissionEntity> entities = permissionRepository.findAllByPidAndVersionId(pid, versionId);
+        return BeanUtil.copyCollectionProperties(entities, AnanPermissionRespDto.class);
     }
 
     @Override
-    public List<AnanPermissionEntity> findByServiceCode(String serviceCode) {
-        return permissionRepository.findAllByServiceId(serviceRepository.findOneByCode(serviceCode).getId());
+    public List<AnanPermissionRespDto> findByServiceCode(String serviceCode) {
+        List<AnanPermissionEntity> entities = permissionRepository.findAllByServiceId(serviceRepository.findOneByCode(serviceCode).getId());
+        return BeanUtil.copyCollectionProperties(entities, AnanPermissionRespDto.class);
     }
 
     @Override
-    public IJpaRepository<AnanPermissionEntity, Long> getRepository() {
+    public PermissionRepository getRepository() {
         return permissionRepository;
     }
 }

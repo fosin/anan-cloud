@@ -1,11 +1,10 @@
 package top.fosin.anan.platform.repository;
 
-import java.util.List;
-
+import org.springframework.stereotype.Repository;
 import top.fosin.anan.jpa.repository.IJpaRepository;
 import top.fosin.anan.platform.entity.AnanInternationalCharsetEntity;
 
-import org.springframework.stereotype.Repository;
+import java.util.List;
 
 /**
  * 国际化明显(anan_international_charset)表数据库访问层
@@ -15,7 +14,7 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface AnanInternationalCharsetRepository extends IJpaRepository<AnanInternationalCharsetEntity, Long> {
-    List<AnanInternationalCharsetEntity> findAllByInternationalId(Integer internationalId);
+    List<AnanInternationalCharsetEntity> findAllByInternationalId(Long internationalId);
 
-    List<AnanInternationalCharsetEntity> findAllByInternationalIdAndServiceId(Integer internationalId, Integer serviceId);
+    List<AnanInternationalCharsetEntity> findAllByInternationalIdAndServiceId(Long internationalId, Long serviceId);
 }

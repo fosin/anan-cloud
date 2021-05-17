@@ -3,11 +3,11 @@ package top.fosin.anan.platform.controller;
 import io.swagger.annotations.Api;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import top.fosin.anan.platform.dto.res.AnanPayOrderRespDto;
 import top.fosin.anan.model.controller.ISimpleController;
 import top.fosin.anan.platform.dto.request.AnanPayOrderCreateDto;
 import top.fosin.anan.platform.dto.request.AnanPayOrderRetrieveDto;
 import top.fosin.anan.platform.dto.request.AnanPayOrderUpdateDto;
-import top.fosin.anan.platform.entity.AnanPayOrderEntity;
 import top.fosin.anan.platform.service.inter.AnanPayOrderService;
 
 /**
@@ -19,11 +19,12 @@ import top.fosin.anan.platform.service.inter.AnanPayOrderService;
 @RestController
 @RequestMapping("v1/order")
 @Api(value = "v1/order", tags = "系统支付订单表(anan_pay_order)接入层API")
-public class AnanPayOrderController implements ISimpleController<AnanPayOrderEntity, Long, AnanPayOrderCreateDto, AnanPayOrderRetrieveDto, AnanPayOrderUpdateDto> {
+public class AnanPayOrderController implements ISimpleController<AnanPayOrderRespDto, Long, AnanPayOrderCreateDto, AnanPayOrderRetrieveDto, AnanPayOrderUpdateDto> {
     /**
      * 服务对象
      */
     private final AnanPayOrderService ananSysPayOrderService;
+
     public AnanPayOrderController(AnanPayOrderService ananSysPayOrderService) {
         this.ananSysPayOrderService = ananSysPayOrderService;
     }

@@ -8,11 +8,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
+import top.fosin.anan.platform.dto.res.AnanInternationalRespDto;
 import top.fosin.anan.model.controller.ISimpleController;
 import top.fosin.anan.platform.dto.request.AnanInternationalCreateDto;
 import top.fosin.anan.platform.dto.request.AnanInternationalRetrieveDto;
 import top.fosin.anan.platform.dto.request.AnanInternationalUpdateDto;
-import top.fosin.anan.platform.entity.AnanInternationalEntity;
 import top.fosin.anan.platform.service.inter.AnanInternationalService;
 
 import java.util.List;
@@ -26,7 +26,7 @@ import java.util.List;
 @RestController
 @RequestMapping(UrlPrefixConstant.INTERNATIONAL)
 @Api(value = UrlPrefixConstant.INTERNATIONAL, tags = "国际化(anan_international)接入层API")
-public class AnanInternationalController implements ISimpleController<AnanInternationalEntity, Integer,
+public class AnanInternationalController implements ISimpleController<AnanInternationalRespDto, Long,
         AnanInternationalCreateDto, AnanInternationalRetrieveDto, AnanInternationalUpdateDto> {
 
     private final AnanInternationalService ananInternationalService;
@@ -44,7 +44,7 @@ public class AnanInternationalController implements ISimpleController<AnanIntern
             required = true,
             dataTypeClass = Integer.class
     )
-    public ResponseEntity<List<AnanInternationalEntity>> findAllByStatus(@PathVariable Integer status) {
+    public ResponseEntity<List<AnanInternationalRespDto>> findAllByStatus(@PathVariable Integer status) {
         return ResponseEntity.ok(ananInternationalService.findAllByStatus(status));
     }
 
@@ -57,13 +57,13 @@ public class AnanInternationalController implements ISimpleController<AnanIntern
             required = true,
             dataTypeClass = String.class
     )
-    public ResponseEntity<AnanInternationalEntity> findAllByCode(@PathVariable String code) {
+    public ResponseEntity<AnanInternationalRespDto> findAllByCode(@PathVariable String code) {
         return ResponseEntity.ok(ananInternationalService.findByCode(code));
     }
 
     @RequestMapping(path = "/default")
     @ApiOperation("查找默认语言")
-    public ResponseEntity<AnanInternationalEntity> findByDefaultFlag() {
+    public ResponseEntity<AnanInternationalRespDto> findByDefaultFlag() {
         return ResponseEntity.ok(ananInternationalService.findByDefaultFlag());
     }
 

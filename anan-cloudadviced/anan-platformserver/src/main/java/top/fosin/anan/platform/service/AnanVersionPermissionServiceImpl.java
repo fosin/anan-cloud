@@ -1,20 +1,15 @@
 package top.fosin.anan.platform.service;
 
-import top.fosin.anan.core.util.BeanUtil;
-import top.fosin.anan.jpa.service.batch.IUpdateInBatchJpaService;
-import top.fosin.anan.platform.dto.request.AnanVersionPermissionUpdateDto;
-import top.fosin.anan.platform.entity.*;
-import top.fosin.anan.platform.repository.*;
-import top.fosin.anan.platform.service.inter.AnanVersionPermissionService;
-import top.fosin.anan.platformapi.entity.AnanRoleEntity;
-import top.fosin.anan.platformapi.entity.AnanRolePermissionEntity;
-import top.fosin.anan.platformapi.entity.AnanUserPermissionEntity;
-import top.fosin.anan.platformapi.repository.RolePermissionRepository;
-import top.fosin.anan.platformapi.repository.UserPermissionRepository;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+import top.fosin.anan.platform.dto.res.AnanVersionPermissionRespDto;
+import top.fosin.anan.core.util.BeanUtil;
+import top.fosin.anan.platform.dto.request.AnanVersionPermissionCreateDto;
+import top.fosin.anan.platform.entity.*;
+import top.fosin.anan.platform.repository.*;
+import top.fosin.anan.platform.service.inter.AnanVersionPermissionService;
 
 import java.util.Collection;
 import java.util.List;
@@ -65,8 +60,8 @@ public class AnanVersionPermissionServiceImpl implements AnanVersionPermissionSe
     }
 
     @Override
-    public List<AnanVersionPermissionEntity> findByVersionId(Long versionId) {
-        return getRepository().findByVersionId(versionId);
+    public List<AnanVersionPermissionRespDto> findByVersionId(Long versionId) {
+        return BeanUtil.copyCollectionProperties(getRepository().findByVersionId(versionId), AnanVersionPermissionRespDto.class);
     }
 
     @Override
@@ -76,12 +71,12 @@ public class AnanVersionPermissionServiceImpl implements AnanVersionPermissionSe
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Collection<AnanVersionPermissionEntity> updateInBatch(Long versionId, Collection<AnanVersionPermissionUpdateDto> entities) {
+    public Collection<AnanVersionPermissionRespDto> updateInBatch(String deleteCol, Long versionId, Collection<AnanVersionPermissionCreateDto> entities) {
 
         Assert.notNull(versionId, "传入的版本ID不能为空!");
         Assert.isTrue(entities.stream().allMatch(entity -> entity.getVersionId().equals(versionId)), "需要更新的数据集中有与版本ID不匹配的数据!");
 
-        Collection<AnanVersionPermissionEntity> versionPermissionEntities = BeanUtil.copyCollectionProperties(this.getClass(), IUpdateInBatchJpaService.class, entities);
+        Collection<AnanVersionPermissionEntity> versionPermissionEntities = BeanUtil.copyCollectionProperties(entities, AnanVersionPermissionEntity.class);
 
         List<AnanOrganizationAuthEntity> organizationAuthEntities = organizationAuthRepository.findAllByVersionId(versionId);
         organizationAuthEntities.forEach(authEntity -> {
@@ -136,7 +131,7 @@ public class AnanVersionPermissionServiceImpl implements AnanVersionPermissionSe
 
         versionPermissionRepository.deleteByVersionId(versionId);
 
-        return versionPermissionRepository.saveAll(versionPermissionEntities);
+        return BeanUtil.copyCollectionProperties(versionPermissionRepository.saveAll(versionPermissionEntities), AnanVersionPermissionRespDto.class);
     }
 
 }

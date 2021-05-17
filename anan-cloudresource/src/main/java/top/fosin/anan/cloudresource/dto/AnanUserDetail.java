@@ -14,14 +14,12 @@ import java.util.Date;
 import java.util.HashSet;
 
 /**
- * 
- *
  * @author fosin
  * @date 2018.7.9
  */
 public class AnanUserDetail extends User {
     @Getter
-    private AnanUserDto user;
+    private AnanUserAuthDto user;
     @Getter
     private AnanClient ananClient;
 
@@ -30,9 +28,9 @@ public class AnanUserDetail extends User {
         super("dfgsdfgdsgr", "sdfgergergerg", new HashSet<>());
     }
 
-    public AnanUserDetail(AnanUserDto user, Collection<? extends GrantedAuthority> authorities) {
+    public AnanUserDetail(AnanUserAuthDto user, Collection<? extends GrantedAuthority> authorities) {
         super(user.getUsercode(), user.getPassword(), user.getStatus() == 0, user.getExpireTime().after(new Date()), true, user.getStatus() != 9, authorities);
-        this.user = new AnanUserDto();
+        this.user = new AnanUserAuthDto();
         BeanUtils.copyProperties(user, this.user);
         this.user.setPassword(null);
         ananClient = new AnanClient();

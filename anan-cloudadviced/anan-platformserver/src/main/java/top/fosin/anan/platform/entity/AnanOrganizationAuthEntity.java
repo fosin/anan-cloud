@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.DynamicUpdate;
-import top.fosin.anan.jpa.entity.AbstractOrganizIdCreateJpaEntity;
+import top.fosin.anan.jpa.entity.OrganizIdCreateEntity;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -26,7 +26,7 @@ import java.io.Serializable;
 @DynamicUpdate
 @Table(name = "anan_organization_auth")
 @ApiModel(value = "系统机构授权表实体类", description = "表(anan_organization_auth)的对应的实体类")
-public class AnanOrganizationAuthEntity extends AbstractOrganizIdCreateJpaEntity<Long, Long> implements Serializable {
+public class AnanOrganizationAuthEntity extends OrganizIdCreateEntity<Long> implements Serializable {
     private static final long serialVersionUID = -99392087741484947L;
 
     @Basic

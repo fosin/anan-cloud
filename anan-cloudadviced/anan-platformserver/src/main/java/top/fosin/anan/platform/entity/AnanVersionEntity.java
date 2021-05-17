@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.DynamicUpdate;
-import top.fosin.anan.jpa.entity.AbstractCreateUpdateJpaEntity;
+import top.fosin.anan.jpa.entity.CreateUpdateEntity;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -27,7 +27,7 @@ import java.util.Date;
 @DynamicUpdate
 @Table(name = "anan_version")
 @ApiModel(value = "系统版本表实体类", description = "表(anan_version)的对应的实体类")
-public class AnanVersionEntity extends AbstractCreateUpdateJpaEntity<Long, Long> implements Serializable {
+public class AnanVersionEntity extends CreateUpdateEntity<Long> implements Serializable {
     private static final long serialVersionUID = -54459367678395780L;
 
     @Basic

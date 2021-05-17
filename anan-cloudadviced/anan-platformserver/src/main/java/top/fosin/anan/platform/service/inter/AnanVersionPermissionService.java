@@ -1,10 +1,10 @@
 package top.fosin.anan.platform.service.inter;
 
 
+import top.fosin.anan.platform.dto.res.AnanVersionPermissionRespDto;
 import top.fosin.anan.jpa.service.batch.ICrudBatchJpaService;
 import top.fosin.anan.platform.dto.request.AnanVersionPermissionCreateDto;
 import top.fosin.anan.platform.dto.request.AnanVersionPermissionRetrieveDto;
-import top.fosin.anan.platform.dto.request.AnanVersionPermissionUpdateDto;
 import top.fosin.anan.platform.entity.AnanVersionPermissionEntity;
 
 import java.util.List;
@@ -16,8 +16,9 @@ import java.util.List;
  * @date 2018-11-18 17:26:40
  */
 public interface AnanVersionPermissionService extends ICrudBatchJpaService<AnanVersionPermissionEntity,
-        Long, Long, AnanVersionPermissionCreateDto, AnanVersionPermissionRetrieveDto, AnanVersionPermissionUpdateDto> {
-    List<AnanVersionPermissionEntity> findByVersionId(Long versionId);
+        AnanVersionPermissionRespDto,
+        Long, Long, AnanVersionPermissionCreateDto, AnanVersionPermissionRetrieveDto> {
+    List<AnanVersionPermissionRespDto> findByVersionId(Long versionId);
 
     long countByPermissionId(Long permissionId);
 

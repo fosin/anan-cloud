@@ -1,5 +1,6 @@
 package top.fosin.anan.platform.service.inter;
 
+import top.fosin.anan.platform.dto.res.AnanVersionRoleRespDto;
 import top.fosin.anan.platform.dto.request.AnanVersionRoleCreateDto;
 import top.fosin.anan.platform.dto.request.AnanVersionRoleRetrieveDto;
 import top.fosin.anan.platform.dto.request.AnanVersionRoleUpdateDto;
@@ -12,5 +13,6 @@ import top.fosin.anan.jpa.service.ISimpleJpaService;
  * @author fosin
  * @date 2018-11-18 17:26:40
  */
-public interface AnanVersionRoleService extends ISimpleJpaService<AnanVersionRoleEntity, Long, AnanVersionRoleCreateDto, AnanVersionRoleRetrieveDto, AnanVersionRoleUpdateDto> {
+public interface AnanVersionRoleService extends ISimpleJpaService<AnanVersionRoleEntity, AnanVersionRoleRespDto,
+        Long, AnanVersionRoleCreateDto, AnanVersionRoleRetrieveDto, AnanVersionRoleUpdateDto> {
 }

@@ -9,34 +9,34 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
-import top.fosin.anan.cloudresource.dto.request.AnanPermissionCreateDto;
-import top.fosin.anan.cloudresource.dto.request.AnanPermissionRetrieveDto;
-import top.fosin.anan.cloudresource.dto.request.AnanPermissionUpdateDto;
+import top.fosin.anan.platform.dto.request.AnanPermissionCreateDto;
+import top.fosin.anan.cloudresource.dto.req.AnanPermissionRetrieveDto;
+import top.fosin.anan.platform.dto.request.AnanPermissionUpdateDto;
 import top.fosin.anan.cloudresource.dto.res.AnanPermissionRespDto;
-import top.fosin.anan.model.controller.AbstractBaseController;
+import top.fosin.anan.cloudresource.dto.res.AnanPermissionRespTreeDto;
+import top.fosin.anan.model.controller.BaseController;
 import top.fosin.anan.model.controller.IRetrieveTreeController;
 import top.fosin.anan.model.controller.ISimpleController;
 import top.fosin.anan.model.dto.TreeDto;
+import top.fosin.anan.platform.entity.AnanPermissionEntity;
 import top.fosin.anan.platform.service.inter.PermissionService;
-import top.fosin.anan.platformapi.entity.AnanPermissionEntity;
+import top.fosin.anan.cloudresource.constant.RequestPath;
 
 import java.util.Collection;
 import java.util.List;
 
 /**
- * 
- *
  * @author fosin
  */
 @RestController
 @RequestMapping(UrlPrefixConstant.PERMISSION)
 @Api(value = UrlPrefixConstant.PERMISSION, tags = "权限管理")
-public class PermissionController extends AbstractBaseController
-        implements ISimpleController<AnanPermissionEntity, Long,
+public class PermissionController extends BaseController
+        implements ISimpleController<AnanPermissionRespDto, Long,
         AnanPermissionCreateDto, AnanPermissionRetrieveDto,
         AnanPermissionUpdateDto>,
         IRetrieveTreeController<AnanPermissionEntity,
-                AnanPermissionRespDto, Long,
+                AnanPermissionRespTreeDto, Long,
                 AnanPermissionRetrieveDto> {
 
     private final PermissionService permissionService;
@@ -49,15 +49,15 @@ public class PermissionController extends AbstractBaseController
     @ApiImplicitParam(name = TreeDto.PID_NAME, value = "父权限ID,AnanPermissionEntity.pid",
             required = true, dataTypeClass = Long.class, paramType = "path")
     @PostMapping("/listChild/{pid}")
-    public ResponseEntity<Collection<AnanPermissionEntity>> getListChild(@PathVariable Long pid) {
+    public ResponseEntity<Collection<AnanPermissionRespDto>> getListChild(@PathVariable Long pid) {
         return ResponseEntity.ok(permissionService.findByPid(pid));
     }
 
-    @PostMapping("/serviceCode/{serviceCode}")
+    @PostMapping(RequestPath.SERVICE_CODE)
     @ApiImplicitParam(name = "serviceCode", value = "服务标识，等同于anan_service.code",
             required = true, dataTypeClass = String.class, paramType = "path")
     @ApiOperation(value = "查询应用权限", notes = "根据服务标识(anan_service.code)查询其权限列表")
-    public ResponseEntity<List<AnanPermissionEntity>> findByServiceCode(@PathVariable String serviceCode) {
+    public ResponseEntity<List<AnanPermissionRespDto>> findByServiceCode(@PathVariable String serviceCode) {
         return ResponseEntity.ok(permissionService.findByServiceCode(serviceCode));
     }
 

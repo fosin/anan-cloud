@@ -1,8 +1,7 @@
 package top.fosin.anan.platform.service.inter;
 
+import top.fosin.anan.platform.dto.res.AnanInternationalCharsetRespDto;
 import top.fosin.anan.jpa.service.ISimpleJpaService;
-import top.fosin.anan.model.module.PageModule;
-import top.fosin.anan.model.result.ListResult;
 import top.fosin.anan.platform.dto.request.AnanInternationalCharsetCreateDto;
 import top.fosin.anan.platform.dto.request.AnanInternationalCharsetRetrieveDto;
 import top.fosin.anan.platform.dto.request.AnanInternationalCharsetUpdateDto;
@@ -16,10 +15,14 @@ import java.util.List;
  * @author fosin
  * @date 2020-12-04 11:05:28
  */
-public interface AnanInternationalCharsetService extends ISimpleJpaService<AnanInternationalCharsetEntity, Long,
-        AnanInternationalCharsetCreateDto, AnanInternationalCharsetRetrieveDto, AnanInternationalCharsetUpdateDto> {
-    List<AnanInternationalCharsetEntity> findAllByInternationalId(Integer internationalId);
+public interface AnanInternationalCharsetService extends ISimpleJpaService<AnanInternationalCharsetEntity,
+        AnanInternationalCharsetRespDto,
+        Long,
+        AnanInternationalCharsetCreateDto,
+        AnanInternationalCharsetRetrieveDto,
+        AnanInternationalCharsetUpdateDto> {
+    List<AnanInternationalCharsetRespDto> findAllByInternationalId(Long internationalId);
 
-    List<AnanInternationalCharsetEntity> findAllByInternationalIdAndServiceId(Integer internationalId, Integer serviceId);
+    List<AnanInternationalCharsetRespDto> findAllByInternationalIdAndServiceId(Long internationalId, Long serviceId);
 
 }

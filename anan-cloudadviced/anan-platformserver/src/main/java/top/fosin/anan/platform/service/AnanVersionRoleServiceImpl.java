@@ -5,6 +5,8 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import top.fosin.anan.cloudresource.constant.SystemConstant;
+import top.fosin.anan.platform.dto.res.AnanVersionRoleRespDto;
+import top.fosin.anan.core.util.BeanUtil;
 import top.fosin.anan.platform.dto.request.AnanVersionRoleCreateDto;
 import top.fosin.anan.platform.dto.request.AnanVersionRoleUpdateDto;
 import top.fosin.anan.platform.entity.AnanVersionRoleEntity;
@@ -41,12 +43,12 @@ public class AnanVersionRoleServiceImpl implements AnanVersionRoleService {
      * @return entity 实例对象
      */
     @Override
-    public AnanVersionRoleEntity create(AnanVersionRoleCreateDto entity) {
+    public AnanVersionRoleRespDto create(AnanVersionRoleCreateDto entity) {
         Assert.notNull(entity, "创建数据的实体对象不能为空!");
         Assert.isTrue(!entity.getValue().equals(SystemConstant.ANAN_USER_CODE), "角色标识不能为:" + SystemConstant.ANAN_USER_CODE);
         AnanVersionRoleEntity createEntity = new AnanVersionRoleEntity();
         BeanUtils.copyProperties(entity, createEntity);
-        return getRepository().save(createEntity);
+        return BeanUtil.copyProperties(getRepository().save(createEntity), AnanVersionRoleRespDto.class);
     }
 
     /**
@@ -56,7 +58,7 @@ public class AnanVersionRoleServiceImpl implements AnanVersionRoleService {
      * @return entity 实例对象
      */
     @Override
-    public AnanVersionRoleEntity update(AnanVersionRoleUpdateDto entity) {
+    public void update(AnanVersionRoleUpdateDto entity) {
         Assert.notNull(entity, "更新数据的实体对象不能为空!");
         Long id = entity.getId();
         Assert.isTrue(id != null && id > 0, "传入的主键无效!");
@@ -64,31 +66,6 @@ public class AnanVersionRoleServiceImpl implements AnanVersionRoleService {
         AnanVersionRoleEntity createEntity = getRepository().findById(id).orElse(null);
         Assert.notNull(createEntity, "更新数据的实体对象不能为空!");
         BeanUtils.copyProperties(entity, createEntity);
-        return getRepository().save(createEntity);
+        getRepository().save(createEntity);
     }
-
-    /**
-     * 根据查询条件查询分页排序数据集
-     *
-     * @param pageModule 分页排序条件
-     * @return Result结果集
-     */
-//    @Override
-//    public Result findAllByPageSort(PageModule pageModule) {
-//        PageRequest pageable = PageRequest.of(pageModule.getPageNumber() - 1, pageModule.getPageSize(), Sort.Direction.fromString(pageModule.getSortOrder()), pageModule.getSortName());
-//        String searchCondition = pageModule.getSearchText();
-//        Specification<AnanVersionRoleEntity> condition = (root, query, cb) -> {
-//            Path<String> roleName = root.get("name");
-//            Path<String> roleValue = root.get("value");
-//            if (StringUtils.isBlank(searchCondition)) {
-//                return query.getRestriction();
-//            }
-//            return cb.or(cb.like(roleName, "%" + searchCondition + "%"), cb.like(roleValue, "%" + searchCondition + "%"));
-//        };
-//
-//        //分页查找
-//        Page<AnanVersionRoleEntity> page = getRepository().findAll(condition, pageable);
-//
-//        return ResultUtils.success(page.getTotalElements(), page.getContent());
-//    }
 }

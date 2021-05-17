@@ -1,10 +1,11 @@
 package top.fosin.anan.platform.service;
 
-import top.fosin.anan.platformapi.entity.AnanServiceEntity;
-import top.fosin.anan.platformapi.repository.AnanServiceRepository;
-import top.fosin.anan.platform.service.inter.AnanServiceService;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
+import top.fosin.anan.cloudresource.dto.res.AnanServiceRespDto;
+import top.fosin.anan.core.util.BeanUtil;
+import top.fosin.anan.platform.repository.AnanServiceRepository;
+import top.fosin.anan.platform.service.inter.AnanServiceService;
 
 import java.util.List;
 
@@ -25,8 +26,8 @@ public class AnanServiceServiceImpl implements AnanServiceService {
     }
 
     @Override
-    public List<AnanServiceEntity> findAllByStatus(Integer status) {
-        return this.getRepository().findAllByStatus(status);
+    public List<AnanServiceRespDto> findAllByStatus(Integer status) {
+        return BeanUtil.copyCollectionProperties(this.getRepository().findAllByStatus(status), AnanServiceRespDto.class);
     }
 
     /**

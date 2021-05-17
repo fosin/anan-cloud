@@ -1,11 +1,11 @@
 package top.fosin.anan.platform.service.inter;
 
 
-import top.fosin.anan.cloudresource.dto.request.AnanUserPermissionCreateDto;
-import top.fosin.anan.cloudresource.dto.request.AnanUserPermissionRetrieveDto;
-import top.fosin.anan.cloudresource.dto.request.AnanUserPermissionUpdateDto;
-import top.fosin.anan.platformapi.entity.AnanUserPermissionEntity;
+import top.fosin.anan.platform.dto.request.AnanUserPermissionCreateDto;
+import top.fosin.anan.platform.dto.request.AnanUserPermissionRetrieveDto;
+import top.fosin.anan.platform.dto.res.AnanUserPermissionRespDto;
 import top.fosin.anan.jpa.service.batch.ICrudBatchJpaService;
+import top.fosin.anan.platform.entity.AnanUserPermissionEntity;
 
 import java.util.List;
 
@@ -16,11 +16,13 @@ import java.util.List;
  * @author fosin
  */
 public interface UserPermissionService extends
-        ICrudBatchJpaService<AnanUserPermissionEntity, Long, Long, AnanUserPermissionCreateDto,
-                AnanUserPermissionRetrieveDto, AnanUserPermissionUpdateDto> {
-    List<AnanUserPermissionEntity> findByUserIdAndOrganizId(Long userId, Long organizId);
+        ICrudBatchJpaService<AnanUserPermissionEntity,
+                AnanUserPermissionRespDto,
+                Long, Long, AnanUserPermissionCreateDto,
+                AnanUserPermissionRetrieveDto> {
+    List<AnanUserPermissionRespDto> findByUserIdAndOrganizId(Long userId, Long organizId);
 
-    List<AnanUserPermissionEntity> findByUserId(Long userId);
+    List<AnanUserPermissionRespDto> findByUserId(Long userId);
 
     long countByPermissionId(Long permissionId);
 }

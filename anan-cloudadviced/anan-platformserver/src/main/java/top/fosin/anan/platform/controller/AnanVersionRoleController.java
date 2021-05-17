@@ -8,13 +8,13 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
+import top.fosin.anan.platform.dto.res.AnanVersionRolePermissionRespDto;
+import top.fosin.anan.platform.dto.res.AnanVersionRoleRespDto;
 import top.fosin.anan.model.controller.ISimpleController;
 import top.fosin.anan.platform.dto.request.AnanVersionRoleCreateDto;
-import top.fosin.anan.platform.dto.request.AnanVersionRolePermissionUpdateDto;
+import top.fosin.anan.platform.dto.request.AnanVersionRolePermissionCreateDto;
 import top.fosin.anan.platform.dto.request.AnanVersionRoleRetrieveDto;
 import top.fosin.anan.platform.dto.request.AnanVersionRoleUpdateDto;
-import top.fosin.anan.platform.entity.AnanVersionRoleEntity;
-import top.fosin.anan.platform.entity.AnanVersionRolePermissionEntity;
 import top.fosin.anan.platform.service.inter.AnanVersionRolePermissionService;
 import top.fosin.anan.platform.service.inter.AnanVersionRoleService;
 
@@ -29,22 +29,23 @@ import java.util.List;
 @RestController
 @RequestMapping(UrlPrefixConstant.VERSION_ROLE)
 @Api(value = UrlPrefixConstant.VERSION_ROLE, tags = "系统版本角色表(anan_version_role)接入层API")
-public class AnanVersionRoleController implements ISimpleController<AnanVersionRoleEntity, Long, AnanVersionRoleCreateDto, AnanVersionRoleRetrieveDto, AnanVersionRoleUpdateDto> {
+public class AnanVersionRoleController implements ISimpleController<AnanVersionRoleRespDto,
+        Long, AnanVersionRoleCreateDto, AnanVersionRoleRetrieveDto, AnanVersionRoleUpdateDto> {
     /**
      * 服务对象
      */
-    private final AnanVersionRoleService ananSysVersionRoleService;
+    private final AnanVersionRoleService versionRoleService;
     private final AnanVersionRolePermissionService versionRolePermissionService;
 
-    public AnanVersionRoleController(AnanVersionRoleService ananSysVersionRoleService, AnanVersionRolePermissionService versionRolePermissionService) {
-        this.ananSysVersionRoleService = ananSysVersionRoleService;
+    public AnanVersionRoleController(AnanVersionRoleService versionRoleService, AnanVersionRolePermissionService versionRolePermissionService) {
+        this.versionRoleService = versionRoleService;
         this.versionRolePermissionService = versionRolePermissionService;
     }
 
     @ApiOperation("根据角色ID获取版本权限")
     @ApiImplicitParam(name = "roleId", value = "版本ID,取值于AnanVersionRoleEntity.id", required = true, dataTypeClass = Long.class, paramType = "path")
     @RequestMapping(value = "/permissions/{roleId}", method = {RequestMethod.GET, RequestMethod.POST})
-    public ResponseEntity<List<AnanVersionRolePermissionEntity>> permissions(@PathVariable Long roleId) {
+    public ResponseEntity<List<AnanVersionRolePermissionRespDto>> permissions(@PathVariable Long roleId) {
         return ResponseEntity.ok(versionRolePermissionService.findByRoleId(roleId));
     }
 
@@ -54,15 +55,15 @@ public class AnanVersionRoleController implements ISimpleController<AnanVersionR
             @ApiImplicitParam(name = "roleId", value = "版本ID,取值于AnanVersionRoleEntity.id", required = true, dataTypeClass = Long.class, paramType = "path")
     })
     @PutMapping(value = "/permissions/{roleId}")
-    public ResponseEntity<Boolean> permissions(@RequestBody List<AnanVersionRolePermissionUpdateDto> entities,
+    public ResponseEntity<Boolean> permissions(@RequestBody List<AnanVersionRolePermissionCreateDto> entities,
                                                @PathVariable("roleId") Long roleId) {
         //更新版本权限
-        versionRolePermissionService.updateInBatch(roleId, entities);
+        versionRolePermissionService.updateInBatch("roleId", roleId, entities);
         return ResponseEntity.ok(true);
     }
 
     @Override
     public AnanVersionRoleService getService() {
-        return ananSysVersionRoleService;
+        return versionRoleService;
     }
 }

@@ -3,6 +3,9 @@ package top.fosin.anan.platform.dto.request;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+import top.fosin.anan.model.dto.IdDto;
 
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -15,13 +18,11 @@ import java.io.Serializable;
  * @since 1.0.0
  */
 @Data
+@ToString
+@EqualsAndHashCode(callSuper = true)
 @ApiModel(value = "系统机构权限表更新DTO", description = "表(anan_organization_permission)的对应的更新DTO")
-public class AnanOrganizationPermissionUpdateDto implements Serializable {
+public class AnanOrganizationPermissionUpdateDto extends IdDto<Long> implements Serializable {
     private static final long serialVersionUID = 186440811228040786L;
-
-    @NotNull(message = "机构权限ID" + "{javax.validation.constraints.NotNull.message}")
-    @ApiModelProperty(value = "机构权限ID, 主键", required = true)
-    private Long id;
 
     @NotNull(message = "机构ID" + "{javax.validation.constraints.NotNull.message}")
     @ApiModelProperty(value = "机构ID", required = true)

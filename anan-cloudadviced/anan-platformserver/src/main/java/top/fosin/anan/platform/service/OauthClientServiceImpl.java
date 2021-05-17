@@ -7,8 +7,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
+import top.fosin.anan.platform.dto.res.OauthClientDetailsRespDto;
 import top.fosin.anan.core.util.BeanUtil;
-import top.fosin.anan.jpa.repository.IJpaRepository;
 import top.fosin.anan.platform.dto.request.OauthClientDetailsCreateDto;
 import top.fosin.anan.platform.dto.request.OauthClientDetailsUpdateDto;
 import top.fosin.anan.platform.entity.OauthClientDetailsEntity;
@@ -36,7 +36,7 @@ public class OauthClientServiceImpl implements OauthClientService {
     }
 
     @Override
-    public OauthClientDetailsEntity create(OauthClientDetailsCreateDto entity) {
+    public OauthClientDetailsRespDto create(OauthClientDetailsCreateDto entity) {
         Assert.notNull(entity, "传入的创建数据实体对象不能为空!");
         String id = entity.getClientId();
         OauthClientDetailsEntity createEntity = oauthClientRepository.findById(id).orElse(null);
@@ -44,11 +44,11 @@ public class OauthClientServiceImpl implements OauthClientService {
         createEntity = new OauthClientDetailsEntity();
         BeanUtils.copyProperties(entity, createEntity);
         createEntity.setClientSecret(passwordEncoder.encode(createEntity.getClientSecret()));
-        return oauthClientRepository.save(createEntity);
+        return BeanUtil.copyProperties(oauthClientRepository.save(createEntity), OauthClientDetailsRespDto.class);
     }
 
     @Override
-    public OauthClientDetailsEntity update(OauthClientDetailsUpdateDto entity) {
+    public void update(OauthClientDetailsUpdateDto entity) {
         Assert.notNull(entity, "传入的更新数据实体对象不能为空!");
 
         String id = entity.getClientId();
@@ -63,11 +63,11 @@ public class OauthClientServiceImpl implements OauthClientService {
         if (!Objects.equals(entity.getClientSecret(), updateEntiy.getClientSecret())) {
             updateEntiy.setClientSecret(passwordEncoder.encode(updateEntiy.getClientSecret()));
         }
-        return oauthClientRepository.save(updateEntiy);
+        oauthClientRepository.save(updateEntiy);
     }
 
     @Override
-    public IJpaRepository<OauthClientDetailsEntity, String> getRepository() {
+    public OauthClientRepository getRepository() {
         return oauthClientRepository;
     }
 }

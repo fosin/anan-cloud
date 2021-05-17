@@ -5,14 +5,14 @@
     <parent>
         <groupId>top.fosin.anan</groupId>
         <artifactId>anan-boot-starter</artifactId>
-        <version>2.3.0-SNAPSHOT</version>
+        <version>2.4.0-SNAPSHOT</version>
         <relativePath/>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <packaging>pom</packaging>
     <artifactId>anan-cloud</artifactId>
-    <version>2.6.0-SNAPSHOT</version>
+    <version>2.7.0-SNAPSHOT</version>
     <modules>
         <module>anan-eurekaserver</module>
         <module>anan-cloudadviced</module>
@@ -163,7 +163,7 @@
         <dependency>
             <groupId>top.fosin.anan</groupId>
             <artifactId>anan-cloudresource</artifactId>
-            <version>2.6.0-SNAPSHOT</version>
+            <version>2.7.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -259,11 +259,6 @@
                 <artifactId>spring-boot-admin-starter-server</artifactId>
                 <version>${anan-spring-boot-admin.version}</version>
             </dependency>
-            <dependency>
-                <groupId>top.fosin.anan</groupId>
-                <artifactId>anan-platformapi</artifactId>
-                <version>2.6.0-SNAPSHOT</version>
-            </dependency>
         </dependencies>
     </dependencyManagement>
     <repositories>
@@ -331,10 +326,6 @@
                         <exclude>
                             <groupId>top.fosin.anan</groupId>
                             <artifactId>anan-cloudresource</artifactId>
-                        </exclude>
-                        <exclude>
-                            <groupId>top.fosin.anan</groupId>
-                            <artifactId>anan-platformapi</artifactId>
                         </exclude>
                     </excludes>
                     <!--<skip>true</skip> 默认跳过repackage-->

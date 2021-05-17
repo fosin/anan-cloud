@@ -9,37 +9,34 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
-import top.fosin.anan.cloudresource.dto.RegisterDto;
-import top.fosin.anan.cloudresource.dto.request.AnanOrganizationCreateDto;
-import top.fosin.anan.cloudresource.dto.request.AnanOrganizationRetrieveDto;
-import top.fosin.anan.cloudresource.dto.request.AnanOrganizationUpdateDto;
+import top.fosin.anan.cloudresource.dto.req.RegisterDto;
+import top.fosin.anan.platform.dto.request.AnanOrganizationCreateDto;
+import top.fosin.anan.platform.dto.request.AnanOrganizationRetrieveDto;
+import top.fosin.anan.platform.dto.request.AnanOrganizationUpdateDto;
+import top.fosin.anan.platform.dto.res.AnanOrganizationAuthRespDto;
+import top.fosin.anan.platform.dto.res.AnanOrganizationPermissionRespDto;
+import top.fosin.anan.cloudresource.dto.res.AnanOrganizationRespDto;
 import top.fosin.anan.cloudresource.dto.res.AnanOrganizationTreeDto;
-import top.fosin.anan.model.controller.AbstractBaseController;
+import top.fosin.anan.model.controller.BaseController;
 import top.fosin.anan.model.controller.ISimpleController;
 import top.fosin.anan.model.dto.TreeDto;
-import top.fosin.anan.model.service.ISimpleService;
-import top.fosin.anan.platform.dto.request.AnanOrganizationPermissionUpdateDto;
-import top.fosin.anan.platform.entity.AnanOrganizationAuthEntity;
-import top.fosin.anan.platform.entity.AnanOrganizationPermissionEntity;
+import top.fosin.anan.platform.dto.request.AnanOrganizationPermissionCreateDto;
 import top.fosin.anan.platform.service.inter.AnanOrganizationAuthService;
 import top.fosin.anan.platform.service.inter.AnanOrganizationPermissionService;
 import top.fosin.anan.platform.service.inter.OrganizationService;
-import top.fosin.anan.platformapi.entity.AnanOrganizationEntity;
 
 import java.util.Collection;
 import java.util.List;
 
 /**
- * 
- *
  * @author fosin
  */
 @RestController
 @Slf4j
 @RequestMapping(UrlPrefixConstant.ORGANIZATION)
 @Api(value = UrlPrefixConstant.ORGANIZATION, tags = "机构管理相关操作(增删改查)")
-public class AnanOrganizationController extends AbstractBaseController
-        implements ISimpleController<AnanOrganizationEntity, Long,
+public class AnanOrganizationController extends BaseController
+        implements ISimpleController<AnanOrganizationRespDto, Long,
         AnanOrganizationCreateDto, AnanOrganizationRetrieveDto,
         AnanOrganizationUpdateDto> {
     private final OrganizationService organizationService;
@@ -56,7 +53,7 @@ public class AnanOrganizationController extends AbstractBaseController
     @ApiImplicitParam(name = "organizId", value = "机构ID,取值于AnanOrganizationEntity.id",
             required = true, dataTypeClass = Long.class, paramType = "path")
     @RequestMapping(value = "/permissions/{organizId}", method = {RequestMethod.GET, RequestMethod.POST})
-    public ResponseEntity<List<AnanOrganizationPermissionEntity>> permissions(@PathVariable Long organizId) {
+    public ResponseEntity<List<AnanOrganizationPermissionRespDto>> permissions(@PathVariable Long organizId) {
         return ResponseEntity.ok(organizationPermissionService.findByOrganizId(organizId));
     }
 
@@ -68,23 +65,23 @@ public class AnanOrganizationController extends AbstractBaseController
 
     })
     @PutMapping(value = "/permissions/{organizId}")
-    public ResponseEntity<Collection<AnanOrganizationPermissionEntity>> permissions(@RequestBody List<AnanOrganizationPermissionUpdateDto> entities,
-                                                                                    @PathVariable("organizId") Long organizId) {
-        return ResponseEntity.ok(organizationPermissionService.updateInBatch(organizId, entities));
+    public ResponseEntity<Collection<AnanOrganizationPermissionRespDto>> permissions(@RequestBody List<AnanOrganizationPermissionCreateDto> entities,
+                                                                                     @PathVariable("organizId") Long organizId) {
+        return ResponseEntity.ok(organizationPermissionService.updateInBatch("organizId", organizId, entities));
     }
 
 
     @ApiOperation("根据父机构ID获取其孩子节点数据")
     @PostMapping("/listChild/{pid}")
     @ApiImplicitParam(name = TreeDto.PID_NAME, required = true, dataTypeClass = Long.class, value = "父节点ID,AnanOrganizationEntity.id", paramType = "path")
-    public ResponseEntity<List<AnanOrganizationEntity>> findChildByPid(@PathVariable(TreeDto.PID_NAME) Long pid) {
+    public ResponseEntity<List<AnanOrganizationRespDto>> findChildByPid(@PathVariable(TreeDto.PID_NAME) Long pid) {
         return ResponseEntity.ok(organizationService.findChildByPid(pid));
     }
 
     @ApiOperation("根据父机构ID获取其所有后代节点数据")
     @ApiImplicitParam(name = TreeDto.PID_NAME, required = true, dataTypeClass = Long.class, value = "父节点ID,AnanOrganizationEntity.id", paramType = "path")
     @PostMapping("/listAllChild/{pid}")
-    public ResponseEntity<List<AnanOrganizationEntity>> findAllChildByPid(@PathVariable(TreeDto.PID_NAME) Long pid) {
+    public ResponseEntity<List<AnanOrganizationRespDto>> findAllChildByPid(@PathVariable(TreeDto.PID_NAME) Long pid) {
         return ResponseEntity.ok(organizationService.findAllChildByPid(pid));
     }
 
@@ -108,10 +105,10 @@ public class AnanOrganizationController extends AbstractBaseController
     @ApiOperation("根据父机构ID获取其孩子节点数据")
     @ApiImplicitParam(name = "organizId", required = true, dataTypeClass = Long.class, value = "机构ID,取值于AnanOrganizationEntity.id", paramType = "path")
     @PostMapping("/auth/{organizId}")
-    public ResponseEntity<AnanOrganizationAuthEntity> getOrganizAuth(@PathVariable("organizId") Long organizId) {
-        List<AnanOrganizationAuthEntity> organizationAuthEntities = organizationAuthService.findAllByOrganizId(organizId);
-        Assert.isTrue(organizationAuthEntities.size() > 0, "该机构还未购买服务器!");
-        return ResponseEntity.ok(organizationAuthEntities.get(0));
+    public ResponseEntity<AnanOrganizationAuthRespDto> getOrganizAuth(@PathVariable("organizId") Long organizId) {
+        List<AnanOrganizationAuthRespDto> authRespDtos = organizationAuthService.findAllByOrganizId(organizId);
+        Assert.isTrue(authRespDtos.size() > 0, "该机构还未购买服务器!");
+        return ResponseEntity.ok(authRespDtos.get(0));
     }
 
     @Override

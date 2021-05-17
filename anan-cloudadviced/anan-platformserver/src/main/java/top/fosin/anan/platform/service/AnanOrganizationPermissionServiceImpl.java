@@ -1,16 +1,15 @@
 package top.fosin.anan.platform.service;
 
-import top.fosin.anan.jpa.service.batch.IUpdateInBatchJpaService;
-import top.fosin.anan.platform.dto.request.AnanOrganizationPermissionUpdateDto;
-import top.fosin.anan.platform.entity.AnanOrganizationPermissionEntity;
-import top.fosin.anan.platform.repository.AnanOrganizationPermissionRepository;
-import top.fosin.anan.platform.service.inter.AnanOrganizationPermissionService;
-import top.fosin.anan.core.util.BeanUtil;
-
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+import top.fosin.anan.platform.dto.res.AnanOrganizationPermissionRespDto;
+import top.fosin.anan.core.util.BeanUtil;
+import top.fosin.anan.platform.dto.request.AnanOrganizationPermissionCreateDto;
+import top.fosin.anan.platform.entity.AnanOrganizationPermissionEntity;
+import top.fosin.anan.platform.repository.AnanOrganizationPermissionRepository;
+import top.fosin.anan.platform.service.inter.AnanOrganizationPermissionService;
 
 import java.util.Collection;
 import java.util.List;
@@ -24,10 +23,10 @@ import java.util.List;
 @Service
 @Lazy
 public class AnanOrganizationPermissionServiceImpl implements AnanOrganizationPermissionService {
-    private final AnanOrganizationPermissionRepository ananSysOrganizationPermissionRepository;
+    private final AnanOrganizationPermissionRepository organizationPermissionRepository;
 
-    public AnanOrganizationPermissionServiceImpl(AnanOrganizationPermissionRepository ananSysOrganizationPermissionRepository) {
-        this.ananSysOrganizationPermissionRepository = ananSysOrganizationPermissionRepository;
+    public AnanOrganizationPermissionServiceImpl(AnanOrganizationPermissionRepository organizationPermissionRepository) {
+        this.organizationPermissionRepository = organizationPermissionRepository;
     }
 
     /**
@@ -35,12 +34,12 @@ public class AnanOrganizationPermissionServiceImpl implements AnanOrganizationPe
      */
     @Override
     public AnanOrganizationPermissionRepository getRepository() {
-        return ananSysOrganizationPermissionRepository;
+        return organizationPermissionRepository;
     }
 
     @Override
-    public List<AnanOrganizationPermissionEntity> findByOrganizId(Long organizId) {
-        return getRepository().findByOrganizId(organizId);
+    public List<AnanOrganizationPermissionRespDto> findByOrganizId(Long organizId) {
+        return BeanUtil.copyCollectionProperties(getRepository().findByOrganizId(organizId), AnanOrganizationPermissionRespDto.class);
     }
 
     @Override
@@ -50,15 +49,15 @@ public class AnanOrganizationPermissionServiceImpl implements AnanOrganizationPe
 
     @Override
     @Transactional
-    public List<AnanOrganizationPermissionEntity> updateInBatch(Long organizId, Collection<AnanOrganizationPermissionUpdateDto> entities) {
+    public List<AnanOrganizationPermissionRespDto> updateInBatch(String deleteCol, Long organizId, Collection<AnanOrganizationPermissionCreateDto> dtos) {
         Assert.notNull(organizId, "传入的版本ID不能为空!");
 
-        Assert.isTrue(entities.stream().allMatch(entity -> entity.getOrganizId().equals(organizId)), "需要更新的数据集中有与版本ID不匹配的数据!");
+        Assert.isTrue(dtos.stream().allMatch(entity -> entity.getOrganizId().equals(organizId)), "需要更新的数据集中有与版本ID不匹配的数据!");
 
-        ananSysOrganizationPermissionRepository.deleteByOrganizId(organizId);
+        Collection<AnanOrganizationPermissionEntity> saveEntities = BeanUtil.copyCollectionProperties(dtos, AnanOrganizationPermissionEntity.class);
 
-        Collection<AnanOrganizationPermissionEntity> saveEntities = BeanUtil.copyCollectionProperties(this.getClass(), IUpdateInBatchJpaService.class, entities);
+        organizationPermissionRepository.deleteByOrganizId(organizId);
 
-        return ananSysOrganizationPermissionRepository.saveAll(saveEntities);
+        return BeanUtil.copyCollectionProperties(organizationPermissionRepository.saveAll(saveEntities), AnanOrganizationPermissionRespDto.class);
     }
 }

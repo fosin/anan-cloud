@@ -13,7 +13,7 @@ import java.io.Serializable;
  *
  * @author fosin
  * @date 2019-02-19 18:17:04
- * @since 1.0.0
+ * @since 2.6.0
  */
 @EqualsAndHashCode(callSuper = true)
 @Data

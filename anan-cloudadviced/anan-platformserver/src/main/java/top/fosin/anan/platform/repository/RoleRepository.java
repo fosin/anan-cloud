@@ -1,7 +1,7 @@
 package top.fosin.anan.platform.repository;
 
 import top.fosin.anan.jpa.repository.IJpaRepository;
-import top.fosin.anan.platformapi.entity.AnanRoleEntity;
+import top.fosin.anan.platform.entity.AnanRoleEntity;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

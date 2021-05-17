@@ -10,21 +10,22 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 import top.fosin.anan.cloudresource.constant.SystemConstant;
-import top.fosin.anan.cloudresource.dto.request.AnanRoleCreateDto;
-import top.fosin.anan.cloudresource.dto.request.AnanRoleRetrieveDto;
-import top.fosin.anan.cloudresource.dto.request.AnanRoleUpdateDto;
-import top.fosin.anan.jpa.repository.IJpaRepository;
+import top.fosin.anan.platform.dto.request.AnanRoleCreateDto;
+import top.fosin.anan.platform.dto.request.AnanRoleRetrieveDto;
+import top.fosin.anan.platform.dto.request.AnanRoleUpdateDto;
+import top.fosin.anan.cloudresource.dto.res.AnanRoleRespDto;
+import top.fosin.anan.core.util.BeanUtil;
 import top.fosin.anan.model.module.PageModule;
 import top.fosin.anan.model.result.ListResult;
 import top.fosin.anan.model.result.ResultUtils;
+import top.fosin.anan.platform.entity.AnanOrganizationEntity;
+import top.fosin.anan.platform.entity.AnanRoleEntity;
+import top.fosin.anan.platform.entity.AnanUserRoleEntity;
 import top.fosin.anan.platform.repository.OrganizationRepository;
 import top.fosin.anan.platform.repository.RoleRepository;
 import top.fosin.anan.platform.repository.UserRoleRepository;
 import top.fosin.anan.platform.service.inter.RoleService;
-import top.fosin.anan.platformapi.entity.AnanOrganizationEntity;
-import top.fosin.anan.platformapi.entity.AnanRoleEntity;
-import top.fosin.anan.platformapi.entity.AnanUserRoleEntity;
-import top.fosin.anan.platformapi.service.AnanUserDetailService;
+import top.fosin.anan.cloudresource.service.AnanUserDetailService;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Path;
@@ -54,7 +55,7 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public AnanRoleEntity create(AnanRoleCreateDto entity) {
+    public AnanRoleRespDto create(AnanRoleCreateDto entity) {
         Assert.notNull(entity, "传入了空对象!");
 
         if (SystemConstant.ADMIN_ROLE_NAME.equals(entity.getValue().toUpperCase()) &&
@@ -65,11 +66,14 @@ public class RoleServiceImpl implements RoleService {
                 "不能创建超级管理员角色帐号信息!");
         AnanRoleEntity saveEntity = new AnanRoleEntity();
         BeanUtils.copyProperties(entity, saveEntity);
-        return roleRepository.save(saveEntity);
+        AnanRoleEntity save = roleRepository.save(saveEntity);
+        AnanRoleRespDto respDto = new AnanRoleRespDto();
+        BeanUtils.copyProperties(save, respDto);
+        return respDto;
     }
 
     @Override
-    public AnanRoleEntity update(AnanRoleUpdateDto entity) {
+    public void update(AnanRoleUpdateDto entity) {
         Assert.notNull(entity, "传入了空对象!");
         Long id = entity.getId();
         Assert.notNull(id, "传入了空ID!");
@@ -84,11 +88,11 @@ public class RoleServiceImpl implements RoleService {
                 "不能修改超级管理员角色帐号信息!");
         AnanRoleEntity saveEntity = new AnanRoleEntity();
         BeanUtils.copyProperties(entity, saveEntity);
-        return roleRepository.save(saveEntity);
+        roleRepository.save(saveEntity);
     }
 
     @Override
-    public AnanRoleEntity deleteById(Long id) {
+    public void deleteById(Long id) {
         Assert.isTrue(id != null && id > 0, "传入的角色ID无效！");
         AnanRoleEntity entity = roleRepository.findById(id).orElse(null);
         Assert.notNull(entity, "根据角色ID未能找到角色数据!");
@@ -100,11 +104,10 @@ public class RoleServiceImpl implements RoleService {
         Assert.isTrue(roleUsers.size() == 0,
                 "该角色下还存在用户,不能直接删除角色!");
         roleRepository.deleteById(id);
-        return null;
     }
 
     @Override
-    public AnanRoleEntity deleteByEntity(AnanRoleRetrieveDto entity) {
+    public void deleteByDto(AnanRoleUpdateDto entity) {
         Assert.notNull(entity, "传入了空对象!");
         Assert.isTrue(!SystemConstant.ANAN_ROLE_NAME.equals(entity.getValue())
                         && !SystemConstant.ADMIN_ROLE_NAME.equals(entity.getValue()),
@@ -112,25 +115,24 @@ public class RoleServiceImpl implements RoleService {
         List<AnanUserRoleEntity> roleUsers = userRoleRepository.findByRoleId(entity.getId());
         Assert.isTrue(roleUsers.size() == 0,
                 "该角色下还存在用户,不能直接删除角色!");
-        AnanRoleEntity deleteEntity = findOneByEntity(entity);
+        AnanRoleEntity deleteEntity = queryOneByDto(entity);
         if (deleteEntity != null) {
             getRepository().delete(deleteEntity);
         }
-        return deleteEntity;
     }
 
     @Override
-    public List<AnanRoleEntity> findOtherUsersByRoleId(Long userId) {
-        return roleRepository.findOtherRolesByUserId(userId);
+    public List<AnanRoleRespDto> findOtherUsersByRoleId(Long userId) {
+        return BeanUtil.copyCollectionProperties(roleRepository.findOtherRolesByUserId(userId), AnanRoleRespDto.class);
     }
 
     @Override
-    public List<AnanRoleEntity> findRoleUsersByRoleId(Long userId) {
-        return roleRepository.findUserRolesByUserId(userId);
+    public List<AnanRoleRespDto> findRoleUsersByRoleId(Long userId) {
+        return BeanUtil.copyCollectionProperties(roleRepository.findUserRolesByUserId(userId), AnanRoleRespDto.class);
     }
 
     @Override
-    public ListResult<AnanRoleEntity> findPage(PageModule<AnanRoleRetrieveDto> pageModule) {
+    public ListResult<AnanRoleRespDto> findPage(PageModule<AnanRoleRetrieveDto> pageModule) {
         Assert.notNull(pageModule, "传入的分页信息不能为空!");
         AnanRoleRetrieveDto params = pageModule.getParams();
 
@@ -168,15 +170,17 @@ public class RoleServiceImpl implements RoleService {
             };
         }
         page = roleRepository.findAll(condition, pageable);
-        return ResultUtils.success(page.getTotalElements(), page.getTotalPages(), page.getContent());
+
+        return ResultUtils.success(page.getTotalElements(), page.getTotalPages(),
+                BeanUtil.copyCollectionProperties(page.getContent(), AnanRoleRespDto.class));
     }
 
     @Override
-    public List<AnanRoleEntity> findAllByOrganizId(Long organizId) {
+    public List<AnanRoleRespDto> findAllByOrganizId(Long organizId) {
         Assert.notNull(organizId, "机构ID不能为空!");
-
+        List<AnanRoleEntity> entities;
         if (ananUserDetailService.hasSysAdminRole()) {
-            return roleRepository.findAll();
+            entities = roleRepository.findAll();
         } else {
             AnanOrganizationEntity organiz = organizationRepository.findById(organizId).orElse(null);
             Assert.notNull(organiz, "根据传入的机构编码没有找到任何数据!");
@@ -193,12 +197,13 @@ public class RoleServiceImpl implements RoleService {
                 }
                 return cb.and(in, cb.notEqual(roleValue, SystemConstant.ANAN_ROLE_NAME));
             };
-            return roleRepository.findAll(condition);
+            entities = roleRepository.findAll(condition);
         }
+        return BeanUtil.copyCollectionProperties(entities, AnanRoleRespDto.class);
     }
 
     @Override
-    public IJpaRepository<AnanRoleEntity, Long> getRepository() {
+    public RoleRepository getRepository() {
         return roleRepository;
     }
 }

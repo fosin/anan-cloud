@@ -8,17 +8,19 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import top.fosin.anan.cloudresource.constant.RedisConstant;
-import top.fosin.anan.cloudresource.dto.request.AnanOrganizationCreateDto;
-import top.fosin.anan.cloudresource.dto.request.AnanOrganizationRetrieveDto;
-import top.fosin.anan.cloudresource.dto.request.AnanOrganizationUpdateDto;
+import top.fosin.anan.platform.dto.request.AnanOrganizationCreateDto;
+import top.fosin.anan.platform.dto.request.AnanOrganizationRetrieveDto;
+import top.fosin.anan.platform.dto.request.AnanOrganizationUpdateDto;
+import top.fosin.anan.cloudresource.dto.res.AnanOrganizationRespDto;
 import top.fosin.anan.cloudresource.dto.res.AnanOrganizationTreeDto;
+import top.fosin.anan.core.util.BeanUtil;
 import top.fosin.anan.jpa.repository.IJpaRepository;
 import top.fosin.anan.model.module.OperatorMode;
 import top.fosin.anan.model.module.QueryRule;
+import top.fosin.anan.platform.entity.AnanOrganizationEntity;
 import top.fosin.anan.platform.repository.OrganizationRepository;
 import top.fosin.anan.platform.service.inter.OrganizationService;
-import top.fosin.anan.platformapi.entity.AnanOrganizationEntity;
-import top.fosin.anan.platformapi.service.AnanUserDetailService;
+import top.fosin.anan.cloudresource.service.AnanUserDetailService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +45,7 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     @Override
     @CachePut(value = RedisConstant.ANAN_ORGANIZATION, key = "#result.id")
-    public AnanOrganizationEntity create(AnanOrganizationCreateDto entity) {
+    public AnanOrganizationRespDto create(AnanOrganizationCreateDto entity) {
         Assert.notNull(entity, "传入的创建数据实体对象不能为空!");
         AnanOrganizationEntity createEntity = new AnanOrganizationEntity();
         BeanUtils.copyProperties(entity, createEntity);
@@ -64,12 +66,12 @@ public class OrganizationServiceImpl implements OrganizationService {
             result.setTopId(result.getId());
             result = organizationRepository.save(result);
         }
-        return result;
+        return BeanUtil.copyProperties(result, AnanOrganizationRespDto.class);
     }
 
     @Override
-    @CachePut(value = RedisConstant.ANAN_ORGANIZATION, key = "#entity.id")
-    public AnanOrganizationEntity update(AnanOrganizationUpdateDto entity) {
+    @CacheEvict(value = RedisConstant.ANAN_ORGANIZATION, key = "#entity.id")
+    public void update(AnanOrganizationUpdateDto entity) {
         Assert.notNull(entity, "无效的更新数据");
         Long id = entity.getId();
         Assert.notNull(id, "无效的字典代码code");
@@ -78,55 +80,44 @@ public class OrganizationServiceImpl implements OrganizationService {
 
         Long pid = entity.getPid();
         if (!updateEntity.getPid().equals(pid)) {
-            AnanOrganizationEntity parentEntity = organizationRepository.findById(pid).orElse(null);
-            updateEntity.setLevel(Objects.requireNonNull(parentEntity,
-                    "传入的创建数据实体找不到对于的父节点数据!").getLevel() + 1);
+            organizationRepository.findById(pid).ifPresent(sentity -> updateEntity.setLevel(sentity.getLevel() + 1));
         }
-        return organizationRepository.save(updateEntity);
+        organizationRepository.save(updateEntity);
     }
 
     @Override
     @Cacheable(value = RedisConstant.ANAN_ORGANIZATION, key = "#id")
-    public AnanOrganizationEntity findById(Long id) {
-        return organizationRepository.findById(id).orElse(null);
+    public AnanOrganizationRespDto findOneById(Long id) {
+        return OrganizationService.super.findOneById(id);
     }
 
     @Override
     @CacheEvict(value = RedisConstant.ANAN_ORGANIZATION, key = "#id")
-    public AnanOrganizationEntity deleteById(Long id) {
+    public void deleteById(Long id) {
         Assert.notNull(id, "传入了空ID!");
-        List<AnanOrganizationEntity> entities = findChildByPid(id);
-        Assert.isTrue(entities == null || entities.size() == 0, "该节点还存在子节点不能直接删除!");
+        List<AnanOrganizationRespDto> dtos = findChildByPid(id);
+        Assert.isTrue(dtos == null || dtos.size() == 0, "该节点还存在子节点不能直接删除!");
         organizationRepository.deleteById(id);
-        return null;
     }
 
     @Override
-    @CacheEvict(value = RedisConstant.ANAN_ORGANIZATION, key = "#entity.id")
-    public AnanOrganizationEntity deleteByEntity(AnanOrganizationRetrieveDto entity) {
-        Assert.notNull(entity, "传入了空对象!");
-        Long id = entity.getId();
+    @CacheEvict(value = RedisConstant.ANAN_ORGANIZATION, key = "#dto.id")
+    public void deleteByDto(AnanOrganizationUpdateDto dto) {
+        Assert.notNull(dto, "传入了空对象!");
+        Long id = dto.getId();
         Assert.notNull(id, "传入了空ID!");
-        List<AnanOrganizationEntity> entities = findChildByPid(id);
-        Assert.isTrue(entities == null || entities.size() == 0, "该节点还存在子节点不能直接删除!");
-        AnanOrganizationEntity deleteEntity = organizationRepository.findById(id).orElse(null);
-        if (deleteEntity != null) {
-            organizationRepository.delete(deleteEntity);
-        }
-        return deleteEntity;
-    }
-
-    public String getCacheName() {
-        return "AllData";
+        List<AnanOrganizationRespDto> dtos = findChildByPid(id);
+        Assert.isTrue(dtos == null || dtos.size() == 0, "该节点还存在子节点不能直接删除!");
+        organizationRepository.findById(id).ifPresent(organizationRepository::delete);
     }
 
     @Override
-    public List<AnanOrganizationEntity> findChildByPid(Long pid) {
-        return organizationRepository.findByPidOrderByCodeAsc(pid);
+    public List<AnanOrganizationRespDto> findChildByPid(Long pid) {
+        return BeanUtil.copyCollectionProperties(organizationRepository.findByPidOrderByCodeAsc(pid), AnanOrganizationRespDto.class);
     }
 
     @Override
-    public List<AnanOrganizationEntity> findAllChildByPid(Long pid) {
+    public List<AnanOrganizationRespDto> findAllChildByPid(Long pid) {
         List<AnanOrganizationEntity> result = new ArrayList<>();
         if (pid == 0) {
             List<AnanOrganizationEntity> list = organizationRepository.findByPidOrderByCodeAsc(pid);
@@ -141,7 +132,7 @@ public class OrganizationServiceImpl implements OrganizationService {
                 result.addAll(byCodeStartingWith);
             }
         }
-        return result;
+        return BeanUtil.copyCollectionProperties(result, AnanOrganizationRespDto.class);
     }
 
     @Override

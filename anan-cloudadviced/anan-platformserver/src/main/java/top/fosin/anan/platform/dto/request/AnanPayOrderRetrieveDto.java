@@ -22,7 +22,7 @@ import top.fosin.anan.model.module.QueryRule;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @ApiModel(value = "系统支付订单表查询DTO", description = "表(anan_pay_order)的对应的查询DTO")
-public class AnanPayOrderRetrieveDto extends QuerySortRuleDto<QueryRule,SortRule,Long> implements Serializable {
+public class AnanPayOrderRetrieveDto extends QuerySortRuleDto<QueryRule,SortRule> implements Serializable {
     private static final long serialVersionUID = -15118452601033466L;
 
     @ApiModelProperty(value = "订单机构")

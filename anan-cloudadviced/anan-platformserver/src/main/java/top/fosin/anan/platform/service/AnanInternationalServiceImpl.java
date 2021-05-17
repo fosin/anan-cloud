@@ -6,12 +6,11 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
 import top.fosin.anan.cloudresource.constant.RedisConstant;
+import top.fosin.anan.platform.dto.res.AnanInternationalRespDto;
+import top.fosin.anan.core.util.BeanUtil;
 import top.fosin.anan.platform.dto.request.AnanInternationalCreateDto;
-import top.fosin.anan.platform.dto.request.AnanInternationalRetrieveDto;
 import top.fosin.anan.platform.dto.request.AnanInternationalUpdateDto;
-import top.fosin.anan.platform.entity.AnanInternationalEntity;
 import top.fosin.anan.platform.repository.AnanInternationalRepository;
 import top.fosin.anan.platform.service.inter.AnanInternationalService;
 
@@ -35,38 +34,24 @@ public class AnanInternationalServiceImpl implements AnanInternationalService {
 
     @Override
     @Cacheable(value = RedisConstant.ANAN_INTERNATIONAL_STATUS, key = "#status")
-    public List<AnanInternationalEntity> findAllByStatus(Integer status) {
-        return this.getRepository().findAllByStatus(status);
+    public List<AnanInternationalRespDto> findAllByStatus(Integer status) {
+        return BeanUtil.copyCollectionProperties(
+                this.getRepository().findAllByStatus(status), AnanInternationalRespDto.class);
     }
 
     @Override
     @Cacheable(value = RedisConstant.ANAN_INTERNATIONAL_CODE, key = "#code")
-    public AnanInternationalEntity findByCode(String code) {
-        return this.getRepository().findByCode(code);
+    public AnanInternationalRespDto findByCode(String code) {
+        AnanInternationalRespDto respDto = new AnanInternationalRespDto();
+        BeanUtils.copyProperties(this.getRepository().findByCode(code), respDto);
+        return respDto;
     }
 
     @Override
-    public AnanInternationalEntity findByDefaultFlag() {
-        return this.getRepository().findByDefaultFlag(1);
-    }
-
-    @Override
-    @Caching(
-            evict = {
-                    @CacheEvict(value = RedisConstant.ANAN_INTERNATIONAL_STATUS, allEntries = true),
-                    @CacheEvict(value = RedisConstant.ANAN_INTERNATIONAL_CODE, allEntries = true)
-            }
-    )
-    public AnanInternationalEntity create(AnanInternationalCreateDto entity) {
-        Assert.notNull(entity, "传入的创建数据实体对象不能为空!");
-        AnanInternationalEntity entityDynamic = findOneByEntity(entity);
-        if (entityDynamic == null) {
-            AnanInternationalEntity createEntiy = new AnanInternationalEntity();
-            BeanUtils.copyProperties(entity, createEntiy);
-            entityDynamic = defaultRepository.save(createEntiy);
-        }
-
-        return entityDynamic;
+    public AnanInternationalRespDto findByDefaultFlag() {
+        AnanInternationalRespDto respDto = new AnanInternationalRespDto();
+        BeanUtils.copyProperties(this.getRepository().findByDefaultFlag(1), respDto);
+        return respDto;
     }
 
     @Override
@@ -76,13 +61,8 @@ public class AnanInternationalServiceImpl implements AnanInternationalService {
                     @CacheEvict(value = RedisConstant.ANAN_INTERNATIONAL_CODE, allEntries = true)
             }
     )
-    public AnanInternationalEntity deleteById(Integer id) {
-        Assert.notNull(id, "需要删除的数据主键不能为空!");
-        AnanInternationalEntity entity = defaultRepository.findById(id).orElse(null);
-        if (entity != null) {
-            defaultRepository.delete(entity);
-        }
-        return entity;
+    public AnanInternationalRespDto create(AnanInternationalCreateDto entity) {
+        return AnanInternationalService.super.create(entity);
     }
 
     @Override
@@ -92,13 +72,8 @@ public class AnanInternationalServiceImpl implements AnanInternationalService {
                     @CacheEvict(value = RedisConstant.ANAN_INTERNATIONAL_CODE, allEntries = true)
             }
     )
-    public AnanInternationalEntity deleteByEntity(AnanInternationalRetrieveDto entity) {
-        Assert.notNull(entity, "删除数据的实体对象不能为空!");
-        AnanInternationalEntity deleteEntity = defaultRepository.findById(entity.getId()).orElse(null);
-        if (deleteEntity != null) {
-            defaultRepository.delete(deleteEntity);
-        }
-        return deleteEntity;
+    public void deleteById(Long id) {
+        AnanInternationalService.super.deleteById(id);
     }
 
     @Override
@@ -108,13 +83,19 @@ public class AnanInternationalServiceImpl implements AnanInternationalService {
                     @CacheEvict(value = RedisConstant.ANAN_INTERNATIONAL_CODE, allEntries = true)
             }
     )
-    public AnanInternationalEntity update(AnanInternationalUpdateDto entity) {
-        Integer id = entity.getId();
-        Assert.notNull(id, "更新的数据id不能为空或者小于1!");
-        AnanInternationalEntity createUser = defaultRepository.findById(id).orElse(null);
-        Assert.notNull(createUser, "在数据库中未找到该用户数据!");
-        BeanUtils.copyProperties(entity, createUser);
-        return defaultRepository.save(createUser);
+    public void deleteByDto(AnanInternationalUpdateDto entity) {
+        AnanInternationalService.super.deleteByDto(entity);
+    }
+
+    @Override
+    @Caching(
+            evict = {
+                    @CacheEvict(value = RedisConstant.ANAN_INTERNATIONAL_STATUS, allEntries = true),
+                    @CacheEvict(value = RedisConstant.ANAN_INTERNATIONAL_CODE, allEntries = true)
+            }
+    )
+    public void update(AnanInternationalUpdateDto entity) {
+        AnanInternationalService.super.update(entity);
     }
 
     /**

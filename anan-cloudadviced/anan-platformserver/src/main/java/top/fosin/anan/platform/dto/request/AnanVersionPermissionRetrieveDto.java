@@ -22,7 +22,7 @@ import top.fosin.anan.model.module.QueryRule;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @ApiModel(value = "系统版本权限表查询DTO", description = "表(anan_version_permission)的对应的查询DTO")
-public class AnanVersionPermissionRetrieveDto extends QuerySortRuleDto<QueryRule,SortRule,Long> implements Serializable {
+public class AnanVersionPermissionRetrieveDto extends QuerySortRuleDto<QueryRule,SortRule> implements Serializable {
     private static final long serialVersionUID = 425131909775170449L;
 
     @ApiModelProperty(value = "版本ID")
