@@ -2,9 +2,9 @@ package top.fosin.anan.platform.service.inter;
 
 import top.fosin.anan.cloudresource.dto.res.AnanServiceRespDto;
 import top.fosin.anan.platform.entity.AnanServiceEntity;
-import top.fosin.anan.platform.dto.request.AnanServiceCreateDto;
-import top.fosin.anan.platform.dto.request.AnanServiceRetrieveDto;
-import top.fosin.anan.platform.dto.request.AnanServiceUpdateDto;
+import top.fosin.anan.platform.dto.req.AnanServiceCreateDto;
+import top.fosin.anan.platform.dto.req.AnanServiceRetrieveDto;
+import top.fosin.anan.platform.dto.req.AnanServiceUpdateDto;
 import top.fosin.anan.jpa.service.ISimpleJpaService;
 
 import java.util.List;

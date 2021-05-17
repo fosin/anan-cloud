@@ -5,9 +5,9 @@ import top.fosin.anan.platform.dto.res.OauthClientDetailsRespDto;
 import top.fosin.anan.core.util.BeanUtil;
 import top.fosin.anan.jpa.repository.IJpaRepository;
 import top.fosin.anan.jpa.service.ISimpleJpaService;
-import top.fosin.anan.platform.dto.request.OauthClientDetailsCreateDto;
-import top.fosin.anan.platform.dto.request.OauthClientDetailsRetrieveDto;
-import top.fosin.anan.platform.dto.request.OauthClientDetailsUpdateDto;
+import top.fosin.anan.platform.dto.req.OauthClientDetailsCreateDto;
+import top.fosin.anan.platform.dto.req.OauthClientDetailsRetrieveDto;
+import top.fosin.anan.platform.dto.req.OauthClientDetailsUpdateDto;
 import top.fosin.anan.platform.entity.OauthClientDetailsEntity;
 
 /**

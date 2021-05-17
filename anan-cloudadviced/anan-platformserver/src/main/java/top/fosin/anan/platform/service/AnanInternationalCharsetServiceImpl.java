@@ -7,8 +7,8 @@ import org.springframework.stereotype.Service;
 import top.fosin.anan.cloudresource.constant.RedisConstant;
 import top.fosin.anan.platform.dto.res.AnanInternationalCharsetRespDto;
 import top.fosin.anan.core.util.BeanUtil;
-import top.fosin.anan.platform.dto.request.AnanInternationalCharsetCreateDto;
-import top.fosin.anan.platform.dto.request.AnanInternationalCharsetUpdateDto;
+import top.fosin.anan.platform.dto.req.AnanInternationalCharsetCreateDto;
+import top.fosin.anan.platform.dto.req.AnanInternationalCharsetUpdateDto;
 import top.fosin.anan.platform.repository.AnanInternationalCharsetRepository;
 import top.fosin.anan.platform.service.inter.AnanInternationalCharsetService;
 

@@ -1,9 +1,9 @@
 package top.fosin.anan.platform.service.inter;
 
 
-import top.fosin.anan.platform.dto.request.AnanPermissionCreateDto;
+import top.fosin.anan.platform.dto.req.AnanPermissionCreateDto;
 import top.fosin.anan.cloudresource.dto.req.AnanPermissionRetrieveDto;
-import top.fosin.anan.platform.dto.request.AnanPermissionUpdateDto;
+import top.fosin.anan.platform.dto.req.AnanPermissionUpdateDto;
 import top.fosin.anan.cloudresource.dto.res.AnanPermissionRespDto;
 import top.fosin.anan.cloudresource.dto.res.AnanPermissionRespTreeDto;
 import top.fosin.anan.jpa.service.IRetrieveTreeJpaService;

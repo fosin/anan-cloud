@@ -2,8 +2,8 @@ package top.fosin.anan.platform.service.inter;
 
 import top.fosin.anan.platform.dto.res.AnanVersionRolePermissionRespDto;
 import top.fosin.anan.jpa.service.batch.ICrudBatchJpaService;
-import top.fosin.anan.platform.dto.request.AnanVersionRolePermissionCreateDto;
-import top.fosin.anan.platform.dto.request.AnanVersionRolePermissionRetrieveDto;
+import top.fosin.anan.platform.dto.req.AnanVersionRolePermissionCreateDto;
+import top.fosin.anan.platform.dto.req.AnanVersionRolePermissionRetrieveDto;
 import top.fosin.anan.platform.entity.AnanVersionRolePermissionEntity;
 
 import java.util.List;

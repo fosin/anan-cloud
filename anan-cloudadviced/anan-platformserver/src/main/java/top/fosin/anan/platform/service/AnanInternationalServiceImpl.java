@@ -9,8 +9,8 @@ import org.springframework.stereotype.Service;
 import top.fosin.anan.cloudresource.constant.RedisConstant;
 import top.fosin.anan.platform.dto.res.AnanInternationalRespDto;
 import top.fosin.anan.core.util.BeanUtil;
-import top.fosin.anan.platform.dto.request.AnanInternationalCreateDto;
-import top.fosin.anan.platform.dto.request.AnanInternationalUpdateDto;
+import top.fosin.anan.platform.dto.req.AnanInternationalCreateDto;
+import top.fosin.anan.platform.dto.req.AnanInternationalUpdateDto;
 import top.fosin.anan.platform.repository.AnanInternationalRepository;
 import top.fosin.anan.platform.service.inter.AnanInternationalService;
 

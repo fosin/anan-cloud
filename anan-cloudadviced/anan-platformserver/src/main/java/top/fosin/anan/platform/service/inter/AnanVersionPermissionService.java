@@ -3,8 +3,8 @@ package top.fosin.anan.platform.service.inter;
 
 import top.fosin.anan.platform.dto.res.AnanVersionPermissionRespDto;
 import top.fosin.anan.jpa.service.batch.ICrudBatchJpaService;
-import top.fosin.anan.platform.dto.request.AnanVersionPermissionCreateDto;
-import top.fosin.anan.platform.dto.request.AnanVersionPermissionRetrieveDto;
+import top.fosin.anan.platform.dto.req.AnanVersionPermissionCreateDto;
+import top.fosin.anan.platform.dto.req.AnanVersionPermissionRetrieveDto;
 import top.fosin.anan.platform.entity.AnanVersionPermissionEntity;
 
 import java.util.List;

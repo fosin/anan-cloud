@@ -6,7 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import top.fosin.anan.platform.dto.res.AnanOrganizationPermissionRespDto;
 import top.fosin.anan.core.util.BeanUtil;
-import top.fosin.anan.platform.dto.request.AnanOrganizationPermissionCreateDto;
+import top.fosin.anan.platform.dto.req.AnanOrganizationPermissionCreateDto;
 import top.fosin.anan.platform.entity.AnanOrganizationPermissionEntity;
 import top.fosin.anan.platform.repository.AnanOrganizationPermissionRepository;
 import top.fosin.anan.platform.service.inter.AnanOrganizationPermissionService;

@@ -1,9 +1,9 @@
 package top.fosin.anan.platform.service.inter;
 
 
-import top.fosin.anan.platform.dto.request.AnanOrganizationCreateDto;
-import top.fosin.anan.platform.dto.request.AnanOrganizationRetrieveDto;
-import top.fosin.anan.platform.dto.request.AnanOrganizationUpdateDto;
+import top.fosin.anan.platform.dto.req.AnanOrganizationCreateDto;
+import top.fosin.anan.platform.dto.req.AnanOrganizationRetrieveDto;
+import top.fosin.anan.platform.dto.req.AnanOrganizationUpdateDto;
 import top.fosin.anan.cloudresource.dto.res.AnanOrganizationRespDto;
 import top.fosin.anan.cloudresource.dto.res.AnanOrganizationTreeDto;
 import top.fosin.anan.jpa.service.IRetrieveTreeJpaService;

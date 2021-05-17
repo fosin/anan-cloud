@@ -5,9 +5,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import top.fosin.anan.platform.dto.res.AnanPayOrderRespDto;
 import top.fosin.anan.model.controller.ISimpleController;
-import top.fosin.anan.platform.dto.request.AnanPayOrderCreateDto;
-import top.fosin.anan.platform.dto.request.AnanPayOrderRetrieveDto;
-import top.fosin.anan.platform.dto.request.AnanPayOrderUpdateDto;
+import top.fosin.anan.platform.dto.req.AnanPayOrderCreateDto;
+import top.fosin.anan.platform.dto.req.AnanPayOrderRetrieveDto;
+import top.fosin.anan.platform.dto.req.AnanPayOrderUpdateDto;
 import top.fosin.anan.platform.service.inter.AnanPayOrderService;
 
 /**

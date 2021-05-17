@@ -1,8 +1,8 @@
 package top.fosin.anan.platform.service.inter;
 
-import top.fosin.anan.platform.dto.request.AnanRoleCreateDto;
-import top.fosin.anan.platform.dto.request.AnanRoleRetrieveDto;
-import top.fosin.anan.platform.dto.request.AnanRoleUpdateDto;
+import top.fosin.anan.platform.dto.req.AnanRoleCreateDto;
+import top.fosin.anan.platform.dto.req.AnanRoleRetrieveDto;
+import top.fosin.anan.platform.dto.req.AnanRoleUpdateDto;
 import top.fosin.anan.cloudresource.dto.res.AnanRoleRespDto;
 import top.fosin.anan.jpa.service.ISimpleJpaService;
 import top.fosin.anan.platform.entity.AnanRoleEntity;

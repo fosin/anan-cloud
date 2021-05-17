@@ -1,8 +1,8 @@
 package top.fosin.anan.platform.service.inter;
 
 
-import top.fosin.anan.platform.dto.request.AnanUserPermissionCreateDto;
-import top.fosin.anan.platform.dto.request.AnanUserPermissionRetrieveDto;
+import top.fosin.anan.platform.dto.req.AnanUserPermissionCreateDto;
+import top.fosin.anan.platform.dto.req.AnanUserPermissionRetrieveDto;
 import top.fosin.anan.platform.dto.res.AnanUserPermissionRespDto;
 import top.fosin.anan.jpa.service.batch.ICrudBatchJpaService;
 import top.fosin.anan.platform.entity.AnanUserPermissionEntity;

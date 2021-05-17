@@ -11,10 +11,10 @@ import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
 import top.fosin.anan.platform.dto.res.AnanVersionRolePermissionRespDto;
 import top.fosin.anan.platform.dto.res.AnanVersionRoleRespDto;
 import top.fosin.anan.model.controller.ISimpleController;
-import top.fosin.anan.platform.dto.request.AnanVersionRoleCreateDto;
-import top.fosin.anan.platform.dto.request.AnanVersionRolePermissionCreateDto;
-import top.fosin.anan.platform.dto.request.AnanVersionRoleRetrieveDto;
-import top.fosin.anan.platform.dto.request.AnanVersionRoleUpdateDto;
+import top.fosin.anan.platform.dto.req.AnanVersionRoleCreateDto;
+import top.fosin.anan.platform.dto.req.AnanVersionRolePermissionCreateDto;
+import top.fosin.anan.platform.dto.req.AnanVersionRoleRetrieveDto;
+import top.fosin.anan.platform.dto.req.AnanVersionRoleUpdateDto;
 import top.fosin.anan.platform.service.inter.AnanVersionRolePermissionService;
 import top.fosin.anan.platform.service.inter.AnanVersionRoleService;
 

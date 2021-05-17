@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.RestController;
 import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
 import top.fosin.anan.platform.dto.res.AnanInternationalRespDto;
 import top.fosin.anan.model.controller.ISimpleController;
-import top.fosin.anan.platform.dto.request.AnanInternationalCreateDto;
-import top.fosin.anan.platform.dto.request.AnanInternationalRetrieveDto;
-import top.fosin.anan.platform.dto.request.AnanInternationalUpdateDto;
+import top.fosin.anan.platform.dto.req.AnanInternationalCreateDto;
+import top.fosin.anan.platform.dto.req.AnanInternationalRetrieveDto;
+import top.fosin.anan.platform.dto.req.AnanInternationalUpdateDto;
 import top.fosin.anan.platform.service.inter.AnanInternationalService;
 
 import java.util.List;

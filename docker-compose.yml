@@ -70,7 +70,7 @@ services:
   anan-vue:
     network_mode: host
     container_name: anan-vue
-    image: registry.cn-hongkong.aliyuncs.com/fosin/anan-vue:3.4.0
+    image: registry.cn-hongkong.aliyuncs.com/fosin/anan-vue:3.5.0
     hostname: anan-vue
     restart: always
     environment:

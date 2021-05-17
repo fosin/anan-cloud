@@ -2,9 +2,9 @@ package top.fosin.anan.platform.service.inter;
 
 import top.fosin.anan.platform.dto.res.AnanOrganizationAuthRespDto;
 import top.fosin.anan.jpa.service.ISimpleJpaService;
-import top.fosin.anan.platform.dto.request.AnanOrganizationAuthCreateDto;
-import top.fosin.anan.platform.dto.request.AnanOrganizationAuthRetrieveDto;
-import top.fosin.anan.platform.dto.request.AnanOrganizationAuthUpdateDto;
+import top.fosin.anan.platform.dto.req.AnanOrganizationAuthCreateDto;
+import top.fosin.anan.platform.dto.req.AnanOrganizationAuthRetrieveDto;
+import top.fosin.anan.platform.dto.req.AnanOrganizationAuthUpdateDto;
 import top.fosin.anan.platform.entity.AnanOrganizationAuthEntity;
 import top.fosin.anan.cloudresource.dto.req.RegisterDto;
 

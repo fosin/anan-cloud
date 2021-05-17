@@ -1,9 +1,9 @@
 package top.fosin.anan.platform.service.inter;
 
 import top.fosin.anan.platform.dto.res.AnanPayInvoiceRespDto;
-import top.fosin.anan.platform.dto.request.AnanPayInvoiceCreateDto;
-import top.fosin.anan.platform.dto.request.AnanPayInvoiceRetrieveDto;
-import top.fosin.anan.platform.dto.request.AnanPayInvoiceUpdateDto;
+import top.fosin.anan.platform.dto.req.AnanPayInvoiceCreateDto;
+import top.fosin.anan.platform.dto.req.AnanPayInvoiceRetrieveDto;
+import top.fosin.anan.platform.dto.req.AnanPayInvoiceUpdateDto;
 import top.fosin.anan.platform.entity.AnanPayInvoiceEntity;
 import top.fosin.anan.jpa.service.ISimpleJpaService;
 

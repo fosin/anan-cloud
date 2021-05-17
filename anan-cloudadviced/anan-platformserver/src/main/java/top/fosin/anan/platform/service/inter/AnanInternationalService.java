@@ -2,9 +2,9 @@ package top.fosin.anan.platform.service.inter;
 
 import top.fosin.anan.platform.dto.res.AnanInternationalRespDto;
 import top.fosin.anan.jpa.service.ISimpleJpaService;
-import top.fosin.anan.platform.dto.request.AnanInternationalCreateDto;
-import top.fosin.anan.platform.dto.request.AnanInternationalRetrieveDto;
-import top.fosin.anan.platform.dto.request.AnanInternationalUpdateDto;
+import top.fosin.anan.platform.dto.req.AnanInternationalCreateDto;
+import top.fosin.anan.platform.dto.req.AnanInternationalRetrieveDto;
+import top.fosin.anan.platform.dto.req.AnanInternationalUpdateDto;
 import top.fosin.anan.platform.entity.AnanInternationalEntity;
 
 import java.util.List;

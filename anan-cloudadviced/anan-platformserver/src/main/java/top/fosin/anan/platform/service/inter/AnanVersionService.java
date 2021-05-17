@@ -2,9 +2,9 @@ package top.fosin.anan.platform.service.inter;
 
 import top.fosin.anan.platform.dto.res.AnanVersionRespDto;
 import top.fosin.anan.jpa.service.ISimpleJpaService;
-import top.fosin.anan.platform.dto.request.AnanVersionCreateDto;
-import top.fosin.anan.platform.dto.request.AnanVersionRetrieveDto;
-import top.fosin.anan.platform.dto.request.AnanVersionUpdateDto;
+import top.fosin.anan.platform.dto.req.AnanVersionCreateDto;
+import top.fosin.anan.platform.dto.req.AnanVersionRetrieveDto;
+import top.fosin.anan.platform.dto.req.AnanVersionUpdateDto;
 import top.fosin.anan.platform.entity.AnanVersionEntity;
 
 /**

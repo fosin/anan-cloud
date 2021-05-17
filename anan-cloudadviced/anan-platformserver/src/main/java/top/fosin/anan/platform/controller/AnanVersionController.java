@@ -13,7 +13,7 @@ import top.fosin.anan.platform.dto.res.AnanVersionPermissionRespDto;
 import top.fosin.anan.platform.dto.res.AnanVersionRespDto;
 import top.fosin.anan.model.controller.ISimpleController;
 import top.fosin.anan.model.dto.TreeDto;
-import top.fosin.anan.platform.dto.request.*;
+import top.fosin.anan.platform.dto.req.*;
 import top.fosin.anan.platform.service.inter.*;
 
 import java.util.ArrayList;

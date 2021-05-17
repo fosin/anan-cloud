@@ -5,9 +5,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import top.fosin.anan.platform.dto.res.OauthClientDetailsRespDto;
 import top.fosin.anan.model.controller.ISimpleController;
-import top.fosin.anan.platform.dto.request.OauthClientDetailsCreateDto;
-import top.fosin.anan.platform.dto.request.OauthClientDetailsRetrieveDto;
-import top.fosin.anan.platform.dto.request.OauthClientDetailsUpdateDto;
+import top.fosin.anan.platform.dto.req.OauthClientDetailsCreateDto;
+import top.fosin.anan.platform.dto.req.OauthClientDetailsRetrieveDto;
+import top.fosin.anan.platform.dto.req.OauthClientDetailsUpdateDto;
 import top.fosin.anan.platform.service.inter.OauthClientService;
 
 /**

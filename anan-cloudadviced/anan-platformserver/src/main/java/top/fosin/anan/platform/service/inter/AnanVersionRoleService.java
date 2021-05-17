@@ -1,9 +1,9 @@
 package top.fosin.anan.platform.service.inter;
 
 import top.fosin.anan.platform.dto.res.AnanVersionRoleRespDto;
-import top.fosin.anan.platform.dto.request.AnanVersionRoleCreateDto;
-import top.fosin.anan.platform.dto.request.AnanVersionRoleRetrieveDto;
-import top.fosin.anan.platform.dto.request.AnanVersionRoleUpdateDto;
+import top.fosin.anan.platform.dto.req.AnanVersionRoleCreateDto;
+import top.fosin.anan.platform.dto.req.AnanVersionRoleRetrieveDto;
+import top.fosin.anan.platform.dto.req.AnanVersionRoleUpdateDto;
 import top.fosin.anan.platform.entity.AnanVersionRoleEntity;
 import top.fosin.anan.jpa.service.ISimpleJpaService;
 

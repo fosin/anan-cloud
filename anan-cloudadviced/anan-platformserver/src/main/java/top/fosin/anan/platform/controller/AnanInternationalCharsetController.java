@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
 import top.fosin.anan.platform.dto.res.AnanInternationalCharsetRespDto;
 import top.fosin.anan.model.controller.ISimpleController;
-import top.fosin.anan.platform.dto.request.AnanInternationalCharsetCreateDto;
-import top.fosin.anan.platform.dto.request.AnanInternationalCharsetRetrieveDto;
-import top.fosin.anan.platform.dto.request.AnanInternationalCharsetUpdateDto;
+import top.fosin.anan.platform.dto.req.AnanInternationalCharsetCreateDto;
+import top.fosin.anan.platform.dto.req.AnanInternationalCharsetRetrieveDto;
+import top.fosin.anan.platform.dto.req.AnanInternationalCharsetUpdateDto;
 import top.fosin.anan.platform.service.inter.AnanInternationalCharsetService;
 
 import java.util.List;

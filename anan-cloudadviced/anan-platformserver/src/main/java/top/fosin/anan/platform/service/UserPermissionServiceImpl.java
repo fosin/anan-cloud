@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import top.fosin.anan.cloudresource.constant.RedisConstant;
-import top.fosin.anan.platform.dto.request.AnanUserPermissionCreateDto;
+import top.fosin.anan.platform.dto.req.AnanUserPermissionCreateDto;
 import top.fosin.anan.platform.dto.res.AnanUserPermissionRespDto;
 import top.fosin.anan.core.util.BeanUtil;
 import top.fosin.anan.platform.repository.UserPermissionRepository;

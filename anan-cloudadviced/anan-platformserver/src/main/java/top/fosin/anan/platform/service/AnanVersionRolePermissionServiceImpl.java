@@ -7,7 +7,7 @@ import org.springframework.util.Assert;
 import top.fosin.anan.cloudresource.constant.RedisConstant;
 import top.fosin.anan.platform.dto.res.AnanVersionRolePermissionRespDto;
 import top.fosin.anan.core.util.BeanUtil;
-import top.fosin.anan.platform.dto.request.AnanVersionRolePermissionCreateDto;
+import top.fosin.anan.platform.dto.req.AnanVersionRolePermissionCreateDto;
 import top.fosin.anan.platform.entity.*;
 import top.fosin.anan.platform.repository.*;
 import top.fosin.anan.platform.service.inter.AnanVersionRolePermissionService;
