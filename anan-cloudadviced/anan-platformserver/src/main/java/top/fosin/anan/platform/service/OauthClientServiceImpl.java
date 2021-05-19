@@ -7,10 +7,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
-import top.fosin.anan.platform.dto.res.OauthClientDetailsRespDto;
 import top.fosin.anan.core.util.BeanUtil;
 import top.fosin.anan.platform.dto.req.OauthClientDetailsCreateDto;
 import top.fosin.anan.platform.dto.req.OauthClientDetailsUpdateDto;
+import top.fosin.anan.platform.dto.res.OauthClientDetailsRespDto;
 import top.fosin.anan.platform.entity.OauthClientDetailsEntity;
 import top.fosin.anan.platform.repository.OauthClientRepository;
 import top.fosin.anan.platform.service.inter.OauthClientService;
@@ -48,19 +48,18 @@ public class OauthClientServiceImpl implements OauthClientService {
     }
 
     @Override
-    public void update(OauthClientDetailsUpdateDto entity) {
-        Assert.notNull(entity, "传入的更新数据实体对象不能为空!");
-
-        String id = entity.getClientId();
+    public void update(OauthClientDetailsUpdateDto dto) {
+        String id = dto.getClientId();
         Assert.isTrue(StringUtils.hasText(id), "更新数据时ClientId不能为空!");
-        OauthClientDetailsEntity updateEntiy = oauthClientRepository.findById(id).orElse(null);
-        Assert.notNull(updateEntiy, "没有找到对应的数据!");
+        OauthClientDetailsEntity updateEntiy = oauthClientRepository.findById(id).orElseThrow(() -> {
+            throw new IllegalArgumentException("没有找到对应的数据!");
+        });
 
-        //复制新数据到当前数据实体类中，忽略空值
-        BeanUtils.copyProperties(entity, updateEntiy, BeanUtil.getNullProperties(entity));
+        //复制新数据到当前数据实体类中
+        BeanUtils.copyProperties(dto, updateEntiy);
 
         //如果密码与数据库中的不一致则需要加密
-        if (!Objects.equals(entity.getClientSecret(), updateEntiy.getClientSecret())) {
+        if (!Objects.equals(dto.getClientSecret(), updateEntiy.getClientSecret())) {
             updateEntiy.setClientSecret(passwordEncoder.encode(updateEntiy.getClientSecret()));
         }
         oauthClientRepository.save(updateEntiy);

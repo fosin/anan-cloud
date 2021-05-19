@@ -3,6 +3,7 @@ package top.fosin.anan.platform.dto.req;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import top.fosin.anan.model.getter.IdGetter;
 
 import java.io.Serializable;
 
@@ -15,7 +16,7 @@ import java.io.Serializable;
  */
 @Data
 @ApiModel(value = "OAuth2客户端接入配置更新DTO", description = "表(oauth_client_details)的对应的更新DTO")
-public class OauthClientDetailsUpdateDto implements Serializable {
+public class OauthClientDetailsUpdateDto implements Serializable, IdGetter<String> {
     private static final long serialVersionUID = -19073929038045745L;
 
     @ApiModelProperty(value = "客户端ID", example = "String")
@@ -51,4 +52,23 @@ public class OauthClientDetailsUpdateDto implements Serializable {
     @ApiModelProperty(value = "自动授权", example = "String")
     private String autoapprove;
 
+    /**
+     * 获取主键值
+     *
+     * @return 主键值
+     */
+    @Override
+    public String getIdValue() {
+        return clientId;
+    }
+
+    /**
+     * 获取主键属性名
+     *
+     * @return 属性名
+     */
+    @Override
+    public String getIdName() {
+        return "clientId";
+    }
 }

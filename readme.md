@@ -1,5 +1,5 @@
 # 设计定位
-    anan基于Spring Boot 2.3.x和Spring Cloud Hoxton生态体系技术，采用微服务前后端分离架构，为个人及企业微
+    anan基于OpenJdk8、Spring Boot 2.3.x、Spring Cloud Hoxton生态体系技术，采用微服务前后端分离架构，为个人及企业微
     服务架构提供一种解决方案，供开发人员学习和交流。其中包括服务注册与发现、服务监控、服务管理、
     服务治理、服务网关、服务熔断、配置管理、OAuth2认证授权中心等常见微服务组件。其中服务注册与发现支持nacos、eureka。
     支持Kubernetes(Helm)集群部署、jar包集群部署、Docker-Compose部署、Swarm集群部署
@@ -7,7 +7,12 @@
 # 技术选型
      技术                                   |           简介 
     ------                                 |          ------
-    Spring Boot                            | 基础构建框架，用于快速整合各资源 
+    Anan-Boot                              | anan-boot-starter基础构建框架脚手架，基于SpringBoot2.3
+        anan-core                          | 公共核心、工具类
+        anan-security                      | 快速搭建基于Spring Security、Oauth2的授权服务器、资源服务器认证体系
+        anan-jpa                           | 快速构建基于Spring Data Jpa的CRUD、分页、排序、树形数据
+        anan-mybatis                       | 快速构建基于MybatisPlus的CRUD、分页、排序、树形数据
+        anan-swagger                       | 快速构建基于Swagger3.0的API文档
     Spring MVC                             | MVC分层框架 
     Alibaba Nacos(备选Config)               | 配置管理中心 
     Alibaba Nacos(备选Eureka)               | 服务注册中心 
@@ -16,15 +21,12 @@
     Spring Cloud Feign                     | 微服务声明式调用框架 
     Spring Cloud Sleuth Zipkin             | 分布式链路追踪
     Spring Boot Admin                      | 服务管理中心 
-    Spring Data Jpa                        | 持久化框架 
     Spring Data Redis                      | 缓存框架 
-    Spring Security                        | 安全框架 
     OAuth2 Authorization Server            | 单点登录、鉴权、认证框架
     Slf4j Log4j2 Logback                   | 日志框架
     Spring Validator                       | 后端验证框架 
     Hibernate Validator                    | Hibernate验证框架 
     lombok                                 | 一个通过注解自动生成get/set方法的类库 
-    Swagger                                | API文档
     Thymeleaf                              | HTML5模板引擎  
     Maven                                  | 项目构建管理  
     Redis                                  | 缓存内存数据库 
