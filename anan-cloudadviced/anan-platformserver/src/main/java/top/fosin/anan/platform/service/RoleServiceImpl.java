@@ -7,17 +7,19 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 import top.fosin.anan.cloudresource.constant.SystemConstant;
-import top.fosin.anan.platform.dto.req.AnanRoleCreateDto;
-import top.fosin.anan.platform.dto.req.AnanRoleRetrieveDto;
-import top.fosin.anan.platform.dto.req.AnanRoleUpdateDto;
 import top.fosin.anan.cloudresource.dto.res.AnanRoleRespDto;
+import top.fosin.anan.cloudresource.service.AnanUserDetailService;
 import top.fosin.anan.core.util.BeanUtil;
 import top.fosin.anan.model.module.PageModule;
 import top.fosin.anan.model.result.ListResult;
 import top.fosin.anan.model.result.ResultUtils;
+import top.fosin.anan.platform.dto.req.AnanRoleCreateDto;
+import top.fosin.anan.platform.dto.req.AnanRoleRetrieveDto;
+import top.fosin.anan.platform.dto.req.AnanRoleUpdateDto;
 import top.fosin.anan.platform.entity.AnanOrganizationEntity;
 import top.fosin.anan.platform.entity.AnanRoleEntity;
 import top.fosin.anan.platform.entity.AnanUserRoleEntity;
@@ -25,7 +27,6 @@ import top.fosin.anan.platform.repository.OrganizationRepository;
 import top.fosin.anan.platform.repository.RoleRepository;
 import top.fosin.anan.platform.repository.UserRoleRepository;
 import top.fosin.anan.platform.service.inter.RoleService;
-import top.fosin.anan.cloudresource.service.AnanUserDetailService;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Path;
@@ -55,17 +56,19 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public AnanRoleRespDto create(AnanRoleCreateDto entity) {
-        Assert.notNull(entity, "传入了空对象!");
-
-        if (SystemConstant.ADMIN_ROLE_NAME.equals(entity.getValue().toUpperCase()) &&
-                !SystemConstant.ADMIN_ROLE_NAME.equals(entity.getValue().toUpperCase())) {
+    @Transactional(rollbackFor = Exception.class)
+    public AnanRoleRespDto create(AnanRoleCreateDto dto) {
+        String value = dto.getValue();
+        if (SystemConstant.ADMIN_ROLE_NAME.equalsIgnoreCase(value) &&
+                !SystemConstant.ADMIN_ROLE_NAME.equalsIgnoreCase(value)) {
             throw new IllegalArgumentException("不能创建角色标识" + SystemConstant.ADMIN_ROLE_NAME + "!");
         }
-        Assert.isTrue(!SystemConstant.ANAN_ROLE_NAME.equals(entity.getValue().toUpperCase()),
+        Assert.isTrue(!SystemConstant.ANAN_ROLE_NAME.equalsIgnoreCase(value),
                 "不能创建超级管理员角色帐号信息!");
+        AnanRoleEntity entityDynamic = this.queryOneByDto(dto);
+        Assert.isNull(entityDynamic, "该角色已存在，请核对!");
         AnanRoleEntity saveEntity = new AnanRoleEntity();
-        BeanUtils.copyProperties(entity, saveEntity);
+        BeanUtils.copyProperties(dto, saveEntity);
         AnanRoleEntity save = roleRepository.save(saveEntity);
         AnanRoleRespDto respDto = new AnanRoleRespDto();
         BeanUtils.copyProperties(save, respDto);
@@ -73,6 +76,7 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void update(AnanRoleUpdateDto entity) {
         Assert.notNull(entity, "传入了空对象!");
         Long id = entity.getId();
@@ -80,11 +84,11 @@ public class RoleServiceImpl implements RoleService {
 
         AnanRoleEntity oldEntity = roleRepository.findById(id).orElse(null);
         Assert.notNull(oldEntity, "通过传入的ID：" + id + "未能找到数据!");
-        if (SystemConstant.ADMIN_ROLE_NAME.equals(oldEntity.getValue().toUpperCase()) &&
-                !SystemConstant.ADMIN_ROLE_NAME.equals(entity.getValue().toUpperCase())) {
+        if (SystemConstant.ADMIN_ROLE_NAME.equalsIgnoreCase(oldEntity.getValue()) &&
+                !SystemConstant.ADMIN_ROLE_NAME.equalsIgnoreCase(entity.getValue())) {
             throw new IllegalArgumentException("不能修改角色标识" + SystemConstant.ADMIN_ROLE_NAME + "!");
         }
-        Assert.isTrue(!SystemConstant.ANAN_ROLE_NAME.equals(oldEntity.getValue().toUpperCase()),
+        Assert.isTrue(!SystemConstant.ANAN_ROLE_NAME.equalsIgnoreCase(oldEntity.getValue()),
                 "不能修改超级管理员角色帐号信息!");
         AnanRoleEntity saveEntity = new AnanRoleEntity();
         BeanUtils.copyProperties(entity, saveEntity);
@@ -92,6 +96,7 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void deleteById(Long id) {
         Assert.isTrue(id != null && id > 0, "传入的角色ID无效！");
         AnanRoleEntity entity = roleRepository.findById(id).orElse(null);
@@ -107,6 +112,7 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void deleteByDto(AnanRoleUpdateDto entity) {
         Assert.notNull(entity, "传入了空对象!");
         Assert.isTrue(!SystemConstant.ANAN_ROLE_NAME.equals(entity.getValue())

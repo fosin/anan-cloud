@@ -8,7 +8,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import top.fosin.anan.core.util.DateTimeUtil;
 import top.fosin.anan.model.dto.QuerySortRuleDto;
 import top.fosin.anan.model.module.SortRule;
-import top.fosin.anan.model.module.QueryRule;
+import top.fosin.anan.model.module.LogicalQueryRule;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -23,7 +23,7 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @ApiModel(value = "系统角色表查询DTO", description = "表(anan_role)的对应的查询DTO")
-public class AnanRoleRetrieveDto extends QuerySortRuleDto<QueryRule,SortRule> implements Serializable {
+public class AnanRoleRetrieveDto extends QuerySortRuleDto<LogicalQueryRule,SortRule> implements Serializable {
     private static final long serialVersionUID = 431913654589649616L;
 
     @ApiModelProperty(value = "机构ID")

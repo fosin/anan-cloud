@@ -6,6 +6,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import top.fosin.anan.cloudresource.constant.RedisConstant;
 import top.fosin.anan.platform.dto.res.AnanInternationalRespDto;
 import top.fosin.anan.core.util.BeanUtil;
@@ -61,6 +62,7 @@ public class AnanInternationalServiceImpl implements AnanInternationalService {
                     @CacheEvict(value = RedisConstant.ANAN_INTERNATIONAL_CODE, allEntries = true)
             }
     )
+    @Transactional(rollbackFor = Exception.class)
     public AnanInternationalRespDto create(AnanInternationalCreateDto entity) {
         return AnanInternationalService.super.create(entity);
     }
@@ -72,6 +74,7 @@ public class AnanInternationalServiceImpl implements AnanInternationalService {
                     @CacheEvict(value = RedisConstant.ANAN_INTERNATIONAL_CODE, allEntries = true)
             }
     )
+    @Transactional(rollbackFor = Exception.class)
     public void deleteById(Long id) {
         AnanInternationalService.super.deleteById(id);
     }
@@ -83,6 +86,7 @@ public class AnanInternationalServiceImpl implements AnanInternationalService {
                     @CacheEvict(value = RedisConstant.ANAN_INTERNATIONAL_CODE, allEntries = true)
             }
     )
+    @Transactional(rollbackFor = Exception.class)
     public void deleteByDto(AnanInternationalUpdateDto entity) {
         AnanInternationalService.super.deleteByDto(entity);
     }
@@ -94,6 +98,7 @@ public class AnanInternationalServiceImpl implements AnanInternationalService {
                     @CacheEvict(value = RedisConstant.ANAN_INTERNATIONAL_CODE, allEntries = true)
             }
     )
+    @Transactional(rollbackFor = Exception.class)
     public void update(AnanInternationalUpdateDto entity) {
         AnanInternationalService.super.update(entity);
     }

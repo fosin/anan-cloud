@@ -1,18 +1,13 @@
 package top.fosin.anan.platform.dto.res;
 
-import java.util.Date;
-
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-
-import java.io.Serializable;
-
 import lombok.Data;
-import org.springframework.format.annotation.DateTimeFormat;
-import top.fosin.anan.core.util.DateTimeUtil;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import top.fosin.anan.model.dto.IdDto;
+import top.fosin.anan.model.dto.IdCreateUpdateDto;
+
+import java.io.Serializable;
 
 /**
  * 系统版本角色表(AnanVersionRole)响应DTO
@@ -25,7 +20,7 @@ import top.fosin.anan.model.dto.IdDto;
 @ToString
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value = "系统版本角色表响应DTO", description = "表(anan_version_role)的响应DTO")
-public class AnanVersionRoleRespDto extends IdDto<Long> implements Serializable {
+public class AnanVersionRoleRespDto extends IdCreateUpdateDto<Long> implements Serializable {
     private static final long serialVersionUID = -39744614020133302L;
     @ApiModelProperty(value = "版本ID", example = "Long")
     private Long versionId;

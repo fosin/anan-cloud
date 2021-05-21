@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import top.fosin.anan.model.dto.QuerySortRuleDto;
-import top.fosin.anan.model.module.QueryRule;
+import top.fosin.anan.model.module.LogicalQueryRule;
 import top.fosin.anan.model.module.SortRule;
 
 import java.io.Serializable;
@@ -20,7 +20,7 @@ import java.io.Serializable;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @ApiModel(value = "系统服务表查询DTO", description = "表(anan_service)的对应的查询DTO")
-public class AnanServiceRetrieveDto extends QuerySortRuleDto<QueryRule, SortRule> implements Serializable {
+public class AnanServiceRetrieveDto extends QuerySortRuleDto<LogicalQueryRule, SortRule> implements Serializable {
     private static final long serialVersionUID = -95213722807513308L;
 
     @ApiModelProperty(value = "服务标识", example = "String")

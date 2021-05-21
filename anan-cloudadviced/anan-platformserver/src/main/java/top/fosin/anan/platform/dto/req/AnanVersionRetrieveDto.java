@@ -10,7 +10,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import top.fosin.anan.core.util.DateTimeUtil;
 import top.fosin.anan.model.dto.QuerySortRuleDto;
 import top.fosin.anan.model.module.SortRule;
-import top.fosin.anan.model.module.QueryRule;
+import top.fosin.anan.model.module.LogicalQueryRule;
 
 /**
  * 系统版本表(AnanVersion)查询DTO
@@ -22,7 +22,7 @@ import top.fosin.anan.model.module.QueryRule;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @ApiModel(value = "系统版本表查询DTO", description = "表(anan_version)的对应的查询DTO")
-public class AnanVersionRetrieveDto extends QuerySortRuleDto<QueryRule,SortRule> implements Serializable {
+public class AnanVersionRetrieveDto extends QuerySortRuleDto<LogicalQueryRule,SortRule> implements Serializable {
     private static final long serialVersionUID = -91727267823167686L;
 
     @ApiModelProperty(value = "版本名称")

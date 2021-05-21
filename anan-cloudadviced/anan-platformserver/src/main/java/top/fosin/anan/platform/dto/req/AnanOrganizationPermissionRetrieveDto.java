@@ -7,7 +7,7 @@ import lombok.EqualsAndHashCode;
 import org.springframework.format.annotation.DateTimeFormat;
 import top.fosin.anan.core.util.DateTimeUtil;
 import top.fosin.anan.model.dto.QuerySortRuleDto;
-import top.fosin.anan.model.module.QueryRule;
+import top.fosin.anan.model.module.LogicalQueryRule;
 import top.fosin.anan.model.module.SortRule;
 
 import java.io.Serializable;
@@ -23,7 +23,7 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @ApiModel(value = "系统机构权限表查询DTO", description = "表(anan_organization_permission)的对应的查询DTO")
-public class AnanOrganizationPermissionRetrieveDto extends QuerySortRuleDto<QueryRule,SortRule> implements Serializable {
+public class AnanOrganizationPermissionRetrieveDto extends QuerySortRuleDto<LogicalQueryRule,SortRule> implements Serializable {
     private static final long serialVersionUID = 258891966081450196L;
 
     @ApiModelProperty(value = "机构ID")

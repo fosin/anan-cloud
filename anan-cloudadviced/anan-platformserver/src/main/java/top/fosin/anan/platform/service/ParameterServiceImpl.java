@@ -52,6 +52,7 @@ public class ParameterServiceImpl implements ParameterService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     @CachePut(value = RedisConstant.ANAN_PARAMETER, key = "#root.target.getCacheKey(#result)")
     public AnanParameterRespDto create(AnanParameterCreateDto entity) {
         Assert.notNull(entity, "传入的创建数据实体对象不能为空!");
@@ -61,6 +62,7 @@ public class ParameterServiceImpl implements ParameterService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void update(AnanParameterUpdateDto entity) {
         Assert.notNull(entity, "传入了空对象!");
         Long id = entity.getId();
@@ -82,6 +84,7 @@ public class ParameterServiceImpl implements ParameterService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void deleteById(Long id) {
         AnanParameterEntity entity = parameterRepository.findById(id).orElse(null);
         Assert.notNull(entity, "通过ID没有能找到参数数据,删除被取消!");
@@ -97,6 +100,7 @@ public class ParameterServiceImpl implements ParameterService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     @CacheEvict(value = RedisConstant.ANAN_PARAMETER, key = "#root.target.getCacheKey(#entity)")
     public void deleteByDto(AnanParameterUpdateDto entity) {
         Assert.notNull(entity, "传入了空对象!");
@@ -135,6 +139,7 @@ public class ParameterServiceImpl implements ParameterService {
      */
     @Override
     @Cacheable(value = RedisConstant.ANAN_PARAMETER, key = "#root.target.getCacheKey(#type,#scope,#name)")
+    @Transactional(rollbackFor = Exception.class)
     public AnanParameterRespDto getNearestParameter(int type, String scope, String name) {
         AnanParameterEntity parameter = parameterRepository.findByTypeAndScopeAndName(type, scope, name);
         boolean finded = parameter != null && parameter.getId() != null;
@@ -165,6 +170,7 @@ public class ParameterServiceImpl implements ParameterService {
 
     @Override
     @Cacheable(value = RedisConstant.ANAN_PARAMETER, key = "#root.target.getCacheKey(#type,#scope,#name)")
+    @Transactional(rollbackFor = Exception.class)
     public AnanParameterRespDto getOrCreateParameter(int type, String scope, String name, String defaultValue, String description) {
         AnanParameterRespDto respDto;
         try {
@@ -185,7 +191,7 @@ public class ParameterServiceImpl implements ParameterService {
     }
 
     @Override
-    @Transactional(rollbackFor = AnanServiceException.class)
+    @Transactional(rollbackFor = Exception.class)
     public Boolean applyChange(Long id) {
         AnanParameterEntity entity = parameterRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("该参数已经不存在!"));
@@ -220,7 +226,7 @@ public class ParameterServiceImpl implements ParameterService {
     }
 
     @Override
-    @Transactional(rollbackFor = AnanServiceException.class)
+    @Transactional(rollbackFor = Exception.class)
     public Boolean applyChanges() {
         List<AnanParameterEntity> entities = parameterRepository.findByStatusNot(0);
         Assert.isTrue(entities != null && entities.size() != 0, "没有更改过任何参数，不需要发布!");

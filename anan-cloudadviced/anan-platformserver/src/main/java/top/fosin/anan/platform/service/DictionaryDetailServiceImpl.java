@@ -6,6 +6,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import top.fosin.anan.cloudresource.constant.RedisConstant;
 import top.fosin.anan.cloudresource.constant.SystemConstant;
@@ -46,6 +47,7 @@ public class DictionaryDetailServiceImpl implements DictionaryDetailService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     @CacheEvict(value = RedisConstant.ANAN_DICTIONARY_DETAIL, key = "#result.dictionaryId")
     public AnanDictionaryDetailRespDto create(AnanDictionaryDetailCreateDto entity) {
         Assert.notNull(entity, "传入的创建数据实体对象不能为空!");
@@ -56,6 +58,7 @@ public class DictionaryDetailServiceImpl implements DictionaryDetailService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     @CacheEvict(value = RedisConstant.ANAN_DICTIONARY_DETAIL, key = "#entity.dictionaryId")
     public void update(AnanDictionaryDetailUpdateDto entity) {
         Assert.notNull(entity, "传入的更新数据实体对象不能为空!");
@@ -77,6 +80,7 @@ public class DictionaryDetailServiceImpl implements DictionaryDetailService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     @CacheEvict(value = RedisConstant.ANAN_DICTIONARY_DETAIL, key = "#result.dictionaryId")
     public void deleteById(Long id) {
         Assert.notNull(id, "传入了空的ID!");
@@ -92,6 +96,7 @@ public class DictionaryDetailServiceImpl implements DictionaryDetailService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     @CacheEvict(value = RedisConstant.ANAN_DICTIONARY_DETAIL, key = "#dto.dictionaryId")
     public void deleteByDto(AnanDictionaryDetailUpdateDto dto) {
         Assert.notNull(dto, "传入了空的对象!");

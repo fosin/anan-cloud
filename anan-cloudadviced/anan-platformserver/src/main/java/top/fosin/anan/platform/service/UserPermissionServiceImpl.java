@@ -27,21 +27,20 @@ import java.util.List;
 @Lazy
 public class UserPermissionServiceImpl implements UserPermissionService {
     private final UserPermissionRepository userPermissionRepository;
-    private final AnanCacheManger ananCacheManger;
 
     public UserPermissionServiceImpl(UserPermissionRepository userPermissionRepository, AnanCacheManger ananCacheManger) {
         this.userPermissionRepository = userPermissionRepository;
-        this.ananCacheManger = ananCacheManger;
     }
 
     @Override
     @Cacheable(value = RedisConstant.ANAN_USER_PERMISSION, key = "T(String).valueOf(#userId).concat('-').concat(T(String).valueOf(#organizId))")
     public List<AnanUserPermissionRespDto> findByUserIdAndOrganizId(Long userId, Long organizId) {
         return BeanUtil.copyCollectionProperties(
-                userPermissionRepository.findByUserIdAndOrganizId(userId, organizId),AnanUserPermissionRespDto.class);
+                userPermissionRepository.findByUserIdAndOrganizId(userId, organizId), AnanUserPermissionRespDto.class);
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     @Cacheable(value = RedisConstant.ANAN_USER_PERMISSION, key = "#userId")
     public List<AnanUserPermissionRespDto> findByUserId(Long userId) {
         return BeanUtil.copyCollectionProperties(
@@ -53,29 +52,6 @@ public class UserPermissionServiceImpl implements UserPermissionService {
         return userPermissionRepository.countByPermissionId(permissionId);
     }
 
-//    @Override
-//    public void deleteInBatch(Collection<AnanUserPermissionEntity> entities) {
-//        Set<Long> needDelUsers = new HashSet<>();
-//        for (AnanUserPermissionEntity entity : entities) {
-//            needDelUsers.add(entity.getUserId());
-//        }
-//        Assert.isTrue(needDelUsers.size() != 0, "没有找到需要删除数据!");
-//        for (Long userId : needDelUsers) {
-//            ananCacheManger.evict(RedisConstant.ANAN_USER_ALL_PERMISSIONS, userId + "");
-//            ananCacheManger.evict(RedisConstant.ANAN_USER_PERMISSION, userId + "");
-//        }
-//        userPermissionRepository.deleteInBatch(entities);
-//        try {
-//            Thread.sleep(1000);
-//        } catch (InterruptedException e) {
-//            throw new AnanServiceException(e);
-//        }
-//        for (Long userId : needDelUsers) {
-//            ananCacheManger.evict(RedisConstant.ANAN_USER_ALL_PERMISSIONS, userId + "");
-//            ananCacheManger.evict(RedisConstant.ANAN_USER_PERMISSION, userId + "");
-//        }
-//    }
-
     @Override
     @Caching(
             evict = {
@@ -83,7 +59,7 @@ public class UserPermissionServiceImpl implements UserPermissionService {
                     @CacheEvict(value = RedisConstant.ANAN_USER_ALL_PERMISSIONS, key = "#userId"),
             }
     )
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public Collection<AnanUserPermissionRespDto> updateInBatch(String deleteCol, Long userId, Collection<AnanUserPermissionCreateDto> dtos) {
         return UserPermissionService.super.updateInBatch(deleteCol, userId, dtos);
     }

@@ -38,6 +38,7 @@ public class DictionaryServiceImpl implements DictionaryService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public AnanDictionaryRespDto create(AnanDictionaryCreateDto entity) {
         Assert.notNull(entity, "传入的创建数据实体对象不能为空!");
         AnanDictionaryEntity createEntity = new AnanDictionaryEntity();
@@ -54,6 +55,7 @@ public class DictionaryServiceImpl implements DictionaryService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void update(AnanDictionaryUpdateDto entity) {
         Assert.notNull(entity, "无效的更新数据");
         Long id = entity.getId();

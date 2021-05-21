@@ -1,8 +1,8 @@
 package top.fosin.anan.auth.service.inter;
 
 
-import top.fosin.anan.auth.entity.AnanUserEntity;
 import top.fosin.anan.cloudresource.dto.AnanUserAllPermissionTreeDto;
+import top.fosin.anan.cloudresource.dto.AnanUserAuthDto;
 import top.fosin.anan.cloudresource.dto.res.AnanUserAllPermissionsRespDto;
 
 import java.util.List;
@@ -18,5 +18,5 @@ public interface AuthService {
 
     AnanUserAllPermissionTreeDto findTreeByUserId(Long userId);
 
-    AnanUserEntity findByUsercode(String usercode);
+    AnanUserAuthDto findByUsercode(String usercode);
 }

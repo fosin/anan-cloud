@@ -29,11 +29,9 @@ import java.util.List;
 @Lazy
 public class RolePermissionServiceImpl implements RolePermissionService {
     private final RolePermissionRepository rolePermissionRepository;
-    private final AnanCacheManger ananCacheManger;
 
     public RolePermissionServiceImpl(RolePermissionRepository rolePermissionRepository, AnanCacheManger ananCacheManger) {
         this.rolePermissionRepository = rolePermissionRepository;
-        this.ananCacheManger = ananCacheManger;
     }
 
     @Override
@@ -54,32 +52,10 @@ public class RolePermissionServiceImpl implements RolePermissionService {
      * @param aLong     属性值
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void deleteInBatch(String deleteCol, Long aLong) {
         RolePermissionService.super.deleteInBatch(deleteCol, aLong);
     }
-//    @Override
-//    public void deleteInBatch(Collection<AnanRolePermissionEntity> entities) {
-//        Assert.notEmpty(entities, "要删除的集合不能为空!");
-//        Set<Long> needDelRoles = new HashSet<>();
-//        for (AnanRolePermissionEntity entity : entities) {
-//            needDelRoles.add(entity.getRoleId());
-//        }
-//        Assert.notEmpty(needDelRoles, "没有找到需要删除数据!");
-//        for (Long roleId : needDelRoles) {
-//            ananCacheManger.evict(RedisConstant.ANAN_ROLE_PERMISSION, roleId + "");
-//            ananCacheManger.clear(RedisConstant.ANAN_USER_ALL_PERMISSIONS);
-//        }
-//        rolePermissionRepository.deleteInBatch(entities);
-//        try {
-//            Thread.sleep(1000);
-//        } catch (InterruptedException e) {
-//            throw new AnanServiceException(e);
-//        }
-//        for (Long roleId : needDelRoles) {
-//            ananCacheManger.evict(RedisConstant.ANAN_ROLE_PERMISSION, roleId + "");
-//            ananCacheManger.clear(RedisConstant.ANAN_USER_ALL_PERMISSIONS);
-//        }
-//    }
 
     @Override
     @Caching(
@@ -88,7 +64,7 @@ public class RolePermissionServiceImpl implements RolePermissionService {
                     @CacheEvict(value = RedisConstant.ANAN_USER_ALL_PERMISSIONS, allEntries = true)
             }
     )
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public List<AnanRolePermissionRespDto> updateInBatch(String deleteCol, Long roleId, Collection<AnanRolePermissionCreateDto> dtos) {
         Assert.notNull(roleId, "传入的角色ID不能为空!");
         Assert.isTrue(dtos.stream().allMatch(entity -> entity.getRoleId().equals(roleId)), "需要更新的数据集中有与版本ID不匹配的数据!");

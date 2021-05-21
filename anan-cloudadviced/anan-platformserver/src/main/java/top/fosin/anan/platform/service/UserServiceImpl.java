@@ -22,7 +22,6 @@ import top.fosin.anan.cloudresource.dto.res.AnanUserRespDto;
 import top.fosin.anan.cloudresource.service.AnanUserDetailService;
 import top.fosin.anan.core.util.BeanUtil;
 import top.fosin.anan.core.util.RegexUtil;
-import top.fosin.anan.jpa.repository.IJpaRepository;
 import top.fosin.anan.model.dto.TreeDto;
 import top.fosin.anan.model.module.PageModule;
 import top.fosin.anan.model.result.ListResult;
@@ -40,7 +39,6 @@ import top.fosin.anan.platform.service.inter.UserService;
 import top.fosin.anan.redis.cache.AnanCacheManger;
 
 import javax.persistence.criteria.*;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
@@ -79,6 +77,9 @@ public class UserServiceImpl implements UserService {
     public AnanUserRespDto findByUsercode(String usercode) {
         Assert.notNull(usercode, "用户工号不能为空!");
         AnanUserEntity userEntity = userRepository.findByUsercode(usercode);
+        if (userEntity == null) {
+            return null;
+        }
         AnanUserRespDto respDto = new AnanUserRespDto();
         BeanUtils.copyProperties(userEntity, respDto);
         return respDto;
@@ -104,19 +105,23 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public AnanUserRespPassDto create(AnanUserCreateDto entity) {
-        AnanUserEntity createUser = new AnanUserEntity();
-        BeanUtils.copyProperties(entity, createUser);
-
+    @Transactional(rollbackFor = Exception.class)
+    public AnanUserRespPassDto create(AnanUserCreateDto dto) {
+        AnanUserRespDto entityDynamic = this.findByUsercode(dto.getUsercode());
+        Assert.isNull(entityDynamic, "用户工号已存在，请核对!");
 //        String passwordStrength = localOrganParameter.getOrCreateParameter("DefaultPasswordStrength", RegexUtil.PASSWORD_STRONG, "用户密码强度正则表达式,密码最少6位，包括至少1个大写字母，1个小写字母，1个数字，1个特殊字符");
 //        Assert.isTrue(RegexUtil.matcher(createUser.getPassword(), passwordStrength), "用户密码强度正则表达式,密码最少6位，包括至少1个大写字母，1个小写字母，1个数字，1个特殊字符!");
+        AnanUserEntity createUser = new AnanUserEntity();
+        BeanUtils.copyProperties(dto, createUser);
         String password = encryptBeforeSave(createUser);
-        AnanUserEntity savedEntity = userRepository.save(createUser);
-        savedEntity.setPassword(password);
-        return BeanUtil.copyProperties(savedEntity, AnanUserRespPassDto.class);
+        createUser = userRepository.save(createUser);
+        AnanUserRespPassDto respPassDto = BeanUtil.copyProperties(createUser, AnanUserRespPassDto.class);
+        respPassDto.setPassword(password);
+        return respPassDto;
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void update(AnanUserUpdateDto dto) {
         Long id = dto.getId();
         Assert.notNull(id, "更新的数据id不能为空或者小于1!");
@@ -135,25 +140,6 @@ public class UserServiceImpl implements UserService {
         userRepository.save(createUser);
     }
 
-    public List<AnanUserEntity> findAll(Iterable<Long> ids) {
-        List<AnanUserEntity> rcList = new ArrayList<>();
-        List<Long> needQueryIds = new ArrayList<>();
-        for (Long id : ids) {
-            AnanUserEntity userEntity = ananCacheManger.get(RedisConstant.ANAN_USER, id + "", AnanUserEntity.class);
-            if (userEntity != null) {
-                rcList.add(userEntity);
-            } else {
-                needQueryIds.add(id);
-            }
-        }
-        if (needQueryIds.size() > 0) {
-            List<AnanUserEntity> queryList = userRepository.findAllById(needQueryIds);
-            rcList.addAll(queryList);
-        }
-
-        return rcList;
-    }
-
     @Override
     @Caching(
             evict = {
@@ -163,6 +149,7 @@ public class UserServiceImpl implements UserService {
                     @CacheEvict(value = RedisConstant.ANAN_USER_ALL_PERMISSIONS, key = "#id")
             }
     )
+    @Transactional(rollbackFor = Exception.class)
     public void deleteById(Long id) {
         Assert.isTrue(id != null && id > 0, "传入的用户ID无效！");
         AnanUserEntity entity = ananCacheManger.get(RedisConstant.ANAN_USER, id + "", AnanUserEntity.class);
@@ -186,6 +173,7 @@ public class UserServiceImpl implements UserService {
                     @CacheEvict(value = RedisConstant.ANAN_USER_ALL_PERMISSIONS, key = "#entity.id")
             }
     )
+    @Transactional(rollbackFor = Exception.class)
     public void deleteByDto(AnanUserUpdateDto entity) {
         Assert.notNull(entity, "不能删除空的用户对象!");
         Assert.isTrue(!ananUserDetailService.isSysAdminUser(entity.getUsercode())
@@ -376,7 +364,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public IJpaRepository<AnanUserEntity, Long> getRepository() {
+    public UserRepository getRepository() {
         return userRepository;
     }
 }

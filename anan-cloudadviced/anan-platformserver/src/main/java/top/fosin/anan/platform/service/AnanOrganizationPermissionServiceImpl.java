@@ -48,7 +48,7 @@ public class AnanOrganizationPermissionServiceImpl implements AnanOrganizationPe
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public List<AnanOrganizationPermissionRespDto> updateInBatch(String deleteCol, Long organizId, Collection<AnanOrganizationPermissionCreateDto> dtos) {
         Assert.notNull(organizId, "传入的版本ID不能为空!");
 

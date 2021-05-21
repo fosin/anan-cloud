@@ -8,19 +8,20 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import top.fosin.anan.cloudresource.constant.RedisConstant;
+import top.fosin.anan.cloudresource.dto.res.AnanOrganizationRespDto;
+import top.fosin.anan.cloudresource.dto.res.AnanOrganizationTreeDto;
+import top.fosin.anan.cloudresource.service.AnanUserDetailService;
+import top.fosin.anan.core.util.BeanUtil;
+import top.fosin.anan.jpa.repository.IJpaRepository;
+import top.fosin.anan.model.module.LogicalQueryRule;
+import top.fosin.anan.model.module.RelaQueryRule;
+import top.fosin.anan.model.module.RelationalOperator;
 import top.fosin.anan.platform.dto.req.AnanOrganizationCreateDto;
 import top.fosin.anan.platform.dto.req.AnanOrganizationRetrieveDto;
 import top.fosin.anan.platform.dto.req.AnanOrganizationUpdateDto;
-import top.fosin.anan.cloudresource.dto.res.AnanOrganizationRespDto;
-import top.fosin.anan.cloudresource.dto.res.AnanOrganizationTreeDto;
-import top.fosin.anan.core.util.BeanUtil;
-import top.fosin.anan.jpa.repository.IJpaRepository;
-import top.fosin.anan.model.module.OperatorMode;
-import top.fosin.anan.model.module.QueryRule;
 import top.fosin.anan.platform.entity.AnanOrganizationEntity;
 import top.fosin.anan.platform.repository.OrganizationRepository;
 import top.fosin.anan.platform.service.inter.OrganizationService;
-import top.fosin.anan.cloudresource.service.AnanUserDetailService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -141,10 +142,12 @@ public class OrganizationServiceImpl implements OrganizationService {
         AnanOrganizationRetrieveDto dto = new AnanOrganizationRetrieveDto();
         dto.setTopId(entity.getTopId());
         dto.setCode(entity.getCode());
-        ArrayList<QueryRule> queryRules = new ArrayList<>();
-        queryRules.add(new QueryRule(OperatorMode.rightLike, "code"));
-        queryRules.add(new QueryRule(OperatorMode.equal, "topId"));
-        dto.setQueryRules(queryRules);
+        LogicalQueryRule logicalQueryRule = new LogicalQueryRule();
+        List<RelaQueryRule> relaQueryRules = new ArrayList<>();
+        logicalQueryRule.setRelaRules(relaQueryRules);
+        relaQueryRules.add(new RelaQueryRule(RelationalOperator.rightLike, "code"));
+        relaQueryRules.add(new RelaQueryRule(RelationalOperator.equal, "topId"));
+        dto.setQueryRule(logicalQueryRule);
         return this.findTree(dto, id);
     }
 

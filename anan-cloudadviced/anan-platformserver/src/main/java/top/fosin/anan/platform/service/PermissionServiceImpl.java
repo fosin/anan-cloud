@@ -58,6 +58,7 @@ public class PermissionServiceImpl implements PermissionService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     @CachePut(value = RedisConstant.ANAN_PERMISSION, key = "#result.id")
     public AnanPermissionRespDto create(AnanPermissionCreateDto entity) {
         Assert.notNull(entity, "传入的创建数据实体对象不能为空!");
@@ -145,6 +146,7 @@ public class PermissionServiceImpl implements PermissionService {
                     @CacheEvict(value = RedisConstant.ANAN_ROLE_PERMISSION, allEntries = true)
             }
     )
+    @Transactional(rollbackFor = Exception.class)
     public void deleteById(Long id) {
         Assert.notNull(id, "传入了空ID!");
         AnanPermissionEntity entity = permissionRepository.findById(id).orElse(null);
@@ -177,6 +179,7 @@ public class PermissionServiceImpl implements PermissionService {
                     @CacheEvict(value = RedisConstant.ANAN_ROLE_PERMISSION, allEntries = true)
             }
     )
+    @Transactional(rollbackFor = Exception.class)
     public void deleteByDto(AnanPermissionUpdateDto entity) {
         AnanPermissionEntity deleteEntity = permissionRepository.findById(entity.getId()).orElse(null);
         deleteByDto(Objects.requireNonNull(deleteEntity, "传入了空对象!"));

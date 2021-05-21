@@ -14,6 +14,7 @@ import top.fosin.anan.auth.service.inter.AuthService;
 import top.fosin.anan.cloudresource.constant.RedisConstant;
 import top.fosin.anan.cloudresource.constant.SystemConstant;
 import top.fosin.anan.cloudresource.dto.AnanUserAllPermissionTreeDto;
+import top.fosin.anan.cloudresource.dto.AnanUserAuthDto;
 import top.fosin.anan.cloudresource.dto.res.AnanUserAllPermissionsRespDto;
 import top.fosin.anan.core.util.BeanUtil;
 import top.fosin.anan.core.util.TreeUtil;
@@ -44,7 +45,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     @Cacheable(value = RedisConstant.ANAN_USER, key = "#usercode")
     @Transactional(readOnly = true)
-    public AnanUserEntity findByUsercode(String usercode) {
+    public AnanUserAuthDto findByUsercode(String usercode) {
         Assert.notNull(usercode, "用户工号不能为空!");
         //该代码看似无用，其实是为了解决懒加载和缓存先后问题
         AnanUserEntity userEntity = userRepository.findByUsercode(usercode);
@@ -52,7 +53,7 @@ public class AuthServiceImpl implements AuthService {
             List<AnanUserRoleEntity> userRoles = userEntity.getUserRoles();
             log.debug(userRoles.toString());
         }
-        return userEntity;
+        return userEntity.conert2Dto();
     }
 
     @Override

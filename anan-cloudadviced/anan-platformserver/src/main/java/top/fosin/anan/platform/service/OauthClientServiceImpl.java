@@ -5,6 +5,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 import top.fosin.anan.core.util.BeanUtil;
@@ -36,6 +37,7 @@ public class OauthClientServiceImpl implements OauthClientService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public OauthClientDetailsRespDto create(OauthClientDetailsCreateDto entity) {
         Assert.notNull(entity, "传入的创建数据实体对象不能为空!");
         String id = entity.getClientId();
@@ -48,6 +50,7 @@ public class OauthClientServiceImpl implements OauthClientService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void update(OauthClientDetailsUpdateDto dto) {
         String id = dto.getClientId();
         Assert.isTrue(StringUtils.hasText(id), "更新数据时ClientId不能为空!");

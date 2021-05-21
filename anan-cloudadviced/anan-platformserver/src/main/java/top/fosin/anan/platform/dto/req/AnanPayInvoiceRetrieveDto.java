@@ -8,7 +8,7 @@ import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 import top.fosin.anan.model.dto.QuerySortRuleDto;
 import top.fosin.anan.model.module.SortRule;
-import top.fosin.anan.model.module.QueryRule;
+import top.fosin.anan.model.module.LogicalQueryRule;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -23,7 +23,7 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @ApiModel(value = "系统支付发票表查询DTO", description = "表(anan_pay_invoice)的对应的查询DTO")
-public class AnanPayInvoiceRetrieveDto extends QuerySortRuleDto<QueryRule,SortRule> implements Serializable {
+public class AnanPayInvoiceRetrieveDto extends QuerySortRuleDto<LogicalQueryRule,SortRule> implements Serializable {
     private static final long serialVersionUID = 805808354567024792L;
 
     @ApiModelProperty(value = "支付ID")

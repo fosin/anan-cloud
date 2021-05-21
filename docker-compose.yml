@@ -5,7 +5,7 @@ services:
     container_name: mysql-leader
     hostname: mysql-leader
     restart: always
-    image: registry.cn-hongkong.aliyuncs.com/fosin/mysql-leader:2.7
+    image: registry.cn-hongkong.aliyuncs.com/fosin/mysql-leader:2.4
     #    build:
     #      context: deploy/mysql/leader
     environment:

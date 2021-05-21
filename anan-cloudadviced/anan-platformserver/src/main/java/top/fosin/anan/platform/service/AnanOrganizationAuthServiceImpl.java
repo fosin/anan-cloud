@@ -76,7 +76,7 @@ public class AnanOrganizationAuthServiceImpl implements AnanOrganizationAuthServ
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public Boolean register(RegisterDto registerDto) {
         Date now = new Date();
 
