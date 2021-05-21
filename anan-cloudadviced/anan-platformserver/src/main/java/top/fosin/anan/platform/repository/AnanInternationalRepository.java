@@ -8,7 +8,7 @@ import top.fosin.anan.platform.entity.AnanInternationalEntity;
 import org.springframework.stereotype.Repository;
 
 /**
- * 国际化(anan_international)表数据库访问层
+ * 国际化语言数据库访问层
  *
  * @author fosin
  * @date 2020-12-04 11:05:40

@@ -30,7 +30,7 @@ import java.util.Date;
 @SQLDelete(sql = "update anan_parameter set deleted = 1 where id = ?")
 @Where(clause = "deleted = 0")
 @Table(name = "anan_parameter")
-@ApiModel(value = "用于存放各种分类分组的个性化参数实体类", description = "表(anan_parameter)的对应的实体类")
+@ApiModel(value = "用于存放各种分类分组的个性化参数实体类", description = "系统通用参数的实体类")
 public class AnanParameterEntity extends SoftDeleteEntity<Long> implements Serializable {
     private static final long serialVersionUID = 301081721804164443L;
 

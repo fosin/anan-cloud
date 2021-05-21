@@ -11,7 +11,7 @@ import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
- * 国际化语言字符集(AnanInternationalCharset)更新DTO
+ * 国际化语言字符集更新DTO
  *
  * @author fosin
  * @date 2020-12-09 10:34:34
@@ -20,7 +20,7 @@ import java.io.Serializable;
 @Data
 @ToString
 @EqualsAndHashCode(callSuper = true)
-@ApiModel(value = "国际化语言字符集更新DTO", description = "表(anan_international_charset)的对应的更新DTO")
+@ApiModel(value = "国际化语言字符集更新DTO", description = "国际化语言字符集更新DTO")
 public class AnanInternationalCharsetUpdateDto extends IdDto<Long> implements Serializable {
     private static final long serialVersionUID = -22137097820187644L;
 

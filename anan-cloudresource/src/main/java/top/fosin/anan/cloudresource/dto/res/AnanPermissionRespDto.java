@@ -19,7 +19,7 @@ import java.io.Serializable;
 @Data
 @ToString
 @EqualsAndHashCode(callSuper = true)
-@ApiModel(value = "功能权限表响应DTO", description = "表(anan_permission)的响应DTO")
+@ApiModel(value = "功能权限表响应DTO", description = "系统权限的响应DTO")
 public class AnanPermissionRespDto extends PidDto<Long> implements Serializable {
     private static final long serialVersionUID = -59729421245439638L;
     @ApiModelProperty(value = "权限编码，不能重复 不能为空", example = "String")

@@ -15,7 +15,7 @@ import java.io.Serializable;
  * @since 1.0.0
  */
 @Data
-@ApiModel(value = "系统版本角色权限表创建DTO", description = "表(anan_version_role_permission)的对应的创建DTO")
+@ApiModel(value = "系统版本角色权限表创建DTO", description = "系统版本角色权限的创建DTO")
 public class AnanVersionRolePermissionCreateDto implements Serializable {
     private static final long serialVersionUID = -75539368876091612L;
 

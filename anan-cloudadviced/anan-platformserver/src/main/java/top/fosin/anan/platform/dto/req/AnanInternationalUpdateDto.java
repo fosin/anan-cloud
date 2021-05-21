@@ -21,7 +21,7 @@ import java.io.Serializable;
 @Data
 @ToString
 @EqualsAndHashCode(callSuper = true)
-@ApiModel(value = "国际化语言集更新DTO", description = "表(anan_international)的对应的更新DTO")
+@ApiModel(value = "国际化语言集更新DTO", description = "国际化语言的更新DTO")
 public class AnanInternationalUpdateDto extends IdDto<Long> implements Serializable {
     private static final long serialVersionUID = -76433218731003447L;
 

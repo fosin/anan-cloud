@@ -34,7 +34,7 @@ import java.util.List;
 @RestController
 @Slf4j
 @RequestMapping(UrlPrefixConstant.ORGANIZATION)
-@Api(value = UrlPrefixConstant.ORGANIZATION, tags = "机构管理相关操作(增删改查)")
+@Api(value = UrlPrefixConstant.ORGANIZATION, tags = "机构管理相关操作")
 public class AnanOrganizationController extends BaseController
         implements ISimpleController<AnanOrganizationRespDto, Long,
         AnanOrganizationCreateDto, AnanOrganizationRetrieveDto,

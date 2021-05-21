@@ -14,7 +14,7 @@ import javax.persistence.Table;
 import java.io.Serializable;
 
 /**
- * 国际化语言字符集(AnanInternationalCharset)实体类
+ * 国际化语言字符集实体类
  *
  * @author fosin
  * @date 2020-12-09 10:34:33
@@ -25,7 +25,7 @@ import java.io.Serializable;
 @Entity
 @DynamicUpdate
 @Table(name = "anan_international_charset")
-@ApiModel(value = "表(anan_international_charset)的对应的实体类", description = "表(anan_international_charset)的对应的实体类")
+@ApiModel(value = "国际化语言字符集实体类", description = "国际化语言字符集实体类")
 public class AnanInternationalCharsetEntity extends CreateUpdateEntity<Long> implements Serializable {
     private static final long serialVersionUID = -47422702414130736L;
 

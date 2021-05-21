@@ -5,7 +5,7 @@ import top.fosin.anan.jpa.repository.IJpaRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.context.annotation.Lazy;
 /**
- * 系统支付发票表(anan_pay_invoice)表数据库访问层
+ * 系统支付发票表数据库访问层
  *
  * @author fosin
  * @date 2018-11-18 17:26:40

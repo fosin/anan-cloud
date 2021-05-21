@@ -24,7 +24,7 @@ import top.fosin.anan.model.dto.IdDto;
 @Data
 @ToString
 @EqualsAndHashCode(callSuper = true)
-@ApiModel(value = "系统支付订单表响应DTO", description = "表(anan_pay_order)的响应DTO")
+@ApiModel(value = "系统支付订单表响应DTO", description = "系统支付订单的响应DTO")
 public class AnanPayOrderRespDto extends IdDto<Long> implements Serializable {
     private static final long serialVersionUID = 246548313263160346L;
     @ApiModelProperty(value = "订单机构", example = "Long")

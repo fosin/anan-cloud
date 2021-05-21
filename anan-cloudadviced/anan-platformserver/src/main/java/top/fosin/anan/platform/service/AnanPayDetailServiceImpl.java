@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.context.annotation.Lazy;
 
 /**
- * 系统支付明细表(anan_pay_detail)表服务实现类
+ * 系统支付明细系统支付明细表服务实现类
  *
  * @author fosin
  * @date 2018-11-18 17:26:40

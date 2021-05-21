@@ -16,7 +16,7 @@ import top.fosin.anan.platform.service.inter.AnanInternationalCharsetService;
 import java.util.List;
 
 /**
- * 国际化明显(anan_international_charset)表服务实现类
+ * 国际化明细服务实现类
  *
  * @author fosin
  * @date 2020-12-03 21:18:05

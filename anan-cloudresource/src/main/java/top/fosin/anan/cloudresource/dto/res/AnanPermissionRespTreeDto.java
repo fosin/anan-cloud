@@ -17,7 +17,7 @@ import java.io.Serializable;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-@ApiModel(value = "权限树响应DTO", description = "表(anan_permission)权限树响应DTO")
+@ApiModel(value = "权限树响应DTO", description = "系统权限权限树响应DTO")
 public class AnanPermissionRespTreeDto extends TreeDto<AnanPermissionRespTreeDto, Long> implements Serializable {
     private static final long serialVersionUID = -61984917164013694L;
 

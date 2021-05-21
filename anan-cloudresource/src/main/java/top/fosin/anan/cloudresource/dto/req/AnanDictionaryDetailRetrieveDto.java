@@ -24,7 +24,7 @@ import java.util.Date;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-@ApiModel(value = "系统通用字典明细表查询DTO", description = "表(anan_dictionary_detail)的对应的查询DTO")
+@ApiModel(value = "系统通用字典明细表查询DTO", description = "系统通用字典明细的查询DTO")
 public class AnanDictionaryDetailRetrieveDto extends QuerySortRuleDto<LogicalQueryRule,SortRule> implements Serializable {
     private static final long serialVersionUID = 507206776709737910L;
 

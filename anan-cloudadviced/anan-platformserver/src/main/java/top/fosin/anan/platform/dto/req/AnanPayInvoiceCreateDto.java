@@ -1,14 +1,15 @@
 package top.fosin.anan.platform.dto.req;
 
-import java.util.Date;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import java.io.Serializable;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 import top.fosin.anan.core.util.DateTimeUtil;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import java.io.Serializable;
+import java.util.Date;
 
 /**
  * 系统支付发票表(AnanPayInvoice)创建DTO
@@ -18,7 +19,7 @@ import top.fosin.anan.core.util.DateTimeUtil;
  * @since 1.0.0
  */
 @Data
-@ApiModel(value = "系统支付发票表创建DTO", description = "表(anan_pay_invoice)的对应的创建DTO")
+@ApiModel(value = "系统支付发票表创建DTO", description = "系统支付发票的创建DTO")
 public class AnanPayInvoiceCreateDto implements Serializable {
     private static final long serialVersionUID = 216983964108957018L;
 

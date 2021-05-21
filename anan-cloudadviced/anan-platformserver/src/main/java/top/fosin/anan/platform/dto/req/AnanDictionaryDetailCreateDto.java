@@ -17,7 +17,7 @@ import java.io.Serializable;
  * @since 1.0.0
  */
 @Data
-@ApiModel(value = "系统通用字典明细表创建DTO", description = "表(anan_dictionary_detail)的对应的创建DTO")
+@ApiModel(value = "系统通用字典明细表创建DTO", description = "系统通用字典明细的创建DTO")
 public class AnanDictionaryDetailCreateDto implements Serializable {
     private static final long serialVersionUID = -81112310562332311L;
 

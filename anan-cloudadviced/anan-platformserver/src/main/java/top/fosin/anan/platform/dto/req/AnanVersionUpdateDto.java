@@ -24,7 +24,7 @@ import java.util.Date;
 @Data
 @ToString
 @EqualsAndHashCode(callSuper = true)
-@ApiModel(value = "系统版本表更新DTO", description = "表(anan_version)的对应的更新DTO")
+@ApiModel(value = "系统版本表更新DTO", description = "系统版本的更新DTO")
 public class AnanVersionUpdateDto extends IdDto<Long> implements Serializable {
     private static final long serialVersionUID = -76570893417143301L;
 

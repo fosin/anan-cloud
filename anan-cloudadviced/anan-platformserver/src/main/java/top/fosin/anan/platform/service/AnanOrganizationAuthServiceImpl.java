@@ -27,7 +27,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * 系统机构授权表(anan_organization_auth)表服务实现类
+ * 系统机构授权系统机构授权表服务实现类
  *
  * @author fosin
  * @date 2018-11-18 17:26:40

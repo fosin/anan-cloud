@@ -2,10 +2,11 @@ package top.fosin.anan.platform.dto.req;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import lombok.Data;
 
 /**
  * 系统机构授权表(AnanOrganizationAuth)创建DTO
@@ -15,7 +16,7 @@ import lombok.Data;
  * @since 1.0.0
  */
 @Data
-@ApiModel(value = "系统机构授权表创建DTO", description = "表(anan_organization_auth)的对应的创建DTO")
+@ApiModel(value = "系统机构授权表创建DTO", description = "系统机构授权的创建DTO")
 public class AnanOrganizationAuthCreateDto implements Serializable {
     private static final long serialVersionUID = 456236738061734028L;
 

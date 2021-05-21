@@ -24,7 +24,7 @@ import top.fosin.anan.model.dto.IdDto;
 @Data
 @ToString
 @EqualsAndHashCode(callSuper = true)
-@ApiModel(value = "系统角色权限表响应DTO", description = "表(anan_role_permission)的响应DTO")
+@ApiModel(value = "系统角色权限表响应DTO", description = "系统角色权限的响应DTO")
 public class AnanRolePermissionRespDto extends IdDto<Long> implements Serializable {
     private static final long serialVersionUID = 785551683787615699L;
     @ApiModelProperty(value = "角色ID", example = "Long")

@@ -15,7 +15,7 @@ import java.io.Serializable;
  * @since 1.0.0
  */
 @Data
-@ApiModel(value = "OAuth2客户端接入配置更新DTO", description = "表(oauth_client_details)的对应的更新DTO")
+@ApiModel(value = "OAuth2客户端接入配置更新DTO", description = "OAuth2客户端接入配置的更新DTO")
 public class OauthClientDetailsUpdateDto implements Serializable, IdGetter<String> {
     private static final long serialVersionUID = -19073929038045745L;
 

@@ -28,7 +28,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("v1/version")
-@Api(value = "v1/version", tags = "系统版本表(anan_version)接入层API")
+@Api(value = "v1/version", tags = "系统版本管理")
 public class AnanVersionController implements ISimpleController<AnanVersionRespDto,
         Long, AnanVersionCreateDto, AnanVersionRetrieveDto, AnanVersionUpdateDto> {
     /**

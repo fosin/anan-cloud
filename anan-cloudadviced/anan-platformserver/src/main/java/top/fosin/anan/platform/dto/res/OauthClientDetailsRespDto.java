@@ -14,7 +14,7 @@ import java.io.Serializable;
  * @since 2.6.0
  */
 @Data
-@ApiModel(value = "OAuth2客户端接入配置响应DTO", description = "表(oauth_client_details)的响应DTO")
+@ApiModel(value = "OAuth2客户端接入配置响应DTO", description = "OAuth2客户端接入配置的响应DTO")
 public class OauthClientDetailsRespDto implements Serializable {
     private static final long serialVersionUID = 692552529395562413L;
     @ApiModelProperty(value = "客户端ID", example = "String")

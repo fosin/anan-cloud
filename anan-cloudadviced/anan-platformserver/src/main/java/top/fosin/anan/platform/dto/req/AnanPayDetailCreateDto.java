@@ -15,7 +15,7 @@ import java.io.Serializable;
  * @since 1.0.0
  */
 @Data
-@ApiModel(value = "系统支付明细表创建DTO", description = "表(anan_pay_detail)的对应的创建DTO")
+@ApiModel(value = "系统支付明细表创建DTO", description = "系统支付明细的创建DTO")
 public class AnanPayDetailCreateDto implements Serializable {
     private static final long serialVersionUID = -77766644338507723L;
 

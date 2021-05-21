@@ -8,7 +8,7 @@ import top.fosin.anan.platform.entity.AnanVersionRoleEntity;
 import top.fosin.anan.jpa.service.ISimpleJpaService;
 
 /**
- * 系统版本角色表(anan_version_role)表服务接口
+ * 系统版本角色表服务接口
  *
  * @author fosin
  * @date 2018-11-18 17:26:40

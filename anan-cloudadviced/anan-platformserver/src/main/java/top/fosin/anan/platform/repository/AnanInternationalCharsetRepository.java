@@ -7,7 +7,7 @@ import top.fosin.anan.platform.entity.AnanInternationalCharsetEntity;
 import java.util.List;
 
 /**
- * 国际化明显(anan_international_charset)表数据库访问层
+ * 国际化明细数据库访问层
  *
  * @author fosin
  * @date 2020-12-04 11:05:40

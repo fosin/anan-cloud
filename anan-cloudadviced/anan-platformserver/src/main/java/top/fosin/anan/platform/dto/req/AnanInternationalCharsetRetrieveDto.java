@@ -11,7 +11,7 @@ import top.fosin.anan.model.module.SortRule;
 import java.io.Serializable;
 
 /**
- * 国际化语言字符集(AnanInternationalCharset)查询DTO
+ * 国际化语言字符集查询DTO
  *
  * @author fosin
  * @date 2020-12-09 10:34:35
@@ -19,7 +19,7 @@ import java.io.Serializable;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-@ApiModel(value = "国际化语言字符集查询DTO", description = "表(anan_international_charset)的对应的查询DTO")
+@ApiModel(value = "国际化语言字符集查询DTO", description = "国际化语言字符集查询DTO")
 public class AnanInternationalCharsetRetrieveDto extends QuerySortRuleDto<LogicalQueryRule, SortRule> implements Serializable {
     private static final long serialVersionUID = 329752756986005664L;
 

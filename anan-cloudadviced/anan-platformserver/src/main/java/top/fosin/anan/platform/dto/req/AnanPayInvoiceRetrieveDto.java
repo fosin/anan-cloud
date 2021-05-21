@@ -22,7 +22,7 @@ import java.util.Date;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-@ApiModel(value = "系统支付发票表查询DTO", description = "表(anan_pay_invoice)的对应的查询DTO")
+@ApiModel(value = "系统支付发票表查询DTO", description = "系统支付发票的查询DTO")
 public class AnanPayInvoiceRetrieveDto extends QuerySortRuleDto<LogicalQueryRule,SortRule> implements Serializable {
     private static final long serialVersionUID = 805808354567024792L;
 

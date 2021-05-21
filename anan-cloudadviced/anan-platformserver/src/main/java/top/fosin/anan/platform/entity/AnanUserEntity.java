@@ -28,7 +28,7 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @DynamicUpdate
 @Table(name = "anan_user")
-@ApiModel(value = "系统用户表实体类", description = "表(anan_user)的对应的实体类")
+@ApiModel(value = "系统用户表实体类", description = "系统用户的实体类")
 public class AnanUserEntity extends OrganizIdCreateUpdateEntity<Long> implements Serializable {
     private static final long serialVersionUID = 897030139778409164L;
 

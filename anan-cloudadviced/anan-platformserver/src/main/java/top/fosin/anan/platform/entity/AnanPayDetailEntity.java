@@ -25,7 +25,7 @@ import java.io.Serializable;
 @Entity
 @DynamicUpdate
 @Table(name = "anan_pay_detail")
-@ApiModel(value = "系统支付明细表实体类", description = "表(anan_pay_detail)的对应的实体类")
+@ApiModel(value = "系统支付明细表实体类", description = "系统支付明细的实体类")
 public class AnanPayDetailEntity extends IdEntity<Long> implements Serializable {
     private static final long serialVersionUID = -23058131683087837L;
 

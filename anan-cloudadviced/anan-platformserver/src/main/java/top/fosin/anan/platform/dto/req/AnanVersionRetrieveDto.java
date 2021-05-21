@@ -21,7 +21,7 @@ import top.fosin.anan.model.module.LogicalQueryRule;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-@ApiModel(value = "系统版本表查询DTO", description = "表(anan_version)的对应的查询DTO")
+@ApiModel(value = "系统版本表查询DTO", description = "系统版本的查询DTO")
 public class AnanVersionRetrieveDto extends QuerySortRuleDto<LogicalQueryRule,SortRule> implements Serializable {
     private static final long serialVersionUID = -91727267823167686L;
 

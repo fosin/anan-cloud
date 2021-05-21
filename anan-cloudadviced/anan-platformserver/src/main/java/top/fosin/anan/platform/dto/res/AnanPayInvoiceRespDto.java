@@ -22,7 +22,7 @@ import java.util.Date;
 @Data
 @ToString
 @EqualsAndHashCode(callSuper = true)
-@ApiModel(value = "系统支付发票表响应DTO", description = "表(anan_pay_invoice)的响应DTO")
+@ApiModel(value = "系统支付发票表响应DTO", description = "系统支付发票的响应DTO")
 public class AnanPayInvoiceRespDto extends IdDto<Long> implements Serializable {
     private static final long serialVersionUID = -74851260485641159L;
     @ApiModelProperty(value = "支付ID", example = "Long")

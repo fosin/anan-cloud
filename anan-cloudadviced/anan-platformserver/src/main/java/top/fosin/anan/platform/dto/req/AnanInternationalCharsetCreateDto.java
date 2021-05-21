@@ -8,14 +8,14 @@ import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
- * 国际化语言字符集(AnanInternationalCharset)创建DTO
+ * 国际化语言字符集创建DTO
  *
  * @author fosin
  * @date 2020-12-09 10:34:34
  * @since 1.0.0
  */
 @Data
-@ApiModel(value = "国际化语言字符集创建DTO", description = "表(anan_international_charset)的对应的创建DTO")
+@ApiModel(value = "国际化语言字符集创建DTO", description = "国际化语言字符集创建DTO")
 public class AnanInternationalCharsetCreateDto implements Serializable {
     private static final long serialVersionUID = -73638009472211031L;
 

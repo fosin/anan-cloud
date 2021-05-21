@@ -15,7 +15,7 @@ import lombok.Data;
  * @since 1.0.0
  */
 @Data
-@ApiModel(value = "系统机构权限表创建DTO", description = "表(anan_organization_permission)的对应的创建DTO")
+@ApiModel(value = "系统机构权限表创建DTO", description = "系统机构权限的创建DTO")
 public class AnanOrganizationPermissionCreateDto implements Serializable {
     private static final long serialVersionUID = -87000731093466069L;
 

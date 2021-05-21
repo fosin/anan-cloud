@@ -1,18 +1,13 @@
 package top.fosin.anan.cloudresource.dto.res;
 
-import java.util.Date;
-
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-
-import java.io.Serializable;
-
 import lombok.Data;
-import org.springframework.format.annotation.DateTimeFormat;
-import top.fosin.anan.core.util.DateTimeUtil;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import top.fosin.anan.model.dto.IdDto;
+
+import java.io.Serializable;
 
 /**
  * 系统通用字典表(AnanDictionary)响应DTO
@@ -24,7 +19,7 @@ import top.fosin.anan.model.dto.IdDto;
 @Data
 @ToString
 @EqualsAndHashCode(callSuper = true)
-@ApiModel(value = "系统通用字典表响应DTO", description = "表(anan_dictionary)的响应DTO")
+@ApiModel(value = "系统通用字典表响应DTO", description = "系统通用字典的响应DTO")
 public class AnanDictionaryRespDto extends IdDto<Long> implements Serializable {
     private static final long serialVersionUID = 611539841082760505L;
     @ApiModelProperty(value = "字典名称", example = "String")

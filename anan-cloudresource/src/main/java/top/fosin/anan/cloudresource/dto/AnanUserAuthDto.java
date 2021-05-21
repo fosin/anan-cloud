@@ -22,7 +22,7 @@ import java.util.List;
 @Data
 @ToString
 @EqualsAndHashCode(callSuper = true)
-@ApiModel(value = "系统用户表更新DTO", description = "表(anan_user)的对应的更新DTO")
+@ApiModel(value = "系统用户表更新DTO", description = "系统用户的更新DTO")
 public class AnanUserAuthDto extends AnanUserRespDto implements Serializable {
     private static final long serialVersionUID = -38545495043403316L;
 

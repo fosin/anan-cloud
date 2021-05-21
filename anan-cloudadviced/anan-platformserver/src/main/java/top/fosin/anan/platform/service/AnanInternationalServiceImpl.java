@@ -18,7 +18,7 @@ import top.fosin.anan.platform.service.inter.AnanInternationalService;
 import java.util.List;
 
 /**
- * 国际化(anan_international)表服务实现类
+ * 国际化语言服务实现类
  *
  * @author fosin
  * @date 2020-12-03 21:11:42

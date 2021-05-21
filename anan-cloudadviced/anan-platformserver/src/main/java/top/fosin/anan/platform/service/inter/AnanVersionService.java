@@ -8,7 +8,7 @@ import top.fosin.anan.platform.dto.req.AnanVersionUpdateDto;
 import top.fosin.anan.platform.entity.AnanVersionEntity;
 
 /**
- * 系统版本表(anan_version)表服务接口
+ * 系统版本表服务接口
  *
  * @author fosin
  * @date 2018-11-18 17:26:40

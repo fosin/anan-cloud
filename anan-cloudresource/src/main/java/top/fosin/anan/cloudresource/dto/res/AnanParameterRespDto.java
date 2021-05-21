@@ -22,7 +22,7 @@ import java.util.Date;
 @Data
 @ToString
 @EqualsAndHashCode(callSuper = true)
-@ApiModel(value = "用于存放各种分类分组的个性化参数响应DTO", description = "表(anan_parameter)的响应DTO")
+@ApiModel(value = "用于存放各种分类分组的个性化参数响应DTO", description = "系统通用参数的响应DTO")
 public class AnanParameterRespDto extends IdDto<Long> implements Serializable {
     private static final long serialVersionUID = -73214133063602891L;
     @ApiModelProperty(value = "参数键", example = "String")

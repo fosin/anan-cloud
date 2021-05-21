@@ -25,7 +25,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping(UrlPrefixConstant.SERVICE)
-@Api(value = UrlPrefixConstant.SERVICE, tags = "系统服务表(anan_service)接入层API")
+@Api(value = UrlPrefixConstant.SERVICE, tags = "系统服务管理")
 public class AnanServiceController implements ISimpleController<AnanServiceRespDto, Long,
         AnanServiceCreateDto, AnanServiceRetrieveDto, AnanServiceUpdateDto> {
 

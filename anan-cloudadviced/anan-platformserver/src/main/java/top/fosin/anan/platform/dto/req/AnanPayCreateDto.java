@@ -18,7 +18,7 @@ import java.util.Date;
  * @since 1.0.0
  */
 @Data
-@ApiModel(value = "系统支付表创建DTO", description = "表(anan_pay)的对应的创建DTO")
+@ApiModel(value = "系统支付表创建DTO", description = "系统支付的创建DTO")
 public class AnanPayCreateDto implements Serializable {
     private static final long serialVersionUID = -68212718429188184L;
 

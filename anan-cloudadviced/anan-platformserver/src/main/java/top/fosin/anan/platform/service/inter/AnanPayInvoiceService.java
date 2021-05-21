@@ -8,7 +8,7 @@ import top.fosin.anan.platform.entity.AnanPayInvoiceEntity;
 import top.fosin.anan.jpa.service.ISimpleJpaService;
 
 /**
- * 系统支付发票表(anan_pay_invoice)表服务接口
+ * 系统支付发票表服务接口
  *
  * @author fosin
  * @date 2018-11-18 17:26:40

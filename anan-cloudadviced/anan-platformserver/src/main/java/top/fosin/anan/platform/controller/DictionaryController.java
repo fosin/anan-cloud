@@ -18,7 +18,7 @@ import top.fosin.anan.platform.service.inter.DictionaryService;
  */
 @RestController
 @RequestMapping(UrlPrefixConstant.DICTIONARY)
-@Api(value = UrlPrefixConstant.DICTIONARY, tags = "通用字典管理(增删改查)")
+@Api(value = UrlPrefixConstant.DICTIONARY, tags = "通用字典管理")
 public class DictionaryController implements ISimpleController<AnanDictionaryRespDto,
         Long, AnanDictionaryCreateDto, AnanDictionaryRetrieveDto, AnanDictionaryUpdateDto> {
     private final DictionaryService dictionaryService;

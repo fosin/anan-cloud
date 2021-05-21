@@ -10,7 +10,7 @@ import top.fosin.anan.jpa.service.ISimpleJpaService;
 import java.util.List;
 
 /**
- * 系统服务表(anan_service)表服务接口
+ * 系统服务表服务接口
  *
  * @author fosin
  * @date 2020-12-04 17:47:40

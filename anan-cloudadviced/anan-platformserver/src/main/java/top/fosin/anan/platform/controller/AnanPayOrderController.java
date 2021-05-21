@@ -18,7 +18,7 @@ import top.fosin.anan.platform.service.inter.AnanPayOrderService;
  */
 @RestController
 @RequestMapping("v1/order")
-@Api(value = "v1/order", tags = "系统支付订单表(anan_pay_order)接入层API")
+@Api(value = "v1/order", tags = "系统支付订单管理")
 public class AnanPayOrderController implements ISimpleController<AnanPayOrderRespDto, Long, AnanPayOrderCreateDto, AnanPayOrderRetrieveDto, AnanPayOrderUpdateDto> {
     /**
      * 服务对象

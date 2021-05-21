@@ -25,7 +25,7 @@ import java.io.Serializable;
 @Entity
 @DynamicUpdate
 @Table(name = "anan_international")
-@ApiModel(value = "表(anan_international)的对应的实体类", description = "表(anan_international)的对应的实体类")
+@ApiModel(value = "国际化语言的实体类", description = "国际化语言的实体类")
 public class AnanInternationalEntity extends CreateUpdateEntity<Long> implements Serializable {
     private static final long serialVersionUID = 717249075172389735L;
 

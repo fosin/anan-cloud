@@ -10,7 +10,7 @@ import top.fosin.anan.platform.service.inter.AnanServiceService;
 import java.util.List;
 
 /**
- * 系统服务表(anan_service)表服务实现类
+ * 系统服务表服务实现类
  *
  * @author fosin
  * @date 2020-12-04 17:47:51

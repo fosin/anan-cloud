@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * 系统版本角色权限表(anan_version_role_permission)表服务实现类
+ * 系统版本角色权限系统版本角色权限表服务实现类
  *
  * @author fosin
  * @date 2018-11-18 17:26:40

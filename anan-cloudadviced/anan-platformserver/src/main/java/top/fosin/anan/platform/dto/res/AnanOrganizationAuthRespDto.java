@@ -24,7 +24,7 @@ import top.fosin.anan.model.dto.IdDto;
 @Data
 @ToString
 @EqualsAndHashCode(callSuper = true)
-@ApiModel(value = "系统机构授权表响应DTO", description = "表(anan_organization_auth)的响应DTO")
+@ApiModel(value = "系统机构授权表响应DTO", description = "系统机构授权的响应DTO")
 public class AnanOrganizationAuthRespDto extends IdDto<Long> implements Serializable {
     private static final long serialVersionUID = -14631872198139889L;
     @ApiModelProperty(value = "机构ID", example = "Long")

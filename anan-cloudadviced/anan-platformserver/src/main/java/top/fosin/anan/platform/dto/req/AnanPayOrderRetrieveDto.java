@@ -21,7 +21,7 @@ import top.fosin.anan.model.module.LogicalQueryRule;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-@ApiModel(value = "系统支付订单表查询DTO", description = "表(anan_pay_order)的对应的查询DTO")
+@ApiModel(value = "系统支付订单表查询DTO", description = "系统支付订单的查询DTO")
 public class AnanPayOrderRetrieveDto extends QuerySortRuleDto<LogicalQueryRule,SortRule> implements Serializable {
     private static final long serialVersionUID = -15118452601033466L;
 

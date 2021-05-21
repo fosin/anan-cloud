@@ -11,7 +11,7 @@ import top.fosin.anan.cloudresource.dto.req.RegisterDto;
 import java.util.List;
 
 /**
- * 系统机构授权表(anan_organization_auth)表服务接口
+ * 系统机构授权系统机构授权表服务接口
  *
  * @author fosin
  * @date 2018-11-18 17:26:40

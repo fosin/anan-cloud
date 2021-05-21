@@ -16,7 +16,7 @@ import java.io.Serializable;
  * @since 1.0.0
  */
 @Data
-@ApiModel(value = "国际化语言集创建DTO", description = "表(anan_international)的对应的创建DTO")
+@ApiModel(value = "国际化语言集创建DTO", description = "国际化语言的创建DTO")
 public class AnanInternationalCreateDto implements Serializable {
     private static final long serialVersionUID = 161205976988896597L;
 

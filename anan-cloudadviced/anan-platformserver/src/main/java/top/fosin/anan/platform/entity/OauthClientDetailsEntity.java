@@ -19,7 +19,7 @@ import java.io.Serializable;
 @Entity
 @DynamicUpdate
 @Table(name = "oauth_client_details")
-@ApiModel(value = "表(oauth_client_details)的对应的实体类", description = "表(oauth_client_details)的对应的实体类")
+@ApiModel(value = "OAuth2客户端接入配置的实体类", description = "OAuth2客户端接入配置的实体类")
 public class OauthClientDetailsEntity implements Serializable {
     private static final long serialVersionUID = -51110701713375430L;
 

@@ -25,7 +25,7 @@ import java.util.Date;
 @Entity
 @DynamicUpdate
 @Table(name = "anan_pay_order")
-@ApiModel(value = "系统支付订单表实体类", description = "表(anan_pay_order)的对应的实体类")
+@ApiModel(value = "系统支付订单表实体类", description = "系统支付订单的实体类")
 public class AnanPayOrderEntity  extends IdEntity<Long> implements Serializable {
     private static final long serialVersionUID = -88896111334285360L;
 

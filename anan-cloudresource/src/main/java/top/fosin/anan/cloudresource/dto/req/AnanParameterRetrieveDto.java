@@ -24,7 +24,7 @@ import java.util.Date;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-@ApiModel(value = "用于存放各种分类分组的个性化参数查询DTO", description = "表(anan_parameter)的对应的查询DTO")
+@ApiModel(value = "用于存放各种分类分组的个性化参数查询DTO", description = "系统通用参数的查询DTO")
 public class AnanParameterRetrieveDto extends QuerySortRuleDto<LogicalQueryRule,SortRule> implements Serializable {
     private static final long serialVersionUID = -95372770044687456L;
 

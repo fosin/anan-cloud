@@ -19,7 +19,7 @@ import java.io.Serializable;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-@ApiModel(value = "系统角色权限表查询DTO", description = "表(anan_role_permission)的对应的查询DTO")
+@ApiModel(value = "系统角色权限表查询DTO", description = "系统角色权限的查询DTO")
 public class AnanRolePermissionRetrieveDto extends QuerySortRuleDto<LogicalQueryRule,SortRule> implements Serializable {
     private static final long serialVersionUID = -44755376359236777L;
 

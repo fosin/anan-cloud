@@ -19,7 +19,7 @@ import java.io.Serializable;
 @Data
 @ToString
 @EqualsAndHashCode(callSuper = true)
-@ApiModel(value = "系统服务表响应DTO", description = "表(anan_service)的响应DTO")
+@ApiModel(value = "系统服务表响应DTO", description = "系统服务的响应DTO")
 public class AnanServiceRespDto extends IdCreateUpdateDto<Long> implements Serializable {
     private static final long serialVersionUID = -56691240580744332L;
     @ApiModelProperty(value = "服务标识", example = "String")

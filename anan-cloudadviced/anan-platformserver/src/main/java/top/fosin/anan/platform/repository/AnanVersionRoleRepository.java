@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 /**
- * 系统版本角色表(anan_version_role)表数据库访问层
+ * 系统版本角色表数据库访问层
  *
  * @author fosin
  * @date 2018-11-18 17:26:40

@@ -19,7 +19,7 @@ import java.io.Serializable;
 @Data
 @ToString
 @EqualsAndHashCode(callSuper = true)
-@ApiModel(value = "系统角色表响应DTO", description = "表(anan_role)的响应DTO")
+@ApiModel(value = "系统角色表响应DTO", description = "系统角色的响应DTO")
 public class AnanRoleRespDto extends OrganizIdCreateUpdateDto<Long> implements Serializable {
     private static final long serialVersionUID = -40320128611775614L;
 

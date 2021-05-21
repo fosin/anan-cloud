@@ -15,7 +15,7 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * 系统机构权限表(anan_organization_permission)表服务实现类
+ * 系统机构权限系统机构权限表服务实现类
  *
  * @author fosin
  * @date 2018-11-18 17:26:40

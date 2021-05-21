@@ -19,7 +19,7 @@ import java.util.Date;
  * @since 1.0.0
  */
 @Data
-@ApiModel(value = "系统用户表创建DTO", description = "表(anan_user)的对应的创建DTO")
+@ApiModel(value = "系统用户表创建DTO", description = "系统用户的创建DTO")
 public class AnanUserCreateDto implements Serializable {
     private static final long serialVersionUID = -88086907817240926L;
 

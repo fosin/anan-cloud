@@ -26,8 +26,9 @@ import java.util.List;
  */
 @RestController
 @RequestMapping(UrlPrefixConstant.DICTIONARY_DETAIL)
-@Api(value = UrlPrefixConstant.DICTIONARY_DETAIL, tags = "通用字典明细管理(增删改查)")
-public class DictionaryDetailController implements ISimpleController<AnanDictionaryDetailRespDto, Long, AnanDictionaryDetailCreateDto, AnanDictionaryDetailRetrieveDto, AnanDictionaryDetailUpdateDto> {
+@Api(value = UrlPrefixConstant.DICTIONARY_DETAIL, tags = "通用字典明细管理")
+public class DictionaryDetailController implements ISimpleController<AnanDictionaryDetailRespDto,
+        Long, AnanDictionaryDetailCreateDto, AnanDictionaryDetailRetrieveDto, AnanDictionaryDetailUpdateDto> {
     private final DictionaryDetailService dictionaryDetailService;
 
     public DictionaryDetailController(DictionaryDetailService dictionaryDetailService) {

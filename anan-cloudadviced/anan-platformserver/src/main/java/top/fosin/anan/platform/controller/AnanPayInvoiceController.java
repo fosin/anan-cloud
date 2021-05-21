@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("v1/invoice")
-@Api(value = "v1/invoice", tags = "系统支付发票表(anan_pay_invoice)接入层API")
+@Api(value = "v1/invoice", tags = "系统支付发票管理")
 public class AnanPayInvoiceController implements ISimpleController<AnanPayInvoiceRespDto, Long, AnanPayInvoiceCreateDto, AnanPayInvoiceRetrieveDto, AnanPayInvoiceUpdateDto> {
     /**
      * 服务对象

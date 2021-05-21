@@ -19,7 +19,7 @@ import java.io.Serializable;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@ApiModel(value = "OAuth2客户端接入配置查询DTO", description = "表(oauth_client_details)的对应的查询DTO")
+@ApiModel(value = "OAuth2客户端接入配置查询DTO", description = "OAuth2客户端接入配置的查询DTO")
 public class OauthClientDetailsRetrieveDto extends QuerySortRuleDto<LogicalQueryRule, SortRule> implements Serializable {
     private static final long serialVersionUID = 326033612155817845L;
 

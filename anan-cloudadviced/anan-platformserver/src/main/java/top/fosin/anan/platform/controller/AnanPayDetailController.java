@@ -19,7 +19,7 @@ import top.fosin.anan.platform.service.inter.AnanPayDetailService;
  */
 @RestController
 @RequestMapping(UrlPrefixConstant.PAY_DETAIL)
-@Api(value = UrlPrefixConstant.PAY_DETAIL, tags = "系统支付明细表接入层API")
+@Api(value = UrlPrefixConstant.PAY_DETAIL, tags = "系统支付明细表管理")
 public class AnanPayDetailController implements ISimpleController<AnanPayDetailRespDto, Long, AnanPayDetailCreateDto, AnanPayDetailRetrieveDto, AnanPayDetailUpdateDto> {
     /**
      * 服务对象

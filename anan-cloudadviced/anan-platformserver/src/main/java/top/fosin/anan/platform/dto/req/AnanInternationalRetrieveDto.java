@@ -19,7 +19,7 @@ import java.io.Serializable;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-@ApiModel(value = "国际化语言集查询DTO", description = "表(anan_international)的对应的查询DTO")
+@ApiModel(value = "国际化语言集查询DTO", description = "国际化语言的查询DTO")
 public class AnanInternationalRetrieveDto extends QuerySortRuleDto<LogicalQueryRule, SortRule> implements Serializable {
     private static final long serialVersionUID = 380520117161696142L;
 

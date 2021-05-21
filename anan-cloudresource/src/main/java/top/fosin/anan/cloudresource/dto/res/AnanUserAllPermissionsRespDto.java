@@ -24,7 +24,7 @@ import java.io.Serializable;
 @Data
 @ToString
 @EqualsAndHashCode(callSuper = true)
-@ApiModel(value = "用户所有的权限响应DTO", description = "表(anan_user_all_permissions)的响应DTO")
+@ApiModel(value = "用户所有的权限响应DTO", description = "系统用户所有权限的响应DTO")
 public class AnanUserAllPermissionsRespDto extends PidDto<Long> implements Serializable {
     private static final long serialVersionUID = 836500519130655446L;
 

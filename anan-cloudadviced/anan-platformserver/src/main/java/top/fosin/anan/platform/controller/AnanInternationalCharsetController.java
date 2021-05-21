@@ -20,14 +20,14 @@ import top.fosin.anan.platform.service.inter.AnanInternationalCharsetService;
 import java.util.List;
 
 /**
- * 国际化明显(anan_international_charset: table)表控制层
+ * 国际化语言明细控制层
  *
  * @author fosin
  * @date 2020-12-04 11:05:46
  */
 @RestController
 @RequestMapping(UrlPrefixConstant.INTERNATIONAL_CHARSET)
-@Api(value = UrlPrefixConstant.INTERNATIONAL_CHARSET, tags = "国际化明显(anan_international_charset)接入层API")
+@Api(value = UrlPrefixConstant.INTERNATIONAL_CHARSET, tags = "国际化语言明细管理")
 public class AnanInternationalCharsetController implements ISimpleController<AnanInternationalCharsetRespDto,
         Long,
         AnanInternationalCharsetCreateDto,

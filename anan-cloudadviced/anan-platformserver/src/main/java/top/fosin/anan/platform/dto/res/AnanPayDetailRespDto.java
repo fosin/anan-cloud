@@ -22,7 +22,7 @@ import top.fosin.anan.model.dto.IdDto;
 @Data
 @ToString
 @EqualsAndHashCode(callSuper = true)
-@ApiModel(value = "系统支付明细表响应DTO", description = "表(anan_pay_detail)的响应DTO")
+@ApiModel(value = "系统支付明细表响应DTO", description = "系统支付明细的响应DTO")
 public class AnanPayDetailRespDto extends IdDto<Long> implements Serializable {
     private static final long serialVersionUID = 333646482553193487L;
     @ApiModelProperty(value = "支付ID", example = "Long")

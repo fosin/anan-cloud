@@ -18,7 +18,7 @@ import top.fosin.anan.core.util.DateTimeUtil;
  * @since 1.0.0
  */
 @Data
-@ApiModel(value = "系统支付订单表创建DTO", description = "表(anan_pay_order)的对应的创建DTO")
+@ApiModel(value = "系统支付订单表创建DTO", description = "系统支付订单的创建DTO")
 public class AnanPayOrderCreateDto implements Serializable {
     private static final long serialVersionUID = -16509988727597750L;
 

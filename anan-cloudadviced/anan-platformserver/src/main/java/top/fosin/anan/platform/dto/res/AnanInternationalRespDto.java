@@ -24,7 +24,7 @@ import top.fosin.anan.model.dto.IdDto;
 @Data
 @ToString
 @EqualsAndHashCode(callSuper = true)
-@ApiModel(value = "国际化语言集响应DTO", description = "表(anan_international)的响应DTO")
+@ApiModel(value = "国际化语言集响应DTO", description = "国际化语言的响应DTO")
 public class AnanInternationalRespDto extends IdDto<Long> implements Serializable {
     private static final long serialVersionUID = 589462762626564199L;
     @ApiModelProperty(value = "标识", example = "String")

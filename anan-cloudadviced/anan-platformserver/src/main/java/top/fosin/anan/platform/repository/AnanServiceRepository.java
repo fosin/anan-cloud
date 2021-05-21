@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 /**
- * 系统服务表(anan_service)表数据库访问层
+ * 系统服务表数据库访问层
  *
  * @author fosin
  * @date 2020-12-04 17:48:02

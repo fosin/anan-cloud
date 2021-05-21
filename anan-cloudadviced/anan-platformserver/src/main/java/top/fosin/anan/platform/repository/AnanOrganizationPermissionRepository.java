@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Lazy;
 import java.util.List;
 
 /**
- * 系统机构权限表(anan_organization_permission)表数据库访问层
+ * 系统机构权限系统机构权限表数据库访问层
  *
  * @author fosin
  * @date 2018-11-18 17:26:40
