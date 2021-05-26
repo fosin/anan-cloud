@@ -34,14 +34,14 @@ public class AnanVersionController implements ISimpleController<AnanVersionRespD
     /**
      * 服务对象
      */
-    private final AnanVersionService ananSysVersionService;
+    private final AnanVersionService versionService;
     private final AnanVersionPermissionService versionPermissionService;
     private final AnanOrganizationPermissionService organizationPermissionService;
     private final AnanOrganizationAuthService organizationAuthService;
     private final PermissionService permissionService;
 
-    public AnanVersionController(AnanVersionService ananSysVersionService, AnanVersionPermissionService versionPermissionService, AnanOrganizationPermissionService organizationPermissionService, AnanOrganizationAuthService organizationAuthService, PermissionService permissionService) {
-        this.ananSysVersionService = ananSysVersionService;
+    public AnanVersionController(AnanVersionService versionService, AnanVersionPermissionService versionPermissionService, AnanOrganizationPermissionService organizationPermissionService, AnanOrganizationAuthService organizationAuthService, PermissionService permissionService) {
+        this.versionService = versionService;
         this.versionPermissionService = versionPermissionService;
         this.organizationPermissionService = organizationPermissionService;
         this.organizationAuthService = organizationAuthService;
@@ -103,6 +103,6 @@ public class AnanVersionController implements ISimpleController<AnanVersionRespD
 
     @Override
     public AnanVersionService getService() {
-        return ananSysVersionService;
+        return versionService;
     }
 }

@@ -29,10 +29,10 @@ import java.util.List;
 public class AnanServiceController implements ISimpleController<AnanServiceRespDto, Long,
         AnanServiceCreateDto, AnanServiceRetrieveDto, AnanServiceUpdateDto> {
 
-    private final AnanServiceService ananServiceService;
+    private final AnanServiceService serviceService;
 
-    public AnanServiceController(AnanServiceService ananServiceService) {
-        this.ananServiceService = ananServiceService;
+    public AnanServiceController(AnanServiceService serviceService) {
+        this.serviceService = serviceService;
     }
 
     @RequestMapping(path = "/status/{status}")
@@ -45,11 +45,11 @@ public class AnanServiceController implements ISimpleController<AnanServiceRespD
             dataTypeClass = Integer.class
     )
     public ResponseEntity<List<AnanServiceRespDto>> findAllByStatus(@PathVariable Integer status) {
-        return ResponseEntity.ok(ananServiceService.findAllByStatus(status));
+        return ResponseEntity.ok(serviceService.findAllByStatus(status));
     }
 
     @Override
     public AnanServiceService getService() {
-        return ananServiceService;
+        return serviceService;
     }
 }

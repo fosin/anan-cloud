@@ -124,7 +124,7 @@ public class UserServiceImpl implements UserService {
     @Transactional(rollbackFor = Exception.class)
     public void update(AnanUserUpdateDto dto) {
         Long id = dto.getId();
-        Assert.notNull(id, "更新的数据id不能为空或者小于1!");
+        Assert.isTrue(id > 0, "更新的数据id不能为空或者小于1!");
         AnanUserEntity createUser = userRepository.findById(id).orElse(null);
         String usercode = Objects.requireNonNull(createUser, "通过ID：" + id + "未能找到对应的数据!").getUsercode().toLowerCase();
         if (ananUserDetailService.isAdminUser(usercode) &&
@@ -137,6 +137,7 @@ public class UserServiceImpl implements UserService {
         ananCacheManger.evict(RedisConstant.ANAN_USER, usercode);
         ananCacheManger.evict(RedisConstant.ANAN_USER, id + "");
         ananCacheManger.evict(RedisConstant.ANAN_USER_PERMISSION, id + "");
+        ananCacheManger.evict(RedisConstant.ANAN_USER_ALL_PERMISSIONS, id + "");
         userRepository.save(createUser);
     }
 
@@ -167,20 +168,19 @@ public class UserServiceImpl implements UserService {
     @Override
     @Caching(
             evict = {
-                    @CacheEvict(value = RedisConstant.ANAN_USER, key = "#entity.usercode"),
-                    @CacheEvict(value = RedisConstant.ANAN_USER, key = "#entity.id"),
-                    @CacheEvict(value = RedisConstant.ANAN_USER_PERMISSION, key = "#entity.id"),
-                    @CacheEvict(value = RedisConstant.ANAN_USER_ALL_PERMISSIONS, key = "#entity.id")
+                    @CacheEvict(value = RedisConstant.ANAN_USER, key = "#dto.usercode"),
+                    @CacheEvict(value = RedisConstant.ANAN_USER, key = "#dto.id"),
+                    @CacheEvict(value = RedisConstant.ANAN_USER_PERMISSION, key = "#dto.id"),
+                    @CacheEvict(value = RedisConstant.ANAN_USER_ALL_PERMISSIONS, key = "#dto.id")
             }
     )
     @Transactional(rollbackFor = Exception.class)
-    public void deleteByDto(AnanUserUpdateDto entity) {
-        Assert.notNull(entity, "不能删除空的用户对象!");
-        Assert.isTrue(!ananUserDetailService.isSysAdminUser(entity.getUsercode())
-                && !ananUserDetailService.isAdminUser(entity.getUsercode()), "不能删除管理员帐号!");
-        List<AnanUserRoleEntity> userRoles = userRoleRepository.findByUserId(entity.getId());
+    public void deleteByDto(AnanUserUpdateDto dto) {
+        Assert.isTrue(!ananUserDetailService.isSysAdminUser(dto.getUsercode())
+                && !ananUserDetailService.isAdminUser(dto.getUsercode()), "不能删除管理员帐号!");
+        List<AnanUserRoleEntity> userRoles = userRoleRepository.findByUserId(dto.getId());
         Assert.isTrue(userRoles.size() == 0, "该用户下还存在角色信息,不能直接删除用户!");
-        AnanUserEntity deleteEntity = queryOneByDto(entity);
+        AnanUserEntity deleteEntity = queryOneByDto(dto);
         Assert.notNull(deleteEntity, "未找到需要删除的数据!");
         getRepository().delete(deleteEntity);
     }
@@ -262,7 +262,6 @@ public class UserServiceImpl implements UserService {
             }
     )
     public AnanUserRespDto changePassword(Long id, String password, String confirmPassword1, String confirmPassword2) {
-        Assert.notNull(id, "用户ID不能为空!");
         Assert.isTrue(!StringUtils.isEmpty(confirmPassword1) &&
                 !StringUtils.isEmpty(confirmPassword2) && confirmPassword1.equals(confirmPassword2), "新密码和确认新密码不能为空且必须一致!");
         Assert.isTrue(!confirmPassword1.equals(password), "新密码和原密码不能相同!");

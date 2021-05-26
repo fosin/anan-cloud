@@ -10,17 +10,17 @@ import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
 import top.fosin.anan.cloudresource.dto.req.RegisterDto;
+import top.fosin.anan.cloudresource.dto.res.AnanOrganizationRespDto;
+import top.fosin.anan.cloudresource.dto.res.AnanOrganizationTreeDto;
+import top.fosin.anan.model.controller.BaseController;
+import top.fosin.anan.model.controller.IRetrieveTreeController;
+import top.fosin.anan.model.controller.ISimpleController;
 import top.fosin.anan.platform.dto.req.AnanOrganizationCreateDto;
+import top.fosin.anan.platform.dto.req.AnanOrganizationPermissionCreateDto;
 import top.fosin.anan.platform.dto.req.AnanOrganizationRetrieveDto;
 import top.fosin.anan.platform.dto.req.AnanOrganizationUpdateDto;
 import top.fosin.anan.platform.dto.res.AnanOrganizationAuthRespDto;
 import top.fosin.anan.platform.dto.res.AnanOrganizationPermissionRespDto;
-import top.fosin.anan.cloudresource.dto.res.AnanOrganizationRespDto;
-import top.fosin.anan.cloudresource.dto.res.AnanOrganizationTreeDto;
-import top.fosin.anan.model.controller.BaseController;
-import top.fosin.anan.model.controller.ISimpleController;
-import top.fosin.anan.model.dto.TreeDto;
-import top.fosin.anan.platform.dto.req.AnanOrganizationPermissionCreateDto;
 import top.fosin.anan.platform.service.inter.AnanOrganizationAuthService;
 import top.fosin.anan.platform.service.inter.AnanOrganizationPermissionService;
 import top.fosin.anan.platform.service.inter.OrganizationService;
@@ -38,7 +38,8 @@ import java.util.List;
 public class AnanOrganizationController extends BaseController
         implements ISimpleController<AnanOrganizationRespDto, Long,
         AnanOrganizationCreateDto, AnanOrganizationRetrieveDto,
-        AnanOrganizationUpdateDto> {
+        AnanOrganizationUpdateDto>,
+        IRetrieveTreeController<AnanOrganizationTreeDto, Long, AnanOrganizationRetrieveDto> {
     private final OrganizationService organizationService;
     private final AnanOrganizationAuthService organizationAuthService;
     private final AnanOrganizationPermissionService organizationPermissionService;
@@ -59,37 +60,16 @@ public class AnanOrganizationController extends BaseController
 
     @ApiOperation(value = "根据版本ID更新版本权限", notes = "根据版本ID更新版本权限，此操作将先删除原权限，再新增新权限")
     @ApiImplicitParams({
-//            @ApiImplicitParam(name = "entities", value = "版本权限集合(List<AnanOrganizationPermissionEntity>)"),
+            @ApiImplicitParam(name = "dtos", value = "版本权限集合(List<AnanOrganizationPermissionEntity>)",
+                    dataTypeClass = List.class, paramType = "body"),
             @ApiImplicitParam(name = "organizId", value = "机构ID,取值于AnanOrganizationEntity.id",
                     required = true, dataTypeClass = Long.class, paramType = "path")
 
     })
     @PutMapping(value = "/permissions/{organizId}")
-    public ResponseEntity<Collection<AnanOrganizationPermissionRespDto>> permissions(@RequestBody List<AnanOrganizationPermissionCreateDto> entities,
+    public ResponseEntity<Collection<AnanOrganizationPermissionRespDto>> permissions(@RequestBody List<AnanOrganizationPermissionCreateDto> dtos,
                                                                                      @PathVariable("organizId") Long organizId) {
-        return ResponseEntity.ok(organizationPermissionService.updateInBatch("organizId", organizId, entities));
-    }
-
-
-    @ApiOperation("根据父机构ID获取其孩子节点数据")
-    @PostMapping("/listChild/{pid}")
-    @ApiImplicitParam(name = TreeDto.PID_NAME, required = true, dataTypeClass = Long.class, value = "父节点ID,AnanOrganizationEntity.id", paramType = "path")
-    public ResponseEntity<List<AnanOrganizationRespDto>> findChildByPid(@PathVariable(TreeDto.PID_NAME) Long pid) {
-        return ResponseEntity.ok(organizationService.findChildByPid(pid));
-    }
-
-    @ApiOperation("根据父机构ID获取其所有后代节点数据")
-    @ApiImplicitParam(name = TreeDto.PID_NAME, required = true, dataTypeClass = Long.class, value = "父节点ID,AnanOrganizationEntity.id", paramType = "path")
-    @PostMapping("/listAllChild/{pid}")
-    public ResponseEntity<List<AnanOrganizationRespDto>> findAllChildByPid(@PathVariable(TreeDto.PID_NAME) Long pid) {
-        return ResponseEntity.ok(organizationService.findAllChildByPid(pid));
-    }
-
-    @ApiOperation("根据机构ID获取其以及后代节点数据，树形结构")
-    @ApiImplicitParam(name = TreeDto.ID_NAME, required = true, dataTypeClass = Long.class, value = "父节点ID,AnanOrganizationEntity.id", paramType = "path")
-    @PostMapping("/treeAllChild/{id}")
-    public ResponseEntity<AnanOrganizationTreeDto> treeAllChildByid(@PathVariable(TreeDto.ID_NAME) Long id) {
-        return ResponseEntity.ok(organizationService.treeAllChildByid(id));
+        return ResponseEntity.ok(organizationPermissionService.updateInBatch("organizId", organizId, dtos));
     }
 
     @ApiOperation(value = "机构注册", notes = "用户自助注册机构")

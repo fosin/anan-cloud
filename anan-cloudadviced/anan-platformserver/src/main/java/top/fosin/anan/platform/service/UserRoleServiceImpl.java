@@ -7,18 +7,18 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import top.fosin.anan.cloudresource.constant.RedisConstant;
-import top.fosin.anan.platform.dto.req.AnanUserRoleCreateDto;
+import top.fosin.anan.cloudresource.dto.res.AnanUserRespDto;
 import top.fosin.anan.cloudresource.dto.res.AnanUserRoleRespDto;
+import top.fosin.anan.cloudresource.service.AnanUserDetailService;
 import top.fosin.anan.core.exception.AnanUserOrPassInvalidException;
 import top.fosin.anan.core.util.BeanUtil;
+import top.fosin.anan.platform.dto.req.AnanUserRoleCreateDto;
 import top.fosin.anan.platform.entity.AnanRoleEntity;
 import top.fosin.anan.platform.entity.AnanUserEntity;
 import top.fosin.anan.platform.entity.AnanUserRoleEntity;
 import top.fosin.anan.platform.repository.UserRepository;
 import top.fosin.anan.platform.repository.UserRoleRepository;
 import top.fosin.anan.platform.service.inter.UserRoleService;
-import top.fosin.anan.platform.service.inter.UserService;
-import top.fosin.anan.cloudresource.service.AnanUserDetailService;
 import top.fosin.anan.redis.cache.AnanCacheManger;
 
 import java.util.ArrayList;
@@ -41,7 +41,7 @@ public class UserRoleServiceImpl implements UserRoleService {
     private final AnanUserDetailService ananUserDetailService;
 
     public UserRoleServiceImpl(UserRoleRepository userRoleRepository,
-                               UserService userService, UserRepository userRepository,
+                               UserRepository userRepository,
                                PasswordEncoder passwordEncoder, AnanCacheManger ananCacheManger,
                                AnanUserDetailService ananUserDetailService) {
         this.userRoleRepository = userRoleRepository;
@@ -80,30 +80,30 @@ public class UserRoleServiceImpl implements UserRoleService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public List<AnanUserRoleRespDto> updateInBatch(String deleteCol, Long deleteValue, Collection<AnanUserRoleCreateDto> dtos) {
-        Assert.notNull(deleteValue, "传入的用户ID不能为空!");
-
-        if (dtos != null && dtos.size() > 0) {
-            AnanUserEntity userEntity = userRepository.findById(deleteValue)
-                    .orElseThrow(() -> new IllegalArgumentException("传入的ID" + deleteValue + "找不到数据!"));
-            if ("userId".equals(deleteCol)) {
-                Assert.isTrue(dtos.stream().allMatch(entity -> entity.getUserId().equals(deleteValue)), "需要更新的数据集中有与用户ID不匹配的数据!");
-                //如果是用户角色，则只需要删除一个用户的缓存
-                ananCacheManger.evict(RedisConstant.ANAN_USER, userEntity.getUsercode());
-                ananCacheManger.evict(RedisConstant.ANAN_USER_ALL_PERMISSIONS, deleteValue + "");
-                userRoleRepository.deleteByUserId(deleteValue);
-            } else {
-                Assert.isTrue(dtos.stream().allMatch(entity -> entity.getRoleId().equals(deleteValue)), "需要更新的数据集中有与角色ID不匹配的数据!");
-                //如果是角色用户，则需要删除所有角色相关用户的缓存
-                for (AnanUserRoleCreateDto dto : dtos) {
-                    Long userId = dto.getUserId();
-                    ananCacheManger.evict(RedisConstant.ANAN_USER, userEntity.getUsercode());
-                    ananCacheManger.evict(RedisConstant.ANAN_USER_ALL_PERMISSIONS, userId + "");
-                }
-                userRoleRepository.deleteByRoleId(deleteValue);
+        if ("userId".equals(deleteCol)) {
+            Assert.isTrue(dtos.stream().allMatch(entity -> entity.getUserId().equals(deleteValue)), "需要更新的数据集中有与用户ID不匹配的数据!");
+            //如果是用户角色，则只需要删除一个用户的缓存
+            clearUserCache(deleteValue);
+            userRoleRepository.deleteByUserId(deleteValue);
+        } else {
+            Assert.isTrue(dtos.stream().allMatch(entity -> entity.getRoleId().equals(deleteValue)), "需要更新的数据集中有与角色ID不匹配的数据!");
+            //如果是角色用户，则需要删除所有角色相关用户的缓存
+            for (AnanUserRoleCreateDto dto : dtos) {
+                clearUserCache(dto.getUserId());
             }
+            userRoleRepository.deleteByRoleId(deleteValue);
         }
 
         return getAnanUserRoleEntities(dtos);
+    }
+
+    private void clearUserCache(Long userId) {
+        AnanUserRespDto respDto = ananCacheManger.get(RedisConstant.ANAN_USER, userId + "", AnanUserRespDto.class);
+        if (respDto != null) {
+            ananCacheManger.evict(RedisConstant.ANAN_USER, respDto.getUsercode());
+        }
+        ananCacheManger.evict(RedisConstant.ANAN_USER, userId + "");
+        ananCacheManger.evict(RedisConstant.ANAN_USER_ALL_PERMISSIONS, userId + "");
     }
 
     private List<AnanUserRoleRespDto> getAnanUserRoleEntities(Collection<AnanUserRoleCreateDto> dtos) {

@@ -42,10 +42,6 @@ public class AnanUserUpdateDto extends IdDto<Long> implements Serializable {
     @Pattern(regexp = RegexUtil.SPECIAL, message = "用户姓名不能包含特殊字符")
     private String username;
 
-    @NotBlank(message = "密码" + "{javax.validation.constraints.NotBlank.message}")
-    @ApiModelProperty(value = "传入原始密码，后台会对原始密码进行加密后再存储", required = true)
-    private String password;
-
     @Past(message = "生日必须是一个过去的日期")
     @ApiModelProperty(value = "生日", required = true)
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)

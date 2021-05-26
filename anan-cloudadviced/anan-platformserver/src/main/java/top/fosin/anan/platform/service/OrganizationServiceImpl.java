@@ -96,7 +96,7 @@ public class OrganizationServiceImpl implements OrganizationService {
     @CacheEvict(value = RedisConstant.ANAN_ORGANIZATION, key = "#id")
     public void deleteById(Long id) {
         Assert.notNull(id, "传入了空ID!");
-        List<AnanOrganizationRespDto> dtos = findChildByPid(id);
+        List<AnanOrganizationTreeDto> dtos = listChild(id);
         Assert.isTrue(dtos == null || dtos.size() == 0, "该节点还存在子节点不能直接删除!");
         organizationRepository.deleteById(id);
     }
@@ -107,18 +107,19 @@ public class OrganizationServiceImpl implements OrganizationService {
         Assert.notNull(dto, "传入了空对象!");
         Long id = dto.getId();
         Assert.notNull(id, "传入了空ID!");
-        List<AnanOrganizationRespDto> dtos = findChildByPid(id);
+        List<AnanOrganizationTreeDto> dtos = listChild(id);
         Assert.isTrue(dtos == null || dtos.size() == 0, "该节点还存在子节点不能直接删除!");
         organizationRepository.findById(id).ifPresent(organizationRepository::delete);
     }
 
     @Override
-    public List<AnanOrganizationRespDto> findChildByPid(Long pid) {
-        return BeanUtil.copyCollectionProperties(organizationRepository.findByPidOrderByCodeAsc(pid), AnanOrganizationRespDto.class);
+    public List<AnanOrganizationTreeDto> listChild(Long pid) {
+        return BeanUtil.copyCollectionProperties(organizationRepository.findByPidOrderByCodeAsc(pid),
+                AnanOrganizationTreeDto.class);
     }
 
     @Override
-    public List<AnanOrganizationRespDto> findAllChildByPid(Long pid) {
+    public List<AnanOrganizationTreeDto> listAllChild(Long pid) {
         List<AnanOrganizationEntity> result = new ArrayList<>();
         if (pid == 0) {
             List<AnanOrganizationEntity> list = organizationRepository.findByPidOrderByCodeAsc(pid);
@@ -133,7 +134,7 @@ public class OrganizationServiceImpl implements OrganizationService {
                 result.addAll(byCodeStartingWith);
             }
         }
-        return BeanUtil.copyCollectionProperties(result, AnanOrganizationRespDto.class);
+        return BeanUtil.copyCollectionProperties(result, AnanOrganizationTreeDto.class);
     }
 
     @Override
@@ -148,7 +149,7 @@ public class OrganizationServiceImpl implements OrganizationService {
         relaQueryRules.add(new RelaQueryRule(RelationalOperator.rightLike, "code"));
         relaQueryRules.add(new RelaQueryRule(RelationalOperator.equal, "topId"));
         dto.setQueryRule(logicalQueryRule);
-        return this.findTree(dto, id);
+        return this.treeAllChild(dto, id);
     }
 
     @Override

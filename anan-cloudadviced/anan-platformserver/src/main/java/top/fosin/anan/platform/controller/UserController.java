@@ -7,13 +7,8 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
-import top.fosin.anan.cloudresource.dto.req.*;
+import top.fosin.anan.cloudresource.dto.req.AnanUserRetrieveDto;
 import top.fosin.anan.cloudresource.dto.res.AnanRoleRespDto;
-import top.fosin.anan.platform.dto.req.AnanUserCreateDto;
-import top.fosin.anan.platform.dto.req.AnanUserPermissionCreateDto;
-import top.fosin.anan.platform.dto.req.AnanUserRoleCreateDto;
-import top.fosin.anan.platform.dto.req.AnanUserUpdateDto;
-import top.fosin.anan.platform.dto.res.AnanUserPermissionRespDto;
 import top.fosin.anan.cloudresource.dto.res.AnanUserRespDto;
 import top.fosin.anan.cloudresource.dto.res.AnanUserRoleRespDto;
 import top.fosin.anan.core.exception.AnanControllerException;
@@ -21,11 +16,19 @@ import top.fosin.anan.core.exception.AnanServiceException;
 import top.fosin.anan.model.controller.BaseController;
 import top.fosin.anan.model.controller.ISimpleController;
 import top.fosin.anan.model.dto.TreeDto;
+import top.fosin.anan.platform.dto.req.AnanUserCreateDto;
+import top.fosin.anan.platform.dto.req.AnanUserPermissionCreateDto;
+import top.fosin.anan.platform.dto.req.AnanUserRoleCreateDto;
+import top.fosin.anan.platform.dto.req.AnanUserUpdateDto;
+import top.fosin.anan.platform.dto.res.AnanUserPermissionRespDto;
 import top.fosin.anan.platform.service.inter.RoleService;
 import top.fosin.anan.platform.service.inter.UserPermissionService;
 import top.fosin.anan.platform.service.inter.UserRoleService;
 import top.fosin.anan.platform.service.inter.UserService;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.Collection;
 import java.util.List;
 
@@ -37,7 +40,8 @@ import java.util.List;
 @RestController
 @RequestMapping(UrlPrefixConstant.USER)
 @Api(value = UrlPrefixConstant.USER, tags = "用户管理")
-public class UserController extends BaseController implements ISimpleController<AnanUserRespDto, Long, AnanUserCreateDto, AnanUserRetrieveDto, AnanUserUpdateDto> {
+public class UserController extends BaseController implements ISimpleController<AnanUserRespDto,
+        Long, AnanUserCreateDto, AnanUserRetrieveDto, AnanUserUpdateDto> {
     private final UserService userService;
     private final UserRoleService userRoleService;
     private final RoleService roleService;
@@ -54,7 +58,7 @@ public class UserController extends BaseController implements ISimpleController<
     @ApiImplicitParam(name = "usercode", value = "用户工号,取值于AnanUserEntity.usercode",
             required = true, dataTypeClass = String.class, paramType = "path")
     @ApiOperation("根据用户工号查找用户信息")
-    public ResponseEntity<AnanUserRespDto> getByUsercode(@PathVariable("usercode") String usercode) {
+    public ResponseEntity<AnanUserRespDto> getByUsercode(@NotBlank @PathVariable("usercode") String usercode) {
         return ResponseEntity.ok(userService.findByUsercode(usercode));
     }
 
@@ -70,36 +74,19 @@ public class UserController extends BaseController implements ISimpleController<
             @ApiImplicitParam(name = "confirmPassword2", value = "确认新密码2(未加密)",
                     required = true, dataTypeClass = String.class, paramType = "query"),
     })
-    public ResponseEntity<String> changePassword(@RequestParam(TreeDto.ID_NAME) Long id,
-                                                 @RequestParam("password") String password,
-                                                 @RequestParam("confirmPassword1") String confirmPassword1,
-                                                 @RequestParam("confirmPassword2") String confirmPassword2) throws AnanControllerException, AnanServiceException {
+    public ResponseEntity<String> changePassword(@Min(1) @RequestParam(TreeDto.ID_NAME) Long id,
+                                                 @NotBlank @RequestParam("password") String password,
+                                                 @NotBlank @RequestParam("confirmPassword1") String confirmPassword1,
+                                                 @NotBlank @RequestParam("confirmPassword2") String confirmPassword2) throws AnanControllerException, AnanServiceException {
         userService.changePassword(id, password, confirmPassword1, confirmPassword2);
         return ResponseEntity.ok("Success");
     }
-
-    //    @RequestMapping("/changePassword")
-//    public ResponseEntity<String> changePassword(@RequestParam("a") String password,
-//                                                 @RequestParam("b") String confirmpassword1,
-//                                                 @RequestParam("c") String passphrase,
-//                                                 @RequestParam("d") String iv,
-//                                                 @RequestParam("e") String salt,
-//                                                 @RequestParam("f") Integer keysize,
-//                                                 @RequestParam("g") Integer iterationcount,
-//                                                 @RequestParam("h") String confirmpassword2,
-//                                                 @RequestParam("i") Integer id
-//                                                ) {
-//        AesUtil aesUtil = new AesUtil(keysize, iterationcount);
-//        userService.changePassword(id, aesUtil.decrypt(salt, iv, passphrase, password),
-//                aesUtil.decrypt(salt, iv, passphrase, confirmpassword1), aesUtil.decrypt(salt, iv, passphrase, confirmpassword2));
-//        return ResponseEntity.ok("");
-//    }
 
     @ApiOperation("根据用户ID查询用户权限列表")
     @ApiImplicitParam(name = "userId", value = "用户ID,取值于AnanUserEntity.id",
             required = true, dataTypeClass = String.class, paramType = "query")
     @RequestMapping(value = "/permissions/{userId}", method = {RequestMethod.GET, RequestMethod.POST})
-    public ResponseEntity<List<AnanUserPermissionRespDto>> permissions(@PathVariable Long userId) {
+    public ResponseEntity<List<AnanUserPermissionRespDto>> permissions(@Min(1) @PathVariable Long userId) {
         return ResponseEntity.ok(userPermissionService.findByUserId(userId));
     }
 
@@ -111,7 +98,9 @@ public class UserController extends BaseController implements ISimpleController<
                     required = true, dataTypeClass = Long.class, paramType = "path"),
     })
     @PutMapping(value = "/permissions/{userId}")
-    public ResponseEntity<Collection<AnanUserPermissionRespDto>> permissions(@RequestBody List<AnanUserPermissionCreateDto> entities, @PathVariable Long userId) {
+    public ResponseEntity<Collection<AnanUserPermissionRespDto>>
+    permissions(@NotNull @RequestBody List<AnanUserPermissionCreateDto> entities,
+                @Min(1) @PathVariable Long userId) {
         return ResponseEntity.ok(userPermissionService.updateInBatch("userId", userId, entities));
     }
 
@@ -119,7 +108,7 @@ public class UserController extends BaseController implements ISimpleController<
     @ApiImplicitParam(name = TreeDto.ID_NAME, value = "用户ID,取值于AnanUserEntity.id",
             required = true, dataTypeClass = Long.class, paramType = "path")
     @PostMapping("/resetPassword/{id}")
-    public ResponseEntity<String> resetPassword(@PathVariable("id") Long id) {
+    public ResponseEntity<String> resetPassword(@Min(1) @PathVariable("id") Long id) {
         return ResponseEntity.ok(userService.resetPassword(id).getPassword());
     }
 
@@ -127,7 +116,7 @@ public class UserController extends BaseController implements ISimpleController<
     @ApiImplicitParam(name = "userId", value = "用户ID,取值于AnanUserEntity.id",
             required = true, dataTypeClass = Long.class, paramType = "path")
     @RequestMapping(value = "/roles/{userId}", method = {RequestMethod.GET, RequestMethod.POST})
-    public ResponseEntity<List<AnanRoleRespDto>> getUserRoles(@PathVariable("userId") Long userId) {
+    public ResponseEntity<List<AnanRoleRespDto>> getUserRoles(@Min(1) @PathVariable("userId") Long userId) {
         return ResponseEntity.ok(roleService.findRoleUsersByRoleId(userId));
     }
 
@@ -140,7 +129,8 @@ public class UserController extends BaseController implements ISimpleController<
     })
     @PutMapping(value = "/roles/{userId}")
     public ResponseEntity<Collection<AnanUserRoleRespDto>> putUserRoles
-            (@RequestBody List<AnanUserRoleCreateDto> entities, @PathVariable Long userId) throws
+            (@NotNull @RequestBody List<AnanUserRoleCreateDto> entities,
+             @Min(1)  @PathVariable Long userId) throws
             AnanServiceException {
         return ResponseEntity.ok(userRoleService.updateInBatch("userId", userId, entities));
     }
@@ -149,7 +139,7 @@ public class UserController extends BaseController implements ISimpleController<
     @ApiImplicitParam(name = "userId", value = "用户ID,对应AnanRoleEntity.id",
             required = true, dataTypeClass = Integer.class, paramType = "path")
     @RequestMapping(value = "/otherRoles/{userId}", method = {RequestMethod.GET, RequestMethod.POST})
-    public ResponseEntity<List<AnanRoleRespDto>> getOtherRoles(@PathVariable("userId") Long userId) {
+    public ResponseEntity<List<AnanRoleRespDto>> getOtherRoles(@Min(1)  @PathVariable("userId") Long userId) {
         return ResponseEntity.ok(roleService.findOtherUsersByRoleId(userId));
     }
 
@@ -157,7 +147,8 @@ public class UserController extends BaseController implements ISimpleController<
     @ApiOperation("根据机构ID查询该机构及子机构的所有用户")
     @ApiImplicitParam(name = "organizId", value = "机构ID",
             required = true, dataTypeClass = Long.class, paramType = "path")
-    public ResponseEntity<List<AnanUserRespDto>> findAllByOrganizId(@PathVariable("organizId") Long organizId, @PathVariable("status") Integer status) {
+    public ResponseEntity<List<AnanUserRespDto>> findAllByOrganizId(@NotNull @PathVariable("organizId") Long organizId,
+                                                                    @NotNull @PathVariable("status") Integer status) {
         return ResponseEntity.ok(userService.findAllByOrganizId(organizId, status));
     }
 

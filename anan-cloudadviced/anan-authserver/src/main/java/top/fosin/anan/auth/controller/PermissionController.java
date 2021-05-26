@@ -30,7 +30,7 @@ public class PermissionController {
     @ApiOperation(value = "查询用户权限树", notes = "查询用户权限树")
     @ApiImplicitParam(name = "userId", value = "用户的唯一ID",
             required = true, dataTypeClass = Long.class, paramType = "path")
-    public ResponseEntity<AnanUserAllPermissionTreeDto> findTree(@PathVariable("userId") Long userId) {
+    public ResponseEntity<AnanUserAllPermissionTreeDto> findTreeByUserId(@PathVariable("userId") Long userId) {
         return ResponseEntity.ok(authService.findTreeByUserId(userId));
     }
 
