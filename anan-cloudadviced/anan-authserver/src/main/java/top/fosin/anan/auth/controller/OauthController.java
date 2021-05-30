@@ -1,6 +1,5 @@
 package top.fosin.anan.auth.controller;
 
-import org.springframework.util.StringUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -17,6 +16,7 @@ import org.springframework.security.oauth2.provider.endpoint.TokenEndpoint;
 import org.springframework.security.oauth2.provider.endpoint.TokenKeyEndpoint;
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -29,8 +29,6 @@ import java.security.Principal;
 import java.util.Map;
 
 /**
- * 
- *
  * @author fosin
  */
 @RestController

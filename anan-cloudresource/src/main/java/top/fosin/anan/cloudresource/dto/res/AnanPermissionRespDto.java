@@ -49,6 +49,9 @@ public class AnanPermissionRespDto extends PidDto<Long> implements Serializable 
     @ApiModelProperty(value = "所属服务,等同于表anan_service.id", example = "Long")
     private Long serviceId;
 
+    @ApiModelProperty(value = "所属服务,等同于表anan_service.code", example = "String")
+    private String serviceCode;
+
     @ApiModelProperty(value = "后台请求权限地址，权限路径ant风格表达式，用于动态验证HTTP后台请求的权限标识", example = "String")
     private String path;
 

@@ -1,8 +1,6 @@
 package top.fosin.anan.cloudresource.constant;
 
 /**
- * 
- *
  * @author fosin
  * @date 2018.7.24
  */

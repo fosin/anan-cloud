@@ -6,11 +6,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.DynamicUpdate;
 import top.fosin.anan.jpa.entity.PidCreateUpdateEntity;
+import top.fosin.anan.model.prop.StatusProp;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 
 /**
@@ -26,7 +24,8 @@ import java.io.Serializable;
 @DynamicUpdate
 @Table(name = "anan_organization")
 @ApiModel(value = "系统机构表实体类", description = "系统机构的实体类")
-public class AnanOrganizationEntity extends PidCreateUpdateEntity<Long> implements Serializable {
+public class AnanOrganizationEntity extends PidCreateUpdateEntity<Long> implements Serializable,
+        StatusProp<Integer> {
     private static final long serialVersionUID = -27331190994806707L;
 
     @Basic
@@ -68,5 +67,24 @@ public class AnanOrganizationEntity extends PidCreateUpdateEntity<Long> implemen
     @ApiModelProperty(value = "使用状态：0=启用，1=禁用，具体取值于字典表anan_dictionary.id=11", required = true)
     @Column(name = "status", nullable = false)
     private Integer status;
+
+
+    @Override
+    @Transient
+    public Integer getStatusValue() {
+        return status;
+    }
+
+    @Override
+    @Transient
+    public void setStatusValue(Integer integer) {
+        this.status = integer;
+    }
+
+    @Override
+    @Transient
+    public String getStatusName() {
+        return "status";
+    }
 
 }

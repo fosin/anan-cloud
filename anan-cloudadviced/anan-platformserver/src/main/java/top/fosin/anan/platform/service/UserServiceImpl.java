@@ -39,15 +39,15 @@ import top.fosin.anan.platform.service.inter.UserService;
 import top.fosin.anan.redis.cache.AnanCacheManger;
 
 import javax.persistence.criteria.*;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 
 /**
- * 2017/12/27.
- * Time:15:13
- *
  * @author fosin
+ * @date 2017/12/27
+ *
  */
 @Service
 @Lazy
@@ -136,7 +136,6 @@ public class UserServiceImpl implements UserService {
         BeanUtils.copyProperties(dto, createUser);
         ananCacheManger.evict(RedisConstant.ANAN_USER, usercode);
         ananCacheManger.evict(RedisConstant.ANAN_USER, id + "");
-        ananCacheManger.evict(RedisConstant.ANAN_USER_PERMISSION, id + "");
         ananCacheManger.evict(RedisConstant.ANAN_USER_ALL_PERMISSIONS, id + "");
         userRepository.save(createUser);
     }
@@ -146,7 +145,6 @@ public class UserServiceImpl implements UserService {
             evict = {
                     @CacheEvict(value = RedisConstant.ANAN_USER, key = "#root.caches[0].get(#id).get().usercode", condition = "#root.caches[0].get(#id) != null"),
                     @CacheEvict(value = RedisConstant.ANAN_USER, key = "#id"),
-                    @CacheEvict(value = RedisConstant.ANAN_USER_PERMISSION, key = "#id"),
                     @CacheEvict(value = RedisConstant.ANAN_USER_ALL_PERMISSIONS, key = "#id")
             }
     )
@@ -158,31 +156,35 @@ public class UserServiceImpl implements UserService {
             entity = userRepository.findById(id).orElse(null);
         }
         Assert.notNull(entity, "通过该ID没有找到相应的用户数据!");
-        Assert.isTrue(!ananUserDetailService.isSysAdminUser(entity.getUsercode())
-                && !ananUserDetailService.isAdminUser(entity.getUsercode()), "不能删除管理员帐号!");
-        List<AnanUserRoleEntity> userRoles = userRoleRepository.findByUserId(id);
-        Assert.isTrue(userRoles.size() == 0, "该用户下还存在角色信息,不能直接删除用户!");
-        userRepository.deleteById(id);
+        deleteByEntity(entity);
     }
 
-    @Override
-    @Caching(
-            evict = {
-                    @CacheEvict(value = RedisConstant.ANAN_USER, key = "#dto.usercode"),
-                    @CacheEvict(value = RedisConstant.ANAN_USER, key = "#dto.id"),
-                    @CacheEvict(value = RedisConstant.ANAN_USER_PERMISSION, key = "#dto.id"),
-                    @CacheEvict(value = RedisConstant.ANAN_USER_ALL_PERMISSIONS, key = "#dto.id")
-            }
-    )
-    @Transactional(rollbackFor = Exception.class)
-    public void deleteByDto(AnanUserUpdateDto dto) {
-        Assert.isTrue(!ananUserDetailService.isSysAdminUser(dto.getUsercode())
-                && !ananUserDetailService.isAdminUser(dto.getUsercode()), "不能删除管理员帐号!");
-        List<AnanUserRoleEntity> userRoles = userRoleRepository.findByUserId(dto.getId());
+    private void deleteByEntity(AnanUserEntity entity) {
+        Assert.isTrue(!ananUserDetailService.isSysAdminUser(entity.getUsercode())
+                && !ananUserDetailService.isAdminUser(entity.getUsercode()), "不能删除管理员帐号!");
+        List<AnanUserRoleEntity> userRoles = userRoleRepository.findByUserId(entity.getId());
         Assert.isTrue(userRoles.size() == 0, "该用户下还存在角色信息,不能直接删除用户!");
-        AnanUserEntity deleteEntity = queryOneByDto(dto);
-        Assert.notNull(deleteEntity, "未找到需要删除的数据!");
-        getRepository().delete(deleteEntity);
+        userRepository.delete(entity);
+    }
+
+    /**
+     * 根据主键删除多条数据
+     *
+     * @param ids 主键编号集合
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void deleteByIds(Collection<Long> ids) {
+        List<AnanUserEntity> entities = userRepository.findAllById(ids);
+        for (AnanUserEntity entity : entities) {
+            deleteByEntity(entity);
+        }
+        for (AnanUserEntity entity : entities) {
+            String id = entity.getId() + "";
+            ananCacheManger.evict(RedisConstant.ANAN_USER, id);
+            ananCacheManger.evict(RedisConstant.ANAN_USER, entity.getUsercode());
+            ananCacheManger.evict(RedisConstant.ANAN_USER_ALL_PERMISSIONS, id);
+        }
     }
 
     @Override

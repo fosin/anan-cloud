@@ -1,4 +1,5 @@
     ## 安装 Docker 软件
+
 ```shell script
 
 ### 1、 升级系统内核为 4.4
@@ -82,14 +83,17 @@ cat > /etc/docker/daemon.json <<EOF
 EOF
 
 ```
-##  开启Docker远程端口2375(按需选做)
+
+## 开启Docker远程端口2375(按需选做)
+
 sed -i 's/usr\/bin\/dockerd -H/usr\/bin\/dockerd -H tcp:\/\/0.0.0.0:2375 -H/g' /usr/lib/systemd/system/docker.service
 
-##  重启docker服务
+## 重启docker服务
+
 systemctl daemon-reload && systemctl start docker && systemctl enable docker
 
-
 ## 卸载 Docker 软件
+
 ```shell script
 ### 查询docker安装过的包：
 yum list installed | grep docker
@@ -101,44 +105,57 @@ rm -rf /var/lib/docker
 ```
 
 ### 3、实用小技巧
+
 #### 3.1、停止删除当前容器和镜像
+
 ##### 一条命令实现停用并删除容器
+
     docker stop $(docker ps -q) && docker rm $(docker ps -aq)
 
 ##### 修剪容器
+
     #默认情况下，所有停止状态的容器会被删除。可以使用 --filter 标志来限制范围。
     docker container prune -f
     docker rm $(docker ps -a| grep Exited | awk '{print $1}')
 
 #### 3.2、删除指定的镜像
+
     #删除所有包含关键字fosin的镜像
     docker rmi $(docker images | grep 1.16.15 | awk '{print $3}')
     #删除所有未被tag标记（none）
     docker rmi $(docker images | grep none | awk '{print $3}')
     #清理无容器使用的镜像(虚悬镜像)
     docker image prune -af
-    
+
 ### 3.3、修剪容器、数据卷、网络、镜像
+
     # 命令是修剪镜像、容器和网络的快捷方式，指定--volumes标志才会修剪卷
     # 在 Docker 17.06.0 及以前版本中，还好修剪卷。在 Docker 17.06.1 及更高版本中必须为 docker system prune 命令明确指定 --volumes 标志才会修剪卷。
     docker system prune --volumes -f
+
 ### 3.4、修剪volumn
+
     # 卷可以被一个或多个容器使用，并占用 Docker 主机上的空间。卷永远不会被自动删除，因为这么做会破坏数据。
     docker volume prune -f
+
 ### 3.5、修剪网络
+
     # Docker 网络不会占用太多磁盘空间，但是它们会创建 iptables 规则，桥接网络设备和路由表条目。
     # 要清理这些东西，可以使用 docker network prune 来清理没有被容器未使用的网络。
     docker network prune -f
 
 ## 配置Docker安全访问（非必须）
+
 ### 1、创建CA私钥和CA公钥，首先创建一个ca文件夹用来存放私钥跟公钥
-mkdir -p /usr/local/ca
-cd /usr/local/ca
+
+mkdir -p /usr/local/ca cd /usr/local/ca
 
 ### 然后在Docker守护程序的主机上，生成CA私钥和公钥：
+
 openssl genrsa -aes256 -out ca-key.pem 4096
 
 ### 2、补全CA证书信息，执行如下指令：
+
 openssl req -new -x509 -days 365 -key ca-key.pem -sha256 -out ca.pem
 
     Enter pass phrase for ca-key.pem:
@@ -158,72 +175,75 @@ openssl req -new -x509 -days 365 -key ca-key.pem -sha256 -out ca.pem
     Email Address []:28860823@qq.com
 
 ### 3、生成server-key.pem
+
 openssl genrsa -out server-key.pem 4096
 
 ### 4、用CA签署公钥
+
 由于可以通过IP地址和DNS名称建立TLS连接，因此在创建证书时需要指定IP地址。例如，允许使用10.211.55.4进行连接：
 
-openssl req -subj "/CN=10.211.55.4" -sha256 -new -key server-key.pem -out server.csr
-如果你是用的网址(比如:www.sscai.club)则替换一下即可：
+openssl req -subj "/CN=10.211.55.4" -sha256 -new -key server-key.pem -out server.csr 如果你是用的网址(比如:www.sscai.club)则替换一下即可：
 
-openssl req -subj "/CN=anan.fosin.top" -sha256 -new -key server-key.pem -out server.csr
-注意：这里指的ip或者是域名，都是指的将来用于对外的地址。
+openssl req -subj "/CN=anan.fosin.top" -sha256 -new -key server-key.pem -out server.csr 注意：这里指的ip或者是域名，都是指的将来用于对外的地址。
 
 ### 5、匹配白名单
-配置白名单的意义在于，允许哪些ip可以远程连接docker：
-如果你对外docker的地址是ip地址，则命令如下：
-echo subjectAltName = DNS:$HOST,IP:XX.XX.XX.XX,IP:XX.XX.XX.XX >> extfile.cnf
+
+配置白名单的意义在于，允许哪些ip可以远程连接docker： 如果你对外docker的地址是ip地址，则命令如下： echo subjectAltName = DNS:$HOST,IP:XX.XX.XX.XX,IP:
+XX.XX.XX.XX >> extfile.cnf
 
 echo subjectAltName = DNS:anan.fosin.top,IP:0.0.0.0 >> extfile.cnf
 
 ### 6、执行命令
-将Docker守护程序密钥的扩展使用属性设置为仅用于服务器身份验证：
-echo extendedKeyUsage = serverAuth >> extfile.cnf
+
+将Docker守护程序密钥的扩展使用属性设置为仅用于服务器身份验证： echo extendedKeyUsage = serverAuth >> extfile.cnf
 
 ### 7、生成签名整数
-openssl x509 -req -days 365 -sha256 -in server.csr -CA ca.pem -CAkey ca-key.pem \
-  -CAcreateserial -out server-cert.pem -extfile extfile.cnf
-执行后需要输入上方设置的密码
 
+openssl x509 -req -days 365 -sha256 -in server.csr -CA ca.pem -CAkey ca-key.pem \
+-CAcreateserial -out server-cert.pem -extfile extfile.cnf 执行后需要输入上方设置的密码
 
 ### 8、生成客户端的key.pem
-openssl genrsa -out key.pem 4096
-openssl req -subj '/CN=client' -new -key key.pem -out client.csr
+
+openssl genrsa -out key.pem 4096 openssl req -subj '/CN=client' -new -key key.pem -out client.csr
 
 ### 9、要使秘钥适合客户端身份验证
+
 创建扩展配置文件：
 
-echo extendedKeyUsage = clientAuth >> extfile.cnf
-echo extendedKeyUsage = clientAuth > extfile-client.cnf
+echo extendedKeyUsage = clientAuth >> extfile.cnf echo extendedKeyUsage = clientAuth > extfile-client.cnf
 
 ### 10、生成签名整数,生成cert.pem，需要再次输入之前设置的密码：
+
 openssl x509 -req -days 365 -sha256 -in client.csr -CA ca.pem -CAkey ca-key.pem \
-  -CAcreateserial -out cert.pem -extfile extfile-client.cnf
+-CAcreateserial -out cert.pem -extfile extfile-client.cnf
 
 ### 11、删除不需要的文件，两个整数签名请求
+
 生成后cert.pem，server-cert.pem您可以安全地删除两个证书签名请求和扩展配置文件：
 
 rm -v client.csr server.csr extfile.cnf extfile-client.cnf
 
 ### 12、可修改权限
+
 为了保护您的密钥免于意外损坏，请删除其写入权限。要使它们仅供您阅读，请按以下方式更改文件模式：
 
-chmod -v 0400 ca-key.pem key.pem server-key.pem
-chmod -v 0444 ca.pem server-cert.pem cert.pem
+chmod -v 0400 ca-key.pem key.pem server-key.pem chmod -v 0444 ca.pem server-cert.pem cert.pem
 
 ### 13、归集服务器证书
-cp server-*.pem /etc/docker/
-cp ca.pem /etc/docker/
+
+cp server-*.pem /etc/docker/ cp ca.pem /etc/docker/
 
 ### 14、修改Docker配置
+
 使Docker守护程序仅接收来自提供CA信任的证书的客户端的链接
 
-vim /lib/systemd/system/docker.service
-将 ExecStart 属性值进行替换：
+vim /lib/systemd/system/docker.service 将 ExecStart 属性值进行替换：
 
-ExecStart=/usr/bin/dockerd --tlsverify --tlscacert=/etc/docker/ca.pem --tlscert=/etc/docker/server-cert.pem --tlskey=/etc/docker/server-key.pem -H tcp://0.0.0.0:2375 -H unix:///var/run/docker.sock
+ExecStart=/usr/bin/dockerd --tlsverify --tlscacert=/etc/docker/ca.pem --tlscert=/etc/docker/server-cert.pem
+--tlskey=/etc/docker/server-key.pem -H tcp://0.0.0.0:2375 -H unix:///var/run/docker.sock
 
 ### 15、重新加载daemon并重启docker
+
 systemctl daemon-reload && systemctl restart docker && systemctl enable docker
 
 ### 16、把ca.perm、ca-key.perm、cert.perm、key.perm四个文件拷贝到客户端用于远程连接Docker

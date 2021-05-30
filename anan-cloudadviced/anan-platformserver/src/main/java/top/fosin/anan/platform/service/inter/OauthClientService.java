@@ -8,10 +8,9 @@ import top.fosin.anan.platform.dto.res.OauthClientDetailsRespDto;
 import top.fosin.anan.platform.entity.OauthClientDetailsEntity;
 
 /**
- * 2017/12/29.
- * Time:12:30
- *
  * @author fosin
+ * @date 2017/12/29
+ *
  */
 public interface OauthClientService extends ISimpleJpaService<OauthClientDetailsEntity, OauthClientDetailsRespDto,
         String, OauthClientDetailsCreateDto,

@@ -7,16 +7,18 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import top.fosin.anan.cloudresource.constant.SystemConstant;
+import top.fosin.anan.cloudresource.dto.res.AnanDictionaryRespDto;
+import top.fosin.anan.cloudresource.service.AnanUserDetailService;
+import top.fosin.anan.core.util.BeanUtil;
 import top.fosin.anan.platform.dto.req.AnanDictionaryCreateDto;
 import top.fosin.anan.platform.dto.req.AnanDictionaryUpdateDto;
-import top.fosin.anan.cloudresource.dto.res.AnanDictionaryRespDto;
-import top.fosin.anan.core.exception.AnanServiceException;
-import top.fosin.anan.core.util.BeanUtil;
 import top.fosin.anan.platform.entity.AnanDictionaryEntity;
 import top.fosin.anan.platform.repository.DictionaryDetailRepository;
 import top.fosin.anan.platform.repository.DictionaryRepository;
 import top.fosin.anan.platform.service.inter.DictionaryService;
-import top.fosin.anan.cloudresource.service.AnanUserDetailService;
+
+import java.util.Collection;
+import java.util.List;
 
 /**
  * 字典表服务
@@ -40,7 +42,6 @@ public class DictionaryServiceImpl implements DictionaryService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public AnanDictionaryRespDto create(AnanDictionaryCreateDto entity) {
-        Assert.notNull(entity, "传入的创建数据实体对象不能为空!");
         AnanDictionaryEntity createEntity = new AnanDictionaryEntity();
         BeanUtils.copyProperties(entity, createEntity);
         hasModifiedPrivileges(createEntity.getType());
@@ -57,7 +58,6 @@ public class DictionaryServiceImpl implements DictionaryService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void update(AnanDictionaryUpdateDto entity) {
-        Assert.notNull(entity, "无效的更新数据");
         Long id = entity.getId();
         Assert.notNull(id, "无效的字典代码id");
         AnanDictionaryEntity updateEntity = dictionaryRepository.findById(id).orElse(null);
@@ -70,9 +70,6 @@ public class DictionaryServiceImpl implements DictionaryService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void deleteById(Long id) {
-        if (id == null) {
-            throw new AnanServiceException("传入的code无效!");
-        }
         dictionaryRepository.findById(id).ifPresent(entity -> {
             hasModifiedPrivileges(entity.getType());
             dictionaryDetailRepository.deleteAllByDictionaryId(entity.getId());
@@ -80,13 +77,21 @@ public class DictionaryServiceImpl implements DictionaryService {
         });
     }
 
+    /**
+     * 根据主键删除多条数据
+     *
+     * @param ids 主键编号集合
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void deleteByDto(AnanDictionaryUpdateDto dto) {
-        Assert.isTrue(dto != null && dto.getId() > 0, "传入了空的对象!");
-        hasModifiedPrivileges(dto.getType());
-        dictionaryDetailRepository.deleteAllByDictionaryId(dto.getId());
-        dictionaryRepository.findById(dto.getId()).ifPresent(dictionaryRepository::delete);
+    public void deleteByIds(Collection<Long> ids) {
+        List<AnanDictionaryEntity> entities = dictionaryRepository.findAllById(ids);
+        for (AnanDictionaryEntity entity : entities) {
+            hasModifiedPrivileges(entity.getType());
+            Long id = entity.getId();
+            dictionaryDetailRepository.deleteAllByDictionaryId(id);
+            dictionaryRepository.delete(entity);
+        }
     }
 
     @Override

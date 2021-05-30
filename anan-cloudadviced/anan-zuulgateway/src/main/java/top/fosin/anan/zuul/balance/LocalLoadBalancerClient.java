@@ -8,19 +8,17 @@ import java.io.IOException;
 import java.net.URI;
 
 /**
- * 
- *
  * @author fosin
  * @date 2018.9.24
  */
 public class LocalLoadBalancerClient implements LoadBalancerClient {
     @Override
-    public <T> T execute(String serviceId, LoadBalancerRequest<T> request) throws IOException {
+    public <T> T execute(String serviceId, LoadBalancerRequest<T> request) {
         return null;
     }
 
     @Override
-    public <T> T execute(String serviceId, ServiceInstance serviceInstance, LoadBalancerRequest<T> request) throws IOException {
+    public <T> T execute(String serviceId, ServiceInstance serviceInstance, LoadBalancerRequest<T> request) {
         return null;
     }
 

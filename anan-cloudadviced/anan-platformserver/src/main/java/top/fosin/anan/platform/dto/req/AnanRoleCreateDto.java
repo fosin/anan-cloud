@@ -1,9 +1,9 @@
 package top.fosin.anan.platform.dto.req;
 
-import top.fosin.anan.core.util.RegexUtil;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import top.fosin.anan.core.util.RegexUtil;
 
 import javax.validation.constraints.*;
 import java.io.Serializable;
@@ -29,7 +29,8 @@ public class AnanRoleCreateDto implements Serializable {
     @Pattern(regexp = RegexUtil.SPECIAL, message = "名称不能包含特殊字符")
     private String name;
 
-    @NotBlank(message = "角色标识" + "{javax.validation.constraints.NotBlank.message}")    @Pattern(regexp = "[\\w]{1,40}", message = "角色标识只能大小写字母、数字、下杠(_)组合而成,长度不超过40位")
+    @NotBlank(message = "角色标识" + "{javax.validation.constraints.NotBlank.message}")
+    @Pattern(regexp = "[\\w]{1,40}", message = "角色标识只能大小写字母、数字、下杠(_)组合而成,长度不超过40位")
     @ApiModelProperty(value = "角色标识", required = true)
     private String value;
 

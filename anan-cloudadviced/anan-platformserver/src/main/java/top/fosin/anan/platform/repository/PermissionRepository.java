@@ -11,10 +11,8 @@ import top.fosin.anan.platform.entity.AnanPermissionEntity;
 import java.util.List;
 
 /**
- * 2017/12/27.
- * Time:16:09
- *
  * @author fosin
+ * @date 2017/12/27
  */
 @Repository
 @Lazy
@@ -34,4 +32,5 @@ public interface PermissionRepository extends IJpaRepository<AnanPermissionEntit
 
     List<AnanPermissionEntity> findAllByServiceId(Long serviceId);
 
+    List<AnanPermissionEntity> findByServiceIdIn(List<Long> serviceIds);
 }

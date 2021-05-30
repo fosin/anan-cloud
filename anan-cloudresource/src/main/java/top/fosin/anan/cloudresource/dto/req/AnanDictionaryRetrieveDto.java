@@ -1,15 +1,15 @@
 package top.fosin.anan.cloudresource.dto.req;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.format.annotation.DateTimeFormat;
 import top.fosin.anan.core.util.DateTimeUtil;
 import top.fosin.anan.core.util.RegexUtil;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
 import top.fosin.anan.model.dto.QuerySortRuleDto;
-import top.fosin.anan.model.module.SortRule;
 import top.fosin.anan.model.module.LogicalQueryRule;
+import top.fosin.anan.model.module.SortRule;
 
 import javax.validation.constraints.Pattern;
 import java.io.Serializable;
@@ -25,7 +25,7 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @ApiModel(value = "系统通用字典表查询DTO", description = "系统通用字典的查询DTO")
-public class AnanDictionaryRetrieveDto extends QuerySortRuleDto<LogicalQueryRule,SortRule> implements Serializable {
+public class AnanDictionaryRetrieveDto extends QuerySortRuleDto<LogicalQueryRule, SortRule> implements Serializable {
     private static final long serialVersionUID = 480249603699448721L;
 
     @ApiModelProperty(value = "字典名称")
@@ -36,7 +36,7 @@ public class AnanDictionaryRetrieveDto extends QuerySortRuleDto<LogicalQueryRule
     private Integer type;
 
     @ApiModelProperty(value = "字典作用域，以字典类别为前提，在字典类别基础上再次细化分类字典")
-    @Pattern(regexp =RegexUtil.SPECIAL, message = "作用域不能包含特殊字符")
+    @Pattern(regexp = RegexUtil.SPECIAL, message = "作用域不能包含特殊字符")
     private String scope;
 
     @ApiModelProperty(value = "字典说明")

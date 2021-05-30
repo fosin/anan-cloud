@@ -1,17 +1,15 @@
 package top.fosin.anan.cloudresource.dto.req;
 
-import top.fosin.anan.core.util.RegexUtil;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import top.fosin.anan.core.util.RegexUtil;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 
 /**
- *
- *
  * @author fosin
  * @date 2018.12.5
  */
@@ -19,6 +17,7 @@ import java.io.Serializable;
 @ApiModel(value = "创建机构")
 public class OrganizationRegisterDto implements Serializable {
 
+    private static final long serialVersionUID = -2691405300807660308L;
     @NotBlank(message = "机构编码" + "{javax.validation.constraints.NotBlank.message}")
     @Pattern(regexp = "[\\w]{1,64}", message = "机构编码只能大小写字母、数字、下杠(_)组合而成,长度不超过64位")
     @ApiModelProperty(value = "机构编码，自定义机构编码，下级机构必须以上级机构编码为前缀", notes = "机构编码，自定义机构编码，下级机构必须以上级机构编码为前缀")

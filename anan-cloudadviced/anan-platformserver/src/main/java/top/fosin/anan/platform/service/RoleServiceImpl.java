@@ -31,14 +31,13 @@ import top.fosin.anan.platform.service.inter.RoleService;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
 /**
- * 2017/12/29.
- * Time:12:31
- *
  * @author fosin
+ * @date 2017/12/29
  */
 @Service
 @Lazy
@@ -101,29 +100,31 @@ public class RoleServiceImpl implements RoleService {
         Assert.isTrue(id != null && id > 0, "传入的角色ID无效！");
         AnanRoleEntity entity = roleRepository.findById(id).orElse(null);
         Assert.notNull(entity, "根据角色ID未能找到角色数据!");
+        deleteByEntity(entity);
+    }
+
+    private void deleteByEntity(AnanRoleEntity entity) {
         Assert.isTrue(!SystemConstant.ANAN_ROLE_NAME.equals(entity.getValue())
                         && !SystemConstant.ADMIN_ROLE_NAME.equals(entity.getValue()),
                 "不能删除(超级)管理员角色帐号信息!");
 
-        List<AnanUserRoleEntity> roleUsers = userRoleRepository.findByRoleId(id);
-        Assert.isTrue(roleUsers.size() == 0,
-                "该角色下还存在用户,不能直接删除角色!");
-        roleRepository.deleteById(id);
-    }
-
-    @Override
-    @Transactional(rollbackFor = Exception.class)
-    public void deleteByDto(AnanRoleUpdateDto entity) {
-        Assert.notNull(entity, "传入了空对象!");
-        Assert.isTrue(!SystemConstant.ANAN_ROLE_NAME.equals(entity.getValue())
-                        && !SystemConstant.ADMIN_ROLE_NAME.equals(entity.getValue()),
-                "不能删除(超级)管理员角色信息!");
         List<AnanUserRoleEntity> roleUsers = userRoleRepository.findByRoleId(entity.getId());
         Assert.isTrue(roleUsers.size() == 0,
                 "该角色下还存在用户,不能直接删除角色!");
-        AnanRoleEntity deleteEntity = queryOneByDto(entity);
-        if (deleteEntity != null) {
-            getRepository().delete(deleteEntity);
+        roleRepository.delete(entity);
+    }
+
+    /**
+     * 根据主键删除多条数据
+     *
+     * @param ids 主键编号集合
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void deleteByIds(Collection<Long> ids) {
+        List<AnanRoleEntity> entities = roleRepository.findAllById(ids);
+        for (AnanRoleEntity entity : entities) {
+            deleteByEntity(entity);
         }
     }
 

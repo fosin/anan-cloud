@@ -6,6 +6,7 @@ import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import top.fosin.anan.cloudresource.constant.RedisConstant;
 import top.fosin.anan.cloudresource.dto.res.AnanOrganizationRespDto;
@@ -22,16 +23,16 @@ import top.fosin.anan.platform.dto.req.AnanOrganizationUpdateDto;
 import top.fosin.anan.platform.entity.AnanOrganizationEntity;
 import top.fosin.anan.platform.repository.OrganizationRepository;
 import top.fosin.anan.platform.service.inter.OrganizationService;
+import top.fosin.anan.redis.cache.AnanCacheManger;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
 /**
- * 2017/12/29.
- * Time:12:31
- *
  * @author fosin
+ * @date 2017/12/29
  */
 @Service
 @Lazy
@@ -39,15 +40,16 @@ public class OrganizationServiceImpl implements OrganizationService {
     private final OrganizationRepository organizationRepository;
     private final AnanUserDetailService ananUserDetailService;
 
-    public OrganizationServiceImpl(OrganizationRepository organizationRepository, AnanUserDetailService ananUserDetailService) {
+    public OrganizationServiceImpl(OrganizationRepository organizationRepository, AnanUserDetailService ananUserDetailService, AnanCacheManger ananCacheManger) {
         this.organizationRepository = organizationRepository;
         this.ananUserDetailService = ananUserDetailService;
+        this.ananCacheManger = ananCacheManger;
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     @CachePut(value = RedisConstant.ANAN_ORGANIZATION, key = "#result.id")
     public AnanOrganizationRespDto create(AnanOrganizationCreateDto entity) {
-        Assert.notNull(entity, "传入的创建数据实体对象不能为空!");
         AnanOrganizationEntity createEntity = new AnanOrganizationEntity();
         BeanUtils.copyProperties(entity, createEntity);
         Long pid = entity.getPid();
@@ -72,8 +74,8 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     @Override
     @CacheEvict(value = RedisConstant.ANAN_ORGANIZATION, key = "#entity.id")
+    @Transactional(rollbackFor = Exception.class)
     public void update(AnanOrganizationUpdateDto entity) {
-        Assert.notNull(entity, "无效的更新数据");
         Long id = entity.getId();
         Assert.notNull(id, "无效的字典代码code");
         AnanOrganizationEntity updateEntity = organizationRepository.findById(id).orElse(null);
@@ -93,24 +95,35 @@ public class OrganizationServiceImpl implements OrganizationService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     @CacheEvict(value = RedisConstant.ANAN_ORGANIZATION, key = "#id")
     public void deleteById(Long id) {
-        Assert.notNull(id, "传入了空ID!");
         List<AnanOrganizationTreeDto> dtos = listChild(id);
         Assert.isTrue(dtos == null || dtos.size() == 0, "该节点还存在子节点不能直接删除!");
         organizationRepository.deleteById(id);
     }
 
+    /**
+     * 根据主键删除多条数据
+     *
+     * @param ids 主键编号集合
+     */
     @Override
-    @CacheEvict(value = RedisConstant.ANAN_ORGANIZATION, key = "#dto.id")
-    public void deleteByDto(AnanOrganizationUpdateDto dto) {
-        Assert.notNull(dto, "传入了空对象!");
-        Long id = dto.getId();
-        Assert.notNull(id, "传入了空ID!");
-        List<AnanOrganizationTreeDto> dtos = listChild(id);
-        Assert.isTrue(dtos == null || dtos.size() == 0, "该节点还存在子节点不能直接删除!");
-        organizationRepository.findById(id).ifPresent(organizationRepository::delete);
+    @Transactional(rollbackFor = Exception.class)
+    public void deleteByIds(Collection<Long> ids) {
+        List<AnanOrganizationEntity> entities = organizationRepository.findAllById(ids);
+        for (AnanOrganizationEntity entity : entities) {
+            Long id = entity.getId();
+            List<AnanOrganizationTreeDto> dtos = listChild(id);
+            Assert.isTrue(dtos == null || dtos.size() == 0, "该节点还存在子节点不能直接删除!");
+            organizationRepository.delete(entity);
+        }
+        for (AnanOrganizationEntity entity : entities) {
+            ananCacheManger.evict(RedisConstant.ANAN_ORGANIZATION, entity.getId() + "");
+        }
     }
+
+    private final AnanCacheManger ananCacheManger;
 
     @Override
     public List<AnanOrganizationTreeDto> listChild(Long pid) {

@@ -7,4 +7,5 @@ package top.fosin.anan.cloudresource.constant;
  */
 public class RequestPath {
     public static final String SERVICE_CODE = "/serviceCode/{serviceCode}";
+    public static final String SERVICE_CODES = "/serviceCodes";
 }

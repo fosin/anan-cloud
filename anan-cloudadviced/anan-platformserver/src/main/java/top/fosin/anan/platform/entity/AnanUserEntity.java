@@ -5,16 +5,12 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.DynamicUpdate;
-import org.springframework.beans.BeanUtils;
-import top.fosin.anan.cloudresource.dto.AnanUserAuthDto;
-import top.fosin.anan.cloudresource.dto.req.AnanUserRoleDto;
 import top.fosin.anan.jpa.entity.OrganizIdCreateUpdateEntity;
+import top.fosin.anan.model.prop.StatusProp;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 /**
  * 系统用户表(AnanUser)实体类
@@ -29,7 +25,8 @@ import java.util.List;
 @DynamicUpdate
 @Table(name = "anan_user")
 @ApiModel(value = "系统用户表实体类", description = "系统用户的实体类")
-public class AnanUserEntity extends OrganizIdCreateUpdateEntity<Long> implements Serializable {
+public class AnanUserEntity extends OrganizIdCreateUpdateEntity<Long> implements Serializable,
+        StatusProp<Integer> {
     private static final long serialVersionUID = 897030139778409164L;
 
     @Basic
@@ -81,5 +78,23 @@ public class AnanUserEntity extends OrganizIdCreateUpdateEntity<Long> implements
     @ApiModelProperty(value = "过期时间，账户过期后用户被锁定切不能登录系统", required = true)
     @Column(name = "expire_time", nullable = false)
     private Date expireTime;
+
+    @Override
+    @Transient
+    public Integer getStatusValue() {
+        return status;
+    }
+
+    @Override
+    @Transient
+    public void setStatusValue(Integer integer) {
+        this.status = integer;
+    }
+
+    @Override
+    @Transient
+    public String getStatusName() {
+        return "status";
+    }
 
 }

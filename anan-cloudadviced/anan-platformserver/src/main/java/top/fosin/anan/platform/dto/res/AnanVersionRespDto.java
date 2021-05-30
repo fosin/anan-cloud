@@ -1,18 +1,16 @@
 package top.fosin.anan.platform.dto.res;
 
-import java.util.Date;
-
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-
-import java.io.Serializable;
-
 import lombok.Data;
-import org.springframework.format.annotation.DateTimeFormat;
-import top.fosin.anan.core.util.DateTimeUtil;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.springframework.format.annotation.DateTimeFormat;
+import top.fosin.anan.core.util.DateTimeUtil;
 import top.fosin.anan.model.dto.IdDto;
+
+import java.io.Serializable;
+import java.util.Date;
 
 /**
  * 系统版本表(AnanVersion)响应DTO

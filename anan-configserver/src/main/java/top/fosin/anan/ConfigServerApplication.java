@@ -1,15 +1,14 @@
 package top.fosin.anan;
 
-import top.fosin.anan.core.banner.AnanBanner;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.cloud.bootstrap.encrypt.RsaProperties;
 import org.springframework.cloud.config.server.EnableConfigServer;
 import org.springframework.context.annotation.Bean;
+import top.fosin.anan.core.banner.AnanBanner;
 
 /**
- * 
  * @author fosin
  */
 @SpringBootApplication

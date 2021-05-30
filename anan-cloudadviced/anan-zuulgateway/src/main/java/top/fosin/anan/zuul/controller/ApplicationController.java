@@ -1,12 +1,9 @@
 package top.fosin.anan.zuul.controller;
 
-import org.springframework.util.StringUtils;
-import top.fosin.anan.zuul.dto.PageURI;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
@@ -14,18 +11,18 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.Assert;
 import org.springframework.util.Base64Utils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import top.fosin.anan.zuul.dto.PageURI;
 
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Random;
 
 /**
- * 
- *
  * @author fosin
  * @date 2018.8.20
  */
@@ -57,10 +54,10 @@ public class ApplicationController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "serviceId",
                     value = "注册Eureka注册中心的服务名称，一般等于spring.application.name",
-                    required = true,dataTypeClass = String.class,paramType = "query"),
+                    required = true, dataTypeClass = String.class, paramType = "query"),
             @ApiImplicitParam(name = "path",
                     value = "当前服务节点管理端点的url",
-                    required = false,dataTypeClass = String.class,paramType = "query")
+                    required = false, dataTypeClass = String.class, paramType = "query")
     })
     @RequestMapping(value = "/ui/url", method = {RequestMethod.POST})
     public ResponseEntity<PageURI> uiUrl(@RequestParam String serviceId, @RequestParam(value = "path", required = false) String path) {

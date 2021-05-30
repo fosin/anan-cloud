@@ -1,8 +1,10 @@
 ### 1.1、安装docker-compose(按需安装注意版本更新和匹配)
+
     sudo curl -L https://github.com/docker/compose/releases/download/1.25.4/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
     sudo chmod +x /usr/local/bin/docker-compose
 
 ### 1.2、基础运行环境安装篇，使用docker-compose.yml文件(mysql、Redis、RabbitMQ、nacos)
+
        所有涉及帐号和密码的地方默认帐号都是anan，默认密码都是local，如果不是账户不是anan得地方，下面会单独说明。
        如果需要修改密码，则需要修改以下地方：
            docker-compose.yml（中间件帐号和密码）
@@ -35,7 +37,9 @@
             docker-compose -f D:\myproject\anan\anan-cloud\docker-compose.yml up -d redis rabbitmq mysql-leader nacos-0
        1.2.6、关闭compose
             docker-compose -f D:\myproject\anan\anan-cloud\docker-compose.yml down --remove-orphans
+
 ### 1.3、日志安装篇，使用文件docker-compose.yml(elsaticsearch、filebeat、kibana等) -非必须
+
        1.3.1、安装ElasticSearch6.7及以上(6.7及以上kibana有中文版，不要中文版安装低版本也可以)
             docker-compose -f anan-cloud\docker-compose.yml up -d elasticsearch
             
@@ -74,6 +78,7 @@
             grafana: http://容器主机IP:3000/
 
 ### 1.5、服务安装篇，使用文件docker-compose.yml(anan-eurekaserver、anan-configserver、anan-authserver等) -非必须
+
         本地开发环境基本上不需要启动这些服务，主要还是使用源码跑
             anan-eurekaserver
             anan-configserver
@@ -81,7 +86,9 @@
             anan-platformserver
             anan-zuulgateway
             anan-adminserver
+
 ### 1.6、配置开发环境
+
        1.6.1、安装jdk1.8及以上、lombok插件、ignore插件，开发工具推荐使用Idea
        1.6.2、Windows下修改c:/windows/system32/drives/etc/hosts文件增加以下信息，IP地址根据实际情况设定
             192.168.137.1是本机IP，192.168.137.8是Docker容器的主机IP
@@ -104,11 +111,13 @@
             MYECLIPSE 需要ansi 插件的支持
 
 ### 1.7、按顺序启动服务
+
        1.7.1、启动anan-authserver授权认证中心
        1.7.2、启动anan-platformserver平台服务中心、anan-zuulgateway服务路由网关
        1.7.3、启动anan-adminserver服务监控
-       
+
 ### 1.9、如果使用Spring Cloud Eureka作为服务注册和发现组件、Config作为配置中心()
+
        1.9.1、修改在以下模块的源码目录下的启动配置文件src/main/resources/bootstrap.yml
             anan-authserver
             anan-platformserver

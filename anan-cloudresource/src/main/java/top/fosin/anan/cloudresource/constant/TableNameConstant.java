@@ -1,7 +1,6 @@
 package top.fosin.anan.cloudresource.constant;
 
 /**
- * 
  * @author fosin
  */
 public class TableNameConstant {

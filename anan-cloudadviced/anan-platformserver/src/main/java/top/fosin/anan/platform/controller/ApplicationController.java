@@ -1,13 +1,9 @@
 package top.fosin.anan.platform.controller;
 
-import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
-import top.fosin.anan.platform.dto.PageURI;
-import org.springframework.util.StringUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
@@ -15,18 +11,19 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.Assert;
 import org.springframework.util.Base64Utils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
+import top.fosin.anan.platform.dto.PageURI;
 
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Random;
 
 /**
- * 
- *
  * @author fosin
  * @date 2018.8.20
  */

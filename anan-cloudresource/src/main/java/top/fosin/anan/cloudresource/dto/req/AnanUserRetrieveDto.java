@@ -1,14 +1,14 @@
 package top.fosin.anan.cloudresource.dto.req;
 
-import lombok.EqualsAndHashCode;
-import top.fosin.anan.core.util.DateTimeUtil;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.springframework.format.annotation.DateTimeFormat;
+import top.fosin.anan.core.util.DateTimeUtil;
 import top.fosin.anan.model.dto.QuerySortRuleDto;
-import top.fosin.anan.model.module.SortRule;
 import top.fosin.anan.model.module.LogicalQueryRule;
+import top.fosin.anan.model.module.SortRule;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -23,7 +23,7 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @ApiModel(value = "系统用户表查询DTO", description = "系统用户的查询DTO")
-public class AnanUserRetrieveDto extends QuerySortRuleDto<LogicalQueryRule,SortRule> implements Serializable {
+public class AnanUserRetrieveDto extends QuerySortRuleDto<LogicalQueryRule, SortRule> implements Serializable {
     private static final long serialVersionUID = -24340282458700184L;
 
     @ApiModelProperty(value = "机构ID")

@@ -1,16 +1,17 @@
 package top.fosin.anan.platform.dto.req;
 
-import java.util.Date;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.format.annotation.DateTimeFormat;
 import top.fosin.anan.core.util.DateTimeUtil;
 import top.fosin.anan.model.dto.QuerySortRuleDto;
-import top.fosin.anan.model.module.SortRule;
 import top.fosin.anan.model.module.LogicalQueryRule;
+import top.fosin.anan.model.module.SortRule;
+
+import java.io.Serializable;
+import java.util.Date;
 
 /**
  * 系统支付订单表(AnanPayOrder)查询DTO
@@ -22,7 +23,7 @@ import top.fosin.anan.model.module.LogicalQueryRule;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @ApiModel(value = "系统支付订单表查询DTO", description = "系统支付订单的查询DTO")
-public class AnanPayOrderRetrieveDto extends QuerySortRuleDto<LogicalQueryRule,SortRule> implements Serializable {
+public class AnanPayOrderRetrieveDto extends QuerySortRuleDto<LogicalQueryRule, SortRule> implements Serializable {
     private static final long serialVersionUID = -15118452601033466L;
 
     @ApiModelProperty(value = "订单机构")

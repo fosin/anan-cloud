@@ -1,8 +1,5 @@
 package top.fosin.anan.cloudgateway.controller;
 
-import top.fosin.anan.cloudgateway.dto.PageURI;
-import org.springframework.util.StringUtils;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
@@ -10,18 +7,18 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.Assert;
 import org.springframework.util.Base64Utils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import top.fosin.anan.cloudgateway.dto.PageURI;
 
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Random;
 
 /**
- * 
- *
  * @author fosin
  * @date 2018.8.20
  */
@@ -41,7 +38,7 @@ public class ApplicationController {
 //    @Autowired
 //    private IRule iRule;
 
-//    @ApiOperation(value = "获取服务名称列表", notes = "获取当前注册到Eureka注册中心的所有节点服务名称")
+    //    @ApiOperation(value = "获取服务名称列表", notes = "获取当前注册到Eureka注册中心的所有节点服务名称")
     @RequestMapping(value = "/serviceNames", method = {RequestMethod.POST})
     public ResponseEntity<List<String>> getServiceNames() {
         Assert.notNull(discoveryClient, "discoveryClient不能为空!");
@@ -49,7 +46,7 @@ public class ApplicationController {
         return ResponseEntity.ok(services);
     }
 
-//    @ApiOperation(value = "根据服务名称获取对应实例管理web地址", notes = "获取当前注册到Eureka注册中心的实例地址")
+    //    @ApiOperation(value = "根据服务名称获取对应实例管理web地址", notes = "获取当前注册到Eureka注册中心的实例地址")
 //    @ApiImplicitParams({
 //            @ApiImplicitParam(name = "serviceId",
 //                    value = "注册Eureka注册中心的服务名称，一般等于spring.application.name"),

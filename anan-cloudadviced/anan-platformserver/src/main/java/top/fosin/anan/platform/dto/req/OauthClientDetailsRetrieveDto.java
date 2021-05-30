@@ -4,8 +4,8 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import top.fosin.anan.model.module.LogicalQueryRule;
 import top.fosin.anan.model.dto.QuerySortRuleDto;
+import top.fosin.anan.model.module.LogicalQueryRule;
 import top.fosin.anan.model.module.SortRule;
 
 import java.io.Serializable;

@@ -1,9 +1,9 @@
 package top.fosin.anan.platform.dto.req;
 
-import top.fosin.anan.core.util.RegexUtil;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import top.fosin.anan.core.util.RegexUtil;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;

@@ -23,7 +23,7 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @ApiModel(value = "系统版本角色权限表查询DTO", description = "系统版本角色权限的查询DTO")
-public class AnanVersionRolePermissionRetrieveDto extends QuerySortRuleDto<LogicalQueryRule,SortRule> implements Serializable {
+public class AnanVersionRolePermissionRetrieveDto extends QuerySortRuleDto<LogicalQueryRule, SortRule> implements Serializable {
     private static final long serialVersionUID = -42309427704059941L;
 
     @ApiModelProperty(value = "角色ID")

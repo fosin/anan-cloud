@@ -1,7 +1,5 @@
 package top.fosin.anan.cloudgateway.config;
 
-import top.fosin.anan.cloudgateway.filter.ChangePasswordGatewayFilter;
-import top.fosin.anan.cloudgateway.filter.LoginGatewayFilter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerInterceptor;
@@ -10,10 +8,10 @@ import org.springframework.cloud.gateway.config.GatewayProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import top.fosin.anan.cloudgateway.filter.ChangePasswordGatewayFilter;
+import top.fosin.anan.cloudgateway.filter.LoginGatewayFilter;
 
 /**
- * 
- *
  * @author fosin
  * @date 2018.12.17
  */

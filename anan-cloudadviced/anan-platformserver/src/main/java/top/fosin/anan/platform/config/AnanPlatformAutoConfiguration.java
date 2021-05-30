@@ -11,8 +11,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.client.RestTemplate;
 
 /**
- * 
- *
  * @author fosin
  * @date 2018.12.17
  */

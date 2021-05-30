@@ -18,8 +18,8 @@ services:
       - MYSQL_PASSWORD=local
     volumes:
       - /root/deploy/nfs/mysql-leader1:/var/lib/mysql
-#    ports:
-#      - "3306:3306"
+  #    ports:
+  #      - "3306:3306"
   nacos-0:
     image: nacos/nacos-server:1.4.1
     container_name: nacos-0
@@ -42,10 +42,10 @@ services:
       - JVM_MS=160M
       - JVM_MMS=160M
     volumes:
-      -  /root/deploy/nacos/logs/:/home/nacos/logs
-#    ports:
-#      - "8848:8848"
-#      - "9555:9555"
+      - /root/deploy/nacos/logs/:/home/nacos/logs
+    #    ports:
+    #      - "8848:8848"
+    #      - "9555:9555"
     depends_on:
       - mysql-leader
 
@@ -63,9 +63,9 @@ services:
     #    volumes: TODO 启动后报错cookie file /var/lib/rabbitmq/.erlang.cookie must be accessible by owner only
     #      - /root/deploy/rabbitmq:/var/lib/rabbitmq
     restart: always
-#    ports:
-#      - 15672:15672
-#      - 5672:5672
+  #    ports:
+  #      - 15672:15672
+  #      - 5672:5672
 
   anan-vue:
     network_mode: host
@@ -77,9 +77,9 @@ services:
       - TZ=Asia/Shanghai
     volumes:
       - /root/deploy/nginx/:/etc/nginx/conf.d/
-#      - /root/deploy/nginx/anan-vue.conf:/etc/nginx/nginx.conf
-#    ports:
-#      - 80:80
+    #      - /root/deploy/nginx/anan-vue.conf:/etc/nginx/nginx.conf
+    #    ports:
+    #      - 80:80
     depends_on:
       - nacos-0
 
@@ -93,8 +93,8 @@ services:
     volumes:
       - /root/deploy/redis:/data
     restart: always
-#    ports:
-#      - 6379:6379
+    #    ports:
+    #      - 6379:6379
     command: redis-server --appendonly yes --requirepass local
 
   mysql-follower:
@@ -113,8 +113,8 @@ services:
       - MYSQL_SERVICE_HOST=mysql-leader
     volumes:
       - /root/deploy/nfs/mysql-follower2:/var/lib/mysql
-#    ports:
-#      - "3305:3306"
+    #    ports:
+    #      - "3305:3306"
     depends_on:
       - mysql-leader
 
@@ -127,8 +127,8 @@ services:
     restart: always
     environment:
       - JAVA_TOOL_OPTIONS=-Xmx200M -XX:MaxMetaspaceSize=160M -XX:MetaspaceSize=160M -XX:+DisableExplicitGC -XX:ErrorFile=/logs/hs_err_pid%p.log
-#    ports:
-#      - 51400:51400
+      #    ports:
+      #      - 51400:51400
       #    volumes:
       #- /root/deploy/logs/anan:/logs
     depends_on:
@@ -223,7 +223,7 @@ services:
     #      - output.logstash.enabled=false
     #      - setup.kibana.host=kibana:5601
     # disable strict permission checks
-    command: ["--strict.perms=false"]
+    command: [ "--strict.perms=false" ]
     depends_on:
       - elasticsearch
 

@@ -1,6 +1,5 @@
 package top.fosin.anan;
 
-import top.fosin.anan.core.banner.AnanBanner;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer;
@@ -8,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
+import top.fosin.anan.core.banner.AnanBanner;
 
 /**
  * @author fosin
@@ -24,6 +24,7 @@ public class EurekaServerApplication {
 
     /**
      * 设置跨域过滤器
+     *
      * @return 跨域过滤器
      */
     @Bean
@@ -40,7 +41,7 @@ public class EurekaServerApplication {
         // 则Access-Control-Allow-Credentials必须为true,否则会请求失败，报错
         corsConfiguration.setAllowCredentials(true);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**",corsConfiguration);
+        source.registerCorsConfiguration("/**", corsConfiguration);
         return new CorsFilter(source);
     }
 }

@@ -1,15 +1,12 @@
 package top.fosin.anan.auth.exception;
 
-import top.fosin.anan.model.exception.AnanExceptionHandler;
-import top.fosin.anan.core.exception.AnanUserOrPassInvalidException;
-import org.springframework.context.ApplicationContext;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import top.fosin.anan.core.exception.AnanUserOrPassInvalidException;
+import top.fosin.anan.model.exception.AnanExceptionHandler;
 
 /**
- * 
- *
  * @author fosin
  */
 @RestControllerAdvice

@@ -1,7 +1,7 @@
 package top.fosin.anan.cloudresource.parameter;
 
-import top.fosin.anan.cloudresource.service.inter.ParameterFeignService;
 import top.fosin.anan.cloudresource.service.AnanUserDetailService;
+import top.fosin.anan.cloudresource.service.inter.ParameterFeignService;
 
 /**
  * 机构参数

@@ -9,8 +9,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 
 /**
- * 
- *
  * @author fosin
  */
 @Configuration

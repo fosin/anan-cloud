@@ -8,10 +8,9 @@ import top.fosin.anan.cloudresource.dto.res.AnanUserAllPermissionsRespDto;
 import java.util.List;
 
 /**
- * 2017/12/29.
- * Time:12:37
- *
  * @author fosin
+ * @date 2017/12/29
+ *
  */
 public interface AuthService {
     List<AnanUserAllPermissionsRespDto> findByUserId(Long userId);

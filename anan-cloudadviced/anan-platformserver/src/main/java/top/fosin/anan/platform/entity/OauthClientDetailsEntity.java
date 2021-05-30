@@ -8,6 +8,7 @@ import org.hibernate.annotations.DynamicUpdate;
 import javax.persistence.*;
 import javax.validation.constraints.Pattern;
 import java.io.Serializable;
+
 /**
  * (OauthClientDetails)实体类
  *

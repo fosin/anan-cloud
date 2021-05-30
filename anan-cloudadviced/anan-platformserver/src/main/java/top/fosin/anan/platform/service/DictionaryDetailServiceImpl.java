@@ -10,18 +10,19 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import top.fosin.anan.cloudresource.constant.RedisConstant;
 import top.fosin.anan.cloudresource.constant.SystemConstant;
-import top.fosin.anan.platform.dto.req.AnanDictionaryDetailCreateDto;
-import top.fosin.anan.platform.dto.req.AnanDictionaryDetailUpdateDto;
 import top.fosin.anan.cloudresource.dto.res.AnanDictionaryDetailRespDto;
+import top.fosin.anan.cloudresource.service.AnanUserDetailService;
 import top.fosin.anan.core.exception.AnanServiceException;
 import top.fosin.anan.core.util.BeanUtil;
-import top.fosin.anan.platform.entity.AnanDictionaryDetailEntity;
+import top.fosin.anan.platform.dto.req.AnanDictionaryDetailCreateDto;
+import top.fosin.anan.platform.dto.req.AnanDictionaryDetailUpdateDto;
 import top.fosin.anan.platform.entity.AnanDictionaryEntity;
+import top.fosin.anan.platform.entity.DictionaryDetailEntity;
 import top.fosin.anan.platform.repository.DictionaryDetailRepository;
 import top.fosin.anan.platform.repository.DictionaryRepository;
 import top.fosin.anan.platform.service.inter.DictionaryDetailService;
-import top.fosin.anan.cloudresource.service.AnanUserDetailService;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -51,7 +52,7 @@ public class DictionaryDetailServiceImpl implements DictionaryDetailService {
     @CacheEvict(value = RedisConstant.ANAN_DICTIONARY_DETAIL, key = "#result.dictionaryId")
     public AnanDictionaryDetailRespDto create(AnanDictionaryDetailCreateDto entity) {
         Assert.notNull(entity, "传入的创建数据实体对象不能为空!");
-        AnanDictionaryDetailEntity createEntiy = new AnanDictionaryDetailEntity();
+        DictionaryDetailEntity createEntiy = new DictionaryDetailEntity();
         BeanUtils.copyProperties(entity, createEntiy);
         hasModifiedPrivileges(createEntiy.getDictionaryId());
         return BeanUtil.copyProperties(getRepository().save(createEntiy), AnanDictionaryDetailRespDto.class);
@@ -64,7 +65,7 @@ public class DictionaryDetailServiceImpl implements DictionaryDetailService {
         Assert.notNull(entity, "传入的更新数据实体对象不能为空!");
         Long id = entity.getId();
         Assert.notNull(id, "传入的更新数据实体对象主键不能为空!");
-        AnanDictionaryDetailEntity findEntity = dictionaryDetailRepository.findById(id).orElse(null);
+        DictionaryDetailEntity findEntity = dictionaryDetailRepository.findById(id).orElse(null);
         Assert.notNull(findEntity, "根据传入的主键[" + id + "]在数据库中未能找到数据!");
         hasModifiedPrivileges(entity.getDictionaryId());
         BeanUtils.copyProperties(entity, findEntity);
@@ -95,13 +96,16 @@ public class DictionaryDetailServiceImpl implements DictionaryDetailService {
         });
     }
 
+    /**
+     * 根据主键删除多条数据
+     *
+     * @param ids 主键编号集合
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    @CacheEvict(value = RedisConstant.ANAN_DICTIONARY_DETAIL, key = "#dto.dictionaryId")
-    public void deleteByDto(AnanDictionaryDetailUpdateDto dto) {
-        Assert.notNull(dto, "传入了空的对象!");
-        hasModifiedPrivileges(dto.getDictionaryId());
-        dictionaryDetailRepository.findById(dto.getId()).ifPresent(dictionaryDetailRepository::delete);
+    @CacheEvict(value = RedisConstant.ANAN_DICTIONARY_DETAIL, allEntries = true)
+    public void deleteByIds(Collection<Long> ids) {
+        DictionaryDetailService.super.deleteByIds(ids);
     }
 
     @Override

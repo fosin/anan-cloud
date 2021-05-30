@@ -1,10 +1,10 @@
 package top.fosin.anan.auth.controller;
 
-import top.fosin.anan.auth.verifycode.VerifyCode;
 import io.swagger.annotations.Api;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
+import top.fosin.anan.auth.verifycode.VerifyCode;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

@@ -32,7 +32,8 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- *  解密前端传过来的密码信息
+ * 解密前端传过来的密码信息
+ *
  * @author fosin
  */
 @Component
@@ -60,24 +61,24 @@ public class ChangePasswordFilter extends ZuulFilter {
         if (params == null) {
             return null;
         }
-        String id = getRequestParam(params,"i");
+        String id = getRequestParam(params, "i");
         if (StringUtils.isEmpty(id)) {
             return null;
         }
 
-        String password = getRequestParam(params,"a");
+        String password = getRequestParam(params, "a");
         if (StringUtils.isEmpty(password)) {
             return null;
         }
-        String confirmpassword1 = getRequestParam(params,"b");
+        String confirmpassword1 = getRequestParam(params, "b");
         if (StringUtils.isEmpty(confirmpassword1)) {
             return null;
         }
-        String confirmpassword2 = getRequestParam(params,"h");
+        String confirmpassword2 = getRequestParam(params, "h");
         if (StringUtils.isEmpty(confirmpassword2)) {
             return null;
         }
-        String passphrase = getRequestParam(params,"c");
+        String passphrase = getRequestParam(params, "c");
         if (StringUtils.isEmpty(passphrase)) {
             return null;
         }
@@ -85,15 +86,15 @@ public class ChangePasswordFilter extends ZuulFilter {
         if (keysize < 1) {
             return null;
         }
-        String iv = getRequestParam(params,"d");
+        String iv = getRequestParam(params, "d");
         if (StringUtils.isEmpty(iv)) {
             return null;
         }
-        int iterationcount = Integer.parseInt(Objects.requireNonNull(getRequestParam(params,"g")));
+        int iterationcount = Integer.parseInt(Objects.requireNonNull(getRequestParam(params, "g")));
         if (iterationcount < 1) {
             return null;
         }
-        String salt = getRequestParam(params,"e");
+        String salt = getRequestParam(params, "e");
         if (StringUtils.isEmpty(salt)) {
             return null;
         }
@@ -101,19 +102,19 @@ public class ChangePasswordFilter extends ZuulFilter {
 
         List<String> idList = new ArrayList<>();
         idList.add(id);
-        params.put(TreeDto.ID_NAME,idList);
+        params.put(TreeDto.ID_NAME, idList);
 
         List<String> passwordList = new ArrayList<>();
-        passwordList.add(aesUtil.decrypt(salt,iv,passphrase,password));
-        params.put("password",passwordList);
+        passwordList.add(aesUtil.decrypt(salt, iv, passphrase, password));
+        params.put("password", passwordList);
 
         List<String> confirmPasswordList1 = new ArrayList<>();
-        confirmPasswordList1.add(aesUtil.decrypt(salt,iv,passphrase,confirmpassword1));
-        params.put("confirmPassword1",confirmPasswordList1);
+        confirmPasswordList1.add(aesUtil.decrypt(salt, iv, passphrase, confirmpassword1));
+        params.put("confirmPassword1", confirmPasswordList1);
 
         List<String> confirmPasswordList2 = new ArrayList<>();
-        confirmPasswordList2.add(aesUtil.decrypt(salt,iv,passphrase,confirmpassword2));
-        params.put("confirmPassword2",confirmPasswordList2);
+        confirmPasswordList2.add(aesUtil.decrypt(salt, iv, passphrase, confirmpassword2));
+        params.put("confirmPassword2", confirmPasswordList2);
 
         ctx.setRequestQueryParams(params);
         return null;

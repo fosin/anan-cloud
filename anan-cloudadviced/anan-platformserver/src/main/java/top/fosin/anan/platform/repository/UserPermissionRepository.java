@@ -1,20 +1,19 @@
 package top.fosin.anan.platform.repository;
 
-import top.fosin.anan.platform.entity.AnanUserPermissionEntity;
-import top.fosin.anan.jpa.repository.IJpaRepository;
-import org.springframework.stereotype.Repository;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Repository;
+import top.fosin.anan.jpa.repository.IJpaRepository;
+import top.fosin.anan.platform.entity.AnanUserPermissionEntity;
 
 import java.util.List;
 
 /**
- *  2017/12/27.
- * Time:16:09
  * @author fosin
+ * @date 2017/12/27
  */
 @Repository
 @Lazy
-public interface UserPermissionRepository extends IJpaRepository<AnanUserPermissionEntity,Long> {
+public interface UserPermissionRepository extends IJpaRepository<AnanUserPermissionEntity, Long> {
     List<AnanUserPermissionEntity> findByUserIdAndOrganizId(Long userId, Long organizId);
 
     List<AnanUserPermissionEntity> findByOrganizId(Long organizId);

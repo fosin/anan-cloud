@@ -12,13 +12,13 @@ import top.fosin.anan.cloudresource.dto.res.AnanUserRespDto;
 import top.fosin.anan.cloudresource.service.UserFeignFallbackServiceImpl;
 import top.fosin.anan.model.constant.PathConstant;
 import top.fosin.anan.model.dto.TreeDto;
+
 import java.util.List;
 
 /**
- * 2017/12/29.
- * Time:12:37
- *
  * @author fosin
+ * @date 2017/12/29
+ *
  */
 @FeignClient(value = ServiceConstant.ANAN_PLATFORMSERVER, path = UrlPrefixConstant.USER, fallback = UserFeignFallbackServiceImpl.class)
 public interface UserFeignService {

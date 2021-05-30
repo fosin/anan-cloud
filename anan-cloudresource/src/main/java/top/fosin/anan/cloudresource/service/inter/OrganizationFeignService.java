@@ -17,10 +17,9 @@ import top.fosin.anan.model.dto.TreeDto;
 import java.util.List;
 
 /**
- * 2017/12/29.
- * Time:12:37
- *
  * @author fosin
+ * @date 2017/12/29
+ *
  */
 @FeignClient(value = ServiceConstant.ANAN_PLATFORMSERVER, path = UrlPrefixConstant.ORGANIZATION, fallback = OrganizationFeignFallbackServiceImpl.class)
 public interface OrganizationFeignService {

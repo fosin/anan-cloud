@@ -1,19 +1,17 @@
 package top.fosin.anan.cloudresource.dto.req;
 
-import top.fosin.anan.core.util.DateTimeUtil;
-import top.fosin.anan.core.util.RegexUtil;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
+import top.fosin.anan.core.util.DateTimeUtil;
+import top.fosin.anan.core.util.RegexUtil;
 
 import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.util.Date;
 
 /**
- *
- *
  * @author fosin
  * @date 2018.12.5
  */
@@ -21,6 +19,7 @@ import java.util.Date;
 @ApiModel(value = "创建用户")
 public class AnanUserRegisterDto implements Serializable {
 
+    private static final long serialVersionUID = 8067979204680924269L;
     @NotBlank(message = "用户工号" + "{javax.validation.constraints.NotBlank.message}")
     @ApiModelProperty(value = "用户工号", required = true)
     @Pattern(regexp = "[A-Za-z][A-Za-z0-9]{1,30}", message = "用户工号只能大小写字母开头，数字、下杠(_)组合而成,长度不超过30位")

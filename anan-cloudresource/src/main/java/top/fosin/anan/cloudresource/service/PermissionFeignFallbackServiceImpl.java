@@ -24,4 +24,16 @@ public class PermissionFeignFallbackServiceImpl implements PermissionFeignServic
         log.error("feign 远程查询当前应用权限失败:{}", serviceCode);
         return null;
     }
+
+    /**
+     * 远程查询应用权限
+     *
+     * @param serviceCodes 服务标识清单
+     * @return 应用权限列表
+     */
+    @Override
+    public ResponseEntity<List<AnanPermissionRespDto>> findByServiceCodes(List<String> serviceCodes) {
+        log.error("feign 远程批量查询当前应用权限失败:{}", serviceCodes);
+        return null;
+    }
 }

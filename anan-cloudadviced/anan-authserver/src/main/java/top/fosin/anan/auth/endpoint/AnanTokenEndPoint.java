@@ -1,8 +1,6 @@
 package top.fosin.anan.auth.endpoint;
 
 /**
- * 
- *
  * @author fosin
  * @date 2018.7.10
  */

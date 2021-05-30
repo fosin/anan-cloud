@@ -1,5 +1,7 @@
 ## 1、Docker Swarm集群环境部署
+
 ### 1.1、创建集群管理节点(当主机上存在多个ip时，需要指定MANAGER-IP)
+
     $ docker swarm init --advertise-addr 192.168.137.8
     
     Swarm initialized: current node (jexina8uncvt29aeim6wcg05n) is now a manager.
@@ -24,14 +26,17 @@
 ### 1.2、使用创建管理节点时返回的命令在worker节点上都执行一遍加入swarm集群
 
 ### 1.3、创建swarm网络
+
     docker network create -d overlay --subnet=172.29.0.0/16 anan-overlay
 
 ### 1.4、环境部署
+
     拷贝docker文件夹到Linux服务器上，每个节点都要拷贝
     分配权限
         chmod 755 deploy/swarm -R
-    
+
 ### 1.5、使用yml启动swarm集群
+
     cd deploy/swarm
     
     启动基础中间件(mysql、redis、rabbitmq)
@@ -47,6 +52,7 @@
     docker stack deploy -c prometheus.yml p
 
 ### 1.6、停止集群中所有服务并删除容器
+
     docker stack rm s
     docker stack rm p
     docker stack rm e

@@ -13,7 +13,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpMethod;
-import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 import springfox.documentation.swagger.web.SwaggerResource;
@@ -42,38 +41,43 @@ public class AnanZuulAutoConfiguration {
     @Bean
     @Lazy
     @ConditionalOnBean(PermissionFeignService.class)
-    public AnanProgramAuthorities ananProgramAuthorities(RouteLocator routeLocator, PermissionFeignService permissionService) {
+    public AnanProgramAuthorities ananProgramAuthorities(RouteLocator routeLocator,
+                                                         PermissionFeignService permissionFeignService) {
         List<Route> routes = routeLocator.getRoutes();
+        List<String> locations = routes.stream().map(Route::getLocation).collect(Collectors.toList());
+        List<AnanPermissionRespDto> dtos = permissionFeignService.findByServiceCodes(locations).getBody();
         List<AnanSecurityProperties.AnanAuthorityProperties> propertiesList = new ArrayList<>();
-        routes.forEach(route -> {
-            String fullPath = route.getFullPath();
-            String location = route.getLocation();
-
-            List<AnanPermissionRespDto> dtos = permissionService.findByServiceCode(location).getBody();
-            Objects.requireNonNull(dtos).forEach(dto -> {
-                String entityPath = dto.getPath();
-                if (StringUtils.hasText(entityPath)) {
-                    String method = dto.getMethod();
-                    List<HttpMethod> httpMethods = new ArrayList<>();
-                    if (StringUtils.hasText(method)) {
-                        String[] strings = method.split(",");
-                        for (String string : strings) {
-                            httpMethods.add(HttpMethod.resolve(string));
-                        }
+        Objects.requireNonNull(dtos).forEach(dto -> {
+            String entityPath = dto.getPath();
+            if (StringUtils.hasText(entityPath)) {
+                String method = dto.getMethod();
+                List<HttpMethod> httpMethods = new ArrayList<>();
+                if (StringUtils.hasText(method)) {
+                    String[] strings = method.split(",");
+                    for (String string : strings) {
+                        httpMethods.add(HttpMethod.resolve(string));
                     }
-                    Long id = dto.getId();
-                    String joinPath = joinPath(fullPath, entityPath);
-                    Assert.isTrue(id != null && id > 0, "无效的权限ID：" + id);
-                    String authority = AnanSecurityConstant.PREFIX_ROLE + id;
-                    AnanSecurityProperties.AnanAuthorityProperties authorityProperties = new AnanSecurityProperties.AnanAuthorityProperties();
-                    authorityProperties.setPaths(Collections.singletonList(joinPath));
-                    authorityProperties.setMethods(httpMethods);
-                    authorityProperties.setPermission(AnanAuthorityPermission.hasAuthority.getName() + AnanAuthorityPermission.SPLITER + authority);
-                    propertiesList.add(authorityProperties);
                 }
-            });
+                String joinPath = joinPath(getRouteFullPath(routes, dto.getServiceCode()), entityPath);
+                String authority = AnanSecurityConstant.PREFIX_ROLE + dto.getId();
+                AnanSecurityProperties.AnanAuthorityProperties authorityProperties = new AnanSecurityProperties.AnanAuthorityProperties();
+                authorityProperties.setPaths(Collections.singletonList(joinPath));
+                authorityProperties.setMethods(httpMethods);
+                authorityProperties.setPermission(AnanAuthorityPermission.hasAuthority.getName() + AnanAuthorityPermission.SPLITER + authority);
+                propertiesList.add(authorityProperties);
+            }
         });
         return new AnanProgramAuthorities(propertiesList);
+    }
+
+    private String getRouteFullPath(List<Route> routes, String serviceCode) {
+        String fullPath = "";
+        for (Route route : routes) {
+            if (route.getLocation().equals(serviceCode)) {
+                fullPath = route.getFullPath();
+            }
+        }
+        return fullPath;
     }
 
     private String joinPath(String prefixPath, String suffixPath) {

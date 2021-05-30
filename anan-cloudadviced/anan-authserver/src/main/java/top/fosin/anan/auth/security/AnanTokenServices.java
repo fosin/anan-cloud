@@ -1,6 +1,5 @@
 package top.fosin.anan.auth.security;
 
-import top.fosin.anan.cloudresource.dto.AnanUserDetail;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -9,6 +8,7 @@ import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenEnhancer;
 import org.springframework.security.oauth2.provider.token.TokenStore;
+import top.fosin.anan.cloudresource.dto.AnanUserDetail;
 
 import java.util.Date;
 import java.util.Optional;

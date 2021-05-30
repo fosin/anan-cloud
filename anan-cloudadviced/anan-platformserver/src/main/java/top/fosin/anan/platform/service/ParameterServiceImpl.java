@@ -4,7 +4,6 @@ package top.fosin.anan.platform.service;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Lazy;
@@ -15,6 +14,8 @@ import top.fosin.anan.cloudresource.constant.RedisConstant;
 import top.fosin.anan.cloudresource.dto.req.AnanParameterCreateDto;
 import top.fosin.anan.cloudresource.dto.req.AnanParameterUpdateDto;
 import top.fosin.anan.cloudresource.dto.res.AnanParameterRespDto;
+import top.fosin.anan.cloudresource.parameter.OrganStrategy;
+import top.fosin.anan.cloudresource.service.AnanUserDetailService;
 import top.fosin.anan.core.exception.AnanServiceException;
 import top.fosin.anan.core.util.BeanUtil;
 import top.fosin.anan.platform.entity.AnanOrganizationEntity;
@@ -22,10 +23,9 @@ import top.fosin.anan.platform.entity.AnanParameterEntity;
 import top.fosin.anan.platform.repository.OrganizationRepository;
 import top.fosin.anan.platform.repository.ParameterRepository;
 import top.fosin.anan.platform.service.inter.ParameterService;
-import top.fosin.anan.cloudresource.parameter.OrganStrategy;
-import top.fosin.anan.cloudresource.service.AnanUserDetailService;
 import top.fosin.anan.redis.cache.AnanCacheManger;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -86,11 +86,13 @@ public class ParameterServiceImpl implements ParameterService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void deleteById(Long id) {
-        AnanParameterEntity entity = parameterRepository.findById(id).orElse(null);
-        Assert.notNull(entity, "通过ID没有能找到参数数据,删除被取消!");
+        parameterRepository.findById(id).ifPresent(this::deleteByEntity);
+    }
+
+    private void deleteByEntity(AnanParameterEntity entity) {
         String cacheKey = getCacheKey(entity);
         ananCacheManger.evict(RedisConstant.ANAN_PARAMETER, cacheKey);
-        parameterRepository.deleteById(id);
+        parameterRepository.deleteById(entity.getId());
         try {
             Thread.sleep(500);
         } catch (InterruptedException e) {
@@ -99,12 +101,18 @@ public class ParameterServiceImpl implements ParameterService {
         ananCacheManger.evict(RedisConstant.ANAN_PARAMETER, cacheKey);
     }
 
+    /**
+     * 根据主键删除多条数据
+     *
+     * @param ids 主键编号集合
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    @CacheEvict(value = RedisConstant.ANAN_PARAMETER, key = "#root.target.getCacheKey(#entity)")
-    public void deleteByDto(AnanParameterUpdateDto entity) {
-        Assert.notNull(entity, "传入了空对象!");
-        parameterRepository.findById(entity.getId()).ifPresent(parameterRepository::delete);
+    public void deleteByIds(Collection<Long> ids) {
+        List<AnanParameterEntity> entities = parameterRepository.findAllById(ids);
+        for (AnanParameterEntity entity : entities) {
+            deleteByEntity(entity);
+        }
     }
 
     public String getCacheKey(AnanParameterEntity entity) {

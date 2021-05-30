@@ -1,41 +1,36 @@
 package top.fosin.anan.platform.service;
 
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.cache.annotation.Caching;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import top.fosin.anan.cloudresource.constant.RedisConstant;
-import top.fosin.anan.platform.dto.req.AnanRolePermissionCreateDto;
 import top.fosin.anan.cloudresource.dto.res.AnanRolePermissionRespDto;
 import top.fosin.anan.core.util.BeanUtil;
+import top.fosin.anan.platform.dto.req.AnanRolePermissionCreateDto;
 import top.fosin.anan.platform.entity.AnanRolePermissionEntity;
 import top.fosin.anan.platform.repository.RolePermissionRepository;
 import top.fosin.anan.platform.service.inter.RolePermissionService;
-import top.fosin.anan.redis.cache.AnanCacheManger;
 
 import java.util.Collection;
 import java.util.List;
 
 /**
- * 2017/12/29.
- * Time:12:38
- *
  * @author fosin
+ * @date 2017/12/29
+ *
  */
 @Service
 @Lazy
 public class RolePermissionServiceImpl implements RolePermissionService {
     private final RolePermissionRepository rolePermissionRepository;
 
-    public RolePermissionServiceImpl(RolePermissionRepository rolePermissionRepository, AnanCacheManger ananCacheManger) {
+    public RolePermissionServiceImpl(RolePermissionRepository rolePermissionRepository) {
         this.rolePermissionRepository = rolePermissionRepository;
     }
 
     @Override
-    @Cacheable(value = RedisConstant.ANAN_ROLE_PERMISSION, key = "#roleId")
     public List<AnanRolePermissionEntity> findByRoleId(Long roleId) {
         return rolePermissionRepository.findByRoleId(roleId);
     }
@@ -58,12 +53,7 @@ public class RolePermissionServiceImpl implements RolePermissionService {
     }
 
     @Override
-    @Caching(
-            evict = {
-                    @CacheEvict(value = RedisConstant.ANAN_ROLE_PERMISSION, key = "#roleId"),
-                    @CacheEvict(value = RedisConstant.ANAN_USER_ALL_PERMISSIONS, allEntries = true)
-            }
-    )
+    @CacheEvict(value = RedisConstant.ANAN_USER_ALL_PERMISSIONS, allEntries = true)
     @Transactional(rollbackFor = Exception.class)
     public List<AnanRolePermissionRespDto> updateInBatch(String deleteCol, Long roleId, Collection<AnanRolePermissionCreateDto> dtos) {
         Assert.notNull(roleId, "传入的角色ID不能为空!");

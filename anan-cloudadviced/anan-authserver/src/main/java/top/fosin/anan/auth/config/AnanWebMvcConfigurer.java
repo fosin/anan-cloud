@@ -1,6 +1,5 @@
 package top.fosin.anan.auth.config;
 
-import top.fosin.anan.core.util.DateTimeUtil;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.format.datetime.DateFormatter;
@@ -12,11 +11,11 @@ import org.springframework.web.method.support.HandlerMethodReturnValueHandler;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.config.annotation.*;
 import org.thymeleaf.spring5.view.ThymeleafViewResolver;
+import top.fosin.anan.core.util.DateTimeUtil;
 
 import java.util.List;
 
 /**
- * 
  * WebMvcConfigurationSupport、@EnableWebMvc、WebMvcConfigurer、WebMvcConfigurationAdapter区别：
  * 1、implements WebMvcConfigurer ： 不会覆盖@EnableAutoConfiguration关于WebMvcAutoConfiguration的配置
  * 2、implements WebMvcConfigurer + @EnableWebMvc ： 会覆盖@EnableAutoConfiguration关于WebMvcAutoConfiguration的配置

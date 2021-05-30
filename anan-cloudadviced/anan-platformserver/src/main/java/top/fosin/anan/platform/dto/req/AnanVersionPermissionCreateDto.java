@@ -2,10 +2,10 @@ package top.fosin.anan.platform.dto.req;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import lombok.Data;
 
 /**
  * 系统版本权限表(AnanVersionPermission)创建DTO

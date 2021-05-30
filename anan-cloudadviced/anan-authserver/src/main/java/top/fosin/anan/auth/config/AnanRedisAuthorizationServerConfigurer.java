@@ -1,7 +1,5 @@
 package top.fosin.anan.auth.config;
 
-import top.fosin.anan.auth.security.AnanTokenServices;
-import top.fosin.anan.auth.security.AnanUserDetailsServiceImpl;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -17,16 +15,16 @@ import org.springframework.security.oauth2.provider.code.AuthorizationCodeServic
 import org.springframework.security.oauth2.provider.code.JdbcAuthorizationCodeServices;
 import org.springframework.security.oauth2.provider.token.TokenEnhancer;
 import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
+import top.fosin.anan.auth.security.AnanTokenServices;
+import top.fosin.anan.auth.security.AnanUserDetailsServiceImpl;
 
 import javax.sql.DataSource;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * 2017/12/28.
- * Time:11:02
- *
  * @author fosin
+ * @date 2017/12/28
  */
 //@Configuration
 //@EnableAuthorizationServer
@@ -99,7 +97,6 @@ public class AnanRedisAuthorizationServerConfigurer extends AuthorizationServerC
     }
 
     /**
-     *
      * @return DefaultTokenServices
      */
 //    @Primary

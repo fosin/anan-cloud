@@ -19,10 +19,8 @@ import top.fosin.anan.platform.service.inter.OauthClientService;
 import java.util.Objects;
 
 /**
- * 2017/12/29.
- * Time:12:31
- *
  * @author fosin
+ * @date 2017/12/29
  */
 @Service
 @Lazy

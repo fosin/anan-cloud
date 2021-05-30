@@ -4,8 +4,8 @@ import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.util.Assert;
 import top.fosin.anan.cloudresource.constant.SystemConstant;
 import top.fosin.anan.cloudresource.dto.AnanClient;
-import top.fosin.anan.cloudresource.dto.AnanUserDetail;
 import top.fosin.anan.cloudresource.dto.AnanUserAuthDto;
+import top.fosin.anan.cloudresource.dto.AnanUserDetail;
 import top.fosin.anan.cloudresource.dto.req.AnanUserRoleDto;
 import top.fosin.anan.security.util.AnanJwtTool;
 

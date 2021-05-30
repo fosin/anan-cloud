@@ -1,12 +1,12 @@
 package top.fosin.anan.auth.config;
 
-import top.fosin.anan.cloudresource.dto.AnanUserDetail;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.oauth2.provider.token.DefaultUserAuthenticationConverter;
+import top.fosin.anan.cloudresource.dto.AnanUserDetail;
 
 import java.util.LinkedHashMap;
 import java.util.Map;

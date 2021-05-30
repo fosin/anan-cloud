@@ -3,6 +3,8 @@ package top.fosin.anan.platform.service.inter;
 import top.fosin.anan.cloudresource.dto.req.AnanUserRetrieveDto;
 import top.fosin.anan.cloudresource.dto.res.AnanUserRespDto;
 import top.fosin.anan.jpa.service.ISimpleJpaService;
+import top.fosin.anan.jpa.service.IStatusJpaService;
+import top.fosin.anan.model.dto.StatusDto;
 import top.fosin.anan.platform.dto.req.AnanUserCreateDto;
 import top.fosin.anan.platform.dto.req.AnanUserUpdateDto;
 import top.fosin.anan.platform.dto.res.AnanUserRespPassDto;
@@ -11,15 +13,15 @@ import top.fosin.anan.platform.entity.AnanUserEntity;
 import java.util.List;
 
 /**
- * 2017/12/27.
- * Time:15:12
- *
  * @author fosin
+ * @date 2017/12/27
+ *
  */
 public interface UserService extends ISimpleJpaService<AnanUserEntity,
         AnanUserRespDto,
         Long,
-        AnanUserCreateDto, AnanUserRetrieveDto, AnanUserUpdateDto> {
+        AnanUserCreateDto, AnanUserRetrieveDto, AnanUserUpdateDto>,
+        IStatusJpaService<AnanUserEntity, Long, Integer, StatusDto<Long, Integer>> {
     AnanUserRespDto findByUsercode(String usercode);
 
     AnanUserRespDto changePassword(Long id, String password, String confirmPassword1, String confirmPassword2);

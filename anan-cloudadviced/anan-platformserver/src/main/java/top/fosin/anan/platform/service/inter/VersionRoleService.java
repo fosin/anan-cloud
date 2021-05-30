@@ -1,0 +1,21 @@
+package top.fosin.anan.platform.service.inter;
+
+import top.fosin.anan.jpa.service.ISimpleJpaService;
+import top.fosin.anan.jpa.service.IStatusJpaService;
+import top.fosin.anan.model.dto.StatusDto;
+import top.fosin.anan.platform.dto.req.AnanVersionRoleCreateDto;
+import top.fosin.anan.platform.dto.req.AnanVersionRoleRetrieveDto;
+import top.fosin.anan.platform.dto.req.AnanVersionRoleUpdateDto;
+import top.fosin.anan.platform.dto.res.AnanVersionRoleRespDto;
+import top.fosin.anan.platform.entity.AnanVersionRoleEntity;
+
+/**
+ * 系统版本角色表服务接口
+ *
+ * @author fosin
+ * @date 2018-11-18 17:26:40
+ */
+public interface VersionRoleService extends ISimpleJpaService<AnanVersionRoleEntity, AnanVersionRoleRespDto,
+        Long, AnanVersionRoleCreateDto, AnanVersionRoleRetrieveDto, AnanVersionRoleUpdateDto>,
+        IStatusJpaService<AnanVersionRoleEntity, Long, Integer, StatusDto<Long, Integer>> {
+}

@@ -1,16 +1,14 @@
 package top.fosin.anan;
 
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
 import top.fosin.anan.core.banner.AnanBanner;
 import top.fosin.anan.redis.annotation.EnableAnanRedis;
 import top.fosin.anan.security.annotation.EnableAnanFormLogin;
 import top.fosin.anan.security.annotation.EnableAnanSecurityOauth2;
 import top.fosin.anan.swagger.annotation.EnableAnanSwagger2;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.builder.SpringApplicationBuilder;
 
 /**
- * 
- *
  * @author fosin
  */
 @SpringBootApplication

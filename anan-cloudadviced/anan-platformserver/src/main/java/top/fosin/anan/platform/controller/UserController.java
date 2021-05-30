@@ -15,6 +15,8 @@ import top.fosin.anan.core.exception.AnanControllerException;
 import top.fosin.anan.core.exception.AnanServiceException;
 import top.fosin.anan.model.controller.BaseController;
 import top.fosin.anan.model.controller.ISimpleController;
+import top.fosin.anan.model.controller.IStatusController;
+import top.fosin.anan.model.dto.StatusDto;
 import top.fosin.anan.model.dto.TreeDto;
 import top.fosin.anan.platform.dto.req.AnanUserCreateDto;
 import top.fosin.anan.platform.dto.req.AnanUserPermissionCreateDto;
@@ -41,7 +43,8 @@ import java.util.List;
 @RequestMapping(UrlPrefixConstant.USER)
 @Api(value = UrlPrefixConstant.USER, tags = "用户管理")
 public class UserController extends BaseController implements ISimpleController<AnanUserRespDto,
-        Long, AnanUserCreateDto, AnanUserRetrieveDto, AnanUserUpdateDto> {
+        Long, AnanUserCreateDto, AnanUserRetrieveDto, AnanUserUpdateDto>,
+        IStatusController<Long, Integer, StatusDto<Long, Integer>> {
     private final UserService userService;
     private final UserRoleService userRoleService;
     private final RoleService roleService;
@@ -130,7 +133,7 @@ public class UserController extends BaseController implements ISimpleController<
     @PutMapping(value = "/roles/{userId}")
     public ResponseEntity<Collection<AnanUserRoleRespDto>> putUserRoles
             (@NotNull @RequestBody List<AnanUserRoleCreateDto> entities,
-             @Min(1)  @PathVariable Long userId) throws
+             @Min(1) @PathVariable Long userId) throws
             AnanServiceException {
         return ResponseEntity.ok(userRoleService.updateInBatch("userId", userId, entities));
     }
@@ -139,7 +142,7 @@ public class UserController extends BaseController implements ISimpleController<
     @ApiImplicitParam(name = "userId", value = "用户ID,对应AnanRoleEntity.id",
             required = true, dataTypeClass = Integer.class, paramType = "path")
     @RequestMapping(value = "/otherRoles/{userId}", method = {RequestMethod.GET, RequestMethod.POST})
-    public ResponseEntity<List<AnanRoleRespDto>> getOtherRoles(@Min(1)  @PathVariable("userId") Long userId) {
+    public ResponseEntity<List<AnanRoleRespDto>> getOtherRoles(@Min(1) @PathVariable("userId") Long userId) {
         return ResponseEntity.ok(roleService.findOtherUsersByRoleId(userId));
     }
 

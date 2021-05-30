@@ -1,9 +1,9 @@
 package top.fosin.anan;
 
-import top.fosin.anan.core.banner.AnanBanner;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.cloud.client.SpringCloudApplication;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import top.fosin.anan.core.banner.AnanBanner;
 import top.fosin.anan.swagger.annotation.EnableAnanSwagger2;
 
 /**

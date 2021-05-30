@@ -1,11 +1,13 @@
 # 3、Helm部署指南
 
 ## 3.1、整体规划
+
      主机名    |     内网IP       |  节点类型
     -------   |  ------------   |  ----------
     local0       172.16.1.206       master、worker
     local1       172.16.1.207       master、worker
     local2       172.16.1.208       master、worker
+
 ```shell script
 # 设置环境变量(每台主机上执行)
 # NODE_INDEX：主机唯一编号，从0开始，每增加一台服务器，数值+1
@@ -43,7 +45,9 @@ hostnamectl set-hostname ${NODE_NAME_PREFIX}${NODE_INDEX}
 su -
 
 ```
+
 ## 3.2、准备nfs存储
+
 ```shell script
 # 在所有节点上安装NFS
 #（主包提供文件系统）（提供rpc协议）
@@ -92,10 +96,13 @@ showmount -e ${NODE_IPS[0]}
 ```
 
 ## 3.3、部署k8s环境
+
 [详细部署文档请看readme-k8s.md](https://github.com/fosin/anan-cloud/blob/master/deploy/k8s/readme-k8s.md)
 
 ## 3.4、部署helm
+
 ## Helm部署指南
+
 ```shell script
 #安装helm
 ntpdate ntp1.aliyun.com
@@ -120,6 +127,7 @@ rm -rf /usr/local/bin/helm
 ```
 
 ## 3.5、按顺序启动服务
+
 ```shell script
 #1、上传anan部署包到到服务器，并解压到/data/helm/相对目录下
 mkdir -p ${ANAN_WORKDIR}/helm

@@ -3,7 +3,7 @@ package top.fosin.anan.platform.dto.req;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import top.fosin.anan.model.getter.IdGetter;
+import top.fosin.anan.model.prop.IdProp;
 
 import java.io.Serializable;
 
@@ -16,7 +16,7 @@ import java.io.Serializable;
  */
 @Data
 @ApiModel(value = "OAuth2客户端接入配置更新DTO", description = "OAuth2客户端接入配置的更新DTO")
-public class OauthClientDetailsUpdateDto implements Serializable, IdGetter<String> {
+public class OauthClientDetailsUpdateDto implements Serializable, IdProp<String> {
     private static final long serialVersionUID = -19073929038045745L;
 
     @ApiModelProperty(value = "客户端ID", example = "String")

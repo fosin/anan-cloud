@@ -4,6 +4,7 @@ import top.fosin.anan.cloudresource.service.AnanUserDetailService;
 
 /**
  * 机构参数
+ *
  * @author fosin
  * @date 2019/5/13
  */

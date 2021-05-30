@@ -1,19 +1,19 @@
 package top.fosin.anan.platform.service;
 
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Service;
+import top.fosin.anan.cloudresource.dto.req.AnanParameterCreateDto;
 import top.fosin.anan.cloudresource.dto.res.AnanParameterRespDto;
-import top.fosin.anan.platform.service.inter.ParameterService;
 import top.fosin.anan.cloudresource.parameter.IParameter;
 import top.fosin.anan.cloudresource.parameter.IParameterStrategy;
 import top.fosin.anan.cloudresource.parameter.OrganStrategy;
-import top.fosin.anan.cloudresource.dto.req.AnanParameterCreateDto;
 import top.fosin.anan.cloudresource.service.AnanUserDetailService;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.stereotype.Service;
+import top.fosin.anan.platform.service.inter.ParameterService;
 
 import java.util.Objects;
 
 /**
- *  数据库参数工具类
+ * 数据库参数工具类
  *
  * @author fosin
  * @date 2018.8.1
@@ -23,6 +23,7 @@ import java.util.Objects;
 public class LocalOrganParameter implements IParameter {
     private final ParameterService parameterService;
     private final AnanUserDetailService ananUserDetailService;
+
     public LocalOrganParameter(ParameterService parameterService, AnanUserDetailService ananUserDetailService) {
         this.parameterService = parameterService;
         this.ananUserDetailService = ananUserDetailService;

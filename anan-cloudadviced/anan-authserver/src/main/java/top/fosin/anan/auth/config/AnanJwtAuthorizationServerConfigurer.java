@@ -1,8 +1,5 @@
 package top.fosin.anan.auth.config;
 
-import top.fosin.anan.auth.security.AnanTokenServices;
-import top.fosin.anan.security.resource.AnanSecurityProperties;
-import org.springframework.util.StringUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,6 +21,9 @@ import org.springframework.security.oauth2.provider.token.*;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 import org.springframework.security.rsa.crypto.KeyStoreKeyFactory;
+import org.springframework.util.StringUtils;
+import top.fosin.anan.auth.security.AnanTokenServices;
+import top.fosin.anan.security.resource.AnanSecurityProperties;
 
 import javax.sql.DataSource;
 import java.security.KeyPair;
@@ -31,10 +31,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * 2017/12/28.
- * Time:11:02
- *
  * @author fosin
+ * @date 2017/12/28
  */
 @Configuration
 @EnableAuthorizationServer

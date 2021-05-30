@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.lang.NonNull;
-import top.fosin.anan.cloudresource.service.AnanUserDetailService;
 
 import java.util.Optional;
 
