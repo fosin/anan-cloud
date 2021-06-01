@@ -11,14 +11,11 @@ import org.springframework.web.bind.annotation.RestController;
 import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
 import top.fosin.anan.model.controller.ISimpleController;
 import top.fosin.anan.model.controller.IStatusController;
-import top.fosin.anan.model.dto.StatusDto;
 import top.fosin.anan.platform.dto.req.AnanInternationalCreateDto;
 import top.fosin.anan.platform.dto.req.AnanInternationalRetrieveDto;
 import top.fosin.anan.platform.dto.req.AnanInternationalUpdateDto;
 import top.fosin.anan.platform.dto.res.AnanInternationalRespDto;
 import top.fosin.anan.platform.service.inter.InternationalService;
-
-import java.util.List;
 
 /**
  * 国际化语言控制层
@@ -31,28 +28,14 @@ import java.util.List;
 @Api(value = UrlPrefixConstant.INTERNATIONAL, tags = "国际化语言管理")
 public class InternationalController implements ISimpleController<AnanInternationalRespDto, Long,
         AnanInternationalCreateDto, AnanInternationalRetrieveDto, AnanInternationalUpdateDto>,
-        IStatusController<Long, Integer, StatusDto<Long, Integer>> {
+        IStatusController<AnanInternationalRespDto, Long, Integer> {
 
     private final InternationalService internationalService;
 
     public InternationalController(InternationalService internationalService) {
         this.internationalService = internationalService;
     }
-
-    @RequestMapping(path = "/status/{status}", method = {RequestMethod.GET,
-            RequestMethod.POST, RequestMethod.OPTIONS})
-    @ApiOperation("根据状态码查找所有国际化语言清单")
-    @ApiImplicitParam(
-            name = "status",
-            value = "状态: 0=有效，1=无效",
-            paramType = "path",
-            required = true,
-            dataTypeClass = Integer.class
-    )
-    public ResponseEntity<List<AnanInternationalRespDto>> findAllByStatus(@PathVariable Integer status) {
-        return ResponseEntity.ok(internationalService.findAllByStatus(status));
-    }
-
+    
     @RequestMapping(path = "/code/{code}", method = {RequestMethod.GET,
             RequestMethod.POST, RequestMethod.OPTIONS})
     @ApiOperation("根据国际化语言编码查找国际化语言")

@@ -30,9 +30,11 @@ import top.fosin.anan.platform.dto.req.AnanUserCreateDto;
 import top.fosin.anan.platform.dto.req.AnanUserUpdateDto;
 import top.fosin.anan.platform.dto.res.AnanUserRespPassDto;
 import top.fosin.anan.platform.entity.AnanOrganizationEntity;
+import top.fosin.anan.platform.entity.AnanUserAllEntity;
 import top.fosin.anan.platform.entity.AnanUserEntity;
 import top.fosin.anan.platform.entity.AnanUserRoleEntity;
 import top.fosin.anan.platform.repository.OrganizationRepository;
+import top.fosin.anan.platform.repository.UserAllRepository;
 import top.fosin.anan.platform.repository.UserRepository;
 import top.fosin.anan.platform.repository.UserRoleRepository;
 import top.fosin.anan.platform.service.inter.UserService;
@@ -47,13 +49,13 @@ import java.util.Random;
 /**
  * @author fosin
  * @date 2017/12/27
- *
  */
 @Service
 @Lazy
 @Slf4j
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
+    private final UserAllRepository userAllRepository;
     private final UserRoleRepository userRoleRepository;
     private final OrganizationRepository organizationRepository;
     private final PasswordEncoder passwordEncoder;
@@ -61,8 +63,9 @@ public class UserServiceImpl implements UserService {
     private final AnanCacheManger ananCacheManger;
     private final AnanUserDetailService ananUserDetailService;
 
-    public UserServiceImpl(UserRepository userRepository, UserRoleRepository userRoleRepository, OrganizationRepository organizationRepository, PasswordEncoder passwordEncoder, LocalOrganParameter localOrganParameter, AnanCacheManger ananCacheManger, AnanUserDetailService ananUserDetailService) {
+    public UserServiceImpl(UserRepository userRepository, UserAllRepository userAllRepository, UserRoleRepository userRoleRepository, OrganizationRepository organizationRepository, PasswordEncoder passwordEncoder, LocalOrganParameter localOrganParameter, AnanCacheManger ananCacheManger, AnanUserDetailService ananUserDetailService) {
         this.userRepository = userRepository;
+        this.userAllRepository = userAllRepository;
         this.userRoleRepository = userRoleRepository;
         this.organizationRepository = organizationRepository;
         this.passwordEncoder = passwordEncoder;
@@ -71,12 +74,28 @@ public class UserServiceImpl implements UserService {
         this.ananUserDetailService = ananUserDetailService;
     }
 
+    /**
+     * 根据主键编号查找所有数据服务(包括软删除)
+     *
+     * @param ids 主键编号
+     * @return 查找结果集
+     */
+    @Override
+    public List<AnanUserRespDto> listByIds(Collection<Long> ids) {
+        return BeanUtil.copyCollectionProperties(userAllRepository.findAllById(ids), AnanUserRespDto.class);
+    }
+
+    /**
+     * 根据用户工号查找数据服务(包括软删除)
+     * @param usercode 用户工号
+     * @return 用户
+     */
     @Override
     @Cacheable(value = RedisConstant.ANAN_USER, key = "#usercode", condition = "#result != null")
     @Transactional(readOnly = true)
     public AnanUserRespDto findByUsercode(String usercode) {
         Assert.notNull(usercode, "用户工号不能为空!");
-        AnanUserEntity userEntity = userRepository.findByUsercode(usercode);
+        AnanUserEntity userEntity = userAllRepository.findByUsercode(usercode);
         if (userEntity == null) {
             return null;
         }
@@ -85,12 +104,18 @@ public class UserServiceImpl implements UserService {
         return respDto;
     }
 
-
+    /**
+     * 根据用户编号查找数据服务(包括软删除)
+     * @param id 用户编号
+     * @return 用户
+     */
     @Override
     @Cacheable(value = RedisConstant.ANAN_USER, key = "#id", condition = "#result != null")
     @Transactional(readOnly = true)
     public AnanUserRespDto findOneById(Long id) {
-        return UserService.super.findOneById(id);
+        AnanUserAllEntity entity = userAllRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("未找到对应数据!"));
+        return BeanUtil.copyProperties(entity,
+                AnanUserRespDto.class);
     }
 
 
@@ -333,7 +358,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<AnanUserRespDto> findAllByOrganizId(Long organizId, Integer status) {
+    public List<AnanUserRespDto> listByOrganizId(Long organizId, Integer status) {
         Assert.notNull(organizId, "机构ID不能为空!");
         List<AnanUserEntity> entities;
         if (ananUserDetailService.isUserRequest() && ananUserDetailService.hasSysAdminRole()) {

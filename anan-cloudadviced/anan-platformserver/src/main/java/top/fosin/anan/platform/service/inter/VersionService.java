@@ -2,7 +2,7 @@ package top.fosin.anan.platform.service.inter;
 
 import top.fosin.anan.jpa.service.ISimpleJpaService;
 import top.fosin.anan.jpa.service.IStatusJpaService;
-import top.fosin.anan.model.dto.StatusDto;
+
 import top.fosin.anan.platform.dto.req.AnanVersionCreateDto;
 import top.fosin.anan.platform.dto.req.AnanVersionRetrieveDto;
 import top.fosin.anan.platform.dto.req.AnanVersionUpdateDto;
@@ -17,5 +17,5 @@ import top.fosin.anan.platform.entity.AnanVersionEntity;
  */
 public interface VersionService extends ISimpleJpaService<AnanVersionEntity, AnanVersionRespDto,
         Long, AnanVersionCreateDto, AnanVersionRetrieveDto, AnanVersionUpdateDto>,
-        IStatusJpaService<AnanVersionEntity, Long, Integer, StatusDto<Long, Integer>> {
+        IStatusJpaService<AnanVersionEntity, AnanVersionRespDto, Long, Integer> {
 }

@@ -15,6 +15,7 @@ import top.fosin.anan.cloudresource.dto.req.AnanParameterCreateDto;
 import top.fosin.anan.cloudresource.dto.req.AnanParameterUpdateDto;
 import top.fosin.anan.cloudresource.dto.res.AnanParameterRespDto;
 import top.fosin.anan.cloudresource.parameter.OrganStrategy;
+import top.fosin.anan.cloudresource.parameter.ParameterStatus;
 import top.fosin.anan.cloudresource.service.AnanUserDetailService;
 import top.fosin.anan.core.exception.AnanServiceException;
 import top.fosin.anan.core.util.BeanUtil;
@@ -28,6 +29,7 @@ import top.fosin.anan.redis.cache.AnanCacheManger;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 字典表服务
@@ -63,17 +65,18 @@ public class ParameterServiceImpl implements ParameterService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void update(AnanParameterUpdateDto entity) {
-        Assert.notNull(entity, "传入了空对象!");
-        Long id = entity.getId();
+    public void update(AnanParameterUpdateDto dto) {
+        Assert.notNull(dto, "传入了空对象!");
+        Long id = dto.getId();
         Assert.notNull(id, "ID不能为空!");
         AnanParameterEntity cEntity = parameterRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("通过ID：" + id + "未能找到对应的数据!"));
         String oldCacheKey = getCacheKey(cEntity);
-        String newCacheKey = getCacheKey(entity.getType(), entity.getScope(), entity.getName());
+        String newCacheKey = getCacheKey(dto.getType(), dto.getScope(), dto.getName());
 
-        BeanUtils.copyProperties(entity, cEntity,
-                BeanUtil.getNullProperties(entity));
+        BeanUtils.copyProperties(dto, cEntity,
+                BeanUtil.getNullProperties(dto));
+        cEntity.setStatus(ParameterStatus.Modified.getTypeValue());
         parameterRepository.save(cEntity);
         //如果修改了type、scope、name则需要删除以前的缓存并设置新缓存
         if (!oldCacheKey.equals(newCacheKey)) {
@@ -83,26 +86,22 @@ public class ParameterServiceImpl implements ParameterService {
         }
     }
 
+    /**
+     * 不直接删除， 先修改为删除状态，应用后才真正删除
+     *
+     * @param id 主键
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void deleteById(Long id) {
-        parameterRepository.findById(id).ifPresent(this::deleteByEntity);
-    }
-
-    private void deleteByEntity(AnanParameterEntity entity) {
-        String cacheKey = getCacheKey(entity);
-        ananCacheManger.evict(RedisConstant.ANAN_PARAMETER, cacheKey);
-        parameterRepository.deleteById(entity.getId());
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            throw new AnanServiceException(e);
-        }
-        ananCacheManger.evict(RedisConstant.ANAN_PARAMETER, cacheKey);
+        parameterRepository.findById(id).ifPresent(entity -> {
+            entity.setStatusValue(ParameterStatus.Deleted.getTypeValue());
+            parameterRepository.save(entity);
+        });
     }
 
     /**
-     * 根据主键删除多条数据
+     * 不直接删除， 先修改为删除状态，应用后才真正删除
      *
      * @param ids 主键编号集合
      */
@@ -111,8 +110,24 @@ public class ParameterServiceImpl implements ParameterService {
     public void deleteByIds(Collection<Long> ids) {
         List<AnanParameterEntity> entities = parameterRepository.findAllById(ids);
         for (AnanParameterEntity entity : entities) {
-            deleteByEntity(entity);
+            entity.setStatusValue(ParameterStatus.Deleted.getTypeValue());
         }
+        parameterRepository.saveAll(entities);
+    }
+
+    /**
+     * 取消删除
+     *
+     * @param ids 主键
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void cancelDelete(Collection<Long> ids) {
+        List<AnanParameterEntity> entities = parameterRepository.findAllById(ids);
+        for (AnanParameterEntity entity : entities) {
+            entity.setStatusValue(ParameterStatus.Normal.getTypeValue());
+        }
+        parameterRepository.saveAll(entities);
     }
 
     public String getCacheKey(AnanParameterEntity entity) {
@@ -202,11 +217,11 @@ public class ParameterServiceImpl implements ParameterService {
     @Transactional(rollbackFor = Exception.class)
     public Boolean applyChange(Long id) {
         AnanParameterEntity entity = parameterRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("该参数已经不存在!"));
+                .orElseThrow(() -> new IllegalArgumentException("该参数[" + id + "]已经不存在!"));
         String cacheKey = getCacheKey(entity);
         boolean success;
-        switch (entity.getStatus()) {
-            case 1:
+        switch (Objects.requireNonNull(ParameterStatus.valueOf(entity.getStatus()))) {
+            case Modified:
                 entity.setApplyBy(ananUserDetailService.getAnanUserId());
                 entity.setApplyTime(new Date());
                 entity.setStatus(0);
@@ -215,7 +230,7 @@ public class ParameterServiceImpl implements ParameterService {
                     parameterRepository.save(entity);
                 }
                 break;
-            case 2:
+            case Deleted:
                 success = ananCacheManger.evict(RedisConstant.ANAN_PARAMETER, cacheKey);
                 if (success) {
                     parameterRepository.deleteById(id);
@@ -240,6 +255,16 @@ public class ParameterServiceImpl implements ParameterService {
         Assert.isTrue(entities != null && entities.size() != 0, "没有更改过任何参数，不需要发布!");
         for (AnanParameterEntity entity : entities) {
             applyChange(entity.getId());
+        }
+        return true;
+    }
+
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public Boolean applyChanges(List<Long> ids) {
+        for (Long id : ids) {
+            applyChange(id);
         }
         return true;
     }

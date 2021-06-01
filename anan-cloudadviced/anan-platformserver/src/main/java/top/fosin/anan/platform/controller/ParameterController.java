@@ -11,14 +11,17 @@ import top.fosin.anan.cloudresource.dto.req.AnanParameterCreateDto;
 import top.fosin.anan.cloudresource.dto.req.AnanParameterRetrieveDto;
 import top.fosin.anan.cloudresource.dto.req.AnanParameterUpdateDto;
 import top.fosin.anan.cloudresource.dto.res.AnanParameterRespDto;
+import top.fosin.anan.model.constant.PathConstant;
 import top.fosin.anan.model.controller.ISimpleController;
 import top.fosin.anan.model.controller.IStatusController;
-import top.fosin.anan.model.dto.StatusDto;
 import top.fosin.anan.model.dto.TreeDto;
 import top.fosin.anan.platform.service.inter.ParameterService;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * 参数控制器
@@ -29,7 +32,7 @@ import javax.validation.constraints.NotBlank;
 @RequestMapping(UrlPrefixConstant.PARAMETER)
 @Api(value = UrlPrefixConstant.PARAMETER, tags = "通用参数管理相关操作(参数获取、自动创建)")
 public class ParameterController implements ISimpleController<AnanParameterRespDto, Long, AnanParameterCreateDto, AnanParameterRetrieveDto, AnanParameterUpdateDto>,
-        IStatusController<Long, Integer, StatusDto<Long, Integer>> {
+        IStatusController<AnanParameterRespDto, Long, Integer> {
     private final ParameterService parameterService;
 
     public ParameterController(ParameterService parameterService) {
@@ -85,14 +88,28 @@ public class ParameterController implements ISimpleController<AnanParameterRespD
     @ApiImplicitParam(name = TreeDto.ID_NAME, value = "参数ID,取值于AnanParameterEntity.id",
             required = true, dataTypeClass = Long.class, paramType = "path")
     @RequestMapping(value = "/apply/{id}", method = {RequestMethod.POST, RequestMethod.GET})
-    public ResponseEntity<Boolean> apply(@Min(1) @PathVariable(TreeDto.ID_NAME) Long id) {
+    public ResponseEntity<Boolean> applyChanges(@Min(1) @PathVariable(TreeDto.ID_NAME) Long id) {
         return ResponseEntity.ok(parameterService.applyChange(id));
     }
 
     @ApiOperation(value = "刷新所有已更改参数缓存信息", notes = "该方法只能在有修改参数信息的情况下使用，这是一个批量刷新参数缓存的操作")
-    @RequestMapping(value = "/applys", method = {RequestMethod.POST, RequestMethod.GET})
-    public ResponseEntity<Boolean> applys() {
+    @GetMapping(value = "/applys")
+    public ResponseEntity<Boolean> applyChanges() {
         return ResponseEntity.ok(parameterService.applyChanges());
+    }
+
+    @ApiOperation(value = "刷新制定参数缓存信息", notes = "这是一个批量刷新参数缓存的操作")
+    @PostMapping(value = "/applys")
+    public ResponseEntity<Boolean> applyChanges(@NotEmpty @RequestBody List<Long> ids) {
+        return ResponseEntity.ok(parameterService.applyChanges(ids));
+    }
+
+    @PostMapping(value = "/cancelDelete"+PathConstant.PATH_IDS)
+    @ApiOperation(value = "取消删除")
+    @ApiImplicitParam(name = "ids", value = "主键编号集合",
+            paramType = "body", required = true, dataTypeClass = Collection.class)
+    public void cancelDelete(@NotEmpty @RequestBody Collection<Long> ids) {
+        getService().cancelDelete(ids);
     }
 
     @Override

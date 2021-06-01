@@ -36,7 +36,7 @@ public class InternationalServiceImpl implements InternationalService {
 
     @Override
     @Cacheable(value = RedisConstant.ANAN_INTERNATIONAL_STATUS, key = "#status")
-    public List<AnanInternationalRespDto> findAllByStatus(Integer status) {
+    public List<AnanInternationalRespDto> listByStatus(Integer status) {
         return BeanUtil.copyCollectionProperties(
                 this.getRepository().findAllByStatus(status), AnanInternationalRespDto.class);
     }

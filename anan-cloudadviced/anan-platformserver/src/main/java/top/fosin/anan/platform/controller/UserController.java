@@ -16,7 +16,6 @@ import top.fosin.anan.core.exception.AnanServiceException;
 import top.fosin.anan.model.controller.BaseController;
 import top.fosin.anan.model.controller.ISimpleController;
 import top.fosin.anan.model.controller.IStatusController;
-import top.fosin.anan.model.dto.StatusDto;
 import top.fosin.anan.model.dto.TreeDto;
 import top.fosin.anan.platform.dto.req.AnanUserCreateDto;
 import top.fosin.anan.platform.dto.req.AnanUserPermissionCreateDto;
@@ -44,7 +43,7 @@ import java.util.List;
 @Api(value = UrlPrefixConstant.USER, tags = "用户管理")
 public class UserController extends BaseController implements ISimpleController<AnanUserRespDto,
         Long, AnanUserCreateDto, AnanUserRetrieveDto, AnanUserUpdateDto>,
-        IStatusController<Long, Integer, StatusDto<Long, Integer>> {
+        IStatusController<AnanUserRespDto, Long, Integer> {
     private final UserService userService;
     private final UserRoleService userRoleService;
     private final RoleService roleService;
@@ -61,7 +60,7 @@ public class UserController extends BaseController implements ISimpleController<
     @ApiImplicitParam(name = "usercode", value = "用户工号,取值于AnanUserEntity.usercode",
             required = true, dataTypeClass = String.class, paramType = "path")
     @ApiOperation("根据用户工号查找用户信息")
-    public ResponseEntity<AnanUserRespDto> getByUsercode(@NotBlank @PathVariable("usercode") String usercode) {
+    public ResponseEntity<AnanUserRespDto> findOneByUsercode(@NotBlank @PathVariable("usercode") String usercode) {
         return ResponseEntity.ok(userService.findByUsercode(usercode));
     }
 
@@ -150,9 +149,9 @@ public class UserController extends BaseController implements ISimpleController<
     @ApiOperation("根据机构ID查询该机构及子机构的所有用户")
     @ApiImplicitParam(name = "organizId", value = "机构ID",
             required = true, dataTypeClass = Long.class, paramType = "path")
-    public ResponseEntity<List<AnanUserRespDto>> findAllByOrganizId(@NotNull @PathVariable("organizId") Long organizId,
-                                                                    @NotNull @PathVariable("status") Integer status) {
-        return ResponseEntity.ok(userService.findAllByOrganizId(organizId, status));
+    public ResponseEntity<List<AnanUserRespDto>> listByOrganizId(@NotNull @PathVariable("organizId") Long organizId,
+                                                                 @NotNull @PathVariable("status") Integer status) {
+        return ResponseEntity.ok(userService.listByOrganizId(organizId, status));
     }
 
     @Override

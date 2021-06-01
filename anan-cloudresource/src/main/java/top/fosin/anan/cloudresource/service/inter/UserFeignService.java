@@ -24,17 +24,17 @@ import java.util.List;
 public interface UserFeignService {
     @PostMapping({PathConstant.PATH_ID})
     @ApiOperation("根据主键ID查询一条数据")
-    ResponseEntity<AnanUserRespDto> findOne(@PathVariable(TreeDto.ID_NAME) Long id);
+    ResponseEntity<AnanUserRespDto> findOneById(@PathVariable(TreeDto.ID_NAME) Long id);
 
     @PostMapping({PathConstant.PATH_IDS})
     @ApiOperation("根据id查询多条数据")
-    ResponseEntity<List<AnanUserRespDto>> findAllByIds(@RequestBody List<Long> ids);
+    ResponseEntity<List<AnanUserRespDto>> listByIds(@RequestBody List<Long> ids);
 
     @PostMapping("/usercode/{usercode}")
-    ResponseEntity<AnanUserRespDto> getByUsercode(@PathVariable("usercode") String usercode);
+    ResponseEntity<AnanUserRespDto> findOneByUsercode(@PathVariable("usercode") String usercode);
 
     @PostMapping("/childList/organizId/{organizId}/{status}")
-    ResponseEntity<List<AnanUserRespDto>> findAllUserByOrganizId(@PathVariable("organizId") Long organizId, @PathVariable("status") Integer status);
+    ResponseEntity<List<AnanUserRespDto>> listByOrganizId(@PathVariable("organizId") Long organizId, @PathVariable("status") Integer status);
 
 }
 

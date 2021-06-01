@@ -13,7 +13,7 @@ import top.fosin.anan.cloudresource.dto.res.AnanUserRespDto;
 import top.fosin.anan.core.exception.AnanControllerException;
 import top.fosin.anan.model.controller.ISimpleController;
 import top.fosin.anan.model.controller.IStatusController;
-import top.fosin.anan.model.dto.StatusDto;
+
 import top.fosin.anan.platform.dto.req.*;
 import top.fosin.anan.platform.entity.AnanRolePermissionEntity;
 import top.fosin.anan.platform.service.inter.RolePermissionService;
@@ -36,7 +36,7 @@ import java.util.List;
 @Api(value = UrlPrefixConstant.ROLE, tags = "角色管理相关操作")
 public class RoleController implements ISimpleController<AnanRoleRespDto, Long,
         AnanRoleCreateDto, AnanRoleRetrieveDto, AnanRoleUpdateDto>,
-        IStatusController<Long, Integer, StatusDto<Long, Integer>> {
+        IStatusController<AnanRoleRespDto, Long, Integer> {
     private final RoleService roleService;
     private final RolePermissionService rolePermissionService;
     private final UserRoleService userRoleService;

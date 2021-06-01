@@ -3,7 +3,7 @@ package top.fosin.anan.platform.service.inter;
 import top.fosin.anan.cloudresource.dto.res.AnanRoleRespDto;
 import top.fosin.anan.jpa.service.ISimpleJpaService;
 import top.fosin.anan.jpa.service.IStatusJpaService;
-import top.fosin.anan.model.dto.StatusDto;
+
 import top.fosin.anan.platform.dto.req.AnanRoleCreateDto;
 import top.fosin.anan.platform.dto.req.AnanRoleRetrieveDto;
 import top.fosin.anan.platform.dto.req.AnanRoleUpdateDto;
@@ -20,7 +20,7 @@ public interface RoleService extends ISimpleJpaService<AnanRoleEntity,
         AnanRoleRespDto,
         Long, AnanRoleCreateDto,
         AnanRoleRetrieveDto, AnanRoleUpdateDto>,
-        IStatusJpaService<AnanRoleEntity, Long, Integer, StatusDto<Long, Integer>> {
+        IStatusJpaService<AnanRoleEntity,AnanRoleRespDto, Long, Integer> {
 
     List<AnanRoleRespDto> findOtherUsersByRoleId(Long userId);
 

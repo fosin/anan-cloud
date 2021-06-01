@@ -1,13 +1,16 @@
 package top.fosin.anan.platform.service.inter;
 
+import org.springframework.transaction.annotation.Transactional;
 import top.fosin.anan.cloudresource.dto.req.AnanParameterCreateDto;
 import top.fosin.anan.cloudresource.dto.req.AnanParameterRetrieveDto;
 import top.fosin.anan.cloudresource.dto.req.AnanParameterUpdateDto;
 import top.fosin.anan.cloudresource.dto.res.AnanParameterRespDto;
 import top.fosin.anan.jpa.service.ISimpleJpaService;
 import top.fosin.anan.jpa.service.IStatusJpaService;
-import top.fosin.anan.model.dto.StatusDto;
 import top.fosin.anan.platform.entity.AnanParameterEntity;
+
+import java.util.Collection;
+import java.util.List;
 
 /**
  * @author fosin
@@ -16,7 +19,10 @@ import top.fosin.anan.platform.entity.AnanParameterEntity;
  */
 public interface ParameterService extends ISimpleJpaService<AnanParameterEntity, AnanParameterRespDto,
         Long, AnanParameterCreateDto, AnanParameterRetrieveDto, AnanParameterUpdateDto>,
-        IStatusJpaService<AnanParameterEntity, Long, Integer, StatusDto<Long, Integer>> {
+        IStatusJpaService<AnanParameterEntity,AnanParameterRespDto, Long, Integer> {
+    @Transactional(rollbackFor = Exception.class)
+    void cancelDelete(Collection<Long> ids);
+
     AnanParameterRespDto getParameter(Integer type, String scope, String name);
 
     AnanParameterRespDto getNearestParameter(int type, String scope, String name);
@@ -26,4 +32,6 @@ public interface ParameterService extends ISimpleJpaService<AnanParameterEntity,
     Boolean applyChange(Long id);
 
     Boolean applyChanges();
+
+    Boolean applyChanges(List<Long> ids);
 }

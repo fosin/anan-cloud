@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
 import top.fosin.anan.model.controller.ISimpleController;
 import top.fosin.anan.model.controller.IStatusController;
-import top.fosin.anan.model.dto.StatusDto;
+
 import top.fosin.anan.platform.dto.req.AnanVersionRoleCreateDto;
 import top.fosin.anan.platform.dto.req.AnanVersionRolePermissionCreateDto;
 import top.fosin.anan.platform.dto.req.AnanVersionRoleRetrieveDto;
@@ -33,7 +33,7 @@ import java.util.List;
 @Api(value = UrlPrefixConstant.VERSION_ROLE, tags = "系统版本角色管理")
 public class VersionRoleController implements ISimpleController<AnanVersionRoleRespDto,
         Long, AnanVersionRoleCreateDto, AnanVersionRoleRetrieveDto, AnanVersionRoleUpdateDto>,
-        IStatusController<Long, Integer, StatusDto<Long, Integer>> {
+        IStatusController<AnanVersionRoleRespDto, Long, Integer> {
     /**
      * 服务对象
      */

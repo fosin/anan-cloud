@@ -2,14 +2,11 @@ package top.fosin.anan.platform.service.inter;
 
 import top.fosin.anan.jpa.service.ISimpleJpaService;
 import top.fosin.anan.jpa.service.IStatusJpaService;
-import top.fosin.anan.model.dto.StatusDto;
 import top.fosin.anan.platform.dto.req.AnanInternationalCreateDto;
 import top.fosin.anan.platform.dto.req.AnanInternationalRetrieveDto;
 import top.fosin.anan.platform.dto.req.AnanInternationalUpdateDto;
 import top.fosin.anan.platform.dto.res.AnanInternationalRespDto;
 import top.fosin.anan.platform.entity.AnanInternationalEntity;
-
-import java.util.List;
 
 /**
  * 国际化语言服务接口
@@ -21,9 +18,7 @@ public interface InternationalService extends ISimpleJpaService<AnanInternationa
         AnanInternationalRespDto,
         Long,
         AnanInternationalCreateDto, AnanInternationalRetrieveDto, AnanInternationalUpdateDto>,
-        IStatusJpaService<AnanInternationalEntity, Long, Integer, StatusDto<Long, Integer>> {
-    List<AnanInternationalRespDto> findAllByStatus(Integer status);
-
+        IStatusJpaService<AnanInternationalEntity, AnanInternationalRespDto, Long, Integer> {
     AnanInternationalRespDto findByCode(String code);
 
     AnanInternationalRespDto findByDefaultFlag();
