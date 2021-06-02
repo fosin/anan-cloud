@@ -35,11 +35,11 @@ public class AnanVersionRespDto extends IdDto<Long> implements Serializable {
     private Double price;
 
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
-    @ApiModelProperty(value = "活动开始日期", example = "Date")
+    @ApiModelProperty(value = "活动开始时间", example = DateTimeUtil.DATETIME_PATTERN)
     private Date beginTime;
 
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
-    @ApiModelProperty(value = "活动结束日期", example = "Date")
+    @ApiModelProperty(value = "活动结束时间", example = DateTimeUtil.DATETIME_PATTERN)
     private Date endTime;
 
     @ApiModelProperty(value = "有效期：一般按天计算", example = "Integer")

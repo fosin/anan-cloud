@@ -51,7 +51,7 @@ public class AnanPayOrderEntity extends IdEntity<Long> implements Serializable {
     private Double money;
 
     @Basic
-    @ApiModelProperty(value = "订单日期", required = true)
+    @ApiModelProperty(value = "订单时间", required = true)
     @Column(name = "order_time", nullable = false)
     private Date orderTime;
 
@@ -61,17 +61,17 @@ public class AnanPayOrderEntity extends IdEntity<Long> implements Serializable {
     private Integer status;
 
     @Basic
-    @ApiModelProperty(value = "支付日期")
+    @ApiModelProperty(value = "支付时间")
     @Column(name = "pay_time")
     private Date payTime;
 
     @Basic
-    @ApiModelProperty(value = "取消日期")
+    @ApiModelProperty(value = "取消时间")
     @Column(name = "cancle_time")
     private Date cancleTime;
 
     @Basic
-    @ApiModelProperty(value = "作废日期")
+    @ApiModelProperty(value = "作废时间")
     @Column(name = "invalid_time")
     private Date invalidTime;
 

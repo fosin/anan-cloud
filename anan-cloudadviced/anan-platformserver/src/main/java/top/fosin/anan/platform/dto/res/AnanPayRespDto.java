@@ -53,7 +53,7 @@ public class AnanPayRespDto extends IdDto<Long> implements Serializable {
     private Double uncollectMoney;
 
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
-    @ApiModelProperty(value = "付款日期", example = "Date")
+    @ApiModelProperty(value = "付款时间", example = DateTimeUtil.DATETIME_PATTERN)
     private Date payTime;
 
     @ApiModelProperty(value = "付款标志：0=未付款，1=分期，2=付全款", example = "Integer")

@@ -54,7 +54,7 @@ public class AnanPayRetrieveDto extends QuerySortRuleDto<LogicalQueryRule, SortR
     private Double uncollectMoney;
 
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
-    @ApiModelProperty(value = "付款日期")
+    @ApiModelProperty(value = "付款时间")
     private Date payTime;
 
     @ApiModelProperty(value = "付款标志：0=未付款，1=分期，2=付全款")

@@ -7,7 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
 import top.fosin.anan.core.util.DateTimeUtil;
-import top.fosin.anan.model.dto.IdDto;
+import top.fosin.anan.model.dto.IdCreateUpdateDto;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -23,7 +23,7 @@ import java.util.Date;
 @ToString
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value = "用于存放各种分类分组的个性化参数响应DTO", description = "系统通用参数的响应DTO")
-public class AnanParameterRespDto extends IdDto<Long> implements Serializable {
+public class AnanParameterRespDto extends IdCreateUpdateDto<Long> implements Serializable {
     private static final long serialVersionUID = -73214133063602891L;
     @ApiModelProperty(value = "参数键", example = "String")
     private String name;
@@ -44,10 +44,10 @@ public class AnanParameterRespDto extends IdDto<Long> implements Serializable {
     private String description;
 
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
-    @ApiModelProperty(value = "生效日期", example = "Date")
+    @ApiModelProperty(value = "生效时间", example = DateTimeUtil.DATETIME_PATTERN)
     private Date applyTime;
 
-    @ApiModelProperty(value = "创建人", example = "Long")
+    @ApiModelProperty(value = "生效人", example = "Long")
     private Long applyBy;
 
     @ApiModelProperty(value = "参数状态：0=正常状态、1=修改状态、2=删除状态", example = "Integer")

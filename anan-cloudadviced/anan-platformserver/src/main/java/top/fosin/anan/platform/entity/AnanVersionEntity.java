@@ -45,12 +45,12 @@ public class AnanVersionEntity extends CreateUpdateEntity<Long> implements Seria
     private Double price;
 
     @Basic
-    @ApiModelProperty(value = "开始日期", required = true)
+    @ApiModelProperty(value = "开始时间", required = true)
     @Column(name = "begin_time", nullable = false)
     private Date beginTime;
 
     @Basic
-    @ApiModelProperty(value = "结束日期", required = true)
+    @ApiModelProperty(value = "结束时间", required = true)
     @Column(name = "end_time", nullable = false)
     private Date endTime;
 

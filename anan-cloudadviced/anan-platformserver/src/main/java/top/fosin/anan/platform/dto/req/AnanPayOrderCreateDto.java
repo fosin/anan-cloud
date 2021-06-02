@@ -38,7 +38,7 @@ public class AnanPayOrderCreateDto implements Serializable {
     @ApiModelProperty(value = "版本金额", required = true)
     private Double money;
 
-    @ApiModelProperty(value = "订单日期", required = true)
+    @ApiModelProperty(value = "订单时间", required = true)
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
     private Date orderTime;
 
@@ -46,15 +46,15 @@ public class AnanPayOrderCreateDto implements Serializable {
     @ApiModelProperty(value = "订单状态：0=新建，1=支付，2=取消，3=作废", required = true)
     private Integer status;
 
-    @ApiModelProperty(value = "支付日期")
+    @ApiModelProperty(value = "支付时间")
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
     private Date payTime;
 
-    @ApiModelProperty(value = "取消日期")
+    @ApiModelProperty(value = "取消时间")
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
     private Date cancleTime;
 
-    @ApiModelProperty(value = "作废日期")
+    @ApiModelProperty(value = "作废时间")
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
     private Date invalidTime;
 

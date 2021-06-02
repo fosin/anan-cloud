@@ -39,22 +39,22 @@ public class AnanPayOrderRetrieveDto extends QuerySortRuleDto<LogicalQueryRule, 
     private Double money;
 
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
-    @ApiModelProperty(value = "订单日期")
+    @ApiModelProperty(value = "订单时间")
     private Date orderTime;
 
     @ApiModelProperty(value = "订单状态：0=新建，1=支付，2=取消，3=作废")
     private Integer status;
 
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
-    @ApiModelProperty(value = "支付日期")
+    @ApiModelProperty(value = "支付时间")
     private Date payTime;
 
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
-    @ApiModelProperty(value = "取消日期")
+    @ApiModelProperty(value = "取消时间")
     private Date cancleTime;
 
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
-    @ApiModelProperty(value = "作废日期")
+    @ApiModelProperty(value = "作废时间")
     private Date invalidTime;
 
 }

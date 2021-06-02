@@ -33,7 +33,7 @@ public class AnanUserRespDto extends OrganizIdDto<Long> implements Serializable 
     private String username;
 
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
-    @ApiModelProperty(value = "生日", example = "Date")
+    @ApiModelProperty(value = "生日", example = DateTimeUtil.DATETIME_PATTERN)
     private Date birthday;
 
     @ApiModelProperty(value = "使用状态：具体取值于字典表anan_dictionary.code=15", example = "Integer")
@@ -52,7 +52,7 @@ public class AnanUserRespDto extends OrganizIdDto<Long> implements Serializable 
     private String avatar;
 
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
-    @ApiModelProperty(value = "过期时间，账户过期后用户被锁定切不能登录系统", example = "Date")
+    @ApiModelProperty(value = "过期时间，账户过期后用户被锁定切不能登录系统", example = DateTimeUtil.DATETIME_PATTERN)
     private Date expireTime;
 
 }

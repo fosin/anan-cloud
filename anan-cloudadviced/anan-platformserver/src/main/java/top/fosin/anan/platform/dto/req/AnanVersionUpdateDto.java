@@ -40,11 +40,11 @@ public class AnanVersionUpdateDto extends IdDto<Long> implements Serializable {
     @ApiModelProperty(value = "版本价格", required = true)
     private Double price;
 
-    @ApiModelProperty(value = "活动开始日期", required = true)
+    @ApiModelProperty(value = "活动开始时间", required = true)
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
     private Date beginTime;
 
-    @ApiModelProperty(value = "活动结束日期", required = true)
+    @ApiModelProperty(value = "活动结束时间", required = true)
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
     private Date endTime;
 

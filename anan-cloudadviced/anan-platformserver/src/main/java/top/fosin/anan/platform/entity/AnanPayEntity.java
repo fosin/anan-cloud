@@ -71,7 +71,7 @@ public class AnanPayEntity extends IdEntity<Long> implements Serializable {
     private Double uncollectMoney;
 
     @Basic
-    @ApiModelProperty(value = "付款日期", required = true)
+    @ApiModelProperty(value = "付款时间", required = true)
     @Column(name = "pay_time", nullable = false)
     private Date payTime;
 

@@ -45,14 +45,14 @@ public class RemoteParameter implements IParameter {
 
     @Override
     public String getOrCreateParameter(String scope, String name, String defaultValue, String description) {
-        AnanParameterRetrieveDto createEntity = new AnanParameterRetrieveDto();
-        createEntity.setScope(scope);
-        createEntity.setType(this.getParameterStrategy().getType());
-        createEntity.setName(name);
-        createEntity.setValue(defaultValue);
-        createEntity.setDefaultValue(defaultValue);
-        createEntity.setDescription(description);
-        return parameterService.getOrCreateParameter(createEntity).getBody();
+        AnanParameterRetrieveDto dto = new AnanParameterRetrieveDto();
+        dto.setScope(scope);
+        dto.setType(this.getParameterStrategy().getType());
+        dto.setName(name);
+        dto.setValue(defaultValue);
+        dto.setDefaultValue(defaultValue);
+        dto.setDescription(description);
+        return parameterService.getOrCreateParameter(dto).getBody();
     }
 
     @Override

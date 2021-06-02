@@ -39,7 +39,7 @@ public class AnanOrganizationAuthRetrieveDto extends QuerySortRuleDto<LogicalQue
     private String authorizationCode;
 
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
-    @ApiModelProperty(value = "创建日期，该值由后台维护，更改数据时前端不需要关心")
+    @ApiModelProperty(value = "创建时间，该值由后台维护，更改数据时前端不需要关心")
     private Date createTime;
 
     @ApiModelProperty(value = "该值由后台维护，更改数据时前端不需要关心，取值于anan_user.id")

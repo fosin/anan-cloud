@@ -41,7 +41,7 @@ public class AnanUserCreateDto implements Serializable {
     @ApiModelProperty(value = "传入原始密码，后台会对原始密码进行加密后再存储", required = true)
     private String password;
 
-    @Past(message = "生日必须是一个过去的日期")
+    @Past(message = "生日必须是一个过去的时间")
     @ApiModelProperty(value = "生日", required = true)
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
     private Date birthday;

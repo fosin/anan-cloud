@@ -42,7 +42,7 @@ public class AnanUserUpdateDto extends IdDto<Long> implements Serializable {
     @Pattern(regexp = RegexUtil.SPECIAL, message = "用户姓名不能包含特殊字符")
     private String username;
 
-    @Past(message = "生日必须是一个过去的日期")
+    @Past(message = "生日必须是一个过去的时间")
     @ApiModelProperty(value = "生日", required = true)
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
     private Date birthday;

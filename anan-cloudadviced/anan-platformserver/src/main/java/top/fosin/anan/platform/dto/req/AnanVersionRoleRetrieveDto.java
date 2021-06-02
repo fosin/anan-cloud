@@ -52,7 +52,7 @@ public class AnanVersionRoleRetrieveDto extends QuerySortRuleDto<LogicalQueryRul
     @ApiModelProperty(value = "更新时间")
     private Date updateTime;
 
-    @ApiModelProperty(value = "更新人，该值由后台维护，更改数据时前端不需要关心，取值于anan_user.id")
+    @ApiModelProperty(value = "修改人，该值由后台维护，更改数据时前端不需要关心，取值于anan_user.id")
     private Long updateBy;
 
 }

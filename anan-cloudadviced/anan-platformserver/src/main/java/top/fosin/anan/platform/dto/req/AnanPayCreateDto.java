@@ -58,7 +58,7 @@ public class AnanPayCreateDto implements Serializable {
     @ApiModelProperty(value = "待收金额", required = true)
     private Double uncollectMoney;
 
-    @ApiModelProperty(value = "付款日期", required = true)
+    @ApiModelProperty(value = "付款时间", required = true)
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
     private Date payTime;
 

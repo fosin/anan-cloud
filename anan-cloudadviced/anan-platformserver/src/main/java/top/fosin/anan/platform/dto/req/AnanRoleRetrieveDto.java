@@ -48,13 +48,13 @@ public class AnanRoleRetrieveDto extends QuerySortRuleDto<LogicalQueryRule, Sort
     private Long createBy;
 
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
-    @ApiModelProperty(value = "创建日期", example = "2021-05-08 13:25:11")
+    @ApiModelProperty(value = "创建时间", example = "2021-05-08 13:25:11")
     private Date createTime;
 
     @ApiModelProperty(value = "修改人", example = "1")
     private Long updateBy;
 
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
-    @ApiModelProperty(value = "修改日期", example = "2021-05-08 13:25:11")
+    @ApiModelProperty(value = "修改时间", example = "2021-05-08 13:25:11")
     private Date updateTime;
 }

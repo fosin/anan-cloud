@@ -49,7 +49,7 @@ public class AnanParameterRetrieveDto extends QuerySortRuleDto<LogicalQueryRule,
     @ApiModelProperty(value = "参数状态：0=正常状态、1=修改状态、2=删除状态")
     private Integer status;
 
-    @ApiModelProperty(value = "应用日期")
+    @ApiModelProperty(value = "应用时间")
     private Date applyTime;
 
     @ApiModelProperty(value = "创建人", example = "1")

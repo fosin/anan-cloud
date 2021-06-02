@@ -32,7 +32,7 @@ public class AnanPayInvoiceRespDto extends IdDto<Long> implements Serializable {
     private String invoceNo;
 
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
-    @ApiModelProperty(value = "出票时间", example = "Date")
+    @ApiModelProperty(value = "出票时间", example = DateTimeUtil.DATETIME_PATTERN)
     private Date invoceTime;
 
 }

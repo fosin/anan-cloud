@@ -38,22 +38,22 @@ public class AnanPayOrderRespDto extends IdDto<Long> implements Serializable {
     private Double money;
 
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
-    @ApiModelProperty(value = "订单日期", example = "Date")
+    @ApiModelProperty(value = "订单时间", example = DateTimeUtil.DATETIME_PATTERN)
     private Date orderTime;
 
     @ApiModelProperty(value = "订单状态：0=新建，1=支付，2=取消，3=作废", example = "Integer")
     private Integer status;
 
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
-    @ApiModelProperty(value = "支付日期", example = "Date")
+    @ApiModelProperty(value = "支付时间", example = DateTimeUtil.DATETIME_PATTERN)
     private Date payTime;
 
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
-    @ApiModelProperty(value = "取消日期", example = "Date")
+    @ApiModelProperty(value = "取消时间", example = DateTimeUtil.DATETIME_PATTERN)
     private Date cancleTime;
 
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
-    @ApiModelProperty(value = "作废日期", example = "Date")
+    @ApiModelProperty(value = "作废时间", example = DateTimeUtil.DATETIME_PATTERN)
     private Date invalidTime;
 
 }

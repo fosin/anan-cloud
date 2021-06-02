@@ -59,7 +59,7 @@ public class AnanParameterEntity extends CreateUpdateEntity<Long> implements Ser
     private String description;
 
     @Basic
-    @ApiModelProperty(value = "生效日期，该值由后台维护，更改数据时前端不需要关心")
+    @ApiModelProperty(value = "生效时间，该值由后台维护，更改数据时前端不需要关心")
     @Column(name = "apply_time")
     private Date applyTime;
 

@@ -36,11 +36,11 @@ public class AnanVersionRetrieveDto extends QuerySortRuleDto<LogicalQueryRule, S
     private Double price;
 
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
-    @ApiModelProperty(value = "活动开始日期")
+    @ApiModelProperty(value = "活动开始时间")
     private Date beginTime;
 
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
-    @ApiModelProperty(value = "活动结束日期")
+    @ApiModelProperty(value = "活动结束时间")
     private Date endTime;
 
     @ApiModelProperty(value = "有效期：一般按天计算")
@@ -71,14 +71,14 @@ public class AnanVersionRetrieveDto extends QuerySortRuleDto<LogicalQueryRule, S
     private Long createBy;
 
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
-    @ApiModelProperty(value = "创建日期")
+    @ApiModelProperty(value = "创建时间")
     private Date createTime;
 
-    @ApiModelProperty(value = "更新人，创建人：该值由后台自动维护，取值于系统用户表的编号")
+    @ApiModelProperty(value = "修改人：该值由后台自动维护，取值于系统用户表的编号")
     private Long updateBy;
 
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
-    @ApiModelProperty(value = "更新日期，该值由后台自动维护")
+    @ApiModelProperty(value = "修改时间，该值由后台自动维护")
     private Date updateTime;
 
 }

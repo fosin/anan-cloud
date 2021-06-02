@@ -56,17 +56,14 @@ public class ParameterServiceImpl implements ParameterService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     @CachePut(value = RedisConstant.ANAN_PARAMETER, key = "#root.target.getCacheKey(#result)")
-    public AnanParameterRespDto create(AnanParameterCreateDto entity) {
-        Assert.notNull(entity, "传入的创建数据实体对象不能为空!");
-        AnanParameterEntity createEntiy = new AnanParameterEntity();
-        BeanUtils.copyProperties(entity, createEntiy);
+    public AnanParameterRespDto create(AnanParameterCreateDto dto) {
+        AnanParameterEntity createEntiy = BeanUtil.copyProperties(dto, AnanParameterEntity.class);
         return BeanUtil.copyProperties(getRepository().save(createEntiy), AnanParameterRespDto.class);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void update(AnanParameterUpdateDto dto) {
-        Assert.notNull(dto, "传入了空对象!");
         Long id = dto.getId();
         Assert.notNull(id, "ID不能为空!");
         AnanParameterEntity cEntity = parameterRepository.findById(id)
@@ -74,14 +71,14 @@ public class ParameterServiceImpl implements ParameterService {
         String oldCacheKey = getCacheKey(cEntity);
         String newCacheKey = getCacheKey(dto.getType(), dto.getScope(), dto.getName());
 
-        BeanUtils.copyProperties(dto, cEntity,
-                BeanUtil.getNullProperties(dto));
+        BeanUtils.copyProperties(dto, cEntity);
         cEntity.setStatus(ParameterStatus.Modified.getTypeValue());
         parameterRepository.save(cEntity);
         //如果修改了type、scope、name则需要删除以前的缓存并设置新缓存
         if (!oldCacheKey.equals(newCacheKey)) {
             //新key设置旧值，需要发布以后才刷新缓存换成本次更新的新值
-            ananCacheManger.put(RedisConstant.ANAN_PARAMETER, newCacheKey, ananCacheManger.getCache(oldCacheKey));
+            ananCacheManger.put(RedisConstant.ANAN_PARAMETER, newCacheKey,
+                    ananCacheManger.get(RedisConstant.ANAN_PARAMETER, oldCacheKey,AnanParameterRespDto.class));
             ananCacheManger.evict(RedisConstant.ANAN_PARAMETER, oldCacheKey);
         }
     }
@@ -130,11 +127,15 @@ public class ParameterServiceImpl implements ParameterService {
         parameterRepository.saveAll(entities);
     }
 
-    public String getCacheKey(AnanParameterEntity entity) {
+    protected String getCacheKey(AnanParameterEntity entity) {
         return getCacheKey(entity.getType(), entity.getScope(), entity.getName());
     }
 
-    public String getCacheKey(Integer type, String scope, String name) {
+    public String getCacheKey(AnanParameterRespDto dto) {
+        return getCacheKey(dto.getType(), dto.getScope(), dto.getName());
+    }
+
+    protected String getCacheKey(Integer type, String scope, String name) {
         if (StringUtils.isEmpty(scope)) {
             scope = "";
         }

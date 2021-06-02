@@ -87,6 +87,7 @@ public class UserServiceImpl implements UserService {
 
     /**
      * 根据用户工号查找数据服务(包括软删除)
+     *
      * @param usercode 用户工号
      * @return 用户
      */
@@ -106,6 +107,7 @@ public class UserServiceImpl implements UserService {
 
     /**
      * 根据用户编号查找数据服务(包括软删除)
+     *
      * @param id 用户编号
      * @return 用户
      */
@@ -387,6 +389,17 @@ public class UserServiceImpl implements UserService {
             entities = userRepository.findAll(condition);
         }
         return BeanUtil.copyCollectionProperties(entities, AnanUserRespDto.class);
+    }
+
+    /**
+     * 根据传入的实体类动态查询多条符合条件的数据
+     *
+     * @return 动态查找的结果集
+     */
+    @Override
+    public List<AnanUserRespDto> listAll() {
+        return BeanUtil.copyCollectionProperties(
+                userAllRepository.findAll(), AnanUserRespDto.class);
     }
 
     @Override
