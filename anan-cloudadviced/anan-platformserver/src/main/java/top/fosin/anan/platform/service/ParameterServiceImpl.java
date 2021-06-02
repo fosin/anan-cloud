@@ -135,7 +135,7 @@ public class ParameterServiceImpl implements ParameterService {
         return getCacheKey(dto.getType(), dto.getScope(), dto.getName());
     }
 
-    protected String getCacheKey(Integer type, String scope, String name) {
+    public String getCacheKey(Integer type, String scope, String name) {
         if (StringUtils.isEmpty(scope)) {
             scope = "";
         }
