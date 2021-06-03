@@ -6,9 +6,11 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.DynamicUpdate;
 import top.fosin.anan.jpa.entity.CreateUpdateEntity;
-import top.fosin.anan.model.prop.StatusProp;
 
-import javax.persistence.*;
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.io.Serializable;
 
 /**
@@ -24,8 +26,7 @@ import java.io.Serializable;
 @DynamicUpdate
 @Table(name = "anan_international")
 @ApiModel(value = "国际化语言的实体类", description = "国际化语言的实体类")
-public class AnanInternationalEntity extends CreateUpdateEntity<Long> implements Serializable,
-        StatusProp<Integer> {
+public class AnanInternationalEntity extends CreateUpdateEntity<Long> implements Serializable {
     private static final long serialVersionUID = 717249075172389735L;
 
     @Basic
@@ -53,22 +54,6 @@ public class AnanInternationalEntity extends CreateUpdateEntity<Long> implements
     @ApiModelProperty(value = "默认标志")
     private Integer defaultFlag;
 
-    @Override
-    @Transient
-    public Integer getStatusValue() {
-        return status;
-    }
 
-    @Override
-    @Transient
-    public void setStatusValue(Integer integer) {
-        this.status = integer;
-    }
-
-    @Override
-    @Transient
-    public String getStatusName() {
-        return "status";
-    }
 
 }

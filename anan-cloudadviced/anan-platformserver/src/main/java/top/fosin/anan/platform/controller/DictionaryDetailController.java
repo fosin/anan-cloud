@@ -13,7 +13,6 @@ import top.fosin.anan.cloudresource.dto.req.AnanDictionaryDetailRetrieveDto;
 import top.fosin.anan.cloudresource.dto.res.AnanDictionaryDetailRespDto;
 import top.fosin.anan.core.exception.AnanControllerException;
 import top.fosin.anan.model.controller.ISimpleController;
-import top.fosin.anan.model.controller.IStatusController;
 
 import top.fosin.anan.platform.dto.req.AnanDictionaryDetailCreateDto;
 import top.fosin.anan.platform.dto.req.AnanDictionaryDetailUpdateDto;
@@ -30,8 +29,7 @@ import java.util.List;
 @RequestMapping(UrlPrefixConstant.DICTIONARY_DETAIL)
 @Api(value = UrlPrefixConstant.DICTIONARY_DETAIL, tags = "通用字典明细管理")
 public class DictionaryDetailController implements ISimpleController<AnanDictionaryDetailRespDto,
-        Long, AnanDictionaryDetailCreateDto, AnanDictionaryDetailRetrieveDto, AnanDictionaryDetailUpdateDto>,
-        IStatusController<AnanDictionaryDetailRespDto,Long, Integer> {
+        Long, AnanDictionaryDetailCreateDto, AnanDictionaryDetailRetrieveDto, AnanDictionaryDetailUpdateDto> {
     private final DictionaryDetailService dictionaryDetailService;
 
     public DictionaryDetailController(DictionaryDetailService dictionaryDetailService) {

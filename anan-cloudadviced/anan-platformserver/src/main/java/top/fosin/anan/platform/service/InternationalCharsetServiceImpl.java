@@ -12,7 +12,9 @@ import top.fosin.anan.platform.dto.req.AnanInternationalCharsetUpdateDto;
 import top.fosin.anan.platform.dto.res.AnanInternationalCharsetRespDto;
 import top.fosin.anan.platform.repository.InternationalCharsetRepository;
 import top.fosin.anan.platform.service.inter.InternationalCharsetService;
+import top.fosin.anan.redis.cache.AnanCacheManger;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 
@@ -27,9 +29,11 @@ import java.util.List;
 public class InternationalCharsetServiceImpl implements InternationalCharsetService {
 
     private final InternationalCharsetRepository defaultRepository;
+    private final AnanCacheManger ananCacheManger;
 
-    public InternationalCharsetServiceImpl(InternationalCharsetRepository defaultRepository) {
+    public InternationalCharsetServiceImpl(InternationalCharsetRepository defaultRepository, AnanCacheManger ananCacheManger) {
         this.defaultRepository = defaultRepository;
+        this.ananCacheManger = ananCacheManger;
     }
 
     /**
@@ -81,4 +85,18 @@ public class InternationalCharsetServiceImpl implements InternationalCharsetServ
                 AnanInternationalCharsetRespDto.class);
     }
 
+    /**
+     * 根据主键集合批量更新一个字段
+     *
+     * @param name  更新的字段名
+     * @param value 更新的值
+     * @param ids   主键集合
+     * @return 更新的数量
+     */
+    @Override
+    public long updateOneField(String name, Serializable value, Collection<Long> ids) {
+        long count = InternationalCharsetService.super.updateOneField(name, value, ids);
+        ids.forEach(id -> this.ananCacheManger.evict(RedisConstant.ANAN_INTERNATIONAL_CHARSET + RedisConstant.ALL, id + ""));
+        return count;
+    }
 }

@@ -4,18 +4,18 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
+import top.fosin.anan.model.constant.PathConstant;
 import top.fosin.anan.model.controller.ISimpleController;
-import top.fosin.anan.model.controller.IStatusController;
 import top.fosin.anan.platform.dto.req.AnanInternationalCreateDto;
 import top.fosin.anan.platform.dto.req.AnanInternationalRetrieveDto;
 import top.fosin.anan.platform.dto.req.AnanInternationalUpdateDto;
 import top.fosin.anan.platform.dto.res.AnanInternationalRespDto;
 import top.fosin.anan.platform.service.inter.InternationalService;
+
+import javax.validation.constraints.NotNull;
+import java.util.List;
 
 /**
  * 国际化语言控制层
@@ -27,15 +27,14 @@ import top.fosin.anan.platform.service.inter.InternationalService;
 @RequestMapping(UrlPrefixConstant.INTERNATIONAL)
 @Api(value = UrlPrefixConstant.INTERNATIONAL, tags = "国际化语言管理")
 public class InternationalController implements ISimpleController<AnanInternationalRespDto, Long,
-        AnanInternationalCreateDto, AnanInternationalRetrieveDto, AnanInternationalUpdateDto>,
-        IStatusController<AnanInternationalRespDto, Long, Integer> {
+        AnanInternationalCreateDto, AnanInternationalRetrieveDto, AnanInternationalUpdateDto> {
 
     private final InternationalService internationalService;
 
     public InternationalController(InternationalService internationalService) {
         this.internationalService = internationalService;
     }
-    
+
     @RequestMapping(path = "/code/{code}", method = {RequestMethod.GET,
             RequestMethod.POST, RequestMethod.OPTIONS})
     @ApiOperation("根据国际化语言编码查找国际化语言")
@@ -54,6 +53,19 @@ public class InternationalController implements ISimpleController<AnanInternatio
     @ApiOperation("查找默认语言")
     public ResponseEntity<AnanInternationalRespDto> findByDefaultFlag() {
         return ResponseEntity.ok(internationalService.findByDefaultFlag());
+    }
+
+    /**
+     * 批量改变一个字段的值
+     *
+     * @param status 更新的字段名
+     */
+    @GetMapping(value = PathConstant.PATH_STATUS + "/{status}")
+    @ApiOperation(value = "改变多条数据的状态")
+    @ApiImplicitParam(name = "status", value = "需改表的状态值", paramType = "path",
+            required = true, dataTypeClass = Integer.class)
+    public ResponseEntity<List<AnanInternationalRespDto>> listByStatus(@NotNull @PathVariable Integer status) {
+        return ResponseEntity.ok(getService().listByStatus(status));
     }
 
     @Override

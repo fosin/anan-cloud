@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import top.fosin.anan.cloudresource.dto.res.AnanPermissionRespDto;
 import top.fosin.anan.model.controller.ISimpleController;
-import top.fosin.anan.model.controller.IStatusController;
+
 import top.fosin.anan.model.dto.TreeDto;
 import top.fosin.anan.platform.dto.req.*;
 import top.fosin.anan.platform.dto.res.AnanOrganizationAuthRespDto;
@@ -31,8 +31,7 @@ import java.util.List;
 @RequestMapping("v1/version")
 @Api(value = "v1/version", tags = "系统版本管理")
 public class VersionController implements ISimpleController<AnanVersionRespDto,
-        Long, AnanVersionCreateDto, AnanVersionRetrieveDto, AnanVersionUpdateDto>,
-        IStatusController<AnanVersionRespDto, Long, Integer> {
+        Long, AnanVersionCreateDto, AnanVersionRetrieveDto, AnanVersionUpdateDto> {
     /**
      * 服务对象
      */

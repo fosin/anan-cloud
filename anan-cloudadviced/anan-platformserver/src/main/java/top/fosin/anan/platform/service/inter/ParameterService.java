@@ -6,7 +6,7 @@ import top.fosin.anan.cloudresource.dto.req.AnanParameterRetrieveDto;
 import top.fosin.anan.cloudresource.dto.req.AnanParameterUpdateDto;
 import top.fosin.anan.cloudresource.dto.res.AnanParameterRespDto;
 import top.fosin.anan.jpa.service.ISimpleJpaService;
-import top.fosin.anan.jpa.service.IStatusJpaService;
+
 import top.fosin.anan.platform.entity.AnanParameterEntity;
 
 import java.util.Collection;
@@ -18,9 +18,7 @@ import java.util.List;
  *
  */
 public interface ParameterService extends ISimpleJpaService<AnanParameterEntity, AnanParameterRespDto,
-        Long, AnanParameterCreateDto, AnanParameterRetrieveDto, AnanParameterUpdateDto>,
-        IStatusJpaService<AnanParameterEntity,AnanParameterRespDto, Long, Integer> {
-    @Transactional(rollbackFor = Exception.class)
+        Long, AnanParameterCreateDto, AnanParameterRetrieveDto, AnanParameterUpdateDto> {
     void cancelDelete(Collection<Long> ids);
 
     AnanParameterRespDto getParameter(Integer type, String scope, String name);

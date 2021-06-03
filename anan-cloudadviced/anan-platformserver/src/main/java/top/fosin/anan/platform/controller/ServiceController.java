@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
 import top.fosin.anan.cloudresource.dto.res.AnanServiceRespDto;
 import top.fosin.anan.model.controller.ISimpleController;
-import top.fosin.anan.model.controller.IStatusController;
+
 import top.fosin.anan.platform.dto.req.AnanServiceCreateDto;
 import top.fosin.anan.platform.dto.req.AnanServiceRetrieveDto;
 import top.fosin.anan.platform.dto.req.AnanServiceUpdateDto;
@@ -22,8 +22,7 @@ import top.fosin.anan.platform.service.inter.ServiceService;
 @RequestMapping(UrlPrefixConstant.SERVICE)
 @Api(value = UrlPrefixConstant.SERVICE, tags = "系统服务管理")
 public class ServiceController implements ISimpleController<AnanServiceRespDto, Long,
-        AnanServiceCreateDto, AnanServiceRetrieveDto, AnanServiceUpdateDto>,
-        IStatusController<AnanServiceRespDto, Long, Integer> {
+        AnanServiceCreateDto, AnanServiceRetrieveDto, AnanServiceUpdateDto> {
 
     private final ServiceService serviceService;
 

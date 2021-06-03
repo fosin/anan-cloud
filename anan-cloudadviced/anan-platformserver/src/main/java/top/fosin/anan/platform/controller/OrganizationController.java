@@ -15,7 +15,7 @@ import top.fosin.anan.cloudresource.dto.res.AnanOrganizationTreeDto;
 import top.fosin.anan.model.controller.BaseController;
 import top.fosin.anan.model.controller.IRetrieveTreeController;
 import top.fosin.anan.model.controller.ISimpleController;
-import top.fosin.anan.model.controller.IStatusController;
+
 
 import top.fosin.anan.platform.dto.req.AnanOrganizationCreateDto;
 import top.fosin.anan.platform.dto.req.AnanOrganizationPermissionCreateDto;
@@ -41,8 +41,7 @@ public class OrganizationController extends BaseController
         implements ISimpleController<AnanOrganizationRespDto, Long,
         AnanOrganizationCreateDto, AnanOrganizationRetrieveDto,
         AnanOrganizationUpdateDto>,
-        IRetrieveTreeController<AnanOrganizationTreeDto, Long, AnanOrganizationRetrieveDto>,
-        IStatusController<AnanOrganizationRespDto,Long, Integer> {
+        IRetrieveTreeController<AnanOrganizationTreeDto, Long, AnanOrganizationRetrieveDto> {
     private final OrganizationService organizationService;
     private final OrganizationAuthService organizationAuthService;
     private final OrganizationPermissionService organizationPermissionService;

@@ -6,11 +6,15 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.DynamicUpdate;
 import top.fosin.anan.jpa.entity.CreateUpdateEntity;
-import top.fosin.anan.model.prop.StatusProp;
 
-import javax.persistence.*;
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.Date;
+
+;
 
 /**
  * 用于存放各种分类分组的个性化参数(AnanParameter)实体类
@@ -25,7 +29,7 @@ import java.util.Date;
 @DynamicUpdate
 @Table(name = "anan_parameter")
 @ApiModel(value = "用于存放各种分类分组的个性化参数实体类", description = "系统通用参数的实体类")
-public class AnanParameterEntity extends CreateUpdateEntity<Long> implements Serializable, StatusProp<Integer> {
+public class AnanParameterEntity extends CreateUpdateEntity<Long> implements Serializable {
     private static final long serialVersionUID = 301081721804164443L;
 
     @Basic
@@ -72,24 +76,5 @@ public class AnanParameterEntity extends CreateUpdateEntity<Long> implements Ser
     @ApiModelProperty(value = "参数状态：0=正常状态、1=修改状态、2=删除状态", required = true)
     @Column(name = "status", nullable = false)
     private Integer status = 0;
-
-
-    @Override
-    @Transient
-    public Integer getStatusValue() {
-        return status;
-    }
-
-    @Override
-    @Transient
-    public void setStatusValue(Integer integer) {
-        this.status = integer;
-    }
-
-    @Override
-    @Transient
-    public String getStatusName() {
-        return "status";
-    }
 
 }

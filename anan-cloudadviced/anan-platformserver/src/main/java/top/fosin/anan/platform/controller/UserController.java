@@ -15,7 +15,7 @@ import top.fosin.anan.core.exception.AnanControllerException;
 import top.fosin.anan.core.exception.AnanServiceException;
 import top.fosin.anan.model.controller.BaseController;
 import top.fosin.anan.model.controller.ISimpleController;
-import top.fosin.anan.model.controller.IStatusController;
+
 import top.fosin.anan.model.dto.TreeDto;
 import top.fosin.anan.platform.dto.req.AnanUserCreateDto;
 import top.fosin.anan.platform.dto.req.AnanUserPermissionCreateDto;
@@ -42,8 +42,7 @@ import java.util.List;
 @RequestMapping(UrlPrefixConstant.USER)
 @Api(value = UrlPrefixConstant.USER, tags = "用户管理")
 public class UserController extends BaseController implements ISimpleController<AnanUserRespDto,
-        Long, AnanUserCreateDto, AnanUserRetrieveDto, AnanUserUpdateDto>,
-        IStatusController<AnanUserRespDto, Long, Integer> {
+        Long, AnanUserCreateDto, AnanUserRetrieveDto, AnanUserUpdateDto> {
     private final UserService userService;
     private final UserRoleService userRoleService;
     private final RoleService roleService;

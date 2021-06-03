@@ -21,7 +21,9 @@ import top.fosin.anan.platform.entity.DictionaryDetailEntity;
 import top.fosin.anan.platform.repository.DictionaryDetailRepository;
 import top.fosin.anan.platform.repository.DictionaryRepository;
 import top.fosin.anan.platform.service.inter.DictionaryDetailService;
+import top.fosin.anan.redis.cache.AnanCacheManger;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 
@@ -38,13 +40,15 @@ public class DictionaryDetailServiceImpl implements DictionaryDetailService {
     private final DictionaryDetailRepository dictionaryDetailRepository;
     private final AnanUserDetailService ananUserDetailService;
     private final DictionaryRepository dictionaryRepository;
+    private final AnanCacheManger ananCacheManger;
 
     public DictionaryDetailServiceImpl(DictionaryDetailRepository dictionaryDetailRepository,
                                        AnanUserDetailService ananUserDetailService,
-                                       DictionaryRepository dictionaryRepository) {
+                                       DictionaryRepository dictionaryRepository, AnanCacheManger ananCacheManger) {
         this.dictionaryDetailRepository = dictionaryDetailRepository;
         this.ananUserDetailService = ananUserDetailService;
         this.dictionaryRepository = dictionaryRepository;
+        this.ananCacheManger = ananCacheManger;
     }
 
     @Override
@@ -115,6 +119,20 @@ public class DictionaryDetailServiceImpl implements DictionaryDetailService {
         return BeanUtil.copyCollectionProperties(dictionaryDetailRepository.findAllByDictionaryId(dictionaryId, sort), AnanDictionaryDetailRespDto.class);
     }
 
+    /**
+     * 根据主键集合批量更新一个字段
+     *
+     * @param name  更新的字段名
+     * @param value 更新的值
+     * @param ids   主键集合
+     * @return 更新的数量
+     */
+    @Override
+    public long updateOneField(String name, Serializable value, Collection<Long> ids) {
+        long count = DictionaryDetailService.super.updateOneField(name, value, ids);
+        ids.forEach(id -> ananCacheManger.evict(RedisConstant.ANAN_DICTIONARY_DETAIL, id + ""));
+        return count;
+    }
 
     @Override
     public DictionaryDetailRepository getRepository() {

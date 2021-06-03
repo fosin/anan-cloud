@@ -13,7 +13,7 @@ import top.fosin.anan.cloudresource.dto.req.AnanParameterUpdateDto;
 import top.fosin.anan.cloudresource.dto.res.AnanParameterRespDto;
 import top.fosin.anan.model.constant.PathConstant;
 import top.fosin.anan.model.controller.ISimpleController;
-import top.fosin.anan.model.controller.IStatusController;
+
 import top.fosin.anan.model.dto.TreeDto;
 import top.fosin.anan.platform.service.inter.ParameterService;
 
@@ -31,8 +31,8 @@ import java.util.List;
 @RestController
 @RequestMapping(UrlPrefixConstant.PARAMETER)
 @Api(value = UrlPrefixConstant.PARAMETER, tags = "通用参数管理相关操作(参数获取、自动创建)")
-public class ParameterController implements ISimpleController<AnanParameterRespDto, Long, AnanParameterCreateDto, AnanParameterRetrieveDto, AnanParameterUpdateDto>,
-        IStatusController<AnanParameterRespDto, Long, Integer> {
+public class ParameterController implements ISimpleController<AnanParameterRespDto, Long,
+        AnanParameterCreateDto, AnanParameterRetrieveDto, AnanParameterUpdateDto> {
     private final ParameterService parameterService;
 
     public ParameterController(ParameterService parameterService) {

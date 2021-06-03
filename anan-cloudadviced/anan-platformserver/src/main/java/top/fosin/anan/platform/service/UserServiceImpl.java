@@ -41,6 +41,7 @@ import top.fosin.anan.platform.service.inter.UserService;
 import top.fosin.anan.redis.cache.AnanCacheManger;
 
 import javax.persistence.criteria.*;
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
@@ -400,6 +401,26 @@ public class UserServiceImpl implements UserService {
     public List<AnanUserRespDto> listAll() {
         return BeanUtil.copyCollectionProperties(
                 userAllRepository.findAll(), AnanUserRespDto.class);
+    }
+
+    /**
+     * 根据主键集合批量更新一个字段
+     *
+     * @param name  更新的字段名
+     * @param value 更新的值
+     * @param ids   主键集合
+     * @return 更新的数量
+     */
+    @Override
+    public long updateOneField(String name, Serializable value, Collection<Long> ids) {
+        long count = UserService.super.updateOneField(name, value, ids);
+        ids.forEach(id -> {
+            ananCacheManger.evict(RedisConstant.ANAN_USER, ananCacheManger.get(RedisConstant.ANAN_USER, id + "",
+                    AnanUserRespDto.class).getUsercode());
+            ananCacheManger.evict(RedisConstant.ANAN_USER, id + "");
+            ananCacheManger.evict(RedisConstant.ANAN_USER_ALL_PERMISSIONS, id + "");
+        });
+        return count;
     }
 
     @Override

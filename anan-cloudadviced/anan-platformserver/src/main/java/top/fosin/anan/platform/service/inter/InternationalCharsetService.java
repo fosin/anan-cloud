@@ -1,7 +1,7 @@
 package top.fosin.anan.platform.service.inter;
 
 import top.fosin.anan.jpa.service.ISimpleJpaService;
-import top.fosin.anan.jpa.service.IStatusJpaService;
+
 
 import top.fosin.anan.platform.dto.req.AnanInternationalCharsetCreateDto;
 import top.fosin.anan.platform.dto.req.AnanInternationalCharsetRetrieveDto;
@@ -22,8 +22,7 @@ public interface InternationalCharsetService extends ISimpleJpaService<AnanInter
         Long,
         AnanInternationalCharsetCreateDto,
         AnanInternationalCharsetRetrieveDto,
-        AnanInternationalCharsetUpdateDto>,
-        IStatusJpaService<AnanInternationalCharsetEntity,AnanInternationalCharsetRespDto, Long, Integer> {
+        AnanInternationalCharsetUpdateDto> {
 
     List<AnanInternationalCharsetRespDto> findAllByInternationalId(Long internationalId);
 

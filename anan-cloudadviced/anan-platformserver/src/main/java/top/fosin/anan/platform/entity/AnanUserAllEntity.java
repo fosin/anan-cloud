@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.DynamicUpdate;
 import top.fosin.anan.jpa.entity.SoftDeleteEntity;
-import top.fosin.anan.model.prop.StatusProp;
+;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -25,8 +25,7 @@ import java.util.Date;
 @DynamicUpdate
 @Table(name = "anan_user")
 @ApiModel(value = "系统用户表实体类", description = "系统用户的实体类-包含软删除")
-public class AnanUserAllEntity extends SoftDeleteEntity<Long> implements Serializable,
-        StatusProp<Integer> {
+public class AnanUserAllEntity extends SoftDeleteEntity<Long> implements Serializable {
     private static final long serialVersionUID = 389805570221840757L;
 
     @Basic
@@ -84,22 +83,6 @@ public class AnanUserAllEntity extends SoftDeleteEntity<Long> implements Seriali
     @Column(name = "expire_time", nullable = false)
     private Date expireTime;
 
-    @Override
-    @Transient
-    public Integer getStatusValue() {
-        return status;
-    }
-
-    @Override
-    @Transient
-    public void setStatusValue(Integer integer) {
-        this.status = integer;
-    }
-
-    @Override
-    @Transient
-    public String getStatusName() {
-        return "status";
-    }
+    
 
 }

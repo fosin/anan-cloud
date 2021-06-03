@@ -3,7 +3,7 @@ package top.fosin.anan.platform.service.inter;
 import top.fosin.anan.cloudresource.dto.req.AnanDictionaryDetailRetrieveDto;
 import top.fosin.anan.cloudresource.dto.res.AnanDictionaryDetailRespDto;
 import top.fosin.anan.jpa.service.ISimpleJpaService;
-import top.fosin.anan.jpa.service.IStatusJpaService;
+
 
 import top.fosin.anan.platform.dto.req.AnanDictionaryDetailCreateDto;
 import top.fosin.anan.platform.dto.req.AnanDictionaryDetailUpdateDto;
@@ -17,7 +17,6 @@ import java.util.List;
  *
  */
 public interface DictionaryDetailService extends ISimpleJpaService<DictionaryDetailEntity, AnanDictionaryDetailRespDto,
-        Long, AnanDictionaryDetailCreateDto, AnanDictionaryDetailRetrieveDto, AnanDictionaryDetailUpdateDto>,
-        IStatusJpaService<DictionaryDetailEntity,AnanDictionaryDetailRespDto, Long, Integer> {
+        Long, AnanDictionaryDetailCreateDto, AnanDictionaryDetailRetrieveDto, AnanDictionaryDetailUpdateDto> {
     List<AnanDictionaryDetailRespDto> findByDictionaryId(Long dictionaryId);
 }

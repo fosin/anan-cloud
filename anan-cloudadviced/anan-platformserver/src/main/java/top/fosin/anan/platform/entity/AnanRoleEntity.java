@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.DynamicUpdate;
 import top.fosin.anan.jpa.entity.OrganizIdCreateUpdateEntity;
-import top.fosin.anan.model.prop.StatusProp;
+;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -24,8 +24,7 @@ import java.io.Serializable;
 @DynamicUpdate
 @Table(name = "anan_role")
 @ApiModel(value = "系统角色表实体类", description = "系统角色的实体类")
-public class AnanRoleEntity extends OrganizIdCreateUpdateEntity<Long> implements Serializable,
-        StatusProp<Integer> {
+public class AnanRoleEntity extends OrganizIdCreateUpdateEntity<Long> implements Serializable {
     private static final long serialVersionUID = -64971271359941469L;
 
     @Basic
@@ -53,22 +52,6 @@ public class AnanRoleEntity extends OrganizIdCreateUpdateEntity<Long> implements
     @Column(name = "built_in", nullable = false)
     private Integer builtIn = 0;
 
-    @Override
-    @Transient
-    public Integer getStatusValue() {
-        return status;
-    }
-
-    @Override
-    @Transient
-    public void setStatusValue(Integer integer) {
-        this.status = integer;
-    }
-
-    @Override
-    @Transient
-    public String getStatusName() {
-        return "status";
-    }
+    
 
 }

@@ -8,7 +8,7 @@ import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 import top.fosin.anan.jpa.entity.SoftDeleteEntity;
-import top.fosin.anan.model.prop.StatusProp;
+;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -29,8 +29,7 @@ import java.util.Date;
 @Where(clause = "deleted = 0")
 @Table(name = "anan_user")
 @ApiModel(value = "系统用户表实体类", description = "系统用户的实体类")
-public class AnanUserEntity extends SoftDeleteEntity<Long> implements Serializable,
-        StatusProp<Integer> {
+public class AnanUserEntity extends SoftDeleteEntity<Long> implements Serializable {
     private static final long serialVersionUID = 897030139778409164L;
 
     @Basic
@@ -88,22 +87,6 @@ public class AnanUserEntity extends SoftDeleteEntity<Long> implements Serializab
     @Column(name = "expire_time", nullable = false)
     private Date expireTime;
 
-    @Override
-    @Transient
-    public Integer getStatusValue() {
-        return status;
-    }
-
-    @Override
-    @Transient
-    public void setStatusValue(Integer integer) {
-        this.status = integer;
-    }
-
-    @Override
-    @Transient
-    public String getStatusName() {
-        return "status";
-    }
+    
 
 }

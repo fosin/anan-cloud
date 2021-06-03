@@ -8,7 +8,7 @@ import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 import top.fosin.anan.jpa.entity.SoftDeleteEntity;
-import top.fosin.anan.model.prop.StatusProp;
+;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -29,8 +29,7 @@ import java.io.Serializable;
 @Where(clause = "deleted = 0")
 @Table(name = "anan_dictionary_detail")
 @ApiModel(value = "系统通用字典明细表实体类", description = "系统通用字典明细的实体类")
-public class DictionaryDetailEntity extends SoftDeleteEntity<Long> implements Serializable,
-        StatusProp<Integer> {
+public class DictionaryDetailEntity extends SoftDeleteEntity<Long> implements Serializable {
     private static final long serialVersionUID = -36972961529681499L;
 
     @Basic
@@ -78,22 +77,6 @@ public class DictionaryDetailEntity extends SoftDeleteEntity<Long> implements Se
     @Column(name = "description", length = 120)
     private String description;
 
-    @Override
-    @Transient
-    public Integer getStatusValue() {
-        return status;
-    }
-
-    @Override
-    @Transient
-    public void setStatusValue(Integer integer) {
-        this.status = integer;
-    }
-
-    @Override
-    @Transient
-    public String getStatusName() {
-        return "status";
-    }
+    
 
 }

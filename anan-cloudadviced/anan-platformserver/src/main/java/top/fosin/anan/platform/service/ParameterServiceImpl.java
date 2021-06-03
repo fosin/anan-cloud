@@ -92,7 +92,7 @@ public class ParameterServiceImpl implements ParameterService {
     @Transactional(rollbackFor = Exception.class)
     public void deleteById(Long id) {
         parameterRepository.findById(id).ifPresent(entity -> {
-            entity.setStatusValue(ParameterStatus.Deleted.getTypeValue());
+            entity.setStatus(ParameterStatus.Deleted.getTypeValue());
             parameterRepository.save(entity);
         });
     }
@@ -107,7 +107,7 @@ public class ParameterServiceImpl implements ParameterService {
     public void deleteByIds(Collection<Long> ids) {
         List<AnanParameterEntity> entities = parameterRepository.findAllById(ids);
         for (AnanParameterEntity entity : entities) {
-            entity.setStatusValue(ParameterStatus.Deleted.getTypeValue());
+            entity.setStatus(ParameterStatus.Deleted.getTypeValue());
         }
         parameterRepository.saveAll(entities);
     }
@@ -122,7 +122,7 @@ public class ParameterServiceImpl implements ParameterService {
     public void cancelDelete(Collection<Long> ids) {
         List<AnanParameterEntity> entities = parameterRepository.findAllById(ids);
         for (AnanParameterEntity entity : entities) {
-            entity.setStatusValue(ParameterStatus.Normal.getTypeValue());
+            entity.setStatus(ParameterStatus.Normal.getTypeValue());
         }
         parameterRepository.saveAll(entities);
     }

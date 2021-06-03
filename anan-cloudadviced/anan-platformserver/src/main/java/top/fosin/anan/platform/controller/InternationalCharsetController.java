@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
 import top.fosin.anan.model.controller.ISimpleController;
-import top.fosin.anan.model.controller.IStatusController;
+
 import top.fosin.anan.platform.dto.req.AnanInternationalCharsetCreateDto;
 import top.fosin.anan.platform.dto.req.AnanInternationalCharsetRetrieveDto;
 import top.fosin.anan.platform.dto.req.AnanInternationalCharsetUpdateDto;
@@ -32,8 +32,7 @@ public class InternationalCharsetController implements ISimpleController<AnanInt
         Long,
         AnanInternationalCharsetCreateDto,
         AnanInternationalCharsetRetrieveDto,
-        AnanInternationalCharsetUpdateDto>,
-        IStatusController<AnanInternationalCharsetRespDto,Long, Integer> {
+        AnanInternationalCharsetUpdateDto> {
 
     private final InternationalCharsetService internationalCharsetService;
 
