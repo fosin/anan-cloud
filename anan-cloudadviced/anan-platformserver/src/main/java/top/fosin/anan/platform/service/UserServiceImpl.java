@@ -415,8 +415,11 @@ public class UserServiceImpl implements UserService {
     public long updateOneField(String name, Serializable value, Collection<Long> ids) {
         long count = UserService.super.updateOneField(name, value, ids);
         ids.forEach(id -> {
-            ananCacheManger.evict(RedisConstant.ANAN_USER, ananCacheManger.get(RedisConstant.ANAN_USER, id + "",
-                    AnanUserRespDto.class).getUsercode());
+            AnanUserRespDto respDto = ananCacheManger.get(RedisConstant.ANAN_USER, id + "",
+                    AnanUserRespDto.class);
+            if (respDto != null) {
+                ananCacheManger.evict(RedisConstant.ANAN_USER, respDto.getUsercode());
+            }
             ananCacheManger.evict(RedisConstant.ANAN_USER, id + "");
             ananCacheManger.evict(RedisConstant.ANAN_USER_ALL_PERMISSIONS, id + "");
         });
