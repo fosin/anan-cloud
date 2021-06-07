@@ -29,7 +29,7 @@ public interface ParameterService extends ISimpleJpaService<AnanParameterEntity,
 
     Boolean applyChange(Long id);
 
-    Boolean applyChanges();
+    Boolean applyChangeAll();
 
     Boolean applyChanges(List<Long> ids);
 }

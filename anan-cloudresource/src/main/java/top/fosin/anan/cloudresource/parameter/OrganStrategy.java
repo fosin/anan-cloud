@@ -22,6 +22,6 @@ public class OrganStrategy implements IParameterStrategy {
 
     @Override
     public String getScope() {
-        return ananUserDetailService.getAnanOrganizId() + "";
+        return ananUserDetailService.isSysAdminUser() ? null : ananUserDetailService.getAnanOrganizId() + "";
     }
 }

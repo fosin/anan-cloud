@@ -338,7 +338,7 @@ public class UserServiceImpl implements UserService {
             int random = 9999;
             if (NumberUtil.isInteger(length)) {
                 int i = Integer.parseInt(length);
-                if (i > 0 && i < 10) {
+                if (i > 0) {
                     random = (int) (Math.pow(10, i)) - 1;
                 }
             }

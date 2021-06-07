@@ -2,16 +2,19 @@ package top.fosin.anan.platform.service;
 
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 import top.fosin.anan.cloudresource.constant.RedisConstant;
 import top.fosin.anan.cloudresource.dto.req.AnanParameterCreateDto;
+import top.fosin.anan.cloudresource.dto.req.AnanParameterRetrieveDto;
 import top.fosin.anan.cloudresource.dto.req.AnanParameterUpdateDto;
 import top.fosin.anan.cloudresource.dto.res.AnanParameterRespDto;
 import top.fosin.anan.cloudresource.parameter.OrganStrategy;
@@ -19,6 +22,9 @@ import top.fosin.anan.cloudresource.parameter.ParameterStatus;
 import top.fosin.anan.cloudresource.service.AnanUserDetailService;
 import top.fosin.anan.core.exception.AnanServiceException;
 import top.fosin.anan.core.util.BeanUtil;
+import top.fosin.anan.model.module.PageModule;
+import top.fosin.anan.model.result.ListResult;
+import top.fosin.anan.model.result.ResultUtils;
 import top.fosin.anan.platform.entity.AnanOrganizationEntity;
 import top.fosin.anan.platform.entity.AnanParameterEntity;
 import top.fosin.anan.platform.repository.OrganizationRepository;
@@ -54,6 +60,29 @@ public class ParameterServiceImpl implements ParameterService {
     }
 
     @Override
+    public ListResult<AnanParameterRespDto> findPage(PageModule<AnanParameterRetrieveDto> pageModule) {
+        PageRequest pageable = PageRequest.of(pageModule.getPageNumber() - 1, pageModule.getPageSize(), this.buildSortRules(pageModule.getParams().getSortRules()));
+        AnanParameterRetrieveDto params = pageModule.getParams();
+        String search = params == null ? "%%" : "%" + params.getName() + "%";
+        Long organizId = ananUserDetailService.getAnanOrganizId();
+        boolean sysAdminUser = ananUserDetailService.isSysAdminUser();
+        int type = 2;
+        String code = "";
+        if (!sysAdminUser) {
+            type = 1;
+            AnanOrganizationEntity organizationEntity =
+                    organizationRepository.findById(organizId).orElseThrow(() -> new IllegalArgumentException(
+                            "未找到你的机构信息!"));
+            code = organizationEntity.getCode();
+        }
+
+        //分页查找
+        Page<AnanParameterEntity> page = parameterRepository.findPage(search, code, type, pageable);
+        return ResultUtils.success(page.getTotalElements(), page.getTotalPages(),
+                BeanUtil.copyCollectionProperties(page.getContent(), AnanParameterRespDto.class));
+    }
+
+    @Override
     @Transactional(rollbackFor = Exception.class)
     @CachePut(value = RedisConstant.ANAN_PARAMETER, key = "#root.target.getCacheKey(#result)")
     public AnanParameterRespDto create(AnanParameterCreateDto dto) {
@@ -68,6 +97,9 @@ public class ParameterServiceImpl implements ParameterService {
         Assert.notNull(id, "ID不能为空!");
         AnanParameterEntity cEntity = parameterRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("通过ID：" + id + "未能找到对应的数据!"));
+        if (!ananUserDetailService.isSysAdminUser()) {
+            Assert.isTrue(!StringUtils.isEmpty(cEntity.getScope()),"非超级管理员不能修改空作用域的参数!");
+        }
         String oldCacheKey = getCacheKey(cEntity);
         String newCacheKey = getCacheKey(dto.getType(), dto.getScope(), dto.getName());
 
@@ -77,8 +109,11 @@ public class ParameterServiceImpl implements ParameterService {
         //如果修改了type、scope、name则需要删除以前的缓存并设置新缓存
         if (!oldCacheKey.equals(newCacheKey)) {
             //新key设置旧值，需要发布以后才刷新缓存换成本次更新的新值
-            ananCacheManger.put(RedisConstant.ANAN_PARAMETER, newCacheKey,
-                    ananCacheManger.get(RedisConstant.ANAN_PARAMETER, oldCacheKey,AnanParameterRespDto.class));
+            AnanParameterRespDto respDto = ananCacheManger.get(RedisConstant.ANAN_PARAMETER, oldCacheKey, AnanParameterRespDto.class);
+            if (respDto != null) {
+                ananCacheManger.put(RedisConstant.ANAN_PARAMETER, newCacheKey,
+                        respDto);
+            }
             ananCacheManger.evict(RedisConstant.ANAN_PARAMETER, oldCacheKey);
         }
     }
@@ -92,6 +127,9 @@ public class ParameterServiceImpl implements ParameterService {
     @Transactional(rollbackFor = Exception.class)
     public void deleteById(Long id) {
         parameterRepository.findById(id).ifPresent(entity -> {
+            if (!ananUserDetailService.isSysAdminUser()) {
+                Assert.isTrue(!StringUtils.isEmpty(entity.getScope()),"非超级管理员不能删除空作用域的参数!");
+            }
             entity.setStatus(ParameterStatus.Deleted.getTypeValue());
             parameterRepository.save(entity);
         });
@@ -107,6 +145,9 @@ public class ParameterServiceImpl implements ParameterService {
     public void deleteByIds(Collection<Long> ids) {
         List<AnanParameterEntity> entities = parameterRepository.findAllById(ids);
         for (AnanParameterEntity entity : entities) {
+            if (!ananUserDetailService.isSysAdminUser()) {
+                Assert.isTrue(!StringUtils.isEmpty(entity.getScope()),"非超级管理员不能删除空作用域的参数!");
+            }
             entity.setStatus(ParameterStatus.Deleted.getTypeValue());
         }
         parameterRepository.saveAll(entities);
@@ -122,6 +163,9 @@ public class ParameterServiceImpl implements ParameterService {
     public void cancelDelete(Collection<Long> ids) {
         List<AnanParameterEntity> entities = parameterRepository.findAllById(ids);
         for (AnanParameterEntity entity : entities) {
+            if (!ananUserDetailService.isSysAdminUser()) {
+                Assert.isTrue(!StringUtils.isEmpty(entity.getScope()),"非超级管理员不能取消删除空作用域的参数!");
+            }
             entity.setStatus(ParameterStatus.Normal.getTypeValue());
         }
         parameterRepository.saveAll(entities);
@@ -181,6 +225,7 @@ public class ParameterServiceImpl implements ParameterService {
 
     private String getNearestScope(int type, String scope) {
         String rc = null;
+        //机构参数存在上下级关系，需要逐级向上查找
         OrganStrategy organStrategy = new OrganStrategy(ananUserDetailService);
         if (type == organStrategy.getType()) {
             Long id = Long.parseLong(scope);
@@ -189,6 +234,7 @@ public class ParameterServiceImpl implements ParameterService {
                 rc = entity.getPid() + "";
             }
         }
+        //用户参数、服务参数等直接返回null
         return rc;
     }
 
@@ -219,6 +265,9 @@ public class ParameterServiceImpl implements ParameterService {
     public Boolean applyChange(Long id) {
         AnanParameterEntity entity = parameterRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("该参数[" + id + "]已经不存在!"));
+        if (!ananUserDetailService.isSysAdminUser()) {
+            Assert.isTrue(!StringUtils.isEmpty(entity.getScope()),"非超级管理员不能发布空作用域的参数!");
+        }
         String cacheKey = getCacheKey(entity);
         boolean success;
         switch (Objects.requireNonNull(ParameterStatus.valueOf(entity.getStatus()))) {
@@ -251,7 +300,7 @@ public class ParameterServiceImpl implements ParameterService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Boolean applyChanges() {
+    public Boolean applyChangeAll() {
         List<AnanParameterEntity> entities = parameterRepository.findByStatusNot(0);
         Assert.isTrue(entities != null && entities.size() != 0, "没有更改过任何参数，不需要发布!");
         for (AnanParameterEntity entity : entities) {

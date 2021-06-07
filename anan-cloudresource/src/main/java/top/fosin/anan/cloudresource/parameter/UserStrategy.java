@@ -22,6 +22,6 @@ public class UserStrategy implements IParameterStrategy {
 
     @Override
     public String getScope() {
-        return ananUserDetailService.getAnanUserId() + "";
+        return ananUserDetailService.isSysAdminUser() ? null : ananUserDetailService.getAnanUserId() + "";
     }
 }

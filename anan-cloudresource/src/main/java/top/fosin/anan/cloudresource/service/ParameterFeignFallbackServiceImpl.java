@@ -10,6 +10,9 @@ import top.fosin.anan.cloudresource.dto.req.AnanParameterUpdateDto;
 import top.fosin.anan.cloudresource.dto.res.AnanParameterRespDto;
 import top.fosin.anan.cloudresource.service.inter.ParameterFeignService;
 
+import java.util.Collection;
+import java.util.List;
+
 /**
  * 远程调用权限服务
  *
@@ -51,14 +54,25 @@ public class ParameterFeignFallbackServiceImpl implements ParameterFeignService 
     }
 
     @Override
-    public ResponseEntity<Boolean> apply(Long id) {
+    public ResponseEntity<Boolean> applyChange(Long id) {
         log.error("feign 远程应用系统参数失败:{}", id);
         return null;
     }
 
     @Override
-    public ResponseEntity<Boolean> applys() {
+    public ResponseEntity<Boolean> applyChangeAll() {
         log.error("feign 远程应用所有系统参数失败");
         return null;
+    }
+
+    @Override
+    public ResponseEntity<Boolean> applyChangeAll(List<Long> ids) {
+        log.error("feign 远程应用所有系统参数失败:{}", ids);
+        return null;
+    }
+
+    @Override
+    public void cancelDelete(Collection<Long> ids) {
+        log.error("feign 远程取消删除系统参数失败:{}", ids);
     }
 }
