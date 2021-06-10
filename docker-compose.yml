@@ -21,7 +21,7 @@ services:
   #    ports:
   #      - "3306:3306"
   nacos-0:
-    image: nacos/nacos-server:1.4.1
+    image: nacos/nacos-server:1.4.2
     container_name: nacos-0
     hostname: nacos-0
     restart: always
