@@ -13,7 +13,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 系统支付发票表(AnanPayInvoice)响应DTO
+ * 支付发票表(AnanPayInvoice)响应DTO
  *
  * @author fosin
  * @date 2021-05-16 14:32:15
@@ -22,7 +22,7 @@ import java.util.Date;
 @Data
 @ToString
 @EqualsAndHashCode(callSuper = true)
-@ApiModel(value = "系统支付发票表响应DTO", description = "系统支付发票的响应DTO")
+@ApiModel(value = "支付发票表响应DTO", description = "支付发票的响应DTO")
 public class AnanPayInvoiceRespDto extends IdDto<Long> implements Serializable {
     private static final long serialVersionUID = -74851260485641159L;
     @ApiModelProperty(value = "支付ID", example = "Long")

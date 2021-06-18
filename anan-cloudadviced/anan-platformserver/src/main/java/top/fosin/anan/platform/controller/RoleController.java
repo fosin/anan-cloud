@@ -33,7 +33,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping(UrlPrefixConstant.ROLE)
-@Api(value = UrlPrefixConstant.ROLE, tags = "角色管理相关操作")
+@Api(value = UrlPrefixConstant.ROLE, tags = "角色管理")
 public class RoleController implements ISimpleController<AnanRoleRespDto, Long,
         AnanRoleCreateDto, AnanRoleRetrieveDto, AnanRoleUpdateDto> {
     private final RoleService roleService;

@@ -8,7 +8,7 @@ import top.fosin.anan.platform.dto.res.AnanPayRespDto;
 import top.fosin.anan.platform.entity.AnanPayEntity;
 
 /**
- * 系统支付表服务接口
+ * 支付表服务接口
  *
  * @author fosin
  * @date 2018-11-18 17:26:40

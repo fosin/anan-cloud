@@ -21,7 +21,7 @@ import java.io.Serializable;
 @Data
 @ToString
 @EqualsAndHashCode(callSuper = true)
-@ApiModel(value = "系统角色表更新DTO", description = "系统角色的更新DTO")
+@ApiModel(value = "角色表更新DTO", description = "角色的更新DTO")
 public class AnanRoleUpdateDto extends IdDto<Long> implements Serializable {
     private static final long serialVersionUID = -79223984618301733L;
 

@@ -25,7 +25,7 @@ import java.io.Serializable;
 @EqualsAndHashCode(callSuper = true)
 @DynamicUpdate
 @Table(name = "anan_user_permission")
-@ApiModel(value = "用于增减用户的单项权限，通常实在角色的基础上增减单项权限实体类", description = "系统用户权限的实体类")
+@ApiModel(value = "用于增减用户的单项权限，通常实在角色的基础上增减单项权限实体类", description = "用户权限的实体类")
 public class AnanUserPermissionEntity extends OrganizIdCreateEntity<Long> implements Serializable {
     private static final long serialVersionUID = 539048606557875412L;
 

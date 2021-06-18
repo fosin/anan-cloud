@@ -12,14 +12,14 @@ import top.fosin.anan.platform.dto.res.AnanPayRespDto;
 import top.fosin.anan.platform.service.inter.PayService;
 
 /**
- * 系统支付表控制层
+ * 支付表控制层
  *
  * @author fosin
  * @date 2018-11-18 17:50:28
  */
 @RestController
 @RequestMapping(UrlPrefixConstant.PAY)
-@Api(value = UrlPrefixConstant.PAY, tags = "系统支付管理")
+@Api(value = UrlPrefixConstant.PAY, tags = "支付管理")
 public class PayController implements ISimpleController<AnanPayRespDto, Long, AnanPayCreateDto, AnanPayRetrieveDto, AnanPayUpdateDto> {
     /**
      * 服务对象

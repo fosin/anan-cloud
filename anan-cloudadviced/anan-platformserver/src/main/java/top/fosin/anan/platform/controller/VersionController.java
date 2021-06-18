@@ -29,7 +29,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("v1/version")
-@Api(value = "v1/version", tags = "系统版本管理")
+@Api(value = "v1/version", tags = "版本管理")
 public class VersionController implements ISimpleController<AnanVersionRespDto,
         Long, AnanVersionCreateDto, AnanVersionRetrieveDto, AnanVersionUpdateDto> {
     /**

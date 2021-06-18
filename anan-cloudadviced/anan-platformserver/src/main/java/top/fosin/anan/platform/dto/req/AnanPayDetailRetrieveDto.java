@@ -11,7 +11,7 @@ import top.fosin.anan.model.module.SortRule;
 import java.io.Serializable;
 
 /**
- * 系统支付明细表(AnanPayDetail)查询DTO
+ * 支付明细表(AnanPayDetail)查询DTO
  *
  * @author fosin
  * @date 2019-02-19 18:14:31
@@ -19,7 +19,7 @@ import java.io.Serializable;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-@ApiModel(value = "系统支付明细表查询DTO", description = "系统支付明细的查询DTO")
+@ApiModel(value = "支付明细表查询DTO", description = "支付明细的查询DTO")
 public class AnanPayDetailRetrieveDto extends QuerySortRuleDto<LogicalQueryRule, SortRule> implements Serializable {
     private static final long serialVersionUID = 318623987516262809L;
 

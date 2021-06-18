@@ -17,7 +17,7 @@ import java.io.Serializable;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-@ApiModel(value = "系统机构表树形响应DTO", description = "系统机构的创建DTO")
+@ApiModel(value = "机构表树形响应DTO", description = "机构的创建DTO")
 public class AnanOrganizationTreeDto extends TreeDto<AnanOrganizationTreeDto, Long> implements Serializable {
     private static final long serialVersionUID = 389815217019211695L;
 

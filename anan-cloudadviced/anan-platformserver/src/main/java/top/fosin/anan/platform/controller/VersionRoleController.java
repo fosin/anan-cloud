@@ -30,7 +30,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping(UrlPrefixConstant.VERSION_ROLE)
-@Api(value = UrlPrefixConstant.VERSION_ROLE, tags = "系统版本角色管理")
+@Api(value = UrlPrefixConstant.VERSION_ROLE, tags = "版本角色管理")
 public class VersionRoleController implements ISimpleController<AnanVersionRoleRespDto,
         Long, AnanVersionRoleCreateDto, AnanVersionRoleRetrieveDto, AnanVersionRoleUpdateDto> {
     /**

@@ -28,7 +28,7 @@ import java.io.Serializable;
 @SQLDelete(sql = "update anan_dictionary_detail set deleted = 1 where id = ?")
 @Where(clause = "deleted = 0")
 @Table(name = "anan_dictionary_detail")
-@ApiModel(value = "系统通用字典明细表实体类", description = "系统通用字典明细的实体类")
+@ApiModel(value = "通用字典明细表实体类", description = "通用字典明细的实体类")
 public class DictionaryDetailEntity extends SoftDeleteEntity<Long> implements Serializable {
     private static final long serialVersionUID = -36972961529681499L;
 

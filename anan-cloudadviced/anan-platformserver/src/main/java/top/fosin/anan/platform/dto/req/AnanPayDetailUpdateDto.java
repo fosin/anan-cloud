@@ -11,7 +11,7 @@ import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
- * 系统支付明细表(AnanPayDetail)更新DTO
+ * 支付明细表(AnanPayDetail)更新DTO
  *
  * @author fosin
  * @date 2019-02-19 18:14:31
@@ -20,7 +20,7 @@ import java.io.Serializable;
 @Data
 @ToString
 @EqualsAndHashCode(callSuper = true)
-@ApiModel(value = "系统支付明细表更新DTO", description = "系统支付明细的更新DTO")
+@ApiModel(value = "支付明细表更新DTO", description = "支付明细的更新DTO")
 public class AnanPayDetailUpdateDto extends IdDto<Long> implements Serializable {
     private static final long serialVersionUID = -84127296586986403L;
 

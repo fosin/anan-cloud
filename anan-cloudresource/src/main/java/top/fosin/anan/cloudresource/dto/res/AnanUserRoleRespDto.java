@@ -19,7 +19,7 @@ import java.io.Serializable;
 @Data
 @ToString
 @EqualsAndHashCode(callSuper = true)
-@ApiModel(value = "系统用户角色表响应DTO", description = "系统用户角色的响应DTO")
+@ApiModel(value = "用户角色表响应DTO", description = "用户角色的响应DTO")
 public class AnanUserRoleRespDto extends IdDto<Long> implements Serializable {
     private static final long serialVersionUID = -30073122110919311L;
     @ApiModelProperty(value = "机构ID", example = "Long")

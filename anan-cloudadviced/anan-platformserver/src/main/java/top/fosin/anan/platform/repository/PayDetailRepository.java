@@ -6,7 +6,7 @@ import top.fosin.anan.jpa.repository.IJpaRepository;
 import top.fosin.anan.platform.entity.AnanPayDetailEntity;
 
 /**
- * 系统支付明细系统支付明细表数据库访问层
+ * 支付明细支付明细表数据库访问层
  *
  * @author fosin
  * @date 2018-11-18 17:26:40

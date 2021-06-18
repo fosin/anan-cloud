@@ -14,7 +14,7 @@ import javax.persistence.Table;
 import java.io.Serializable;
 
 /**
- * 系统支付明细表(AnanPayDetail)实体类
+ * 支付明细表(AnanPayDetail)实体类
  *
  * @author fosin
  * @date 2019-01-28 12:50:34
@@ -25,7 +25,7 @@ import java.io.Serializable;
 @Entity
 @DynamicUpdate
 @Table(name = "anan_pay_detail")
-@ApiModel(value = "系统支付明细表实体类", description = "系统支付明细的实体类")
+@ApiModel(value = "支付明细表实体类", description = "支付明细的实体类")
 public class AnanPayDetailEntity extends IdEntity<Long> implements Serializable {
     private static final long serialVersionUID = -23058131683087837L;
 

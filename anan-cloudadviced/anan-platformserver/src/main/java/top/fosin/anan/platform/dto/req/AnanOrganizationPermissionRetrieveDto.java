@@ -22,7 +22,7 @@ import java.util.Date;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-@ApiModel(value = "系统机构权限表查询DTO", description = "系统机构权限的查询DTO")
+@ApiModel(value = "机构权限表查询DTO", description = "机构权限的查询DTO")
 public class AnanOrganizationPermissionRetrieveDto extends QuerySortRuleDto<LogicalQueryRule, SortRule> implements Serializable {
     private static final long serialVersionUID = 258891966081450196L;
 

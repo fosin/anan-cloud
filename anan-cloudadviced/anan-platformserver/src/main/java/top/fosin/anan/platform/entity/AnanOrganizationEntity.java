@@ -25,7 +25,7 @@ import java.io.Serializable;
 @EqualsAndHashCode(callSuper = true)
 @DynamicUpdate
 @Table(name = "anan_organization")
-@ApiModel(value = "系统机构表实体类", description = "系统机构的实体类")
+@ApiModel(value = "机构表实体类", description = "机构的实体类")
 public class AnanOrganizationEntity extends PidCreateUpdateEntity<Long> implements Serializable {
     private static final long serialVersionUID = -27331190994806707L;
 

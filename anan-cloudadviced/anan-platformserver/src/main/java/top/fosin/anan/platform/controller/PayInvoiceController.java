@@ -11,14 +11,14 @@ import top.fosin.anan.platform.dto.res.AnanPayInvoiceRespDto;
 import top.fosin.anan.platform.service.inter.PayInvoiceService;
 
 /**
- * 系统支付发票表(table:anan_pay_invoice)表控制层
+ * 支付发票表(table:anan_pay_invoice)表控制层
  *
  * @author fosin
  * @date 2018-11-18 17:50:28
  */
 @RestController
 @RequestMapping("v1/invoice")
-@Api(value = "v1/invoice", tags = "系统支付发票管理")
+@Api(value = "v1/invoice", tags = "支付发票管理")
 public class PayInvoiceController implements ISimpleController<AnanPayInvoiceRespDto, Long, AnanPayInvoiceCreateDto, AnanPayInvoiceRetrieveDto, AnanPayInvoiceUpdateDto> {
     /**
      * 服务对象

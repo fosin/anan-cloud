@@ -25,7 +25,7 @@ import java.io.Serializable;
 @EqualsAndHashCode(callSuper = true)
 @DynamicUpdate
 @Table(name = "anan_permission")
-@ApiModel(value = "包含菜单、按钮两种权限实体类", description = "系统权限的实体类")
+@ApiModel(value = "包含菜单、按钮两种权限实体类", description = "权限的实体类")
 public class AnanPermissionEntity extends PidCreateUpdateEntity<Long> implements Serializable {
     private static final long serialVersionUID = -77218975959330473L;
 

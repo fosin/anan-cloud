@@ -23,7 +23,7 @@ import java.io.Serializable;
 @Entity
 @DynamicUpdate
 @Table(name = "anan_service")
-@ApiModel(value = "系统服务的实体类", description = "系统服务的实体类")
+@ApiModel(value = "服务的实体类", description = "服务的实体类")
 public class AnanServiceEntity extends CreateUpdateEntity<Long> implements Serializable {
     private static final long serialVersionUID = -94381323292251990L;
 

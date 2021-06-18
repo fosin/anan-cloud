@@ -17,7 +17,7 @@ import top.fosin.anan.cloudresource.dto.res.AnanUserRespDto;
 @Data
 @ToString
 @EqualsAndHashCode(callSuper = true)
-@ApiModel(value = "系统用户表响应DTO-带密码", description = "系统用户的响应DTO-带密码")
+@ApiModel(value = "用户表响应DTO-带密码", description = "用户的响应DTO-带密码")
 public class AnanUserRespPassDto extends AnanUserRespDto {
     private static final long serialVersionUID = -37913233914512798L;
 

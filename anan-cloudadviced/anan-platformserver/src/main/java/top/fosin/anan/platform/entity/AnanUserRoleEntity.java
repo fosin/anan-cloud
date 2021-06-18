@@ -22,7 +22,7 @@ import java.io.Serializable;
 @Entity
 @DynamicUpdate
 @Table(name = "anan_user_role")
-@ApiModel(value = "系统用户角色表实体类", description = "系统用户角色的实体类")
+@ApiModel(value = "用户角色表实体类", description = "用户角色的实体类")
 public class AnanUserRoleEntity extends OrganizIdCreateEntity<Long> implements Serializable {
     private static final long serialVersionUID = 907700875932623662L;
 

@@ -24,7 +24,7 @@ import java.util.Random;
  */
 @RestController
 @RequestMapping("v1/application")
-//@Api(value = "v1/application", tags = "应用集群相关信息获取", description = "用于应用集群相关的信息获取")
+//@Api(value = "v1/application", tags = "应用集群相关信息获取", description = "应用集群管理")
 public class ApplicationController {
     private final DiscoveryClient discoveryClient;
 

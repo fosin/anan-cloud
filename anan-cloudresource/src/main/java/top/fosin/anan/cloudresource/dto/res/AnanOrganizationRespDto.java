@@ -19,7 +19,7 @@ import java.io.Serializable;
 @Data
 @ToString
 @EqualsAndHashCode(callSuper = true)
-@ApiModel(value = "系统机构表响应DTO", description = "系统机构的响应DTO")
+@ApiModel(value = "机构表响应DTO", description = "机构的响应DTO")
 public class AnanOrganizationRespDto extends PidDto<Long> implements Serializable {
     private static final long serialVersionUID = 386478582280754215L;
     @ApiModelProperty(value = "顶级机构编码：一般指用户注册的机构，通常是一个集团组的最高级别机构，取值于id", example = "Long")

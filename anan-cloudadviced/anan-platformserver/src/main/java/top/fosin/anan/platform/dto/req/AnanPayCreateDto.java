@@ -11,14 +11,14 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 系统支付表(AnanPay)创建DTO
+ * 支付表(AnanPay)创建DTO
  *
  * @author fosin
  * @date 2019-02-19 18:14:31
  * @since 1.0.0
  */
 @Data
-@ApiModel(value = "系统支付表创建DTO", description = "系统支付的创建DTO")
+@ApiModel(value = "支付表创建DTO", description = "支付的创建DTO")
 public class AnanPayCreateDto implements Serializable {
     private static final long serialVersionUID = -68212718429188184L;
 

@@ -22,7 +22,7 @@ import java.util.Date;
 @Data
 @ToString
 @EqualsAndHashCode(callSuper = true)
-@ApiModel(value = "系统版本表响应DTO", description = "系统版本的响应DTO")
+@ApiModel(value = "版本表响应DTO", description = "版本的响应DTO")
 public class AnanVersionRespDto extends IdDto<Long> implements Serializable {
     private static final long serialVersionUID = 622911122470978997L;
     @ApiModelProperty(value = "版本名称", example = "String")

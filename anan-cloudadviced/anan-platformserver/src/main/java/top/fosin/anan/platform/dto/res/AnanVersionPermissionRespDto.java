@@ -19,7 +19,7 @@ import java.io.Serializable;
 @Data
 @ToString
 @EqualsAndHashCode(callSuper = true)
-@ApiModel(value = "系统版本权限表响应DTO", description = "系统版本权限的响应DTO")
+@ApiModel(value = "版本权限表响应DTO", description = "版本权限的响应DTO")
 public class AnanVersionPermissionRespDto extends IdDto<Long> implements Serializable {
     private static final long serialVersionUID = 632049633274326678L;
     @ApiModelProperty(value = "版本ID", example = "Long")

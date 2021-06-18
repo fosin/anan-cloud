@@ -20,7 +20,7 @@ import top.fosin.anan.platform.service.inter.ServiceService;
  */
 @RestController
 @RequestMapping(UrlPrefixConstant.SERVICE)
-@Api(value = UrlPrefixConstant.SERVICE, tags = "系统服务管理")
+@Api(value = UrlPrefixConstant.SERVICE, tags = "服务管理")
 public class ServiceController implements ISimpleController<AnanServiceRespDto, Long,
         AnanServiceCreateDto, AnanServiceRetrieveDto, AnanServiceUpdateDto> {
 

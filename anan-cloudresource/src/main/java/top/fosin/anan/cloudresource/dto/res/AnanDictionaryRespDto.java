@@ -19,7 +19,7 @@ import java.io.Serializable;
 @Data
 @ToString
 @EqualsAndHashCode(callSuper = true)
-@ApiModel(value = "系统通用字典表响应DTO", description = "系统通用字典的响应DTO")
+@ApiModel(value = "通用字典表响应DTO", description = "通用字典的响应DTO")
 public class AnanDictionaryRespDto extends IdDto<Long> implements Serializable {
     private static final long serialVersionUID = 611539841082760505L;
     @ApiModelProperty(value = "字典名称", example = "String")

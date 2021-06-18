@@ -12,14 +12,14 @@ import top.fosin.anan.platform.dto.res.AnanPayDetailRespDto;
 import top.fosin.anan.platform.service.inter.PayDetailService;
 
 /**
- * 系统支付明细表(table:anan_pay_detail)表控制层
+ * 支付明细表(table:anan_pay_detail)表控制层
  *
  * @author fosin
  * @date 2018-11-18 17:50:28
  */
 @RestController
 @RequestMapping(UrlPrefixConstant.PAY_DETAIL)
-@Api(value = UrlPrefixConstant.PAY_DETAIL, tags = "系统支付明细表管理")
+@Api(value = UrlPrefixConstant.PAY_DETAIL, tags = "支付明细表管理")
 public class PayDetailController implements ISimpleController<AnanPayDetailRespDto, Long, AnanPayDetailCreateDto, AnanPayDetailRetrieveDto, AnanPayDetailUpdateDto> {
     /**
      * 服务对象

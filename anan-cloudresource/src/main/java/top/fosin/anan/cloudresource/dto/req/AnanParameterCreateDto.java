@@ -18,7 +18,7 @@ import java.io.Serializable;
  * @since 1.0.0
  */
 @Data
-@ApiModel(value = "用于存放各种分类分组的个性化参数创建DTO", description = "系统通用参数的创建DTO")
+@ApiModel(value = "用于存放各种分类分组的个性化参数创建DTO", description = "通用参数的创建DTO")
 public class AnanParameterCreateDto implements Serializable {
     private static final long serialVersionUID = -73747092156452855L;
 

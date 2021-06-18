@@ -18,7 +18,7 @@ import java.io.Serializable;
  * @since 1.0.0
  */
 @Data
-@ApiModel(value = "包含菜单、按钮两种权限创建DTO", description = "系统权限的创建DTO")
+@ApiModel(value = "包含菜单、按钮两种权限创建DTO", description = "权限的创建DTO")
 public class AnanPermissionCreateDto implements Serializable {
     private static final long serialVersionUID = -64600322422519137L;
 

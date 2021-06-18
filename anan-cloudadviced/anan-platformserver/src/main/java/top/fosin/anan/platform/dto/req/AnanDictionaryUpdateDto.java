@@ -23,7 +23,7 @@ import java.io.Serializable;
 @Data
 @ToString
 @EqualsAndHashCode(callSuper = true)
-@ApiModel(value = "系统通用字典表更新DTO", description = "系统通用字典的更新DTO")
+@ApiModel(value = "通用字典表更新DTO", description = "通用字典的更新DTO")
 public class AnanDictionaryUpdateDto extends IdDto<Long> implements Serializable {
     private static final long serialVersionUID = -36896996810986681L;
 

@@ -24,7 +24,7 @@ import java.util.Date;
 @Data
 @ToString
 @EqualsAndHashCode(callSuper = true)
-@ApiModel(value = "系统用户表更新DTO", description = "系统用户的更新DTO")
+@ApiModel(value = "用户表更新DTO", description = "用户的更新DTO")
 public class AnanUserUpdateDto extends IdDto<Long> implements Serializable {
     private static final long serialVersionUID = -38545495043403316L;
 

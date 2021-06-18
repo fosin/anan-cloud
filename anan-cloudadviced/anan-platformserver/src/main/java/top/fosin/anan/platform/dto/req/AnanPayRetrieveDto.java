@@ -14,7 +14,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 系统支付表(AnanPay)查询DTO
+ * 支付表(AnanPay)查询DTO
  *
  * @author fosin
  * @date 2019-02-19 18:14:31
@@ -22,7 +22,7 @@ import java.util.Date;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-@ApiModel(value = "系统支付表查询DTO", description = "系统支付的查询DTO")
+@ApiModel(value = "支付表查询DTO", description = "支付的查询DTO")
 public class AnanPayRetrieveDto extends QuerySortRuleDto<LogicalQueryRule, SortRule> implements Serializable {
     private static final long serialVersionUID = 154780790568751897L;
 

@@ -26,7 +26,7 @@ import java.util.Date;
 @Entity
 @DynamicUpdate
 @Table(name = "anan_version")
-@ApiModel(value = "系统版本表实体类", description = "系统版本的实体类")
+@ApiModel(value = "版本表实体类", description = "版本的实体类")
 public class AnanVersionEntity extends CreateUpdateEntity<Long> implements Serializable {
     private static final long serialVersionUID = -54459367678395780L;
 

@@ -23,7 +23,7 @@ import java.io.Serializable;
 @Data
 @ToString
 @EqualsAndHashCode(callSuper = true)
-@ApiModel(value = "包含菜单、按钮两种权限更新DTO", description = "系统权限的更新DTO")
+@ApiModel(value = "包含菜单、按钮两种权限更新DTO", description = "权限的更新DTO")
 public class AnanPermissionUpdateDto extends IdDto<Long> implements Serializable {
     private static final long serialVersionUID = 900297768117165756L;
 

@@ -8,14 +8,14 @@ import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
- * 系统支付明细表(AnanPayDetail)创建DTO
+ * 支付明细表(AnanPayDetail)创建DTO
  *
  * @author fosin
  * @date 2019-02-19 18:14:31
  * @since 1.0.0
  */
 @Data
-@ApiModel(value = "系统支付明细表创建DTO", description = "系统支付明细的创建DTO")
+@ApiModel(value = "支付明细表创建DTO", description = "支付明细的创建DTO")
 public class AnanPayDetailCreateDto implements Serializable {
     private static final long serialVersionUID = -77766644338507723L;
 

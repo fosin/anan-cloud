@@ -28,7 +28,7 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = true)
 @DynamicUpdate
 @Table(name = "anan_parameter")
-@ApiModel(value = "用于存放各种分类分组的个性化参数实体类", description = "系统通用参数的实体类")
+@ApiModel(value = "用于存放各种分类分组的个性化参数实体类", description = "通用参数的实体类")
 public class AnanParameterEntity extends CreateUpdateEntity<Long> implements Serializable {
     private static final long serialVersionUID = 301081721804164443L;
 

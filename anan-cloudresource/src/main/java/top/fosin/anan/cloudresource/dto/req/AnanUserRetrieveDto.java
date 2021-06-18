@@ -22,7 +22,7 @@ import java.util.Date;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-@ApiModel(value = "系统用户表查询DTO", description = "系统用户的查询DTO")
+@ApiModel(value = "用户表查询DTO", description = "用户的查询DTO")
 public class AnanUserRetrieveDto extends QuerySortRuleDto<LogicalQueryRule, SortRule> implements Serializable {
     private static final long serialVersionUID = -24340282458700184L;
 

@@ -23,7 +23,7 @@ import java.io.Serializable;
 @Data
 @ToString
 @EqualsAndHashCode(callSuper = true)
-@ApiModel(value = "用于存放各种分类分组的个性化参数更新DTO", description = "系统通用参数的更新DTO")
+@ApiModel(value = "用于存放各种分类分组的个性化参数更新DTO", description = "通用参数的更新DTO")
 public class AnanParameterUpdateDto extends IdDto<Long> implements Serializable {
     private static final long serialVersionUID = -66906700665921741L;
 

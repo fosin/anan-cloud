@@ -6,7 +6,7 @@ import top.fosin.anan.platform.repository.PayInvoiceRepository;
 import top.fosin.anan.platform.service.inter.PayInvoiceService;
 
 /**
- * 系统支付发票表服务实现类
+ * 支付发票表服务实现类
  *
  * @author fosin
  * @date 2018-11-18 17:26:40

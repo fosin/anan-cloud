@@ -24,7 +24,7 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = true)
 @DynamicUpdate
 @Table(name = "anan_user")
-@ApiModel(value = "系统用户表实体类", description = "系统用户的实体类-包含软删除")
+@ApiModel(value = "用户表实体类", description = "用户的实体类-包含软删除")
 public class AnanUserAllEntity extends SoftDeleteEntity<Long> implements Serializable {
     private static final long serialVersionUID = 389805570221840757L;
 

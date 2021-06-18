@@ -6,7 +6,7 @@ import top.fosin.anan.platform.repository.PayDetailRepository;
 import top.fosin.anan.platform.service.inter.PayDetailService;
 
 /**
- * 系统支付明细系统支付明细表服务实现类
+ * 支付明细支付明细表服务实现类
  *
  * @author fosin
  * @date 2018-11-18 17:26:40

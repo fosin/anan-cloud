@@ -29,7 +29,7 @@ import java.util.Random;
  */
 @RestController
 @RequestMapping(UrlPrefixConstant.APPLICATION)
-@Api(value = UrlPrefixConstant.APPLICATION, tags = "用于应用集群相关的信息获取")
+@Api(value = UrlPrefixConstant.APPLICATION, tags = "应用集群管理")
 public class ApplicationController {
     private final DiscoveryClient discoveryClient;
 
