@@ -41,21 +41,21 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    @Cacheable(value = RedisConstant.ANAN_USER, key = "#usercode")
+    @Cacheable(value = RedisConstant.ANAN_USER, key = "#usercode", condition = "#result != null")
     @Transactional(readOnly = true)
     public AnanUserAuthDto findByUsercode(String usercode) {
-        Assert.notNull(usercode, "用户工号不能为空!");
         //该代码看似无用，其实是为了解决懒加载和缓存先后问题
         AnanUserEntity userEntity = userRepository.findByUsercode(usercode);
         if (userEntity != null) {
             List<AnanUserRoleEntity> userRoles = userEntity.getUserRoles();
             log.debug(userRoles.toString());
+            return userEntity.conert2Dto();
         }
-        return userEntity.conert2Dto();
+        return null;
     }
 
     @Override
-    @Cacheable(value = RedisConstant.ANAN_USER_ALL_PERMISSIONS, key = "#userId")
+    @Cacheable(value = RedisConstant.ANAN_USER_ALL_PERMISSIONS, key = "#userId", condition = "#result != null && #result.size() > 0")
     public List<AnanUserAllPermissionsRespDto> findByUserId(Long userId) {
         return BeanUtil.copyCollectionProperties(userAllPermissionsRepository.findByUserId(userId), AnanUserAllPermissionsRespDto.class);
     }

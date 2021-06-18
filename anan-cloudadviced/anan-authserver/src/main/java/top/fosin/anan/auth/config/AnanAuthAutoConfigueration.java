@@ -2,8 +2,10 @@ package top.fosin.anan.auth.config;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
@@ -19,6 +21,21 @@ import javax.sql.DataSource;
  */
 @Configuration
 public class AnanAuthAutoConfigueration {
+
+    /**
+     * 加载国际化认证提示信息
+     *
+     * @return ReloadableResourceBundleMessageSource
+     */
+    @Bean
+    public MessageSource messageSource() {
+        ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
+        //加载org/springframework/security包下的中文提示信息 配置文件
+        messageSource.setBasename("classpath:messages");
+        messageSource.setDefaultEncoding("UTF-8");
+        return messageSource;
+    }
+
     @LoadBalanced
     @Bean
     public RestTemplate restTemplate() {

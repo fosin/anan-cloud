@@ -18,12 +18,15 @@ import java.util.HashSet;
  * @date 2018.7.9
  */
 public class AnanUserDetail extends User {
+    private static final long serialVersionUID = -8649502953562240792L;
     @Getter
     private AnanUserAuthDto user;
     @Getter
     private AnanClient ananClient;
 
-    //该无参构造函数用于Map转Bean时使用
+    /**
+     * 该无参构造函数用于Map转Bean时使用
+     */
     public AnanUserDetail() {
         super("dfgsdfgdsgr", "sdfgergergerg", new HashSet<>());
     }
