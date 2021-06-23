@@ -7,7 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
 import top.fosin.anan.core.util.DateTimeUtil;
-import top.fosin.anan.model.dto.IdDto;
+import top.fosin.anan.model.dto.IdCreateUpdateDto;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -23,7 +23,7 @@ import java.util.Date;
 @ToString
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value = "版本表响应DTO", description = "版本的响应DTO")
-public class AnanVersionRespDto extends IdDto<Long> implements Serializable {
+public class AnanVersionRespDto extends IdCreateUpdateDto<Long> implements Serializable {
     private static final long serialVersionUID = 622911122470978997L;
     @ApiModelProperty(value = "版本名称", example = "String")
     private String name;

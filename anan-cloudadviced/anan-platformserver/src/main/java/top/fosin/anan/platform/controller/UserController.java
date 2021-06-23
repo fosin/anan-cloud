@@ -15,7 +15,7 @@ import top.fosin.anan.core.exception.AnanControllerException;
 import top.fosin.anan.core.exception.AnanServiceException;
 import top.fosin.anan.model.controller.BaseController;
 import top.fosin.anan.model.controller.ISimpleController;
-
+import top.fosin.anan.model.dto.IdDto;
 import top.fosin.anan.model.dto.TreeDto;
 import top.fosin.anan.platform.dto.req.AnanUserCreateDto;
 import top.fosin.anan.platform.dto.req.AnanUserPermissionCreateDto;
@@ -106,7 +106,7 @@ public class UserController extends BaseController implements ISimpleController<
     }
 
     @ApiOperation(value = "根据用户ID重置用户密码", notes = "重置后的密码或是固定密码或是随机密码，具体由机构参数UserResetPasswordType决定")
-    @ApiImplicitParam(name = TreeDto.ID_NAME, value = "用户ID,取值于AnanUserEntity.id",
+    @ApiImplicitParam(name = IdDto.ID_NAME, value = "用户ID,取值于AnanUserEntity.id",
             required = true, dataTypeClass = Long.class, paramType = "path")
     @PostMapping("/resetPassword/{id}")
     public ResponseEntity<String> resetPassword(@Min(1) @PathVariable("id") Long id) {
@@ -144,13 +144,22 @@ public class UserController extends BaseController implements ISimpleController<
         return ResponseEntity.ok(roleService.findOtherUsersByRoleId(userId));
     }
 
-    @PostMapping({"/childList/organizId/{organizId}/{status}"})
+    @PostMapping({"/list/organizId/{organizId}/{status}"})
     @ApiOperation("根据机构ID查询该机构及子机构的所有用户")
     @ApiImplicitParam(name = "organizId", value = "机构ID",
             required = true, dataTypeClass = Long.class, paramType = "path")
     public ResponseEntity<List<AnanUserRespDto>> listByOrganizId(@NotNull @PathVariable("organizId") Long organizId,
                                                                  @NotNull @PathVariable("status") Integer status) {
         return ResponseEntity.ok(userService.listByOrganizId(organizId, status));
+    }
+
+    @PostMapping({"/list/topId/{topId}/{status}"})
+    @ApiOperation("根据顶级机构ID查询其下所有用户")
+    @ApiImplicitParam(name = "topId", value = "顶级机构ID，传0表示默认查询当前用户的顶级机构ID",
+            required = true, dataTypeClass = Long.class, paramType = "path")
+    public ResponseEntity<List<AnanUserRespDto>> listAllChildByTopId(@NotNull @PathVariable("topId") Long topId,
+                                                                     @NotNull @PathVariable("status") Integer status ) {
+        return ResponseEntity.ok(userService.listAllChildByTopId(topId, status));
     }
 
     @Override

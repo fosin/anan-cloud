@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import top.fosin.anan.model.dto.IdDto;
+import top.fosin.anan.model.dto.IdCreateUpdateDto;
 
 import java.io.Serializable;
 
@@ -20,7 +20,7 @@ import java.io.Serializable;
 @ToString
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value = "通用字典明细表响应DTO", description = "通用字典明细的响应DTO")
-public class AnanDictionaryDetailRespDto extends IdDto<Long> implements Serializable {
+public class AnanDictionaryDetailRespDto extends IdCreateUpdateDto<Long> implements Serializable {
     private static final long serialVersionUID = -17948374006352783L;
     @ApiModelProperty(value = "字典明细键，不能重复，字典内明细项唯一代码", example = "Long")
     private Long name;

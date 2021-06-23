@@ -361,8 +361,24 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<AnanUserRespDto> listAllChildByTopId(Long topId, Integer status) {
+        List<AnanUserEntity> entities;
+        if (ananUserDetailService.isUserRequest() && ananUserDetailService.hasSysAdminRole()) {
+            entities = userRepository.findAll();
+        } else {
+            if (topId < 1) {
+                AnanOrganizationEntity organiz =
+                        organizationRepository.findById(ananUserDetailService.getAnanOrganizId()).orElseThrow(() -> new IllegalArgumentException("根据传入的机构编码没有找到任何数据!"));
+                topId = organiz.getTopId();
+            }
+            entities = userRepository.findByTopIdAndStatus(topId,status);
+            entities.add(userRepository.getOne(SystemConstant.ANAN_USER_ID));
+        }
+        return BeanUtil.copyCollectionProperties(entities, AnanUserRespDto.class);
+    }
+
+    @Override
     public List<AnanUserRespDto> listByOrganizId(Long organizId, Integer status) {
-        Assert.notNull(organizId, "机构ID不能为空!");
         List<AnanUserEntity> entities;
         if (ananUserDetailService.isUserRequest() && ananUserDetailService.hasSysAdminRole()) {
             entities = userRepository.findAll();

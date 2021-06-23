@@ -18,4 +18,5 @@ public interface OrganizationRepository extends IJpaRepository<AnanOrganizationE
 
     List<AnanOrganizationEntity> findByTopIdAndCodeStartingWithOrderByCodeAsc(Long topId, String code);
 
+    List<AnanOrganizationEntity> findByTopId(Long topId);
 }

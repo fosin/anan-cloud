@@ -32,4 +32,6 @@ public interface UserService extends ISimpleJpaService<AnanUserEntity,
     List<AnanUserRespDto> findRoleUsersByRoleId(Long roleId);
 
     List<AnanUserRespDto> listByOrganizId(Long organizId, Integer status);
+
+    List<AnanUserRespDto> listAllChildByTopId(Long topId, Integer status);
 }

@@ -33,8 +33,11 @@ public interface UserFeignService {
     @PostMapping("/usercode/{usercode}")
     ResponseEntity<AnanUserRespDto> findOneByUsercode(@PathVariable("usercode") String usercode);
 
-    @PostMapping("/childList/organizId/{organizId}/{status}")
+    @PostMapping("/list/organizId/{organizId}/{status}")
     ResponseEntity<List<AnanUserRespDto>> listByOrganizId(@PathVariable("organizId") Long organizId, @PathVariable("status") Integer status);
 
+    @PostMapping("/list/topId/{topId}/{status}")
+    ResponseEntity<List<AnanUserRespDto>> listByTopId(@PathVariable("topId") Long topId,
+                                                      @PathVariable("status") Integer status);
 }
 

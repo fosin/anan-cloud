@@ -44,4 +44,10 @@ public class UserFeignFallbackServiceImpl implements UserFeignService {
         log.error("feign 远程查询机构及子机构下的用户信息失败:{}", organizId);
         return null;
     }
+
+    @Override
+    public ResponseEntity<List<AnanUserRespDto>> listByTopId(Long topId, Integer status) {
+        log.error("feign 远程查询顶级机构下的用户信息失败:{}", topId);
+        return null;
+    }
 }

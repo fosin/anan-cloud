@@ -100,7 +100,7 @@ public class RoleController implements ISimpleController<AnanRoleRespDto, Long,
         return ResponseEntity.ok(userService.findOtherUsersByRoleId(roleId));
     }
 
-    @PostMapping({"/childList/organizId/{organizId}"})
+    @PostMapping({"/list/organizId/{organizId}"})
     @ApiOperation("根据机构ID查询该机构及子机构的所有角色")
     @ApiImplicitParam(name = "organizId", value = "机构ID",
             required = true, dataTypeClass = Long.class, paramType = "path")
