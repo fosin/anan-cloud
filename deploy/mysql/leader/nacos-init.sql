@@ -3,7 +3,6 @@
 -- Host: localhost    Database: nacos
 -- ------------------------------------------------------
 -- Server version	5.7.26-log
-
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
@@ -14,19 +13,17 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-
 --
 -- Current Database: `nacos`
 --
-
-CREATE DATABASE /*!32312 IF NOT EXISTS*/ `nacos` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci */;
-
+CREATE DATABASE
+/*!32312 IF NOT EXISTS*/
+`nacos`
+/*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci */;
 USE `nacos`;
-
 --
 -- Table structure for table `config_info`
 --
-
 DROP TABLE IF EXISTS `config_info`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -48,18 +45,39 @@ CREATE TABLE `config_info` (
   `type` varchar(64) COLLATE utf8_bin DEFAULT NULL,
   `c_schema` text COLLATE utf8_bin,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_configinfo_datagrouptenant` (`data_id`,`group_id`,`tenant_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='config_info';
+  UNIQUE KEY `uk_configinfo_datagrouptenant` (`data_id`, `group_id`, `tenant_id`)
+) ENGINE = InnoDB AUTO_INCREMENT = 44 DEFAULT CHARSET = utf8 COLLATE = utf8_bin COMMENT = 'config_info';
 /*!40101 SET character_set_client = @saved_cs_client */;
-
 --
 -- Dumping data for table `config_info`
 --
-
 LOCK TABLES `config_info` WRITE;
 /*!40000 ALTER TABLE `config_info` DISABLE KEYS */;
-INSERT INTO `config_info` (`id`, `data_id`, `group_id`, `content`, `md5`, `gmt_create`, `gmt_modified`, `src_user`, `src_ip`, `app_name`, `tenant_id`, `c_desc`, `c_use`, `effect`, `type`, `c_schema`)
-VALUES (4, 'anan-authserver.yaml', 'DEFAULT_GROUP', 'server:
+INSERT INTO
+  `config_info` (
+    `id`,
+    `data_id`,
+    `group_id`,
+    `content`,
+    `md5`,
+    `gmt_create`,
+    `gmt_modified`,
+    `src_user`,
+    `src_ip`,
+    `app_name`,
+    `tenant_id`,
+    `c_desc`,
+    `c_use`,
+    `effect`,
+    `type`,
+    `c_schema`
+  )
+VALUES
+  (
+    4,
+    'anan-authserver.yaml',
+    'DEFAULT_GROUP',
+    'server:
   port: 51400
 spring:
   session:
@@ -145,9 +163,45 @@ anan:
     cache:
       manager: false
     session:
-      manager: true', 'eca38d64f1ee85c0eb52633d48e80dbc', '2019-11-10 17:23:05', '2020-03-15 18:35:10', null, '192.168.137.1', '', '6138f451-2d5b-42fe-a793-df3744d7257c', 'null', 'null', 'null', 'yaml', 'null');
-INSERT INTO `config_info` (`id`, `data_id`, `group_id`, `content`, `md5`, `gmt_create`, `gmt_modified`, `src_user`, `src_ip`, `app_name`, `tenant_id`, `c_desc`, `c_use`, `effect`, `type`, `c_schema`)
-VALUES (7, 'application.yaml', 'DEFAULT_GROUP', 'logging:
+      manager: true',
+    'eca38d64f1ee85c0eb52633d48e80dbc',
+    '2019-11-10 17:23:05',
+    '2020-03-15 18:35:10',
+    null,
+    '192.168.137.1',
+    '',
+    '6138f451-2d5b-42fe-a793-df3744d7257c',
+    'null',
+    'null',
+    'null',
+    'yaml',
+    'null'
+  );
+INSERT INTO
+  `config_info` (
+    `id`,
+    `data_id`,
+    `group_id`,
+    `content`,
+    `md5`,
+    `gmt_create`,
+    `gmt_modified`,
+    `src_user`,
+    `src_ip`,
+    `app_name`,
+    `tenant_id`,
+    `c_desc`,
+    `c_use`,
+    `effect`,
+    `type`,
+    `c_schema`
+  )
+VALUES
+  (
+    7,
+    'application.yaml',
+    'DEFAULT_GROUP',
+    'logging:
   # pattern:
   #   file: ''%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{50} %msg%n%throwablen%''
   #   console: ''%highlight(%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level) %cyan(%logger{50}) %highlight(%msg%n%throwablen%)''
@@ -373,9 +427,45 @@ eureka:
       enabled: true # 开启健康检查（需要spring-boot-starter-actuator依赖）
   instance:
     lease-expiration-duration-in-seconds: 10 # 续约到期时间（默认90秒）
-    lease-renewal-interval-in-seconds: 5 # 续约更新时间间隔（默认30秒）', '626830ef58e9b827b03feeda3492d01f', '2019-11-10 17:39:32', '2019-11-22 21:28:31', null, '192.168.137.1', '', '6138f451-2d5b-42fe-a793-df3744d7257c', '服务公用设置', 'null', 'null', 'yaml', 'null');
-INSERT INTO `config_info` (`id`, `data_id`, `group_id`, `content`, `md5`, `gmt_create`, `gmt_modified`, `src_user`, `src_ip`, `app_name`, `tenant_id`, `c_desc`, `c_use`, `effect`, `type`, `c_schema`)
-VALUES (13, 'anan-adminserver.yaml', 'DEFAULT_GROUP', 'server:
+    lease-renewal-interval-in-seconds: 5 # 续约更新时间间隔（默认30秒）',
+    '626830ef58e9b827b03feeda3492d01f',
+    '2019-11-10 17:39:32',
+    '2019-11-22 21:28:31',
+    null,
+    '192.168.137.1',
+    '',
+    '6138f451-2d5b-42fe-a793-df3744d7257c',
+    '服务公用设置',
+    'null',
+    'null',
+    'yaml',
+    'null'
+  );
+INSERT INTO
+  `config_info` (
+    `id`,
+    `data_id`,
+    `group_id`,
+    `content`,
+    `md5`,
+    `gmt_create`,
+    `gmt_modified`,
+    `src_user`,
+    `src_ip`,
+    `app_name`,
+    `tenant_id`,
+    `c_desc`,
+    `c_use`,
+    `effect`,
+    `type`,
+    `c_schema`
+  )
+VALUES
+  (
+    13,
+    'anan-adminserver.yaml',
+    'DEFAULT_GROUP',
+    'server:
   port: 51700
 turbine:
   cluster-name-expression: new String(''default'')
@@ -400,10 +490,46 @@ spring:
           to: "28860823@qq.com"
           template: "classpath:/META-INF/spring-boot-admin-server/mail/status-changed.html"
           ignore-changes: "UNKNOWN:UP"
-          enabled: true', 'e21f85d17b34ccfdbc9bf544af884e61', '2019-11-10 18:17:25', '2020-02-26 22:12:50', null, '192.168.137.1', '', '6138f451-2d5b-42fe-a793-df3744d7257c', 'null', 'null', 'null', 'yaml', 'null');
-INSERT INTO `config_info` (`id`, `data_id`, `group_id`, `content`, `md5`, `gmt_create`, `gmt_modified`, `src_user`, `src_ip`, `app_name`, `tenant_id`, `c_desc`, `c_use`, `effect`, `type`, `c_schema`)
-VALUES (14, 'anan-cloudgateway.yaml', 'DEFAULT_GROUP', 'server:
-  port: 9000
+          enabled: true',
+    'e21f85d17b34ccfdbc9bf544af884e61',
+    '2019-11-10 18:17:25',
+    '2020-02-26 22:12:50',
+    null,
+    '192.168.137.1',
+    '',
+    '6138f451-2d5b-42fe-a793-df3744d7257c',
+    'null',
+    'null',
+    'null',
+    'yaml',
+    'null'
+  );
+INSERT INTO
+  `config_info` (
+    `id`,
+    `data_id`,
+    `group_id`,
+    `content`,
+    `md5`,
+    `gmt_create`,
+    `gmt_modified`,
+    `src_user`,
+    `src_ip`,
+    `app_name`,
+    `tenant_id`,
+    `c_desc`,
+    `c_use`,
+    `effect`,
+    `type`,
+    `c_schema`
+  )
+VALUES
+  (
+    14,
+    'anan-cloudgateway.yaml',
+    'DEFAULT_GROUP',
+    'server:
+  port: 51900
 spring:
   cloud:
     gateway:
@@ -505,10 +631,46 @@ anan:
     cache:
       manager: false
     session:
-      manager: true', '55b6239e5aed6a522b16d48872a0eedb', '2019-11-10 18:17:51', '2020-03-15 18:36:42', null, '192.168.137.1', '', '6138f451-2d5b-42fe-a793-df3744d7257c', 'null', 'null', 'null', 'yaml', 'null');
-INSERT INTO `config_info` (`id`, `data_id`, `group_id`, `content`, `md5`, `gmt_create`, `gmt_modified`, `src_user`, `src_ip`, `app_name`, `tenant_id`, `c_desc`, `c_use`, `effect`, `type`, `c_schema`)
-VALUES (18, 'anan-zuulgateway.yaml', 'DEFAULT_GROUP', 'server:
-  port: 9000
+      manager: true',
+    '55b6239e5aed6a522b16d48872a0eedb',
+    '2019-11-10 18:17:51',
+    '2020-03-15 18:36:42',
+    null,
+    '192.168.137.1',
+    '',
+    '6138f451-2d5b-42fe-a793-df3744d7257c',
+    'null',
+    'null',
+    'null',
+    'yaml',
+    'null'
+  );
+INSERT INTO
+  `config_info` (
+    `id`,
+    `data_id`,
+    `group_id`,
+    `content`,
+    `md5`,
+    `gmt_create`,
+    `gmt_modified`,
+    `src_user`,
+    `src_ip`,
+    `app_name`,
+    `tenant_id`,
+    `c_desc`,
+    `c_use`,
+    `effect`,
+    `type`,
+    `c_schema`
+  )
+VALUES
+  (
+    18,
+    'anan-zuulgateway.yaml',
+    'DEFAULT_GROUP',
+    'server:
+  port: 51900
 zuul:
   add-host-header: true
   add-proxy-headers: true
@@ -648,8 +810,8 @@ hystrix:
 #    client:
 #      client-id: anan
 #      client-secret: local
-##      access-token-uri: http://localhost:9000/auth/oauth/token
-##      user-authorization-uri: http://localhost:9000/auth/oauth/authorize
+##      access-token-uri: http://localhost:51900/auth/oauth/token
+##      user-authorization-uri: http://localhost:51900/auth/oauth/authorize
 #      access-token-uri: http://localhost:51400/oauth/token
 #      user-authorization-uri: http://localhost:51400/oauth/authorize
 ##      auto-approve-scopes:
@@ -660,7 +822,7 @@ hystrix:
 ##      scope:
 #      authorized-grant-types: authorization_code
 ##      use-current-uri: false
-##      registered-redirect-uri: http://localhost:9000/platform/login
+##      registered-redirect-uri: http://localhost:51900/platform/login
 ##      client-authentication-scheme: form
 anan:
   security:
@@ -730,9 +892,45 @@ anan:
     cache:
       manager: false
     session:
-      manager: true', 'b7353d61807d909009a90b70e0a7114e', '2019-11-10 20:04:04', '2020-03-15 18:36:23', null, '192.168.137.1', '', '6138f451-2d5b-42fe-a793-df3744d7257c', 'null', 'null', 'null', 'yaml', 'null');
-INSERT INTO `config_info` (`id`, `data_id`, `group_id`, `content`, `md5`, `gmt_create`, `gmt_modified`, `src_user`, `src_ip`, `app_name`, `tenant_id`, `c_desc`, `c_use`, `effect`, `type`, `c_schema`)
-VALUES (20, 'anan-platformserver.yaml', 'DEFAULT_GROUP', 'server:
+      manager: true',
+    'b7353d61807d909009a90b70e0a7114e',
+    '2019-11-10 20:04:04',
+    '2020-03-15 18:36:23',
+    null,
+    '192.168.137.1',
+    '',
+    '6138f451-2d5b-42fe-a793-df3744d7257c',
+    'null',
+    'null',
+    'null',
+    'yaml',
+    'null'
+  );
+INSERT INTO
+  `config_info` (
+    `id`,
+    `data_id`,
+    `group_id`,
+    `content`,
+    `md5`,
+    `gmt_create`,
+    `gmt_modified`,
+    `src_user`,
+    `src_ip`,
+    `app_name`,
+    `tenant_id`,
+    `c_desc`,
+    `c_use`,
+    `effect`,
+    `type`,
+    `c_schema`
+  )
+VALUES
+  (
+    20,
+    'anan-platformserver.yaml',
+    'DEFAULT_GROUP',
+    'server:
   port: 51500
 feign:
 #  compression: #开启这个设置比较耗CPU
@@ -766,342 +964,331 @@ anan:
 #    description: Oauth2.0令牌信息,格式例如：Bearer 58cb49cd-be59-4706-bbc5-9c41fc3cbef4
 #    modelRef: string
 #    parameterType: header
-#    required: true', 'c859d1296638e9cd9795a0bb74220ee2', '2019-11-10 20:16:42', '2020-03-15 18:35:53', null, '192.168.137.1', '', '6138f451-2d5b-42fe-a793-df3744d7257c', 'null', 'null', 'null', 'yaml', 'null');
-/*!40000 ALTER TABLE `config_info` ENABLE KEYS */;
+#    required: true',
+    'c859d1296638e9cd9795a0bb74220ee2',
+    '2019-11-10 20:16:42',
+    '2020-03-15 18:35:53',
+    null,
+    '192.168.137.1',
+    '',
+    '6138f451-2d5b-42fe-a793-df3744d7257c',
+    'null',
+    'null',
+    'null',
+    'yaml',
+    'null'
+  );
+  /*!40000 ALTER TABLE `config_info` ENABLE KEYS */;
 UNLOCK TABLES;
-
 --
--- Table structure for table `config_info_aggr`
---
-
-DROP TABLE IF EXISTS `config_info_aggr`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+  -- Table structure for table `config_info_aggr`
+  --
+  DROP TABLE IF EXISTS `config_info_aggr`;
+  /*!40101 SET @saved_cs_client     = @@character_set_client */;
+  /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `config_info_aggr` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `data_id` varchar(255) COLLATE utf8_bin NOT NULL COMMENT 'data_id',
-  `group_id` varchar(255) COLLATE utf8_bin NOT NULL COMMENT 'group_id',
-  `datum_id` varchar(255) COLLATE utf8_bin NOT NULL COMMENT 'datum_id',
-  `content` longtext COLLATE utf8_bin NOT NULL COMMENT '内容',
-  `gmt_modified` datetime NOT NULL COMMENT '修改时间',
-  `app_name` varchar(128) COLLATE utf8_bin DEFAULT NULL,
-  `tenant_id` varchar(128) COLLATE utf8_bin DEFAULT '' COMMENT '租户字段',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_configinfoaggr_datagrouptenantdatum` (`data_id`,`group_id`,`tenant_id`,`datum_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='增加租户字段';
-/*!40101 SET character_set_client = @saved_cs_client */;
-
+    `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'id',
+    `data_id` varchar(255) COLLATE utf8_bin NOT NULL COMMENT 'data_id',
+    `group_id` varchar(255) COLLATE utf8_bin NOT NULL COMMENT 'group_id',
+    `datum_id` varchar(255) COLLATE utf8_bin NOT NULL COMMENT 'datum_id',
+    `content` longtext COLLATE utf8_bin NOT NULL COMMENT '内容',
+    `gmt_modified` datetime NOT NULL COMMENT '修改时间',
+    `app_name` varchar(128) COLLATE utf8_bin DEFAULT NULL,
+    `tenant_id` varchar(128) COLLATE utf8_bin DEFAULT '' COMMENT '租户字段',
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `uk_configinfoaggr_datagrouptenantdatum` (`data_id`, `group_id`, `tenant_id`, `datum_id`)
+  ) ENGINE = InnoDB DEFAULT CHARSET = utf8 COLLATE = utf8_bin COMMENT = '增加租户字段';
+  /*!40101 SET character_set_client = @saved_cs_client */;
 --
--- Dumping data for table `config_info_aggr`
---
-
-LOCK TABLES `config_info_aggr` WRITE;
-/*!40000 ALTER TABLE `config_info_aggr` DISABLE KEYS */;
-/*!40000 ALTER TABLE `config_info_aggr` ENABLE KEYS */;
+  -- Dumping data for table `config_info_aggr`
+  --
+  LOCK TABLES `config_info_aggr` WRITE;
+  /*!40000 ALTER TABLE `config_info_aggr` DISABLE KEYS */;
+  /*!40000 ALTER TABLE `config_info_aggr` ENABLE KEYS */;
 UNLOCK TABLES;
-
 --
--- Table structure for table `config_info_beta`
---
-
-DROP TABLE IF EXISTS `config_info_beta`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+  -- Table structure for table `config_info_beta`
+  --
+  DROP TABLE IF EXISTS `config_info_beta`;
+  /*!40101 SET @saved_cs_client     = @@character_set_client */;
+  /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `config_info_beta` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `data_id` varchar(255) COLLATE utf8_bin NOT NULL COMMENT 'data_id',
-  `group_id` varchar(128) COLLATE utf8_bin NOT NULL COMMENT 'group_id',
-  `app_name` varchar(128) COLLATE utf8_bin DEFAULT NULL COMMENT 'app_name',
-  `content` longtext COLLATE utf8_bin NOT NULL COMMENT 'content',
-  `beta_ips` varchar(1024) COLLATE utf8_bin DEFAULT NULL COMMENT 'betaIps',
-  `md5` varchar(32) COLLATE utf8_bin DEFAULT NULL COMMENT 'md5',
-  `gmt_create` datetime NOT NULL DEFAULT '2010-05-05 00:00:00' COMMENT '创建时间',
-  `gmt_modified` datetime NOT NULL DEFAULT '2010-05-05 00:00:00' COMMENT '修改时间',
-  `src_user` text COLLATE utf8_bin COMMENT 'source user',
-  `src_ip` varchar(20) COLLATE utf8_bin DEFAULT NULL COMMENT 'source ip',
-  `tenant_id` varchar(128) COLLATE utf8_bin DEFAULT '' COMMENT '租户字段',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_configinfobeta_datagrouptenant` (`data_id`,`group_id`,`tenant_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='config_info_beta';
-/*!40101 SET character_set_client = @saved_cs_client */;
-
+    `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'id',
+    `data_id` varchar(255) COLLATE utf8_bin NOT NULL COMMENT 'data_id',
+    `group_id` varchar(128) COLLATE utf8_bin NOT NULL COMMENT 'group_id',
+    `app_name` varchar(128) COLLATE utf8_bin DEFAULT NULL COMMENT 'app_name',
+    `content` longtext COLLATE utf8_bin NOT NULL COMMENT 'content',
+    `beta_ips` varchar(1024) COLLATE utf8_bin DEFAULT NULL COMMENT 'betaIps',
+    `md5` varchar(32) COLLATE utf8_bin DEFAULT NULL COMMENT 'md5',
+    `gmt_create` datetime NOT NULL DEFAULT '2010-05-05 00:00:00' COMMENT '创建时间',
+    `gmt_modified` datetime NOT NULL DEFAULT '2010-05-05 00:00:00' COMMENT '修改时间',
+    `src_user` text COLLATE utf8_bin COMMENT 'source user',
+    `src_ip` varchar(20) COLLATE utf8_bin DEFAULT NULL COMMENT 'source ip',
+    `tenant_id` varchar(128) COLLATE utf8_bin DEFAULT '' COMMENT '租户字段',
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `uk_configinfobeta_datagrouptenant` (`data_id`, `group_id`, `tenant_id`)
+  ) ENGINE = InnoDB DEFAULT CHARSET = utf8 COLLATE = utf8_bin COMMENT = 'config_info_beta';
+  /*!40101 SET character_set_client = @saved_cs_client */;
 --
--- Dumping data for table `config_info_beta`
---
-
-LOCK TABLES `config_info_beta` WRITE;
-/*!40000 ALTER TABLE `config_info_beta` DISABLE KEYS */;
-/*!40000 ALTER TABLE `config_info_beta` ENABLE KEYS */;
+  -- Dumping data for table `config_info_beta`
+  --
+  LOCK TABLES `config_info_beta` WRITE;
+  /*!40000 ALTER TABLE `config_info_beta` DISABLE KEYS */;
+  /*!40000 ALTER TABLE `config_info_beta` ENABLE KEYS */;
 UNLOCK TABLES;
-
 --
--- Table structure for table `config_info_tag`
---
-
-DROP TABLE IF EXISTS `config_info_tag`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+  -- Table structure for table `config_info_tag`
+  --
+  DROP TABLE IF EXISTS `config_info_tag`;
+  /*!40101 SET @saved_cs_client     = @@character_set_client */;
+  /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `config_info_tag` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `data_id` varchar(255) COLLATE utf8_bin NOT NULL COMMENT 'data_id',
-  `group_id` varchar(128) COLLATE utf8_bin NOT NULL COMMENT 'group_id',
-  `tenant_id` varchar(128) COLLATE utf8_bin DEFAULT '' COMMENT 'tenant_id',
-  `tag_id` varchar(128) COLLATE utf8_bin NOT NULL COMMENT 'tag_id',
-  `app_name` varchar(128) COLLATE utf8_bin DEFAULT NULL COMMENT 'app_name',
-  `content` longtext COLLATE utf8_bin NOT NULL COMMENT 'content',
-  `md5` varchar(32) COLLATE utf8_bin DEFAULT NULL COMMENT 'md5',
-  `gmt_create` datetime NOT NULL DEFAULT '2010-05-05 00:00:00' COMMENT '创建时间',
-  `gmt_modified` datetime NOT NULL DEFAULT '2010-05-05 00:00:00' COMMENT '修改时间',
-  `src_user` text COLLATE utf8_bin COMMENT 'source user',
-  `src_ip` varchar(20) COLLATE utf8_bin DEFAULT NULL COMMENT 'source ip',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_configinfotag_datagrouptenanttag` (`data_id`,`group_id`,`tenant_id`,`tag_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='config_info_tag';
-/*!40101 SET character_set_client = @saved_cs_client */;
-
+    `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'id',
+    `data_id` varchar(255) COLLATE utf8_bin NOT NULL COMMENT 'data_id',
+    `group_id` varchar(128) COLLATE utf8_bin NOT NULL COMMENT 'group_id',
+    `tenant_id` varchar(128) COLLATE utf8_bin DEFAULT '' COMMENT 'tenant_id',
+    `tag_id` varchar(128) COLLATE utf8_bin NOT NULL COMMENT 'tag_id',
+    `app_name` varchar(128) COLLATE utf8_bin DEFAULT NULL COMMENT 'app_name',
+    `content` longtext COLLATE utf8_bin NOT NULL COMMENT 'content',
+    `md5` varchar(32) COLLATE utf8_bin DEFAULT NULL COMMENT 'md5',
+    `gmt_create` datetime NOT NULL DEFAULT '2010-05-05 00:00:00' COMMENT '创建时间',
+    `gmt_modified` datetime NOT NULL DEFAULT '2010-05-05 00:00:00' COMMENT '修改时间',
+    `src_user` text COLLATE utf8_bin COMMENT 'source user',
+    `src_ip` varchar(20) COLLATE utf8_bin DEFAULT NULL COMMENT 'source ip',
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `uk_configinfotag_datagrouptenanttag` (`data_id`, `group_id`, `tenant_id`, `tag_id`)
+  ) ENGINE = InnoDB DEFAULT CHARSET = utf8 COLLATE = utf8_bin COMMENT = 'config_info_tag';
+  /*!40101 SET character_set_client = @saved_cs_client */;
 --
--- Dumping data for table `config_info_tag`
---
-
-LOCK TABLES `config_info_tag` WRITE;
-/*!40000 ALTER TABLE `config_info_tag` DISABLE KEYS */;
-/*!40000 ALTER TABLE `config_info_tag` ENABLE KEYS */;
+  -- Dumping data for table `config_info_tag`
+  --
+  LOCK TABLES `config_info_tag` WRITE;
+  /*!40000 ALTER TABLE `config_info_tag` DISABLE KEYS */;
+  /*!40000 ALTER TABLE `config_info_tag` ENABLE KEYS */;
 UNLOCK TABLES;
-
 --
--- Table structure for table `config_tags_relation`
---
-
-DROP TABLE IF EXISTS `config_tags_relation`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+  -- Table structure for table `config_tags_relation`
+  --
+  DROP TABLE IF EXISTS `config_tags_relation`;
+  /*!40101 SET @saved_cs_client     = @@character_set_client */;
+  /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `config_tags_relation` (
-  `id` bigint(20) NOT NULL COMMENT 'id',
-  `tag_name` varchar(128) COLLATE utf8_bin NOT NULL COMMENT 'tag_name',
-  `tag_type` varchar(64) COLLATE utf8_bin DEFAULT NULL COMMENT 'tag_type',
-  `data_id` varchar(255) COLLATE utf8_bin NOT NULL COMMENT 'data_id',
-  `group_id` varchar(128) COLLATE utf8_bin NOT NULL COMMENT 'group_id',
-  `tenant_id` varchar(128) COLLATE utf8_bin DEFAULT '' COMMENT 'tenant_id',
-  `nid` bigint(20) NOT NULL AUTO_INCREMENT,
-  PRIMARY KEY (`nid`),
-  UNIQUE KEY `uk_configtagrelation_configidtag` (`id`,`tag_name`,`tag_type`),
-  KEY `idx_tenant_id` (`tenant_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='config_tag_relation';
-/*!40101 SET character_set_client = @saved_cs_client */;
-
+    `id` bigint(20) NOT NULL COMMENT 'id',
+    `tag_name` varchar(128) COLLATE utf8_bin NOT NULL COMMENT 'tag_name',
+    `tag_type` varchar(64) COLLATE utf8_bin DEFAULT NULL COMMENT 'tag_type',
+    `data_id` varchar(255) COLLATE utf8_bin NOT NULL COMMENT 'data_id',
+    `group_id` varchar(128) COLLATE utf8_bin NOT NULL COMMENT 'group_id',
+    `tenant_id` varchar(128) COLLATE utf8_bin DEFAULT '' COMMENT 'tenant_id',
+    `nid` bigint(20) NOT NULL AUTO_INCREMENT,
+    PRIMARY KEY (`nid`),
+    UNIQUE KEY `uk_configtagrelation_configidtag` (`id`, `tag_name`, `tag_type`),
+    KEY `idx_tenant_id` (`tenant_id`)
+  ) ENGINE = InnoDB DEFAULT CHARSET = utf8 COLLATE = utf8_bin COMMENT = 'config_tag_relation';
+  /*!40101 SET character_set_client = @saved_cs_client */;
 --
--- Dumping data for table `config_tags_relation`
---
-
-LOCK TABLES `config_tags_relation` WRITE;
-/*!40000 ALTER TABLE `config_tags_relation` DISABLE KEYS */;
-/*!40000 ALTER TABLE `config_tags_relation` ENABLE KEYS */;
+  -- Dumping data for table `config_tags_relation`
+  --
+  LOCK TABLES `config_tags_relation` WRITE;
+  /*!40000 ALTER TABLE `config_tags_relation` DISABLE KEYS */;
+  /*!40000 ALTER TABLE `config_tags_relation` ENABLE KEYS */;
 UNLOCK TABLES;
-
 --
--- Table structure for table `group_capacity`
---
-
-DROP TABLE IF EXISTS `group_capacity`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+  -- Table structure for table `group_capacity`
+  --
+  DROP TABLE IF EXISTS `group_capacity`;
+  /*!40101 SET @saved_cs_client     = @@character_set_client */;
+  /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `group_capacity` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-  `group_id` varchar(128) COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT 'Group ID，空字符表示整个集群',
-  `quota` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '配额，0表示使用默认值',
-  `usage` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '使用量',
-  `max_size` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '单个配置大小上限，单位为字节，0表示使用默认值',
-  `max_aggr_count` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '聚合子配置最大个数，，0表示使用默认值',
-  `max_aggr_size` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '单个聚合数据的子配置大小上限，单位为字节，0表示使用默认值',
-  `max_history_count` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最大变更历史数量',
-  `gmt_create` datetime NOT NULL DEFAULT '2010-05-05 00:00:00' COMMENT '创建时间',
-  `gmt_modified` datetime NOT NULL DEFAULT '2010-05-05 00:00:00' COMMENT '修改时间',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_group_id` (`group_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='集群、各Group容量信息表';
-/*!40101 SET character_set_client = @saved_cs_client */;
-
+    `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `group_id` varchar(128) COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT 'Group ID，空字符表示整个集群',
+    `quota` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '配额，0表示使用默认值',
+    `usage` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '使用量',
+    `max_size` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '单个配置大小上限，单位为字节，0表示使用默认值',
+    `max_aggr_count` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '聚合子配置最大个数，，0表示使用默认值',
+    `max_aggr_size` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '单个聚合数据的子配置大小上限，单位为字节，0表示使用默认值',
+    `max_history_count` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最大变更历史数量',
+    `gmt_create` datetime NOT NULL DEFAULT '2010-05-05 00:00:00' COMMENT '创建时间',
+    `gmt_modified` datetime NOT NULL DEFAULT '2010-05-05 00:00:00' COMMENT '修改时间',
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `uk_group_id` (`group_id`)
+  ) ENGINE = InnoDB DEFAULT CHARSET = utf8 COLLATE = utf8_bin COMMENT = '集群、各Group容量信息表';
+  /*!40101 SET character_set_client = @saved_cs_client */;
 --
--- Dumping data for table `group_capacity`
---
-
-LOCK TABLES `group_capacity` WRITE;
-/*!40000 ALTER TABLE `group_capacity` DISABLE KEYS */;
-/*!40000 ALTER TABLE `group_capacity` ENABLE KEYS */;
+  -- Dumping data for table `group_capacity`
+  --
+  LOCK TABLES `group_capacity` WRITE;
+  /*!40000 ALTER TABLE `group_capacity` DISABLE KEYS */;
+  /*!40000 ALTER TABLE `group_capacity` ENABLE KEYS */;
 UNLOCK TABLES;
-
 --
--- Table structure for table `his_config_info`
---
-
-DROP TABLE IF EXISTS `his_config_info`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+  -- Table structure for table `his_config_info`
+  --
+  DROP TABLE IF EXISTS `his_config_info`;
+  /*!40101 SET @saved_cs_client     = @@character_set_client */;
+  /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `his_config_info` (
-  `id` bigint(64) unsigned NOT NULL,
-  `nid` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `data_id` varchar(255) COLLATE utf8_bin NOT NULL,
-  `group_id` varchar(128) COLLATE utf8_bin NOT NULL,
-  `app_name` varchar(128) COLLATE utf8_bin DEFAULT NULL COMMENT 'app_name',
-  `content` longtext COLLATE utf8_bin NOT NULL,
-  `md5` varchar(32) COLLATE utf8_bin DEFAULT NULL,
-  `gmt_create` datetime NOT NULL DEFAULT '2010-05-05 00:00:00',
-  `gmt_modified` datetime NOT NULL DEFAULT '2010-05-05 00:00:00',
-  `src_user` text COLLATE utf8_bin,
-  `src_ip` varchar(20) COLLATE utf8_bin DEFAULT NULL,
-  `op_type` char(10) COLLATE utf8_bin DEFAULT NULL,
-  `tenant_id` varchar(128) COLLATE utf8_bin DEFAULT '' COMMENT '租户字段',
-  PRIMARY KEY (`nid`),
-  KEY `idx_gmt_create` (`gmt_create`),
-  KEY `idx_gmt_modified` (`gmt_modified`),
-  KEY `idx_did` (`data_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='多租户改造';
-/*!40101 SET character_set_client = @saved_cs_client */;
-
+    `id` bigint(64) unsigned NOT NULL,
+    `nid` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+    `data_id` varchar(255) COLLATE utf8_bin NOT NULL,
+    `group_id` varchar(128) COLLATE utf8_bin NOT NULL,
+    `app_name` varchar(128) COLLATE utf8_bin DEFAULT NULL COMMENT 'app_name',
+    `content` longtext COLLATE utf8_bin NOT NULL,
+    `md5` varchar(32) COLLATE utf8_bin DEFAULT NULL,
+    `gmt_create` datetime NOT NULL DEFAULT '2010-05-05 00:00:00',
+    `gmt_modified` datetime NOT NULL DEFAULT '2010-05-05 00:00:00',
+    `src_user` text COLLATE utf8_bin,
+    `src_ip` varchar(20) COLLATE utf8_bin DEFAULT NULL,
+    `op_type` char(10) COLLATE utf8_bin DEFAULT NULL,
+    `tenant_id` varchar(128) COLLATE utf8_bin DEFAULT '' COMMENT '租户字段',
+    PRIMARY KEY (`nid`),
+    KEY `idx_gmt_create` (`gmt_create`),
+    KEY `idx_gmt_modified` (`gmt_modified`),
+    KEY `idx_did` (`data_id`)
+  ) ENGINE = InnoDB DEFAULT CHARSET = utf8 COLLATE = utf8_bin COMMENT = '多租户改造';
+  /*!40101 SET character_set_client = @saved_cs_client */;
 --
--- Dumping data for table `his_config_info`
---
-
-LOCK TABLES `his_config_info` WRITE;
-/*!40000 ALTER TABLE `his_config_info` DISABLE KEYS */;
-/*!40000 ALTER TABLE `his_config_info` ENABLE KEYS */;
+  -- Dumping data for table `his_config_info`
+  --
+  LOCK TABLES `his_config_info` WRITE;
+  /*!40000 ALTER TABLE `his_config_info` DISABLE KEYS */;
+  /*!40000 ALTER TABLE `his_config_info` ENABLE KEYS */;
 UNLOCK TABLES;
-
 --
--- Table structure for table `permissions`
---
-
-DROP TABLE IF EXISTS `permissions`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-create table if not exists permissions
-(
+  -- Table structure for table `permissions`
+  --
+  DROP TABLE IF EXISTS `permissions`;
+  /*!40101 SET @saved_cs_client     = @@character_set_client */;
+  /*!40101 SET character_set_client = utf8 */;
+create table if not exists permissions (
     role varchar(50) not null,
     resource varchar(512) not null,
     action varchar(8) not null,
-    constraint uk_role_permission
-        unique (role, resource, action)
-);
-
+    constraint uk_role_permission unique (role, resource, action)
+  );
 --
--- Table structure for table `roles`
---
-
-DROP TABLE IF EXISTS `roles`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+  -- Table structure for table `roles`
+  --
+  DROP TABLE IF EXISTS `roles`;
+  /*!40101 SET @saved_cs_client     = @@character_set_client */;
+  /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `roles` (
-  `username` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `role` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
+    `username` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+    `role` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL
+  ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+  /*!40101 SET character_set_client = @saved_cs_client */;
 --
--- Dumping data for table `roles`
---
-
-LOCK TABLES `roles` WRITE;
-/*!40000 ALTER TABLE `roles` DISABLE KEYS */;
-INSERT INTO `roles` VALUES ('nacos','ROLE_ADMIN');
-/*!40000 ALTER TABLE `roles` ENABLE KEYS */;
+  -- Dumping data for table `roles`
+  --
+  LOCK TABLES `roles` WRITE;
+  /*!40000 ALTER TABLE `roles` DISABLE KEYS */;
+INSERT INTO
+  `roles`
+VALUES
+  ('nacos', 'ROLE_ADMIN');
+  /*!40000 ALTER TABLE `roles` ENABLE KEYS */;
 UNLOCK TABLES;
-
 --
--- Table structure for table `tenant_capacity`
---
-
-DROP TABLE IF EXISTS `tenant_capacity`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+  -- Table structure for table `tenant_capacity`
+  --
+  DROP TABLE IF EXISTS `tenant_capacity`;
+  /*!40101 SET @saved_cs_client     = @@character_set_client */;
+  /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `tenant_capacity` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-  `tenant_id` varchar(128) COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT 'Tenant ID',
-  `quota` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '配额，0表示使用默认值',
-  `usage` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '使用量',
-  `max_size` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '单个配置大小上限，单位为字节，0表示使用默认值',
-  `max_aggr_count` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '聚合子配置最大个数',
-  `max_aggr_size` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '单个聚合数据的子配置大小上限，单位为字节，0表示使用默认值',
-  `max_history_count` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最大变更历史数量',
-  `gmt_create` datetime NOT NULL DEFAULT '2010-05-05 00:00:00' COMMENT '创建时间',
-  `gmt_modified` datetime NOT NULL DEFAULT '2010-05-05 00:00:00' COMMENT '修改时间',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_tenant_id` (`tenant_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='租户容量信息表';
-/*!40101 SET character_set_client = @saved_cs_client */;
-
+    `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `tenant_id` varchar(128) COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT 'Tenant ID',
+    `quota` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '配额，0表示使用默认值',
+    `usage` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '使用量',
+    `max_size` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '单个配置大小上限，单位为字节，0表示使用默认值',
+    `max_aggr_count` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '聚合子配置最大个数',
+    `max_aggr_size` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '单个聚合数据的子配置大小上限，单位为字节，0表示使用默认值',
+    `max_history_count` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最大变更历史数量',
+    `gmt_create` datetime NOT NULL DEFAULT '2010-05-05 00:00:00' COMMENT '创建时间',
+    `gmt_modified` datetime NOT NULL DEFAULT '2010-05-05 00:00:00' COMMENT '修改时间',
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `uk_tenant_id` (`tenant_id`)
+  ) ENGINE = InnoDB DEFAULT CHARSET = utf8 COLLATE = utf8_bin COMMENT = '租户容量信息表';
+  /*!40101 SET character_set_client = @saved_cs_client */;
 --
--- Dumping data for table `tenant_capacity`
---
-
-LOCK TABLES `tenant_capacity` WRITE;
-/*!40000 ALTER TABLE `tenant_capacity` DISABLE KEYS */;
-/*!40000 ALTER TABLE `tenant_capacity` ENABLE KEYS */;
+  -- Dumping data for table `tenant_capacity`
+  --
+  LOCK TABLES `tenant_capacity` WRITE;
+  /*!40000 ALTER TABLE `tenant_capacity` DISABLE KEYS */;
+  /*!40000 ALTER TABLE `tenant_capacity` ENABLE KEYS */;
 UNLOCK TABLES;
-
 --
--- Table structure for table `tenant_info`
---
-
-DROP TABLE IF EXISTS `tenant_info`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+  -- Table structure for table `tenant_info`
+  --
+  DROP TABLE IF EXISTS `tenant_info`;
+  /*!40101 SET @saved_cs_client     = @@character_set_client */;
+  /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `tenant_info` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `kp` varchar(128) COLLATE utf8_bin NOT NULL COMMENT 'kp',
-  `tenant_id` varchar(128) COLLATE utf8_bin DEFAULT '' COMMENT 'tenant_id',
-  `tenant_name` varchar(128) COLLATE utf8_bin DEFAULT '' COMMENT 'tenant_name',
-  `tenant_desc` varchar(256) COLLATE utf8_bin DEFAULT NULL COMMENT 'tenant_desc',
-  `create_source` varchar(32) COLLATE utf8_bin DEFAULT NULL COMMENT 'create_source',
-  `gmt_create` bigint(20) NOT NULL COMMENT '创建时间',
-  `gmt_modified` bigint(20) NOT NULL COMMENT '修改时间',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_tenant_info_kptenantid` (`kp`,`tenant_id`),
-  KEY `idx_tenant_id` (`tenant_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='tenant_info';
-/*!40101 SET character_set_client = @saved_cs_client */;
-
+    `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'id',
+    `kp` varchar(128) COLLATE utf8_bin NOT NULL COMMENT 'kp',
+    `tenant_id` varchar(128) COLLATE utf8_bin DEFAULT '' COMMENT 'tenant_id',
+    `tenant_name` varchar(128) COLLATE utf8_bin DEFAULT '' COMMENT 'tenant_name',
+    `tenant_desc` varchar(256) COLLATE utf8_bin DEFAULT NULL COMMENT 'tenant_desc',
+    `create_source` varchar(32) COLLATE utf8_bin DEFAULT NULL COMMENT 'create_source',
+    `gmt_create` bigint(20) NOT NULL COMMENT '创建时间',
+    `gmt_modified` bigint(20) NOT NULL COMMENT '修改时间',
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `uk_tenant_info_kptenantid` (`kp`, `tenant_id`),
+    KEY `idx_tenant_id` (`tenant_id`)
+  ) ENGINE = InnoDB AUTO_INCREMENT = 5 DEFAULT CHARSET = utf8 COLLATE = utf8_bin COMMENT = 'tenant_info';
+  /*!40101 SET character_set_client = @saved_cs_client */;
 --
--- Dumping data for table `tenant_info`
---
-
-LOCK TABLES `tenant_info` WRITE;
-/*!40000 ALTER TABLE `tenant_info` DISABLE KEYS */;
-INSERT INTO `tenant_info` VALUES (1,'1','local','local','本地开发环境','nacos',1573371901768,1573371901768);
-/*!40000 ALTER TABLE `tenant_info` ENABLE KEYS */;
+  -- Dumping data for table `tenant_info`
+  --
+  LOCK TABLES `tenant_info` WRITE;
+  /*!40000 ALTER TABLE `tenant_info` DISABLE KEYS */;
+INSERT INTO
+  `tenant_info`
+VALUES
+  (
+    1,
+    '1',
+    'local',
+    'local',
+    '本地开发环境',
+    'nacos',
+    1573371901768,
+    1573371901768
+  );
+  /*!40000 ALTER TABLE `tenant_info` ENABLE KEYS */;
 UNLOCK TABLES;
-
 --
--- Table structure for table `users`
---
-
-DROP TABLE IF EXISTS `users`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+  -- Table structure for table `users`
+  --
+  DROP TABLE IF EXISTS `users`;
+  /*!40101 SET @saved_cs_client     = @@character_set_client */;
+  /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `users` (
-  `username` varchar(50) NOT NULL,
-  `password` varchar(500) NOT NULL,
-  `enabled` tinyint(1) NOT NULL,
-  PRIMARY KEY (`username`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
+    `username` varchar(50) NOT NULL,
+    `password` varchar(500) NOT NULL,
+    `enabled` tinyint(1) NOT NULL,
+    PRIMARY KEY (`username`)
+  ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
+  /*!40101 SET character_set_client = @saved_cs_client */;
 --
--- Dumping data for table `users`
---
-
-LOCK TABLES `users` WRITE;
-/*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES ('nacos','$2a$10$NAkPmjD2jhWZr68cZUnByuj2jCKRVkafFWGrYcg6ODVZBQ2F/Wzzq',1);
-/*!40000 ALTER TABLE `users` ENABLE KEYS */;
+  -- Dumping data for table `users`
+  --
+  LOCK TABLES `users` WRITE;
+  /*!40000 ALTER TABLE `users` DISABLE KEYS */;
+INSERT INTO
+  `users`
+VALUES
+  (
+    'nacos',
+    '$2a$10$NAkPmjD2jhWZr68cZUnByuj2jCKRVkafFWGrYcg6ODVZBQ2F/Wzzq',
+    1
+  );
+  /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
-
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-
+  /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+  /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+  /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+  /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+  /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+  /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+  /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+  /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 -- Dump completed on 2020-02-14 14:10:48

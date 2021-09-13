@@ -1,5 +1,5 @@
 server:
-  port: 9000
+  port: 51900
 zuul:
   add-host-header: true
   add-proxy-headers: true
@@ -133,8 +133,8 @@ hystrix:
 #    client:
 #      client-id: anan
 #      client-secret: local
-##      access-token-uri: http://localhost:9000/auth/oauth/token
-##      user-authorization-uri: http://localhost:9000/auth/oauth/authorize
+##      access-token-uri: http://localhost:51900/auth/oauth/token
+##      user-authorization-uri: http://localhost:51900/auth/oauth/authorize
 #      access-token-uri: http://localhost:51400/oauth/token
 #      user-authorization-uri: http://localhost:51400/oauth/authorize
 ##      auto-approve-scopes:
@@ -145,7 +145,7 @@ hystrix:
 ##      scope:
 #      authorized-grant-types: authorization_code
 ##      use-current-uri: false
-##      registered-redirect-uri: http://localhost:9000/platform/login
+##      registered-redirect-uri: http://localhost:51900/platform/login
 ##      client-authentication-scheme: form
 anan:
   security:

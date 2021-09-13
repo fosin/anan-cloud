@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.DynamicUpdate;
 import top.fosin.anan.jpa.entity.CreateUpdateEntity;
-;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -25,23 +24,21 @@ import java.io.Serializable;
 @Table(name = "anan_service")
 @ApiModel(value = "服务的实体类", description = "服务的实体类")
 public class AnanServiceEntity extends CreateUpdateEntity<Long> implements Serializable {
-    private static final long serialVersionUID = -94381323292251990L;
+  private static final long serialVersionUID = -94381323292251990L;
 
-    @Basic
-    @Column(name = "code")
-    @ApiModelProperty(value = "服务标识")
-    private String code;
+  @Basic
+  @Column(name = "code")
+  @ApiModelProperty(value = "服务标识")
+  private String code;
 
-    @Basic
-    @Column(name = "name")
-    @ApiModelProperty(value = "服务名称")
-    private String name;
+  @Basic
+  @Column(name = "name")
+  @ApiModelProperty(value = "服务名称")
+  private String name;
 
-    @Basic
-    @Column(name = "status")
-    @ApiModelProperty(value = "状态码：0：禁用 1：启用")
-    private Integer status;
-
-    
+  @Basic
+  @Column(name = "status")
+  @ApiModelProperty(value = "状态码：0：禁用 1：启用")
+  private Integer status;
 
 }

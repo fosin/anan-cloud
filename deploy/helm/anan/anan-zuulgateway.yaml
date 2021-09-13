@@ -19,7 +19,7 @@ livenessProbe:
   timeoutSeconds: 5
   httpGet:
     scheme: HTTP
-    port: 9000
+    port: 51900
     path: /actuator/health
 readinessProbe:
   initialDelaySeconds: 45
@@ -27,7 +27,7 @@ readinessProbe:
   timeoutSeconds: 5
   httpGet:
     scheme: HTTP
-    port: 9000
+    port: 51900
     path: /actuator/health
 env:
   - name: spring.rabbitmq.addresses
@@ -52,14 +52,14 @@ lifecycle:
   preStop:
     httpGet:
       scheme: HTTP
-      port: 9000
+      port: 51900
       path: actuator/shutdown
 service:
   type: ClusterIP
   ports:
-    - port: 9000
-      targetPort: 9000
-      nodePort: 9000
+    - port: 51900
+      targetPort: 51900
+      nodePort: 51900
       name: one
 terminationGracePeriodSeconds: 30 #优雅关闭pod的等待时间，默认30s
 initContainers:

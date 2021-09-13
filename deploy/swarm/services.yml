@@ -57,7 +57,7 @@ services:
     volumes:
       - ../logs:/logs
     ports:
-      - 9000:9000
+      - 51900:51900
     networks:
       - anan-overlay
     depends_on:
@@ -80,7 +80,7 @@ services:
 
   anan-adminserver:
     image: fosin/anan-adminserver:2.7.0-SNAPSHOT
-    entrypoint: "sh /anan/wait-for.sh anan-zuulgateway:9000 -t 3600 -- /anan/entrypoint.sh"
+    entrypoint: "sh /anan/wait-for.sh anan-zuulgateway:51900 -t 3600 -- /anan/entrypoint.sh"
     networks:
       - anan-overlay
     volumes:

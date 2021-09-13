@@ -1,4 +1,4 @@
-# 搭建三主的高可用k8s集群
+# 搭建三主的高可用 k8s 集群
 
 ## 1、准备环境
 
@@ -6,24 +6,24 @@
 
 ```shell script
 yum install -y conntrack ntp ipvsadm ipset jq iptables curl sysstat libseccomp wget vim net-tools git
-``` 
+```
 
-### 1.2、设置防火墙为Iptables并清空规则
+### 1.2、设置防火墙为 Iptables 并清空规则
 
 ```shell script
 
 systemctl stop firewalld && systemctl disable firewalld
 yum install -y iptables-services && systemctl start iptables && systemctl enable iptables && iptables -F && service iptables save
 
-``` 
+```
 
-### 1.3、关闭SELINUX
+### 1.3、关闭 SELINUX
 
 ```shell script
 swapoff -a && sed -i '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
 setenforce 0 && sed -i 's/^SELINUX=.*/SELINUX=disabled/' /etc/selinux/config
 
-``` 
+```
 
 ### 1.4、调整内核参数，对于 K8S
 
@@ -83,7 +83,7 @@ systemctl stop postfix && systemctl disable postfix
 ```shell script
 # 持久化保存日志的目录、持久化日志配置文件的目录
 
-mkdir /var/log/journal 
+mkdir /var/log/journal
 mkdir /etc/systemd/journald.conf.d
 cat > /etc/systemd/journald.conf.d/99-prophet.conf <<EOF
 [Journal]
@@ -232,16 +232,16 @@ vrrp_instance nginx {
 }
 EOF
 
-systemctl restart keepalived && systemctl status keepalived && systemctl enable keepalived 
+systemctl restart keepalived && systemctl status keepalived && systemctl enable keepalived
 
 # 第一个节点查看
 ip a s | grep ${K8S_LB_IP}
 
 ```
 
-## 2、Kubeadm部署安装
+## 2、Kubeadm 部署安装
 
-### 2.1、kube-proxy开启ipvs的前置条件
+### 2.1、kube-proxy 开启 ipvs 的前置条件
 
 ```shell script
 modprobe br_netfilter
@@ -259,11 +259,11 @@ chmod 755 /etc/sysconfig/modules/ipvs.modules && bash /etc/sysconfig/modules/ipv
 
 ```
 
-### 2.2、安装Docker软件
+### 2.2、安装 Docker 软件
 
-部署Docker[点这里readme-docker.md](../readme-docker.md)
+部署 Docker[点这里 readme-docker.md](../readme-docker.md)
 
-### 2.3、查询当前k8s可用的所有版本
+### 2.3、查询当前 k8s 可用的所有版本
 
 ```shell script
 yum makecache fast && yum list --showduplicates kubeadm --disableexcludes=kubernetes
@@ -295,9 +295,9 @@ echo 'source <(kubectl completion bash)' >> ~/.bash_profile
 source ~/.bash_profile
 kubectl completion bash >/etc/bash_completion.d/kubectl
 
- ```
+```
 
-### 2.5、初始化k8s集群(第一个控制平面节点执行)
+### 2.5、初始化 k8s 集群(第一个控制平面节点执行)
 
 ```shell script
 ## 开始初始化k8s集群（控制平面节点执行）
@@ -317,7 +317,7 @@ kubeadm init --kubernetes-version=v${K8S_VERSION} \
 --upload-certs \
 --ignore-preflight-errors=Swap
 
-# 将控制平面节点加入集群(所有工作控制平面节点执行) 
+# 将控制平面节点加入集群(所有工作控制平面节点执行)
 #Secret会在两个小时后过期,如果过期就需要使用命令重新生成（选做）
 kubeadm init phase upload-certs --upload-certs
 
@@ -327,7 +327,7 @@ kubeadm join 172.16.1.200:6443 --token z9k16e.c64sazweotw3aagk \
     --control-plane --certificate-key 91992c5d0b90f14297830f268f6b9365b0b007e83c8a23a2670a117f8d3b4661 \
     --apiserver-advertise-address=${NODE_IPS[${NODE_INDEX}]}
 
-### 将其余工作节点加入集群(所有工作节点执行) 
+### 将其余工作节点加入集群(所有工作节点执行)
 
 #在主节点上执行以下命令获取最新join命令（如果node节点和master是接着安装的则不要执行该步）
 kubeadm token create --print-join-command
@@ -377,16 +377,16 @@ kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documen
 
 ```
 
-### 2.9、让控制平面节点参与POD负载（如果不让主节点参与负载则不需要操作这步）
+### 2.9、让控制平面节点参与 POD 负载（如果不让主节点参与负载则不需要操作这步）
 
 ```shell script
 kubectl taint nodes --all node-role.kubernetes.io/master-
 
 ```
 
-## 3、升级k8s版本
+## 3、升级 k8s 版本
 
-### 3.1、查询当前k8s可用的所有版本
+### 3.1、查询当前 k8s 可用的所有版本
 
 ```shell script
 # 在列表中找到最新的 1.x 版本号
@@ -444,7 +444,7 @@ yum install -y kubelet-${K8S_VERSION} kubectl-${K8S_VERSION} --disableexcludes=k
 #### 3.4.2、执行如下命令，以重启 kubelet
 
 ```shell script
-systemctl daemon-reload && systemctl restart kubelet && systemctl status kubelet 
+systemctl daemon-reload && systemctl restart kubelet && systemctl status kubelet
 
 ```
 
@@ -466,7 +466,7 @@ yum install -y kubeadm-${K8S_VERSION} --disableexcludes=kubernetes
 #执行以下命令，将节点标记为 不可调度的 并驱逐节点上所有的 Pod，
 # 在可以执行 kubectl 命令的位置执行（通常是第一个 控制平面节点）
 # $NODE 代表一个变量，实际执行时，请用您的节点名替换
-kubectl drain $NODE --ignore-daemonsets   
+kubectl drain $NODE --ignore-daemonsets
 # 如果由于有状态Pod导致驱逐失败，只能删除本地数据，但是有风险，需自行评估
 kubectl drain $NODE --ignore-daemonsets --delete-local-data
 #输出结果如下所示：
@@ -516,7 +516,7 @@ kubectl get nodes -o wide
     #该命令是 幂等 的，并将最终保证您能够达到最终期望的升级结果。
     #从失败状态中恢复时，请执行 kubeadm upgrade --force 命令，注意要使用集群的当前版本号。
 
-## 4、卸载k8s
+## 4、卸载 k8s
 
 ```shell script
 kubeadm reset -f
@@ -543,6 +543,6 @@ sed -i 's/export KUBECONFIG=\/etc\/kubernetes\/admin.conf//g' ~/.bash_profile
 
 ```
 
-## 5、使用Helm部署anan服务
+## 5、使用 Helm 部署 anan 服务
 
-部署anan [点这里readme-anan.md](../helm/readme-anan.md) 
+部署 anan [点这里 readme-anan.md](../helm/readme-anan.md)
