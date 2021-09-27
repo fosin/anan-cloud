@@ -6,8 +6,6 @@ eureka:
   instance:
     prefer-ip-address: true
 spring:
-  main:
-    allow-bean-definition-overriding: true
   profiles:
     active: @profileActive@
   application:
@@ -62,6 +60,9 @@ encrypt:
     algorithm: default
     strong: false
     salt: deadbeaf
+jasypt:
+  encryptor:
+    password: @jasypt.encryptor.password@
 info: #定义各种额外的详情给服务端显示
   description: "@project.description@"
   version: "@project.version@"
