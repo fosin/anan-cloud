@@ -21,7 +21,8 @@ import java.util.List;
  * @date 2017/12/29
  *
  */
-@FeignClient(value = ServiceConstant.ANAN_PLATFORMSERVER, path = UrlPrefixConstant.ORGANIZATION, fallback = OrganizationFeignFallbackServiceImpl.class)
+@FeignClient(value = ServiceConstant.ANAN_PLATFORMSERVER, path = UrlPrefixConstant.ORGANIZATION, fallback =
+        OrganizationFeignFallbackServiceImpl.class,contextId = "organizationFeignService")
 public interface OrganizationFeignService {
     @PostMapping({PathConstant.PATH_ID})
     @ApiOperation("根据主键ID查询一条数据")

@@ -22,7 +22,8 @@ import java.util.List;
  * @author fosin
  * @date 2019-3-26
  */
-@FeignClient(name = ServiceConstant.ANAN_PLATFORMSERVER, path = UrlPrefixConstant.PARAMETER, fallback = ParameterFeignFallbackServiceImpl.class)
+@FeignClient(name = ServiceConstant.ANAN_PLATFORMSERVER, path = UrlPrefixConstant.PARAMETER,
+        fallback = ParameterFeignFallbackServiceImpl.class,contextId = "parameterFeignService")
 public interface ParameterFeignService {
     String PATH_VALUE = "value";
     String PATH_DTO = PathConstant.PATH_DTO;

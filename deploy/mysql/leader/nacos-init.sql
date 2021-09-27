@@ -201,7 +201,11 @@ VALUES
     7,
     'application.yaml',
     'DEFAULT_GROUP',
-    'logging:
+    'jasypt:
+  encryptor:
+    algorithm: PBEWithMD5AndDES
+    password: oF7tVrdfjrbQ0NfSsRL3
+logging:
   # pattern:
   #   file: ''%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{50} %msg%n%throwablen%''
   #   console: ''%highlight(%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level) %cyan(%logger{50}) %highlight(%msg%n%throwablen%)''
@@ -215,17 +219,17 @@ VALUES
     com.alibaba.nacos.naming.log.level: warn
     com.alibaba.nacos.client.naming: warn
     com.alibaba.nacos.client.config: warn
-    #打印SQL语句
-    org.hibernate.SQL: info
-    #打印SQL语句参数
-    org.hibernate.type.descriptor.sql.BasicBinder: info
-    #打印SQL执行结果
-    org.hibernate.type.descriptor.sql.BasicExtractor: info
+    #打印SQL语句（需改成DEBUG）
+    org.hibernate.SQL: DEBUG
+    #打印SQL语句参数（需改成TRACE）
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    #打印SQL执行结果（需改成TRACE）
+    org.hibernate.type.descriptor.sql.BasicExtractor: INFO
     #打印查询中命名参数的值
-    org.hibernate.engine.spi.QueryParameters: info
-    org.hibernate.engine.query.spi.HQLQueryPlan: info
+    org.hibernate.engine.spi.QueryParameters: DEBUG
+    org.hibernate.engine.query.spi.HQLQueryPlan: DEBUG
 #    zipkin2: debug
-    # top.fosin.anan.security: DEBUG
+    # com.github.fosin.anan.security: DEBUG
     # org.springframework.security: DEBUG
 spring:
   datasource:
@@ -274,8 +278,7 @@ spring:
     #      max-redirects:
     #      nodes: redis:6379
     host: redis
-    port: 6379
-    password: local
+    password: ENC(svOoGRZ5qlC1bRGGh+7YwA==)
     # 连接超时时间（毫秒）
     timeout: 10s
     lettuce:
@@ -320,6 +323,8 @@ spring:
 #    baseUrl: http://zipkin:9411/
     sender:
       type: rabbit
+    rabbitmq:
+      queue: zipkin
 #    locator:
 #      discovery:
 #        enabled: true
@@ -402,7 +407,7 @@ anan:
   datasource:
     url: jdbc:mysql://mysql-leader:3306/anan_platform?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=GMT%2b8
     username: anan
-    password: local
+    password: ENC(svOoGRZ5qlC1bRGGh+7YwA==)
   security:
     jwt:
       key-store: ${encrypt.key-store.location}
@@ -707,18 +712,6 @@ zuul:
       retryable: true
       custom-sensitive-headers: true
       sensitive-headers:
-    anan-mpi:
-      path: /mpi/**
-      serviceId: anan-mpi
-      retryable: true
-      custom-sensitive-headers: true
-      sensitive-headers:
-    anan-vhr:
-      path: /vhr/**
-      serviceId: anan-vhr
-      retryable: true
-      custom-sensitive-headers: true
-      sensitive-headers:
     anan-exam:
       path: /exam/**
       serviceId: anan-exam
@@ -733,7 +726,7 @@ zuul:
 #    thread-pool-key-prefix: zuulgw
   ratelimit:
     #对应用来标识请求的key的前缀
-    key-prefix: anan:ratelimit-zuul
+    key-prefix: zuulgateway
     enabled: true
     #对应存储类型（用来存储统计信息）,可选值REDIS、IN_MEMORY、JPA、CONSUL,默认IN_MEMORY
     repository: REDIS
@@ -742,9 +735,9 @@ zuul:
     response-headers: VERBOSE
     #可选 - 针对所有的路由配置的策略，除非特别配置了policies
     default-policy-list:
-      - limit: 6000 #可选 - 每个刷新时间窗口对应的请求数量限制
-        quota: 1000 #可选-  每个刷新时间窗口对应的请求时间限制（秒）
-        refresh-interval: 60 # 刷新时间窗口的时间，默认值 60(秒)
+      - limit: 600000 #可选 - 每个刷新时间窗口对应的请求数量限制
+        quota: 100000 #可选-  每个刷新时间窗口对应的请求时间限制（秒）
+        refresh-interval: 60 #刷新时间窗口的时间，默认值 60(秒)
         #可选 限流方式
         type:
            #用户粒度
@@ -771,7 +764,7 @@ ribbon:
   #对切换实例的重试次数，默认1
   MaxAutoRetriesNextServer: 1
   #负载均衡超时时间，默认值1000，单位ms
-  ReadTimeout: 5000
+  ReadTimeout: 10000
   #ribbon请求连接的超时时间，默认值1000，单位ms
   ConnectTimeout: 5000
   #从注册中心刷新servelist的时间 默认30秒，单位ms
@@ -791,39 +784,17 @@ hystrix:
         isolation:
           thread:
             #断路器的超时时间；如果ribbon配置了重试那么该值必需大于ribbonTimeout = (ribbonReadTimeout + ribbonConnectTimeout) * (maxAutoRetries + 1) * (maxAutoRetriesNextServer + 1)，重试才能生效
-            timeoutInMilliseconds: 20001
+            timeoutInMilliseconds: 40001
       timeout:
         enabled: false
       circuitBreaker:
+        enabled: true
         #当在配置时间窗口内达到此数量的失败后，进行短路。默认20个
         requestVolumeThreshold: 20
         #短路多久以后开始尝试是否恢复，默认5s
         sleepWindowInMilliseconds: 5000
         #出错百分比阈值，当达到此阈值后，开始短路。默认50%
         errorThresholdPercentage: 50%
-
-##禁用自定义过滤器ThrowExceptionFilter
-#zuul.ThrowExceptionFilter.pre.disable=true
-#security:
-#  sessions: stateless
-#  oauth2:
-#    client:
-#      client-id: anan
-#      client-secret: local
-##      access-token-uri: http://localhost:51900/auth/oauth/token
-##      user-authorization-uri: http://localhost:51900/auth/oauth/authorize
-#      access-token-uri: http://localhost:51400/oauth/token
-#      user-authorization-uri: http://localhost:51400/oauth/authorize
-##      auto-approve-scopes:
-##      pre-established-redirect-uri: http://${security.user.name}:${security.user.password}@${eureka.instance.hostname}:${server.port}/
-##      token-name:
-##      refresh-token-validity-seconds:
-##      access-token-validity-seconds:
-##      scope:
-#      authorized-grant-types: authorization_code
-##      use-current-uri: false
-##      registered-redirect-uri: http://localhost:51900/platform/login
-##      client-authentication-scheme: form
 anan:
   security:
     oauth2:
@@ -848,6 +819,7 @@ anan:
           allow-credentials: true
     web-ignoring:
       - /**/auth/oauth/**
+      - /**/auth/sso/**
       - /**/*.html
       - /**/*.css
       - /**/*.js
@@ -930,7 +902,10 @@ VALUES
     20,
     'anan-platformserver.yaml',
     'DEFAULT_GROUP',
-    'server:
+    'logging:
+  level:
+    top.fosin.anan: debug
+server:
   port: 51500
 feign:
 #  compression: #开启这个设置比较耗CPU

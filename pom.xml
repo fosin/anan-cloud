@@ -53,7 +53,7 @@
                 <spring.cloud.config.server.git.uri>https://github.com/fosin/anan-cloud/deploy
                 </spring.cloud.config.server.git.uri>
                 <spring.cloud.config.server.git.search-paths>anan-config</spring.cloud.config.server.git.search-paths>
-                <spring.cloud.inetutils.preferred-networks>100.100.,192.168.</spring.cloud.inetutils.preferred-networks>
+                <spring.cloud.inetutils.preferred-networks>100.100.,10.8.,192.168.</spring.cloud.inetutils.preferred-networks>
                 <spring.rabbitmq.addresses>rabbitmq:5672</spring.rabbitmq.addresses>
                 <spring.rabbitmq.username>anan</spring.rabbitmq.username>
                 <spring.rabbitmq.password>local</spring.rabbitmq.password>
@@ -258,6 +258,13 @@
                 <groupId>de.codecentric</groupId>
                 <artifactId>spring-boot-admin-starter-server</artifactId>
                 <version>${anan-spring-boot-admin.version}</version>
+            </dependency>
+            <!--如果升级springboot版本到2.4及以上，版本需要升级到3.x
+            当前Springboot是2.3，只能使用2.x的版本，否则启动应用报错-->
+            <dependency>
+                <groupId>com.github.ulisesbocchio</groupId>
+                <artifactId>jasypt-spring-boot-starter</artifactId>
+                <version>2.1.2</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

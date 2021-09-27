@@ -22,7 +22,8 @@ import java.util.List;
  * @author fosin
  * @date 2019-3-26
  */
-@FeignClient(value = ServiceConstant.ANAN_PLATFORMSERVER, path = UrlPrefixConstant.PERMISSION, fallback = PermissionFeignFallbackServiceImpl.class)
+@FeignClient(value = ServiceConstant.ANAN_PLATFORMSERVER, path = UrlPrefixConstant.PERMISSION,
+        fallback = PermissionFeignFallbackServiceImpl.class, contextId = "permissionFeignService")
 public interface PermissionFeignService {
 
     /**
