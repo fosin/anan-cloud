@@ -134,28 +134,6 @@
            spring.cloud.config.enabled=true
        1.9.3、设置启动配置
             修改anan-cloud的pom.xml中的相关配置，local环境可以不用修改，一般需要修改生产环境
-            <eureka.client.service-url.defaultZone>
-                http://${anan-placeholder1}spring.security.user.name${anan-placeholder2}:${anan-placeholder1}spring.security.user.password${anan-placeholder2}@anan-eurekaserver:51000/eureka/
-            </eureka.client.service-url.defaultZone>
-            <spring.cloud.config.profileActive>native</spring.cloud.config.profileActive>
-            <spring.cloud.config.server.svn.uri></spring.cloud.config.server.svn.uri>
-            <spring.cloud.config.server.svn.username></spring.cloud.config.server.svn.username>
-            <spring.cloud.config.server.svn.password></spring.cloud.config.server.svn.password>
-            <spring.cloud.config.server.native.search-locations>file:deploy/anan-config</spring.cloud.config.server.native.search-locations>
-            <spring.cloud.config.server.git.uri>https://github.com/fosin/anan-cloud/deploy</spring.cloud.config.server.git.uri>
-            <spring.cloud.config.server.git.search-paths>anan-config</spring.cloud.config.server.git.search-paths>
-            <spring.cloud.inetutils.preferred-networks>192.168.137.</spring.cloud.inetutils.preferred-networks>
-            <spring.rabbitmq.addresses>rabbitmq:5672</spring.rabbitmq.addresses>
-            <spring.rabbitmq.username>'{cipher}AQAGy3LYSBkcOJA32VA/mT3jNtxscWGe0Eto3isApxPrUgv00Pw0629LROM3zCh9KC3/HqP4aoUexyBw3QhdLCkXr6zpXGFrj0x7EPcu+A9B9kbzZejfcdG3l+Wln+chjS50cLe0txPDt4ioZxbLb0BjgwfPS4THrIfozhJgyRKNwkrw4prTXSnE2o/tbo/rHKJutXF53ywkAqRK7sZNFUMiHZTKiQkKzzCTUQmFRoBYkYtoc2SjVMerEfySCyx8oEm0+FnLpUuFpexO/cVl/YbWxmeU4qvrpeDgj1OEJ9JAuKZGfSHF/1LdvaOP7HVlx1EiyqLoQys/pa1vFjkRu8YHSmSS7jOfiGty2sT3g4+fFG7G0K+8g5cmRGAUbhUppDI='</spring.rabbitmq.username>
-            <spring.rabbitmq.password>'{cipher}AQAf9K0s8zLVaIk44+wqpHGuHsHEK5G4KKu1vk0HwxlojaYQHRkNsFhdQwmcrnkayWpGmNZezJCVb56JJTYL0wOus7L+zUIRWG0YIBzZBzG0iAX/6fQ0l7EVc6JyYmksGi6czSWhhAYvaJ2zupxU5pMou+k48ILP1MSZ+2n/mmM2OA/msXzum7hhSbuHKHkazorFlYLem2efeU0M61xWGRgzHAJ6pOxWGJx2NepgFDGLSTpDiqRTXD98AabHa28X8TpBbFynDONrU3mueuW/TSrXOlzp2LOO/cDbYGpZXAc/jypbH8SWfkSQlQrWaKBg2FJ8DYg/hUnxfSy+QbzyeGkPfJAcrDZ+9lhluKJ2RplT9bAedAWmvzPu2cJCQuf/RmM='</spring.rabbitmq.password>
-            <spring.security.user.name>'{cipher}AQAGy3LYSBkcOJA32VA/mT3jNtxscWGe0Eto3isApxPrUgv00Pw0629LROM3zCh9KC3/HqP4aoUexyBw3QhdLCkXr6zpXGFrj0x7EPcu+A9B9kbzZejfcdG3l+Wln+chjS50cLe0txPDt4ioZxbLb0BjgwfPS4THrIfozhJgyRKNwkrw4prTXSnE2o/tbo/rHKJutXF53ywkAqRK7sZNFUMiHZTKiQkKzzCTUQmFRoBYkYtoc2SjVMerEfySCyx8oEm0+FnLpUuFpexO/cVl/YbWxmeU4qvrpeDgj1OEJ9JAuKZGfSHF/1LdvaOP7HVlx1EiyqLoQys/pa1vFjkRu8YHSmSS7jOfiGty2sT3g4+fFG7G0K+8g5cmRGAUbhUppDI='</spring.security.user.name>
-            <spring.security.user.password>'{cipher}AQAf9K0s8zLVaIk44+wqpHGuHsHEK5G4KKu1vk0HwxlojaYQHRkNsFhdQwmcrnkayWpGmNZezJCVb56JJTYL0wOus7L+zUIRWG0YIBzZBzG0iAX/6fQ0l7EVc6JyYmksGi6czSWhhAYvaJ2zupxU5pMou+k48ILP1MSZ+2n/mmM2OA/msXzum7hhSbuHKHkazorFlYLem2efeU0M61xWGRgzHAJ6pOxWGJx2NepgFDGLSTpDiqRTXD98AabHa28X8TpBbFynDONrU3mueuW/TSrXOlzp2LOO/cDbYGpZXAc/jypbH8SWfkSQlQrWaKBg2FJ8DYg/hUnxfSy+QbzyeGkPfJAcrDZ+9lhluKJ2RplT9bAedAWmvzPu2cJCQuf/RmM='</spring.security.user.password>-->
-            <spring.security.user.name>anan</spring.security.user.name>
-            <spring.security.user.password>local</spring.security.user.password>
-            <encrypt.key-store.location>classpath:/cdp.jks</encrypt.key-store.location>
-            <encrypt.key-store.password>123456</encrypt.key-store.password>
-            <encrypt.key-store.alias>cdp</encrypt.key-store.alias>
-            <encrypt.key-store.secret>123456</encrypt.key-store.secret>
        1.9.4、启动服务 
             1.9.4.1、启动anan-eurekaserver服务注册与发现中心
             1.9.4.2、启动anan-configserver配置中心

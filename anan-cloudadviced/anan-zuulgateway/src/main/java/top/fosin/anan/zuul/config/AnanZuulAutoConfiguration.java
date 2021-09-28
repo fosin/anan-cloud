@@ -1,6 +1,5 @@
 package top.fosin.anan.zuul.config;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerInterceptor;
@@ -10,7 +9,6 @@ import org.springframework.cloud.netflix.zuul.filters.RouteLocator;
 import org.springframework.cloud.netflix.zuul.filters.ZuulProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpMethod;
 import org.springframework.util.StringUtils;
@@ -39,9 +37,8 @@ import java.util.stream.Collectors;
 public class AnanZuulAutoConfiguration {
 
     @Bean
-    @Lazy
-    @ConditionalOnBean(PermissionFeignService.class)
-    public AnanProgramAuthorities ananProgramAuthorities(RouteLocator routeLocator,
+    @Primary
+    public AnanProgramAuthorities ananProgramAuthoritiesNew(RouteLocator routeLocator,
                                                          PermissionFeignService permissionFeignService) {
         List<Route> routes = routeLocator.getRoutes();
         List<String> locations = routes.stream().map(Route::getLocation).collect(Collectors.toList());
