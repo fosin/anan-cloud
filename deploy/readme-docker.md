@@ -54,6 +54,7 @@ yum-config-manager --add-repo https://mirrors.aliyun.com/docker-ce/linux/centos/
 # Step 1: 安装指定版本的docker-ce-selinux
 # yum install https://download.docker.com/linux/centos/7/x86_64/stable/Packages/docker-ce-selinux-17.03.2.ce-1.el7.centos.noarch.rpm
 # Step 2: 查找Docker-CE的版本:
+yum makecache fast
 yum list docker-ce.x86_64 --showduplicates | sort -r
 #   Loading mirror speeds from cached hostfile
 #   Loaded plugins: branch, fastestmirror, langpacks
@@ -64,8 +65,7 @@ yum list docker-ce.x86_64 --showduplicates | sort -r
 # Step 3: 安装指定版本的Docker-CE: (VERSION 例如上面的 17.03.0.ce.1-1.el7.centos)
 # sudo yum -y install docker-ce-[VERSION]
 # 当前选择最新版本
-sudo yum makecache fast
-sudo yum install -y docker-ce
+yum install -y docker-ce
 
 # 配置 daemon.json,执行命令前需要手动去掉前面的空格
 mkdir /etc/docker
@@ -90,7 +90,7 @@ sed -i 's/usr\/bin\/dockerd -H/usr\/bin\/dockerd -H tcp:\/\/0.0.0.0:2375 -H/g' /
 
 ## 重启docker服务
 
-systemctl daemon-reload && systemctl start docker && systemctl enable docker
+systemctl daemon-reload && systemctl restart docker && systemctl enable docker
 
 ## 卸载 Docker 软件
 

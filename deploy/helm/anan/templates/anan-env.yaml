@@ -6,10 +6,10 @@ metadata:
 data:
   #anan服务配置
   spring.profiles.active: {{ .Values.anan.spring.profilesActive | quote }}
-  spring.cloud.nacos.config.namespace: {{ .Values.nacos.namespaceId | quote }}
-  spring.cloud.nacos.config.sharedConfigs: {{ .Values.nacos.sharedConfigs | quote }}
+  spring.cloud.nacos.namespace: {{ .Values.nacos.namespaceId | quote }}
+  spring.cloud.nacos.sharedConfigs: {{ .Values.nacos.sharedConfigs | quote }}
   spring.cloud.nacos.discovery.namespace: {{ .Values.nacos.namespaceId | quote }}
-  spring.cloud.nacos.config.server-addr:
+  spring.cloud.nacos.server-addr:
   {{- $replicaCount := int .Values.replicaCount }}
   {{- $headlessName := (include "anan.service.headless.name" .) }}
   {{- range $i, $e := until $replicaCount -}}
@@ -37,7 +37,7 @@ data:
 {{/*  {{- end }}*/}}
   JAVA_TOOL_OPTIONS: {{ .Values.anan.javaToolOptions | quote }}
   #以下配置在启用eureka和spring cloud config时需要启用
-  #spring.cloud.nacos.config.enabled: "false"
+  #spring.cloud.nacos.enabled: "false"
   #spring.cloud.nacos.discovery.enabled: "false"
   #eureka.client.enabled: "true"
   #spring.cloud.config.enabled: "true"

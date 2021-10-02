@@ -125,7 +125,7 @@
             anan-adminserver
             anan-cloudgateway
        1.9.1、关闭Nacos的作为服务发现和配置中心的设置
-            spring.cloud.nacos.config.enabled=false
+            spring.cloud.nacos.enabled=false
             spring.cloud.nacos.discovery.enabled=false
         
        1.9.2、启用Eureka和Config作为服务发现和配置中心的设置

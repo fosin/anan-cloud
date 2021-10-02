@@ -400,6 +400,7 @@ yum makecache fast && yum list --showduplicates kubeadm --disableexcludes=kubern
 #### 3.2.1、升级第一个控制平面节点
 
 ```shell script
+K8S_VERSION=1.18.20-0
 #假设所有命令都以 root 身份执行
 #在第一个 master 节点上执行如下命令，升级 kubeadm
 yum install -y kubeadm-${K8S_VERSION} --disableexcludes=kubernetes
@@ -444,6 +445,9 @@ yum install -y kubelet-${K8S_VERSION} kubectl-${K8S_VERSION} --disableexcludes=k
 #### 3.4.2、执行如下命令，以重启 kubelet
 
 ```shell script
+## kuberntes服务nodeport端口，默认是3000-32767。但是某些场合下，这个限制并不适用。
+## 在apiserver配置文件中command下添加    - --service-node-port-range=1-65535参数，修改后会自动生效，无需其他操作:
+vim /etc/kubernetes/manifests/kube-apiserver.yaml
 systemctl daemon-reload && systemctl restart kubelet && systemctl status kubelet
 
 ```
