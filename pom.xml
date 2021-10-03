@@ -36,7 +36,7 @@
                 <jasypt.encryptor.password>oF7tVrdfjrbQ0NfSsRL3</jasypt.encryptor.password>
                 <spring.cloud.nacos.enabled>true</spring.cloud.nacos.enabled>
                 <spring.cloud.nacos.username>nacos</spring.cloud.nacos.username>
-                <spring.cloud.nacos.password>ENC(svOoGRZ5qlC1bRGGh+7YwA==)</spring.cloud.nacos.password>
+                <spring.cloud.nacos.password>local</spring.cloud.nacos.password>
                 <spring.cloud.nacos.server-addr>nacos-0:8848</spring.cloud.nacos.server-addr>
                 <spring.cloud.nacos.namespace>local</spring.cloud.nacos.namespace>
                 <spring.cloud.nacos.sharedConfigs>application.yaml</spring.cloud.nacos.sharedConfigs>
@@ -57,7 +57,7 @@
                 <spring.cloud.inetutils.preferred-networks>100.100.,10.8.,192.168.</spring.cloud.inetutils.preferred-networks>
                 <spring.rabbitmq.addresses>rabbitmq:5672</spring.rabbitmq.addresses>
                 <spring.rabbitmq.username>anan</spring.rabbitmq.username>
-                <spring.rabbitmq.password>ENC(svOoGRZ5qlC1bRGGh+7YwA==)</spring.rabbitmq.password>
+                <spring.rabbitmq.password>local</spring.rabbitmq.password>
                 <!--TODO 这里启用加密后除anan-eurekaserver、anan-configserver之外的应用都无法解密
                 <spring.security.user.name>'{cipher}AQAGy3LYSBkcOJA32VA/mT3jNtxscWGe0Eto3isApxPrUgv00Pw0629LROM3zCh9KC3/HqP4aoUexyBw3QhdLCkXr6zpXGFrj0x7EPcu+A9B9kbzZejfcdG3l+Wln+chjS50cLe0txPDt4ioZxbLb0BjgwfPS4THrIfozhJgyRKNwkrw4prTXSnE2o/tbo/rHKJutXF53ywkAqRK7sZNFUMiHZTKiQkKzzCTUQmFRoBYkYtoc2SjVMerEfySCyx8oEm0+FnLpUuFpexO/cVl/YbWxmeU4qvrpeDgj1OEJ9JAuKZGfSHF/1LdvaOP7HVlx1EiyqLoQys/pa1vFjkRu8YHSmSS7jOfiGty2sT3g4+fFG7G0K+8g5cmRGAUbhUppDI='</spring.security.user.name>
                 <spring.security.user.password>'{cipher}AQAf9K0s8zLVaIk44+wqpHGuHsHEK5G4KKu1vk0HwxlojaYQHRkNsFhdQwmcrnkayWpGmNZezJCVb56JJTYL0wOus7L+zUIRWG0YIBzZBzG0iAX/6fQ0l7EVc6JyYmksGi6czSWhhAYvaJ2zupxU5pMou+k48ILP1MSZ+2n/mmM2OA/msXzum7hhSbuHKHkazorFlYLem2efeU0M61xWGRgzHAJ6pOxWGJx2NepgFDGLSTpDiqRTXD98AabHa28X8TpBbFynDONrU3mueuW/TSrXOlzp2LOO/cDbYGpZXAc/jypbH8SWfkSQlQrWaKBg2FJ8DYg/hUnxfSy+QbzyeGkPfJAcrDZ+9lhluKJ2RplT9bAedAWmvzPu2cJCQuf/RmM='</spring.security.user.password>-->

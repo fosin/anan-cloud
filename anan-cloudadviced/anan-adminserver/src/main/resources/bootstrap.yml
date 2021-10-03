@@ -29,16 +29,19 @@ spring:
       enabled: @spring.cloud.config.enabled@
     nacos:
       config:
+        enabled: @spring.cloud.nacos.enabled@
         namespace: @spring.cloud.nacos.namespace@
         shared-configs: @spring.cloud.nacos.sharedConfigs@
         file-extension: yaml
-        enabled: @spring.cloud.nacos.enabled@
+        username: @spring.cloud.nacos.username@
+        password: @spring.cloud.nacos.password@
+        server-addr: @spring.cloud.nacos.server-addr@
       discovery:
-        namespace: @spring.cloud.nacos.namespace@
         enabled: @spring.cloud.nacos.enabled@
-      username: @spring.cloud.nacos.username@
-      password: @spring.cloud.nacos.password@
-      server-addr: @spring.cloud.nacos.server-addr@
+        namespace: @spring.cloud.nacos.namespace@
+        username: @spring.cloud.nacos.username@
+        password: @spring.cloud.nacos.password@
+        server-addr: @spring.cloud.nacos.server-addr@
   rabbitmq:
     addresses: @spring.rabbitmq.addresses@
     username: @spring.rabbitmq.username@
