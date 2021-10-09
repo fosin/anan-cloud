@@ -42,7 +42,17 @@
 
 # 架构设计
 
-# 原理介绍
+## 系统架构图
+![系统架构图](https://assets.processon.com/chart_image/5b15e20ce4b03f9d250e4027.png)
+
+# 网络拓扑图
+![网络拓扑图](http://assets.processon.com/chart_image/616142a6e0b34d7c7da2e8b4.png)
+
+## 模块关系图
+![项目模块关系图](https://assets.processon.com/chart_image/61610a6a5653bb1336ad206f.png)
+
+## 功能设计图
+![项目功能设计图](https://assets.processon.com/chart_image/61613db80e3e746edc9ed8a3.png)
 
 # 框架版本对照
 
@@ -97,3 +107,5 @@
 
 详细介绍 [点这里readme-swarm.md](deploy/swarm/readme-swarm.md) 
    
+# 码农不易，不介意的话打赏作者一杯茶吧
+![打赏](https://upload.jianshu.io/users/qrcodes/22247790/%E5%BE%AE%E4%BF%A1%E5%92%8C%E6%94%AF%E4%BB%98%E5%AE%9D.jpg)
