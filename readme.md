@@ -43,16 +43,16 @@
 # 架构设计
 
 ## 系统架构图
-![系统架构图](https://assets.processon.com/chart_image/5b15e20ce4b03f9d250e4027.png)
+![系统架构图](./docs/image/技术架构图.png)
 
-# 网络拓扑图
-![网络拓扑图](http://assets.processon.com/chart_image/616142a6e0b34d7c7da2e8b4.png)
+## 网络拓扑图
+![网络拓扑图](./docs/image/网络拓扑图.png)
 
 ## 模块关系图
-![项目模块关系图](https://assets.processon.com/chart_image/61610a6a5653bb1336ad206f.png)
+![模块关系图](./docs/image/模块关系图.png)
 
 ## 功能设计图
-![项目功能设计图](https://assets.processon.com/chart_image/61613db80e3e746edc9ed8a3.png)
+![功能设计图](./docs/image/功能设计图.png)
 
 # 框架版本对照
 
@@ -71,21 +71,17 @@
 
 ## 1、本地（profile=local）开发环境指南
 
-### 1.1、安装docker、docker-compose并配置镜像加速
+### 1.1、安装docker、docker-compose
 
 #### 1.1.1、安装docker
 
 详细介绍 [点这里deploy/readme-docker.md](deploy/readme-docker.md)
 
-#### 1.1.2、安装docker-compose(按需安装注意版本更新和匹配)
+#### 1.1.2、安装docker-compose并搭建开放环境
 
 详细介绍 [点这里deploy/readme-docker-compose.md](deploy/readme-docker-compose.md)
 
-### 1.2、开发指南
-
-详细介绍 [点这里readme-dev.md](readme-dev.md)
-
-### 1.3、运行前端项目anan-vue
+### 1.2、运行前端项目anan-vue
 
 详细介绍移步<https://github.com/fosin/anan-vue>查看前端项目的开发环境搭建过程
 
@@ -107,5 +103,5 @@
 
 详细介绍 [点这里readme-swarm.md](deploy/swarm/readme-swarm.md) 
    
-# 码农不易，不介意的话打赏作者一杯茶吧
+# 码农不易，打赏作者一杯茶吧
 ![打赏](https://upload.jianshu.io/users/qrcodes/22247790/%E5%BE%AE%E4%BF%A1%E5%92%8C%E6%94%AF%E4%BB%98%E5%AE%9D.jpg)
