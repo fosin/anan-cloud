@@ -102,7 +102,7 @@
             anan-authserver
             anan-platformserver
             anan-zuulgateway
-            anan-adminserver
+            anan-sbaserver
 
 ### 1.6、配置开发环境
 
@@ -131,7 +131,7 @@
 
        1.7.1、启动anan-platformserver平台服务中心
        1.7.2、启动anan-authserver授权认证中心、anan-zuulgateway服务路由网关
-       1.7.3、启动anan-adminserver服务监控（非必须）
+       1.7.3、启动anan-sbaserver服务监控（非必须）
 
 ### 1.9、如果使用Spring Cloud Eureka作为服务注册和发现组件、Config作为配置中心
 
@@ -139,7 +139,7 @@
             anan-authserver
             anan-platformserver
             anan-zuulgateway
-            anan-adminserver
+            anan-sbaserver
             anan-cloudgateway
        1.9.1、关闭Nacos的作为服务发现和配置中心的设置
             spring.cloud.nacos.enabled=false
@@ -156,4 +156,4 @@
             1.9.4.2、启动anan-configserver配置中心
             1.9.4.3、启动anan-authserver授权认证中心
             1.9.4.4、启动anan-platformserver平台服务中心、anan-zuulgateway服务路由网关
-            1.9.4.5、启动anan-adminserver服务监控
+            1.9.4.5、启动anan-sbaserver服务监控

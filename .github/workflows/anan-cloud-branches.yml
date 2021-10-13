@@ -145,11 +145,11 @@ jobs:
           MODULE_VERSION=$(grep 'version=' $MODULE_PATH/target/maven-archiver/pom.properties | awk -F '=' '{ print $2 }')
           docker build ./$MODULE_PATH -t ${{ env.DOCKER_MIRROR_SERVER }}/${{ env.DOCKER_MIRROR_NS }}/$MODULE_NAME:$MODULE_VERSION -f ./$MODULE_PATH/Dockerfile
           docker push ${{ env.DOCKER_MIRROR_SERVER }}/${{ env.DOCKER_MIRROR_NS }}/$MODULE_NAME:$MODULE_VERSION
-      # 创建anan-adminserver
-      - name: Docker build and push anan-adminserver
-        if: contains(env.MODIFY_FILES,'anan-cloudadviced/anan-adminserver/') || contains(env.MODIFY_FILES,'anan-cloudadviced/pom.xml') || contains(env.MODULE_LIST,'anan-cloud')
+      # 创建anan-sbaserver
+      - name: Docker build and push anan-sbaserver
+        if: contains(env.MODIFY_FILES,'anan-cloudadviced/anan-sbaserver/') || contains(env.MODIFY_FILES,'anan-cloudadviced/pom.xml') || contains(env.MODULE_LIST,'anan-cloud')
         run: |
-          MODULE_PATH=anan-cloudadviced/anan-adminserver
+          MODULE_PATH=anan-cloudadviced/anan-sbaserver
           MODULE_NAME=$(grep 'artifactId=' $MODULE_PATH/target/maven-archiver/pom.properties | awk -F '=' '{ print $2 }')
           MODULE_VERSION=$(grep 'version=' $MODULE_PATH/target/maven-archiver/pom.properties | awk -F '=' '{ print $2 }')
           docker build ./$MODULE_PATH -t ${{ env.DOCKER_MIRROR_SERVER }}/${{ env.DOCKER_MIRROR_NS }}/$MODULE_NAME:$MODULE_VERSION -f ./$MODULE_PATH/Dockerfile

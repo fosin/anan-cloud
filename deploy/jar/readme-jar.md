@@ -31,7 +31,7 @@ mvn clean compile jar:jar spring-boot:repackage ^
 -P {activeProfile} ^
 -pl ./anan-eurekaserver,./anan-configserver,./anan-cloudgateway,^
 ./anan-cloudadviced/anan-authserver,./anan-cloudadviced/anan-platformserver,^
-./anan-cloudadviced/anan-zuulgateway,./anan-cloudadviced/anan-adminserver
+./anan-cloudadviced/anan-zuulgateway,./anan-cloudadviced/anan-sbaserver
 ```
 
 ## 5、按顺序启动jar
@@ -46,7 +46,7 @@ mvn clean compile jar:jar spring-boot:repackage ^
 
 ./anan-authserver-2.7.0-SNAPSHOT-{activeProfile}.jar
 ./anan-platformserver-2.7.0-SNAPSHOT-{activeProfile}.jar
-./anan-adminserver-2.7.0-SNAPSHOT-{activeProfile}.jar
+./anan-sbaserver-2.7.0-SNAPSHOT-{activeProfile}.jar
 
 # 网关选择zuul或者gateway其一即可
 ./anan-zuulgateway-2.7.0-SNAPSHOT-{activeProfile}.jar

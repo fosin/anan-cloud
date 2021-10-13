@@ -55,10 +55,10 @@ jobs:
           docker build ./$MODULE_PATH -t ${{ env.DOCKER_MIRROR_SERVER }}/${{ env.DOCKER_MIRROR_NS }}/$MODULE_NAME:$MODULE_VERSION -f ./$MODULE_PATH/Dockerfile
           docker push ${{ env.DOCKER_MIRROR_SERVER }}/${{ env.DOCKER_MIRROR_NS }}/$MODULE_NAME:$MODULE_VERSION
 
-      - name: Build and Push anan-adminserver
+      - name: Build and Push anan-sbaserver
         run: |
-          MODULE_PATH=anan-cloudadviced/anan-adminserver
-          MODULE_NAME=anan-adminserver
+          MODULE_PATH=anan-cloudadviced/anan-sbaserver
+          MODULE_NAME=anan-sbaserver
           docker build ./$MODULE_PATH -t ${{ env.DOCKER_MIRROR_SERVER }}/${{ env.DOCKER_MIRROR_NS }}/$MODULE_NAME:$MODULE_VERSION -f ./$MODULE_PATH/Dockerfile
           docker push ${{ env.DOCKER_MIRROR_SERVER }}/${{ env.DOCKER_MIRROR_NS }}/$MODULE_NAME:$MODULE_VERSION
 

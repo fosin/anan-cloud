@@ -78,8 +78,8 @@ services:
         reservations:
           memory: 256M
 
-  anan-adminserver:
-    image: fosin/anan-adminserver:2.7.0-SNAPSHOT
+  anan-sbaserver:
+    image: fosin/anan-sbaserver:2.7.0-SNAPSHOT
     entrypoint: "sh /anan/wait-for.sh anan-zuulgateway:51900 -t 3600 -- /anan/entrypoint.sh"
     networks:
       - anan-overlay

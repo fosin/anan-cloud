@@ -77,7 +77,6 @@ services:
       - TZ=Asia/Shanghai
     volumes:
       - /root/deploy/nginx/:/etc/nginx/conf.d/
-    #      - /root/deploy/nginx/anan-vue.conf:/etc/nginx/nginx.conf
     #    ports:
     #      - 80:80
     depends_on:
@@ -166,12 +165,12 @@ services:
       - mysql-leader
       - nacos-0
 
-  anan-adminserver:
+  anan-sbaserver:
     network_mode: host
-    image: registry.cn-hongkong.aliyuncs.com/fosin/anan-adminserver:2.7.0-SNAPSHOT
+    image: registry.cn-hongkong.aliyuncs.com/fosin/anan-sbaserver:2.7.0-SNAPSHOT
     entrypoint: 'sh /anan/wait-for.sh anan-zuulgateway:51900 -t 3600 -- /anan/entrypoint.sh'
-    container_name: anan-adminserver
-    hostname: anan-adminserver
+    container_name: anan-sbaserver
+    hostname: anan-sbaserver
     restart: always
     environment:
       - JAVA_TOOL_OPTIONS=-Xmx200M -XX:MaxMetaspaceSize=160M -XX:MetaspaceSize=160M -XX:+DisableExplicitGC -XX:ErrorFile=/logs/hs_err_pid%p.log

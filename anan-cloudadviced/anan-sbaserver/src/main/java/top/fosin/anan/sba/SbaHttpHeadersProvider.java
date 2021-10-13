@@ -1,4 +1,4 @@
-package top.fosin.anan.admin;
+package top.fosin.anan.sba;
 
 import de.codecentric.boot.admin.server.domain.entities.Instance;
 import de.codecentric.boot.admin.server.web.client.BasicAuthHttpHeaderProvider;
@@ -12,7 +12,7 @@ import org.springframework.util.StringUtils;
  * @date 2018.8.12
  */
 @Component
-public class AdminHttpHeadersProvider implements HttpHeadersProvider {
+public class SbaHttpHeadersProvider implements HttpHeadersProvider {
     @Override
     public HttpHeaders getHeaders(Instance instance) {
         String username = instance.getRegistration().getMetadata().get("user.name");

@@ -1,4 +1,4 @@
-package top.fosin.anan.admin;
+package top.fosin.anan.sba;
 
 import de.codecentric.boot.admin.server.config.AdminServerProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Primary;
  * @since 2.0.0
  */
 @Configuration
-public class AnanAdminAutoConfiguration {
+public class SbaAutoConfiguration {
 
     @Bean
     LoadBalancerInterceptor loadBalancerInterceptor(LoadBalancerClient loadBalance) {

@@ -161,7 +161,7 @@ helm install redis anan -f anan/redis.yaml --dry-run --debug
 # 可以优先并行启动得
 helm install anan-authserver anan -f anan/anan-authserver.yaml
 helm install anan-platformserver anan -f anan/anan-platformserver.yaml
-helm install anan-adminserver anan -f anan/anan-adminserver.yaml
+helm install anan-sbaserver anan -f anan/anan-sbaserver.yaml
 # 依赖anan-authserver
 helm install anan-zuulgateway anan -f anan/anan-zuulgateway.yaml
 

@@ -468,7 +468,7 @@ INSERT INTO
 VALUES
   (
     13,
-    'anan-adminserver.yaml',
+    'anan-sbaserver.yaml',
     'DEFAULT_GROUP',
     'server:
   port: 51700

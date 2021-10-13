@@ -10,10 +10,10 @@ import top.fosin.anan.core.banner.AnanBanner;
  */
 @SpringBootApplication
 @EnableAdminServer
-public class AdminServerApplication {
+public class SbaServerApplication {
     public static void main(String[] args) {
-        new SpringApplicationBuilder(AdminServerApplication.class)
-                .banner(new AnanBanner("AnAn Admin Server"))
+        new SpringApplicationBuilder(SbaServerApplication.class)
+                .banner(new AnanBanner("AnAn SBA Server"))
                 .logStartupInfo(true)
                 .run(args);
     }
