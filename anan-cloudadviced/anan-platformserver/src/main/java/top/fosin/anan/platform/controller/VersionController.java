@@ -37,15 +37,15 @@ public class VersionController implements ISimpleController<AnanVersionRespDto,
      */
     private final VersionService versionService;
     private final VersionPermissionService versionPermissionService;
-    private final OrganizationPermissionService organizationPermissionService;
-    private final OrganizationAuthService organizationAuthService;
+    private final OrganizationPermissionService orgPermissionService;
+    private final OrganizationAuthService orgAuthService;
     private final PermissionService permissionService;
 
-    public VersionController(VersionService versionService, VersionPermissionService versionPermissionService, OrganizationPermissionService organizationPermissionService, OrganizationAuthService organizationAuthService, PermissionService permissionService) {
+    public VersionController(VersionService versionService, VersionPermissionService versionPermissionService, OrganizationPermissionService orgPermissionService, OrganizationAuthService orgAuthService, PermissionService permissionService) {
         this.versionService = versionService;
         this.versionPermissionService = versionPermissionService;
-        this.organizationPermissionService = organizationPermissionService;
-        this.organizationAuthService = organizationAuthService;
+        this.orgPermissionService = orgPermissionService;
+        this.orgAuthService = orgAuthService;
         this.permissionService = permissionService;
     }
 
@@ -81,23 +81,23 @@ public class VersionController implements ISimpleController<AnanVersionRespDto,
         Collection<AnanVersionPermissionRespDto> respDtos = versionPermissionService.updateInBatch("versionId", versionId, dtos);
 
         //准备版本相关联的机构权限数据
-        List<AnanOrganizationPermissionCreateDto> organizationPermissionEntities = new ArrayList<>();
+        List<AnanOrganizationPermissionCreateDto> orgPermissionEntities = new ArrayList<>();
         for (AnanVersionPermissionRespDto dto : respDtos) {
             AnanOrganizationPermissionCreateDto createDto = new AnanOrganizationPermissionCreateDto();
             createDto.setPermissionId(dto.getPermissionId());
-            organizationPermissionEntities.add(createDto);
+            orgPermissionEntities.add(createDto);
         }
 
         //查询所有通过该版本生成的机构数据
-        List<AnanOrganizationAuthRespDto> organizationAuthRespDtos = organizationAuthService.findAllByVersionId(versionId);
+        List<AnanOrganizationAuthRespDto> organizationAuthRespDtos = orgAuthService.findAllByVersionId(versionId);
 
         //更新所有机构权限数据
         for (AnanOrganizationAuthRespDto entity : organizationAuthRespDtos) {
             Long organizId = entity.getOrganizId();
-            for (AnanOrganizationPermissionCreateDto entity1 : organizationPermissionEntities) {
+            for (AnanOrganizationPermissionCreateDto entity1 : orgPermissionEntities) {
                 entity1.setOrganizId(organizId);
             }
-            organizationPermissionService.updateInBatch("organizId", organizId, organizationPermissionEntities);
+            orgPermissionService.updateInBatch("organizId", organizId, orgPermissionEntities);
         }
         return ResponseEntity.ok(true);
     }

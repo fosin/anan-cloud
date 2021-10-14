@@ -50,7 +50,7 @@ public class OrganizationPermissionServiceImpl implements OrganizationPermission
     @Override
     @Transactional(rollbackFor = Exception.class)
     public List<AnanOrganizationPermissionRespDto> updateInBatch(String deleteCol, Long organizId, Collection<AnanOrganizationPermissionCreateDto> dtos) {
-        Assert.notNull(organizId, "传入的版本ID不能为空!");
+        Assert.notNull(organizId, "传入的机构ID不能为空!");
 
         Assert.isTrue(dtos.stream().allMatch(entity -> entity.getOrganizId().equals(organizId)), "需要更新的数据集中有与版本ID不匹配的数据!");
 

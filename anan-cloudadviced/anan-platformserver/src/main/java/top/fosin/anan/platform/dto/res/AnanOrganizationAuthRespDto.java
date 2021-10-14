@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import top.fosin.anan.model.dto.IdDto;
+import top.fosin.anan.model.dto.OrganizIdDto;
 
 import java.io.Serializable;
 
@@ -20,10 +20,8 @@ import java.io.Serializable;
 @ToString
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value = "机构授权表响应DTO", description = "机构授权的响应DTO")
-public class AnanOrganizationAuthRespDto extends IdDto<Long> implements Serializable {
+public class AnanOrganizationAuthRespDto extends OrganizIdDto<Long> implements Serializable {
     private static final long serialVersionUID = -14631872198139889L;
-    @ApiModelProperty(value = "机构ID", example = "Long")
-    private Long organizId;
 
     @ApiModelProperty(value = "版本ID", example = "Long")
     private Long versionId;

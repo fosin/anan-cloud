@@ -30,8 +30,8 @@ public class VersionPermissionServiceImpl implements VersionPermissionService {
     private final RoleRepository roleRepository;
     private final RolePermissionRepository rolePermissionRepository;
     private final UserPermissionRepository userPermissionRepository;
-    private final OrganizationAuthRepository organizationAuthRepository;
-    private final OrganizationPermissionRepository organizationPermissionRepository;
+    private final OrganizationAuthRepository orgAuthRepository;
+    private final OrganizationPermissionRepository orgPermissionRepository;
 
     public VersionPermissionServiceImpl(VersionPermissionRepository versionPermissionRepository,
                                         VersionRolePermissionRepository versionRolePermissionRepository,
@@ -39,16 +39,16 @@ public class VersionPermissionServiceImpl implements VersionPermissionService {
                                         RoleRepository roleRepository,
                                         RolePermissionRepository rolePermissionRepository,
                                         UserPermissionRepository userPermissionRepository,
-                                        OrganizationAuthRepository organizationAuthRepository,
-                                        OrganizationPermissionRepository organizationPermissionRepository) {
+                                        OrganizationAuthRepository orgAuthRepository,
+                                        OrganizationPermissionRepository orgPermissionRepository) {
         this.versionPermissionRepository = versionPermissionRepository;
         this.versionRolePermissionRepository = versionRolePermissionRepository;
         this.versionRoleRepository = versionRoleRepository;
         this.roleRepository = roleRepository;
         this.rolePermissionRepository = rolePermissionRepository;
         this.userPermissionRepository = userPermissionRepository;
-        this.organizationAuthRepository = organizationAuthRepository;
-        this.organizationPermissionRepository = organizationPermissionRepository;
+        this.orgAuthRepository = orgAuthRepository;
+        this.orgPermissionRepository = orgPermissionRepository;
     }
 
     /**
@@ -78,31 +78,28 @@ public class VersionPermissionServiceImpl implements VersionPermissionService {
 
         Collection<AnanVersionPermissionEntity> versionPermissionEntities = BeanUtil.copyCollectionProperties(entities, AnanVersionPermissionEntity.class);
 
-        List<AnanOrganizationAuthEntity> organizationAuthEntities = organizationAuthRepository.findAllByVersionId(versionId);
+        List<AnanOrganizationAuthEntity> organizationAuthEntities = orgAuthRepository.findAllByVersionId(versionId);
         organizationAuthEntities.forEach(authEntity -> {
             Long organizId = authEntity.getOrganizId();
 
             //同步删除角色权限中删除的版本权限
             List<AnanRoleEntity> roleEntities = roleRepository.findAllByOrganizId(organizId);
             roleEntities.forEach(role -> {
-                Long roleId = role.getId();
-                List<AnanRolePermissionEntity> rolePermissionEntities = rolePermissionRepository.findByRoleId(roleId);
-                rolePermissionEntities.forEach(rolePermission -> {
-                    boolean find = versionPermissionEntities.stream().anyMatch(entity -> entity.getPermissionId().equals(rolePermission.getPermissionId()));
-                    if (!find) {
-                        rolePermissionRepository.deleteById(rolePermission.getId());
-                    }
-                });
+                List<AnanRolePermissionEntity> entityList = rolePermissionRepository.findByRoleId(role.getId())
+                        .stream().filter(rolePermission -> versionPermissionEntities.stream()
+                                .anyMatch(entity -> entity.getPermissionId().equals(rolePermission.getPermissionId())))
+                        .collect(Collectors.toList());
+                if (entityList.size() > 0) {
+                    rolePermissionRepository.deleteAll(entityList);
+                }
             });
 
             //同步删除用户权限中删除的版本权限
-            List<AnanUserPermissionEntity> userEntities = userPermissionRepository.findByOrganizId(organizId);
-            userEntities.forEach(userPermission -> {
-                boolean find = versionPermissionEntities.stream().anyMatch(entity -> entity.getPermissionId().equals(userPermission.getPermissionId()));
-                if (!find) {
-                    userPermissionRepository.deleteById(userPermission.getId());
-                }
-            });
+            List<AnanUserPermissionEntity> userEntities =
+                    userPermissionRepository.findByOrganizId(organizId).stream().filter(userPermission -> versionPermissionEntities.stream().anyMatch(entity -> entity.getPermissionId().equals(userPermission.getPermissionId()))).collect(Collectors.toList());
+            if (userEntities.size() > 0) {
+                userPermissionRepository.deleteAll(userEntities);
+            }
 
             //重建机构权限
             Collection<AnanOrganizationPermissionEntity> organizationPermissionEntities = versionPermissionEntities.stream().map(versionPermissionEntity -> {
@@ -111,22 +108,18 @@ public class VersionPermissionServiceImpl implements VersionPermissionService {
                 entity.setPermissionId(versionPermissionEntity.getPermissionId());
                 return entity;
             }).collect(Collectors.toList());
-            organizationPermissionRepository.deleteByOrganizId(organizId);
-            organizationPermissionRepository.saveAll(organizationPermissionEntities);
+            orgPermissionRepository.deleteByOrganizId(organizId);
+            orgPermissionRepository.saveAll(organizationPermissionEntities);
 
         });
 
         //同步删除版本角色权限中删除的版本权限
         List<AnanVersionRoleEntity> versionRoleEntities = versionRoleRepository.findByVersionId(versionId);
         versionRoleEntities.forEach(versionRoleEntity -> {
-            Long versionRoleId = versionRoleEntity.getId();
-            List<AnanVersionRolePermissionEntity> versionRolePermissionEntities = versionRolePermissionRepository.findByRoleId(versionRoleId);
-            versionRolePermissionEntities.forEach(versionRolePermissionEntity -> {
-                boolean find = versionPermissionEntities.stream().anyMatch(entity -> entity.getPermissionId().equals(versionRolePermissionEntity.getPermissionId()));
-                if (!find) {
-                    versionRolePermissionRepository.deleteById(versionRolePermissionEntity.getId());
-                }
-            });
+            List<AnanVersionRolePermissionEntity> entityList = versionRolePermissionRepository.findByRoleId(versionRoleEntity.getId()).stream().filter(permissionEntity -> versionPermissionEntities.stream().anyMatch(entity -> entity.getPermissionId().equals(permissionEntity.getPermissionId()))).collect(Collectors.toList());
+            if (entityList.size() > 0) {
+                versionRolePermissionRepository.deleteAll(entityList);
+            }
         });
 
         versionPermissionRepository.deleteByVersionId(versionId);
