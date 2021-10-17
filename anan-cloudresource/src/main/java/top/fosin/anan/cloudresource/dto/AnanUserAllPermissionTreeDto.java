@@ -82,4 +82,8 @@ public class AnanUserAllPermissionTreeDto extends TreeDto<AnanUserAllPermissionT
     @NotNull(message = "角色ID" + "{javax.validation.constraints.NotNull.message}")
     @ApiModelProperty(value = "角色ID", required = true)
     private Long roleId;
+
+    @NotNull(message = "机构ID" + "{javax.validation.constraints.NotNull.message}")
+    @ApiModelProperty(value = "机构ID", required = true)
+    private Long organizId;
 }

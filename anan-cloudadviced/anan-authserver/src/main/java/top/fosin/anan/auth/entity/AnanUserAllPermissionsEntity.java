@@ -141,4 +141,9 @@ public class AnanUserAllPermissionsEntity extends CreateUpdateEntity<Long> imple
     @ApiModelProperty(value = "补充方式：0=增加权限、1=删除权限", required = true)
     @Column(name = "add_mode", nullable = false)
     private Integer addMode;
+
+    @Basic
+    @ApiModelProperty(value = "机构ID", required = true)
+    @Column(name = "organiz_id", nullable = false)
+    private Long organizId;
 }
