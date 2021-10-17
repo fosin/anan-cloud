@@ -20,19 +20,19 @@ public class AnanUserPermissionCreateDto implements Serializable {
     private static final long serialVersionUID = -29204374865503979L;
 
     @NotNull(message = "机构ID" + "{javax.validation.constraints.NotNull.message}")
-    @ApiModelProperty(value = "机构ID", required = true)
+    @ApiModelProperty(value = "机构ID", required = true, example = "1")
     private Long organizId;
 
     @NotNull(message = "用户ID" + "{javax.validation.constraints.NotNull.message}")
-    @ApiModelProperty(value = "用户ID", required = true)
+    @ApiModelProperty(value = "用户ID", required = true, example = "1")
     private Long userId;
 
     @NotNull(message = "权限ID" + "{javax.validation.constraints.NotNull.message}")
-    @ApiModelProperty(value = "权限ID", required = true)
+    @ApiModelProperty(value = "权限ID", required = true, example = "1")
     private Long permissionId;
 
     @NotNull(message = "补充方式" + "{javax.validation.constraints.NotNull.message}")
-    @ApiModelProperty(value = "补充方式：0=增加权限、1=删除权限", required = true)
+    @ApiModelProperty(value = "补充方式：0=增加权限、1=删除权限", required = true, example = "0")
     private Integer addMode;
 
 }

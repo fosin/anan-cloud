@@ -73,7 +73,7 @@ public class UserController extends BaseController implements ISimpleController<
             @ApiImplicitParam(name = "confirmPassword1", value = "确认新密码1(未加密)",
                     required = true, dataTypeClass = String.class, paramType = "query"),
             @ApiImplicitParam(name = "confirmPassword2", value = "确认新密码2(未加密)",
-                    required = true, dataTypeClass = String.class, paramType = "query"),
+                    required = true, dataTypeClass = String.class, paramType = "query")
     })
     public ResponseEntity<String> changePassword(@Min(1) @RequestParam(TreeDto.ID_NAME) Long id,
                                                  @NotBlank @RequestParam("password") String password,
@@ -84,11 +84,16 @@ public class UserController extends BaseController implements ISimpleController<
     }
 
     @ApiOperation("根据用户ID查询用户权限列表")
-    @ApiImplicitParam(name = "userId", value = "用户ID,取值于AnanUserEntity.id",
-            required = true, dataTypeClass = String.class, paramType = "query")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userId", value = "用户ID,取值于AnanUserEntity.id",
+                    required = true, dataTypeClass = String.class, paramType = "path"),
+            @ApiImplicitParam(name = "organizId", value = "机构ID",
+                    required = true, dataTypeClass = Long.class, paramType = "query")
+    })
     @RequestMapping(value = "/permissions/{userId}", method = {RequestMethod.GET, RequestMethod.POST})
-    public ResponseEntity<List<AnanUserPermissionRespDto>> permissions(@Min(1) @PathVariable Long userId) {
-        return ResponseEntity.ok(userPermissionService.findByUserId(userId));
+    public ResponseEntity<List<AnanUserPermissionRespDto>> permissions(@Min(1) @PathVariable Long userId,
+                                                                       @RequestParam("organizId") Long organizId) {
+        return ResponseEntity.ok(userPermissionService.findByUserIdAndOrganizId(userId, organizId));
     }
 
     @ApiOperation("根据用户ID更新用户权限")
@@ -158,7 +163,7 @@ public class UserController extends BaseController implements ISimpleController<
     @ApiImplicitParam(name = "topId", value = "顶级机构ID，传0表示默认查询当前用户的顶级机构ID",
             required = true, dataTypeClass = Long.class, paramType = "path")
     public ResponseEntity<List<AnanUserRespDto>> listAllChildByTopId(@NotNull @PathVariable("topId") Long topId,
-                                                                     @NotNull @PathVariable("status") Integer status ) {
+                                                                     @NotNull @PathVariable("status") Integer status) {
         return ResponseEntity.ok(userService.listAllChildByTopId(topId, status));
     }
 

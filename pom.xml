@@ -54,7 +54,7 @@
                 <spring.cloud.config.server.git.uri>https://github.com/fosin/anan-cloud/deploy
                 </spring.cloud.config.server.git.uri>
                 <spring.cloud.config.server.git.search-paths>anan-config</spring.cloud.config.server.git.search-paths>
-                <spring.cloud.inetutils.preferred-networks>100.100.,10.8.,192.168.</spring.cloud.inetutils.preferred-networks>
+                <spring.cloud.inetutils.preferred-networks>100.100.,10.8.</spring.cloud.inetutils.preferred-networks>
                 <spring.rabbitmq.addresses>rabbitmq:5672</spring.rabbitmq.addresses>
                 <spring.rabbitmq.username>anan</spring.rabbitmq.username>
                 <spring.rabbitmq.password>local</spring.rabbitmq.password>

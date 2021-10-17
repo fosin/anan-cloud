@@ -8,7 +8,6 @@ import lombok.ToString;
 import top.fosin.anan.cloudresource.dto.req.AnanUserRoleDto;
 import top.fosin.anan.cloudresource.dto.res.AnanUserRespDto;
 
-import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 import java.util.List;
 
@@ -29,8 +28,7 @@ public class AnanUserAuthDto extends AnanUserRespDto implements Serializable {
     @ApiModelProperty(value = "用户拥有的角色")
     private List<AnanUserRoleDto> userRoles;
 
-    @NotBlank(message = "密码" + "{javax.validation.constraints.NotBlank.message}")
-    @ApiModelProperty(value = "传入原始密码，后台会对原始密码进行加密后再存储", required = true)
+    @ApiModelProperty(value = "用户密码", example = "123456")
     private String password;
 
 }

@@ -9,16 +9,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import top.fosin.anan.cloudresource.dto.res.AnanPermissionRespDto;
 import top.fosin.anan.model.controller.ISimpleController;
-
 import top.fosin.anan.model.dto.TreeDto;
-import top.fosin.anan.platform.dto.req.*;
-import top.fosin.anan.platform.dto.res.AnanOrganizationAuthRespDto;
+import top.fosin.anan.platform.dto.req.AnanVersionCreateDto;
+import top.fosin.anan.platform.dto.req.AnanVersionPermissionCreateDto;
+import top.fosin.anan.platform.dto.req.AnanVersionRetrieveDto;
+import top.fosin.anan.platform.dto.req.AnanVersionUpdateDto;
 import top.fosin.anan.platform.dto.res.AnanVersionPermissionRespDto;
 import top.fosin.anan.platform.dto.res.AnanVersionRespDto;
 import top.fosin.anan.platform.service.inter.*;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -37,15 +36,11 @@ public class VersionController implements ISimpleController<AnanVersionRespDto,
      */
     private final VersionService versionService;
     private final VersionPermissionService versionPermissionService;
-    private final OrganizationPermissionService orgPermissionService;
-    private final OrganizationAuthService orgAuthService;
     private final PermissionService permissionService;
 
-    public VersionController(VersionService versionService, VersionPermissionService versionPermissionService, OrganizationPermissionService orgPermissionService, OrganizationAuthService orgAuthService, PermissionService permissionService) {
+    public VersionController(VersionService versionService, VersionPermissionService versionPermissionService, PermissionService permissionService) {
         this.versionService = versionService;
         this.versionPermissionService = versionPermissionService;
-        this.orgPermissionService = orgPermissionService;
-        this.orgAuthService = orgAuthService;
         this.permissionService = permissionService;
     }
 
@@ -76,29 +71,8 @@ public class VersionController implements ISimpleController<AnanVersionRespDto,
     @PutMapping(value = "/permissions/{versionId}")
     public ResponseEntity<Boolean> permissions(@RequestBody List<AnanVersionPermissionCreateDto> dtos,
                                                @PathVariable("versionId") Long versionId) {
-
         //更新版本权限
-        Collection<AnanVersionPermissionRespDto> respDtos = versionPermissionService.updateInBatch("versionId", versionId, dtos);
-
-        //准备版本相关联的机构权限数据
-        List<AnanOrganizationPermissionCreateDto> orgPermissionEntities = new ArrayList<>();
-        for (AnanVersionPermissionRespDto dto : respDtos) {
-            AnanOrganizationPermissionCreateDto createDto = new AnanOrganizationPermissionCreateDto();
-            createDto.setPermissionId(dto.getPermissionId());
-            orgPermissionEntities.add(createDto);
-        }
-
-        //查询所有通过该版本生成的机构数据
-        List<AnanOrganizationAuthRespDto> organizationAuthRespDtos = orgAuthService.findAllByVersionId(versionId);
-
-        //更新所有机构权限数据
-        for (AnanOrganizationAuthRespDto entity : organizationAuthRespDtos) {
-            Long organizId = entity.getOrganizId();
-            for (AnanOrganizationPermissionCreateDto entity1 : orgPermissionEntities) {
-                entity1.setOrganizId(organizId);
-            }
-            orgPermissionService.updateInBatch("organizId", organizId, orgPermissionEntities);
-        }
+        versionPermissionService.updateInBatch("versionId", versionId, dtos);
         return ResponseEntity.ok(true);
     }
 

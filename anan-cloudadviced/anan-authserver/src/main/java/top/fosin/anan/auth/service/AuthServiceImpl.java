@@ -5,9 +5,10 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+import top.fosin.anan.auth.entity.AnanOrganizationEntity;
 import top.fosin.anan.auth.entity.AnanUserAllPermissionsEntity;
 import top.fosin.anan.auth.entity.AnanUserEntity;
-import top.fosin.anan.auth.entity.AnanUserRoleEntity;
+import top.fosin.anan.auth.repository.OrganizationRepository;
 import top.fosin.anan.auth.repository.UserAllPermissionsRepository;
 import top.fosin.anan.auth.repository.UserRepository;
 import top.fosin.anan.auth.service.inter.AuthService;
@@ -31,13 +32,15 @@ import java.util.TreeSet;
 @Service
 @Slf4j
 public class AuthServiceImpl implements AuthService {
-    private final UserAllPermissionsRepository userAllPermissionsRepository;
-    private final UserRepository userRepository;
+    private final UserAllPermissionsRepository userAllPermissionsRepo;
+    private final UserRepository userRepo;
+    private final OrganizationRepository orgRepo;
 
-    public AuthServiceImpl(UserAllPermissionsRepository userAllPermissionsRepository,
-                           UserRepository userRepository) {
-        this.userAllPermissionsRepository = userAllPermissionsRepository;
-        this.userRepository = userRepository;
+    public AuthServiceImpl(UserAllPermissionsRepository userAllPermissionsRepo,
+                           UserRepository userRepo, OrganizationRepository orgRepo) {
+        this.userAllPermissionsRepo = userAllPermissionsRepo;
+        this.userRepo = userRepo;
+        this.orgRepo = orgRepo;
     }
 
     @Override
@@ -45,11 +48,15 @@ public class AuthServiceImpl implements AuthService {
     @Transactional(readOnly = true)
     public AnanUserAuthDto findByUsercode(String usercode) {
         //该代码看似无用，其实是为了解决懒加载和缓存先后问题
-        AnanUserEntity userEntity = userRepository.findByUsercode(usercode);
+        AnanUserEntity userEntity = userRepo.findByUsercode(usercode);
         if (userEntity != null) {
-            List<AnanUserRoleEntity> userRoles = userEntity.getUserRoles();
-            log.debug(userRoles.toString());
-            return userEntity.conert2Dto();
+            AnanUserAuthDto dto = userEntity.conert2Dto();
+            Long organizId = dto.getOrganizId();
+            if (organizId > 0) {
+                AnanOrganizationEntity organization = orgRepo.getOne(organizId);
+                dto.setTopId(organization.getTopId());
+            }
+            return dto;
         }
         return null;
     }
@@ -57,7 +64,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     @Cacheable(value = RedisConstant.ANAN_USER_ALL_PERMISSIONS, key = "#userId", condition = "#result != null && #result.size() > 0")
     public List<AnanUserAllPermissionsRespDto> findByUserId(Long userId) {
-        return BeanUtil.copyCollectionProperties(userAllPermissionsRepository.findByUserId(userId), AnanUserAllPermissionsRespDto.class);
+        return BeanUtil.copyCollectionProperties(userAllPermissionsRepo.findByUserId(userId), AnanUserAllPermissionsRespDto.class);
     }
 
     @Override
@@ -78,7 +85,7 @@ public class AuthServiceImpl implements AuthService {
 
             return o1.getCode().compareToIgnoreCase(o2.getCode());
         });
-        List<AnanUserAllPermissionsEntity> permissionEntities = userAllPermissionsRepository.findByUserId(userId);
+        List<AnanUserAllPermissionsEntity> permissionEntities = userAllPermissionsRepo.findByUserId(userId);
 
         for (AnanUserAllPermissionsEntity entity : permissionEntities) {
             // 只操作状态为启用的权限

@@ -5,7 +5,6 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.DynamicUpdate;
-import top.fosin.anan.jpa.entity.CreateEntity;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -26,17 +25,12 @@ import java.io.Serializable;
 @DynamicUpdate
 @Table(name = "anan_role_permission")
 @ApiModel(value = "角色权限表实体类", description = "角色权限的实体类")
-public class AnanRolePermissionEntity extends CreateEntity<Long> implements Serializable {
+public class AnanRolePermissionEntity extends PermissionEntity<Long> implements Serializable {
     private static final long serialVersionUID = 646285760537969078L;
 
     @Basic
     @ApiModelProperty(value = "角色ID", required = true)
     @Column(name = "role_id", nullable = false)
     private Long roleId;
-
-    @Basic
-    @ApiModelProperty(value = "权限ID", required = true)
-    @Column(name = "permission_id", nullable = false)
-    private Long permissionId;
 
 }

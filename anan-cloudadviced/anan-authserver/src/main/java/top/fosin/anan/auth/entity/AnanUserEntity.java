@@ -38,14 +38,17 @@ public class AnanUserEntity extends OrganizIdCreateUpdateEntity<Long> implements
         userDto.setId(this.getId());
         List<AnanUserRoleEntity> userRoles = this.getUserRoles();
         List<AnanUserRoleDto> userRoles2 = new ArrayList<>();
-        if (userRoles != null && userRoles.size() > 0) {
-            userRoles.forEach(userRole -> {
-                AnanUserRoleDto role2 = new AnanUserRoleDto();
-                AnanRoleEntity role = userRole.getRole();
-                BeanUtils.copyProperties(role, role2);
-                role2.setId(role.getId());
-                userRoles2.add(role2);
-            });
+        if (userRoles != null) {
+            String test = userRoles.toString();
+            if (userRoles.size() > 0) {
+                userRoles.forEach(userRole -> {
+                    AnanUserRoleDto role2 = new AnanUserRoleDto();
+                    AnanRoleEntity role = userRole.getRole();
+                    BeanUtils.copyProperties(role, role2);
+                    role2.setId(role.getId());
+                    userRoles2.add(role2);
+                });
+            }
         }
         userDto.setUserRoles(userRoles2);
         return userDto;

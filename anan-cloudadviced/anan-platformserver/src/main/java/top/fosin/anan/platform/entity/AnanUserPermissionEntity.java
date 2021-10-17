@@ -5,7 +5,6 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.DynamicUpdate;
-import top.fosin.anan.jpa.entity.OrganizIdCreateEntity;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -26,7 +25,7 @@ import java.io.Serializable;
 @DynamicUpdate
 @Table(name = "anan_user_permission")
 @ApiModel(value = "用于增减用户的单项权限，通常实在角色的基础上增减单项权限实体类", description = "用户权限的实体类")
-public class AnanUserPermissionEntity extends OrganizIdCreateEntity<Long> implements Serializable {
+public class AnanUserPermissionEntity extends OrganizIdPermissionEntity<Long> implements Serializable {
     private static final long serialVersionUID = 539048606557875412L;
 
     @Basic
@@ -35,13 +34,7 @@ public class AnanUserPermissionEntity extends OrganizIdCreateEntity<Long> implem
     private Long userId;
 
     @Basic
-    @ApiModelProperty(value = "权限ID", required = true)
-    @Column(name = "permission_id", nullable = false)
-    private Long permissionId;
-
-    @Basic
     @ApiModelProperty(value = "补充方式：0=增加权限、1=删除权限", required = true)
     @Column(name = "add_mode", nullable = false)
     private Integer addMode;
-
 }

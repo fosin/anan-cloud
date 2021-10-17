@@ -16,6 +16,8 @@ import java.util.List;
 public interface UserPermissionRepository extends IJpaRepository<AnanUserPermissionEntity, Long> {
     List<AnanUserPermissionEntity> findByUserIdAndOrganizId(Long userId, Long organizId);
 
+    List<AnanUserPermissionEntity> findByUserIdAndOrganizIdAndAddMode(Long userId, Long organizId, int addMode);
+
     List<AnanUserPermissionEntity> findByOrganizId(Long organizId);
 
     List<AnanUserPermissionEntity> findByUserId(Long userId);

@@ -79,6 +79,15 @@ public class AnanUserDetailService extends AnanJwtTool<AnanUserDetail> {
     }
 
     /**
+     * 得到当前登录用户的顶级机构ID
+     *
+     * @return Long 顶级机构ID
+     */
+    public Long getAnanTopId() {
+        return this.getAnanUser().getTopId();
+    }
+
+    /**
      * 得到当前登录用户工号
      *
      * @return Long 前登录用户工号

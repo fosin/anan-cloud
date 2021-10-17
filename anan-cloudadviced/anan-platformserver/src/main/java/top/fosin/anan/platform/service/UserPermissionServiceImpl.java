@@ -4,15 +4,20 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 import top.fosin.anan.cloudresource.constant.RedisConstant;
+import top.fosin.anan.cloudresource.service.AnanUserDetailService;
 import top.fosin.anan.core.util.BeanUtil;
 import top.fosin.anan.platform.dto.req.AnanUserPermissionCreateDto;
 import top.fosin.anan.platform.dto.res.AnanUserPermissionRespDto;
+import top.fosin.anan.platform.entity.AnanUserPermissionEntity;
 import top.fosin.anan.platform.repository.UserPermissionRepository;
 import top.fosin.anan.platform.service.inter.UserPermissionService;
+import top.fosin.anan.platform.util.PermissionUtil;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author fosin
@@ -21,39 +26,74 @@ import java.util.List;
 @Service
 @Lazy
 public class UserPermissionServiceImpl implements UserPermissionService {
-    private final UserPermissionRepository userPermissionRepository;
+    private final UserPermissionRepository userPermissionRepo;
+    private final AnanUserDetailService ananUserDetailService;
 
-    public UserPermissionServiceImpl(UserPermissionRepository userPermissionRepository) {
-        this.userPermissionRepository = userPermissionRepository;
+    public UserPermissionServiceImpl(UserPermissionRepository userPermissionRepo, AnanUserDetailService ananUserDetailService) {
+        this.userPermissionRepo = userPermissionRepo;
+        this.ananUserDetailService = ananUserDetailService;
     }
 
     @Override
     public List<AnanUserPermissionRespDto> findByUserIdAndOrganizId(Long userId, Long organizId) {
         return BeanUtil.copyCollectionProperties(
-                userPermissionRepository.findByUserIdAndOrganizId(userId, organizId), AnanUserPermissionRespDto.class);
+                userPermissionRepo.findByUserIdAndOrganizId(userId, organizId), AnanUserPermissionRespDto.class);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public List<AnanUserPermissionRespDto> findByUserId(Long userId) {
         return BeanUtil.copyCollectionProperties(
-                userPermissionRepository.findByUserId(userId), AnanUserPermissionRespDto.class);
+                userPermissionRepo.findByUserId(userId), AnanUserPermissionRespDto.class);
     }
 
     @Override
     public long countByPermissionId(Long permissionId) {
-        return userPermissionRepository.countByPermissionId(permissionId);
+        return userPermissionRepo.countByPermissionId(permissionId);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     @CacheEvict(value = RedisConstant.ANAN_USER_ALL_PERMISSIONS, key = "#userId")
     public Collection<AnanUserPermissionRespDto> updateInBatch(String deleteCol, Long userId, Collection<AnanUserPermissionCreateDto> dtos) {
-        return UserPermissionService.super.updateInBatch(deleteCol, userId, dtos);
+        Assert.notNull(userId, "传入的用户ID不能为空!");
+        Assert.isTrue(dtos.stream().allMatch(entity -> entity.getUserId().equals(userId)), "需要更新的数据集中有与用户ID不匹配的数据!");
+        long organizId = dtos.stream().distinct().map(AnanUserPermissionCreateDto::getOrganizId)
+                .findFirst().orElseThrow(() -> new IllegalArgumentException("没有找打破有效的机构ID"));
+        List<AnanUserPermissionEntity> after0Permissions =
+                dtos.stream().filter(dto -> dto.getAddMode() == 0).map(permission -> {
+                    AnanUserPermissionEntity entity = new AnanUserPermissionEntity();
+                    entity.setUserId(userId);
+                    entity.setPermissionId(permission.getPermissionId());
+                    entity.setOrganizId(organizId);
+                    entity.setAddMode(permission.getAddMode());
+                    return entity;
+                }).collect(Collectors.toList());
+
+        List<AnanUserPermissionEntity> after1Permissions =
+                dtos.stream().filter(dto -> dto.getAddMode() == 1).map(permission -> {
+                    AnanUserPermissionEntity entity = new AnanUserPermissionEntity();
+                    entity.setUserId(userId);
+                    entity.setPermissionId(permission.getPermissionId());
+                    entity.setOrganizId(organizId);
+                    entity.setAddMode(permission.getAddMode());
+                    return entity;
+                }).collect(Collectors.toList());
+
+        List<AnanUserPermissionEntity> beforePermissions =
+                userPermissionRepo.findByUserIdAndOrganizIdAndAddMode(userId, organizId, 0);
+        PermissionUtil.deletePermission(beforePermissions, after0Permissions, userPermissionRepo);
+        PermissionUtil.saveNewPermission(beforePermissions, after0Permissions, userPermissionRepo);
+        beforePermissions =
+                userPermissionRepo.findByUserIdAndOrganizIdAndAddMode(userId, organizId, 1);
+        PermissionUtil.deletePermission(beforePermissions, after1Permissions, userPermissionRepo);
+        PermissionUtil.saveNewPermission(beforePermissions, after1Permissions, userPermissionRepo);
+
+        return BeanUtil.copyCollectionProperties(dtos, AnanUserPermissionRespDto.class);
     }
 
     @Override
     public UserPermissionRepository getRepository() {
-        return userPermissionRepository;
+        return userPermissionRepo;
     }
 }

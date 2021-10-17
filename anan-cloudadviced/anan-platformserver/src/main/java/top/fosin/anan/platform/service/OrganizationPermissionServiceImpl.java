@@ -10,9 +10,11 @@ import top.fosin.anan.platform.dto.res.AnanOrganizationPermissionRespDto;
 import top.fosin.anan.platform.entity.AnanOrganizationPermissionEntity;
 import top.fosin.anan.platform.repository.OrganizationPermissionRepository;
 import top.fosin.anan.platform.service.inter.OrganizationPermissionService;
+import top.fosin.anan.platform.util.PermissionUtil;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 系统机构权限系统机构权限表服务实现类
@@ -23,10 +25,10 @@ import java.util.List;
 @Service
 @Lazy
 public class OrganizationPermissionServiceImpl implements OrganizationPermissionService {
-    private final OrganizationPermissionRepository organizationPermissionRepository;
+    private final OrganizationPermissionRepository orgPermissionRepository;
 
-    public OrganizationPermissionServiceImpl(OrganizationPermissionRepository organizationPermissionRepository) {
-        this.organizationPermissionRepository = organizationPermissionRepository;
+    public OrganizationPermissionServiceImpl(OrganizationPermissionRepository orgPermissionRepository) {
+        this.orgPermissionRepository = orgPermissionRepository;
     }
 
     /**
@@ -34,7 +36,7 @@ public class OrganizationPermissionServiceImpl implements OrganizationPermission
      */
     @Override
     public OrganizationPermissionRepository getRepository() {
-        return organizationPermissionRepository;
+        return orgPermissionRepository;
     }
 
     @Override
@@ -54,10 +56,21 @@ public class OrganizationPermissionServiceImpl implements OrganizationPermission
 
         Assert.isTrue(dtos.stream().allMatch(entity -> entity.getOrganizId().equals(organizId)), "需要更新的数据集中有与版本ID不匹配的数据!");
 
-        Collection<AnanOrganizationPermissionEntity> saveEntities = BeanUtil.copyCollectionProperties(dtos, AnanOrganizationPermissionEntity.class);
+        Collection<AnanOrganizationPermissionEntity> afterPermissions = BeanUtil.copyCollectionProperties(dtos, AnanOrganizationPermissionEntity.class);
 
-        organizationPermissionRepository.deleteByOrganizId(organizId);
+        List<AnanOrganizationPermissionEntity> beforePermissions = orgPermissionRepository.findByOrganizId(organizId);
 
-        return BeanUtil.copyCollectionProperties(organizationPermissionRepository.saveAll(saveEntities), AnanOrganizationPermissionRespDto.class);
+        PermissionUtil.deletePermission(beforePermissions, afterPermissions, orgPermissionRepository);
+
+        PermissionUtil.saveNewPermission(beforePermissions, afterPermissions.stream().map(versionPermissionEntity -> {
+            AnanOrganizationPermissionEntity entity = new AnanOrganizationPermissionEntity();
+            entity.setOrganizId(organizId);
+            entity.setPermissionId(versionPermissionEntity.getPermissionId());
+            return entity;
+        }).collect(Collectors.toList()), orgPermissionRepository);
+
+        orgPermissionRepository.deleteByOrganizId(organizId);
+
+        return BeanUtil.copyCollectionProperties(orgPermissionRepository.saveAll(afterPermissions), AnanOrganizationPermissionRespDto.class);
     }
 }

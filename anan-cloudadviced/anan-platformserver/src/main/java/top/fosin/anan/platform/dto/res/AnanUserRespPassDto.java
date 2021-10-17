@@ -21,7 +21,7 @@ import top.fosin.anan.cloudresource.dto.res.AnanUserRespDto;
 public class AnanUserRespPassDto extends AnanUserRespDto {
     private static final long serialVersionUID = -37913233914512798L;
 
-    @ApiModelProperty(value = "用户密码", example = "String")
+    @ApiModelProperty(value = "用户密码", example = "123456")
     private String password;
 
 }

@@ -12,32 +12,33 @@ import top.fosin.anan.platform.dto.req.AnanRolePermissionCreateDto;
 import top.fosin.anan.platform.entity.AnanRolePermissionEntity;
 import top.fosin.anan.platform.repository.RolePermissionRepository;
 import top.fosin.anan.platform.service.inter.RolePermissionService;
+import top.fosin.anan.platform.util.PermissionUtil;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author fosin
  * @date 2017/12/29
- *
  */
 @Service
 @Lazy
 public class RolePermissionServiceImpl implements RolePermissionService {
-    private final RolePermissionRepository rolePermissionRepository;
+    private final RolePermissionRepository rolePermissionRepo;
 
-    public RolePermissionServiceImpl(RolePermissionRepository rolePermissionRepository) {
-        this.rolePermissionRepository = rolePermissionRepository;
+    public RolePermissionServiceImpl(RolePermissionRepository rolePermissionRepo) {
+        this.rolePermissionRepo = rolePermissionRepo;
     }
 
     @Override
     public List<AnanRolePermissionEntity> findByRoleId(Long roleId) {
-        return rolePermissionRepository.findByRoleId(roleId);
+        return rolePermissionRepo.findByRoleId(roleId);
     }
 
     @Override
     public long countByPermissionId(Long permissionId) {
-        return rolePermissionRepository.countByPermissionId(permissionId);
+        return rolePermissionRepo.countByPermissionId(permissionId);
     }
 
     /**
@@ -57,15 +58,22 @@ public class RolePermissionServiceImpl implements RolePermissionService {
     @Transactional(rollbackFor = Exception.class)
     public List<AnanRolePermissionRespDto> updateInBatch(String deleteCol, Long roleId, Collection<AnanRolePermissionCreateDto> dtos) {
         Assert.notNull(roleId, "传入的角色ID不能为空!");
-        Assert.isTrue(dtos.stream().allMatch(entity -> entity.getRoleId().equals(roleId)), "需要更新的数据集中有与版本ID不匹配的数据!");
-        Collection<AnanRolePermissionEntity> saveEntities = BeanUtil.copyCollectionProperties(dtos, AnanRolePermissionEntity.class);
+        Assert.isTrue(dtos.stream().allMatch(entity -> entity.getRoleId().equals(roleId)), "需要更新的数据集中有与用户ID不匹配的数据!");
+        List<AnanRolePermissionEntity> afterRolePermissions = dtos.stream().map(permission -> {
+            AnanRolePermissionEntity entity = new AnanRolePermissionEntity();
+            entity.setRoleId(roleId);
+            entity.setPermissionId(permission.getPermissionId());
+            return entity;
+        }).collect(Collectors.toList());
+        List<AnanRolePermissionEntity> rolePermissions = rolePermissionRepo.findByRoleId(roleId);
+        PermissionUtil.deletePermission(rolePermissions, afterRolePermissions, rolePermissionRepo);
+        PermissionUtil.saveNewPermission(rolePermissions, afterRolePermissions, rolePermissionRepo);
 
-        rolePermissionRepository.deleteByRoleId(roleId);
-        return BeanUtil.copyCollectionProperties(rolePermissionRepository.saveAll(saveEntities), AnanRolePermissionRespDto.class);
+        return BeanUtil.copyCollectionProperties(afterRolePermissions, AnanRolePermissionRespDto.class);
     }
 
     @Override
     public RolePermissionRepository getRepository() {
-        return rolePermissionRepository;
+        return rolePermissionRepo;
     }
 }

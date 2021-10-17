@@ -63,8 +63,9 @@ public class UserServiceImpl implements UserService {
     private final LocalOrganParameter localOrganParameter;
     private final AnanCacheManger ananCacheManger;
     private final AnanUserDetailService ananUserDetailService;
+    private final OrganizationRepository orgRepo;
 
-    public UserServiceImpl(UserRepository userRepository, UserAllRepository userAllRepository, UserRoleRepository userRoleRepository, OrganizationRepository organizationRepository, PasswordEncoder passwordEncoder, LocalOrganParameter localOrganParameter, AnanCacheManger ananCacheManger, AnanUserDetailService ananUserDetailService) {
+    public UserServiceImpl(UserRepository userRepository, UserAllRepository userAllRepository, UserRoleRepository userRoleRepository, OrganizationRepository organizationRepository, PasswordEncoder passwordEncoder, LocalOrganParameter localOrganParameter, AnanCacheManger ananCacheManger, AnanUserDetailService ananUserDetailService, OrganizationRepository orgRepo) {
         this.userRepository = userRepository;
         this.userAllRepository = userAllRepository;
         this.userRoleRepository = userRoleRepository;
@@ -73,6 +74,7 @@ public class UserServiceImpl implements UserService {
         this.localOrganParameter = localOrganParameter;
         this.ananCacheManger = ananCacheManger;
         this.ananUserDetailService = ananUserDetailService;
+        this.orgRepo = orgRepo;
     }
 
     /**
@@ -101,8 +103,13 @@ public class UserServiceImpl implements UserService {
         if (userEntity == null) {
             return null;
         }
-        AnanUserRespDto respDto = new AnanUserRespDto();
-        BeanUtils.copyProperties(userEntity, respDto);
+
+        AnanUserRespDto respDto = BeanUtil.copyProperties(userEntity, AnanUserRespDto.class);
+        Long organizId = userEntity.getOrganizId();
+        if (organizId > 0) {
+            AnanOrganizationEntity organization = orgRepo.getOne(organizId);
+            respDto.setTopId(organization.getTopId());
+        }
         return respDto;
     }
 
@@ -116,9 +123,14 @@ public class UserServiceImpl implements UserService {
     @Cacheable(value = RedisConstant.ANAN_USER, key = "#id", condition = "#result != null")
     @Transactional(readOnly = true)
     public AnanUserRespDto findOneById(Long id) {
-        AnanUserAllEntity entity = userAllRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("未找到对应数据!"));
-        return BeanUtil.copyProperties(entity,
-                AnanUserRespDto.class);
+        AnanUserAllEntity userEntity = userAllRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("未找到对应数据!"));
+        AnanUserRespDto respDto = BeanUtil.copyProperties(userEntity, AnanUserRespDto.class);
+        Long organizId = userEntity.getOrganizId();
+        if (organizId > 0) {
+            AnanOrganizationEntity organization = orgRepo.getOne(organizId);
+            respDto.setTopId(organization.getTopId());
+        }
+        return respDto;
     }
 
 
@@ -371,7 +383,7 @@ public class UserServiceImpl implements UserService {
                         organizationRepository.findById(ananUserDetailService.getAnanOrganizId()).orElseThrow(() -> new IllegalArgumentException("根据传入的机构编码没有找到任何数据!"));
                 topId = organiz.getTopId();
             }
-            entities = userRepository.findByTopIdAndStatus(topId,status);
+            entities = userRepository.findByTopIdAndStatus(topId, status);
             entities.add(userRepository.getOne(SystemConstant.ANAN_USER_ID));
         }
         return BeanUtil.copyCollectionProperties(entities, AnanUserRespDto.class);
