@@ -8,8 +8,6 @@ import top.fosin.anan.model.dto.QuerySortRuleDto;
 import top.fosin.anan.model.module.LogicalQueryRule;
 import top.fosin.anan.model.module.SortRule;
 
-import java.io.Serializable;
-
 /**
  * 系统角色权限表(AnanRolePermission)查询DTO
  *
@@ -20,7 +18,7 @@ import java.io.Serializable;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @ApiModel(value = "角色权限表查询DTO", description = "角色权限的查询DTO")
-public class AnanRolePermissionRetrieveDto extends QuerySortRuleDto<LogicalQueryRule, SortRule> implements Serializable {
+public class AnanRolePermissionRetrieveDto extends QuerySortRuleDto<LogicalQueryRule, SortRule> {
     private static final long serialVersionUID = -44755376359236777L;
 
     @ApiModelProperty(value = "角色ID")

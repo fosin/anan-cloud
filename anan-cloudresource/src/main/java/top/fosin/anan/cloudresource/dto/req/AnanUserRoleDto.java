@@ -7,8 +7,6 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import top.fosin.anan.model.dto.OrganizIdDto;
 
-import java.io.Serializable;
-
 /**
  * 系统角色表(AnanRole)查询DTO
  *
@@ -20,7 +18,7 @@ import java.io.Serializable;
 @ToString
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value = "角色表查询DTO", description = "角色的查询DTO")
-public class AnanUserRoleDto extends OrganizIdDto<Long> implements Serializable {
+public class AnanUserRoleDto extends OrganizIdDto<Long> {
     private static final long serialVersionUID = 431913654589649616L;
 
     @ApiModelProperty(value = "角色名称")

@@ -1,5 +1,9 @@
 package top.fosin.anan.platform.dto.req;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -7,11 +11,6 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import top.fosin.anan.core.util.RegexUtil;
 import top.fosin.anan.model.dto.IdDto;
-
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-import java.io.Serializable;
 
 /**
  * 包含菜单、按钮两种权限(AnanPermission)更新DTO
@@ -24,7 +23,7 @@ import java.io.Serializable;
 @ToString
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value = "包含菜单、按钮两种权限更新DTO", description = "权限的更新DTO")
-public class AnanPermissionUpdateDto extends IdDto<Long> implements Serializable {
+public class AnanPermissionUpdateDto extends IdDto<Long> {
     private static final long serialVersionUID = 900297768117165756L;
 
     @NotBlank(message = "权限编码" + "{javax.validation.constraints.NotBlank.message}")

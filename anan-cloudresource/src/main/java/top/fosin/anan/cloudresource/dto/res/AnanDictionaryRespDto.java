@@ -7,8 +7,6 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import top.fosin.anan.model.dto.IdCreateUpdateDto;
 
-import java.io.Serializable;
-
 /**
  * 系统通用字典表(AnanDictionary)响应DTO
  *
@@ -20,7 +18,7 @@ import java.io.Serializable;
 @ToString
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value = "通用字典表响应DTO", description = "通用字典的响应DTO")
-public class AnanDictionaryRespDto extends IdCreateUpdateDto<Long> implements Serializable {
+public class AnanDictionaryRespDto extends IdCreateUpdateDto<Long> {
     private static final long serialVersionUID = 611539841082760505L;
     @ApiModelProperty(value = "字典名称", example = "String")
     private String name;

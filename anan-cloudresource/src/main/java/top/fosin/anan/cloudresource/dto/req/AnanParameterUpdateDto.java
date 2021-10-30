@@ -1,5 +1,9 @@
 package top.fosin.anan.cloudresource.dto.req;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -7,11 +11,6 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import top.fosin.anan.core.util.RegexUtil;
 import top.fosin.anan.model.dto.IdDto;
-
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-import java.io.Serializable;
 
 /**
  * 用于存放各种分类分组的个性化参数(AnanParameter)更新DTO
@@ -24,7 +23,7 @@ import java.io.Serializable;
 @ToString
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value = "用于存放各种分类分组的个性化参数更新DTO", description = "通用参数的更新DTO")
-public class AnanParameterUpdateDto extends IdDto<Long> implements Serializable {
+public class AnanParameterUpdateDto extends IdDto<Long> {
     private static final long serialVersionUID = -66906700665921741L;
 
     @NotBlank(message = "参数键" + "{javax.validation.constraints.NotBlank.message}")

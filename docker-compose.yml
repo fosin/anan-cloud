@@ -155,6 +155,7 @@ services:
     container_name: anan-platformserver
     hostname: anan-platformserver
     restart: always
+    privileged: true
     environment:
       - JAVA_TOOL_OPTIONS=-Xmx200M -XX:MaxMetaspaceSize=160M -XX:MetaspaceSize=160M -XX:+DisableExplicitGC -XX:ErrorFile=/logs/hs_err_pid%p.log
       #    volumes:

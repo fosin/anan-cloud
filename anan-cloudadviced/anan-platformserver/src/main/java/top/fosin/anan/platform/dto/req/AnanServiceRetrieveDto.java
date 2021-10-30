@@ -8,8 +8,6 @@ import top.fosin.anan.model.dto.QuerySortRuleDto;
 import top.fosin.anan.model.module.LogicalQueryRule;
 import top.fosin.anan.model.module.SortRule;
 
-import java.io.Serializable;
-
 /**
  * 系统服务表(AnanService)查询DTO
  *
@@ -20,7 +18,7 @@ import java.io.Serializable;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @ApiModel(value = "服务表查询DTO", description = "服务的查询DTO")
-public class AnanServiceRetrieveDto extends QuerySortRuleDto<LogicalQueryRule, SortRule> implements Serializable {
+public class AnanServiceRetrieveDto extends QuerySortRuleDto<LogicalQueryRule, SortRule> {
     private static final long serialVersionUID = -95213722807513308L;
 
     @ApiModelProperty(value = "服务标识", example = "String")

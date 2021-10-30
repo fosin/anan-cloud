@@ -7,8 +7,6 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import top.fosin.anan.model.dto.IdCreateUpdateDto;
 
-import java.io.Serializable;
-
 /**
  * 国际化语言集(AnanInternational)响应DTO
  *
@@ -20,7 +18,7 @@ import java.io.Serializable;
 @ToString
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value = "国际化语言集响应DTO", description = "国际化语言的响应DTO")
-public class AnanInternationalRespDto extends IdCreateUpdateDto<Long> implements Serializable {
+public class AnanInternationalRespDto extends IdCreateUpdateDto<Long> {
     private static final long serialVersionUID = 589462762626564199L;
     @ApiModelProperty(value = "标识", example = "String")
     private String code;

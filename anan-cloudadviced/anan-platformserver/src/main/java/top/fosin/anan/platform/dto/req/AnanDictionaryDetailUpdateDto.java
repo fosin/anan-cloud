@@ -10,7 +10,6 @@ import top.fosin.anan.model.dto.IdDto;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-import java.io.Serializable;
 
 /**
  * 系统通用字典明细表(AnanDictionaryDetail)更新DTO
@@ -23,7 +22,7 @@ import java.io.Serializable;
 @ToString
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value = "通用字典明细表更新DTO", description = "通用字典明细的更新DTO")
-public class AnanDictionaryDetailUpdateDto extends IdDto<Long> implements Serializable {
+public class AnanDictionaryDetailUpdateDto extends IdDto<Long> {
     private static final long serialVersionUID = 609095667456068012L;
 
     @NotNull(message = "字典明细键" + "{javax.validation.constraints.NotNull.message}")

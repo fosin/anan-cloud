@@ -7,8 +7,6 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import top.fosin.anan.model.dto.IdCreateUpdateDto;
 
-import java.io.Serializable;
-
 /**
  * 系统服务表(AnanService)响应DTO
  *
@@ -20,7 +18,7 @@ import java.io.Serializable;
 @ToString
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value = "服务表响应DTO", description = "服务的响应DTO")
-public class AnanServiceRespDto extends IdCreateUpdateDto<Long> implements Serializable {
+public class AnanServiceRespDto extends IdCreateUpdateDto<Long> {
     private static final long serialVersionUID = -56691240580744332L;
     @ApiModelProperty(value = "服务标识", example = "String")
     private String code;

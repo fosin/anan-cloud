@@ -13,7 +13,6 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-import java.io.Serializable;
 
 /**
  * 系统通用字典表(AnanDictionary)实体类
@@ -29,8 +28,8 @@ import java.io.Serializable;
 @SQLDelete(sql = "update anan_dictionary set deleted = 1 where id = ?")
 @Where(clause = "deleted = 0")
 @Table(name = "anan_dictionary")
-@ApiModel(value = "通用字典表实体类", description = "通用字典的实体类")
-public class AnanDictionaryEntity extends SoftDeleteEntity<Long> implements Serializable {
+@ApiModel(value = " ", description = "通用字典的实体类")
+public class AnanDictionaryEntity extends SoftDeleteEntity<Long> {
     private static final long serialVersionUID = -48637204028516104L;
 
     @Basic

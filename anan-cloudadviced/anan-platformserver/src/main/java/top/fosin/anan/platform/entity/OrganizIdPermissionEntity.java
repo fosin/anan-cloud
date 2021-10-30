@@ -21,7 +21,7 @@ import java.io.Serializable;
 @ToString(callSuper = true)
 @Data
 @MappedSuperclass
-public class OrganizIdPermissionEntity<ID extends Serializable> extends PermissionEntity<ID> implements Serializable {
+public class OrganizIdPermissionEntity<ID extends Serializable> extends PermissionEntity<ID> {
     private static final long serialVersionUID = 117455991817648863L;
 
     @Column(name = "organiz_id", nullable = false)

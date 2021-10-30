@@ -7,8 +7,6 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import top.fosin.anan.cloudresource.dto.PermissionDto;
 
-import java.io.Serializable;
-
 /**
  * 用于增减用户的单项权限，通常实在角色的基础上增减单项权限(AnanUserPermission)响应DTO
  *
@@ -20,7 +18,7 @@ import java.io.Serializable;
 @ToString
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value = "用于增减用户的单项权限，通常实在角色的基础上增减单项权限响应DTO", description = "用户权限的响应DTO")
-public class AnanUserPermissionRespDto extends PermissionDto<Long> implements Serializable {
+public class AnanUserPermissionRespDto extends PermissionDto<Long> {
     private static final long serialVersionUID = -28245693115711034L;
     @ApiModelProperty(value = "机构ID", example = "Long")
     private Long organizId;

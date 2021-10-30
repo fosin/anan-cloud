@@ -1,5 +1,9 @@
 package top.fosin.anan.platform.dto.req;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -7,11 +11,6 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import top.fosin.anan.core.util.RegexUtil;
 import top.fosin.anan.model.dto.IdDto;
-
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-import java.io.Serializable;
 
 /**
  * 系统通用字典表(AnanDictionary)更新DTO
@@ -24,7 +23,7 @@ import java.io.Serializable;
 @ToString
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value = "通用字典表更新DTO", description = "通用字典的更新DTO")
-public class AnanDictionaryUpdateDto extends IdDto<Long> implements Serializable {
+public class AnanDictionaryUpdateDto extends IdDto<Long> {
     private static final long serialVersionUID = -36896996810986681L;
 
     @NotBlank(message = "字典名称" + "{javax.validation.constraints.NotBlank.message}")

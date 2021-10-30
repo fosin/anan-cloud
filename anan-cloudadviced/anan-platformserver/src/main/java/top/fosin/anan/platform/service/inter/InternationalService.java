@@ -1,7 +1,5 @@
 package top.fosin.anan.platform.service.inter;
 
-import org.springframework.cache.annotation.Cacheable;
-import top.fosin.anan.cloudresource.constant.RedisConstant;
 import top.fosin.anan.jpa.service.ISimpleJpaService;
 import top.fosin.anan.platform.dto.req.AnanInternationalCreateDto;
 import top.fosin.anan.platform.dto.req.AnanInternationalRetrieveDto;

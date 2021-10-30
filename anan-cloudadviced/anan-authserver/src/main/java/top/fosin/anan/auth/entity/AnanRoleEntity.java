@@ -1,17 +1,17 @@
 package top.fosin.anan.auth.entity;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import org.hibernate.annotations.DynamicUpdate;
-import top.fosin.anan.jpa.entity.OrganizIdCreateUpdateEntity;
-
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-import java.io.Serializable;
+
+import org.hibernate.annotations.DynamicUpdate;
+
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import top.fosin.anan.jpa.entity.OrganizIdCreateUpdateEntity;
 
 /**
  * 系统角色表(AnanRole)实体类
@@ -26,7 +26,7 @@ import java.io.Serializable;
 @DynamicUpdate
 @Table(name = "anan_role")
 @ApiModel(value = "角色表实体类", description = "角色的实体类")
-public class AnanRoleEntity extends OrganizIdCreateUpdateEntity<Long> implements Serializable {
+public class AnanRoleEntity extends OrganizIdCreateUpdateEntity<Long> {
     private static final long serialVersionUID = -64971271359941469L;
 
     @Basic

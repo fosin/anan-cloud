@@ -1,13 +1,22 @@
 package top.fosin.anan.platform.controller;
 
+import java.util.Collection;
+import java.util.List;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.util.Assert;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
-import org.springframework.util.Assert;
-import org.springframework.web.bind.annotation.*;
 import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
 import top.fosin.anan.cloudresource.dto.req.RegisterDto;
 import top.fosin.anan.cloudresource.dto.res.AnanOrganizationRespDto;
@@ -15,8 +24,6 @@ import top.fosin.anan.cloudresource.dto.res.AnanOrganizationTreeDto;
 import top.fosin.anan.model.controller.BaseController;
 import top.fosin.anan.model.controller.IRetrieveTreeController;
 import top.fosin.anan.model.controller.ISimpleController;
-
-
 import top.fosin.anan.platform.dto.req.AnanOrganizationCreateDto;
 import top.fosin.anan.platform.dto.req.AnanOrganizationPermissionCreateDto;
 import top.fosin.anan.platform.dto.req.AnanOrganizationRetrieveDto;
@@ -27,14 +34,10 @@ import top.fosin.anan.platform.service.inter.OrganizationAuthService;
 import top.fosin.anan.platform.service.inter.OrganizationPermissionService;
 import top.fosin.anan.platform.service.inter.OrganizationService;
 
-import java.util.Collection;
-import java.util.List;
-
 /**
  * @author fosin
  */
 @RestController
-@Slf4j
 @RequestMapping(UrlPrefixConstant.ORGANIZATION)
 @Api(value = UrlPrefixConstant.ORGANIZATION, tags = "机构管理")
 public class OrganizationController extends BaseController

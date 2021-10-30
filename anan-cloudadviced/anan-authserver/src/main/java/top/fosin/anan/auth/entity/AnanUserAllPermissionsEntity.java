@@ -1,19 +1,24 @@
 package top.fosin.anan.auth.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+
+import org.hibernate.annotations.DynamicUpdate;
+import org.springframework.beans.BeanUtils;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.hibernate.annotations.DynamicUpdate;
-import org.springframework.beans.BeanUtils;
 import springfox.documentation.annotations.ApiIgnore;
 import top.fosin.anan.cloudresource.dto.AnanUserAllPermissionTreeDto;
 import top.fosin.anan.jpa.entity.CreateUpdateEntity;
-
-import javax.persistence.*;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * 包含菜单、按钮两种权限(AnanPermission)实体类
@@ -28,7 +33,7 @@ import java.util.List;
 @DynamicUpdate
 @Table(name = "anan_user_all_permissions")
 @ApiModel(value = "用户的所有权限，包含角色权限、用户增减权限", description = "试图(anan_user_all_permissions)用户的所有权限，包含角色权限、用户增减权限")
-public class AnanUserAllPermissionsEntity extends CreateUpdateEntity<Long> implements Serializable {
+public class AnanUserAllPermissionsEntity extends CreateUpdateEntity<Long> {
     private static final long serialVersionUID = 5284105099273855621L;
 
     public AnanUserAllPermissionTreeDto convert2Dto() {

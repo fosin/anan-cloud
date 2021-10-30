@@ -8,8 +8,6 @@ import top.fosin.anan.model.dto.QuerySortRuleDto;
 import top.fosin.anan.model.module.LogicalQueryRule;
 import top.fosin.anan.model.module.SortRule;
 
-import java.io.Serializable;
-
 /**
  * 国际化语言集(AnanInternational)查询DTO
  *
@@ -20,7 +18,7 @@ import java.io.Serializable;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @ApiModel(value = "国际化语言集查询DTO", description = "国际化语言的查询DTO")
-public class AnanInternationalRetrieveDto extends QuerySortRuleDto<LogicalQueryRule, SortRule> implements Serializable {
+public class AnanInternationalRetrieveDto extends QuerySortRuleDto<LogicalQueryRule, SortRule> {
     private static final long serialVersionUID = 380520117161696142L;
 
     @ApiModelProperty(value = "标识", example = "String")

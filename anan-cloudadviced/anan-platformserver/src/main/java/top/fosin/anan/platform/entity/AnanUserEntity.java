@@ -1,17 +1,21 @@
 package top.fosin.anan.platform.entity;
 
+import java.util.Date;
+
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
 import top.fosin.anan.jpa.entity.SoftDeleteEntity;
-
-import javax.persistence.*;
-import java.io.Serializable;
-import java.util.Date;
 
 /**
  * 系统用户表(AnanUser)实体类
@@ -28,7 +32,7 @@ import java.util.Date;
 @Where(clause = "deleted = 0")
 @Table(name = "anan_user")
 @ApiModel(value = "用户表实体类", description = "用户的实体类")
-public class AnanUserEntity extends SoftDeleteEntity<Long> implements Serializable {
+public class AnanUserEntity extends SoftDeleteEntity<Long> {
   private static final long serialVersionUID = 897030139778409164L;
 
   @Basic

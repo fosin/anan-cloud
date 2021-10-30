@@ -1,17 +1,17 @@
 package top.fosin.anan.platform.dto.req;
 
+import java.util.Date;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.springframework.format.annotation.DateTimeFormat;
 import top.fosin.anan.core.util.DateTimeUtil;
 import top.fosin.anan.model.dto.QuerySortRuleDto;
 import top.fosin.anan.model.module.LogicalQueryRule;
 import top.fosin.anan.model.module.SortRule;
-
-import java.io.Serializable;
-import java.util.Date;
 
 /**
  * 用于增减用户的单项权限，通常实在角色的基础上增减单项权限(AnanUserPermission)查询DTO
@@ -23,7 +23,7 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @ApiModel(value = "用于增减用户的单项权限，通常实在角色的基础上增减单项权限查询DTO", description = "用户权限的查询DTO")
-public class AnanUserPermissionRetrieveDto extends QuerySortRuleDto<LogicalQueryRule, SortRule> implements Serializable {
+public class AnanUserPermissionRetrieveDto extends QuerySortRuleDto<LogicalQueryRule, SortRule> {
     private static final long serialVersionUID = 989390435758584592L;
 
     @ApiModelProperty(value = "机构ID")

@@ -1,16 +1,15 @@
 package top.fosin.anan.cloudresource.dto;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import top.fosin.anan.core.util.RegexUtil;
 import top.fosin.anan.model.dto.TreeDto;
-
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-import java.io.Serializable;
 
 /**
  * 包含菜单、按钮两种权限(AnanPermission)更新DTO
@@ -22,7 +21,7 @@ import java.io.Serializable;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @ApiModel(value = "用户所有的权限", description = "用户所有的权限，包含用户权限和角色权限")
-public class AnanUserAllPermissionTreeDto extends TreeDto<AnanUserAllPermissionTreeDto, Long> implements Serializable {
+public class AnanUserAllPermissionTreeDto extends TreeDto<AnanUserAllPermissionTreeDto, Long> {
     private static final long serialVersionUID = 900297768117165756L;
 
     @NotBlank(message = "权限编码" + "{javax.validation.constraints.NotBlank.message}")

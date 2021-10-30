@@ -1,18 +1,19 @@
 package top.fosin.anan.platform.entity;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import org.hibernate.annotations.DynamicUpdate;
-import top.fosin.anan.jpa.entity.CreateUpdateEntity;
+import java.util.Date;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-import java.io.Serializable;
-import java.util.Date;
+
+import org.hibernate.annotations.DynamicUpdate;
+
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import top.fosin.anan.jpa.entity.CreateUpdateEntity;
 
 /**
  * 系统版本表(AnanVersion)实体类
@@ -27,7 +28,7 @@ import java.util.Date;
 @DynamicUpdate
 @Table(name = "anan_version")
 @ApiModel(value = "版本表实体类", description = "版本的实体类")
-public class AnanVersionEntity extends CreateUpdateEntity<Long> implements Serializable {
+public class AnanVersionEntity extends CreateUpdateEntity<Long> {
     private static final long serialVersionUID = -54459367678395780L;
 
     @Basic

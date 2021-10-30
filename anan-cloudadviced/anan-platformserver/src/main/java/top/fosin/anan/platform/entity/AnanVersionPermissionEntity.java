@@ -1,16 +1,16 @@
 package top.fosin.anan.platform.entity;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import org.hibernate.annotations.DynamicUpdate;
-
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-import java.io.Serializable;
+
+import org.hibernate.annotations.DynamicUpdate;
+
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * 系统版本权限表(AnanVersionPermission)实体类
@@ -25,7 +25,7 @@ import java.io.Serializable;
 @DynamicUpdate
 @Table(name = "anan_version_permission")
 @ApiModel(value = "版本权限表实体类", description = "版本权限的实体类")
-public class AnanVersionPermissionEntity extends PermissionEntity<Long> implements Serializable {
+public class AnanVersionPermissionEntity extends PermissionEntity<Long> {
     private static final long serialVersionUID = 117455991817648863L;
 
     @Basic

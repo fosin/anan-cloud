@@ -1,18 +1,19 @@
 package top.fosin.anan.platform.entity;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import org.hibernate.annotations.DynamicUpdate;
-import top.fosin.anan.jpa.entity.CreateUpdateEntity;
+import java.util.Date;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-import java.io.Serializable;
-import java.util.Date;
+
+import org.hibernate.annotations.DynamicUpdate;
+
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import top.fosin.anan.jpa.entity.CreateUpdateEntity;
 
 ;
 
@@ -29,7 +30,7 @@ import java.util.Date;
 @DynamicUpdate
 @Table(name = "anan_parameter")
 @ApiModel(value = "用于存放各种分类分组的个性化参数实体类", description = "通用参数的实体类")
-public class AnanParameterEntity extends CreateUpdateEntity<Long> implements Serializable {
+public class AnanParameterEntity extends CreateUpdateEntity<Long> {
     private static final long serialVersionUID = 301081721804164443L;
 
     @Basic

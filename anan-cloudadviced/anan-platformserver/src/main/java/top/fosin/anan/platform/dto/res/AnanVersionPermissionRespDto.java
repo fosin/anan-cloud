@@ -7,8 +7,6 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import top.fosin.anan.cloudresource.dto.PermissionDto;
 
-import java.io.Serializable;
-
 /**
  * 系统版本权限表(AnanVersionPermission)响应DTO
  *
@@ -20,7 +18,7 @@ import java.io.Serializable;
 @ToString
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value = "版本权限表响应DTO", description = "版本权限的响应DTO")
-public class AnanVersionPermissionRespDto extends PermissionDto<Long> implements Serializable {
+public class AnanVersionPermissionRespDto extends PermissionDto<Long> {
     private static final long serialVersionUID = 632049633274326678L;
     @ApiModelProperty(value = "版本ID", example = "Long")
     private Long versionId;

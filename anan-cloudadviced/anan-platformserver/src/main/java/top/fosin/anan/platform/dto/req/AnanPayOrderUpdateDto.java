@@ -1,17 +1,18 @@
 package top.fosin.anan.platform.dto.req;
 
+import java.util.Date;
+
+import javax.validation.constraints.NotNull;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import org.springframework.format.annotation.DateTimeFormat;
 import top.fosin.anan.core.util.DateTimeUtil;
 import top.fosin.anan.model.dto.IdDto;
-
-import javax.validation.constraints.NotNull;
-import java.io.Serializable;
-import java.util.Date;
 
 /**
  * 支付订单表(AnanPayOrder)更新DTO
@@ -24,7 +25,7 @@ import java.util.Date;
 @ToString
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value = "支付订单表更新DTO", description = "支付订单的更新DTO")
-public class AnanPayOrderUpdateDto extends IdDto<Long> implements Serializable {
+public class AnanPayOrderUpdateDto extends IdDto<Long> {
     private static final long serialVersionUID = 376987885367918806L;
 
     @NotNull(message = "订单机构" + "{javax.validation.constraints.NotNull.message}")

@@ -66,32 +66,33 @@ jobs:
       - name: Docker Hub Login
         run: |
           docker login --username=${{ secrets.alidocker_username }} --password=${{ secrets.alidocker_secrect }} ${{ env.DOCKER_MIRROR_SERVER }}
-      # 创建adoptopenjdk11-openj9镜像
-      - name: Docker build and push adoptopenjdk-11-jdk-openj9
+      # 创建openjdk-11-ubuntu-openj9镜像
+      - name: Docker build and push openjdk-11-ubuntu-openj9
         if: contains(env.MODIFY_FILES,'deploy/openjdk/11-openj9.Dockerfile') || contains(env.MODIFY_FILES,'entrypoint.sh') || contains(env.MODIFY_FILES,'sources.list')
         run: |
           MODULE_PATH=deploy/openjdk
           MODULE_NAME=adoptopenjdk
-          MODULE_VERSION=11-jdk-openj9
+          MODULE_VERSION=11-ubuntu-openj9
           docker build $MODULE_PATH -t ${{ env.DOCKER_MIRROR_SERVER }}/${{ env.DOCKER_MIRROR_NS }}/$MODULE_NAME:$MODULE_VERSION -f $MODULE_PATH/11-openj9.Dockerfile
           docker push ${{ env.DOCKER_MIRROR_SERVER }}/${{ env.DOCKER_MIRROR_NS }}/$MODULE_NAME:$MODULE_VERSION
-      # 创建jdk11镜像
-      - name: Docker build and push openjdk11
-        if: contains(env.MODIFY_FILES,'deploy/openjdk/11.Dockerfile') || contains(env.MODIFY_FILES,'entrypoint.sh') || contains(env.MODIFY_FILES,'sources.list')
+      # 创建jdk11-ubuntu-hotspot镜像
+      - name: Docker build and push openjdk11-ubuntu-hotspot
+        if: contains(env.MODIFY_FILES,'deploy/openjdk/11-ubuntu.Dockerfile') || contains(env.MODIFY_FILES,'entrypoint.sh') || contains(env.MODIFY_FILES,'sources.list')
         run: |
           MODULE_PATH=deploy/openjdk
-          MODULE_NAME=adoptopenjdk
-          MODULE_VERSION=11-jdk-hotspot
-          docker build $MODULE_PATH -t ${{ env.DOCKER_MIRROR_SERVER }}/${{ env.DOCKER_MIRROR_NS }}/$MODULE_NAME:$MODULE_VERSION -f $MODULE_PATH/11.Dockerfile
+          MODULE_NAME=eclipse-temurin
+          MODULE_VERSION=11-ubuntu-hotspot
+          docker build $MODULE_PATH -t ${{ env.DOCKER_MIRROR_SERVER }}/${{ env.DOCKER_MIRROR_NS }}/$MODULE_NAME:$MODULE_VERSION -f $MODULE_PATH/11-ubuntu.Dockerfile
           docker push ${{ env.DOCKER_MIRROR_SERVER }}/${{ env.DOCKER_MIRROR_NS }}/$MODULE_NAME:$MODULE_VERSION
-      # 创建jdk8镜像
+      # 创建jdk11-centos7-hotspot镜像
       - name: Docker build and push openjdk8
-        if: contains(env.MODIFY_FILES,'deploy/openjdk/8.Dockerfile') || contains(env.MODIFY_FILES,'entrypoint.sh') || contains(env.MODIFY_FILES,'sources.list')
+        if: contains(env.MODIFY_FILES,'deploy/openjdk/11-centos7.Dockerfile') || contains(env.MODIFY_FILES,'entrypoint
+        .sh') || contains(env.MODIFY_FILES,'sources.list')
         run: |
           MODULE_PATH=deploy/openjdk
-          MODULE_NAME=adoptopenjdk
-          MODULE_VERSION=8-jdk-hotspot
-          docker build $MODULE_PATH -t ${{ env.DOCKER_MIRROR_SERVER }}/${{ env.DOCKER_MIRROR_NS }}/$MODULE_NAME:$MODULE_VERSION -f $MODULE_PATH/8.Dockerfile
+          MODULE_NAME=eclipse-temurin
+          MODULE_VERSION=11-centos7-hotspot
+          docker build $MODULE_PATH -t ${{ env.DOCKER_MIRROR_SERVER }}/${{ env.DOCKER_MIRROR_NS }}/$MODULE_NAME:$MODULE_VERSION -f $MODULE_PATH/11-centos7.Dockerfile
           docker push ${{ env.DOCKER_MIRROR_SERVER }}/${{ env.DOCKER_MIRROR_NS }}/$MODULE_NAME:$MODULE_VERSION
 
       # Maven构建jar包

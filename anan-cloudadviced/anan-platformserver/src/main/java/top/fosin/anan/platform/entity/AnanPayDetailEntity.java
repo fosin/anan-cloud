@@ -1,17 +1,17 @@
 package top.fosin.anan.platform.entity;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import org.hibernate.annotations.DynamicUpdate;
-import top.fosin.anan.jpa.entity.IdEntity;
-
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-import java.io.Serializable;
+
+import org.hibernate.annotations.DynamicUpdate;
+
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import top.fosin.anan.jpa.entity.IdEntity;
 
 /**
  * 支付明细表(AnanPayDetail)实体类
@@ -26,7 +26,7 @@ import java.io.Serializable;
 @DynamicUpdate
 @Table(name = "anan_pay_detail")
 @ApiModel(value = "支付明细表实体类", description = "支付明细的实体类")
-public class AnanPayDetailEntity extends IdEntity<Long> implements Serializable {
+public class AnanPayDetailEntity extends IdEntity<Long> {
     private static final long serialVersionUID = -23058131683087837L;
 
     @Basic

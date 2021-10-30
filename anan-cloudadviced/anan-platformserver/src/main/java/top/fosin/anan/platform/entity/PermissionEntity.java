@@ -23,7 +23,7 @@ import java.io.Serializable;
 @Data
 @MappedSuperclass
 public class PermissionEntity<ID extends Serializable>
-        extends CreateEntity<ID> implements Serializable {
+        extends CreateEntity<ID> {
     private static final long serialVersionUID = 117455991817648863L;
 
     @Basic

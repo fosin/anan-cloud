@@ -7,8 +7,6 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import top.fosin.anan.model.dto.IdDto;
 
-import java.io.Serializable;
-
 /**
  * 支付明细表(AnanPayDetail)响应DTO
  *
@@ -20,7 +18,7 @@ import java.io.Serializable;
 @ToString
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value = "支付明细表响应DTO", description = "支付明细的响应DTO")
-public class AnanPayDetailRespDto extends IdDto<Long> implements Serializable {
+public class AnanPayDetailRespDto extends IdDto<Long> {
     private static final long serialVersionUID = 333646482553193487L;
     @ApiModelProperty(value = "支付ID", example = "Long")
     private Long payId;

@@ -1,13 +1,13 @@
 # 设计定位
 
-    anan基于OpenJdk8、Spring Boot 2.3.x、Spring Cloud Hoxton生态体系技术，采用微服务前后端分离架构，为个人及企业微
+    anan基于OpenJdk11、Spring Boot 2.3.x、Spring Cloud Hoxton生态体系技术，采用微服务前后端分离架构，为个人及企业微
     服务架构提供一种解决方案，供开发人员学习和交流。其中包括服务注册与发现、服务监控、服务管理、
     服务治理、服务网关、服务熔断、配置管理、OAuth2认证授权中心等常见微服务组件。其中服务注册与发现支持nacos、eureka。
     支持Kubernetes(Helm)集群部署、jar包集群部署、Docker-Compose部署、Swarm集群部署
 
 对应前端项目地址: <https://github.com/fosin/anan-vue>
 
-# 技术选型
+## 技术选型
 
      技术                                   |           简介 
     ------                                 |          ------
@@ -40,21 +40,25 @@
     ELK                                    | 日志收集、分析组合框架
     Vuejs、Nodejs、Webpack、ElementUI       | 前段开发框架
 
-# 架构设计
+## 架构设计
 
-## 系统架构图
+### 系统架构图
+
 ![系统架构图](./docs/image/技术架构图.png)
 
-## 网络拓扑图
+### 网络拓扑图
+
 ![网络拓扑图](./docs/image/网络拓扑图.png)
 
-## 模块关系图
+### 模块关系图
+
 ![模块关系图](./docs/image/模块关系图.png)
 
-## 功能设计图
+### 功能设计图
+
 ![功能设计图](./docs/image/功能设计图.png)
 
-# 框架版本对照
+## 框架版本对照
 
     anan-cloud    |     anan-boot     |      anan-vue
     -------------------------------------------------------
@@ -67,7 +71,7 @@
     2.6.x               2.3.x                3.4.x
     2.7.x               2.4.x                3.5.x
 
-# 搭建环境
+## 搭建环境
 
 ## 1、本地（profile=local）开发环境指南
 
@@ -101,7 +105,8 @@
 
 ### 2.4、Docker Swarm集群环境部署
 
-详细介绍 [点这里readme-swarm.md](deploy/swarm/readme-swarm.md) 
-   
-# 码农不易，打赏作者一杯茶吧
+详细介绍 [点这里readme-swarm.md](deploy/swarm/readme-swarm.md)
+
+## 码农不易，打赏作者一杯茶吧
+
 ![打赏](https://upload.jianshu.io/users/qrcodes/22247790/%E5%BE%AE%E4%BF%A1%E5%92%8C%E6%94%AF%E4%BB%98%E5%AE%9D.jpg)

@@ -1,16 +1,16 @@
 package top.fosin.anan.platform.dto.res;
 
+import java.util.Date;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import org.springframework.format.annotation.DateTimeFormat;
 import top.fosin.anan.core.util.DateTimeUtil;
 import top.fosin.anan.model.dto.IdDto;
-
-import java.io.Serializable;
-import java.util.Date;
 
 /**
  * 支付订单表(AnanPayOrder)响应DTO
@@ -23,7 +23,7 @@ import java.util.Date;
 @ToString
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value = "支付订单表响应DTO", description = "支付订单的响应DTO")
-public class AnanPayOrderRespDto extends IdDto<Long> implements Serializable {
+public class AnanPayOrderRespDto extends IdDto<Long> {
     private static final long serialVersionUID = 246548313263160346L;
     @ApiModelProperty(value = "订单机构", example = "Long")
     private Long organizId;

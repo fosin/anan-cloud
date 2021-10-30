@@ -1,15 +1,14 @@
 package top.fosin.anan.platform.dto.req;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import top.fosin.anan.model.dto.IdDto;
-
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import java.io.Serializable;
 
 /**
  * 系统服务表(AnanService)更新DTO
@@ -22,7 +21,7 @@ import java.io.Serializable;
 @ToString
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value = "服务表更新DTO", description = "服务的更新DTO")
-public class AnanServiceUpdateDto extends IdDto<Long> implements Serializable {
+public class AnanServiceUpdateDto extends IdDto<Long> {
     private static final long serialVersionUID = -36886476405187311L;
 
     @NotBlank(message = "服务标识" + "{javax.validation.constraints.NotBlank.message}")

@@ -1,19 +1,20 @@
 package top.fosin.anan.cloudresource.dto.req;
 
+import java.util.Date;
+
+import javax.validation.constraints.Pattern;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.springframework.format.annotation.DateTimeFormat;
 import top.fosin.anan.core.util.DateTimeUtil;
 import top.fosin.anan.core.util.RegexUtil;
 import top.fosin.anan.model.dto.QuerySortRuleDto;
 import top.fosin.anan.model.module.LogicalQueryRule;
 import top.fosin.anan.model.module.SortRule;
-
-import javax.validation.constraints.Pattern;
-import java.io.Serializable;
-import java.util.Date;
 
 /**
  * 系统通用字典表(AnanDictionary)查询DTO
@@ -25,7 +26,7 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @ApiModel(value = "通用字典表查询DTO", description = "通用字典的查询DTO")
-public class AnanDictionaryRetrieveDto extends QuerySortRuleDto<LogicalQueryRule, SortRule> implements Serializable {
+public class AnanDictionaryRetrieveDto extends QuerySortRuleDto<LogicalQueryRule, SortRule> {
     private static final long serialVersionUID = 480249603699448721L;
 
     @ApiModelProperty(value = "字典名称")

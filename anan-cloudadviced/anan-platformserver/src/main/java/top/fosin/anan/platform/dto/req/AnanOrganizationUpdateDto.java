@@ -1,5 +1,9 @@
 package top.fosin.anan.platform.dto.req;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -7,11 +11,6 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import top.fosin.anan.core.util.RegexUtil;
 import top.fosin.anan.model.dto.IdDto;
-
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-import java.io.Serializable;
 
 /**
  * 系统机构表(AnanOrganization)更新DTO
@@ -24,7 +23,7 @@ import java.io.Serializable;
 @ToString
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value = "机构表更新DTO", description = "机构的更新DTO")
-public class AnanOrganizationUpdateDto extends IdDto<Long> implements Serializable {
+public class AnanOrganizationUpdateDto extends IdDto<Long> {
     private static final long serialVersionUID = -70574823368846228L;
 
     @NotNull(message = "父机构编号" + "{javax.validation.constraints.NotNull.message}")

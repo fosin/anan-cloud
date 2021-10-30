@@ -8,8 +8,6 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import top.fosin.anan.model.dto.PidDto;
 
-import java.io.Serializable;
-
 /**
  * (AnanUserAllPermissions)响应DTO
  *
@@ -21,7 +19,7 @@ import java.io.Serializable;
 @ToString
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value = "用户所有的权限响应DTO", description = "用户所有权限的响应DTO")
-public class AnanUserAllPermissionsRespDto extends PidDto<Long> implements Serializable {
+public class AnanUserAllPermissionsRespDto extends PidDto<Long> {
     private static final long serialVersionUID = 836500519130655446L;
 
     @ApiModelProperty(value = "权限编码，不能重复 不能为空", required = true)

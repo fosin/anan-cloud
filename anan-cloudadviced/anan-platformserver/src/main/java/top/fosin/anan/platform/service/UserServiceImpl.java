@@ -1,7 +1,17 @@
 package top.fosin.anan.platform.service;
 
-import cn.hutool.core.util.NumberUtil;
-import lombok.extern.slf4j.Slf4j;
+import java.io.Serializable;
+import java.util.Collection;
+import java.util.List;
+import java.util.Objects;
+import java.util.Random;
+
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.Path;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import javax.persistence.criteria.Subquery;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -15,6 +25,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
+
+import cn.hutool.core.util.NumberUtil;
 import top.fosin.anan.cloudresource.constant.RedisConstant;
 import top.fosin.anan.cloudresource.constant.SystemConstant;
 import top.fosin.anan.cloudresource.dto.req.AnanUserRetrieveDto;
@@ -40,20 +52,12 @@ import top.fosin.anan.platform.repository.UserRoleRepository;
 import top.fosin.anan.platform.service.inter.UserService;
 import top.fosin.anan.redis.cache.AnanCacheManger;
 
-import javax.persistence.criteria.*;
-import java.io.Serializable;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
-import java.util.Random;
-
 /**
  * @author fosin
  * @date 2017/12/27
  */
 @Service
 @Lazy
-@Slf4j
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final UserAllRepository userAllRepository;

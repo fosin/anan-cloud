@@ -11,7 +11,6 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-import java.io.Serializable;
 
 /**
  * 国际化语言字符集实体类
@@ -26,7 +25,7 @@ import java.io.Serializable;
 @DynamicUpdate
 @Table(name = "anan_international_charset")
 @ApiModel(value = "国际化语言字符集实体类", description = "国际化语言字符集实体类")
-public class AnanInternationalCharsetEntity extends CreateUpdateEntity<Long> implements Serializable {
+public class AnanInternationalCharsetEntity extends CreateUpdateEntity<Long> {
     private static final long serialVersionUID = -47422702414130736L;
 
     @Basic

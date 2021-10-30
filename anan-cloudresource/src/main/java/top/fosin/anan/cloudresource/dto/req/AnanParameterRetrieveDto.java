@@ -1,5 +1,10 @@
 package top.fosin.anan.cloudresource.dto.req;
 
+import java.util.Date;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -7,11 +12,6 @@ import lombok.EqualsAndHashCode;
 import top.fosin.anan.model.dto.QuerySortRuleDto;
 import top.fosin.anan.model.module.LogicalQueryRule;
 import top.fosin.anan.model.module.SortRule;
-
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import java.io.Serializable;
-import java.util.Date;
 
 /**
  * 用于存放各种分类分组的个性化参数(AnanParameter)查询DTO
@@ -23,7 +23,7 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @ApiModel(value = "用于存放各种分类分组的个性化参数查询DTO", description = "通用参数的查询DTO")
-public class AnanParameterRetrieveDto extends QuerySortRuleDto<LogicalQueryRule, SortRule> implements Serializable {
+public class AnanParameterRetrieveDto extends QuerySortRuleDto<LogicalQueryRule, SortRule> {
     private static final long serialVersionUID = -95372770044687456L;
 
     @ApiModelProperty(value = "参数键")

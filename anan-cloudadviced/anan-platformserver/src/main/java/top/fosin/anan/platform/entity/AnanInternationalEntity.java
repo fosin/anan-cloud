@@ -1,17 +1,17 @@
 package top.fosin.anan.platform.entity;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import org.hibernate.annotations.DynamicUpdate;
-import top.fosin.anan.jpa.entity.CreateUpdateEntity;
-
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-import java.io.Serializable;
+
+import org.hibernate.annotations.DynamicUpdate;
+
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import top.fosin.anan.jpa.entity.CreateUpdateEntity;
 
 /**
  * 国际化语言集(AnanInternational)实体类
@@ -26,7 +26,7 @@ import java.io.Serializable;
 @DynamicUpdate
 @Table(name = "anan_international")
 @ApiModel(value = "国际化语言的实体类", description = "国际化语言的实体类")
-public class AnanInternationalEntity extends CreateUpdateEntity<Long> implements Serializable {
+public class AnanInternationalEntity extends CreateUpdateEntity<Long> {
     private static final long serialVersionUID = 717249075172389735L;
 
     @Basic

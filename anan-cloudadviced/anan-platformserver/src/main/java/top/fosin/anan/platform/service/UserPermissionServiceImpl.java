@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import top.fosin.anan.cloudresource.constant.RedisConstant;
-import top.fosin.anan.cloudresource.service.AnanUserDetailService;
 import top.fosin.anan.core.util.BeanUtil;
 import top.fosin.anan.platform.dto.req.AnanUserPermissionCreateDto;
 import top.fosin.anan.platform.dto.res.AnanUserPermissionRespDto;
@@ -27,11 +26,8 @@ import java.util.stream.Collectors;
 @Lazy
 public class UserPermissionServiceImpl implements UserPermissionService {
     private final UserPermissionRepository userPermissionRepo;
-    private final AnanUserDetailService ananUserDetailService;
-
-    public UserPermissionServiceImpl(UserPermissionRepository userPermissionRepo, AnanUserDetailService ananUserDetailService) {
+    public UserPermissionServiceImpl(UserPermissionRepository userPermissionRepo) {
         this.userPermissionRepo = userPermissionRepo;
-        this.ananUserDetailService = ananUserDetailService;
     }
 
     @Override

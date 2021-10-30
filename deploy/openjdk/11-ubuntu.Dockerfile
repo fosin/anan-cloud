@@ -1,4 +1,4 @@
-FROM adoptopenjdk:11-jdk-hotspot
+FROM eclipse-temurin:11-jdk
 MAINTAINER fosin 28860823@qq.com
 
 VOLUME ["/tmp","/logs"]
@@ -10,10 +10,8 @@ COPY sources.list /etc/apt/
 
 RUN chmod +x entrypoint.sh wait-for.sh \
     && echo "Asia/Shanghai" > /etc/timezone \
-    && apt update \
+    && /bin/cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime -f \
+    && apt-get update \
     && set -eux \
-    && apt -y install netcat \
-    && apt -y install net-tools \
-    && apt -y install iputils-ping \
-    && apt -y install telnet \
+    && apt-get -y install netcat net-tools iputils-ping telnet \
     && rm -rf /var/lib/apt/lists/*

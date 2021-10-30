@@ -1,6 +1,5 @@
 package top.fosin.anan.auth.service;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,7 +29,6 @@ import java.util.TreeSet;
  * @date 2017/12/29
  */
 @Service
-@Slf4j
 public class AuthServiceImpl implements AuthService {
     private final UserAllPermissionsRepository userAllPermissionsRepo;
     private final UserRepository userRepo;

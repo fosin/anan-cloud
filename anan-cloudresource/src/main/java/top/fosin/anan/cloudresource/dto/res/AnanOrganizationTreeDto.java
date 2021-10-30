@@ -6,8 +6,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import top.fosin.anan.model.dto.TreeDto;
 
-import java.io.Serializable;
-
 /**
  * 系统机构表(AnanOrganization)创建DTO
  *
@@ -18,7 +16,7 @@ import java.io.Serializable;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @ApiModel(value = "机构表树形响应DTO", description = "机构的创建DTO")
-public class AnanOrganizationTreeDto extends TreeDto<AnanOrganizationTreeDto, Long> implements Serializable {
+public class AnanOrganizationTreeDto extends TreeDto<AnanOrganizationTreeDto, Long> {
     private static final long serialVersionUID = 389815217019211695L;
 
     @ApiModelProperty(value = "顶级机构编号：一般指用户注册的机构，通常是一个集团组的最高级别机构，取值于id", required = true)

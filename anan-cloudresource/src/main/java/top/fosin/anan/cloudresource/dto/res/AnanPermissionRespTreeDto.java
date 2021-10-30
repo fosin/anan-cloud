@@ -6,8 +6,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import top.fosin.anan.model.dto.TreeDto;
 
-import java.io.Serializable;
-
 /**
  * 包含菜单、按钮两种权限(AnanPermission)查询DTO
  *
@@ -18,7 +16,7 @@ import java.io.Serializable;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @ApiModel(value = "权限树响应DTO", description = "权限权限树响应DTO")
-public class AnanPermissionRespTreeDto extends TreeDto<AnanPermissionRespTreeDto, Long> implements Serializable {
+public class AnanPermissionRespTreeDto extends TreeDto<AnanPermissionRespTreeDto, Long> {
     private static final long serialVersionUID = -61984917164013694L;
 
     @ApiModelProperty(value = "权限编码，不能重复 不能为空")
