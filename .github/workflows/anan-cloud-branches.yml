@@ -26,7 +26,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           ref: ${{ env.BRANCHE_VERSION }}
-          fetch-depth: 2
+          fetch-depth: 3
 
       - name: Setup JDK
         uses: actions/setup-java@v1
@@ -35,7 +35,7 @@ jobs:
 
       - name: Set Build Modules
         run: |
-          MODIFY_FILES=$(git diff --name-only HEAD~ HEAD)
+          MODIFY_FILES=$(git diff --name-only HEAD~1 HEAD)
           MODULES=""
           echo MODIFY_FILES: $MODIFY_FILES
           if [[ $MODIFY_FILES =~ "\npom.xml" || $MODIFY_FILES =~ "^pom.xml" || $MODIFY_FILES =~ " pom.xml" ]]; then
@@ -85,9 +85,8 @@ jobs:
           docker build $MODULE_PATH -t ${{ env.DOCKER_MIRROR_SERVER }}/${{ env.DOCKER_MIRROR_NS }}/$MODULE_NAME:$MODULE_VERSION -f $MODULE_PATH/11-ubuntu.Dockerfile
           docker push ${{ env.DOCKER_MIRROR_SERVER }}/${{ env.DOCKER_MIRROR_NS }}/$MODULE_NAME:$MODULE_VERSION
       # 创建jdk11-centos7-hotspot镜像
-      - name: Docker build and push openjdk8
-        if: contains(env.MODIFY_FILES,'deploy/openjdk/11-centos7.Dockerfile') || contains(env.MODIFY_FILES,'entrypoint
-        .sh') || contains(env.MODIFY_FILES,'sources.list')
+      - name: Docker build and push jdk11-centos7-hotspot
+        if: contains(env.MODIFY_FILES,'deploy/openjdk/11-centos7.Dockerfile') || contains(env.MODIFY_FILES,'entrypoint.sh') || contains(env.MODIFY_FILES,'sources.list')
         run: |
           MODULE_PATH=deploy/openjdk
           MODULE_NAME=eclipse-temurin
