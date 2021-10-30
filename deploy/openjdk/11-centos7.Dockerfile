@@ -11,5 +11,5 @@ RUN chmod +x entrypoint.sh wait-for.sh \
     && echo "Asia/Shanghai" > /etc/timezone \
     && /bin/cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime -f \
     && yum makecache fast \
-    && yum -y install net-tools sysstat xinetd telnet telnet-server \
+    && yum -y install nmap-ncat net-tools sysstat xinetd telnet telnet-server \
     && yum clean all
