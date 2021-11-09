@@ -1,11 +1,12 @@
 package top.fosin.anan.platform.service;
 
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
-import top.fosin.anan.cloudresource.constant.RedisConstant;
+import top.fosin.anan.cloudresource.constant.PlatformRedisConstant;
 import top.fosin.anan.cloudresource.dto.res.AnanRolePermissionRespDto;
 import top.fosin.anan.core.util.BeanUtil;
 import top.fosin.anan.platform.dto.req.AnanRolePermissionCreateDto;
@@ -54,7 +55,12 @@ public class RolePermissionServiceImpl implements RolePermissionService {
     }
 
     @Override
-    @CacheEvict(value = RedisConstant.ANAN_USER_ALL_PERMISSIONS, allEntries = true)
+    @Caching(
+            evict = {
+                    @CacheEvict(value = PlatformRedisConstant.ANAN_USER_ALL_PERMISSIONS, allEntries = true),
+                    @CacheEvict(value = PlatformRedisConstant.ANAN_USER_PERMISSION_TREE, allEntries = true)
+
+            })
     @Transactional(rollbackFor = Exception.class)
     public List<AnanRolePermissionRespDto> updateInBatch(String deleteCol, Long roleId, Collection<AnanRolePermissionCreateDto> dtos) {
         Assert.notNull(roleId, "传入的角色ID不能为空!");

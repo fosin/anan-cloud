@@ -120,7 +120,7 @@ services:
   anan-authserver:
     network_mode: host
     image: registry.cn-hongkong.aliyuncs.com/fosin/anan-authserver:2.7.0-SNAPSHOT
-    entrypoint: 'sh /anan/wait-for.sh nacos-0:8848 -t 3600 -- /anan/entrypoint.sh'
+#    entrypoint: 'sh /anan/wait-for.sh nacos-0:8848 -t 3600 -- /anan/entrypoint.sh'
     container_name: anan-authserver
     hostname: anan-authserver
     restart: always
@@ -139,7 +139,7 @@ services:
   anan-zuulgateway:
     network_mode: host
     image: registry.cn-hongkong.aliyuncs.com/fosin/anan-zuulgateway:2.7.0-SNAPSHOT
-    entrypoint: 'sh /anan/wait-for.sh anan-authserver:51400 -t 3600 -- /anan/entrypoint.sh'
+#    entrypoint: 'sh /anan/wait-for.sh anan-authserver:51400 -t 3600 -- /anan/entrypoint.sh'
     container_name: anan-zuulgateway
     hostname: anan-zuulgateway
     restart: always

@@ -5,7 +5,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import top.fosin.anan.cloudresource.constant.RedisConstant;
+import top.fosin.anan.cloudresource.constant.PlatformRedisConstant;
 import top.fosin.anan.core.util.BeanUtil;
 import top.fosin.anan.platform.dto.req.AnanInternationalCharsetCreateDto;
 import top.fosin.anan.platform.dto.req.AnanInternationalCharsetUpdateDto;
@@ -46,14 +46,14 @@ public class InternationalCharsetServiceImpl implements InternationalCharsetServ
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    @CacheEvict(value = RedisConstant.ANAN_INTERNATIONAL_CHARSET + RedisConstant.ALL, key = "#dto.internationalId")
+    @CacheEvict(value = PlatformRedisConstant.ANAN_INTERNATIONAL_CHARSET_ALL, key = "#dto.internationalId")
     public AnanInternationalCharsetRespDto create(AnanInternationalCharsetCreateDto dto) {
         return InternationalCharsetService.super.create(dto);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    @CacheEvict(value = RedisConstant.ANAN_INTERNATIONAL_CHARSET + RedisConstant.ALL, key = "#result.internationalId")
+    @CacheEvict(value = PlatformRedisConstant.ANAN_INTERNATIONAL_CHARSET_ALL, key = "#result.internationalId")
     public void deleteById(Long id) {
         InternationalCharsetService.super.deleteById(id);
     }
@@ -65,20 +65,20 @@ public class InternationalCharsetServiceImpl implements InternationalCharsetServ
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    @CacheEvict(value = RedisConstant.ANAN_INTERNATIONAL_CHARSET + RedisConstant.ALL, allEntries = true)
+    @CacheEvict(value = PlatformRedisConstant.ANAN_INTERNATIONAL_CHARSET_ALL, allEntries = true)
     public void deleteByIds(Collection<Long> ids) {
         InternationalCharsetService.super.deleteByIds(ids);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    @CacheEvict(value = RedisConstant.ANAN_INTERNATIONAL_CHARSET + RedisConstant.ALL, key = "#dto.internationalId")
+    @CacheEvict(value = PlatformRedisConstant.ANAN_INTERNATIONAL_CHARSET_ALL, key = "#dto.internationalId")
     public void update(AnanInternationalCharsetUpdateDto dto) {
         InternationalCharsetService.super.update(dto);
     }
 
     @Override
-    @Cacheable(value = RedisConstant.ANAN_INTERNATIONAL_CHARSET + RedisConstant.ALL, key = "#internationalId")
+    @Cacheable(value = PlatformRedisConstant.ANAN_INTERNATIONAL_CHARSET_ALL, key = "#internationalId")
     public List<AnanInternationalCharsetRespDto> findAllByInternationalId(Long internationalId) {
         return BeanUtil.copyCollectionProperties(
                 this.getRepository().findAllByInternationalId(internationalId),
@@ -96,7 +96,7 @@ public class InternationalCharsetServiceImpl implements InternationalCharsetServ
     @Override
     public long updateOneField(String name, Serializable value, Collection<Long> ids) {
         long count = InternationalCharsetService.super.updateOneField(name, value, ids);
-        ids.forEach(id -> this.ananCacheManger.evict(RedisConstant.ANAN_INTERNATIONAL_CHARSET + RedisConstant.ALL, id + ""));
+        ids.forEach(id -> this.ananCacheManger.evict(PlatformRedisConstant.ANAN_INTERNATIONAL_CHARSET_ALL, id + ""));
         return count;
     }
 }

@@ -7,7 +7,7 @@ import org.springframework.cache.annotation.Caching;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import top.fosin.anan.cloudresource.constant.RedisConstant;
+import top.fosin.anan.cloudresource.constant.PlatformRedisConstant;
 import top.fosin.anan.core.util.BeanUtil;
 import top.fosin.anan.platform.dto.req.AnanInternationalCreateDto;
 import top.fosin.anan.platform.dto.req.AnanInternationalUpdateDto;
@@ -35,14 +35,14 @@ public class InternationalServiceImpl implements InternationalService {
     }
 
     @Override
-    @Cacheable(value = RedisConstant.ANAN_INTERNATIONAL_STATUS, key = "#status")
+    @Cacheable(value = PlatformRedisConstant.ANAN_INTERNATIONAL_STATUS, key = "#status")
     public List<AnanInternationalRespDto> listByStatus(Integer status) {
         return BeanUtil.copyCollectionProperties(
                 this.getRepository().findAllByStatus(status), AnanInternationalRespDto.class);
     }
 
     @Override
-    @Cacheable(value = RedisConstant.ANAN_INTERNATIONAL_CODE, key = "#code")
+    @Cacheable(value = PlatformRedisConstant.ANAN_INTERNATIONAL_CODE, key = "#code")
     public AnanInternationalRespDto findByCode(String code) {
         AnanInternationalRespDto respDto = new AnanInternationalRespDto();
         BeanUtils.copyProperties(this.getRepository().findByCode(code), respDto);
@@ -59,8 +59,8 @@ public class InternationalServiceImpl implements InternationalService {
     @Override
     @Caching(
             evict = {
-                    @CacheEvict(value = RedisConstant.ANAN_INTERNATIONAL_STATUS, allEntries = true),
-                    @CacheEvict(value = RedisConstant.ANAN_INTERNATIONAL_CODE, allEntries = true)
+                    @CacheEvict(value = PlatformRedisConstant.ANAN_INTERNATIONAL_STATUS, allEntries = true),
+                    @CacheEvict(value = PlatformRedisConstant.ANAN_INTERNATIONAL_CODE, allEntries = true)
             }
     )
     @Transactional(rollbackFor = Exception.class)
@@ -71,8 +71,8 @@ public class InternationalServiceImpl implements InternationalService {
     @Override
     @Caching(
             evict = {
-                    @CacheEvict(value = RedisConstant.ANAN_INTERNATIONAL_STATUS, allEntries = true),
-                    @CacheEvict(value = RedisConstant.ANAN_INTERNATIONAL_CODE, allEntries = true)
+                    @CacheEvict(value = PlatformRedisConstant.ANAN_INTERNATIONAL_STATUS, allEntries = true),
+                    @CacheEvict(value = PlatformRedisConstant.ANAN_INTERNATIONAL_CODE, allEntries = true)
             }
     )
     @Transactional(rollbackFor = Exception.class)
@@ -88,8 +88,8 @@ public class InternationalServiceImpl implements InternationalService {
     @Override
     @Caching(
             evict = {
-                    @CacheEvict(value = RedisConstant.ANAN_INTERNATIONAL_STATUS, allEntries = true),
-                    @CacheEvict(value = RedisConstant.ANAN_INTERNATIONAL_CODE, allEntries = true)
+                    @CacheEvict(value = PlatformRedisConstant.ANAN_INTERNATIONAL_STATUS, allEntries = true),
+                    @CacheEvict(value = PlatformRedisConstant.ANAN_INTERNATIONAL_CODE, allEntries = true)
             }
     )
     @Transactional(rollbackFor = Exception.class)
@@ -100,8 +100,8 @@ public class InternationalServiceImpl implements InternationalService {
     @Override
     @Caching(
             evict = {
-                    @CacheEvict(value = RedisConstant.ANAN_INTERNATIONAL_STATUS, allEntries = true),
-                    @CacheEvict(value = RedisConstant.ANAN_INTERNATIONAL_CODE, allEntries = true)
+                    @CacheEvict(value = PlatformRedisConstant.ANAN_INTERNATIONAL_STATUS, allEntries = true),
+                    @CacheEvict(value = PlatformRedisConstant.ANAN_INTERNATIONAL_CODE, allEntries = true)
             }
     )
     @Transactional(rollbackFor = Exception.class)

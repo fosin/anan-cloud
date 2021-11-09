@@ -6,7 +6,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
-import top.fosin.anan.cloudresource.constant.RedisConstant;
+import top.fosin.anan.cloudresource.constant.PlatformRedisConstant;
 import top.fosin.anan.cloudresource.dto.res.AnanUserRespDto;
 import top.fosin.anan.cloudresource.dto.res.AnanUserRoleRespDto;
 import top.fosin.anan.cloudresource.service.AnanUserDetailService;
@@ -96,12 +96,14 @@ public class UserRoleServiceImpl implements UserRoleService {
     }
 
     private void clearUserCache(Long userId) {
-        AnanUserRespDto respDto = ananCacheManger.get(RedisConstant.ANAN_USER, userId + "", AnanUserRespDto.class);
+        AnanUserRespDto respDto = ananCacheManger.get(PlatformRedisConstant.ANAN_USER, userId + "-id",
+                AnanUserRespDto.class);
         if (respDto != null) {
-            ananCacheManger.evict(RedisConstant.ANAN_USER, respDto.getUsercode());
+            ananCacheManger.evict(PlatformRedisConstant.ANAN_USER, respDto.getUsercode());
         }
-        ananCacheManger.evict(RedisConstant.ANAN_USER, userId + "");
-        ananCacheManger.evict(RedisConstant.ANAN_USER_ALL_PERMISSIONS, userId + "");
+        ananCacheManger.evict(PlatformRedisConstant.ANAN_USER, userId + "-id");
+        ananCacheManger.evict(PlatformRedisConstant.ANAN_USER_ALL_PERMISSIONS, userId + "");
+        ananCacheManger.evict(PlatformRedisConstant.ANAN_USER_PERMISSION_TREE, userId + "");
     }
 
     private List<AnanUserRoleRespDto> getAnanUserRoleEntities(Collection<AnanUserRoleCreateDto> dtos) {

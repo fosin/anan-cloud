@@ -4,7 +4,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
-import top.fosin.anan.cloudresource.constant.RedisConstant;
+import top.fosin.anan.cloudresource.constant.PlatformRedisConstant;
 import top.fosin.anan.core.util.BeanUtil;
 import top.fosin.anan.platform.dto.req.AnanVersionPermissionCreateDto;
 import top.fosin.anan.platform.dto.res.AnanVersionPermissionRespDto;
@@ -124,7 +124,7 @@ public class VersionPermissionServiceImpl implements VersionPermissionService {
                 return entity;
             }).collect(Collectors.toList()), orgPermissionRepo);
         });
-        ananCacheManger.clear(RedisConstant.ANAN_USER_ALL_PERMISSIONS);
+        ananCacheManger.clear(PlatformRedisConstant.ANAN_USER_ALL_PERMISSIONS);
 
         //版本角色权限删除
         List<AnanVersionRoleEntity> versionRoles = versionRoleRepo.findByVersionId(versionId);

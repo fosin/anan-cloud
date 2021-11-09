@@ -209,7 +209,7 @@ public class AnanJwtAuthorizationServerConfigurer extends AuthorizationServerCon
 //    @Bean
 //    public RedisTokenStore redisTokenStore() {
 //        RedisTokenStore redisTokenStore = new RedisTokenStore(redisConnectionFactory);
-//        redisTokenStore.setPrefix(RedisConstant.ANAN_AUTHSERVER);
+//        redisTokenStore.setPrefix(PlatformRedisConstant.ANAN_AUTHSERVER);
 //        return redisTokenStore;
 //    }
 

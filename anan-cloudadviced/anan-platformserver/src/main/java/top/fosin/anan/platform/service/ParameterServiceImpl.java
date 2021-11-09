@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
-import top.fosin.anan.cloudresource.constant.RedisConstant;
+import top.fosin.anan.cloudresource.constant.PlatformRedisConstant;
 import top.fosin.anan.cloudresource.dto.req.AnanParameterCreateDto;
 import top.fosin.anan.cloudresource.dto.req.AnanParameterRetrieveDto;
 import top.fosin.anan.cloudresource.dto.req.AnanParameterUpdateDto;
@@ -84,7 +84,7 @@ public class ParameterServiceImpl implements ParameterService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    @CachePut(value = RedisConstant.ANAN_PARAMETER, key = "#root.target.getCacheKey(#result)")
+    @CachePut(value = PlatformRedisConstant.ANAN_PARAMETER, key = "#root.target.getCacheKey(#result)")
     public AnanParameterRespDto create(AnanParameterCreateDto dto) {
         AnanParameterEntity createEntiy = BeanUtil.copyProperties(dto, AnanParameterEntity.class);
         return BeanUtil.copyProperties(getRepository().save(createEntiy), AnanParameterRespDto.class);
@@ -109,12 +109,12 @@ public class ParameterServiceImpl implements ParameterService {
         //如果修改了type、scope、name则需要删除以前的缓存并设置新缓存
         if (!oldCacheKey.equals(newCacheKey)) {
             //新key设置旧值，需要发布以后才刷新缓存换成本次更新的新值
-            AnanParameterRespDto respDto = ananCacheManger.get(RedisConstant.ANAN_PARAMETER, oldCacheKey, AnanParameterRespDto.class);
+            AnanParameterRespDto respDto = ananCacheManger.get(PlatformRedisConstant.ANAN_PARAMETER, oldCacheKey, AnanParameterRespDto.class);
             if (respDto != null) {
-                ananCacheManger.put(RedisConstant.ANAN_PARAMETER, newCacheKey,
+                ananCacheManger.put(PlatformRedisConstant.ANAN_PARAMETER, newCacheKey,
                         respDto);
             }
-            ananCacheManger.evict(RedisConstant.ANAN_PARAMETER, oldCacheKey);
+            ananCacheManger.evict(PlatformRedisConstant.ANAN_PARAMETER, oldCacheKey);
         }
     }
 
@@ -187,7 +187,7 @@ public class ParameterServiceImpl implements ParameterService {
     }
 
     @Override
-    @Cacheable(value = RedisConstant.ANAN_PARAMETER, key = "#root.target.getCacheKey(#type,#scope,#name)")
+    @Cacheable(value = PlatformRedisConstant.ANAN_PARAMETER, key = "#root.target.getCacheKey(#type,#scope,#name)")
     public AnanParameterRespDto getParameter(Integer type, String scope, String name) {
         AnanParameterEntity entity = parameterRepository.findByTypeAndScopeAndName(type, scope, name);
         AnanParameterRespDto respDto = BeanUtil.copyProperties(entity, AnanParameterRespDto.class);
@@ -206,7 +206,7 @@ public class ParameterServiceImpl implements ParameterService {
      * @return 参数
      */
     @Override
-    @Cacheable(value = RedisConstant.ANAN_PARAMETER, key = "#root.target.getCacheKey(#type,#scope,#name)")
+    @Cacheable(value = PlatformRedisConstant.ANAN_PARAMETER, key = "#root.target.getCacheKey(#type,#scope,#name)")
     @Transactional(rollbackFor = Exception.class)
     public AnanParameterRespDto getNearestParameter(int type, String scope, String name) {
         AnanParameterEntity parameter = parameterRepository.findByTypeAndScopeAndName(type, scope, name);
@@ -239,7 +239,7 @@ public class ParameterServiceImpl implements ParameterService {
     }
 
     @Override
-    @Cacheable(value = RedisConstant.ANAN_PARAMETER, key = "#root.target.getCacheKey(#type,#scope,#name)")
+    @Cacheable(value = PlatformRedisConstant.ANAN_PARAMETER, key = "#root.target.getCacheKey(#type,#scope,#name)")
     @Transactional(rollbackFor = Exception.class)
     public AnanParameterRespDto getOrCreateParameter(int type, String scope, String name, String defaultValue, String description) {
         AnanParameterRespDto respDto;
@@ -275,13 +275,13 @@ public class ParameterServiceImpl implements ParameterService {
                 entity.setApplyBy(ananUserDetailService.getAnanUserId());
                 entity.setApplyTime(new Date());
                 entity.setStatus(0);
-                success = ananCacheManger.put(RedisConstant.ANAN_PARAMETER, cacheKey, BeanUtil.copyProperties(entity, AnanParameterRespDto.class));
+                success = ananCacheManger.put(PlatformRedisConstant.ANAN_PARAMETER, cacheKey, BeanUtil.copyProperties(entity, AnanParameterRespDto.class));
                 if (success) {
                     parameterRepository.save(entity);
                 }
                 break;
             case Deleted:
-                success = ananCacheManger.evict(RedisConstant.ANAN_PARAMETER, cacheKey);
+                success = ananCacheManger.evict(PlatformRedisConstant.ANAN_PARAMETER, cacheKey);
                 if (success) {
                     parameterRepository.deleteById(id);
                     try {
@@ -289,11 +289,11 @@ public class ParameterServiceImpl implements ParameterService {
                     } catch (InterruptedException e) {
                         throw new AnanServiceException(e);
                     }
-                    success = ananCacheManger.evict(RedisConstant.ANAN_PARAMETER, cacheKey);
+                    success = ananCacheManger.evict(PlatformRedisConstant.ANAN_PARAMETER, cacheKey);
                 }
                 break;
             default:
-                success = ananCacheManger.put(RedisConstant.ANAN_PARAMETER, cacheKey, BeanUtil.copyProperties(entity, AnanParameterRespDto.class));
+                success = ananCacheManger.put(PlatformRedisConstant.ANAN_PARAMETER, cacheKey, BeanUtil.copyProperties(entity, AnanParameterRespDto.class));
         }
         return success;
     }

@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
-import top.fosin.anan.cloudresource.constant.RedisConstant;
+import top.fosin.anan.cloudresource.constant.PlatformRedisConstant;
 import top.fosin.anan.cloudresource.dto.res.AnanOrganizationRespDto;
 import top.fosin.anan.cloudresource.dto.res.AnanOrganizationTreeDto;
 import top.fosin.anan.cloudresource.service.AnanUserDetailService;
@@ -48,7 +48,7 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    @CachePut(value = RedisConstant.ANAN_ORGANIZATION, key = "#result.id")
+    @CachePut(value = PlatformRedisConstant.ANAN_ORGANIZATION, key = "#result.id")
     public AnanOrganizationRespDto create(AnanOrganizationCreateDto entity) {
         AnanOrganizationEntity createEntity = new AnanOrganizationEntity();
         BeanUtils.copyProperties(entity, createEntity);
@@ -73,7 +73,7 @@ public class OrganizationServiceImpl implements OrganizationService {
     }
 
     @Override
-    @CacheEvict(value = RedisConstant.ANAN_ORGANIZATION, key = "#entity.id")
+    @CacheEvict(value = PlatformRedisConstant.ANAN_ORGANIZATION, key = "#entity.id")
     @Transactional(rollbackFor = Exception.class)
     public void update(AnanOrganizationUpdateDto entity) {
         Long id = entity.getId();
@@ -89,14 +89,14 @@ public class OrganizationServiceImpl implements OrganizationService {
     }
 
     @Override
-    @Cacheable(value = RedisConstant.ANAN_ORGANIZATION, key = "#id")
+    @Cacheable(value = PlatformRedisConstant.ANAN_ORGANIZATION, key = "#id")
     public AnanOrganizationRespDto findOneById(Long id) {
         return OrganizationService.super.findOneById(id);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    @CacheEvict(value = RedisConstant.ANAN_ORGANIZATION, key = "#id")
+    @CacheEvict(value = PlatformRedisConstant.ANAN_ORGANIZATION, key = "#id")
     public void deleteById(Long id) {
         List<AnanOrganizationTreeDto> dtos = listChild(id);
         Assert.isTrue(dtos == null || dtos.size() == 0, "该节点还存在子节点不能直接删除!");
@@ -119,7 +119,7 @@ public class OrganizationServiceImpl implements OrganizationService {
             organizationRepository.delete(entity);
         }
         for (AnanOrganizationEntity entity : entities) {
-            ananCacheManger.evict(RedisConstant.ANAN_ORGANIZATION, entity.getId() + "");
+            ananCacheManger.evict(PlatformRedisConstant.ANAN_ORGANIZATION, entity.getId() + "");
         }
     }
 

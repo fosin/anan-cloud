@@ -11,7 +11,7 @@ import top.fosin.anan.auth.repository.OrganizationRepository;
 import top.fosin.anan.auth.repository.UserAllPermissionsRepository;
 import top.fosin.anan.auth.repository.UserRepository;
 import top.fosin.anan.auth.service.inter.AuthService;
-import top.fosin.anan.cloudresource.constant.RedisConstant;
+import top.fosin.anan.cloudresource.constant.PlatformRedisConstant;
 import top.fosin.anan.cloudresource.constant.SystemConstant;
 import top.fosin.anan.cloudresource.dto.AnanUserAllPermissionTreeDto;
 import top.fosin.anan.cloudresource.dto.AnanUserAuthDto;
@@ -42,10 +42,9 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    @Cacheable(value = RedisConstant.ANAN_USER, key = "#usercode", condition = "#result != null")
+    @Cacheable(value = PlatformRedisConstant.ANAN_USER, key = "#usercode", unless = "#result==null")
     @Transactional(readOnly = true)
     public AnanUserAuthDto findByUsercode(String usercode) {
-        //该代码看似无用，其实是为了解决懒加载和缓存先后问题
         AnanUserEntity userEntity = userRepo.findByUsercode(usercode);
         if (userEntity != null) {
             AnanUserAuthDto dto = userEntity.conert2Dto();
@@ -60,12 +59,13 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    @Cacheable(value = RedisConstant.ANAN_USER_ALL_PERMISSIONS, key = "#userId", condition = "#result != null && #result.size() > 0")
+    @Cacheable(value = PlatformRedisConstant.ANAN_USER_ALL_PERMISSIONS, key = "#userId", unless = "#result == null || #result.size() == 0")
     public List<AnanUserAllPermissionsRespDto> findByUserId(Long userId) {
         return BeanUtil.copyCollectionProperties(userAllPermissionsRepo.findByUserId(userId), AnanUserAllPermissionsRespDto.class);
     }
 
     @Override
+    @Cacheable(value = PlatformRedisConstant.ANAN_USER_PERMISSION_TREE, key = "#userId", unless = "#result == null")
     public AnanUserAllPermissionTreeDto findTreeByUserId(Long userId) {
         Set<AnanUserAllPermissionTreeDto> userPermissions = new TreeSet<>((o1, o2) -> {
             long subId = o1.getId() - o2.getId();

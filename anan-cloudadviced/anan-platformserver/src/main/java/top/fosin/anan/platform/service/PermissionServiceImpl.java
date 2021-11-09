@@ -2,11 +2,12 @@ package top.fosin.anan.platform.service;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
-import top.fosin.anan.cloudresource.constant.RedisConstant;
+import top.fosin.anan.cloudresource.constant.PlatformRedisConstant;
 import top.fosin.anan.cloudresource.dto.res.AnanPermissionRespDto;
 import top.fosin.anan.core.util.BeanUtil;
 import top.fosin.anan.platform.dto.req.AnanPermissionCreateDto;
@@ -25,7 +26,6 @@ import java.util.stream.Collectors;
 /**
  * @author fosin
  * @date 2017/12/29
- *
  */
 @Service
 @Lazy
@@ -74,7 +74,12 @@ public class PermissionServiceImpl implements PermissionService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    @CacheEvict(value = RedisConstant.ANAN_USER_ALL_PERMISSIONS, allEntries = true)
+    @Caching(
+            evict = {
+                    @CacheEvict(value = PlatformRedisConstant.ANAN_USER_ALL_PERMISSIONS, allEntries = true),
+                    @CacheEvict(value = PlatformRedisConstant.ANAN_USER_PERMISSION_TREE, allEntries = true)
+
+            })
     public void update(AnanPermissionUpdateDto dto) {
         Long id = dto.getId();
         Assert.notNull(id, "传入了空ID!");
@@ -125,7 +130,12 @@ public class PermissionServiceImpl implements PermissionService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    @CacheEvict(value = RedisConstant.ANAN_USER_ALL_PERMISSIONS, allEntries = true)
+    @Caching(
+            evict = {
+                    @CacheEvict(value = PlatformRedisConstant.ANAN_USER_ALL_PERMISSIONS, allEntries = true),
+                    @CacheEvict(value = PlatformRedisConstant.ANAN_USER_PERMISSION_TREE, allEntries = true)
+
+            })
     public void deleteById(Long id) {
         Assert.notNull(id, "传入了空ID!");
         AnanPermissionEntity entity = permissionRepository.findById(id).orElse(null);
@@ -156,7 +166,12 @@ public class PermissionServiceImpl implements PermissionService {
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    @CacheEvict(value = RedisConstant.ANAN_USER_ALL_PERMISSIONS, allEntries = true)
+    @Caching(
+            evict = {
+                    @CacheEvict(value = PlatformRedisConstant.ANAN_USER_ALL_PERMISSIONS, allEntries = true),
+                    @CacheEvict(value = PlatformRedisConstant.ANAN_USER_PERMISSION_TREE, allEntries = true)
+
+            })
     public void deleteByIds(Collection<Long> ids) {
         List<AnanPermissionEntity> entities = permissionRepository.findAllById(ids);
         for (AnanPermissionEntity entity : entities) {

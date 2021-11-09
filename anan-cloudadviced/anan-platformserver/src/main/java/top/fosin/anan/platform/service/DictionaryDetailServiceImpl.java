@@ -8,7 +8,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
-import top.fosin.anan.cloudresource.constant.RedisConstant;
+import top.fosin.anan.cloudresource.constant.PlatformRedisConstant;
 import top.fosin.anan.cloudresource.constant.SystemConstant;
 import top.fosin.anan.cloudresource.dto.res.AnanDictionaryDetailRespDto;
 import top.fosin.anan.cloudresource.service.AnanUserDetailService;
@@ -53,7 +53,7 @@ public class DictionaryDetailServiceImpl implements DictionaryDetailService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    @CacheEvict(value = RedisConstant.ANAN_DICTIONARY_DETAIL, key = "#result.dictionaryId")
+    @CacheEvict(value = PlatformRedisConstant.ANAN_DICTIONARY_DETAIL, key = "#result.dictionaryId")
     public AnanDictionaryDetailRespDto create(AnanDictionaryDetailCreateDto entity) {
         Assert.notNull(entity, "传入的创建数据实体对象不能为空!");
         DictionaryDetailEntity createEntiy = new DictionaryDetailEntity();
@@ -64,7 +64,7 @@ public class DictionaryDetailServiceImpl implements DictionaryDetailService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    @CacheEvict(value = RedisConstant.ANAN_DICTIONARY_DETAIL, key = "#entity.dictionaryId")
+    @CacheEvict(value = PlatformRedisConstant.ANAN_DICTIONARY_DETAIL, key = "#entity.dictionaryId")
     public void update(AnanDictionaryDetailUpdateDto entity) {
         Assert.notNull(entity, "传入的更新数据实体对象不能为空!");
         Long id = entity.getId();
@@ -86,7 +86,7 @@ public class DictionaryDetailServiceImpl implements DictionaryDetailService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    @CacheEvict(value = RedisConstant.ANAN_DICTIONARY_DETAIL, key = "#result.dictionaryId")
+    @CacheEvict(value = PlatformRedisConstant.ANAN_DICTIONARY_DETAIL, key = "#result.dictionaryId")
     public void deleteById(Long id) {
         Assert.notNull(id, "传入了空的ID!");
         dictionaryDetailRepository.findById(id).ifPresent(entity -> {
@@ -107,13 +107,13 @@ public class DictionaryDetailServiceImpl implements DictionaryDetailService {
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    @CacheEvict(value = RedisConstant.ANAN_DICTIONARY_DETAIL, allEntries = true)
+    @CacheEvict(value = PlatformRedisConstant.ANAN_DICTIONARY_DETAIL, allEntries = true)
     public void deleteByIds(Collection<Long> ids) {
         DictionaryDetailService.super.deleteByIds(ids);
     }
 
     @Override
-    @Cacheable(value = RedisConstant.ANAN_DICTIONARY_DETAIL, key = "#dictionaryId")
+    @Cacheable(value = PlatformRedisConstant.ANAN_DICTIONARY_DETAIL, key = "#dictionaryId")
     public List<AnanDictionaryDetailRespDto> findByDictionaryId(Long dictionaryId) {
         Sort sort = Sort.by(Sort.Direction.fromString("ASC"), "sort");
         return BeanUtil.copyCollectionProperties(dictionaryDetailRepository.findAllByDictionaryId(dictionaryId, sort), AnanDictionaryDetailRespDto.class);
@@ -130,7 +130,7 @@ public class DictionaryDetailServiceImpl implements DictionaryDetailService {
     @Override
     public long updateOneField(String name, Serializable value, Collection<Long> ids) {
         long count = DictionaryDetailService.super.updateOneField(name, value, ids);
-        ids.forEach(id -> ananCacheManger.evict(RedisConstant.ANAN_DICTIONARY_DETAIL, id + ""));
+        ids.forEach(id -> ananCacheManger.evict(PlatformRedisConstant.ANAN_DICTIONARY_DETAIL, id + ""));
         return count;
     }
 
