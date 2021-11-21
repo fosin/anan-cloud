@@ -15,9 +15,17 @@ public interface IParameterStrategy {
     int getType();
 
     /**
+     * 获取参数类型解释
+     *
+     * @return 参数类型解释
+     */
+    String getTypeName();
+
+    /**
      * 获取参数作用域
      *
      * @return 作用域
      */
     String getScope();
+
 }

@@ -21,6 +21,11 @@ public class ServiceStrategy implements IParameterStrategy {
     }
 
     @Override
+    public String getTypeName() {
+        return ParameterType.Service.getTypeName();
+    }
+
+    @Override
     public String getScope() {
         return ananUserDetailService.isSysAdminUser() ? null : ananUserDetailService.getAnanOrganizId() + "";
     }

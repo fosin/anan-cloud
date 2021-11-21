@@ -1,6 +1,5 @@
 package top.fosin.anan.platform.service;
 
-import cn.hutool.core.util.NumberUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -137,6 +136,10 @@ public class UserServiceImpl implements UserService {
         //如果密码为空则随机生成4位以下密码
         if (StringUtils.isEmpty(password)) {
             password = getPassword();
+        } else {
+            int length = localOrganParameter.getOrCreateParameter("UserInitPasswordLength", 6,
+                            "用户初始密码长度");
+            Assert.isTrue(password.length() >= length, "用户初始密码最少"+length+"位!");
         }
         entity.setPassword(passwordEncoder.encode(password));
         return password;
@@ -147,8 +150,6 @@ public class UserServiceImpl implements UserService {
     public AnanUserRespPassDto create(AnanUserCreateDto dto) {
         AnanUserRespDto entityDynamic = this.findByUsercode(dto.getUsercode());
         Assert.isNull(entityDynamic, "用户工号已存在，请核对!");
-//        String passwordStrength = localOrganParameter.getOrCreateParameter("DefaultPasswordStrength", RegexUtil.PASSWORD_STRONG, "用户密码强度正则表达式,密码最少6位，包括至少1个大写字母，1个小写字母，1个数字，1个特殊字符");
-//        Assert.isTrue(RegexUtil.matcher(createUser.getPassword(), passwordStrength), "用户密码强度正则表达式,密码最少6位，包括至少1个大写字母，1个小写字母，1个数字，1个特殊字符!");
         AnanUserEntity createUser = new AnanUserEntity();
         BeanUtils.copyProperties(dto, createUser);
         String password = encryptBeforeSave(createUser);
@@ -221,7 +222,7 @@ public class UserServiceImpl implements UserService {
         }
         for (AnanUserEntity entity : entities) {
             String id = entity.getId() + "";
-            ananCacheManger.evict(PlatformRedisConstant.ANAN_USER, id+"-id");
+            ananCacheManger.evict(PlatformRedisConstant.ANAN_USER, id + "-id");
             ananCacheManger.evict(PlatformRedisConstant.ANAN_USER, entity.getUsercode());
             ananCacheManger.evict(PlatformRedisConstant.ANAN_USER_ALL_PERMISSIONS, id);
             ananCacheManger.evict(PlatformRedisConstant.ANAN_USER_PERMISSION_TREE, id);
@@ -308,8 +309,10 @@ public class UserServiceImpl implements UserService {
         Assert.isTrue(!StringUtils.isEmpty(confirmPassword1) &&
                 !StringUtils.isEmpty(confirmPassword2) && confirmPassword1.equals(confirmPassword2), "新密码和确认新密码不能为空且必须一致!");
         Assert.isTrue(!confirmPassword1.equals(password), "新密码和原密码不能相同!");
-        String passwordStrength = localOrganParameter.getOrCreateParameter("DefaultPasswordStrength", RegexUtil.PASSWORD_STRONG, "用户密码强度正则表达式,密码最少6位，包括至少1个大写字母，1个小写字母，1个数字，1个特殊字符");
-        Assert.isTrue(RegexUtil.matcher(confirmPassword1, passwordStrength), "新密码强度不符合强度要求!");
+        String pwdDesc = "密码最少6位，包括至少1个大写字母，1个小写字母，1个数字，1个特殊字符";
+        String description = "用户密码强度正则表达式," + pwdDesc;
+        String passwordStrength = localOrganParameter.getOrCreateParameter("DefaultPasswordStrength", RegexUtil.PASSWORD_STRONG, description);
+        Assert.isTrue(RegexUtil.matcher(confirmPassword1, passwordStrength), "新密码强度不符合强度要求(" + pwdDesc + ")!");
 
         AnanUserEntity user = userRepository.findById(id).orElse(null);
         Assert.isTrue(passwordEncoder.matches(password, Objects.requireNonNull(user, "通过ID：" + id + "未找到对应的用户信息!").getPassword()), "原密码不正确!");
@@ -343,19 +346,16 @@ public class UserServiceImpl implements UserService {
 
     public String getPassword() {
         String password;
-        String resetUserPasswordType = localOrganParameter.getOrCreateParameter("UserResetPasswordType", "2", "重置用户密码时密码的生成规则(1、重置成系统参数中的固定密码 2、设置成随机4位密码)");
+        String resetUserPasswordType = localOrganParameter.getOrCreateParameter("UserDefaultPasswordStrategy", "2",
+                "用户默认密码策略(1、固定密码（UserDefaultPassword） 2、随机密码（UserInitPasswordLength）)");
         if ("1".equals(resetUserPasswordType)) {
             password = localOrganParameter.getOrCreateParameter("UserDefaultPassword", "123456", "用户的默认密码");
         } else {
-            String length = localOrganParameter.getOrCreateParameter("UserResetPasswordLength", "4", "重置用户密码时密码长度,只支持1-9位,否则将默认取4位");
+            int i = localOrganParameter.getOrCreateParameter("UserInitPasswordLength", 6, "用户初始密码长度");
             int random = 9999;
-            if (NumberUtil.isInteger(length)) {
-                int i = Integer.parseInt(length);
-                if (i > 0) {
-                    random = (int) (Math.pow(10, i)) - 1;
-                }
+            if (i > 0) {
+                random = (int) (Math.pow(10, i)) - 1;
             }
-
             password = new Random().nextInt(random) + "";
         }
         return password;

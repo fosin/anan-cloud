@@ -33,17 +33,16 @@ public enum ParameterType {
         return type;
     }
 
-    public static ParameterType valueOf(int type) {    //手写的从int到enum的转换函数
+    public String getTypeName() {
         switch (type) {
             case 1:
-                return Organization;
+                return "机构参数";
             case 2:
-                return User;
+                return "用户参数";
             case 3:
-                return Service;
+                return "服务参数";
             default:
-                return null;
+                return "";
         }
     }
-
 }
