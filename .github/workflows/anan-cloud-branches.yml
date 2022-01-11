@@ -7,11 +7,12 @@ on:
       - 'pom.xml'
       - 'anan-cloudresource/**'
       - 'anan-cloudadviced/**'
+      - 'anan-cloudgateway/**'
       - 'deploy/mysql/**'
       - 'deploy/openjdk/**'
       - 'anan-configserver/**'
       - 'anan-eurekaserver/**'
-      - '.github/workflows/anan-cloud-branches.yml'
+#      - '.github/workflows/anan-cloud-branches.yml'
 jobs:
   release:
     runs-on: ubuntu-latest
@@ -101,20 +102,12 @@ jobs:
           mvn --batch-mode --errors --file pom.xml clean dependency:copy-dependencies -DincludeScope=runtime compile jar:jar spring-boot:repackage
           echo ANAN_VERSION=$(grep 'version=' target/maven-archiver/pom.properties | awk -F '=' '{ print $2 }') >> $GITHUB_ENV
 
-      - name: Docker build and push mysql-leader
-        if: contains(env.MODIFY_FILES,'deploy/mysql/leader')
+      - name: Docker build and push mysql
+        if: contains(env.MODIFY_FILES,'deploy/mysql')
         run: |
-          MODULE_PATH=deploy/mysql/leader
-          MODULE_NAME=mysql-leader
-          MODULE_VERSION=2.7
-          docker build ./$MODULE_PATH -t ${{ env.DOCKER_MIRROR_SERVER }}/${{ env.DOCKER_MIRROR_NS }}/$MODULE_NAME:$MODULE_VERSION -f ./$MODULE_PATH/7.Dockerfile
-          docker push ${{ env.DOCKER_MIRROR_SERVER }}/${{ env.DOCKER_MIRROR_NS }}/$MODULE_NAME:$MODULE_VERSION
-      - name: Docker build and push mysql-follower
-        if: contains(env.MODIFY_FILES,'deploy/mysql/follower')
-        run: |
-          MODULE_PATH=deploy/mysql/follower
-          MODULE_NAME=mysql-follower
-          MODULE_VERSION=2.7
+          MODULE_PATH=deploy/mysql
+          MODULE_NAME=mysql
+          MODULE_VERSION=3.0.0
           docker build ./$MODULE_PATH -t ${{ env.DOCKER_MIRROR_SERVER }}/${{ env.DOCKER_MIRROR_NS }}/$MODULE_NAME:$MODULE_VERSION -f ./$MODULE_PATH/7.Dockerfile
           docker push ${{ env.DOCKER_MIRROR_SERVER }}/${{ env.DOCKER_MIRROR_NS }}/$MODULE_NAME:$MODULE_VERSION
 
@@ -150,6 +143,15 @@ jobs:
         if: contains(env.MODIFY_FILES,'anan-cloudadviced/anan-sbaserver/') || contains(env.MODIFY_FILES,'anan-cloudadviced/pom.xml') || contains(env.MODULE_LIST,'anan-cloud')
         run: |
           MODULE_PATH=anan-cloudadviced/anan-sbaserver
+          MODULE_NAME=$(grep 'artifactId=' $MODULE_PATH/target/maven-archiver/pom.properties | awk -F '=' '{ print $2 }')
+          MODULE_VERSION=$(grep 'version=' $MODULE_PATH/target/maven-archiver/pom.properties | awk -F '=' '{ print $2 }')
+          docker build ./$MODULE_PATH -t ${{ env.DOCKER_MIRROR_SERVER }}/${{ env.DOCKER_MIRROR_NS }}/$MODULE_NAME:$MODULE_VERSION -f ./$MODULE_PATH/Dockerfile
+          docker push ${{ env.DOCKER_MIRROR_SERVER }}/${{ env.DOCKER_MIRROR_NS }}/$MODULE_NAME:$MODULE_VERSION
+      # 创建anan-cloudgateway
+      - name: Docker build and push anan-cloudgateway
+        if: contains(env.MODIFY_FILES,'anan-cloudgateway/') || contains(env.MODULE_LIST,'anan-cloud')
+        run: |
+          MODULE_PATH=anan-cloudgateway
           MODULE_NAME=$(grep 'artifactId=' $MODULE_PATH/target/maven-archiver/pom.properties | awk -F '=' '{ print $2 }')
           MODULE_VERSION=$(grep 'version=' $MODULE_PATH/target/maven-archiver/pom.properties | awk -F '=' '{ print $2 }')
           docker build ./$MODULE_PATH -t ${{ env.DOCKER_MIRROR_SERVER }}/${{ env.DOCKER_MIRROR_NS }}/$MODULE_NAME:$MODULE_VERSION -f ./$MODULE_PATH/Dockerfile

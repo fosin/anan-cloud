@@ -1,7 +1,7 @@
 package top.fosin.anan.platform.service.inter;
 
 
-import top.fosin.anan.jpa.service.batch.ICrudBatchJpaService;
+import top.fosin.anan.jpa.service.ICrudBatchJpaService;
 import top.fosin.anan.platform.dto.req.AnanVersionPermissionCreateDto;
 import top.fosin.anan.platform.dto.req.AnanVersionPermissionRetrieveDto;
 import top.fosin.anan.platform.dto.res.AnanVersionPermissionRespDto;

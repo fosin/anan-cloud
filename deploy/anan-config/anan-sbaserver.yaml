@@ -6,15 +6,15 @@ turbine:
 spring:
   boot:
     admin:
-      context-path: /adminmonitor
+      context-path: /sba
       ui:
-#        favicon-danger: "assets/img/favicon-danger.png"
-#        favicon: "assets/img/favicon.png"
+        #        favicon-danger: "assets/img/favicon-danger.png"
+        #        favicon: "assets/img/favicon.png"
         title: "服务指标监控"
-#        public-url:
-#      instance-proxy:
-#        ignored-headers: "Cookie", "Set-Cookie", "Authorization"
-#      probed-endpoints: "health", "env", "metrics", "httptrace:trace", "threaddump:dump", "jolokia", "info", "logfile", "refresh", "flyway", "liquibase", "heapdump", "loggers", "auditevents"
+      #        public-url:
+      #      instance-proxy:
+      #        ignored-headers: "Cookie", "Set-Cookie", "Authorization"
+      #      probed-endpoints: "health", "env", "metrics", "httptrace:trace", "threaddump:dump", "jolokia", "info", "logfile", "refresh", "flyway", "liquibase", "heapdump", "loggers", "auditevents"
       notify:
         mail:
           additional-properties:

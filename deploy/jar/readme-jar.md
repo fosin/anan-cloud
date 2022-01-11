@@ -31,25 +31,23 @@ mvn clean compile jar:jar spring-boot:repackage ^
 -P {activeProfile} ^
 -pl ./anan-eurekaserver,./anan-configserver,./anan-cloudgateway,^
 ./anan-cloudadviced/anan-authserver,./anan-cloudadviced/anan-platformserver,^
-./anan-cloudadviced/anan-zuulgateway,./anan-cloudadviced/anan-sbaserver
+./anan-cloudadviced/anan-sbaserver
 ```
 
 ## 5、按顺序启动jar
 
-    假设anan-cloud当前版本是2.7.0-SNAPSHOT
+    假设anan-cloud当前版本是3.0.0-SNAPSHOT
     Profile是dev
 
 ```shell script
 # 默认使用nacos作为服务注册和配置中心，不需要启动erueka和config
-./anan-eurekaserver-2.7.0-SNAPSHOT-{activeProfile}.jar
-./anan-configserver-2.7.0-SNAPSHOT-{activeProfile}.jar
+./anan-eurekaserver-3.0.0-SNAPSHOT-{activeProfile}.jar
+./anan-configserver-3.0.0-SNAPSHOT-{activeProfile}.jar
 
-./anan-authserver-2.7.0-SNAPSHOT-{activeProfile}.jar
-./anan-platformserver-2.7.0-SNAPSHOT-{activeProfile}.jar
-./anan-sbaserver-2.7.0-SNAPSHOT-{activeProfile}.jar
+./anan-authserver-3.0.0-SNAPSHOT-{activeProfile}.jar
+./anan-platformserver-3.0.0-SNAPSHOT-{activeProfile}.jar
+./anan-sbaserver-3.0.0-SNAPSHOT-{activeProfile}.jar
 
-# 网关选择zuul或者gateway其一即可
-./anan-zuulgateway-2.7.0-SNAPSHOT-{activeProfile}.jar
-./anan-cloudgateway-2.7.0-SNAPSHOT-{activeProfile}.jar
+./anan-cloudgateway-3.0.0-SNAPSHOT-{activeProfile}.jar
 
 ```

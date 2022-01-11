@@ -266,15 +266,7 @@ chmod 755 /etc/sysconfig/modules/ipvs.modules && bash /etc/sysconfig/modules/ipv
 ### 2.3、查询当前 k8s 可用的所有版本
 
 ```shell script
-yum makecache fast && yum list --showduplicates kubeadm --disableexcludes=kubernetes
-# 在列表中找到最新的 1.x 版本号
-# 该版本号格式为 1.16.15-0，其中x是此版本号，y 是最新的补丁
-# 以下所有1.16.15替换成具体的版本，例如1.16.15
-```
 
-### 2.4、安装 Kubeadm
-
-```shell script
 cat <<EOF > /etc/yum.repos.d/kubernetes.repo
 [kubernetes]
 name=Kubernetes
@@ -286,9 +278,19 @@ gpgkey=http://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg
 http://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg
 EOF
 
+yum makecache fast && yum list --showduplicates kubeadm --disableexcludes=kubernetes
+# 在列表中找到最新的 1.x 版本号
+# 该版本号格式为 1.16.15-0，其中x是此版本号，y 是最新的补丁
+# 以下所有1.16.15替换成具体的版本，例如1.16.15
+```
+
+### 2.4、安装 Kubeadm
+
+```shell script
+
 yum -y install kubeadm-${K8S_VERSION} kubectl-${K8S_VERSION} kubelet-${K8S_VERSION}
 
-#  启⽤kubectl（需要重新登录会话才能生效）
+##启⽤k8s命令补全
 yum install bash-completion -y
 source /usr/share/bash-completion/bash_completion
 echo 'source <(kubectl completion bash)' >> ~/.bash_profile
@@ -333,7 +335,7 @@ kubeadm join 172.16.1.200:6443 --token z9k16e.c64sazweotw3aagk \
 kubeadm token create --print-join-command
 
 #双网卡需要指定IP，增加--apiserver-advertise-address参数
-kubeadm join 100.100.1.243:6443 --token ruvd9n.5rksmgwyye8h9mis \
+kubeadm join 172.16.1.200:6443 --token ruvd9n.5rksmgwyye8h9mis \
     --discovery-token-ca-cert-hash sha256:e51320599d5ff7f0c5067a765a8403eb81b89043d446cacc3bb26b4a4598eb4a \
     --apiserver-advertise-address=${NODE_IPS[${NODE_INDEX}]}
 
@@ -349,13 +351,6 @@ systemctl daemon-reload && systemctl enable --now kubelet && systemctl status ku
 ### 2.7、Etcd 集群状态查看(所有控制平面节点都可执行)
 
 ```shell script
-
-# k8s 1.16.x
-kubectl -n kube-system exec etcd-$(hostname) -- etcdctl \
---endpoints=https://localhost:2379 \
---ca-file=/etc/kubernetes/pki/etcd/ca.crt \
---cert-file=/etc/kubernetes/pki/etcd/server.crt \
---key-file=/etc/kubernetes/pki/etcd/server.key cluster-health
 
 # k8s 1.18.x
 kubectl -n kube-system exec etcd-$(hostname) -- etcdctl \
@@ -549,4 +544,4 @@ sed -i 's/export KUBECONFIG=\/etc\/kubernetes\/admin.conf//g' ~/.bash_profile
 
 ## 5、使用 Helm 部署 anan 服务
 
-部署 anan [点这里 readme-anan.md](../helm/readme-anan.md)
+部署 anan [点这里 readme-helm.md](../helm/readme-helm.md)

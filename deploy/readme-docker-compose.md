@@ -12,18 +12,17 @@
            docker-compose.yml（中间件帐号和密码）
            nacos配置中心（anan服务相关帐号密码）
            anan-cloud下面的pom.xml中的profile local 的配置信息（spring security帐号密码）
-       docker-compose.yml中redis、rabbitmq、nacos-0、mysql-leader、mysql-follower5个是后台开发环境必须启动的
+       docker-compose.yml中redis、rabbitmq、nacos-0、mysql-leader是后台开发环境必须启动的
        1.2.1、使用docker默认的host网络，需要在docker主机上设置hosts映射     
             cat > /etc/hosts << EOF
             192.168.137.8 redis
             192.168.137.8 rabbitmq
             192.168.137.8 nacos-0
             192.168.137.8 mysql-leader
-            192.168.137.8 mysql-follower
             
             192.168.137.8 anan-authserver
             192.168.137.8 anan-platformserver
-            192.168.137.8 anan-zuulgateway
+            192.168.137.8 anan-cloudgateway
             EOF
        1.2.2、启动mysql主从同步模式和nacos服务发现和配置管理
             docker-compose -f .\docker-compose.yml up -d mysql-leader nacos-0
@@ -101,7 +100,7 @@
             anan-configserver
             anan-authserver
             anan-platformserver
-            anan-zuulgateway
+            anan-cloudgateway
             anan-sbaserver
 
 ### 1.6、配置开发环境
@@ -114,7 +113,6 @@
             192.168.137.8 redis
             192.168.137.8 rabbitmq
             192.168.137.8 mysql-leader
-            192.168.137.8 mysql-follower
             192.168.137.1 anan-eurekaserver
             192.168.137.1 anan-authserver
             
@@ -130,7 +128,7 @@
 ### 1.7、按顺序启动服务
 
        1.7.1、启动anan-platformserver平台服务中心
-       1.7.2、启动anan-authserver授权认证中心、anan-zuulgateway服务路由网关
+       1.7.2、启动anan-authserver授权认证中心、anan-cloudgateway服务路由网关
        1.7.3、启动anan-sbaserver服务监控（非必须）
 
 ### 1.9、如果使用Spring Cloud Eureka作为服务注册和发现组件、Config作为配置中心
@@ -138,7 +136,7 @@
        1.9.1、修改在以下模块的源码目录下的启动配置文件src/main/resources/bootstrap.yml
             anan-authserver
             anan-platformserver
-            anan-zuulgateway
+            anan-cloudgateway
             anan-sbaserver
             anan-cloudgateway
        1.9.1、关闭Nacos的作为服务发现和配置中心的设置
@@ -155,5 +153,5 @@
             1.9.4.1、启动anan-eurekaserver服务注册与发现中心
             1.9.4.2、启动anan-configserver配置中心
             1.9.4.3、启动anan-authserver授权认证中心
-            1.9.4.4、启动anan-platformserver平台服务中心、anan-zuulgateway服务路由网关
+            1.9.4.4、启动anan-platformserver平台服务中心、anan-cloudgateway服务路由网关
             1.9.4.5、启动anan-sbaserver服务监控

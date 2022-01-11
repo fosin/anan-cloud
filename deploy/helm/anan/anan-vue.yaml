@@ -79,7 +79,7 @@ configmap:
         }
 
         location /gateway {
-          proxy_pass http://anan-zuulgateway:51900;
+          proxy_pass http://anan-cloudgateway:51900;
         }
 
         location /nacos {

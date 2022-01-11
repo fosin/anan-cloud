@@ -3,7 +3,7 @@ package top.fosin.anan.platform.service.inter;
 
 import top.fosin.anan.cloudresource.dto.res.AnanUserRoleRespDto;
 import top.fosin.anan.core.exception.AnanUserOrPassInvalidException;
-import top.fosin.anan.jpa.service.batch.ICrudBatchJpaService;
+import top.fosin.anan.jpa.service.ICrudBatchJpaService;
 import top.fosin.anan.platform.dto.req.AnanUserRoleCreateDto;
 import top.fosin.anan.platform.dto.req.AnanUserRoleRetrieveDto;
 import top.fosin.anan.platform.entity.AnanUserRoleEntity;

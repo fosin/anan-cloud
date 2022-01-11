@@ -5,14 +5,14 @@
     <parent>
         <groupId>top.fosin.anan</groupId>
         <artifactId>anan-boot-starter</artifactId>
-        <version>2.4.0-SNAPSHOT</version>
+        <version>3.0.0-SNAPSHOT</version>
         <relativePath/>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <packaging>pom</packaging>
     <artifactId>anan-cloud</artifactId>
-    <version>2.7.0-SNAPSHOT</version>
+    <version>3.0.0-SNAPSHOT</version>
     <modules>
         <module>anan-eurekaserver</module>
         <module>anan-cloudadviced</module>
@@ -23,10 +23,11 @@
     <properties>
         <anan-placeholder1>${</anan-placeholder1>
         <anan-placeholder2>}</anan-placeholder2>
-        <anan-spring-cloud.version>Hoxton.SR12</anan-spring-cloud.version>
-        <anan-spring-cloud-alibaba.version>2.2.6.RELEASE</anan-spring-cloud-alibaba.version>
-        <anan-spring-boot-admin.version>2.3.1</anan-spring-boot-admin.version>
+        <anan-spring-cloud.version>2020.0.5</anan-spring-cloud.version>
+        <anan-spring-cloud-alibaba.version>2021.1</anan-spring-cloud-alibaba.version>
+        <anan-spring-boot-admin.version>2.5.5</anan-spring-boot-admin.version>
         <sonar.host.url>http://192.168.137.8:9001/</sonar.host.url>
+        <log4j2.version>2.16.0</log4j2.version>
     </properties>
     <profiles>
         <profile>
@@ -163,25 +164,17 @@
         </profile>
     </profiles>
     <dependencies>
+        <!--增加解决报错：No spring.config.import property has been defined-->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-bootstrap</artifactId>
+        </dependency>
         <dependency>
             <groupId>top.fosin.anan</groupId>
             <artifactId>anan-cloudresource</artifactId>
-            <version>2.7.0-SNAPSHOT</version>
+            <version>${project.version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-            <exclusions>
-                <exclusion>
-                    <artifactId>spring-boot-starter-tomcat</artifactId>
-                    <groupId>org.springframework.boot</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-undertow</artifactId>
-        </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
@@ -205,7 +198,15 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-loadbalancer</artifactId>
+        </dependency>
+        <!--pring-cloud-starter-loadbalancer的缓存用-->
+        <dependency>
+            <groupId>com.github.ben-manes.caffeine</groupId>
+            <artifactId>caffeine</artifactId>
+        </dependency>
         <dependency>
             <groupId>de.codecentric</groupId>
             <artifactId>spring-boot-admin-starter-client</artifactId>
@@ -262,12 +263,32 @@
                 <artifactId>spring-boot-admin-starter-server</artifactId>
                 <version>${anan-spring-boot-admin.version}</version>
             </dependency>
-            <!--如果升级springboot版本到2.4及以上，版本需要升级到3.x
+            <!--如果升级springboot版本到2.4及以上，版本可以升级到3.x
             当前Springboot是2.3，只能使用2.x的版本，否则启动应用报错-->
             <dependency>
                 <groupId>com.github.ulisesbocchio</groupId>
                 <artifactId>jasypt-spring-boot-starter</artifactId>
                 <version>2.1.2</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-zipkin</artifactId>
+                <version>2.2.8.RELEASE</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-netflix-hystrix</artifactId>
+                <version>2.2.10.RELEASE</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-netflix-hystrix-dashboard</artifactId>
+                <version>2.2.10.RELEASE</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-netflix-zuul</artifactId>
+                <version>2.2.10.RELEASE</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -382,7 +403,10 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
+                <!--需要制定版本，否则使用3.2.0会报错org.apache.maven.plugin.MojoExecutionException: Input length = 1-->
+                <version>3.1.0</version>
                 <configuration>
+                   <!-- <propertiesEncoding>UTF-8</propertiesEncoding>-->
                     <encoding>UTF-8</encoding>
                     <!--不过滤以下后缀的文件-->
                     <nonFilteredFileExtensions>

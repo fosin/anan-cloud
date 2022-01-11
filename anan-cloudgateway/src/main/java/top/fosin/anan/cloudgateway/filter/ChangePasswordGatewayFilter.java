@@ -22,6 +22,7 @@ import java.util.Objects;
  * @date 2019/6/28
  * @since 2.0.0
  */
+@Deprecated
 public class ChangePasswordGatewayFilter implements GatewayFilter, Ordered {
 
     @Override
@@ -33,24 +34,24 @@ public class ChangePasswordGatewayFilter implements GatewayFilter, Ordered {
         //只处理修改密码请求
         if (uri.contains("/user/changePassword")) {
             String id = getRequestParam(params, "i");
-            if (StringUtils.isEmpty(id)) {
+            if (!StringUtils.hasText(id)) {
                 return null;
             }
 
             String password = getRequestParam(params, "a");
-            if (StringUtils.isEmpty(password)) {
+            if (!StringUtils.hasText(password)) {
                 return null;
             }
             String confirmpassword1 = getRequestParam(params, "b");
-            if (StringUtils.isEmpty(confirmpassword1)) {
+            if (!StringUtils.hasText(confirmpassword1)) {
                 return null;
             }
             String confirmpassword2 = getRequestParam(params, "h");
-            if (StringUtils.isEmpty(confirmpassword2)) {
+            if (!StringUtils.hasText(confirmpassword2)) {
                 return null;
             }
             String passphrase = getRequestParam(params, "c");
-            if (StringUtils.isEmpty(passphrase)) {
+            if (!StringUtils.hasText(passphrase)) {
                 return null;
             }
             int keysize = Integer.parseInt(Objects.requireNonNull(getRequestParam(params, "f")));
@@ -58,7 +59,7 @@ public class ChangePasswordGatewayFilter implements GatewayFilter, Ordered {
                 return null;
             }
             String iv = getRequestParam(params, "d");
-            if (StringUtils.isEmpty(iv)) {
+            if (!StringUtils.hasText(iv)) {
                 return null;
             }
             int iterationcount = Integer.parseInt(Objects.requireNonNull(getRequestParam(params, "g")));
@@ -66,7 +67,7 @@ public class ChangePasswordGatewayFilter implements GatewayFilter, Ordered {
                 return null;
             }
             String salt = getRequestParam(params, "e");
-            if (StringUtils.isEmpty(salt)) {
+            if (!StringUtils.hasText(salt)) {
                 return null;
             }
             AesUtil aesUtil = new AesUtil(keysize, iterationcount);

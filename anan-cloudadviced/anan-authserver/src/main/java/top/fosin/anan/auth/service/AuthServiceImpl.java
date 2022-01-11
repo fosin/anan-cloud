@@ -50,7 +50,7 @@ public class AuthServiceImpl implements AuthService {
             AnanUserAuthDto dto = userEntity.conert2Dto();
             Long organizId = dto.getOrganizId();
             if (organizId > 0) {
-                AnanOrganizationEntity organization = orgRepo.getOne(organizId);
+                AnanOrganizationEntity organization = orgRepo.getById(organizId);
                 dto.setTopId(organization.getTopId());
             }
             return dto;

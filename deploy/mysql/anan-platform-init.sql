@@ -14,7 +14,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-
+/*!40111 SET SQL_LOG_BIN=0 */;
 --
 -- Current Database: `anan_platform`
 --
@@ -600,10 +600,9 @@ CREATE TABLE `anan_user` (
 
 LOCK TABLES `anan_user` WRITE;
 /*!40000 ALTER TABLE `anan_user` DISABLE KEYS */;
-INSERT INTO `anan_user` VALUES (1,0,'anan','超级管理员',
-                                '{bcrypt}$2a$10$mEX4ma07reEOJR3VMI3SBeHoXjc2ziuSWP4EdDkXHYt9nmWknPMR.','1982-01-01',
-                                1,'28860823@qq.com','13639003908',0,'mavatar','2017-06-20 15:12:16',1,'2019-03-19
-13:03:37',1,'2050-12-31 23:59:59',null,null,0),(2,1,'admin','管理员','{bcrypt}$2a$10$cKRbR9IJktfmKmf/wShyo.5
+INSERT INTO `anan_user` VALUES (1,0,'anan','超级管理员','{bcrypt}$2a$10$mEX4ma07reEOJR3VMI3SBeHoXjc2ziuSWP4EdDkXHYt9nmWknPMR.','1982-01-01',
+1,'28860823@qq.com','13639003908',0,'mavatar','2017-06-20 15:12:16',1,'2019-03-19 13:03:37',1,'2050-12-31 23:59:59',
+                                null,null,0),(2,1,'admin','管理员','{bcrypt}$2a$10$cKRbR9IJktfmKmf/wShyo.5
 .J8IxO/7YVn8twuWFtvPgruAF8gtKq','2018-08-06',1,'1234567890@qq.com','13666666666',0,'mavatar','2018-07-24 15:47:57',1,'2018-12-08 14:04:39',1,'2050-12-31 23:59:59',null,null,0);
 /*!40000 ALTER TABLE `anan_user` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -1083,7 +1082,5 @@ where (`a`.`id` = `b`.`permission_id`);
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+/*!40111 SET SQL_LOG_BIN=1 */;
 
-USE `mysql`;
-
-GRANT ALL PRIVILEGES ON anan_platform.* TO 'anan'@'%' IDENTIFIED BY 'local';

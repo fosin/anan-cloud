@@ -21,6 +21,7 @@ import java.util.Objects;
  * @date 2019/6/28
  * @since 2.0.0
  */
+@Deprecated
 public class LoginGatewayFilter implements GatewayFilter, Ordered {
 
     @Override
@@ -32,15 +33,15 @@ public class LoginGatewayFilter implements GatewayFilter, Ordered {
         //只处理认证请求
         if (uri.contains("/oauth/token")) {
             String cipheru = getRequestParam(params, "a");
-            if (StringUtils.isEmpty(cipheru)) {
+            if (!StringUtils.hasText(cipheru)) {
                 return null;
             }
             String cipherp = getRequestParam(params, "b");
-            if (StringUtils.isEmpty(cipherp)) {
+            if (!StringUtils.hasText(cipherp)) {
                 return null;
             }
             String passphrase = getRequestParam(params, "c");
-            if (StringUtils.isEmpty(passphrase)) {
+            if (!StringUtils.hasText(passphrase)) {
                 return null;
             }
             int keysize = Integer.parseInt(Objects.requireNonNull(getRequestParam(params, "f")));
@@ -48,7 +49,7 @@ public class LoginGatewayFilter implements GatewayFilter, Ordered {
                 return null;
             }
             String iv = getRequestParam(params, "d");
-            if (StringUtils.isEmpty(iv)) {
+            if (!StringUtils.hasText(iv)) {
                 return null;
             }
             int iterationcount = Integer.parseInt(Objects.requireNonNull(getRequestParam(params, "g")));
@@ -56,7 +57,7 @@ public class LoginGatewayFilter implements GatewayFilter, Ordered {
                 return null;
             }
             String salt = getRequestParam(params, "e");
-            if (StringUtils.isEmpty(salt)) {
+            if (!StringUtils.hasText(salt)) {
                 return null;
             }
             AesUtil aesUtil = new AesUtil(keysize, iterationcount);

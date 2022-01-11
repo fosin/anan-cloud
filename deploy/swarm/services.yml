@@ -1,7 +1,7 @@
 version: "3"
 services:
   anan-authserver:
-    image: fosin/anan-authserver:2.7.0-SNAPSHOT
+    image: fosin/anan-authserver:3.0.0-SNAPSHOT
     entrypoint: "sh /anan/wait-for.sh nacos-0:8848 -t 3600 -- /anan/entrypoint.sh"
     networks:
       - anan-overlay
@@ -26,7 +26,7 @@ services:
           memory: 256M
 
   anan-platformserver:
-    image: fosin/anan-platformserver:2.7.0-SNAPSHOT
+    image: fosin/anan-platformserver:3.0.0-SNAPSHOT
     entrypoint: "sh /anan/wait-for.sh anan-authserver:51400 -t 3600 -- /anan/entrypoint.sh"
     networks:
       - anan-overlay
@@ -52,7 +52,7 @@ services:
           memory: 256M
 
   anan-zuulgateway:
-    image: fosin/anan-zuulgateway:2.7.0-SNAPSHOT
+    image: fosin/anan-zuulgateway:3.0.0-SNAPSHOT
     entrypoint: "sh /anan/wait-for.sh anan-platformserver:51500 -t 3600 -- /anan/entrypoint.sh"
     volumes:
       - ../logs:/logs
@@ -79,7 +79,7 @@ services:
           memory: 256M
 
   anan-sbaserver:
-    image: fosin/anan-sbaserver:2.7.0-SNAPSHOT
+    image: fosin/anan-sbaserver:3.0.0-SNAPSHOT
     entrypoint: "sh /anan/wait-for.sh anan-zuulgateway:51900 -t 3600 -- /anan/entrypoint.sh"
     networks:
       - anan-overlay

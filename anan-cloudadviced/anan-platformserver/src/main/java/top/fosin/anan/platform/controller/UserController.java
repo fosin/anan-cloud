@@ -5,6 +5,8 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
 import top.fosin.anan.cloudresource.dto.req.AnanUserRetrieveDto;
@@ -13,6 +15,7 @@ import top.fosin.anan.cloudresource.dto.res.AnanUserRespDto;
 import top.fosin.anan.cloudresource.dto.res.AnanUserRoleRespDto;
 import top.fosin.anan.core.exception.AnanControllerException;
 import top.fosin.anan.core.exception.AnanServiceException;
+import top.fosin.anan.core.util.crypt.AesUtil;
 import top.fosin.anan.model.controller.BaseController;
 import top.fosin.anan.model.controller.ISimpleController;
 import top.fosin.anan.model.dto.IdDto;
@@ -66,6 +69,57 @@ public class UserController extends BaseController implements ISimpleController<
     @ApiOperation("修改用户帐号密码")
     @PostMapping("/changePassword")
     @ApiImplicitParams({
+           @ApiImplicitParam(name = "a", value = "原密码(未加密)",
+                    required = true, dataTypeClass = String.class, paramType = "query"),
+            @ApiImplicitParam(name = "b", value = "确认新密码1(未加密)",
+                    required = true, dataTypeClass = String.class, paramType = "query"),
+            @ApiImplicitParam(name = "c", value = "passphrase口令", dataTypeClass = String.class, required = true,
+                    paramType = "query"),
+            @ApiImplicitParam(name = "d", value = "iv密钥偏移量", dataTypeClass = String.class,
+                    required = true, paramType = "query"),
+            @ApiImplicitParam(name = "e", value = "salt盐值", dataTypeClass = String.class, required = true,
+                    paramType = "query"),
+            @ApiImplicitParam(name = "f", value = "keysize值大小", dataTypeClass = String.class,
+                    required = true, paramType = "query"),
+            @ApiImplicitParam(name = "g", value = "iterationCount密钥加密次数", dataTypeClass = String.class,
+                    required = true, paramType = "query"),
+            @ApiImplicitParam(name = "h", value = "确认新密码2(未加密)",
+                    required = true, dataTypeClass = String.class, paramType = "query"),
+            @ApiImplicitParam(name = "i", value = "用户ID,取值于AnanUserEntity.id",
+                    required = true, dataTypeClass = Long.class, paramType = "query")
+    })
+    public ResponseEntity<String> changePassword(@RequestParam("a") String password,
+                                                 @RequestParam("b") String confirmpassword1 ,
+                                                 @RequestParam("c") String passphrase,
+                                                 @RequestParam("d") String iv,
+                                                 @RequestParam("e") String salt,
+                                                 @RequestParam("f") Integer keysize,
+                                                 @RequestParam("g") Integer iterationCount,
+                                                 @RequestParam("h") String confirmpassword2,
+                                                 @RequestParam("i") Long id
+    ) throws AnanControllerException, AnanServiceException {
+        Assert.isTrue(StringUtils.hasText(password)
+                        && StringUtils.hasText(confirmpassword1)
+                        && StringUtils.hasText(confirmpassword2)
+                        && StringUtils.hasText(passphrase)
+                        && StringUtils.hasText(iv)
+                        && StringUtils.hasText(salt)
+                        && iterationCount > 0
+                        && keysize > 0
+                        && id > 0
+                ,"参数异常!");
+
+        AesUtil aesUtil = new AesUtil(keysize, iterationCount);
+        userService.changePassword(id,
+                aesUtil.decrypt(salt, iv, passphrase, password),
+                aesUtil.decrypt(salt, iv, passphrase, confirmpassword1),
+                aesUtil.decrypt(salt, iv, passphrase, confirmpassword2));
+        return ResponseEntity.ok("Success");
+    }
+
+    @ApiOperation("修改用户帐号密码")
+    @PostMapping("/changePassword/real")
+    @ApiImplicitParams({
             @ApiImplicitParam(name = TreeDto.ID_NAME, value = "参数类型,取值于AnanUserEntity.id",
                     required = true, dataTypeClass = Long.class, paramType = "query"),
             @ApiImplicitParam(name = "password", value = "原密码(未加密)",
@@ -75,7 +129,7 @@ public class UserController extends BaseController implements ISimpleController<
             @ApiImplicitParam(name = "confirmPassword2", value = "确认新密码2(未加密)",
                     required = true, dataTypeClass = String.class, paramType = "query")
     })
-    public ResponseEntity<String> changePassword(@Min(1) @RequestParam(TreeDto.ID_NAME) Long id,
+    public ResponseEntity<String> changePassword2(@Min(1) @RequestParam(TreeDto.ID_NAME) Long id,
                                                  @NotBlank @RequestParam("password") String password,
                                                  @NotBlank @RequestParam("confirmPassword1") String confirmPassword1,
                                                  @NotBlank @RequestParam("confirmPassword2") String confirmPassword2) throws AnanControllerException, AnanServiceException {

@@ -104,7 +104,7 @@ public class UserServiceImpl implements UserService {
         AnanUserRespDto respDto = BeanUtil.copyProperties(userEntity, AnanUserRespDto.class);
         Long organizId = userEntity.getOrganizId();
         if (organizId > 0) {
-            AnanOrganizationEntity organization = orgRepo.getOne(organizId);
+            AnanOrganizationEntity organization = orgRepo.getById(organizId);
             respDto.setTopId(organization.getTopId());
         }
         return respDto;
@@ -124,7 +124,7 @@ public class UserServiceImpl implements UserService {
         AnanUserRespDto respDto = BeanUtil.copyProperties(userEntity, AnanUserRespDto.class);
         Long organizId = userEntity.getOrganizId();
         if (organizId > 0) {
-            AnanOrganizationEntity organization = orgRepo.getOne(organizId);
+            AnanOrganizationEntity organization = orgRepo.getById(organizId);
             respDto.setTopId(organization.getTopId());
         }
         return respDto;
@@ -134,7 +134,7 @@ public class UserServiceImpl implements UserService {
     private String encryptBeforeSave(AnanUserEntity entity) {
         String password = entity.getPassword();
         //如果密码为空则随机生成4位以下密码
-        if (StringUtils.isEmpty(password)) {
+        if (!StringUtils.hasText(password)) {
             password = getPassword();
         } else {
             int length = localOrganParameter.getOrCreateParameter("UserInitPasswordLength", 6,
@@ -269,10 +269,10 @@ public class UserServiceImpl implements UserService {
                 String usercode = params.getUsercode();
                 String phone = params.getPhone();
                 String email = params.getEmail();
-                if (StringUtils.isEmpty(username)
-                        && StringUtils.isEmpty(usercode)
-                        && StringUtils.isEmpty(phone)
-                        && StringUtils.isEmpty(email)
+                if (!StringUtils.hasText(username)
+                        && !StringUtils.hasText(usercode)
+                        && !StringUtils.hasText(phone)
+                        && !StringUtils.hasText(email)
                 ) {
                     if (sysAdminUser) {
                         return query.getRestriction();
@@ -306,8 +306,8 @@ public class UserServiceImpl implements UserService {
             }
     )
     public AnanUserRespDto changePassword(Long id, String password, String confirmPassword1, String confirmPassword2) {
-        Assert.isTrue(!StringUtils.isEmpty(confirmPassword1) &&
-                !StringUtils.isEmpty(confirmPassword2) && confirmPassword1.equals(confirmPassword2), "新密码和确认新密码不能为空且必须一致!");
+        Assert.isTrue(StringUtils.hasText(confirmPassword1) &&
+                StringUtils.hasText(confirmPassword2) && confirmPassword1.equals(confirmPassword2), "新密码和确认新密码不能为空且必须一致!");
         Assert.isTrue(!confirmPassword1.equals(password), "新密码和原密码不能相同!");
         String pwdDesc = "密码最少6位，包括至少1个大写字母，1个小写字母，1个数字，1个特殊字符";
         String description = "用户密码强度正则表达式," + pwdDesc;
@@ -385,7 +385,7 @@ public class UserServiceImpl implements UserService {
                 topId = organiz.getTopId();
             }
             entities = userRepository.findByTopIdAndStatus(topId, status);
-            entities.add(userRepository.getOne(SystemConstant.ANAN_USER_ID));
+            entities.add(userRepository.getById(SystemConstant.ANAN_USER_ID));
         }
         return BeanUtil.copyCollectionProperties(entities, AnanUserRespDto.class);
     }

@@ -5,7 +5,7 @@ services:
     container_name: mysql-leader
     hostname: mysql-leader
     restart: always
-    image: registry.cn-hongkong.aliyuncs.com/fosin/mysql-leader:2.4
+    image: registry.cn-hongkong.aliyuncs.com/fosin/mysql:3.0.0
     #    build:
     #      context: deploy/mysql/leader
     environment:
@@ -43,6 +43,7 @@ services:
       - JVM_MMS=160M
     volumes:
       - /root/deploy/nacos/logs/:/home/nacos/logs
+      - /root/deploy/nacos/data/:/home/nacos/data
     #    ports:
     #      - "8848:8848"
     #      - "9555:9555"
@@ -101,7 +102,7 @@ services:
     container_name: mysql-follower
     hostname: mysql-follower
     restart: always
-    image: registry.cn-hongkong.aliyuncs.com/fosin/mysql-follower:2.7
+    image: registry.cn-hongkong.aliyuncs.com/fosin/mysql:3.0.0
     #    build:
     #      context: deploy/mysql/follower
     environment:
@@ -119,7 +120,7 @@ services:
 
   anan-authserver:
     network_mode: host
-    image: registry.cn-hongkong.aliyuncs.com/fosin/anan-authserver:2.7.0-SNAPSHOT
+    image: registry.cn-hongkong.aliyuncs.com/fosin/anan-authserver:3.0.0-SNAPSHOT
 #    entrypoint: 'sh /anan/wait-for.sh nacos-0:8848 -t 3600 -- /anan/entrypoint.sh'
     container_name: anan-authserver
     hostname: anan-authserver
@@ -136,12 +137,12 @@ services:
       - mysql-leader
       - nacos-0
 
-  anan-zuulgateway:
+  anan-cloudgateway:
     network_mode: host
-    image: registry.cn-hongkong.aliyuncs.com/fosin/anan-zuulgateway:2.7.0-SNAPSHOT
-#    entrypoint: 'sh /anan/wait-for.sh anan-authserver:51400 -t 3600 -- /anan/entrypoint.sh'
-    container_name: anan-zuulgateway
-    hostname: anan-zuulgateway
+    image: registry.cn-hongkong.aliyuncs.com/fosin/anan-cloudgateway:3.0.0-SNAPSHOT
+    entrypoint: 'sh /anan/wait-for.sh anan-platformserver:51500 -t 3600 -- /anan/entrypoint.sh'
+    container_name: anan-cloudgateway
+    hostname: anan-cloudgateway
     restart: always
     environment:
       - JAVA_TOOL_OPTIONS=-Xmx200M -XX:MaxMetaspaceSize=160M -XX:MetaspaceSize=160M -XX:+DisableExplicitGC -XX:ErrorFile=/logs/hs_err_pid%p.log
@@ -151,7 +152,7 @@ services:
 
   anan-platformserver:
     network_mode: host
-    image: registry.cn-hongkong.aliyuncs.com/fosin/anan-platformserver:2.7.0-SNAPSHOT
+    image: registry.cn-hongkong.aliyuncs.com/fosin/anan-platformserver:3.0.0-SNAPSHOT
     container_name: anan-platformserver
     hostname: anan-platformserver
     restart: always
@@ -168,8 +169,8 @@ services:
 
   anan-sbaserver:
     network_mode: host
-    image: registry.cn-hongkong.aliyuncs.com/fosin/anan-sbaserver:2.7.0-SNAPSHOT
-    entrypoint: 'sh /anan/wait-for.sh anan-zuulgateway:51900 -t 3600 -- /anan/entrypoint.sh'
+    image: registry.cn-hongkong.aliyuncs.com/fosin/anan-sbaserver:3.0.0-SNAPSHOT
+    entrypoint: 'sh /anan/wait-for.sh anan-cloudgateway:51900 -t 3600 -- /anan/entrypoint.sh'
     container_name: anan-sbaserver
     hostname: anan-sbaserver
     restart: always
@@ -182,7 +183,7 @@ services:
 
   anan-eurekaserver:
     network_mode: host
-    image: registry.cn-hongkong.aliyuncs.com/fosin/anan-eurekaserver:2.7.0-SNAPSHOT
+    image: registry.cn-hongkong.aliyuncs.com/fosin/anan-eurekaserver:3.0.0-SNAPSHOT
     container_name: anan-eurekaserver
     hostname: anan-eurekaserver
     restart: always
@@ -191,7 +192,7 @@ services:
 
   anan-configserver:
     network_mode: host
-    image: registry.cn-hongkong.aliyuncs.com/fosin/anan-configserver:2.7.0-SNAPSHOT
+    image: registry.cn-hongkong.aliyuncs.com/fosin/anan-configserver:3.0.0-SNAPSHOT
     entrypoint: 'sh /anan/wait-for.sh anan-eurekaserver:51000 -t 3600 -- /anan/entrypoint.sh'
     container_name: anan-configserver
     hostname: anan-configserver

@@ -1,8 +1,76 @@
-    ## 安装 Docker 软件
+# 部署docker
+
+## 配置系统参数
+
+```shell script
+cat << EOF>/etc/sysctl.conf
+net.ipv4.ip_local_port_range = 1024 65535
+kernel.shmall = 4294967296
+net.ipv4.tcp_fin_timeout=10
+net.ipv4.tcp_keepalive_time = 3
+net.core.wmem_default = 8388608
+net.core.rmem_default = 8388608
+net.core.rmem_max = 16777216
+net.core.wmem_max = 16777216
+net.ipv4.tcp_max_syn_backlog = 4096
+net.ipv4.tcp_tw_reuse = 1
+net.ipv4.tcp_mem = 94500000 915000000 927000000
+net.ipv4.tcp_max_orphans = 3276800
+net.ipv4.tcp_keepalive_probes = 2
+net.ipv4.tcp_keepalive_intvl = 1
+fs.file-max = 6553560
+net.ipv4.ip_local_reserved_ports = 2379-2380,7321,8001,8003,8005-8007,8020-8027,8030-8036,8040-8045,8047,8050-8051,8080-8082,8088,8499-8501,9200
+EOF
+
+sysctl -p
+
+### 1.2 配置资源限制
+
+cat << EOF >/etc/security/limits.conf
+* soft nproc 65536
+* hard nproc 65536
+* soft nofile 65536
+* hard nofile 65536
+EOF
+
+### 1.3 关闭防火墙和 selinux 认证
+
+sed -i 's/SELINUX=enforcing/SELINUX=disabled/' /etc/selinux/config
+grep SELINUX=disabled /etc/selinux/config
+setenforce 0
+systemctl disable firewalld && systemctl stop firewalld
+
+### 1.4 修改 sshd 服务/etc/ssh/sshd-config
+
+配置 root 可以登录 PermitRootLogin yes
+cat /etc/ssh/sshd_config | grep PermitRootLogin
+sed -i 's/PermitRootLogin no/PermitRootLogin yes/g' /etc/ssh/sshd_config
+
+配置可以用账号密码登录 PasswordAuthentication yes
+cat /etc/ssh/sshd_config | grep PasswordAuthentication
+sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config
+
+改为 no,解决服务器 ssh 登录卡住的问题
+cat /etc/ssh/sshd_config | grep UseDNS
+sed -i 's/#UseDNS yes/UseDNS no/g' /etc/ssh/sshd_config
+
+改为 no,解决服务器 ssh 登录卡住的问题
+cat /etc/ssh/sshd_config | grep GSSAPIAuthentication
+sed -i 's/GSSAPIAuthentication yes/GSSAPIAuthentication no/g' /etc/ssh/sshd_config
+
+改为 900,解决 ssh 断开时间过短问题
+cat /etc/ssh/sshd_config | grep ClientAliveInterval
+sed -i 's/#ClientAliveInterval 0/ClientAliveInterval 900/g' /etc/ssh/sshd_config
+
+systemctl restart sshd
+
+```
+
+## 安装 Docker 软件
 
 ```shell script
 
-### 1、 升级系统内核为 4.4
+### 1、 升级系统内核为4.4或以上
 ```shell script
 # 检查系统内核和模块是否适合运行 docker (仅适用于linux 系统)
 curl https://raw.githubusercontent.com/docker/docker/master/contrib/check-config.sh > check-config.sh
@@ -10,7 +78,6 @@ chmod +x check-config.sh
 bash ./check-config.sh
 
 # CentOS 7.x 系统自带的 3.10.x 内核存在一些 Bugs，导致运行的 Docker、Kubernetes 不稳定
-#rpm -Uvh http://www.elrepo.org/elrepo-release-7.0-3.el7.elrepo.noarch.rpm
 yum install -y https://www.elrepo.org/elrepo-release-7.el7.elrepo.noarch.rpm
 # 安装完成后检查 /boot/grub2/grub.cfg 中对应内核 menuentry 中是否包含 initrd16 配置，如果没有，再安装一次！
 yum --enablerepo=elrepo-kernel install -y kernel-lt
@@ -18,9 +85,9 @@ yum --enablerepo=elrepo-kernel install -y kernel-lt
 # 查看当前已安装所有内核
 sudo awk -F\' '$1=="menuentry " {print i++ " : " $2}' /etc/grub2.cfg
 
-0 : CentOS Linux (4.4.232-1.el7.elrepo.x86_64) 7 (Core)
-1 : CentOS Linux (3.10.0-1062.18.1.el7.x86_64) 7 (Core)
-2 : CentOS Linux (0-rescue-0ea734564f9a4e2881b866b82d679dfc) 7 (Core)
+0 : CentOS Linux (5.4.164-1.el7.elrepo.x86_64) 7 (Core)
+1 : CentOS Linux (3.10.0-1160.el7.x86_64) 7 (Core)
+2 : CentOS Linux (0-rescue-9e7c967c4a464a12868d7e84fda76603) 7 (Core)
 
 # 设置开机从新内核启动并重启生效
 grub2-set-default 0
@@ -81,6 +148,18 @@ cat > /etc/docker/daemon.json <<EOF
   "data-root": "/var/lib/docker"
 }
 EOF
+
+```
+
+## 设置命令自动补全
+
+```shell script
+
+在 /usr/share/bash-completion/completions/ 目录下有许多命令自动补齐的脚本，可自行查阅。
+ls  /usr/share/bash-completion/completions/docker*
+
+yum -y install bash-completion
+source /usr/share/bash-completion/bash_completion
 
 ```
 

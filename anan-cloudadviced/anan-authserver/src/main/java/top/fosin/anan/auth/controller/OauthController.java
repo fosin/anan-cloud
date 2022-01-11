@@ -1,5 +1,6 @@
 package top.fosin.anan.auth.controller;
 
+import cn.hutool.core.util.NumberUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
+import top.fosin.anan.core.util.crypt.AesUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
@@ -42,6 +44,62 @@ public class OauthController {
 
 
     @RequestMapping(value = "/token", method = {RequestMethod.POST, RequestMethod.GET})
+    @ApiOperation(value = "获取令牌", notes = "获取Oauth2.0令牌，通常用于前端的认证、登录操作")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", value = "Basic认证信息,格式例如：Basic ouZTJoQk5BQVFLUjVVemlJSw==", required = true, dataTypeClass = String.class, paramType = "header"),
+            @ApiImplicitParam(name = "grant_type", value = "授权类型,可选值(password、refresh_token、client_credentials、authorization_code)", required = true, dataTypeClass = String.class, paramType = "query"),
+            @ApiImplicitParam(name = "refresh_token", value = "早前收到的更新令牌，当grant_type=refresh_token时必选项。", dataTypeClass = String.class, paramType = "query"),
+            @ApiImplicitParam(name = "scope", value = "作用域,表示申请的授权范围", dataTypeClass = String.class, paramType = "query"),
+            @ApiImplicitParam(name = "redirect_uri", value = "重定向URI，当grant_type=authorization_code时才需要填写", dataTypeClass = String.class, paramType = "query"),
+            @ApiImplicitParam(name = "client_id", value = "客户端的ID，当grant_type=authorization_code时必选项", dataTypeClass = String.class, paramType = "query"),
+            @ApiImplicitParam(name = "state", value = "客户端的当前状态，可以指定任意值，认证服务器会原封不动地返回这个值，当grant_type" +
+                    "=authorization_code时才需要填写", dataTypeClass = String.class, paramType = "query"),
+            @ApiImplicitParam(name = "a", value = "cipheru用户加密算法", dataTypeClass = String.class, required = true,
+                    paramType = "query"),
+            @ApiImplicitParam(name = "b", value = "cipherp用户密码加密算法", dataTypeClass = String.class,
+                    required = true, paramType = "query"),
+            @ApiImplicitParam(name = "c", value = "passphrase口令", dataTypeClass = String.class, required = true,
+                    paramType = "query"),
+            @ApiImplicitParam(name = "d", value = "iv密钥偏移量", dataTypeClass = String.class,
+                    required = true, paramType = "query"),
+            @ApiImplicitParam(name = "e", value = "salt盐值", dataTypeClass = String.class, required = true,
+                    paramType = "query"),
+            @ApiImplicitParam(name = "f", value = "keysize值大小", dataTypeClass = String.class,
+                    required = true, paramType = "query"),
+            @ApiImplicitParam(name = "g", value = "iterationCount密钥加密次数", dataTypeClass = String.class,
+                    required = true, paramType = "query"),
+    })
+    public ResponseEntity<OAuth2AccessToken> secretAccessToken(Principal principal, HttpServletRequest request,
+                                                               @ApiIgnore @RequestParam Map<String, String> parameters) throws HttpRequestMethodNotSupportedException {
+
+        String cipheru = parameters.get("a");
+        String cipherp = parameters.get("b");
+        String passphrase = parameters.get("c");
+        int keysize = NumberUtil.parseInt(parameters.get("f"));
+        String iv = parameters.get("d");
+        int iterationCount = NumberUtil.parseInt(parameters.get("g"));
+        String salt = parameters.get("e");
+        Assert.isTrue(StringUtils.hasText(cipheru)
+                && StringUtils.hasText(cipherp)
+                && StringUtils.hasText(passphrase)
+                && StringUtils.hasText(iv)
+                && StringUtils.hasText(salt)
+                && iterationCount > 0
+                && keysize > 0
+                ,"参数异常!");
+
+        AesUtil aesUtil = new AesUtil(keysize, iterationCount);
+        String username = aesUtil.decrypt(salt, iv, passphrase, cipheru);
+        String password = aesUtil.decrypt(salt, iv, passphrase, cipherp);
+        request.setAttribute("username", username);
+        request.setAttribute("password", password);
+        parameters.put("username", username);
+        parameters.put("password", password);
+        return accessToken(principal, request, parameters);
+
+    }
+
+    @RequestMapping(value = "/token/real", method = {RequestMethod.POST, RequestMethod.GET})
     @ApiOperation(value = "获取令牌", notes = "获取Oauth2.0令牌，通常用于前端的认证、登录操作")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "Authorization", value = "Basic认证信息,格式例如：Basic ouZTJoQk5BQVFLUjVVemlJSw==", required = true, dataTypeClass = String.class, paramType = "header"),

@@ -10,13 +10,8 @@ spring:
 anan:
   security:
     sso:
-      session:
-        session-creation-policy: if_required
       authority:
-        root-path: /sso/**
-        authorities:
-          - methods: OPTIONS
-      http-basic: true
+        root-path: ^/((?!oauth).)*$
       form-login:
         enabled: true
         login-page: /sso/login
@@ -26,45 +21,32 @@ anan:
         default-success-url: /sso/index
         failure-url: /sso/login?error
         logout-url: /sso/logout
-        logout-success-url  : /sso/login?logout
-        clear-authentication: true
+        logout-success-url: /sso/login?logout
+        #clear-authentication: true
+        #invalidate-http-session: false
       remember-me:
         enabled: true
-    oauth2:
       session:
-        session-creation-policy: stateless
-      authority:
-        root-path: /**
-        authorities:
-          - methods: OPTIONS
+        session-creation-policy: if_required
       exception-handling:
         access-denied-page: /error
         enabled: true
+      http-basic:
+        enabled: true
+      anonymous:
+        enabled: true
+      web-ignoring:
+        - paths: /**/*.html,/**/*.css,/**/*.js,/**/*.woff*,/**/*.ttf*,/**/*.map,/**/*.ico
+        - paths: /**/*.swf,/**/*.jpg,/**/*.png,/**/*.svg,/**/*.gif
+        - paths: /error,/**/api-docs,/actuator/**,/v1/permission/**
+    oauth2:
+      authority:
+        root-path: ^/oauth/.*
       resource-server:
         enabled: true
         token-type: jwt
-    disable-csrf: true
-    web-ignoring:
-      - /
-      - /**/*.html
-      - /**/*.css
-      - /**/*.js
-      - /**/*.woff*
-      - /**/*.ttf*
-      - /**/*.map
-      - /**/*.ico
-      - /**/*.swf
-      - /**/*.jpg
-      - /**/*.png
-      - /**/*.svg
-      - /**/*.gif
-      - /error
-      - /**/webjars/**
-      - /**/images/**
-      - /**/swagger-resources/**
-      - /**/api-docs
-      - /actuator/**
-      - /v1/permission/**
+      session:
+        session-creation-policy: NEVER
   swagger:
     enabled: true
     title: ${spring.application.name}
@@ -74,7 +56,7 @@ anan:
     authorization:
       name: Oauth2.0 Authorization
       keyName: Authorization
-#      authRegex: ^[^/oauth/token]$
+    #      authRegex: ^[^/oauth/token]$
     contact:
       name: fosin
       email: 28860823@qq.com

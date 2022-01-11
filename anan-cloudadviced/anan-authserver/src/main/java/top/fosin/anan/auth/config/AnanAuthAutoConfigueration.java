@@ -21,7 +21,6 @@ import javax.sql.DataSource;
  */
 @Configuration
 public class AnanAuthAutoConfigueration {
-
     /**
      * 加载国际化认证提示信息
      *
@@ -60,18 +59,4 @@ public class AnanAuthAutoConfigueration {
         jdbcTokenRepository.setDataSource(dataSource);
         return jdbcTokenRepository;
     }
-
-//    @Bean
-//    public CorsFilter corsFilter() {
-//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-//        CorsConfiguration corsConfiguration = new CorsConfiguration();
-//        corsConfiguration.setAllowedOrigins(Collections.singletonList(CorsConfiguration.ALL));
-//        corsConfiguration.setAllowedHeaders(Collections.singletonList(CorsConfiguration.ALL));
-//        corsConfiguration.setAllowedMethods(Collections.singletonList(CorsConfiguration.ALL));
-//        corsConfiguration.setExposedHeaders(null);
-//        corsConfiguration.setAllowCredentials(true);
-//        corsConfiguration.setMaxAge(3600L);
-//        source.registerCorsConfiguration("/**", corsConfiguration);
-//        return new CorsFilter(source);
-//    }
 }

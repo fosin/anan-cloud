@@ -1,12 +1,23 @@
 package top.fosin.anan.cloudresource.config;
 
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * @author fosin
  * @date 2019/3/27
  */
-// @Slf4j
+ @Slf4j
 public class Oauth2FeignConfigure {
+
+    //@Bean
+    //public CircuitBreakerNameResolver circuitBreakerNameResolver() {
+    //    return (String feignClientName, Target<?> target, Method method) -> feignClientName + "_" + method.getName();
+    //}
+    //@Bean
+    //Capability customCapability() {
+    //    return new CustomCapability();
+    //}
 //    // feign的OAuth2ClientContext
 //    private OAuth2ClientContext feignOauth2ClientContext = new DefaultOAuth2ClientContext();
 //    private final ClientCredentialsResourceDetails clientCredentialsResourceDetails;

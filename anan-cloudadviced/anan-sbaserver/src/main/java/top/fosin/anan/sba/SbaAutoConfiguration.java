@@ -2,8 +2,6 @@ package top.fosin.anan.sba;
 
 import de.codecentric.boot.admin.server.config.AdminServerProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
-import org.springframework.cloud.client.loadbalancer.LoadBalancerInterceptor;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,10 +15,10 @@ import org.springframework.context.annotation.Primary;
 @Configuration
 public class SbaAutoConfiguration {
 
-    @Bean
-    LoadBalancerInterceptor loadBalancerInterceptor(LoadBalancerClient loadBalance) {
-        return new LoadBalancerInterceptor(loadBalance);
-    }
+    //@Bean
+    //LoadBalancerInterceptor loadBalancerInterceptor(LoadBalancerClient loadBalance) {
+    //    return new LoadBalancerInterceptor(loadBalance);
+    //}
 
     @Bean
     @Primary

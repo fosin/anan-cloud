@@ -12,6 +12,7 @@ import reactor.core.publisher.Mono;
  * @date 2019/6/28
  * @since 2.0.0
  */
+@Deprecated
 public class RealErrorGatewayFilter implements GatewayFilter, Ordered {
 
     @Override

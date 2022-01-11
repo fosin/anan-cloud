@@ -1,5 +1,7 @@
 package top.fosin.anan.cloudresource.service;
 
+import org.springframework.data.domain.AuditorAware;
+import org.springframework.lang.NonNull;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.util.Assert;
 import top.fosin.anan.cloudresource.constant.SystemConstant;
@@ -9,16 +11,13 @@ import top.fosin.anan.cloudresource.dto.AnanUserDetail;
 import top.fosin.anan.cloudresource.dto.req.AnanUserRoleDto;
 import top.fosin.anan.security.util.AnanJwtTool;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author fosin
  * @date 2018.7.23
  */
-public class AnanUserDetailService extends AnanJwtTool<AnanUserDetail> {
+public class AnanUserDetailService extends AnanJwtTool<AnanUserDetail> implements AuditorAware<Long> {
 
     public AnanUserDetailService(JwtDecoder jwtDecoder) {
         super(jwtDecoder);
@@ -159,5 +158,11 @@ public class AnanUserDetailService extends AnanJwtTool<AnanUserDetail> {
     public boolean hasSysAdminRole() {
         List<AnanUserRoleDto> userRoles = this.getAnanUser().getUserRoles();
         return userRoles.stream().anyMatch(userRole -> SystemConstant.ANAN_ROLE_NAME.equals(userRole.getValue()));
+    }
+
+    @Override
+    @NonNull
+    public Optional<Long> getCurrentAuditor() {
+        return Optional.of(this.getAnanUserId());
     }
 }

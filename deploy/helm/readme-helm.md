@@ -163,7 +163,7 @@ helm install anan-authserver anan -f anan/anan-authserver.yaml
 helm install anan-platformserver anan -f anan/anan-platformserver.yaml
 helm install anan-sbaserver anan -f anan/anan-sbaserver.yaml
 # 依赖anan-authserver
-helm install anan-zuulgateway anan -f anan/anan-zuulgateway.yaml
+helm install anan-cloudgateway anan -f anan/anan-cloudgateway.yaml
 
 #7、部署边缘服务
 # 部署k8s dashboard

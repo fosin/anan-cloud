@@ -13,6 +13,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+/*!40111 SET SQL_LOG_BIN=0 */;
 --
 -- Current Database: `nacos`
 --
@@ -89,13 +90,8 @@ spring:
 anan:
   security:
     sso:
-      session:
-        session-creation-policy: if_required
       authority:
-        root-path: /sso/**
-        authorities:
-          - methods: OPTIONS
-      http-basic: true
+        root-path: ^/((?!oauth).)*$
       form-login:
         enabled: true
         login-page: /sso/login
@@ -105,45 +101,32 @@ anan:
         default-success-url: /sso/index
         failure-url: /sso/login?error
         logout-url: /sso/logout
-        logout-success-url  : /sso/login?logout
-        clear-authentication: true
+        logout-success-url: /sso/login?logout
+        #clear-authentication: true
+        #invalidate-http-session: false
       remember-me:
         enabled: true
-    oauth2:
       session:
-        session-creation-policy: stateless
-      authority:
-        root-path: /**
-        authorities:
-          - methods: OPTIONS
+        session-creation-policy: if_required
       exception-handling:
         access-denied-page: /error
         enabled: true
+      http-basic:
+        enabled: true
+      anonymous:
+        enabled: true
+      web-ignoring:
+        - paths: /**/*.html,/**/*.css,/**/*.js,/**/*.woff*,/**/*.ttf*,/**/*.map,/**/*.ico
+        - paths: /**/*.swf,/**/*.jpg,/**/*.png,/**/*.svg,/**/*.gif
+        - paths: /error,/**/api-docs,/actuator/**,/v1/permission/**
+    oauth2:
+      authority:
+        root-path: ^/oauth/.*
       resource-server:
         enabled: true
         token-type: jwt
-    disable-csrf: true
-    web-ignoring:
-      - /
-      - /**/*.html
-      - /**/*.css
-      - /**/*.js
-      - /**/*.woff*
-      - /**/*.ttf*
-      - /**/*.map
-      - /**/*.ico
-      - /**/*.swf
-      - /**/*.jpg
-      - /**/*.png
-      - /**/*.svg
-      - /**/*.gif
-      - /error
-      - /**/webjars/**
-      - /**/images/**
-      - /**/swagger-resources/**
-      - /**/api-docs
-      - /actuator/**
-      - /v1/permission/**
+      session:
+        session-creation-policy: NEVER
   swagger:
     enabled: true
     title: ${spring.application.name}
@@ -153,7 +136,7 @@ anan:
     authorization:
       name: Oauth2.0 Authorization
       keyName: Authorization
-#      authRegex: ^[^/oauth/token]$
+    #      authRegex: ^[^/oauth/token]$
     contact:
       name: fosin
       email: 28860823@qq.com
@@ -201,11 +184,7 @@ VALUES
     7,
     'application.yaml',
     'DEFAULT_GROUP',
-    'jasypt:
-  encryptor:
-    algorithm: PBEWithMD5AndDES
-    password: oF7tVrdfjrbQ0NfSsRL3
-logging:
+    'logging:
   # pattern:
   #   file: ''%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{50} %msg%n%throwablen%''
   #   console: ''%highlight(%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level) %cyan(%logger{50}) %highlight(%msg%n%throwablen%)''
@@ -228,15 +207,15 @@ logging:
     #打印查询中命名参数的值
     org.hibernate.engine.spi.QueryParameters: DEBUG
     org.hibernate.engine.query.spi.HQLQueryPlan: DEBUG
-#    zipkin2: debug
-    # com.github.fosin.anan.security: DEBUG
-    # org.springframework.security: DEBUG
+    #    zipkin2: debug
+    #top.fosin.anan.security: DEBUG
+    #org.springframework.security: DEBUG
 spring:
   datasource:
     url: ${anan.datasource.url}
     username: ${anan.datasource.username}
     password: ${anan.datasource.password}
-#    type: com.alibaba.druid.pool.DruidDataSource
+    #    type: com.alibaba.druid.pool.DruidDataSource
     # Hikari 连接池配置
     hikari:
       # 最小空闲连接数量
@@ -273,10 +252,6 @@ spring:
   #    platform: mysql
   #    continue-on-error: true
   redis:
-    #database: 10
-    #    cluster:
-    #      max-redirects:
-    #      nodes: redis:6379
     host: redis
     password: ENC(svOoGRZ5qlC1bRGGh+7YwA==)
     # 连接超时时间（毫秒）
@@ -291,9 +266,6 @@ spring:
       # 连接池中的最小空闲连接 默认 0
       min-idle: 1
   cloud:
-    loadbalancer:
-      ribbon:
-        enabled: true
     stream:
       default:
         group: ${spring.application.name}-${spring.cloud.client.ip-address}-${server.port}
@@ -316,27 +288,27 @@ spring:
         format_sql: true
         use_sql_comments: true
     #show-sql: true
-#    hibernate:
-#      ddl-auto: update
+  #    hibernate:
+  #      ddl-auto: update
   zipkin:
     message-timeout: 10
-#    baseUrl: http://zipkin:9411/
+    #    baseUrl: http://zipkin:9411/
     sender:
       type: rabbit
     rabbitmq:
       queue: zipkin
-#    locator:
-#      discovery:
-#        enabled: true
-#    discovery-client-enabled: true
+  #    locator:
+  #      discovery:
+  #        enabled: true
+  #    discovery-client-enabled: true
   sleuth:
-#    enabled: false
+    #    enabled: false
     sampler:
       probability: 1.0
-#    feign:
-#      enabled: false
-#      processor:
-#        enabled: false
+  #    feign:
+  #      enabled: false
+  #      processor:
+  #        enabled: false
   jackson:
     #日期格式化
     date-format: yyyy-MM-dd HH:mm:ss
@@ -377,11 +349,11 @@ server:
         name: ${spring.application.name}
   undertow:
     threads:
-    # 设置IO线程数, 它主要执行非阻塞的任务,它们会负责多个连接, 默认设置每个CPU核心一个线程
-    # 不要设置过大，如果过大，启动项目会报错：打开文件数过多
+      # 设置IO线程数, 它主要执行非阻塞的任务,它们会负责多个连接, 默认设置每个CPU核心一个线程
+      # 不要设置过大，如果过大，启动项目会报错：打开文件数过多
       io: 4
-    # 阻塞任务线程池, 当执行类似servlet请求阻塞IO操作, undertow会从这个线程池中取得线程
-    # 它的值设置取决于系统线程执行任务的阻塞系数，默认值是IO线程数*8
+      # 阻塞任务线程池, 当执行类似servlet请求阻塞IO操作, undertow会从这个线程池中取得线程
+      # 它的值设置取决于系统线程执行任务的阻塞系数，默认值是IO线程数*8
       worker: 4
     # 以下的配置会影响buffer,这些buffer会用于服务器连接的IO操作,有点类似netty的池化内存管理
     # 每块buffer的空间大小,越小的空间被利用越充分，不要设置太大，以免影响其他应用，合适即可
@@ -429,10 +401,57 @@ security:
 eureka:
   client:
     healthcheck:
-      enabled: true # 开启健康检查（需要spring-boot-starter-actuator依赖）
+      # 开启健康检查（需要spring-boot-starter-actuator依赖）
+      enabled: true
   instance:
-    lease-expiration-duration-in-seconds: 10 # 续约到期时间（默认90秒）
-    lease-renewal-interval-in-seconds: 5 # 续约更新时间间隔（默认30秒）',
+    #续约到期时间（默认90秒）
+    lease-expiration-duration-in-seconds: 10
+    #续约更新时间间隔（默认30秒）
+    lease-renewal-interval-in-seconds: 5
+
+# feign:
+#  compression:
+#    request:
+#      enabled: true
+#    #Feign request compression gives you settings similar to what you may set for your web server:
+#      mime-types: text/xml,application/xml,application/json
+#      min-request-size: 2048
+#    response:
+#      enabled: true
+#    #For http clients except OkHttpClient, default gzip decoder can be
+#    # enabled to decode gzip response in UTF-8 encoding:
+#      useGzipDecoder: true
+# circuitbreaker:
+#   enabled: true
+# okhttp:
+#   enabled: true
+#httpclient:
+#  enabled: false
+#    max-connections: 1000 #最大连接数
+#    max-connections-per-route: 100 #每个url的连接数
+#  client:
+#    config:
+#      anan-platformserver:
+#        connectTimeout: 5000
+#        readTimeout: 5000
+#        loggerLevel: full
+#        errorDecoder: com.example.SimpleErrorDecoder
+#        retryer: com.example.SimpleRetryer
+#        defaultQueryParameters:
+#          query: queryValue
+#        defaultRequestHeaders:
+#          header: headerValue
+#        requestInterceptors:
+#          - com.example.FooRequestInterceptor
+#          - com.example.BarRequestInterceptor
+#        decode404: false
+#        encoder: com.example.SimpleEncoder
+#        decoder: com.example.SimpleDecoder
+#        contract: com.example.SimpleContract
+#        capabilities:
+#          - com.example.FooCapability
+#          - com.example.BarCapability
+        #        metrics.enabled: false',
     '626830ef58e9b827b03feeda3492d01f',
     '2019-11-10 17:39:32',
     '2019-11-22 21:28:31',
@@ -478,15 +497,15 @@ turbine:
 spring:
   boot:
     admin:
-      context-path: /adminmonitor
+      context-path: /sba
       ui:
-#        favicon-danger: "assets/img/favicon-danger.png"
-#        favicon: "assets/img/favicon.png"
+        #        favicon-danger: "assets/img/favicon-danger.png"
+        #        favicon: "assets/img/favicon.png"
         title: "服务指标监控"
-#        public-url:
-#      instance-proxy:
-#        ignored-headers: "Cookie", "Set-Cookie", "Authorization"
-#      probed-endpoints: "health", "env", "metrics", "httptrace:trace", "threaddump:dump", "jolokia", "info", "logfile", "refresh", "flyway", "liquibase", "heapdump", "loggers", "auditevents"
+      #        public-url:
+      #      instance-proxy:
+      #        ignored-headers: "Cookie", "Set-Cookie", "Authorization"
+      #      probed-endpoints: "health", "env", "metrics", "httptrace:trace", "threaddump:dump", "jolokia", "info", "logfile", "refresh", "flyway", "liquibase", "heapdump", "loggers", "auditevents"
       notify:
         mail:
           additional-properties:
@@ -537,83 +556,99 @@ VALUES
   port: 51900
 spring:
   cloud:
+    sentinel:
+      transport:
+        #配置 Sentinel dashboard 地址
+        dashboard: localhost:8718
+        #默认8719端口，假如被占用会自动从8719开始依次+1扫描,直至找到未被占用的端口
+        port: 8719
     gateway:
-      enabled: true #If you include the starter, but, for some reason, you do not want the gateway to be enabled
-    routes:
-      - id: anan-platformserver
-        uri: lb://anan-platformserver
-        predicates:
-          - path=/platform/{segment}
-        filters:
-          - SetPath=/{segment}
-          # - StripPrefix=1
-          #   # 限流
-          # - name: RequestRateLimiter
-          #   args:
-          #     # 限流策略
-          #     key-resolver: ''#{@remoteAddrKeyResolver}''
-          #     # 令牌桶每秒填充率
-          #     redis-rate-limiter.replenishRate: 1
-          #     # 令牌桶容量
-          #     redis-rate-limiter.burstCapacity: 2
-          #   # 熔断
-          # - name: Hystrix
-          #   args:
-          #     name: appService1EchoCmd
+      enabled: true
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        - id: anan-cloudgateway
+          uri: lb://anan-cloudgateway
+          order: 99
+          predicates:
+            - Path=/gateway/**
+          filters:
+            - StripPrefix=1
+        - id: anan-platformserver
+          uri: lb://anan-platformserver
+          order: 1
+          predicates:
+            - Path=/gateway/platform/**
+          filters:
+            - StripPrefix=2
+                    #   # 限流 依赖spring-boot-starter-data-redis-reactive，与swagger、zipkin等使用会报错
+                    # - name: RequestRateLimiter
+                    #   args:
+                    #     # 限流策略
+                    #     key-resolver: ''#{@remoteAddrKeyResolver}''
+                    #     # 令牌桶每秒填充率
+                    # redis-rate-limiter.replenishRate: 1
+                    #     # 令牌桶容量
+                    # redis-rate-limiter.burstCapacity: 10
+            # redis-rate-limiter.requestedTokens: 1
+            #   # 熔断
+            # - name: Hystrix
+            #   args:
+            #     name: appService1EchoCmd
 
-      - id: anan-authserver
-        uri: lb://anan-authserver
-        predicates:
-          - path=/auth/**
-        filters:
-          - StripPrefix=1
-      - id: anan-mpi
-        uri: lb://anan-mpi
-        predicates:
-          - path=/mpi/**
-        filters:
-          - RewritePath=/mpi/(?<segment>.*), /$\{segment}
-      - id: anan-vhr
-        uri: lb://anan-vhr
-        predicates:
-          - path=/vhr/**
-        filters:
-          - StripPrefix=1
-ribbon:
-  OkToRetryOnAllOperations: false #对所有操作请求都进行重试,默认false
-  MaxAutoRetries: 0     #对当前实例的重试次数，默认0
-  MaxAutoRetriesNextServer: 1 #对切换实例的重试次数，默认1
-  ReadTimeout: 5000   #负载均衡超时时间，默认值5000，单位ms
-  ConnectTimeout: 5000 #ribbon请求连接的超时时间，默认值2000，单位ms
-  ServerListRefreshInterval: 15000 # 从注册中心刷新servelist的时间 默认30秒，单位ms
-hystrix:
-  threadpool:
-    default:
-      coreSize: 100
-      maximumSize: 2000
-      allowMaximumSizeToDivergeFromCoreSize: true #允许maximumSize起作用
-      maxQueueSize: -1 #如该值为-1，那么使用的是SynchronousQueue，否则使用的是LinkedBlockingQueue
-  command:
-    default:
-      execution:
-        isolation:
-          thread:
-            timeoutInMilliseconds: 20001 #断路器的超时时间；如果ribbon配置了重试那么该值必需大于ribbonTimeout，重试才能生效
-      timeout:
-        enabled: false
-      metrics:
-        rollingStats:
-          timeInMilliseconds: 10000 #判断健康度的滚动时间窗长度（10000）
-      circuitBreaker:
-        requestVolumeThreshold: 20 #当在配置时间窗口内达到此数量的失败后，进行短路。默认20个
-        sleepWindowInMilliseconds: 5 #短路多久以后开始尝试是否恢复，默认5s
-        errorThresholdPercentage: 50% #出错百分比阈值，当达到此阈值后，开始短路。默认50%
-      threadPool:
-        coreSize: 10  #命令线程池执行最大并发量（10）
-##禁用自定义过滤器ThrowExceptionFilter
-#zuul.ThrowExceptionFilter.pre.disable=true
-
+        - id: anan-authserver
+          uri: lb://anan-authserver
+          order: 1
+          predicates:
+            - Path=/gateway/auth/**
+          filters:
+            - StripPrefix=2
+        - id: anan-mpi
+          uri: lb://anan-mpi
+          order: 1
+          predicates:
+            - Path=/gateway/mpi/**
+          filters:
+            - RewritePath=/mpi/(?<segment>.*), /$\{segment}
+        - id: anan-vhr
+          uri: lb://anan-vhr
+          order: 1
+          predicates:
+            - Path=/gateway/vhr/**
+          filters:
+            - StripPrefix=2
+        - id: anan-exam
+          uri: lb://anan-exam
+          order: 1
+          predicates:
+            - Path=/gateway/exam/**
+          filters:
+            - StripPrefix=2
 anan:
+  security:
+    oauth2:
+      session:
+        session-creation-policy: stateless
+      resource-server:
+        enabled: true
+        token-type: jwt
+      corss:
+        enabled: true
+        cors:
+          - path: /**
+            allowed-origins: ''http://localhost:9528''
+            allowed-methods: ''*''
+            allowed-headers: ''*''
+            # exposed-headers: ''*''
+            allow-credentials: true
+      web-ignoring:
+        - paths: /*/*.html,/*/*.css,/*/*.js,/*/*.woff*,/*/*.ttf*,/*/*.map,/*/*.ico
+        - paths: /*/*.swf,/*/*.jpg,/*/*.png,/*/*.svg,/*/*.gif
+        - paths: /*/*/*/api-docs,/*/swagger-resources/**,/*/swagger-ui/**,/swagger-resources/**,/swagger-ui/**
+        - paths: /actuator/**
+        - paths: /gateway/auth/oauth/**,/gateway/auth/sso/**,/gateway/platform/*/international/status/*,/gateway/platform/*/international/code/*,/gateway/platform/*/international/default,/gateway/platform/*/international/charset/internationalId/*
+          methods: GET,POST
   swagger:
     enabled: true
     title: ${spring.application.name}
@@ -718,12 +753,12 @@ zuul:
       retryable: true
       custom-sensitive-headers: true
       sensitive-headers:
-#  semaphore:
-#    max-semaphores: 100
-#  ribbon-isolation-strategy: THREAD
-#  thread-pool:
-#    use-separate-thread-pools: true
-#    thread-pool-key-prefix: zuulgw
+  #  semaphore:
+  #    max-semaphores: 100
+  #  ribbon-isolation-strategy: THREAD
+  #  thread-pool:
+  #    use-separate-thread-pools: true
+  #    thread-pool-key-prefix: zuulgw
   ratelimit:
     #对应用来标识请求的key的前缀
     key-prefix: zuulgateway
@@ -740,10 +775,10 @@ zuul:
         refresh-interval: 60 #刷新时间窗口的时间，默认值 60(秒)
         #可选 限流方式
         type:
-           #用户粒度
-  #        - user
-           #ORIGIN粒度 (用户请求的origin作为粒度控制)
-  #        - origin
+          #用户粒度
+          #        - user
+          #ORIGIN粒度 (用户请求的origin作为粒度控制)
+          #        - origin
           #接口粒度 (请求接口的地址作为粒度控制)
           - url
     policy-list:
@@ -752,7 +787,7 @@ zuul:
           quota: 1000
           refresh-interval: 60
           type:
-          - url
+            - url
   host:
     connect-timeout-millis: 10000
     socket-timeout-millis: 10000
@@ -800,49 +835,25 @@ anan:
     oauth2:
       session:
         session-creation-policy: stateless
-      authority:
-        root-path: /**
-        authorities:
-          - methods: OPTIONS
       resource-server:
         enabled: true
         token-type: jwt
-    disable-csrf: true
     corss:
       enabled: true
       cors:
         - path: /**
-          allowed-origins: ''*''
+          allowed-origins: ''http://localhost:9528''
           allowed-methods: ''*''
           allowed-headers: ''*''
           # exposed-headers: ''*''
           allow-credentials: true
     web-ignoring:
-      - /**/auth/oauth/**
-      - /**/auth/sso/**
-      - /**/*.html
-      - /**/*.css
-      - /**/*.js
-      - /**/*.woff*
-      - /**/*.ttf*
-      - /**/*.map
-      - /**/*.ico
-      - /**/*.swf
-      - /**/*.jpg
-      - /**/*.png
-      - /**/*.svg
-      - /hystrix
-      - /hystrix.stream
-      - /hystrix/**
-      - /**/webjars/**
-      - /**/images/**
-      - /**/swagger-resources/**
-      - /**/api-docs
-      - /actuator/**
-      - /**/international/status/*
-      - /**/international/code/*
-      - /**/international/default
-      - /**/international/charset/internationalId/*
+      - paths: /**/*.html,/**/*.css,/**/*.js,/**/*.woff*,/**/*.ttf*,/**/*.map,/**/*.ico
+      - paths: /**/*.swf,/**/*.jpg,/**/*.png,/**/*.svg,/**/*.gif
+      - paths: /**/api-docs,/**/swagger-resources/**,/**/swagger-ui/**,/swagger-resources/**,/swagger-ui/**
+      - paths: /actuator/**
+      - paths: /gateway/auth/oauth/**,/gateway/auth/sso/**,/gateway/platform/**/international/status/*,/gateway/platform/**/international/code/*,/gateway/platform/**/international/default,/gateway/platform/**/international/charset/internationalId/*
+        methods: GET,POST
   swagger:
     enabled: true
     title: ${spring.application.name}
@@ -858,6 +869,7 @@ anan:
       email: 28860823@qq.com
     ignoreResourceNames:
       - anan-zuulgateway
+      - anan-cloudgateway
   redis:
     idempotent:
       enabled: false
@@ -902,26 +914,13 @@ VALUES
     20,
     'anan-platformserver.yaml',
     'DEFAULT_GROUP',
-    'logging:
-  level:
-    top.fosin.anan: debug
-server:
+    'server:
   port: 51500
-feign:
-#  compression: #开启这个设置比较耗CPU
-#    request:
-#      enabled: true #开启Feign请求压缩
-#      mime-types: text/xml,application/xml,application/json # 配置压缩文档类型
-#    response:
-#      enabled: true #开启Feign响应压缩
-#      min-request-size: 2048 # 配置最小压缩的文档大小
-  okhttp:
-    enabled: true
-  httpclient:
-    enabled: false
-    max-connections: 1000 #最大连接数
-    max-connections-per-route: 100 #每个url的连接数
 anan:
+  security:
+    oauth2:
+      web-ignoring:
+        - paths: /**
   swagger:
     enabled: true
     title: ${spring.application.name}
@@ -939,7 +938,7 @@ anan:
 #    description: Oauth2.0令牌信息,格式例如：Bearer 58cb49cd-be59-4706-bbc5-9c41fc3cbef4
 #    modelRef: string
 #    parameterType: header
-#    required: true',
+        #    required: true',
     'c859d1296638e9cd9795a0bb74220ee2',
     '2019-11-10 20:16:42',
     '2020-03-15 18:35:53',
@@ -1258,12 +1257,14 @@ VALUES
   );
   /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
-  /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
-  /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-  /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-  /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
-  /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-  /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-  /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-  /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+/*!40111 SET SQL_LOG_BIN=1 */;
 -- Dump completed on 2020-02-14 14:10:48

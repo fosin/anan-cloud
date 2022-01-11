@@ -4,7 +4,7 @@ deployment:
       maxSurge: 1      #滚动升级时会先启动1个pod
       maxUnavailable: 1 #滚动升级时允许的最大Unavailable的pod个数
   minReadySeconds: 60  #滚动升级时60s后认为该pod就绪
-image: fosin/anan-sbaserver:2.7.0-SNAPSHOT
+image: fosin/anan-sbaserver:3.0.0-SNAPSHOT
 imagePullPolicy: IfNotPresent
 replicaCount: 1
 resources:
@@ -65,5 +65,5 @@ terminationGracePeriodSeconds: 30 #优雅关闭pod的等待时间，默认30s
 initContainers:
   - name: wait-authserver
     image: busybox
-    command: ['sh', '-c', 'until nc anan-zuulgateway 51900; do echo waiting for anan-zuulgateway; sleep 2; done;']
+    command: ['sh', '-c', 'until nc anan-cloudgateway 51900; do echo waiting for anan-cloudgateway; sleep 2; done;']
     imagePullPolicy: IfNotPresent

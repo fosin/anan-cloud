@@ -1,8 +1,7 @@
 package top.fosin.anan.zuul.config;
 
+import feign.Client;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
-import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
-import org.springframework.cloud.client.loadbalancer.LoadBalancerInterceptor;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.cloud.netflix.zuul.filters.Route;
 import org.springframework.cloud.netflix.zuul.filters.RouteLocator;
@@ -10,21 +9,19 @@ import org.springframework.cloud.netflix.zuul.filters.ZuulProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
-import org.springframework.http.HttpMethod;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 import springfox.documentation.swagger.web.SwaggerResource;
 import top.fosin.anan.cloudresource.dto.res.AnanPermissionRespDto;
 import top.fosin.anan.cloudresource.service.inter.PermissionFeignService;
-import top.fosin.anan.security.resource.AnanAuthorityPermission;
 import top.fosin.anan.security.resource.AnanProgramAuthorities;
-import top.fosin.anan.security.resource.AnanSecurityConstant;
 import top.fosin.anan.security.resource.AnanSecurityProperties;
+import top.fosin.anan.security.resource.AuthorityPermission;
+import top.fosin.anan.security.resource.SecurityConstant;
 import top.fosin.anan.swagger.config.AnanSwaggerResourcesProvider;
 import top.fosin.anan.swagger.config.SwaggerProperties;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -38,33 +35,25 @@ public class AnanZuulAutoConfiguration {
 
     @Bean
     @Primary
-    public AnanProgramAuthorities ananProgramAuthoritiesNew(RouteLocator routeLocator,
+    public AnanProgramAuthorities ananProgramAuthorities(RouteLocator routeLocator,
                                                          PermissionFeignService permissionFeignService) {
         List<Route> routes = routeLocator.getRoutes();
         List<String> locations = routes.stream().map(Route::getLocation).collect(Collectors.toList());
         List<AnanPermissionRespDto> dtos = permissionFeignService.findByServiceCodes(locations).getBody();
-        List<AnanSecurityProperties.AnanAuthorityProperties> propertiesList = new ArrayList<>();
+        List<AnanSecurityProperties.Authority> authorities = new ArrayList<>();
         Objects.requireNonNull(dtos).forEach(dto -> {
             String entityPath = dto.getPath();
             if (StringUtils.hasText(entityPath)) {
-                String method = dto.getMethod();
-                List<HttpMethod> httpMethods = new ArrayList<>();
-                if (StringUtils.hasText(method)) {
-                    String[] strings = method.split(",");
-                    for (String string : strings) {
-                        httpMethods.add(HttpMethod.resolve(string));
-                    }
-                }
                 String joinPath = joinPath(getRouteFullPath(routes, dto.getServiceCode()), entityPath);
-                String authority = AnanSecurityConstant.PREFIX_ROLE + dto.getId();
-                AnanSecurityProperties.AnanAuthorityProperties authorityProperties = new AnanSecurityProperties.AnanAuthorityProperties();
-                authorityProperties.setPaths(Collections.singletonList(joinPath));
-                authorityProperties.setMethods(httpMethods);
-                authorityProperties.setPermission(AnanAuthorityPermission.hasAuthority.getName() + AnanAuthorityPermission.SPLITER + authority);
-                propertiesList.add(authorityProperties);
+                String method = dto.getMethod();
+                AnanSecurityProperties.Authority authority = new AnanSecurityProperties.Authority();
+                authority.setPaths(joinPath);
+                authority.setMethods(method);
+                authority.setPermission(AuthorityPermission.hasAuthority.getName() + SecurityConstant.AUTHORITY_SPLIT + SecurityConstant.PREFIX_ROLE + dto.getId());
+                authorities.add(authority);
             }
         });
-        return new AnanProgramAuthorities(propertiesList);
+        return new AnanProgramAuthorities(authorities);
     }
 
     private String getRouteFullPath(List<Route> routes, String serviceCode) {
@@ -112,11 +101,6 @@ public class AnanZuulAutoConfiguration {
     }
 
     @Bean
-    LoadBalancerInterceptor loadBalancerInterceptor(LoadBalancerClient loadBalance) {
-        return new LoadBalancerInterceptor(loadBalance);
-    }
-
-    @Bean
     @Primary
     public AnanSwaggerResourcesProvider ananSwaggerResourcesProvider(RouteLocator routeLocator, SwaggerProperties swaggerProperties) {
         List<Route> routes = routeLocator.getRoutes();
@@ -130,10 +114,15 @@ public class AnanZuulAutoConfiguration {
         return new AnanSwaggerResourcesProvider(swaggerResources, swaggerProperties);
     }
 
-    //    @Bean
-//    @ConditionalOnProperty(prefix = "spring.profiles", name = "active", havingValue = "local")
-//    public IRule localLoadBalanceRule() {
-//        return new LocalLoadBalanceRule();
-//    }
-
+    /**
+     * 解决：zuul默认使用ribbon做负载，但是springcloud2020使用自己的负载导致报错
+     * class org.springframework.cloud.netflix.ribbon.RibbonLoadBalancerClient cannot be cast to class org
+     * .springframework.cloud.loadbalancer.blocking.client.BlockingLoadBalancerClient
+     *
+     * @return Client
+     */
+    @Bean
+    public Client feignClient() {
+        return new Client.Default(null, null);
+    }
 }

@@ -98,7 +98,7 @@ public class ParameterServiceImpl implements ParameterService {
         AnanParameterEntity cEntity = parameterRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("通过ID：" + id + "未能找到对应的数据!"));
         if (!ananUserDetailService.isSysAdminUser()) {
-            Assert.isTrue(!StringUtils.isEmpty(cEntity.getScope()),"非超级管理员不能修改空作用域的参数!");
+            Assert.isTrue(StringUtils.hasText(cEntity.getScope()),"非超级管理员不能修改公共参数!");
         }
         String oldCacheKey = getCacheKey(cEntity);
         String newCacheKey = getCacheKey(dto.getType(), dto.getScope(), dto.getName());
@@ -128,7 +128,7 @@ public class ParameterServiceImpl implements ParameterService {
     public void deleteById(Long id) {
         parameterRepository.findById(id).ifPresent(entity -> {
             if (!ananUserDetailService.isSysAdminUser()) {
-                Assert.isTrue(!StringUtils.isEmpty(entity.getScope()),"非超级管理员不能删除空作用域的参数!");
+                Assert.isTrue(StringUtils.hasText(entity.getScope()),"非超级管理员不能删除公共参数!");
             }
             entity.setStatus(ParameterStatus.Deleted.getTypeValue());
             parameterRepository.save(entity);
@@ -146,7 +146,7 @@ public class ParameterServiceImpl implements ParameterService {
         List<AnanParameterEntity> entities = parameterRepository.findAllById(ids);
         for (AnanParameterEntity entity : entities) {
             if (!ananUserDetailService.isSysAdminUser()) {
-                Assert.isTrue(!StringUtils.isEmpty(entity.getScope()),"非超级管理员不能删除空作用域的参数!");
+                Assert.isTrue(StringUtils.hasText(entity.getScope()),"非超级管理员不能删除公共参数!");
             }
             entity.setStatus(ParameterStatus.Deleted.getTypeValue());
         }
@@ -164,7 +164,7 @@ public class ParameterServiceImpl implements ParameterService {
         List<AnanParameterEntity> entities = parameterRepository.findAllById(ids);
         for (AnanParameterEntity entity : entities) {
             if (!ananUserDetailService.isSysAdminUser()) {
-                Assert.isTrue(!StringUtils.isEmpty(entity.getScope()),"非超级管理员不能取消删除空作用域的参数!");
+                Assert.isTrue(StringUtils.hasText(entity.getScope()),"非超级管理员不能取消删除公共参数!");
             }
             entity.setStatus(ParameterStatus.Normal.getTypeValue());
         }
@@ -180,7 +180,7 @@ public class ParameterServiceImpl implements ParameterService {
     }
 
     public String getCacheKey(Integer type, String scope, String name) {
-        if (StringUtils.isEmpty(scope)) {
+        if (!StringUtils.hasText(scope)) {
             scope = "";
         }
         return type + "-" + scope + "-" + name;
@@ -216,7 +216,7 @@ public class ParameterServiceImpl implements ParameterService {
             respDto = BeanUtil.copyProperties(parameter, AnanParameterRespDto.class);
         } else {
             //parameter为空表示没有参数记录，则依次向上找父机构的参数
-            Assert.isTrue(!StringUtils.isEmpty(scope), "没有从参数[" + "type:" + type + " scope:" + scope + " name:" + name + "]中查询到参数");
+            Assert.isTrue(StringUtils.hasText(scope), "没有从参数[" + "type:" + type + " scope:" + scope + " name:" + name + "]中查询到参数");
             respDto = getNearestParameter(type, getNearestScope(type, scope), name);
         }
 
@@ -266,7 +266,7 @@ public class ParameterServiceImpl implements ParameterService {
         AnanParameterEntity entity = parameterRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("该参数[" + id + "]已经不存在!"));
         if (!ananUserDetailService.isSysAdminUser()) {
-            Assert.isTrue(!StringUtils.isEmpty(entity.getScope()),"非超级管理员不能发布空作用域的参数!");
+            Assert.isTrue(StringUtils.hasText(entity.getScope()),"非超级管理员不能发布公共参数!");
         }
         String cacheKey = getCacheKey(entity);
         boolean success;

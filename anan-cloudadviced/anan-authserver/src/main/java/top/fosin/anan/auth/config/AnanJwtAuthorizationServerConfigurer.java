@@ -10,7 +10,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
-import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.ClientDetailsService;
@@ -35,7 +34,6 @@ import java.util.Map;
  * @date 2017/12/28
  */
 @Configuration
-@EnableAuthorizationServer
 @AllArgsConstructor
 public class AnanJwtAuthorizationServerConfigurer extends AuthorizationServerConfigurerAdapter {
     private final AuthenticationManager authenticationManager;
@@ -187,7 +185,6 @@ public class AnanJwtAuthorizationServerConfigurer extends AuthorizationServerCon
      */
     @Override
     public void configure(AuthorizationServerSecurityConfigurer security) {
-
         security
                 //url:/oauth/token_key,exposes public key for token verification if using JWT tokens
                 .tokenKeyAccess("isAuthenticated()")

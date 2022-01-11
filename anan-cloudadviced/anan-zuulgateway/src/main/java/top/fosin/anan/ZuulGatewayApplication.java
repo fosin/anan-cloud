@@ -8,7 +8,7 @@ import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import top.fosin.anan.core.banner.AnanBanner;
 import top.fosin.anan.redis.annotation.EnableAnanRedis;
-import top.fosin.anan.security.annotation.EnableAnanSecurityOauth2;
+import top.fosin.anan.security.servlet.annotation.EnableAnanWebSecurityOauth2;
 import top.fosin.anan.swagger.annotation.EnableAnanSwagger2;
 
 /**
@@ -20,9 +20,8 @@ import top.fosin.anan.swagger.annotation.EnableAnanSwagger2;
 @EnableHystrixDashboard
 @EnableAnanRedis
 @EnableAnanSwagger2
-@EnableAnanSecurityOauth2
+@EnableAnanWebSecurityOauth2
 @EnableFeignClients
-//@EnableTurbineStream
 public class ZuulGatewayApplication {
     public static void main(String[] args) {
         new SpringApplicationBuilder(ZuulGatewayApplication.class)

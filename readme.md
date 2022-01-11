@@ -1,9 +1,14 @@
 # 设计定位
+    经过几个月，内部大重构的3.0来了，对外功能无变化，使用更强、更快、更好用了！！！
 
-    anan基于OpenJdk11、Spring Boot 2.3.x、Spring Cloud Hoxton生态体系技术，采用微服务前后端分离架构，为个人及企业微
-    服务架构提供一种解决方案，供开发人员学习和交流。其中包括服务注册与发现、服务监控、服务管理、
-    服务治理、服务网关、服务熔断、配置管理、OAuth2认证授权中心等常见微服务组件。其中服务注册与发现支持nacos、eureka。
-    支持Kubernetes(Helm)集群部署、jar包集群部署、Docker-Compose部署、Swarm集群部署
+    第一步：正式启用anan-cloudgateway网关模块（基于Reactive的WebFlux技术栈），原网关项目anan-zuulgateway不再支持，Servlet和Reactive两种模式并行使用。（已完成）
+    第二步：逐步将剩余模块从Servlet技术栈迁移至Reactive技术栈。（进行中）
+
+    anan基于JDK11、Spring Boot 2.5.x、Spring Cloud 2020生态体系技术，采用微服务前后端分离架构，供开发人员学习和交流。
+    包括服务注册与发现、服务监控、服务管理、服务治理、服务网关、服务熔断、配置管理、OAuth2认证授权中心等常见微服务组件。
+    服务注册与发现：支持nacos、eureka；
+    配置中心：支持Nacos、SpringCloudConfig；
+    部署方式：支持Kubernetes(Helm)集群部署、jar包集群部署、Docker-Compose部署、Swarm集群部署
 
 对应前端项目地址: <https://github.com/fosin/anan-vue>
 
@@ -18,11 +23,12 @@
         anan-mybatis                       | 快速构建基于MybatisPlus的CRUD、分页、排序、树形数据
         anan-swagger                       | 快速构建基于Swagger3.0的API文档
     Spring MVC                             | MVC分层框架 
-    Alibaba Nacos(备选Config)               | 配置管理中心 
+    Spring Webflux                         | Reactive框架技术栈
     Alibaba Nacos(备选Eureka)               | 服务注册中心 
-    Spring Cloud Zuul                      | 服务网关 
-    Spring Cloud Hystrix                   | 服务熔断框架 
-    Spring Cloud Feign                     | 微服务声明式调用框架 
+    Alibaba Nacos(备选Config)               | 配置管理中心 
+    Alibaba Sentinel                       | 服务限流、熔断框架 
+    Spring Cloud Gateway                   | 服务网关 
+    Spring Cloud OpenFeign                 | 微服务声明式调用框架 
     Spring Cloud Sleuth Zipkin             | 分布式链路追踪
     Spring Boot Admin                      | 服务管理中心 
     Spring Data Redis                      | 缓存框架 
@@ -34,12 +40,11 @@
     Thymeleaf                              | HTML5模板引擎  
     Maven                                  | 项目构建管理  
     Redis                                  | 缓存内存数据库 
-    Elasticsearch                          | 搜索内存数据库 
     Mysql                                  | 对象关系数据库 
     RabbitMQ                               | 消息中间件
     ELK                                    | 日志收集、分析组合框架
+    Promethus、Grafana等                    | 智能监控运维框架
     Vuejs、Nodejs、Webpack、ElementUI       | 前段开发框架
-
 ## 架构设计
 
 ### 系统架构图
@@ -70,6 +75,7 @@
     2.5.x               2.2.x                3.4.x
     2.6.x               2.3.x                3.4.x
     2.7.x               2.4.x                3.5.x
+    3.0.x               3.0.x                3.5.x
 
 ## 搭建环境
 
