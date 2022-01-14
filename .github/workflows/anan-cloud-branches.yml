@@ -100,16 +100,16 @@ jobs:
         if: contains(env.MODIFY_FILES,'anan-cloudadviced/') || contains(env.MODIFY_FILES,'anan-cloudresource/') || contains(env.MODIFY_FILES,'anan-configserver/') || contains(env.MODIFY_FILES,'anan-eurekaserver/')
         run: |
           mvn --batch-mode --errors --file pom.xml clean dependency:copy-dependencies -DincludeScope=runtime compile jar:jar spring-boot:repackage
-          echo ANAN_VERSION=$(grep 'version=' target/maven-archiver/pom.properties | awk -F '=' '{ print $2 }') >> $GITHUB_ENV
+          ANAN_VERSION=$(grep 'version=' target/maven-archiver/pom.properties | awk -F '=' '{ print $2 }')
+          echo ANAN_VERSION >> $GITHUB_ENV
 
       - name: Docker build and push mysql
         if: contains(env.MODIFY_FILES,'deploy/mysql')
         run: |
           MODULE_PATH=deploy/mysql
           MODULE_NAME=mysql
-          MODULE_VERSION=3.0.0
-          docker build ./$MODULE_PATH -t ${{ env.DOCKER_MIRROR_SERVER }}/${{ env.DOCKER_MIRROR_NS }}/$MODULE_NAME:$MODULE_VERSION -f ./$MODULE_PATH/7.Dockerfile
-          docker push ${{ env.DOCKER_MIRROR_SERVER }}/${{ env.DOCKER_MIRROR_NS }}/$MODULE_NAME:$MODULE_VERSION
+          docker build ./$MODULE_PATH -t ${{ env.DOCKER_MIRROR_SERVER }}/${{ env.DOCKER_MIRROR_NS }}/$MODULE_NAME:$ANAN_VERSION -f ./$MODULE_PATH/7.Dockerfile
+          docker push ${{ env.DOCKER_MIRROR_SERVER }}/${{ env.DOCKER_MIRROR_NS }}/$MODULE_NAME:$ANAN_VERSION
 
       # 创建anan-authserver
       - name: Docker build and push anan-authserver

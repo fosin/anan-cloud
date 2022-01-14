@@ -10,6 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>anan-cloudgateway</artifactId>
     <description>AnAn Cloud Gateway</description>
+    <packaging>jar</packaging>
     <properties>
         <maven.deploy.skip>true</maven.deploy.skip>
     </properties>
@@ -34,12 +35,16 @@
             <artifactId>spring-boot-starter-data-redis-reactive</artifactId>
         </dependency>-->
         <dependency>
-            <groupId>com.alibaba.csp</groupId>
-            <artifactId>sentinel-spring-cloud-gateway-adapter</artifactId>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-sentinel</artifactId>
         </dependency>
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
-            <artifactId>spring-cloud-starter-alibaba-sentinel</artifactId>
+            <artifactId>spring-cloud-alibaba-sentinel-gateway</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba.csp</groupId>
+            <artifactId>sentinel-datasource-nacos</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>

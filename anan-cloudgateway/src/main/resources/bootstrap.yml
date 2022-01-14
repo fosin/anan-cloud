@@ -3,28 +3,18 @@ eureka:
     service-url:
       defaultZone: @eureka.client.service-url.defaultZone@
     enabled: @eureka.client.enabled@
-  instance:
-    prefer-ip-address: true
 spring:
   profiles:
     active: @profileActive@
   application:
     name: @project.artifactId@
   cloud:
-    inetutils:
-      preferred-networks: @spring.cloud.inetutils.preferred-networks@
     config:
       username: ${spring.security.user.name}
       password: ${spring.security.user.password}
       discovery:
         enabled: @spring.cloud.config.enabled@
         service-id: anan-configserver
-      fail-fast: true
-      retry:
-        initial-interval: 2000
-        max-attempts: 6
-        max-interval: 2000
-        multiplier: 1.1
       profile: @profileActive@
       enabled: @spring.cloud.config.enabled@
     nacos:

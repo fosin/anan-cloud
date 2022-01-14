@@ -35,7 +35,7 @@ public class AnanZuulAutoConfiguration {
 
     @Bean
     @Primary
-    public AnanProgramAuthorities ananProgramAuthorities(RouteLocator routeLocator,
+    public AnanProgramAuthorities ananProgramAuthoritiesNew(RouteLocator routeLocator,
                                                          PermissionFeignService permissionFeignService) {
         List<Route> routes = routeLocator.getRoutes();
         List<String> locations = routes.stream().map(Route::getLocation).collect(Collectors.toList());

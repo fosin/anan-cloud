@@ -15,8 +15,6 @@ spring:
   application:
     name: @project.artifactId@
   cloud:
-    inetutils:
-      preferred-networks: @spring.cloud.inetutils.preferred-networks@
     config:
       server:
         encrypt:

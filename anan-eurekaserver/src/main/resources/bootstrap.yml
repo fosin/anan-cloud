@@ -19,8 +19,7 @@ spring:
   application:
     name: @project.artifactId@
   cloud:
-    inetutils:
-      preferred-networks: @spring.cloud.inetutils.preferred-networks@
+
   jackson: #该参数一定要放bootstrap中，而放application.yml或者后面的配置文件都不能生效
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8

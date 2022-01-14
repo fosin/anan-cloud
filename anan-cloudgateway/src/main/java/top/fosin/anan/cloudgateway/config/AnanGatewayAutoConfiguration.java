@@ -85,9 +85,21 @@ public class AnanGatewayAutoConfiguration {
         return res.getBody();
     }
 
+    /**
+     *  TODO
+     *  如果bean名称是ananProgramAuthorities，则会出现源码跑无问题，编译打包运行报错：
+     *  The bean 'ananProgramAuthorities', defined in class path resource [top/fosin/anan/cloudgateway/config/AnanGatewayAutoConfiguration.class], could not be registered. A bean with that name has already been defined in class path resource [top/fosin/anan/security/configurer/AnanSecurityAutoConfiguration.class] and overriding is disabled.
+     * Action: Consider renaming one of the beans or enabling overriding by setting
+     * spring.main.allow-bean-definition-overriding=true
+     *
+     *  即使设置了spring.main.allow-bean-definition-overriding=true还是会出现这个问题。
+     *
+     * @return AnanProgramAuthorities 编程权限
+     * @throws URISyntaxException 异常
+     */
     @Bean
     @Primary
-    public AnanProgramAuthorities ananProgramAuthorities() throws URISyntaxException {
+    public AnanProgramAuthorities ananProgramAuthoritiesNew() throws URISyntaxException {
         List<RouteDefinition> routes = ananGatewayProperties().getRoutes();
         List<String> hosts = routes.stream().map(route -> route.getUri().getHost()).collect(Collectors.toList());
         //List<AnanPermissionRespDto> dtos = permissionFeignService.findByServiceCodes(hosts).getBody();
