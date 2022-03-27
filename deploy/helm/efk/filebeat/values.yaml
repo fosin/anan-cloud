@@ -1,0 +1,142 @@
+daemonset:
+  lables: {}
+  updateStrategy:
+    type: RollingUpdate
+  minReadySeconds: 60  #滚动升级时60s后认为该pod就绪
+terminationGracePeriodSeconds: 30 #优雅关闭pod的等待时间，默认30s
+containers:
+  - image: elastic/filebeat:6.8.20
+    imagePullPolicy: IfNotPresent
+    resources:
+      limits:
+        memory: 128Mi
+      requests:
+        cpu: 1m
+        memory: 64Mi
+    livenessProbe: {}
+    readinessProbe: {}
+    env:
+      - name: ELASTICSEARCH_HOSTS
+        valueFrom:
+          configMapKeyRef:
+            name: es
+            key: addresses
+      - name: ELASTICSEARCH_USERNAME
+        valueFrom:
+          configMapKeyRef:
+            name: es
+            key: username
+      - name: ELASTICSEARCH_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: es
+            key: password
+    args: [
+        "-c", 
+        "/etc/filebeat/filebeat.yml",
+        "-e",
+    ]
+    securityContext:
+      runAsUser: 0
+hostPath:
+    # data folder stores a registry of read status for all files, so we don't send everything again on a Filebeat pod restart
+  - name: data
+    mountPath: /usr/share/filebeat/data
+    path: /data/filebeat
+    type: DirectoryOrCreate
+  - name: varlibdockercontainers
+    mountPath: /var/lib/docker/containers
+    path: /var/lib/docker/containers
+    readOnly: true
+cluster:
+  role:
+    lables: {}
+    rules:
+      - apiGroups: [""] # "" indicates the core API group
+        resources:
+          - namespaces
+          - pods
+        verbs:
+          - get
+          - watch
+          - list
+configmap:
+  files:
+  - mountPath: /etc/filebeat
+    mountFiles:
+      filebeat.yml: |-
+        filebeat.config:
+          inputs:
+            enabled: true
+            # Mounted `filebeat-inputs` configmap:
+            path: ${path.config}/inputs.d/*.yml
+            # Reload inputs configs as they change:
+            reload.enabled: true
+            reload.period: 10s
+          modules:
+            path: ${path.config}/modules.d/*.yml
+            # Reload module configs as they change:
+            reload.enabled: false
+            reload.period: 10s
+
+        # To enable hints based autodiscover, remove `filebeat.config.inputs` configuration and uncomment this:
+        #filebeat.autodiscover:
+        #  providers:
+        #    - type: kubernetes
+        #      hints.enabled: true
+        processors:
+          - add_cloud_metadata: ~
+
+        output.elasticsearch:
+          hosts: '${ELASTICSEARCH_HOSTS:elasticsearch:9200}'
+          username: '${ELASTICSEARCH_USERNAME:}'
+          password: '${ELASTICSEARCH_PASSWORD:}'
+          index: "k8s-%{+yyyy.MM.dd}"
+        
+        setup.template.enabled: false
+        setup.template.name: "k8s"
+        setup.template.pattern: "k8s-*"
+        #如果一个文件在某个时间段内没有发生过更新，则关闭监控的文件handle，默认1小时
+        close_older: 30m
+        #当文件名称有变化时，包括改名和删除，会自动关闭一个文件(windows独享)
+        #force_close_files: true
+        #没有新日志采集后多长时间关闭文件句柄，默认5分钟
+        close_inactive: 5m
+        #传输了3h后没有传输完成的话就强行关闭文件句柄，这个配置项是解决以上案例问题的key point；
+        close_timeout: 3h
+        #默认值是0表示不清理，不清理的意思是采集过的文件描述在registry文件里永不清理，在运行一段时间后，registry会变大，可能会带来问题
+        clean_inactive: 72h
+        #设置了clean_inactive后就需要设置ignore_older，且要保证ignore_older < clean_inactive
+        ignore_older: 70h
+  - mountPath: /usr/share/filebeat/inputs.d
+    mountFiles:
+      kubernetes.yml: |-
+        - type: docker
+          enabled: true
+          containers.ids:
+          - "*"
+          processors:
+            - add_kubernetes_metadata:
+                in_cluster: true
+      # docker.yml: |-
+      #   - type: docker
+      #     enabled: true
+      #     paths:
+      #     - /var/log/containers/*.log
+      #     multiline: # 多行处理，正则表示如果前面几个数字不是4个数字开头，那么就会合并到一行,解决Java堆栈错误日志收集问题
+      #       pattern: ^\d{4}-\d{1,2}-\d{1,2}\s\d{1,2}:\d{1,2}:\d{1,2} #匹配Java日志开头时间
+      #       negate: true # 正则是否开启，默认false不开启
+      #       match: after # 不匹配的正则的行是放在上面一行的前面还是后面
+      #     processors:
+      #     - add_kubernetes_metadata:
+      #         in_cluster: true
+      #         host: ${NODE_NAME}
+      #         matchers:
+      #         - logs_path:
+      #             logs_path: "/var/log/containers/"
+      #     - add_cloud_metadata:
+      #     - add_kubernetes_metadata:
+      #         matchers:
+      #         - logs_path:
+      #             logs_path: "/var/log/containers/"
+      #     - add_docker_metadata:

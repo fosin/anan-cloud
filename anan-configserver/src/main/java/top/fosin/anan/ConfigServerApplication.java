@@ -16,7 +16,7 @@ import top.fosin.anan.core.banner.AnanBanner;
 public class ConfigServerApplication {
     public static void main(String[] args) {
         new SpringApplicationBuilder(ConfigServerApplication.class)
-                .banner(new AnanBanner("AnAn Config Server"))
+                .banner(new AnanBanner("Anan Config Server"))
                 .logStartupInfo(true)
                 .run(args);
     }

@@ -1,0 +1,9 @@
+apiVersion: v2
+description: A Helm chart for Kubernetes
+name: anan-cloudgateway
+version: 0.0.1
+appVersion: 3.0.0-SNAPSHOT
+dependencies:
+  - name: anan-templates
+    version: 0.0.1
+    repository: file://..//../anan-templates

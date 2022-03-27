@@ -17,7 +17,7 @@ import top.fosin.anan.core.banner.AnanBanner;
 public class EurekaServerApplication {
     public static void main(String[] args) {
         new SpringApplicationBuilder(EurekaServerApplication.class)
-                .banner(new AnanBanner("AnAn Eureka Server"))
+                .banner(new AnanBanner("Anan Eureka Server"))
                 .logStartupInfo(true)
                 .run(args);
     }

@@ -1,0 +1,72 @@
+ingress:
+  annotations: 
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    # nginx.ingress.kubernetes.io/use-regex: "true"
+    # nginx.ingress.kubernetes.io/rewrite-target: "/$1"
+    nginx.ingress.kubernetes.io/app-root: /anan-vue/
+    nginx.org/server-snippets: |
+      location /anan-vue/ {
+          root /usr/local/nginx/html;
+          index index.html;
+      }
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      rewrite ^(/anan-vue)$ $1/ redirect;
+      rewrite ^/rabbitmq/(.*)$ /$1 redirect;
+      rewrite ^/sba/(.*)$ /$1 redirect;
+      proxy_set_header Host $http_host;
+  tls:
+    - secretName: ingress
+      hosts:
+        - www.fosin.top
+  defaultBackend:
+    service:
+      name: anan-vue
+      port:
+        number: 80
+  rules:
+    - host: www.fosin.top
+      http:
+        paths:
+        - path: /zipkin
+          pathType: Prefix
+          backend:
+            service:
+              name: zipkin
+              port:
+                number: 9411
+        - path: /gateway
+          pathType: Prefix
+          backend:
+            service:
+              name: anan-cloudgateway
+              port:
+                number: 51900
+        - path: /nacos
+          pathType: Prefix
+          backend:
+            service:
+              name: nacos
+              port:
+                number: 8848
+        - path: /rabbitmq/(.*)$
+          pathType: Prefix
+          backend:
+            service:
+              name: rabbitmq
+              port:
+                number: 15672
+        - path: /sba/(.*)$
+          pathType: Prefix
+          backend:
+            service:
+              name: anan-sbaserver
+              port:
+                number: 51700
+        - path: /kibana/(.*)$
+          pathType: Prefix
+          backend:
+            service:
+              name: kibana
+              port:
+                number: 5601

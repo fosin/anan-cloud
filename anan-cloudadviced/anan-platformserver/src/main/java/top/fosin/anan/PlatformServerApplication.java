@@ -23,7 +23,7 @@ import top.fosin.anan.swagger.annotation.EnableAnanSwagger2;
 public class PlatformServerApplication {
     public static void main(String[] args) {
         new SpringApplicationBuilder(PlatformServerApplication.class)
-                .banner(new AnanBanner("AnAn Platform Server"))
+                .banner(new AnanBanner("Anan Platform Server"))
                 .logStartupInfo(true)
                 .run(args);
     }

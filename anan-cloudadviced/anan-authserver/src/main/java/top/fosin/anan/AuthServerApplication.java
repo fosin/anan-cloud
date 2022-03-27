@@ -21,7 +21,7 @@ import top.fosin.anan.swagger.annotation.EnableAnanSwagger2;
 public class AuthServerApplication {
     public static void main(String[] args) {
         new SpringApplicationBuilder(AuthServerApplication.class)
-                .banner(new AnanBanner("AnAn Auth Server"))
+                .banner(new AnanBanner("Anan Auth Server"))
                 .logStartupInfo(true)
                 .run(args);
     }

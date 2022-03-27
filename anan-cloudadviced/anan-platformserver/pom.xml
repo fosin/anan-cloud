@@ -10,7 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>anan-platformserver</artifactId>
     <packaging>jar</packaging>
-    <description>AnAn Platform Server</description>
+    <description>Anan Platform Server</description>
     <properties>
         <maven.deploy.skip>true</maven.deploy.skip>
     </properties>
@@ -53,10 +53,6 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.github.ulisesbocchio</groupId>
-            <artifactId>jasypt-spring-boot-starter</artifactId>
         </dependency>
     </dependencies>
 </project>

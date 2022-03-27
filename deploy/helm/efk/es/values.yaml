@@ -1,0 +1,83 @@
+secret:
+  type: Opaque
+  confs:
+    password: "local"
+statefulset:
+  updateStrategy:
+    type: RollingUpdate
+  replicaCount: 3
+terminationGracePeriodSeconds: 15 #优雅关闭pod的等待时间，默认30s
+initContainers:
+  - image: alpine:3.6
+    command: ["/sbin/sysctl", "-w", "vm.max_map_count=262144"]
+    name: elasticsearch-init
+    securityContext:
+      privileged: true
+containers:
+  - image: elasticsearch:6.8.20
+    imagePullPolicy: IfNotPresent
+    resources:
+      limits:
+        memory: 2500Mi
+      requests:
+        cpu: 1m
+        memory: 2200Mi
+    readinessProbe:
+      periodSeconds: 30
+      failureThreshold: 3
+      tcpSocket:
+        port: 9200
+    livenessProbe:
+      periodSeconds: 60
+      failureThreshold: 2
+      tcpSocket:
+        port: 9200
+    env:
+      - name: MY_POD_NAME
+        valueFrom:
+          fieldRef:
+            fieldPath: metadata.name
+      - name: ES_JAVA_OPTS
+        value: "-Xms1024m -Xmx1024m"
+      - name: "NAMESPACE"
+        valueFrom:
+          fieldRef:
+            fieldPath: metadata.namespace
+podAntiAffinity: requiredDuringSchedulingIgnoredDuringExecution
+service:
+  type: ClusterIP
+  ports:
+    - port: 9200
+      name: service
+    - port: 9300
+      name: cluster
+persistence:
+- name: data
+  storageClassName: local-storage
+  size: 10G
+  mountPath: /usr/share/elasticsearch/data
+  accessMode: ReadWriteOnce
+  local:
+    - hostname: examtest0
+      path: /data/es0
+    - hostname: exam1
+      path: /data/es1
+    - hostname: exam2
+      path: /data/es2
+configmap:
+  existConfigMapName: es
+  files:
+  - mountPath: /usr/share/elasticsearch/config/
+    mountFiles:
+      elasticsearch.yml:
+cluster:
+  role:
+    rules:
+      - apiGroups:
+          - ""
+        resources:
+          - "services"
+          - "namespaces"
+          - "endpoints"
+        verbs:
+          - "get"

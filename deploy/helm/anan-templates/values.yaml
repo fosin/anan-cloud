@@ -1,0 +1,213 @@
+deployment:
+  apiVersion: apps/v1
+  lables: {}
+  strategy:
+    type: RollingUpdate #Recreate、RollingUpdate
+    rollingUpdate:  #如果replicas为2,则整个升级,pod个数在2-3个之间
+      maxSurge: 1      #滚动升级时会先启动1个pod
+      maxUnavailable: 1 #滚动升级时允许的最大Unavailable的pod个数
+  replicaCount: 2
+  minReadySeconds: 60  #滚动升级时60s后认为该pod就绪
+terminationGracePeriodSeconds: 30 #优雅关闭pod的等待时间，默认30s
+daemonset:
+  apiVersion: apps/v1
+  lables: {}
+  updateStrategy:
+    type: RollingUpdate #支持OnDelete、RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1 #滚动升级时允许的最大Unavailable的pod个数
+  minReadySeconds: 60  #滚动升级时60s后认为该pod就绪
+statefulset:
+  apiVersion: apps/v1
+  podManagementPolicy: Parallel #并行创建pod,默认为按顺序执行OrderedReady
+  lables: {}
+  replicaCount: 3
+  updateStrategy:
+    type: RollingUpdate #支持OnDelete、RollingUpdate
+    rollingUpdate:
+      partition: 0 #保留的旧版本的个数，取值是0 <= N < replicaCount，一般用于灰度更新
+revisionHistoryLimit: 10 #保留的历史版本个数
+nodeName: "" #调度到的主机的名称
+nodeSelector: {} #调度到某节点的选择器
+hostNetwork: false #使用主机网络
+hostIPC: false # Use the host's ipc namespace. Optional: Default to false.
+hostPID: false #Use the host's pid namespace. Optional: Default to false.
+hostname: "" #Specifies the hostname of the Pod If not specified, the pod's hostname will be set to a system-defined value.
+restartPolicy: Always #Pod重启策略：Always、OnFailure 和 Never。默认值是 Always。
+imagePullSecrets: ""
+initContainers: []
+containers:
+  - name: name
+    image: busybox
+    imagePullPolicy: Always #Always, Never, IfNotPresent. Defaults to Always
+    workingDir: ""
+    resources: {}
+    livenessProbe: {}
+    readinessProbe: {}
+    startupProbe: {}
+    securityContext: {}
+    lifecycle: {}
+    env: []
+    envFrom: []
+    args: []
+    command: []
+    ports:
+      - name: server
+        containerPort: 80
+    volumeDevices: []
+    volumeMounts: []
+volumes: []
+volumeClaimTemplates: []
+affinity: {}
+#requiredDuringSchedulingIgnoredDuringExecution： 硬要求，必须满足，否则不执行调度
+#preferredDuringSchedulingIgnoredDuringExecution：软要求，尽量满足，不满足退而求其次
+podAntiAffinity: requiredDuringSchedulingIgnoredDuringExecution
+podAffinity: preferredDuringSchedulingIgnoredDuringExecution
+nodeAntiAffinity:
+  duringScheduling: requiredDuringSchedulingIgnoredDuringExecution
+  nodeNamePrefix: ""
+nodeAffinity:
+  duringScheduling: requiredDuringSchedulingIgnoredDuringExecution
+  nodeNamePrefix: ""
+tolerations: []
+persistence:
+  # 网络存储(NFS)
+  # name必填
+  - name: nfs
+    apiVersion: v1
+    # lables可以为空，默认是{{ $.Release.Name }}-{{ name }}-{{ nfs的数组元素编号 }}
+    lables: {}
+    # 容量大小，必填
+    size: 1G
+    # 不填系统默认
+    accessMode: ReadWriteOnce
+    # 如果不设置默认是空
+    storageClassName: ""
+    # 不填系统默认
+    persistentVolumeReclaimPolicy: Retain
+    # 挂载目录，必填
+    mountPath: /data
+    # NFS的地址和目录，必填
+    nfs:
+      - server: 127.0.0.1
+        path: "/data/nfs"
+  #本地持久化存储(Local Persistent Volume)
+  # name必填
+  - name: lpv
+    apiVersion: v1
+    # lables可以为空，默认是{{ $.Release.Name }}-{{ name }}-{{ lpv的数组元素编号 }}
+    lables: {}
+    # 容量大小，必填
+    size: 1G
+    # 不填系统默认
+    accessMode: ReadWriteOnce
+    # 需要手动指定：local-storage
+    storageClassName: local-storage
+    # 不填系统默认
+    persistentVolumeReclaimPolicy: Retain
+    # 容器内的挂载目录，必填
+    mountPath: /data
+    # 主机本地目录，必填
+    local:
+      - hostname: hostname-0
+        path: /data
+      - hostname: hostname-1
+        path: /data2
+hostPath:
+  - name: root #volume名称
+    mountPath: /rootfs #挂载到容器的目录，必填
+    path: /  #主机目录，必填
+    # DirectoryOrCreate如果在给定路径上什么都不存在，那么将根据需要创建空目录，权限设置为 0755，具有与 kubelet 相同的组和属主信息。
+    #Directory在给定路径上必须存在的目录。
+    #FileOrCreate如果在给定路径上什么都不存在，那么将在那里根据需要创建空文件，权限设置为 0644，具有与 kubelet 相同的组和所有权。
+    #File在给定路径上必须存在的文件。
+    #Socket在给定路径上必须存在的 UNIX 套接字。
+    #CharDevice在给定路径上必须存在的字符设备。
+    #BlockDevice在给定路径上必须存在的块设备。
+    type: DirectoryOrCreate
+    readOnly: false
+    subPath: ""
+emptyDir:
+  - /data #挂载目录
+configmap:
+  apiVersion: v1
+  annotations: {}
+  existConfigMapName: "nginx" #现存的configmap的名称，如果是单独创建的cm，可以使用该属性进行
+  confs: {} #配置类
+  files: #文件类
+    #以下是示例
+    - mountPath: / #1、挂载目录，如果为空，这不会生成volumes、volumeMounts的信息。2、非/路径（例如/data/），如果以/结尾则会使用subPath属性
+      readOnly: true
+      defaultMode: "0755"
+      mountFiles:
+        k8s.conf: |-
+          a=1
+          b=2
+          c=3
+secret:
+  apiVersion: v1
+  base64: true #是否base64加密，true：使用data属性，false：使用stringData属性
+  annotations: {}
+  #Opaque用户定义的任意数据
+  #kubernetes.io/service-account-token服务账号令牌
+  #kubernetes.io/dockercfg文件~/.dockercfg的序列化形式
+  #kubernetes.io/dockerconfigjson文件~/.docker/config.json的序列化形式
+  #kubernetes.io/basic-auth用于基本身份认证的凭据
+  #kubernetes.io/ssh-auth用于 SSH 身份认证的凭据
+  #kubernetes.io/tls用于 TLS 客户端或者服务器端的数据
+  #bootstrap.kubernetes.io/token启动引导令牌数据
+  type: Opaque
+  confs: {} #配置类
+  existSecretName: "nginx" #现存的secret的名称，用于单独创建的secret
+  files: #文件类
+    #以下是示例
+    - mountPath: / #挂载目录，如果为空，不会自动生成volumes、volumeMounts的信息
+      readOnly: true
+      defaultMode: "0755"
+      secretName: ""
+      optional: false
+      mountFiles:
+        k8s.conf: |-
+          a=1
+          b=2
+          c=3
+service:
+  apiVersion: v1
+  lables: {}
+  annotations: {}
+  type: ClusterIP
+  clusterIP: none
+  publishNotReadyAddresses: true
+  externalName: "" #当type=externalName时，这个属性设置外部名称
+  ports:
+    - port: 80 #必填
+      targetPort: 80 #不填时默认为port的值
+      nodePort: 80 #当type=NodePort得时候有效，不填时默认和port一样，填0表示系统自动生成端口号。
+      protocol: TCP
+      name: cluster #必填
+role:
+  apiVersion: rbac.authorization.k8s.io/v1
+  lables: {}
+  rules: []
+  rolebinding: {}
+  serviceAccountName: ""
+cluster:
+  role:
+    apiVersion: rbac.authorization.k8s.io/v1
+    lables: {}
+    rules: []
+  rolebinding: {}
+  serviceAccountName: ""
+ingress:
+  apiVersion: networking.k8s.io/v1
+  rules: []
+  tls: []
+  defaultBackend: []
+  annotations: {}
+  ingressClassName: "" #指定ingressClass的实例名称，不填则默认为helm发布的ingressClass名称（ReleaseName）
+ingressClass:
+  apiVersion: networking.k8s.io/v1
+  default: true #是否为默认ingressClass
+  annotations: {}
+  controller: "nginx.org/ingress-controller" #默认nginx官方的ingress controller
+  parameters: {}

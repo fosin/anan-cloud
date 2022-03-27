@@ -1,0 +1,47 @@
+deployment:
+  strategy:
+    rollingUpdate:  ##由于replicas为2,则整个升级,pod个数在2-3个之间
+      maxSurge: 1      #滚动升级时会先启动1个pod
+      maxUnavailable: 1 #滚动升级时允许的最大Unavailable的pod个数
+  minReadySeconds: 60  #滚动升级时60s后认为该pod就绪
+  replicaCount: 1
+terminationGracePeriodSeconds: 15 #优雅关闭pod的等待时间，默认30s
+initContainers:
+  - name: wait-platformserver
+    image: busybox
+    command: ['sh', '-c', 'until nc anan-platformserver 51500; do echo waiting for anan-platformserver; sleep 2; done;']
+    imagePullPolicy: IfNotPresent
+containers:
+  - image: registry.cn-hongkong.aliyuncs.com/fosin/anan-cloudgateway:3.0.0-SNAPSHOT
+    imagePullPolicy: IfNotPresent
+    resources:
+      limits:
+        memory: 768Mi
+      requests:
+        cpu: 1m
+        memory: 512Mi
+    readinessProbe:
+      periodSeconds: 45
+      failureThreshold: 2
+      httpGet:
+        scheme: HTTP
+        port: server
+        path: /actuator/health
+    livenessProbe:
+      periodSeconds: 60
+      failureThreshold: 2
+      httpGet:
+        scheme: HTTP
+        port: server
+        path: /actuator/health
+    lifecycle:
+      preStop:
+        httpGet:
+          scheme: HTTP
+          port: server
+          path: actuator/shutdown
+service:
+  type: ClusterIP
+  ports:
+    - port: 51900
+      name: server

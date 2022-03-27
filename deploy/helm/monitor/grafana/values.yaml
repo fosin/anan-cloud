@@ -1,0 +1,61 @@
+deployment:
+  updateStrategy:
+    type: RollingUpdate
+  minReadySeconds: 60 #滚动升级时60s后认为该pod就绪
+  replicaCount: 1
+terminationGracePeriodSeconds: 15 #优雅关闭pod的等待时间，默认30s
+containers:
+  - image: grafana/grafana
+    imagePullPolicy: IfNotPresent
+    resources:
+      limits:
+        memory: 768Mi
+      requests:
+        cpu: 1m
+        memory: 512Mi
+    readinessProbe:
+      periodSeconds: 30
+      failureThreshold: 3
+      tcpSocket:
+        port: 3000
+    livenessProbe:
+      initialDelaySeconds: 15
+      periodSeconds: 60
+      failureThreshold: 2
+      tcpSocket:
+        port: 3000
+    env:
+      - name: GF_SERVER_SERVE_FROM_SUB_PATH
+        value: "true"
+      - name: GF_SERVER_ROOT_URL
+        value: "%(protocol)s://%(domain)s:%(http_port)s/grafana/"
+      - name: GF_SECURITY_ADMIN_PASSWORD
+        value: "bT3JGiZhkJdStPj"
+      - name: GF_USERS_ALLOW_SIGN_UP
+        value: "false"
+      - name: GF_DATABASE_TYPE
+        value: "mysql"
+      - name: GF_DATABASE_HOST
+        value: "$(MYSQL_MGR_SERVICE_HOST):$(MYSQL_MGR_SERVICE_PORT)"
+      - name: GF_DATABASE_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: mysql-mgr
+            key: mysql.grafana.password
+      - name: GF_DATABASE_USER
+        valueFrom:
+          secretKeyRef:
+            name: mysql-mgr
+            key: mysql.grafana.user
+      - name: GF_DATABASE_DBNAME
+        valueFrom:
+          secretKeyRef:
+            name: mysql-mgr
+            key: mysql.grafana.dbname
+      - name: TZ
+        value: Asia/Shanghai
+service:
+  type: NodePort
+  ports:
+    - port: 3000
+      name: server

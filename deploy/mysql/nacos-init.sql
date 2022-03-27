@@ -377,7 +377,7 @@ management:
             enabled: false
 anan:
   datasource:
-    url: jdbc:mysql://mysql-leader:3306/anan_platform?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=GMT%2b8
+    url: jdbc:mysql://mysql:3306/anan_platform?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=GMT%2b8
     username: anan
     password: ENC(svOoGRZ5qlC1bRGGh+7YwA==)
   security:

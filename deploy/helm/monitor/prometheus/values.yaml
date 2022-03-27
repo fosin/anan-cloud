@@ -1,0 +1,288 @@
+configmap:
+  files:
+    - mountPath: /etc/prometheus
+      mountFiles:
+        prometheus.yml: |-
+          global:
+            scrape_interval: 1m
+            evaluation_interval: 1m
+            external_labels:
+              monitor: 'promk8s'
+
+          rule_files:
+            - '/etc/alert-rules/*.yml'
+
+          alerting:
+            alertmanagers:
+              - static_configs:
+                  - targets:
+                      - alertmanager-0.alertmanager-headless:9093
+                      - alertmanager-1.alertmanager-headless:9093
+                      - alertmanager-2.alertmanager-headless:9093
+
+          scrape_configs:
+            - job_name: 'prometheus'
+              metrics_path: /prometheus/metrics
+              static_configs:
+                - targets: ['localhost:9090']
+
+            #监控node方式1（node-exporter方式）
+            - job_name: node
+              # metrics_path: /node-exporter/metrics
+              static_configs:
+                - targets: ['node-exporter-0.node-exporter-headless:9100']
+                  labels:
+                    instance: examtest0
+                - targets: ['node-exporter-1.node-exporter-headless:9100']
+                  labels:
+                    instance: exam1
+                - targets: ['node-exporter-2.node-exporter-headless:9100']
+                  labels:
+                    instance: exam2
+
+            #监控node方式2（apiserver方式）
+            - job_name: 'apiserver->nodes'
+              scheme: https
+              tls_config:
+                ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+              bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+              kubernetes_sd_configs:
+                - role: node
+              relabel_configs:
+                - action: labelmap
+                  regex: __meta_kubernetes_node_label_(.+)
+                - target_label: __address__
+                  replacement: kubernetes.default.svc:443
+                - source_labels: [__meta_kubernetes_node_name]
+                  regex: (.+)
+                  target_label: __metrics_path__
+                  replacement: /api/v1/nodes/${1}/proxy/metrics
+
+            #监控node方式3：通过api-server提供的代理地址访问kubelet的/metrics/cadvisor地址
+            - job_name: 'apiserver->kubelet->cadvisor->node'
+              scheme: https
+              tls_config:
+                ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+              bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+              kubernetes_sd_configs:
+                - role: node
+              relabel_configs:
+                - target_label: __address__
+                  replacement: kubernetes.default.svc:443
+                - source_labels: [__meta_kubernetes_node_name]
+                  regex: (.+)
+                  target_label: __metrics_path__
+                  replacement: /api/v1/nodes/${1}/proxy/metrics/cadvisor
+                - action: labelmap
+                  regex: __meta_kubernetes_node_label_(.+)
+
+            #通过apiserver监控k8s中的endpoints
+            - job_name: 'apiserver->endpoints'
+              kubernetes_sd_configs:
+                - role: endpoints
+              scheme: https
+              tls_config:
+                ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+              bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+              relabel_configs:
+                - source_labels:
+                    [
+                      __meta_kubernetes_namespace,
+                      __meta_kubernetes_service_name,
+                      __meta_kubernetes_endpoint_port_name,
+                    ]
+                  action: keep
+                  regex: default;kubernetes;https
+                - target_label: __address__
+                  replacement: kubernetes.default.svc:443
+
+            #通过apiserver监控k8s中的services
+            - job_name: 'apiserver->services'
+              # metrics_path: /probe
+              params:
+                module: [http_2xx]
+              kubernetes_sd_configs:
+                - role: service
+              relabel_configs:
+                # - source_labels:
+                #     [__meta_kubernetes_service_annotation_prometheus_io_probe]
+                #   action: keep
+                #   regex: true
+                - source_labels: [__address__]
+                  target_label: __param_target
+                - target_label: __address__
+                  replacement: blackbox-exporter:9115
+                - source_labels: [__param_target]
+                  target_label: instance
+                - action: labelmap
+                  regex: __meta_kubernetes_service_label_(.+)
+                - source_labels: [__meta_kubernetes_namespace]
+                  target_label: kubernetes_namespace
+                - source_labels: [__meta_kubernetes_service_name]
+                  target_label: kubernetes_name
+
+            #通过apiserver监控k8s中的ingress
+            - job_name: 'apiserver->ingresses'
+              # metrics_path: /probe
+              params:
+                module: [http_2xx]
+              kubernetes_sd_configs:
+                - role: ingress
+              relabel_configs:
+                # - source_labels:
+                #     [__meta_kubernetes_ingress_annotation_prometheus_io_probe]
+                #   action: keep
+                #   regex: true
+                - source_labels: [__meta_kubernetes_ingress_scheme,__address__,__meta_kubernetes_ingress_path]
+                  regex: (.+);(.+);(.+)
+                  replacement: ${1}://${2}${3}
+                  target_label: __param_target
+                - source_labels: [__param_target]
+                  target_label: instance
+                - target_label: __address__
+                  replacement: blackbox-exporter:9115
+                - action: labelmap
+                  regex: __meta_kubernetes_ingress_label_(.+)
+                - source_labels: [__meta_kubernetes_namespace]
+                  target_label: kubernetes_namespace
+                - source_labels: [__meta_kubernetes_ingress_name]
+                  target_label: kubernetes_name
+    - mountPath: /etc/alert-rules
+      mountFiles:
+        node.rules.yml: |-
+          groups:
+          - name: node.rules.yml
+            rules:
+              - alert: 主机【CPU】使用率超过60%告警
+                expr: ceil(100 - sum(increase(node_cpu_seconds_total{job="node",mode="idle"}[2m])) by(instance) / sum(increase(node_cpu_seconds_total{job="node"}[2m])) by(instance)*100) > 60
+                for: 2m
+                labels:
+                  severity: warning
+                annotations:
+                  description: 1分钟内主机{{ $labels.node_name }}CPU使用率是{{ humanize $value}}%.
+              - alert: 主机【CPU】使用率超过90%告警
+                expr: ceil(100 - sum(increase(node_cpu_seconds_total{job="node",mode="idle"}[5m])) by(instance) / sum(increase(node_cpu_seconds_total{job="node"}[5m])) by(instance)*100) > 90
+                for: 5m
+                labels:
+                  severity: critical
+                annotations:
+                  description: 5分钟内主机{{ $labels.node_name }}CPU使用率超过是{{ humanize $value}}%.
+              - alert: 主机【内存】使用率超过60%告警
+                expr: (node_memory_MemTotal_bytes - (node_memory_MemFree_bytes+node_memory_Buffers_bytes+node_memory_Cached_bytes )) / node_memory_MemTotal_bytes * 100 > 60
+                for: 1m
+                labels:
+                  severity: warning
+                annotations:
+                  description: 1分钟内主机{{ $labels.node_name }}内存使用率是{{ humanize $value}}%.
+              - alert: 主机【内存】使用率超过90%告警
+                expr: (node_memory_MemTotal_bytes - (node_memory_MemFree_bytes+node_memory_Buffers_bytes+node_memory_Cached_bytes )) / node_memory_MemTotal_bytes * 100 > 90
+                for: 1m
+                labels:
+                  severity: critical
+                annotations:
+                  description: 1分钟内主机{{ $labels.node_name }}内存使用率是{{ humanize $value}}%.
+              - alert: 主机【磁盘】使用率超过70%告警
+                expr: (node_filesystem_size_bytes - node_filesystem_avail_bytes) / node_filesystem_size_bytes * 100 > 70
+                for: 1m
+                labels:
+                  severity: warning
+                annotations:
+                  description: 主机{{ $labels.node_name }}磁盘使用率是{{ humanize $value}}%.
+              - alert: 主机【磁盘】使用率超过90%告警
+                expr: (node_filesystem_size_bytes - node_filesystem_avail_bytes) / node_filesystem_size_bytes * 100 > 90
+                for: 8h
+                labels:
+                  severity: critical
+                annotations:
+                  description: 主机{{ $labels.node_name }}磁盘使用率超过90%已超过8小时。
+statefulset:
+  replicaCount: 1
+  updateStrategy:
+    type: RollingUpdate
+  #滚动升级时60s后认为该pod就绪
+  minReadySeconds: 45
+terminationGracePeriodSeconds: 15 #优雅关闭pod的等待时间，默认30s
+containers:
+  - image: prom/prometheus:latest
+    imagePullPolicy: IfNotPresent
+    resources:
+      limits:
+        memory: 768Mi
+      requests:
+        cpu: 1m
+        memory: 256Mi
+    startupProbe:
+      httpGet:
+        path: /prometheus/-/ready
+        port: 9090
+      periodSeconds: 45
+      failureThreshold: 3
+    livenessProbe:
+      httpGet:
+        path: /prometheus/-/healthy
+        port: 9090
+      periodSeconds: 60
+      timeoutSeconds: 15
+    securityContext:
+      runAsUser: 0
+    args:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--storage.tsdb.retention.time=3d'
+      - '--web.external-url=prometheus'
+      - '--web.enable-lifecycle'
+      #- '--webhook-url=http://localhost:9090/prometheus/-/reload'
+    env:
+      - name: TZ
+        value: Asia/Shanghai
+      - name: MY_POD_NAMESPACE
+        valueFrom:
+          fieldRef:
+            fieldPath: metadata.namespace
+      - name: MY_NODE_NAME
+        valueFrom:
+          fieldRef:
+            fieldPath: spec.nodeName
+      - name: MY_POD_NAME
+        valueFrom:
+          fieldRef:
+            fieldPath: metadata.name
+      - name: MY_POD_IP
+        valueFrom:
+          fieldRef:
+            fieldPath: status.podIP
+persistence:
+- name: data
+  size: 10G
+  mountPath: /prometheus
+  accessMode: ReadWriteOnce
+  nfs:
+    - server: 100.100.1.196
+      path: /data/nfs/prometheus
+    # - server: 100.100.1.197
+    #   path: /data/nfs/prometheus
+    # - server: 100.100.1.198
+    #   path: /data/nfs/prometheus
+service:
+  type: NodePort
+  ports:
+    - port: 9090
+      name: prometheus
+cluster:
+  role:
+    rules:
+      - apiGroups: [""]
+        resources:
+        - nodes
+        - nodes/proxy
+        - services
+        - endpoints
+        - pods
+        verbs: ["get", "list", "watch"]
+      - apiGroups:
+        - "networking.k8s.io"
+        resources:
+        - ingresses
+        verbs: ["get", "list", "watch"]
+      - nonResourceURLs: ["/metrics"]
+        verbs: ["get"]

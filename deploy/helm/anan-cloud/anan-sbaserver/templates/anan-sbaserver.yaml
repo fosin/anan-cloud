@@ -1,0 +1,52 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}
+  namespace: {{ .Release.Namespace }}
+data:
+  {{ .Release.Name }}.yaml: |-
+    server:
+      port: 51700
+      context-path: /sba
+    turbine:
+      cluster-name-expression: new String('default')
+      app-config: anan-zuulgateway
+    anan:
+      security:
+        web-ignoring:
+          - paths: /**
+    spring:
+      boot:
+        admin:
+          context-path: /sba
+          discovery:
+            services:
+              - anan-authserver
+              - anan-cloudgateway
+              - anan-exam
+              - anan-mpi
+              - anan-platformserver
+              - anan-sbaserver
+              - anan-vhr
+              - anan-zuulgateway
+              - anan-configserver
+              - anan-eurekaserver
+
+          ui:
+            #        favicon-danger: "assets/img/favicon-danger.png"
+            #        favicon: "assets/img/favicon.png"
+            title: "服务指标监控"
+          #        public-url:
+          #      instance-proxy:
+          #        ignored-headers: "Cookie", "Set-Cookie", "Authorization"
+          #      probed-endpoints: "health", "env", "metrics", "httptrace:trace", "threaddump:dump", "jolokia", "info", "logfile", "refresh", "flyway", "liquibase", "heapdump", "loggers", "auditevents"
+          notify:
+            mail:
+              additional-properties:
+              from: "Spring Boot Admin <noreply@localhost>"
+              cc:
+              to: "28860823@qq.com"
+              template: "classpath:/META-INF/spring-boot-admin-server/mail/status-changed.html"
+              ignore-changes: "UNKNOWN:UP"
+              enabled: true
+

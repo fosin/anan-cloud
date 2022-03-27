@@ -1,29 +1,29 @@
 version: '3'
 services:
-  mysql-leader:
+  mysql:
     network_mode: host
-    container_name: mysql-leader
-    hostname: mysql-leader
+    container_name: mysql
+    hostname: mysql
     restart: always
     image: registry.cn-hongkong.aliyuncs.com/fosin/mysql:3.0.0
     #    build:
     #      context: deploy/mysql/leader
     environment:
       - TZ=Asia/Shanghai
-      - MYSQL_ROOT_PASSWORD=P3CJkdDX3pFeRDx
+      - MYSQL_ROOT_PASSWORD=local
       - MYSQL_REPLICATION_USER=anan_ru
       - MYSQL_REPLICATION_PASSWORD=local
       - MYSQL_DATABASE=nacos
       - MYSQL_USER=nacos
       - MYSQL_PASSWORD=local
     volumes:
-      - /root/deploy/nfs/mysql-leader1:/var/lib/mysql
+      - /data/mysql:/var/lib/mysql
   #    ports:
   #      - "3306:3306"
-  nacos-0:
+  nacos:
     image: nacos/nacos-server:1.4.2
-    container_name: nacos-0
-    hostname: nacos-0
+    container_name: nacos
+    hostname: nacos
     restart: always
     network_mode: host
     environment:
@@ -31,7 +31,7 @@ services:
       - PREFER_HOST_MODE=hostname
       - MODE=standalone
       - SPRING_DATASOURCE_PLATFORM=mysql
-      - MYSQL_SERVICE_HOST=mysql-leader
+      - MYSQL_SERVICE_HOST=mysql
       - MYSQL_SERVICE_PORT=3306
       - MYSQL_SERVICE_DB_NAME=nacos
       - MYSQL_SERVICE_USER=nacos
@@ -42,13 +42,10 @@ services:
       - JVM_MS=160M
       - JVM_MMS=160M
     volumes:
-      - /root/deploy/nacos/logs/:/home/nacos/logs
-      - /root/deploy/nacos/data/:/home/nacos/data
-    #    ports:
-    #      - "8848:8848"
-    #      - "9555:9555"
+      - /data/nacos/logs/:/home/nacos/logs
+      - /data/nacos/data/:/home/nacos/data
     depends_on:
-      - mysql-leader
+      - mysql
 
   rabbitmq:
     network_mode: host
@@ -62,7 +59,7 @@ services:
       - RABBITMQ_DEFAULT_VHOST=/
       - TZ=Asia/Shanghai
     #    volumes: TODO 启动后报错cookie file /var/lib/rabbitmq/.erlang.cookie must be accessible by owner only
-    #      - /root/deploy/rabbitmq:/var/lib/rabbitmq
+    #      - /data/rabbitmq:/var/lib/rabbitmq
     restart: always
   #    ports:
   #      - 15672:15672
@@ -77,11 +74,11 @@ services:
     environment:
       - TZ=Asia/Shanghai
     volumes:
-      - /root/deploy/nginx/:/etc/nginx/conf.d/
+      - /data/nginx/:/etc/nginx/conf.d/
     #    ports:
     #      - 80:80
     depends_on:
-      - nacos-0
+      - nacos
 
   redis:
     network_mode: host
@@ -91,37 +88,16 @@ services:
     environment:
       - TZ=Asia/Shanghai
     volumes:
-      - /root/deploy/redis:/data
+      - /data/redis:/data
     restart: always
     #    ports:
     #      - 6379:6379
     command: redis-server --appendonly yes --requirepass local
 
-  mysql-follower:
-    network_mode: host
-    container_name: mysql-follower
-    hostname: mysql-follower
-    restart: always
-    image: registry.cn-hongkong.aliyuncs.com/fosin/mysql:3.0.0
-    #    build:
-    #      context: deploy/mysql/follower
-    environment:
-      - TZ=Asia/Shanghai
-      - MYSQL_ROOT_PASSWORD=P3CJkdDX3pFeRDx
-      - MYSQL_REPLICATION_USER=anan_ru
-      - MYSQL_REPLICATION_PASSWORD=local
-      - MYSQL_SERVICE_HOST=mysql-leader
-    volumes:
-      - /root/deploy/nfs/mysql-follower2:/var/lib/mysql
-    #    ports:
-    #      - "3305:3306"
-    depends_on:
-      - mysql-leader
-
   anan-authserver:
     network_mode: host
     image: registry.cn-hongkong.aliyuncs.com/fosin/anan-authserver:3.0.0-SNAPSHOT
-#    entrypoint: 'sh /anan/wait-for.sh nacos-0:8848 -t 3600 -- /anan/entrypoint.sh'
+#    entrypoint: 'sh /anan/wait-for.sh nacos:8848 -t 3600 -- /anan/entrypoint.sh'
     container_name: anan-authserver
     hostname: anan-authserver
     restart: always
@@ -130,12 +106,12 @@ services:
       #    ports:
       #      - 51400:51400
       #    volumes:
-      #- /root/deploy/logs/anan:/logs
+      #- /data/logs/anan:/logs
     depends_on:
       - rabbitmq
       - redis
-      - mysql-leader
-      - nacos-0
+      - mysql
+      - nacos
 
   anan-cloudgateway:
     network_mode: host
@@ -148,7 +124,7 @@ services:
       - JAVA_TOOL_OPTIONS=-Xmx200M -XX:MaxMetaspaceSize=160M -XX:MetaspaceSize=160M -XX:+DisableExplicitGC -XX:ErrorFile=/logs/hs_err_pid%p.log
     depends_on:
       - rabbitmq
-      - nacos-0
+      - nacos
 
   anan-platformserver:
     network_mode: host
@@ -160,12 +136,12 @@ services:
     environment:
       - JAVA_TOOL_OPTIONS=-Xmx200M -XX:MaxMetaspaceSize=160M -XX:MetaspaceSize=160M -XX:+DisableExplicitGC -XX:ErrorFile=/logs/hs_err_pid%p.log
       #    volumes:
-      #- /root/deploy/logs/anan:/logs
+      #- /data/logs/anan:/logs
     depends_on:
       - rabbitmq
       - redis
-      - mysql-leader
-      - nacos-0
+      - mysql
+      - nacos
 
   anan-sbaserver:
     network_mode: host
@@ -179,7 +155,7 @@ services:
     depends_on:
       - rabbitmq
       - redis
-      - nacos-0
+      - nacos
 
   anan-eurekaserver:
     network_mode: host
@@ -199,10 +175,10 @@ services:
     restart: always
     environment:
       - JAVA_TOOL_OPTIONS=-Xmx200M -XX:MaxMetaspaceSize=160M -XX:MetaspaceSize=160M -XX:+DisableExplicitGC -XX:ErrorFile=/logs/hs_err_pid%p.log
-      - spring.cloud.config.server.native.search-locations=file:/anan-config
+      - spring.cloud.config.server.native.search-locations=file:/anan-conf
       #    volumes:
-      #- /root/deploy/logs/anan:/logs
-      - /root/deploy/anan-config:/anan-config
+      #- /data/logs/anan:/logs
+      - /data/anan-conf:/anan-conf
     depends_on:
       - anan-eurekaserver
       - rabbitmq
@@ -215,10 +191,10 @@ services:
     restart: always
     user: root
     volumes:
-      - /root/deploy/filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
+      - /data/filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
       - /var/lib/docker/containers:/var/lib/docker/containers:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - /root/deploy/filebeat/logs/filebeat:/logs:ro
+      - /data/filebeat/logs/filebeat:/logs:ro
     #    environment:
     #      - output.elasticsearch.hosts=["elasticsearch:9200"]
     #      - output.logstash.enabled=false
@@ -256,7 +232,7 @@ services:
         soft: -1
         hard: -1
     volumes:
-      - /root/deploy/elasticsearch/data:/usr/share/elasticsearch/data
+      - /data/elasticsearch/data:/usr/share/elasticsearch/data
 
   zipkin:
     network_mode: host
@@ -291,7 +267,7 @@ services:
       - MONGO_INITDB_ROOT_USERNAME=anan
       - MONGO_INITDB_ROOT_PASSWORD=local
     volumes:
-      - /root/deploy/mongodb/db:/data/db
+      - /data/mongodb/db:/data/db
     restart: always
 
   prometheus:
@@ -301,8 +277,8 @@ services:
     environment:
       - TZ=Asia/Shanghai
     volumes:
-      - /root/deploy/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
-    #      - /root/deploy/prometheus/data:/prometheus TODO 不能挂载外部目录，报错
+      - /data/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    #      - /data/prometheus/data:/prometheus TODO 不能挂载外部目录，报错
     restart: always
     privileged: true
     depends_on:
@@ -337,7 +313,7 @@ services:
     container_name: grafana
     hostname: grafana
     volumes:
-      - /root/deploy/grafana:/var/lib/grafana
+      - /data/grafana:/var/lib/grafana
     environment:
       - GF_SERVER_ROOT_URL=http://grafana.server.name
       - GF_SECURITY_ADMIN_PASSWORD=local
@@ -378,8 +354,8 @@ services:
       - '--config.file=/etc/alertmanager/alertmanager.yml'
       - '--storage.path=/alertmanager'
   #    volumes:
-  #      - /root/deploy/alertmanager/data:/alertmanager
-  #    - /root/deploy/alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml
+  #      - /data/alertmanager/data:/alertmanager
+  #    - /data/alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml
 
   unsee:
     network_mode: host
@@ -425,7 +401,7 @@ services:
       - MYSQL_PASSWORD=local
       - MYSQL_SERVICE_PORT=3308
     volumes:
-      - /root/deploy/mysql/nacos:/var/lib/mysql
+      - /data/mysql/nacos:/var/lib/mysql
 
   phpredisadmin:
     network_mode: host

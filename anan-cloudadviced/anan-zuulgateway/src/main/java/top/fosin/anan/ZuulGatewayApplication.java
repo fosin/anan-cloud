@@ -25,7 +25,7 @@ import top.fosin.anan.swagger.annotation.EnableAnanSwagger2;
 public class ZuulGatewayApplication {
     public static void main(String[] args) {
         new SpringApplicationBuilder(ZuulGatewayApplication.class)
-                .banner(new AnanBanner("AnAn Zuul Gateway"))
+                .banner(new AnanBanner("Anan Zuul Gateway"))
                 .logStartupInfo(true)
                 .run(args);
     }

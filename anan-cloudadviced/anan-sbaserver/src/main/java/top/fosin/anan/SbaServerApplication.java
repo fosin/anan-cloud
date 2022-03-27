@@ -13,7 +13,7 @@ import top.fosin.anan.core.banner.AnanBanner;
 public class SbaServerApplication {
     public static void main(String[] args) {
         new SpringApplicationBuilder(SbaServerApplication.class)
-                .banner(new AnanBanner("AnAn SBA Server"))
+                .banner(new AnanBanner("Anan SBA Server"))
                 .logStartupInfo(true)
                 .run(args);
     }

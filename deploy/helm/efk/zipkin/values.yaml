@@ -1,0 +1,83 @@
+deployment:
+  strategy:
+    rollingUpdate:  ##由于replicas为2,则整个升级,pod个数在2-3个之间
+      maxSurge: 1      #滚动升级时会先启动1个pod
+      maxUnavailable: 1 #滚动升级时允许的最大Unavailable的pod个数
+  minReadySeconds: 60  #滚动升级时60s后认为该pod就绪
+  replicaCount: 2
+initContainers:
+  - name: wait-rabbitmq
+    image: busybox
+    command: ['sh', '-c', 'until nc rabbitmq 5672; do echo waiting for rabbitmq; sleep 2; done;']
+  - name: wait-es
+    image: busybox
+    command: ['sh', '-c', 'until nc es 9200; do echo waiting for es; sleep 2; done;']
+containers:
+  - name: zipkin
+    image: openzipkin/zipkin:2
+    imagePullPolicy: IfNotPresent
+    resources:
+      limits:
+        memory: 768Mi
+      requests:
+        memory: 512Mi
+    readinessProbe:
+      periodSeconds: 20
+      failureThreshold: 3
+      tcpSocket:
+        port: server
+    livenessProbe:
+      periodSeconds: 60
+      failureThreshold: 2
+      tcpSocket:
+        port: server
+    env:
+      - name: TZ
+        value: Asia/Shanghai
+      # - name: JAVA_TOOL_OPTIONS
+      #   valueFrom:
+      #     configMapKeyRef:
+      #       name: anan
+      #       key: JAVA_TOOL_OPTIONS
+      - name: STORAGE_TYPE
+        value: "elasticsearch"
+      - name: ES_HOSTS
+        valueFrom:
+          configMapKeyRef:
+            name: es
+            key: addresses
+      - name: ES_USERNAME
+        valueFrom:
+          configMapKeyRef:
+            name: es
+            key: username
+      - name: ES_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: es
+            key: password
+      # Uncomment to see requests to and from elasticsearch
+      #            - name: ES_HTTP_LOGGING
+      #              value: "BODY"
+      - name: RABBIT_ADDRESSES
+        valueFrom:
+          configMapKeyRef:
+            name: rabbitmq
+            key: addresses
+      - name: RABBIT_USER
+        valueFrom:
+          configMapKeyRef:
+            name: rabbitmq
+            key: username
+      - name: RABBIT_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: rabbitmq
+            key: password
+terminationGracePeriodSeconds: 30 #优雅关闭pod的等待时间，默认30s
+service:
+  type: ClusterIP
+  ports:
+    - port: 9411
+      name: server
+persistence: {}

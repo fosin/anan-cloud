@@ -1,0 +1,6 @@
+dependencies:
+- name: anan-templates
+  repository: file://..//../anan-templates
+  version: 0.0.1
+digest: sha256:c6b330ed1b2ac513537a3f4ec5150e76cfd3a306814f7a3725438587ca7008a2
+generated: "2022-03-27T21:25:58.830899+08:00"

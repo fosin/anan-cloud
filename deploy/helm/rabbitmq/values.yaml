@@ -1,35 +1,95 @@
-image: rabbitmq:3-management
-imagePullPolicy: IfNotPresent
-replicaCount: 1
-resources:
-  limits:
-    memory: 512Mi
-  requests:
-    cpu: 1m
-    memory: 256Mi
+secret:
+  type: Opaque
+  confs:
+    password: "local"
+    erlangCookie: SWQOKODSQALRPCLNMEQG
+statefulset:
+  updateStrategy:
+    type: RollingUpdate
+  replicaCount: 1
+terminationGracePeriodSeconds: 15
+podManagementPolicy: Parallel
+containers:
+  - image: rabbitmq:3-management
+    imagePullPolicy: IfNotPresent
+    resources:
+      limits:
+        memory: 256M
+      requests:
+        cpu: 1m
+        memory: 128M
+    startupProbe:
+      exec:
+        command: ["rabbitmqctl", "status"]
+      periodSeconds: 60
+      failureThreshold: 3
+    livenessProbe:
+      exec:
+        command: ["rabbitmqctl", "status"]
+      periodSeconds: 60
+      timeoutSeconds: 10
+    env:
+      - name: TZ
+        value: Asia/Shanghai
+      - name: MY_POD_NAME
+        valueFrom:
+          fieldRef:
+            fieldPath: metadata.name
+      - name: MY_POD_NAMESPACE
+        valueFrom:
+          fieldRef:
+            fieldPath: metadata.namespace
+      - name: MY_RABBITMQ_SERVICE_HEADLESS
+        valueFrom:
+          configMapKeyRef:
+            name: rabbitmq
+            key: serviceHeadless
+      - name: RABBITMQ_DEFAULT_USER
+        valueFrom:
+          configMapKeyRef:
+            name: rabbitmq
+            key: username
+      - name: RABBITMQ_DEFAULT_PASS
+        valueFrom:
+          secretKeyRef:
+            name: rabbitmq
+            key: password
+      - name: RABBITMQ_ERLANG_COOKIE
+        valueFrom:
+          secretKeyRef:
+            name: rabbitmq
+            key: erlangCookie
+      - name: RABBITMQ_USE_LONGNAME
+        value: "true"
+      - name: RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS
+        value: "+sbwt none +sbwtdcpu none +sbwtdio none +swt low +sub true"
+      - name: RABBITMQ_NODENAME
+        value: rabbit@$(MY_POD_NAME).$(MY_RABBITMQ_SERVICE_HEADLESS).$(MY_POD_NAMESPACE).svc.cluster.local
+configmap:
+  existConfigMapName: rabbitmq
+  files:
+  - mountPath: /etc/rabbitmq/
+    mountFiles:
+      rabbitmq.conf:
+      enabled_plugins:
 persistence:
-  size: 1G
+- name: data
+  mountPath: /var/lib/rabbitmq
+  storageClassName: local-storage
+  size: 2G
   accessMode: ReadWriteOnce
-  nfs:
-    - server: 192.168.137.8
+  local:
+    - hostname: examtest0
+      path: /data/rabbitmq0
 service:
   type: NodePort
   ports:
     - port: 5672
-      targetPort: 5672
-      name: amqp
+      name: http
     - port: 15672
-      targetPort: 15672
-      nodePort: 15672
       name: cluster
 role:
   rules:
     - apiGroups: [""]
       resources: ["endpoints"]
       verbs: ["get"]
-rabbitmq:
-#  password: ""
-  erlangCookie: SWQOKODSQALRPCLNMEQG
-configmap:
-  envs: {}
-  confs: {}

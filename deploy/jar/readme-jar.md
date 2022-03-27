@@ -16,7 +16,7 @@
 ## 3、部署nacos及导入nacos基础配置数据
 
 ### 3.1、部署nacos请看官方文档<https://nacos.io/zh-cn/docs/quick-start.html>
-### 3.2、修改对应的mysql数据库、redis配置 [点这里](../anan-config)
+### 3.2、修改对应的mysql数据库、redis配置 [点这里](../anan-conf)
 ### 3.3、使用nacos后台(一般是<http://localhost:8848/nacos/>)导入模版配置,nacos中的namespace 名称需要和[pom.xml](../../pom.xml)中的自定义profile名称一致
 
 ## 4、编译打包jar

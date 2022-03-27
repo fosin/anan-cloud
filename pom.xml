@@ -21,6 +21,7 @@
         <module>anan-cloudresource</module>
     </modules>
     <properties>
+        <revision>3.0.0-SNAPSHOT</revision>
         <anan-placeholder1>${</anan-placeholder1>
         <anan-placeholder2>}</anan-placeholder2>
         <anan-spring-cloud.version>2020.0.5</anan-spring-cloud.version>
@@ -35,10 +36,17 @@
             <properties>
                 <profileActive>local</profileActive>
                 <jasypt.encryptor.password>oF7tVrdfjrbQ0NfSsRL3</jasypt.encryptor.password>
-                <spring.cloud.nacos.enabled>true</spring.cloud.nacos.enabled>
+                <spring.cloud.kubernetes.enabled>true</spring.cloud.kubernetes.enabled>
+                <spring.cloud.kubernetes.discovery.enabled>true</spring.cloud.kubernetes.discovery.enabled>
+                <spring.cloud.kubernetes.config.enabled>true</spring.cloud.kubernetes.config.enabled>
+                <spring.cloud.kubernetes.secrets.enabled>false</spring.cloud.kubernetes.secrets.enabled>
+                <spring.cloud.kubernetes.namespace>default</spring.cloud.kubernetes.namespace>
+                <spring.cloud.kubernetes.sharedConfigMap>application</spring.cloud.kubernetes.sharedConfigMap>
+                <spring.cloud.kubernetes.sharedSecret>application</spring.cloud.kubernetes.sharedSecret>
+                <spring.cloud.nacos.enabled>false</spring.cloud.nacos.enabled>
                 <spring.cloud.nacos.username>nacos</spring.cloud.nacos.username>
                 <spring.cloud.nacos.password>local</spring.cloud.nacos.password>
-                <spring.cloud.nacos.server-addr>nacos-0:8848</spring.cloud.nacos.server-addr>
+                <spring.cloud.nacos.server-addr>nacos:8848</spring.cloud.nacos.server-addr>
                 <spring.cloud.nacos.namespace>local</spring.cloud.nacos.namespace>
                 <spring.cloud.nacos.sharedConfigs>application.yaml</spring.cloud.nacos.sharedConfigs>
                 <eureka.client.enabled>false</eureka.client.enabled>
@@ -50,14 +58,11 @@
                 <spring.cloud.config.server.svn.uri/>
                 <spring.cloud.config.server.svn.username/>
                 <spring.cloud.config.server.svn.password/>
-                <spring.cloud.config.server.native.search-locations>file:deploy/anan-config
+                <spring.cloud.config.server.native.search-locations>file:deploy/anan-conf
                 </spring.cloud.config.server.native.search-locations>
                 <spring.cloud.config.server.git.uri>https://github.com/fosin/anan-cloud/deploy
                 </spring.cloud.config.server.git.uri>
-                <spring.cloud.config.server.git.search-paths>anan-config</spring.cloud.config.server.git.search-paths>
-                <spring.rabbitmq.addresses>rabbitmq:5672</spring.rabbitmq.addresses>
-                <spring.rabbitmq.username>anan</spring.rabbitmq.username>
-                <spring.rabbitmq.password>local</spring.rabbitmq.password>
+                <spring.cloud.config.server.git.search-paths>anan-conf</spring.cloud.config.server.git.search-paths>
                 <!--TODO 这里启用加密后除anan-eurekaserver、anan-configserver之外的应用都无法解密
                 <spring.security.user.name>'{cipher}AQAGy3LYSBkcOJA32VA/mT3jNtxscWGe0Eto3isApxPrUgv00Pw0629LROM3zCh9KC3/HqP4aoUexyBw3QhdLCkXr6zpXGFrj0x7EPcu+A9B9kbzZejfcdG3l+Wln+chjS50cLe0txPDt4ioZxbLb0BjgwfPS4THrIfozhJgyRKNwkrw4prTXSnE2o/tbo/rHKJutXF53ywkAqRK7sZNFUMiHZTKiQkKzzCTUQmFRoBYkYtoc2SjVMerEfySCyx8oEm0+FnLpUuFpexO/cVl/YbWxmeU4qvrpeDgj1OEJ9JAuKZGfSHF/1LdvaOP7HVlx1EiyqLoQys/pa1vFjkRu8YHSmSS7jOfiGty2sT3g4+fFG7G0K+8g5cmRGAUbhUppDI='</spring.security.user.name>
                 <spring.security.user.password>'{cipher}AQAf9K0s8zLVaIk44+wqpHGuHsHEK5G4KKu1vk0HwxlojaYQHRkNsFhdQwmcrnkayWpGmNZezJCVb56JJTYL0wOus7L+zUIRWG0YIBzZBzG0iAX/6fQ0l7EVc6JyYmksGi6czSWhhAYvaJ2zupxU5pMou+k48ILP1MSZ+2n/mmM2OA/msXzum7hhSbuHKHkazorFlYLem2efeU0M61xWGRgzHAJ6pOxWGJx2NepgFDGLSTpDiqRTXD98AabHa28X8TpBbFynDONrU3mueuW/TSrXOlzp2LOO/cDbYGpZXAc/jypbH8SWfkSQlQrWaKBg2FJ8DYg/hUnxfSy+QbzyeGkPfJAcrDZ+9lhluKJ2RplT9bAedAWmvzPu2cJCQuf/RmM='</spring.security.user.password>-->
@@ -78,10 +83,17 @@
             <properties>
                 <profileActive>dev</profileActive>
                 <jasypt.encryptor.password>oF7tVrdfjrbQ0NfSsRL3</jasypt.encryptor.password>
-                <spring.cloud.nacos.enabled>true</spring.cloud.nacos.enabled>
+                <spring.cloud.kubernetes.enabled>true</spring.cloud.kubernetes.enabled>
+                <spring.cloud.kubernetes.discovery.enabled>true</spring.cloud.kubernetes.discovery.enabled>
+                <spring.cloud.kubernetes.config.enabled>true</spring.cloud.kubernetes.config.enabled>
+                <spring.cloud.kubernetes.secrets.enabled>false</spring.cloud.kubernetes.secrets.enabled>
+                <spring.cloud.kubernetes.namespace>default</spring.cloud.kubernetes.namespace>
+                <spring.cloud.kubernetes.sharedConfigMap>application</spring.cloud.kubernetes.sharedConfigMap>
+                <spring.cloud.kubernetes.sharedSecret>application</spring.cloud.kubernetes.sharedSecret>
+                <spring.cloud.nacos.enabled>false</spring.cloud.nacos.enabled>
                 <spring.cloud.nacos.username>nacos</spring.cloud.nacos.username>
                 <spring.cloud.nacos.password>local</spring.cloud.nacos.password>
-                <spring.cloud.nacos.server-addr>nacos-0:8848</spring.cloud.nacos.server-addr>
+                <spring.cloud.nacos.server-addr>nacos:8848</spring.cloud.nacos.server-addr>
                 <spring.cloud.nacos.namespace>dev</spring.cloud.nacos.namespace>
                 <spring.cloud.nacos.sharedConfigs>application.yaml</spring.cloud.nacos.sharedConfigs>
                 <eureka.client.enabled>false</eureka.client.enabled>
@@ -93,13 +105,10 @@
                 <spring.cloud.config.server.svn.uri/>
                 <spring.cloud.config.server.svn.username/>
                 <spring.cloud.config.server.svn.password/>
-                <spring.cloud.config.server.native.search-locations>file:deploy/anan-config
+                <spring.cloud.config.server.native.search-locations>file:deploy/anan-conf
                 </spring.cloud.config.server.native.search-locations>
                 <spring.cloud.config.server.git.uri/>
                 <spring.cloud.config.server.git.search-paths/>
-                <spring.rabbitmq.addresses>rabbitmq:7890</spring.rabbitmq.addresses>
-                <spring.rabbitmq.username>anan</spring.rabbitmq.username>
-                <spring.rabbitmq.password>local</spring.rabbitmq.password>
                 <spring.security.user.name>anan</spring.security.user.name>
                 <spring.security.user.password>local</spring.security.user.password>
                 <encrypt.key-store.location>classpath:/anan.jks</encrypt.key-store.location>
@@ -117,10 +126,17 @@
             <properties>
                 <profileActive>prod</profileActive>
                 <jasypt.encryptor.password>oF7tVrdfjrbQ0NfSsRL3</jasypt.encryptor.password>
-                <spring.cloud.nacos.enabled>true</spring.cloud.nacos.enabled>
+                <spring.cloud.kubernetes.enabled>true</spring.cloud.kubernetes.enabled>
+                <spring.cloud.kubernetes.discovery.enabled>true</spring.cloud.kubernetes.discovery.enabled>
+                <spring.cloud.kubernetes.config.enabled>true</spring.cloud.kubernetes.config.enabled>
+                <spring.cloud.kubernetes.secrets.enabled>false</spring.cloud.kubernetes.secrets.enabled>
+                <spring.cloud.kubernetes.namespace>default</spring.cloud.kubernetes.namespace>
+                <spring.cloud.kubernetes.sharedConfigMap>application</spring.cloud.kubernetes.sharedConfigMap>
+                <spring.cloud.kubernetes.sharedSecret>application</spring.cloud.kubernetes.sharedSecret>
+                <spring.cloud.nacos.enabled>false</spring.cloud.nacos.enabled>
                 <spring.cloud.nacos.username>nacos</spring.cloud.nacos.username>
                 <spring.cloud.nacos.password>prod</spring.cloud.nacos.password>
-                <spring.cloud.nacos.server-addr>nacos-0:8848,nacos-1:8848
+                <spring.cloud.nacos.server-addr>nacos:8848,nacos-1:8848
                 </spring.cloud.nacos.server-addr>
                 <spring.cloud.nacos.namespace>prod
                 </spring.cloud.nacos.namespace>
@@ -134,19 +150,10 @@
                 <spring.cloud.config.server.svn.uri/>
                 <spring.cloud.config.server.svn.username/>
                 <spring.cloud.config.server.svn.password/>
-                <spring.cloud.config.server.native.search-locations>file:/anan-config/@profileActive@
+                <spring.cloud.config.server.native.search-locations>file:/anan-conf/@profileActive@
                 </spring.cloud.config.server.native.search-locations>
                 <spring.cloud.config.server.git.uri/>
                 <spring.cloud.config.server.git.search-paths/>
-                <spring.rabbitmq.addresses>rabbitmq:5672</spring.rabbitmq.addresses>
-                <spring.rabbitmq.username>
-                    '{cipher}AQAGy3LYSBkcOJA32VA/mT3jNtxscWGe0Eto3isApxPrUgv00Pw0629LROM3zCh9KC3/HqP4aoUexyBw3QhdLCkXr6zpXGFrj0x7EPcu+A9B9kbzZejfcdG3l+Wln+chjS50cLe0txPDt4ioZxbLb0BjgwfPS4THrIfozhJgyRKNwkrw4prTXSnE2o/tbo/rHKJutXF53ywkAqRK7sZNFUMiHZTKiQkKzzCTUQmFRoBYkYtoc2SjVMerEfySCyx8oEm0+FnLpUuFpexO/cVl/YbWxmeU4qvrpeDgj1OEJ9JAuKZGfSHF/1LdvaOP7HVlx1EiyqLoQys/pa1vFjkRu8YHSmSS7jOfiGty2sT3g4+fFG7G0K+8g5cmRGAUbhUppDI='
-                </spring.rabbitmq.username>
-                <spring.rabbitmq.password>
-                    '{cipher}AQAhPXqYasqI6a1KN0MfJE5S463GpH3wZnXUkAVS9NzIvHQhYqUkXSIgZyQkX3UKl4JlPhuoCmd9/sQAKHZK+6VTzIDW4oGgmYYV46oOTzpM+u9v5fC4HLVrLJQfJlF+RYy/1IHFXNcLbhE/bUsj8MLHeIZ+cWZzMnu5/nxCtrnZtdb6ZBW6Ua83TfFFx8s3EcDC/XDRNwkxucZSY7yWp0Uh3mV1VVuUAfhdBvjUUMq/TAOY64sMp8Od+rbMMIcyLfjaqplbFOxKg9PdfTEXcyyKK9n3axmgGZ7lt9rE+RXWGzl3UgQf72xa3ynPI4UMsXh+1HB/tFyIDaBPOyc2fnWc38lf4qQK2NA7P58ucxzhf83HDtl1I1XXftX7pewPgQE='
-                </spring.rabbitmq.password>
-                <!--<spring.security.user.name>'{cipher}AQAGy3LYSBkcOJA32VA/mT3jNtxscWGe0Eto3isApxPrUgv00Pw0629LROM3zCh9KC3/HqP4aoUexyBw3QhdLCkXr6zpXGFrj0x7EPcu+A9B9kbzZejfcdG3l+Wln+chjS50cLe0txPDt4ioZxbLb0BjgwfPS4THrIfozhJgyRKNwkrw4prTXSnE2o/tbo/rHKJutXF53ywkAqRK7sZNFUMiHZTKiQkKzzCTUQmFRoBYkYtoc2SjVMerEfySCyx8oEm0+FnLpUuFpexO/cVl/YbWxmeU4qvrpeDgj1OEJ9JAuKZGfSHF/1LdvaOP7HVlx1EiyqLoQys/pa1vFjkRu8YHSmSS7jOfiGty2sT3g4+fFG7G0K+8g5cmRGAUbhUppDI='</spring.security.user.name>
-                <spring.security.user.password>'{cipher}AQAb+qFiQkk4e6bNia6bBtZGeM4yNvzM6wk5B4KfpWnklmf6Misr5OW/7LvXkBssoPC6vvG49ixIb6iCapzktjlKYWY6HTNOdirGfhNZXsfPXOsTvche98uYZVIfBYJNj+/NQ+6BdJlKPjw9fGBRDHa6OFeWD4qcchl3KL1oYq9AzWIQ/nad26R4ErULUGkw9GAeCOjw6tRGeiS90wUZ5xKzY6WiakHenwJJx2P7IJ9EfcWDp+Bvwkx8bn78Yu+0J7Y0HETZqyIJHPo6Ob9aBgUJv3lqrkXmtUQ+7GaYwBBVq2NrE54n/YW5hgUJUcpFeN6pgDUJhDhMNXuV4AEBnCrCJuyJ1sKIo0NDTxA+RqrROa+X4pLuduSL3RK8qAKd0Ig='</spring.security.user.password>-->
                 <spring.security.user.name>anan</spring.security.user.name>
                 <spring.security.user.password>prod</spring.security.user.password>
                 <encrypt.key-store.location>classpath:/anan.jks</encrypt.key-store.location>
@@ -161,6 +168,10 @@
         </profile>
     </profiles>
     <dependencies>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-kubernetes-fabric8-all</artifactId>
+        </dependency>
         <!--增加解决报错：No spring.config.import property has been defined-->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
@@ -331,7 +342,7 @@
         </resources>
         <finalName>${project.artifactId}-${project.version}-${profileActive}</finalName>
         <!--   <filters>
-               <filter>${basedir}/anan-config/application-${profileActive}.properties</filter>
+               <filter>${basedir}/anan-conf/application-${profileActive}.properties</filter>
            </filters>-->
         <plugins>
             <!--SpringBoot插件-->

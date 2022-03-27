@@ -1,0 +1,76 @@
+statefulset:
+  lables: {}
+  updateStrategy:
+    type: RollingUpdate
+  #滚动升级时60s后认为该pod就绪
+  minReadySeconds: 45
+  replicaCount: 3
+terminationGracePeriodSeconds: 15 #优雅关闭pod的等待时间，默认30s
+podAntiAffinity: requiredDuringSchedulingIgnoredDuringExecution
+containers:
+  - image: prom/node-exporter
+    imagePullPolicy: IfNotPresent
+    resources:
+      limits:
+        memory: 128Mi
+      requests:
+        cpu: 1m
+        memory: 64Mi
+    livenessProbe: {}
+    readinessProbe: {}
+    args:
+      #根目录挂载点
+      - '--path.rootfs=/host'
+
+      #启用 systemd 收集器（默认值：禁用）。
+      - "--collector.systemd"
+      #设置systemd白名单
+      # - "--collector.systemd.unit-whitelist=(docker|sshd|nginx).service"
+      #启用进程收集器（默认值：禁用）。
+      - "--collector.processes"
+      #通过正则表达式忽略某些文件系统挂载点的信息收集
+      # - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
+      #通过正则表达式忽略某些磁盘的信息收集
+      # - "--collector.diskstats.ignored-devices="^(ram|loop|fd|(h|s|v|xv)d[a-z]|nvme\\d+n\\d+p)\\d+$""
+      #通过正则表达式忽略某些文件系统类型的信息收集
+      # - "--collector.filesystem.ignored-fs-types="^(autofs|binfmt_misc|bpf|cgroup2?|configfs|debugfs|devpts|devtmpfs|fusectl|hugetlbfs|mqueue|nsfs|overlay|proc|procfs|pstore|rpc_pipefs|securityfs|selinuxfs|squashfs|sysfs|tracefs)$"
+      ##通过正则表达式忽略某些网络类的信息收集
+      # - "--collector.netclass.ignored-devices='^$'"
+      #通过正则表达式忽略某些网络设备的信息收集
+      # - "--collector.netdev.ignored-devices='^$'"
+      #公开指标和 Web 界面的地址。
+      # - --web.listen-address=":9100"
+      #公开指标的路径。
+      # - --web.telemetry-path="/metrics"
+      #仅记录具有给定严重性或更高级别的消息。其中之一：[debug, info, warn, error]
+      # - --log.level=info
+      #日志消息的输出格式。其中之一：[logfmt, json]
+      # - --log.format=logfmt
+      - '--no-collector.ipvs'
+    env:
+      - name: TZ
+        value: Asia/Shanghai
+      - name: NODE_ID
+        valueFrom:
+          fieldRef:
+            fieldPath: metadata.name
+hostPath:
+  - name: rootfs #volume名称
+    mountPath: /host #挂载到容器的目录，必填
+    path: /  #主机目录，必填
+    type: Directory
+    readOnly: true
+  - name: system-dbus-socket #volume名称
+    mountPath: /var/run/dbus/system_bus_socket #挂载到容器的目录，必填
+    path: /var/run/dbus/system_bus_socket  #主机目录，必填
+    readOnly: true
+  - name: localtime
+    mountPath: /etc/localtime #挂载到容器的目录，必填
+    path: /etc/localtime  #主机目录，必填
+    readOnly: true
+    type: File
+service:
+  type: NodePort
+  ports:
+    - port: 9100
+      name: node-exporter

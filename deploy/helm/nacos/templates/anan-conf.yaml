@@ -1,0 +1,36 @@
+{{- if .Values.anan }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: anan
+  namespace: {{ .Release.Namespace }}
+data:
+  #anan服务配置
+  spring.profiles.active: {{ .Values.anan.nacos.namespaceId | quote }}
+  spring.cloud.nacos.config.namespace: {{ .Values.anan.nacos.namespaceId | quote }}
+  spring.cloud.nacos.config.sharedConfigs: {{ .Values.anan.nacos.sharedConfigs | quote }}
+  spring.cloud.nacos.discovery.namespace: {{ .Values.anan.nacos.namespaceId | quote }}
+  spring.cloud.nacos.config.server-addr: {{ $.Release.Name }}:{{ index (index $.Values.service.ports 0) "port" }}
+  spring.cloud.nacos.discovery.server-addr: {{ $.Release.Name }}:{{ index (index $.Values.service.ports 0) "port" }}
+{{/*  spring.security.user.name: {{ include "anan.user" . | quote }}*/}}
+{{/*  spring.security.user.password: {{ include "anan.password" . | quote }}*/}}
+{{/*  {{- if lt .Values.resources.limits.memory "768M" }}*/}}
+{{/*  JAVA_TOOL_OPTIONS: "-Xmx360m -Xms360m -XX:+DisableExplicitGC -XX:ErrorFile=/logs/hs_err_pid%p.log"*/}}
+{{/*  {{- else }}*/}}
+{{/*  JAVA_TOOL_OPTIONS: "-XX:+UseG1GC -XX:MaxGCPauseMillis=200 -XX:MaxRAMPercentage=50 -XX:InitialRAMPercentage=50 -XX:+DisableExplicitGC -XX:ErrorFile=/logs/hs_err_pid%p.log"*/}}
+{{/*  {{- end }}*/}}
+  JAVA_TOOL_OPTIONS: {{ .Values.anan.javaToolOptions | quote }}
+  #以下配置在启用eureka和spring cloud config时需要启用
+  #spring.cloud.nacos.config.enabled: "false"
+  #spring.cloud.nacos.discovery.enabled: "false"
+  #eureka.client.enabled: "true"
+  #spring.cloud.config.enabled: "true"
+  #spring.cloud.config.discovery.enabled: "true"
+  #eureka.client.service-url.defaultZone: "http://anan:local@anan-eurekaserver1:51000/eureka/,http://anan:local@anan-eurekaserver2:51000/eureka/"
+  #spring.cloud.config.profile: "local"
+  #encrypt.key-store.location: "classpath:/anan.jks"
+  #encrypt.key-store.password: "123456"
+  #encrypt.key-store.alias: "anan"
+  #encrypt.key-store.secret: "123456"
+
+{{- end }}

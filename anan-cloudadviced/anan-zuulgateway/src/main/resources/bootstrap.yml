@@ -1,14 +1,27 @@
-eureka:
-  client:
-    service-url:
-      defaultZone: @eureka.client.service-url.defaultZone@
-    enabled: @eureka.client.enabled@
 spring:
   profiles:
     active: @profileActive@
   application:
     name: @project.artifactId@
+  #  main:
+  #    cloud-platform: kubernetes
   cloud:
+    kubernetes:
+      enabled: @spring.cloud.kubernetes.enabled@
+      config:
+        enabled:  @spring.cloud.kubernetes.config.enabled@
+        namespace: @spring.cloud.kubernetes.namespace@
+        sources:
+          - name: @spring.cloud.kubernetes.sharedConfigMap@ #指定 ConfigMap 名称
+          - name: ${spring.application.name} #指定 ConfigMap 名称
+      secrets:
+        enabled:  @spring.cloud.kubernetes.secrets.enabled@
+        namespace: @spring.cloud.kubernetes.namespace@    #指定 Namespace 名称
+        sources:
+          - name: @spring.cloud.kubernetes.sharedSecret@ #指定 ConfigMap 名称
+          - name: ${spring.application.name} #指定 ConfigMap 名称
+      discovery:
+        enabled: @spring.cloud.kubernetes.discovery.enabled@
     config:
       username: ${spring.security.user.name}
       password: ${spring.security.user.password}
@@ -32,10 +45,6 @@ spring:
         username: @spring.cloud.nacos.username@
         password: @spring.cloud.nacos.password@
         server-addr: @spring.cloud.nacos.server-addr@
-  rabbitmq:
-    addresses: @spring.rabbitmq.addresses@
-    username: @spring.rabbitmq.username@
-    password: @spring.rabbitmq.password@
   security:
     user:
       name: @spring.security.user.name@
@@ -56,3 +65,8 @@ jasypt:
 info: #定义各种额外的详情给服务端显示
   description: "@project.description@"
   version: "@project.version@"
+eureka:
+  client:
+    service-url:
+      defaultZone: @eureka.client.service-url.defaultZone@
+    enabled: @eureka.client.enabled@

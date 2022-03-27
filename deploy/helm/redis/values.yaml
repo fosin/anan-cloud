@@ -1,0 +1,79 @@
+secret:
+  type: Opaque
+  confs:
+    password: "local"
+statefulset:
+  updateStrategy:
+    type: RollingUpdate
+  replicaCount: 1
+terminationGracePeriodSeconds: 15
+containers:
+  - name: redis
+    image: redis:5.0
+    imagePullPolicy: IfNotPresent
+    resources:
+      limits:
+        memory: 96M
+      requests:
+        cpu: 1m
+        memory: 64M
+    startupProbe:
+      tcpSocket:
+        port: server
+      periodSeconds: 20
+      failureThreshold: 3
+    livenessProbe:
+      periodSeconds: 60
+      timeoutSeconds: 10
+      tcpSocket:
+        port: server
+    command:
+      - "redis-server"
+    args:
+       - /etc/redis/redis.conf
+    env:
+      - name: TZ
+        value: Asia/Shanghai
+      - name: MY_POD_IP
+        valueFrom:
+          fieldRef:
+            fieldPath: status.podIP
+      - name: HELM_RELEASE_NAME
+        valueFrom:
+          fieldRef:
+            fieldPath: metadata.labels['name']
+affinity:
+  podAntiAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 100
+        podAffinityTerm:
+          labelSelector:
+            matchExpressions:
+              - key: name
+                operator: In
+                values:
+                  - redis
+          topologyKey: kubernetes.io/hostname
+configmap:
+  existConfigMapName: redis
+  files:
+  - mountPath: /etc/redis
+    defaultMode: "0755"
+    mountFiles:
+      redis.conf:
+      fix-ip.sh:
+persistence:
+- name: data
+  mountPath: /data
+  storageClassName: local-storage
+  size: 1G
+  accessMode: ReadWriteOnce
+  local:
+    - hostname: examtest0
+      path: /data/redis0
+service:
+  clusterIP: None
+  type: NodePort
+  ports:
+    - port: 6379
+      name: server

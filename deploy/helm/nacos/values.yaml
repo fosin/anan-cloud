@@ -1,0 +1,96 @@
+anan:
+  javaToolOptions: "-XX:+UseG1GC -XX:MaxGCPauseMillis=200 -XX:MaxRAMPercentage=70 -XX:InitialRAMPercentage=50 -XX:MaxMetaspaceSize=160M -XX:MetaspaceSize=160M -XX:+DisableExplicitGC -XX:ErrorFile=/logs/hs_err_pid%p.log"
+  spring:
+    profilesActive: local
+  nacos:
+    namespaceId: "local"
+    sharedConfigs: "application.yaml"
+secret:
+  type: Opaque
+  confs:
+    spring.cloud.nacos.config.username: "nacos"
+    spring.cloud.nacos.config.password: "local"
+    spring.cloud.nacos.discovery.username: "nacos"
+    spring.cloud.nacos.discovery.password: "local"
+    jasypt.encryptor.password: "oF7tVrdfjrbQ0NfSsRL3"
+statefulset:
+  updateStrategy:
+    type: RollingUpdate
+  replicaCount: 1
+terminationGracePeriodSeconds: 15
+nacos: true
+podAntiAffinity: requiredDuringSchedulingIgnoredDuringExecution
+containers:
+  - image: nacos/nacos-server:1.4.2
+    imagePullPolicy: IfNotPresent
+    resources:
+      limits:
+        memory: 678Mi
+      requests:
+        cpu: 1m
+        memory: 512Mi
+    env:
+      - name: JVM_XMS
+        value: "512M"
+      - name: JVM_XMX
+        value: "512M"
+      - name: JVM_XMN
+        value: "180M"
+      - name: JVM_MS
+        value: "160M"
+      - name: JVM_MMS
+        value: "160M"
+      - name: MODE
+        value: "standalone"
+      - name: NACOS_AUTH_ENABLE
+        value: "true"
+      - name: PREFER_HOST_MODE
+        value: "hostname"
+      - name: SPRING_DATASOURCE_PLATFORM
+        value: "mysql"
+      - name: MYSQL_SERVICE_HOST
+        value: "$(MYSQL_MGR_SERVICE_HOST)"
+      - name: MYSQL_SERVICE_PORT
+        value: "$(MYSQL_MGR_SERVICE_PORT)"
+      - name: TZ
+        value: Asia/Shanghai
+      - name: MYSQL_SERVICE_DB_NAME
+        valueFrom:
+          secretKeyRef:
+            name: mysql-mgr
+            key: mysql.nacos.dbname
+      - name: MYSQL_SERVICE_USER
+        valueFrom:
+          secretKeyRef:
+            name: mysql-mgr
+            key: mysql.nacos.user
+      - name: MYSQL_SERVICE_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: mysql-mgr
+            key: mysql.nacos.password
+service:
+  clusterIP: None
+  type: NodePort
+  ports:
+    - port: 8848
+      name: server
+    - port: 7848
+      name: rpc
+persistence:
+- name: logs
+  storageClassName: local-storage
+  size: 1G
+  accessMode: ReadWriteOnce
+  mountPath: /home/nacos/logs
+  local:
+    - hostname: examtest0
+      path: /data/logs/nacos0
+- name: data
+  storageClassName: local-storage
+  size: 1G
+  accessMode: ReadWriteOnce
+  mountPath: /home/nacos/data
+  local:
+    - hostname: examtest0
+      path: /data/nacos0

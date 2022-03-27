@@ -1,0 +1,284 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: application
+  namespace: {{ .Release.Namespace }}
+data:
+  spring.profiles.active: "local"
+  spring.security.user.name: {{ include "anan.user" . | quote }}
+  spring.security.user.password: {{ include "anan.password" . | quote }}
+  JAVA_TOOL_OPTIONS: "-XX:+UseG1GC -XX:MaxGCPauseMillis=200 -XX:MaxRAMPercentage=70 -XX:InitialRAMPercentage=50 -XX:MaxMetaspaceSize=160M -XX:MetaspaceSize=160M -XX:+DisableExplicitGC -XX:ErrorFile=/logs/hs_err_pid%p.log"
+
+  #启用k8s服务发现和配置服务
+  spring.cloud.kubernetes.enabled: "true"
+
+  #启用nacos作用服务发现和配置服务的
+  spring.cloud.nacos.config.enabled: "false"
+  spring.cloud.nacos.discovery.enabled: "false"
+
+  #以下配置在启用eureka和spring cloud config时需要启用
+  #eureka.client.enabled: "true"
+  #spring.cloud.config.enabled: "true"
+  #spring.cloud.config.discovery.enabled: "true"
+  #eureka.client.service-url.defaultZone: "http://anan:local@anan-eurekaserver1:51000/eureka/,http://anan:local@anan-eurekaserver2:51000/eureka/"
+  #spring.cloud.config.profile: "local"
+  #encrypt.key-store.location: "classpath:/anan.jks"
+  #encrypt.key-store.password: "123456"
+  #encrypt.key-store.alias: "anan"
+  #encrypt.key-store.secret: "123456"
+
+
+  application.yaml: |-
+    logging:
+      # pattern:
+      #   file: '%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{50} %msg%n%throwablen%'
+      #   console: '%highlight(%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level) %cyan(%logger{50}) %highlight(%msg%n%throwablen%)'
+      # file:
+      #   max-size: 50MB
+      #   max-history: 7
+      #   name: logs/${spring.application.name}.log
+      #   total-size-cap: 400MB
+      #   clean-history-on-start: true
+      level:
+        com.alibaba.nacos.naming.log.level: warn
+        com.alibaba.nacos.client.naming: warn
+        com.alibaba.nacos.client.config: warn
+        #打印SQL语句
+        org.hibernate.SQL: info
+        #打印SQL语句参数
+        org.hibernate.type.descriptor.sql.BasicBinder: info
+        #打印SQL执行结果
+        org.hibernate.type.descriptor.sql.BasicExtractor: info
+        #打印查询中命名参数的值
+        org.hibernate.engine.spi.QueryParameters: info
+        org.hibernate.engine.query.spi.HQLQueryPlan: info
+        #    zipkin2: debug
+        #com.github.fosin.anan.security: DEBUG
+        #org.springframework.security: DEBUG
+    spring:
+      kubernetes:
+        reload:
+          enabled: true
+          #监听模式：
+          #    (1)、polling：从 ConfigMap 和 Secret 中定期刷新配置，检测是否进行了修改。
+          #    (2)、event（默认）：监视配置映射或机密的更改。任何事件都会对配置进行重新检查，如果发生更改，则会重新加载。
+          mode: polling
+          period: 5000 #刷新间隔,单位(ms)
+          #刷新模式：
+          #(1)、refresh（默认）：仅注释@ConfigurationProperties或@RefreshScope重新加载的配置Bean
+          #(2)、restart_context：整个Spring ApplicationContext正常重启。使用新配置重新创建Bean。
+          #(3)、shutdown：关闭以激活容器的重启。使用此级别时，请确保将所有非守护程序线程的生命周期绑定到该级别，并将ApplicationContext 复制控制器或副本集配置为重新启动该pod。
+          strategy: shutdown
+          monitoring-secrets: true #是否监控 Secret 的更改来执行更新
+        discovery:
+          all-namespaces: true
+          include-not-ready-addresses: false
+      datasource:
+        url: jdbc:mysql://mysql-mgr:3306/anan_platform?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=GMT%2b8
+        username: anan
+        password: ENC(svOoGRZ5qlC1bRGGh+7YwA==)
+        #    type: com.alibaba.druid.pool.DruidDataSource
+        # Hikari 连接池配置
+        hikari:
+          # 最小空闲连接数量
+          minimum-idle: 1
+          # 空闲连接存活最大时间，默认600000（10分钟）
+          idle-timeout: 180000
+          # 连接池最大连接数，默认是10
+          maximum-pool-size: 5
+          # 此属性控制从池返回的连接的默认自动提交行为,默认值：true
+          auto-commit: true
+          # 连接池名称
+          pool-name: MyHikariCP
+          # 此属性控制池中连接的最长生命周期，值0表示无限生命周期，默认1800000即30分钟
+          max-lifetime: 1800000
+          # 数据库连接超时时间,默认30秒，即30000
+          connection-timeout: 30000
+          connection-test-query: SELECT 1
+        druid:
+          initial-size: 5
+          min-idle: 5
+          maxActive: 10
+          maxWait: 60000
+          timeBetweenEvictionRunsMillis: 60000
+          minEvictableIdleTimeMillis: 300000
+          #      validationQuery: SELECT 1 FROM DUAL
+          testWhileIdle: true
+          testOnBorrow: false
+          testOnReturn: false
+      #      poolPreparedStatements: true
+      #      maxPoolPreparedStatementPerConnectionSize: 20
+      #      filters: stat,wall,log4j
+      #      connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+      #      useGlobalDataSourceStat: true
+      #    platform: mysql
+      #    continue-on-error: true
+      redis:
+        host: redis
+        port: 6379
+        password: ENC(svOoGRZ5qlC1bRGGh+7YwA==)
+        # 连接超时时间（毫秒）
+        timeout: 10s
+        lettuce:
+          # 连接池最大阻塞等待时间 毫秒（使用负值表示没有限制） 默认 -1
+          max-active: 3
+          # 连接池最大连接数（使用负值表示没有限制） 默认 8
+          max-wait: -1
+          # 连接池中的最大空闲连接 默认 8
+          max-idle: 1
+          # 连接池中的最小空闲连接 默认 0
+          min-idle: 1
+      rabbitmq:
+        host: rabbitmq
+        port: 5672
+        username: anan
+        password: ENC(svOoGRZ5qlC1bRGGh+7YwA==)
+      cloud:
+        config:
+          fail-fast: true
+          retry:
+            initial-interval: 2000
+            max-attempts: 6
+            max-interval: 2000
+            multiplier: 1.1
+        stream:
+          default:
+            group: ${spring.application.name}-${spring.cloud.client.ip-address}-${server.port}
+          rabbit:
+            bindings:
+              springCloudBusInput:
+                consumer:
+                  # 队列声明重试次数
+                  queue-declaration-retries: 2000
+                  # 重试间隔(ms)
+                  recovery-interval: 5000
+                  # 为true时，使用‘group’作为配置刷新队列的名称
+                  queue-name-group-only: true
+      jpa:
+        #Hibernate自动创建表的时候使用InnoDB存储引擎，不然就会以默认存储引擎MyISAM来建表，而MyISAM存储引擎是没有事务的。
+        database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+        open-in-view: true
+        properties:
+          hibernate:
+            format_sql: true
+            use_sql_comments: true
+        #show-sql: true
+      #    hibernate:
+      #      ddl-auto: update
+      zipkin:
+        message-timeout: 10
+        #    baseUrl: http://zipkin:9411/
+        sender:
+          type: rabbit
+      #    locator:
+      #      discovery:
+      #        enabled: true
+      #    discovery-client-enabled: true
+      sleuth:
+        web:
+          additional-skip-pattern: "/instances/.*|/actuator/.*"
+        #    enabled: false
+        sampler:
+          probability: 1.0
+      #    feign:
+      #      enabled: false
+      #      processor:
+      #        enabled: false
+      jackson:
+        #日期格式化
+        date-format: yyyy-MM-dd HH:mm:ss
+        time-zone: GMT+8
+        # serialization:
+        #    #格式化输出
+        #   indent_output: true
+        #   #忽略无法转换的对象
+        #   fail_on_empty_beans: false
+        # #设置空如何序列化
+        # defaultPropertyInclusion: NON_EMPTY
+        # deserialization:
+        #   #允许对象忽略json中不存在的属性
+        #   fail_on_unknown_properties: false
+        # parser:
+        #   #允许出现特殊字符和转义符
+        #   allow_unquoted_control_chars: true
+        #   #允许出现单引号
+        #   allow_single_quotes: true
+      oauth2:
+        client:
+          registration:
+            anan-authserver:
+              client-id: appServer
+              client-secret: appServer
+              provider: anan-authserver
+          provider:
+            anan-authserver:
+              authorization-uri: http://anan-authserver:51400/oauth2/authorize
+              token-uri: http://anan-authserver:51400/oauth2/token
+              user-info-uri: http://anan-authserver:51400/oauth2/userinfo/jwt
+              jwk-set-uri: http://anan-authserver:51400/oauth2/token_key
+    server:
+      servlet:
+        session:
+          cookie:
+            # This is to prevent cookie clash with other service as they run on the same host and context path
+            name: ${spring.application.name}
+      undertow:
+        threads:
+          # 设置IO线程数, 它主要执行非阻塞的任务,它们会负责多个连接, 默认设置每个CPU核心一个线程
+          # 不要设置过大，如果过大，启动项目会报错：打开文件数过多
+          io: 4
+          # 阻塞任务线程池, 当执行类似servlet请求阻塞IO操作, undertow会从这个线程池中取得线程
+          # 它的值设置取决于系统线程执行任务的阻塞系数，默认值是IO线程数*8
+          worker: 4
+        # 以下的配置会影响buffer,这些buffer会用于服务器连接的IO操作,有点类似netty的池化内存管理
+        # 每块buffer的空间大小,越小的空间被利用越充分，不要设置太大，以免影响其他应用，合适即可
+        buffer-size: 1024
+        direct-buffers: true
+    management:
+      endpoints:
+        web:
+          exposure:
+            include: '*'
+      endpoint:
+        shutdown:
+          enabled: true
+        health:
+          show-details: ALWAYS
+        restart:
+          enabled: true
+      metrics:
+        web:
+          server:
+            request:
+              autotime:
+                enabled: false
+    anan:
+      security:
+        jwt:
+          key-store: ${encrypt.key-store.location}
+          key-alias: ${encrypt.key-store.alias}
+          key-password: ${encrypt.key-store.password}
+          key-store-password: ${encrypt.key-store.secret}
+          public-key-location: classpath:anan.pub
+      oauth2:
+        client:
+          client-id: appServer
+          client-secret: appServer
+          access-token-uri: http://anan-authserver:51400/oauth/token
+    security:
+      oauth2:
+        resource:
+          loadBalanced: true
+          user-info-uri: http://anan-authserver/oauth/userinfo/principal
+          prefer-token-info: false
+    eureka:
+      client:
+        healthcheck:
+          # 开启健康检查（需要spring-boot-starter-actuator依赖）
+          enabled: true
+      instance:
+        #续约到期时间（默认90秒）
+        lease-expiration-duration-in-seconds: 10
+        #续约更新时间间隔（默认30秒）
+        lease-renewal-interval-in-seconds: 5
+        prefer-ip-address: true

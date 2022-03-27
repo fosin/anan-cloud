@@ -30,10 +30,10 @@ spring:
           username: @spring.cloud.config.server.svn.username@
           password: @spring.cloud.config.server.svn.password@
         default-label: @profileActive@
-  rabbitmq:
-    addresses: @spring.rabbitmq.addresses@
-    username: @spring.rabbitmq.username@
-    password: @spring.rabbitmq.password@
+#  rabbitmq:
+#    addresses: @spring.rabbitmq.addresses@
+#    username: @spring.rabbitmq.username@
+#    password: @spring.rabbitmq.password@
   jackson: #该参数一定要放bootstrap中，而放application.yml或者后面的配置文件都不能生效
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8

@@ -3,7 +3,7 @@ description: A Helm chart for Kubernetes
 name: rabbitmq
 version: 0.0.1
 dependencies:
-  - name: base
+  - name: anan-templates
     version: 0.0.1
-    repository: file://../base
+    repository: file://../anan-templates
 

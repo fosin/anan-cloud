@@ -1,0 +1,38 @@
+{{- if .Values.nacos  }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "anan.configmap.name" . }}
+  namespace: {{ .Release.Namespace }}
+data:
+  {{- $replicaCount := int .Values.statefulset.replicaCount }}
+  {{- $headlessName := (include "anan.service.headless.name" .) }}
+  {{- $serverPort := (index (index .Values.service.ports 0) "port") }}
+  NACOS_REPLICAS: {{ $replicaCount | quote }}
+  NACOS_SERVERS:
+  {{- range $i, $e := until $replicaCount -}}
+  {{- indent 1 "" }}{{ $.Release.Name }}-{{ $i }}.{{ $headlessName }}.{{ $.Release.Namespace }}.svc.cluster.local:{{ $serverPort }}
+  {{- end }}
+  NACOS_SERVER_PORT: {{ $serverPort | quote }}
+  NACOS_APPLICATION_PORT: {{ $serverPort | quote }}
+  custom.properties: |
+    #spring.security.enabled=false
+    #management.security=false
+    #security.basic.enabled=false
+    #nacos.security.ignore.urls=/**
+    #management.metrics.export.elastic.host=http://localhost:9200
+    # metrics for prometheus
+    management.endpoints.web.exposure.include=*
+
+    # metrics for elastic search
+    #management.metrics.export.elastic.enabled=false
+    #management.metrics.export.elastic.host=http://localhost:9200
+
+    # metrics for influx
+    #management.metrics.export.influx.enabled=false
+    #management.metrics.export.influx.db=springboot
+    #management.metrics.export.influx.uri=http://localhost:8086
+    #management.metrics.export.influx.auto-create-db=true
+    #management.metrics.export.influx.consistency=one
+    #management.metrics.export.influx.compressed=true
+{{- end }}

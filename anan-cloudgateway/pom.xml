@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>anan-cloudgateway</artifactId>
-    <description>AnAn Cloud Gateway</description>
+    <description>Anan Cloud Gateway</description>
     <packaging>jar</packaging>
     <properties>
         <maven.deploy.skip>true</maven.deploy.skip>

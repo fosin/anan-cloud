@@ -2,7 +2,7 @@ version: "3"
 services:
   anan-authserver:
     image: fosin/anan-authserver:3.0.0-SNAPSHOT
-    entrypoint: "sh /anan/wait-for.sh nacos-0:8848 -t 3600 -- /anan/entrypoint.sh"
+    entrypoint: "sh /anan/wait-for.sh nacos:8848 -t 3600 -- /anan/entrypoint.sh"
     networks:
       - anan-overlay
     volumes:
