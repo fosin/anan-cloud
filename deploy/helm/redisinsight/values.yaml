@@ -10,7 +10,7 @@ containers:
     ports:
       - containerPort: 8001 #exposed container port and protocol
         protocol: TCP
-        name: server
+        name: http
     env:
       - name: TZ
         value: Asia/Shanghai
@@ -31,21 +31,21 @@ containers:
         memory: "128Mi"
     readinessProbe:
       periodSeconds: 30
-      failureThreshold: 3
+      failureThreshold: 2
       httpGet:
         path : /healthcheck/
-        port: server
+        port: http
     livenessProbe:
-      periodSeconds: 900
-      failureThreshold: 1
+      periodSeconds: 45
+      failureThreshold: 2
       httpGet:
         path : /healthcheck/
-        port: server
+        port: http
 service:
   type: NodePort
   ports:
     - port: 8001
-      name: server
+      name: http
 persistence:
   - name: data
     mountPath: /db

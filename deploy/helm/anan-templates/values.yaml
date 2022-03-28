@@ -52,8 +52,10 @@ containers:
     args: []
     command: []
     ports:
-      - name: server
+      - name: http
         containerPort: 80
+      - name: https
+        containerPort: 443
     volumeDevices: []
     volumeMounts: []
 volumes: []
@@ -184,7 +186,7 @@ service:
       targetPort: 80 #不填时默认为port的值
       nodePort: 80 #当type=NodePort得时候有效，不填时默认和port一样，填0表示系统自动生成端口号。
       protocol: TCP
-      name: cluster #必填
+      name: http #必填
 role:
   apiVersion: rbac.authorization.k8s.io/v1
   lables: {}

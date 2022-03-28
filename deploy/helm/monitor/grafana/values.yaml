@@ -14,16 +14,15 @@ containers:
         cpu: 1m
         memory: 512Mi
     readinessProbe:
-      periodSeconds: 30
-      failureThreshold: 3
+      periodSeconds: 45
+      failureThreshold: 2
       tcpSocket:
-        port: 3000
+        port: http
     livenessProbe:
-      initialDelaySeconds: 15
       periodSeconds: 60
       failureThreshold: 2
       tcpSocket:
-        port: 3000
+        port: http
     env:
       - name: GF_SERVER_SERVE_FROM_SUB_PATH
         value: "true"
@@ -58,4 +57,4 @@ service:
   type: NodePort
   ports:
     - port: 3000
-      name: server
+      name: http

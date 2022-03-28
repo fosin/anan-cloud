@@ -33,26 +33,38 @@ containers:
       failureThreshold: 2
       httpGet:
         scheme: HTTP
-        port: server
+        port: http
         path: /actuator/health
     livenessProbe:
       periodSeconds: 60
       failureThreshold: 2
       httpGet:
         scheme: HTTP
-        port: server
+        port: http
         path: /actuator/health
     lifecycle:
       preStop:
-        httpGet:
-          scheme: HTTP
-          port: server
-          path: actuator/shutdown
+        exec:
+          command:
+            - curl
+            - -XPOST
+            - http://localhost:51500/actuator/shutdown
+    envFrom:
+      #如果使用nacos作为服务发现和配置中心，需要启用这段配置
+      #- configMapRef:
+      #    name: anan-env-nacos
+      #- secretRef:
+      #    name: nacos
+      #如果使用eureka作为服务发现和Spring Cloud Config为作为配置中心，需要启用这段配置
+      #- configMapRef:
+      #    name: anan-env-eureka
+      - configMapRef:
+          name: anan-env-k8s
 service:
   type: ClusterIP
   ports:
     - port: 51500
-      name: server
+      name: http
 cluster:
   serviceAccountName: "default"
   role:

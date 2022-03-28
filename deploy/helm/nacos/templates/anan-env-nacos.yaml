@@ -1,0 +1,34 @@
+{{- if .Values.anan }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: anan-env-nacos
+  namespace: {{ .Release.Namespace }}
+data:
+  #anan服务配置
+  spring.profiles.active: {{ .Values.anan.nacos.namespaceId | quote }}
+  spring.security.user.name: {{ include "anan.user" . | quote }}
+  spring.security.user.password: {{ include "anan.password" . | quote }}
+  JAVA_TOOL_OPTIONS: "-XX:+UseG1GC -XX:MaxGCPauseMillis=200 -XX:MaxRAMPercentage=70 -XX:InitialRAMPercentage=50 -XX:MaxMetaspaceSize=160M -XX:MetaspaceSize=160M -XX:+DisableExplicitGC -XX:ErrorFile=/logs/hs_err_pid%p.log"
+  #encrypt.key-store.location: "classpath:/anan.jks"
+  #encrypt.key-store.password: "123456"
+  #encrypt.key-store.alias: "anan"
+  #encrypt.key-store.secret: "123456"
+
+  #启用nacos作为服务发现和配置中心
+  spring.cloud.nacos.config.enabled: "true"
+  spring.cloud.nacos.discovery.enabled: "true"
+  spring.cloud.nacos.config.namespace: {{ .Values.anan.nacos.namespaceId | quote }}
+  spring.cloud.nacos.config.sharedConfigs: {{ .Values.anan.nacos.sharedConfigs | quote }}
+  spring.cloud.nacos.discovery.namespace: {{ .Values.anan.nacos.namespaceId | quote }}
+  spring.cloud.nacos.config.server-addr: {{ $.Release.Name }}:{{ index (index $.Values.service.ports 0) "port" }}
+  spring.cloud.nacos.discovery.server-addr: {{ $.Release.Name }}:{{ index (index $.Values.service.ports 0) "port" }}
+
+  #关闭k8s服务发现和配置服务
+  spring.cloud.kubernetes.enabled: "false"
+
+  #关闭eureka和spring cloud config
+  eureka.client.enabled: "false"
+  spring.cloud.config.enabled: "false"
+
+{{- end }}

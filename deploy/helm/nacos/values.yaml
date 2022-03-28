@@ -1,5 +1,4 @@
 anan:
-  javaToolOptions: "-XX:+UseG1GC -XX:MaxGCPauseMillis=200 -XX:MaxRAMPercentage=70 -XX:InitialRAMPercentage=50 -XX:MaxMetaspaceSize=160M -XX:MetaspaceSize=160M -XX:+DisableExplicitGC -XX:ErrorFile=/logs/hs_err_pid%p.log"
   spring:
     profilesActive: local
   nacos:
@@ -49,7 +48,10 @@ containers:
       - name: SPRING_DATASOURCE_PLATFORM
         value: "mysql"
       - name: MYSQL_SERVICE_HOST
-        value: "$(MYSQL_MGR_SERVICE_HOST)"
+        valueFrom:
+          configMapKeyRef:
+            name: mysql-mgr
+            key: mysql.mgr.service
       - name: MYSQL_SERVICE_PORT
         value: "$(MYSQL_MGR_SERVICE_PORT)"
       - name: TZ
@@ -69,12 +71,22 @@ containers:
           secretKeyRef:
             name: mysql-mgr
             key: mysql.nacos.password
+    readinessProbe:
+      periodSeconds: 25
+      failureThreshold: 2
+      tcpSocket:
+        port: http
+    livenessProbe:
+      periodSeconds: 30
+      failureThreshold: 2
+      tcpSocket:
+        port: http
 service:
   clusterIP: None
   type: NodePort
   ports:
     - port: 8848
-      name: server
+      name: http
     - port: 7848
       name: rpc
 persistence:

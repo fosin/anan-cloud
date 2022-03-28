@@ -8,7 +8,6 @@ statefulset:
     type: RollingUpdate
   replicaCount: 1
 terminationGracePeriodSeconds: 15
-podManagementPolicy: Parallel
 containers:
   - image: rabbitmq:3-management
     imagePullPolicy: IfNotPresent
@@ -18,16 +17,20 @@ containers:
       requests:
         cpu: 1m
         memory: 128M
-    startupProbe:
+    readinessProbe:
       exec:
         command: ["rabbitmqctl", "status"]
-      periodSeconds: 60
-      failureThreshold: 3
+      periodSeconds: 50
+      failureThreshold: 2
     livenessProbe:
       exec:
         command: ["rabbitmqctl", "status"]
       periodSeconds: 60
-      timeoutSeconds: 10
+      failureThreshold: 2
+    lifecycle:
+      preStop:
+        exec:
+          command: ["rabbitmqctl","stop"]
     env:
       - name: TZ
         value: Asia/Shanghai

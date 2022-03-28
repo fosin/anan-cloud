@@ -5,7 +5,7 @@ secret:
 statefulset:
   updateStrategy:
     type: RollingUpdate
-  replicaCount: 3
+  replicaCount: 1
 terminationGracePeriodSeconds: 15 #优雅关闭pod的等待时间，默认30s
 initContainers:
   - image: alpine:3.6
@@ -23,15 +23,15 @@ containers:
         cpu: 1m
         memory: 2200Mi
     readinessProbe:
-      periodSeconds: 30
-      failureThreshold: 3
+      periodSeconds: 50
+      failureThreshold: 2
       tcpSocket:
-        port: 9200
+        port: http
     livenessProbe:
       periodSeconds: 60
       failureThreshold: 2
       tcpSocket:
-        port: 9200
+        port: http
     env:
       - name: MY_POD_NAME
         valueFrom:
@@ -48,7 +48,7 @@ service:
   type: ClusterIP
   ports:
     - port: 9200
-      name: service
+      name: http
     - port: 9300
       name: cluster
 persistence:

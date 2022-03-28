@@ -16,8 +16,8 @@ containers:
         cpu: 1m
         memory: 512Mi
     readinessProbe:
-      periodSeconds: 30
-      failureThreshold: 3
+      periodSeconds: 45
+      failureThreshold: 2
       tcpSocket:
         port: 5601
     livenessProbe:

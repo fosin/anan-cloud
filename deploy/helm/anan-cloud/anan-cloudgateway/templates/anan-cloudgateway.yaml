@@ -90,7 +90,7 @@ data:
             enabled: true
             cors:
               - path: /**
-                allowed-origins: 'http://localhost:9528'
+                allowed-origins: 'http://localhost:9528,https://anantest.fosin.top:11011'
                 allowed-methods: '*'
                 allowed-headers: '*'
                 # exposed-headers: '*'

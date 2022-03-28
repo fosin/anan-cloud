@@ -20,24 +20,28 @@ containers:
       failureThreshold: 2
       httpGet:
         scheme: HTTP
-        port: server
+        port: http
         path: /actuator/health
     livenessProbe:
       periodSeconds: 60
       failureThreshold: 2
       httpGet:
         scheme: HTTP
-        port: server
+        port: http
         path: /actuator/health
     lifecycle:
       preStop:
-        httpGet:
-          scheme: HTTP
-          port: server
-          path: actuator/shutdown
+        exec:
+          command:
+            - curl
+            - -XPOST
+            - http://localhost:51700/actuator/shutdown
+    envFrom:
+      - configMapRef:
+          name: anan-env-k8s
 service:
   type: NodePort
   ports:
     - port: 51700
       nodePort: 0
-      name: server
+      name: http

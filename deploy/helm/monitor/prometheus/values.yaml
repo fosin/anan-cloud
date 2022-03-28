@@ -211,16 +211,16 @@ containers:
       requests:
         cpu: 1m
         memory: 256Mi
-    startupProbe:
+    readinessProbe:
       httpGet:
         path: /prometheus/-/ready
-        port: 9090
+        port: http
       periodSeconds: 45
-      failureThreshold: 3
+      failureThreshold: 2
     livenessProbe:
       httpGet:
         path: /prometheus/-/healthy
-        port: 9090
+        port: http
       periodSeconds: 60
       timeoutSeconds: 15
     securityContext:
@@ -267,7 +267,7 @@ service:
   type: NodePort
   ports:
     - port: 9090
-      name: prometheus
+      name: http
 cluster:
   role:
     rules:

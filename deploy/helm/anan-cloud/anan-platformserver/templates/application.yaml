@@ -4,30 +4,6 @@ metadata:
   name: application
   namespace: {{ .Release.Namespace }}
 data:
-  spring.profiles.active: "local"
-  spring.security.user.name: {{ include "anan.user" . | quote }}
-  spring.security.user.password: {{ include "anan.password" . | quote }}
-  JAVA_TOOL_OPTIONS: "-XX:+UseG1GC -XX:MaxGCPauseMillis=200 -XX:MaxRAMPercentage=70 -XX:InitialRAMPercentage=50 -XX:MaxMetaspaceSize=160M -XX:MetaspaceSize=160M -XX:+DisableExplicitGC -XX:ErrorFile=/logs/hs_err_pid%p.log"
-
-  #启用k8s服务发现和配置服务
-  spring.cloud.kubernetes.enabled: "true"
-
-  #启用nacos作用服务发现和配置服务的
-  spring.cloud.nacos.config.enabled: "false"
-  spring.cloud.nacos.discovery.enabled: "false"
-
-  #以下配置在启用eureka和spring cloud config时需要启用
-  #eureka.client.enabled: "true"
-  #spring.cloud.config.enabled: "true"
-  #spring.cloud.config.discovery.enabled: "true"
-  #eureka.client.service-url.defaultZone: "http://anan:local@anan-eurekaserver1:51000/eureka/,http://anan:local@anan-eurekaserver2:51000/eureka/"
-  #spring.cloud.config.profile: "local"
-  #encrypt.key-store.location: "classpath:/anan.jks"
-  #encrypt.key-store.password: "123456"
-  #encrypt.key-store.alias: "anan"
-  #encrypt.key-store.secret: "123456"
-
-
   application.yaml: |-
     logging:
       # pattern:

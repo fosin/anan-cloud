@@ -4,6 +4,7 @@ statefulset:
   #并行创建pod,默认为按顺序执行OrderedReady
   podManagementPolicy: OrderedReady
   replicaCount: 1
+terminationGracePeriodSeconds: 45 #优雅关闭pod的等待时间，默认30s
 secret:
   type: Opaque
   confs:
@@ -17,7 +18,7 @@ secret:
     mysql.exam.password: "local"
     mysql.nacos.dbname: "nacos"
     mysql.nacos.user: "nacos"
-    mysql.nacos.password: "local" #nacos的数据库密码中不能包含逗号(,)，踩了几次坑了😶
+    mysql.nacos.password: "local"
     mysql.grafana.dbname: "grafana"
     mysql.grafana.user: "grafana"
     mysql.grafana.password: "local"
@@ -66,7 +67,7 @@ initContainers:
         mountPath: /etc/mysql/conf.d/
 containers:
   - image: mysql:5.7
-    imagePullPolicy: IfNotPresent
+    imagePullPolicy: Always
     resources:
       limits:
         memory: 512Mi
@@ -83,7 +84,7 @@ containers:
             key: mysql.root.password
     readinessProbe:
       periodSeconds: 45
-      failureThreshold: 3
+      failureThreshold: 2
       exec:
         command:
           - /bin/sh
@@ -136,4 +137,4 @@ service:
   type: NodePort
   ports:
     - port: 3306
-      name: server
+      name: http

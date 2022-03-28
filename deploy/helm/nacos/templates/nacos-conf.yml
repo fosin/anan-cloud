@@ -13,8 +13,6 @@ data:
   {{- range $i, $e := until $replicaCount -}}
   {{- indent 1 "" }}{{ $.Release.Name }}-{{ $i }}.{{ $headlessName }}.{{ $.Release.Namespace }}.svc.cluster.local:{{ $serverPort }}
   {{- end }}
-  NACOS_SERVER_PORT: {{ $serverPort | quote }}
-  NACOS_APPLICATION_PORT: {{ $serverPort | quote }}
   custom.properties: |
     #spring.security.enabled=false
     #management.security=false

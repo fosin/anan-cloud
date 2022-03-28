@@ -4,7 +4,8 @@ deployment:
       maxSurge: 1      #滚动升级时会先启动1个pod
       maxUnavailable: 1 #滚动升级时允许的最大Unavailable的pod个数
   minReadySeconds: 60  #滚动升级时60s后认为该pod就绪
-  replicaCount: 2
+  replicaCount: 1
+terminationGracePeriodSeconds: 30 #优雅关闭pod的等待时间，默认30s
 initContainers:
   - name: wait-rabbitmq
     image: busybox
@@ -22,15 +23,15 @@ containers:
       requests:
         memory: 512Mi
     readinessProbe:
-      periodSeconds: 20
-      failureThreshold: 3
+      periodSeconds: 45
+      failureThreshold: 2
       tcpSocket:
-        port: server
+        port: http
     livenessProbe:
       periodSeconds: 60
       failureThreshold: 2
       tcpSocket:
-        port: server
+        port: http
     env:
       - name: TZ
         value: Asia/Shanghai
@@ -74,10 +75,9 @@ containers:
           secretKeyRef:
             name: rabbitmq
             key: password
-terminationGracePeriodSeconds: 30 #优雅关闭pod的等待时间，默认30s
 service:
   type: ClusterIP
   ports:
     - port: 9411
-      name: server
+      name: http
 persistence: {}

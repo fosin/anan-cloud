@@ -17,16 +17,20 @@ containers:
       requests:
         cpu: 1m
         memory: 64M
-    startupProbe:
+    readinessProbe:
       tcpSocket:
-        port: server
+        port: http
       periodSeconds: 20
       failureThreshold: 3
     livenessProbe:
       periodSeconds: 60
       timeoutSeconds: 10
       tcpSocket:
-        port: server
+        port: http
+    lifecycle:
+      preStop:
+        exec:
+          command: ["redis-cli", "-a","${REDIS_PASSWORD}","shutdown"]
     command:
       - "redis-server"
     args:
@@ -42,6 +46,11 @@ containers:
         valueFrom:
           fieldRef:
             fieldPath: metadata.labels['name']
+      - name: REDIS_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: redis
+            key: password
 affinity:
   podAntiAffinity:
     preferredDuringSchedulingIgnoredDuringExecution:
@@ -76,4 +85,4 @@ service:
   type: NodePort
   ports:
     - port: 6379
-      name: server
+      name: http

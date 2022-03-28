@@ -73,4 +73,4 @@ service:
   type: NodePort
   ports:
     - port: 9100
-      name: node-exporter
+      name: http

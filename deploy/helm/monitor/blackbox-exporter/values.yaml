@@ -16,14 +16,14 @@ containers:
       limits:
         memory: 80Mi
         cpu: 200m
-    startupProbe:
+    readinessProbe:
       tcpSocket:
-        port: 9115
+        port: http
       periodSeconds: 20
-      failureThreshold: 3
+      failureThreshold: 2
     livenessProbe:
       tcpSocket:
-        port: 9115
+        port: http
       periodSeconds: 60
       failureThreshold: 2
     args:
@@ -34,7 +34,7 @@ service:
   type: NodePort
   ports:
     - port: 9115
-      name: blackbox
+      name: http
 configmap:
   files:
   - mountPath: /etc/blackbox-exporter

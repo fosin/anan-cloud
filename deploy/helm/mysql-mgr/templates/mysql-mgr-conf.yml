@@ -6,6 +6,7 @@ metadata:
 data:
   #环境配置
   mysql.mgr.service.headless: {{ include "anan.service.headless.name" . }}
+  mysql.mgr.service: {{ include "anan.service.name" . }}
   anan.tz: {{ include "anan.tz" . | quote }}
   anan.user: {{ include "anan.user" . | quote }}
   mgr.cnf: |

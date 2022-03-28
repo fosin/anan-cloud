@@ -136,20 +136,18 @@ containers:
         cpu: 1m
         memory: 64Mi
     readinessProbe:
-      periodSeconds: 20
-      failureThreshold: 3
+      periodSeconds: 30
+      failureThreshold: 2
       httpGet:
         path: /-/ready
-        port: web
+        port: http
         scheme: HTTP
     livenessProbe:
       httpGet:
         path: /-/healthy
-        port: web
+        port: http
         scheme: HTTP
       periodSeconds: 60
-      failureThreshold: 3
-      successThreshold: 1
       failureThreshold: 2
     args:
       - --config.file=/etc/alertmanager/alertmanager.yml
@@ -204,7 +202,7 @@ service:
   ports:
     - port: 9093
       protocol: TCP
-      name: web
+      name: http
     - port: 9094
       protocol: TCP
       name: mesh-tcp

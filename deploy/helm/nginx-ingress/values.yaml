@@ -4,12 +4,12 @@ ingressClass:
 ingress:
   annotations:
     nginx.org/proxy-hide-headers: "Server"
-    nginx.org/rewrites: "serviceName=rabbitmq rewrite=/;serviceName=redisinsight rewrite=/"
+    nginx.org/rewrites: "serviceName=rabbitmq rewrite=/"
     nginx.org/location-snippets: |
       opentracing_propagate_context;
     #设置nginx的server配置
     nginx.org/server-snippets: |
-      opentracing on;
+      opentracing off;
       opentracing_operation_name $uri;
       ssl_session_timeout 5m;
       ssl_protocols SSLv3 TLSv1 TLSv1.1 TLSv1.2;
@@ -26,7 +26,14 @@ ingress:
       location = / {
         return 301 https://$http_host/anan-vue/;
       }
-
+      location /redisinsight/ {
+        proxy_pass http://redisinsight:8001/;
+        proxy_hide_header X-Frame-Options;
+        sub_filter_once off;
+        sub_filter_types *;
+        sub_filter /static/ /redisinsight/static/;
+        sub_filter /api/ /redisinsight/api/;
+      }
   tls:
     - secretName: fosin.top
       hosts:
@@ -35,34 +42,27 @@ ingress:
     - host: anantest.fosin.top
       http: &http_rules
         paths:
-        - path: /gateway/
-          pathType: Prefix
-          backend:
-            service:
-              name: anan-cloudgateway
-              port:
-                number: 51900
-        - path: /rabbitmq/
-          pathType: Prefix
-          backend:
-            service:
-              name: rabbitmq
-              port:
-                number: 15672
-        - path: /redisinsight/
-          pathType: Prefix
-          backend:
-            service:
-              name: redisinsight
-              port:
-                number: 8001
-        - path: /sba/
-          pathType: Prefix
-          backend:
-            service:
-              name: anan-sbaserver
-              port:
-                number: 51700
+          - path: /sba/
+            pathType: Prefix
+            backend:
+              service:
+                name: anan-sbaserver
+                port:
+                  number: 51700
+          - path: /gateway/
+            pathType: Prefix
+            backend:
+              service:
+                name: anan-cloudgateway
+                port:
+                  number: 51900
+          - path: /rabbitmq/
+            pathType: Prefix
+            backend:
+              service:
+                name: rabbitmq
+                port:
+                  number: 15672
 daemonset:
   strategy:
     rollingUpdate:
@@ -97,7 +97,7 @@ containers:
       - -enable-app-protect-dos=false
       - -nginx-configmaps=$(POD_NAMESPACE)/$(HELM_RELEASE_NAME)
       - -ingress-class=$(HELM_RELEASE_NAME)
-      - -nginx-debug=false
+      - -nginx-debug=true
       - -v=1
       - -enable-prometheus-metrics=true
       - -prometheus-metrics-listen-port=9113
@@ -119,6 +119,10 @@ containers:
       httpGet:
         path: /nginx-health
         port: http
+    lifecycle:
+      preStop:
+        exec:
+          command: ["/usr/sbin/nginx", "-s", "quit"]
     securityContext:
       allowPrivilegeEscalation: true
       runAsUser: 101 #nginx

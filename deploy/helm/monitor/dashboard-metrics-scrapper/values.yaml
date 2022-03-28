@@ -19,7 +19,7 @@ containers:
       httpGet:
         scheme: HTTP
         path: /
-        port: 8000
+        port: http
       initialDelaySeconds: 60
       periodSeconds: 15
       timeoutSeconds: 30
@@ -27,7 +27,7 @@ containers:
       httpGet:
         scheme: HTTP
         path: /
-        port: 8000
+        port: http
       initialDelaySeconds: 30
       periodSeconds: 15
       timeoutSeconds: 30
@@ -40,6 +40,6 @@ service:
   type: ClusterIP
   ports:
     - port: 8000
-      name: dashboard-mc
+      name: http
 emptyDir:
   - /tmp
