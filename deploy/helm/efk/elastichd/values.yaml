@@ -9,7 +9,7 @@ terminationGracePeriodSeconds: 30 #优雅关闭pod的等待时间，默认30s
 initContainers:
   - name: wait-es
     image: busybox
-    command: ['sh', '-c', 'until nc es-headless 9200; do echo waiting for es; sleep 2; done;']
+    command: ['sh', '-c', 'until nc es 9200; do echo waiting for es; sleep 2; done;']
 containers:
   - image: containerize/elastichd
     imagePullPolicy: IfNotPresent
@@ -20,19 +20,16 @@ containers:
         memory: 128Mi
     readinessProbe:
       periodSeconds: 25
-      failureThreshold: 3
+      failureThreshold: 2
       tcpSocket:
-        port: 9800
+        port: http
     livenessProbe:
       periodSeconds: 60
       failureThreshold: 2
       tcpSocket:
-        port: 9800
-    env: {}
-    volumeMounts: {}
-volumes: {}
+        port: http
 service:
   type: ClusterIP
   ports:
     - port: 9800
-      name: elastichd
+      name: http

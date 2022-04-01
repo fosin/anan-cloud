@@ -32,7 +32,7 @@ containers:
             name: es
             key: password
     args: [
-        "-c", 
+        "-c",
         "/etc/filebeat/filebeat.yml",
         "-e",
     ]
@@ -50,7 +50,6 @@ hostPath:
     readOnly: true
 cluster:
   role:
-    lables: {}
     rules:
       - apiGroups: [""] # "" indicates the core API group
         resources:
@@ -92,7 +91,7 @@ configmap:
           username: '${ELASTICSEARCH_USERNAME:}'
           password: '${ELASTICSEARCH_PASSWORD:}'
           index: "k8s-%{+yyyy.MM.dd}"
-        
+
         setup.template.enabled: false
         setup.template.name: "k8s"
         setup.template.pattern: "k8s-*"

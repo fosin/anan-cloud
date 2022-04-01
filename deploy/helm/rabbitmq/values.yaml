@@ -13,19 +13,19 @@ containers:
     imagePullPolicy: IfNotPresent
     resources:
       limits:
-        memory: 256M
+        memory: 512M
       requests:
         cpu: 1m
         memory: 128M
     readinessProbe:
       exec:
-        command: ["rabbitmqctl", "status"]
-      periodSeconds: 50
+        command: ["rabbitmqctl", "node_health_check"]
+      periodSeconds: 45
       failureThreshold: 2
     livenessProbe:
       exec:
-        command: ["rabbitmqctl", "status"]
-      periodSeconds: 60
+        command: ["rabbitmqctl", "node_health_check"]
+      periodSeconds: 45
       failureThreshold: 2
     lifecycle:
       preStop:

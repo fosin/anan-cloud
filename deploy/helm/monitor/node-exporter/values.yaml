@@ -16,8 +16,16 @@ containers:
       requests:
         cpu: 1m
         memory: 64Mi
-    livenessProbe: {}
-    readinessProbe: {}
+    readinessProbe:
+      periodSeconds: 45
+      failureThreshold: 2
+      tcpSocket:
+        port: http
+    livenessProbe:
+      periodSeconds: 60
+      failureThreshold: 2
+      tcpSocket:
+        port: http
     args:
       #根目录挂载点
       - '--path.rootfs=/host'
@@ -70,7 +78,7 @@ hostPath:
     readOnly: true
     type: File
 service:
-  type: NodePort
+  type: ClusterIP
   ports:
     - port: 9100
       name: http

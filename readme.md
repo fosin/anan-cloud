@@ -10,6 +10,7 @@
     配置中心：支持K8S、Nacos、SpringCloudConfig；
     部署方式：支持K8S(Helm)集群部署、jar包集群部署、Docker-Compose部署、Swarm集群部署
     部署组件：数据库中间件（Mysql、RabbitMQ、Redis）、Anan后台服务、Anan前端服务(Ingress)、EFk日志体系、Prometheus+Grafana监控体系
+
 对应前端项目地址: <https://github.com/fosin/anan-vue>
 
 ## 技术选型

@@ -19,22 +19,20 @@ containers:
       readOnlyRootFilesystem: true
       runAsUser: 1001
       runAsGroup: 2001
-    livenessProbe:
-      httpGet:
-        scheme: HTTPS
-        path: /
-        port: http
-      initialDelaySeconds: 60
-      periodSeconds: 15
-      timeoutSeconds: 30
     readinessProbe:
       httpGet:
         scheme: HTTPS
         path: /
-        port: http
-      initialDelaySeconds: 30
-      periodSeconds: 15
-      timeoutSeconds: 30
+        port: https
+      periodSeconds: 45
+      failureThreshold: 2
+    livenessProbe:
+      httpGet:
+        scheme: HTTPS
+        path: /
+        port: https
+      periodSeconds: 60
+      failureThreshold: 2
     args:
       - --auto-generate-certificates
       - --namespace=default
@@ -52,7 +50,7 @@ service:
   type: NodePort
   ports:
     - port: 8443
-      name: http
+      name: https
 terminationGracePeriodSeconds: 30 #优雅关闭pod的等待时间，默认30s
 volumes:
   - name: kubernetes-dashboard-certs

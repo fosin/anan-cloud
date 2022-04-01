@@ -15,22 +15,20 @@ containers:
         memory: 512Mi
       requests:
         memory: 256Mi
-    livenessProbe:
-      httpGet:
-        scheme: HTTP
-        path: /
-        port: http
-      initialDelaySeconds: 60
-      periodSeconds: 15
-      timeoutSeconds: 30
     readinessProbe:
       httpGet:
-        scheme: HTTP
+        scheme: HTTPS
         path: /
-        port: http
-      initialDelaySeconds: 30
-      periodSeconds: 15
-      timeoutSeconds: 30
+        port: https
+      periodSeconds: 45
+      failureThreshold: 2
+    livenessProbe:
+      httpGet:
+        scheme: HTTPS
+        path: /
+        port: https
+      periodSeconds: 60
+      failureThreshold: 2
     securityContext:
       allowPrivilegeEscalation: false
       readOnlyRootFilesystem: true
@@ -40,6 +38,6 @@ service:
   type: ClusterIP
   ports:
     - port: 8000
-      name: http
+      name: https
 emptyDir:
   - /tmp

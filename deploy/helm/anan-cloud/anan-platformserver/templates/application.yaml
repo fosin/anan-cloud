@@ -33,6 +33,9 @@ data:
         #org.springframework.security: DEBUG
     spring:
       kubernetes:
+        loadbalancer:
+          #使用K8S的Service进行负载均衡
+          mode: SERVICE
         reload:
           enabled: true
           #监听模式：

@@ -16,10 +16,9 @@ containers:
     imagePullPolicy: IfNotPresent
     resources:
       limits:
-        memory: 768Mi
+        memory: 450Mi
       requests:
-        cpu: 1m
-        memory: 512Mi
+        memory: 360Mi
     readinessProbe:
       periodSeconds: 45
       failureThreshold: 2
@@ -43,7 +42,7 @@ containers:
             - http://localhost:51900/actuator/shutdown
     envFrom:
       - configMapRef:
-          name: anan-env-k8s
+          name: anan-env
 service:
   type: ClusterIP
   ports:

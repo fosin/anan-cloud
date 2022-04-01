@@ -199,6 +199,8 @@ helm install redis redis/
 
 mkdir -p ${ANAN_WORKDIR}/redisinsight
 mkdir -p ${ANAN_WORKDIR}/logs/redisinsight
+chmod 777 ${ANAN_WORKDIR}/redisinsight
+chmod 777 ${ANAN_WORKDIR}/logs/redisinsight
 
 helm install redisinsight redisinsight/
 
@@ -319,7 +321,7 @@ helm install anan-nginx-ingress nginx-ingress/
 helm uninstall grafana
 helm uninstall prometheus
 helm uninstall node-exporter
-helm uninstall black-exporter
+helm uninstall blackbox-exporter
 helm uninstall alertmanager
 
 helm uninstall dashboard-metrics-scraper

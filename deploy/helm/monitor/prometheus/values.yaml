@@ -222,7 +222,7 @@ containers:
         path: /prometheus/-/healthy
         port: http
       periodSeconds: 60
-      timeoutSeconds: 15
+      failureThreshold: 2
     securityContext:
       runAsUser: 0
     args:

@@ -40,7 +40,7 @@ ingress:
         - anantest.fosin.top
   rules:
     - host: anantest.fosin.top
-      http: &http_rules
+      http:
         paths:
           - path: /sba/
             pathType: Prefix

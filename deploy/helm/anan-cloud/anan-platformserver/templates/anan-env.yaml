@@ -1,0 +1,40 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: anan-env
+  namespace: {{ .Release.Namespace }}
+data:
+  #anan服务配置
+  {{- $profilesActive := "local" }}
+  spring.profiles.active: {{ $profilesActive }}
+  spring.security.user.name: {{ include "anan.user" . | quote }}
+  spring.security.user.password: {{ include "anan.password" . | quote }}
+  JAVA_TOOL_OPTIONS: "-XX:+UseG1GC -Xmx200M -XX:MaxMetaspaceSize=180M -XX:MetaspaceSize=180M -XX:+DisableExplicitGC
+  -XX:ErrorFile=/logs/hs_err_pid%p.log"
+  #JAVA_TOOL_OPTIONS: "-XX:+UseG1GC -XX:MaxGCPauseMillis=200 -XX:MaxRAMPercentage=70 -XX:InitialRAMPercentage=50 -XX:MaxMetaspaceSize=160M -XX:MetaspaceSize=160M -XX:+DisableExplicitGC -XX:ErrorFile=/logs/hs_err_pid%p.log"
+  #encrypt.key-store.location: "classpath:/anan.jks"
+  #encrypt.key-store.password: "123456"
+  #encrypt.key-store.alias: "anan"
+  #encrypt.key-store.secret: "123456"
+  jasypt.encryptor.password: "oF7tVrdfjrbQ0NfSsRL3"
+
+  #开启k8s服务发现和配置服务
+  spring.cloud.kubernetes.enabled: "true"
+  spring.cloud.kubernetes.config.namespace: "default"
+  spring.cloud.kubernetes.secrets.namespace: "default"
+
+  #关闭nacos作为服务发现和配置中心
+  spring.cloud.nacos.config.enabled: "false"
+  spring.cloud.nacos.discovery.enabled: "false"
+  spring.cloud.nacos.config.namespace: {{ $profilesActive }}
+  spring.cloud.nacos.config.sharedConfigs: "application.yaml"
+  spring.cloud.nacos.config.server-addr: "nacos:8848"
+  spring.cloud.nacos.discovery.namespace: {{ $profilesActive }}
+  spring.cloud.nacos.discovery.server-addr: "nacos:8848"
+
+  #关闭eureka和spring cloud config
+  eureka.client.enabled: "false"
+  spring.cloud.config.enabled: "false"
+  spring.cloud.config.discovery.enabled: "false"
+  eureka.client.service-url.defaultZone: "http://anan:local@anan-eurekaserver1:51000/eureka/,http://anan:local@anan-eurekaserver2:51000/eureka/"
+  spring.cloud.config.profile: {{ $profilesActive }}

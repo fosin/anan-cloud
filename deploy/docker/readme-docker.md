@@ -155,7 +155,7 @@ EOF
 
 ```shell script
 
-在 /usr/share/bash-completion/completions/ 目录下有许多命令自动补齐的脚本，可自行查阅。
+#在 /usr/share/bash-completion/completions/ 目录下有许多命令自动补齐的脚本，可自行查阅。
 ls  /usr/share/bash-completion/completions/docker*
 
 yum -y install bash-completion

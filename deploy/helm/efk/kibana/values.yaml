@@ -19,12 +19,12 @@ containers:
       periodSeconds: 45
       failureThreshold: 2
       tcpSocket:
-        port: 5601
+        port: http
     livenessProbe:
-      periodSeconds: 900
+      periodSeconds: 60
       failureThreshold: 2
       tcpSocket:
-        port: 5601
+        port: http
     env:
       - name: ELASTICSEARCH_HOSTS
         valueFrom:
@@ -45,7 +45,7 @@ service:
   type: ClusterIP
   ports:
     - port: 5601
-      name: kibana
+      name: http
 configmap:
   files:
   - mountPath: /usr/share/kibana/config
