@@ -16,9 +16,9 @@ containers:
     imagePullPolicy: IfNotPresent
     resources:
       limits:
-        memory: 450Mi
+        memory: 512Mi
       requests:
-        memory: 360Mi
+        memory: 400Mi
     readinessProbe:
       periodSeconds: 45
       failureThreshold: 2
@@ -44,7 +44,7 @@ containers:
       - configMapRef:
           name: anan-env
 service:
-  type: ClusterIP
+  type: NodePort
   ports:
     - port: 51900
       name: http

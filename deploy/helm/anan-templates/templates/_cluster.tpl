@@ -9,10 +9,13 @@ metadata:
   name: {{ $.Release.Name }}
   namespace: {{ $.Release.Namespace }}
   labels:
-  {{- if .Values.cluster.role.lables }}
-  {{- .Values.cluster.role.lables | nindent 4 }}
-  {{- else }}
   {{- include "anan.lable.name" . | nindent 4 }}: {{ $.Release.Name }}
+  {{- with $.Values.cluster.role.labels }}
+  {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with $.Values.cluster.role.annotations }}
+  annotations:
+  {{- toYaml . | nindent 4 }}
   {{- end }}
 {{- with $.Values.cluster.role.rules }}
 rules:
@@ -29,6 +32,15 @@ apiVersion: {{ $.Values.cluster.role.apiVersion | default "rbac.authorization.k8
 metadata:
   name: {{ $.Release.Name }}
   namespace: {{ $.Release.Namespace }}
+  labels:
+  {{- include "anan.lable.name" . | nindent 4 }}: {{ $.Release.Name }}
+  {{- with $.Values.cluster.role.labels }}
+  {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with $.Values.cluster.role.annotations }}
+  annotations:
+  {{- toYaml . | nindent 4 }}
+  {{- end }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole

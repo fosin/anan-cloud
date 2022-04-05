@@ -1,5 +1,12 @@
 {{/* vim: set filetype=mustache: */}}
 {{/*
+anan
+*/}}
+{{- define "anan" -}}
+anan
+{{- end -}}
+
+{{/*
 anan workdir
 */}}
 {{- define "anan.workdir" -}}
@@ -18,7 +25,7 @@ anan nfs workdir
 anan user
 */}}
 {{- define "anan.user" -}}
-anan
+{{ include "anan" . }}
 {{- end -}}
 
 {{/*
@@ -39,5 +46,5 @@ Asia/Shanghai
 anan lable name
 */}}
 {{- define "anan.lable.name" -}}
-name
+{{ include "anan" . }}-templates-release
 {{- end -}}

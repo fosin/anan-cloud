@@ -19,6 +19,10 @@ data:
         sso:
           authority:
             root-path: ^/((?!oauth).)*$
+            authorities:
+              - paths: /**/*.html,/**/*.css,/**/*.js,/**/*.woff*,/**/*.ttf*,/**/*.map,/**/*.ico
+              - paths: /**/*.swf,/**/*.jpg,/**/*.png,/**/*.svg,/**/*.gif
+              - paths: /error,/**/api-docs,/actuator/**,/v1/permission/**
           form-login:
             enabled: true
             login-page: /sso/login
@@ -42,10 +46,6 @@ data:
             enabled: true
           anonymous:
             enabled: true
-        web-ignoring:
-          - paths: /**/*.html,/**/*.css,/**/*.js,/**/*.woff*,/**/*.ttf*,/**/*.map,/**/*.ico
-          - paths: /**/*.swf,/**/*.jpg,/**/*.png,/**/*.svg,/**/*.gif
-          - paths: /error,/**/api-docs,/actuator/**,/v1/permission/**
         oauth2:
           authority:
             root-path: ^/oauth/.*

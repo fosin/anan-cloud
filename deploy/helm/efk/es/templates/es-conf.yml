@@ -20,11 +20,11 @@ data:
     xpack.ml.enabled: false
 
     #开启X-Pack安全功能
-    xpack.security.enabled: true
-    xpack.security.transport.ssl.enabled: true
-    xpack.security.transport.ssl.verification_mode: certificate
-    xpack.security.transport.ssl.keystore.path: /usr/share/elasticsearch/data/elastic-ca.p12
-    xpack.security.transport.ssl.truststore.path: /usr/share/elasticsearch/data/elastic-ca.p12
+    #xpack.security.enabled: true
+    #xpack.security.transport.ssl.enabled: true
+    #xpack.security.transport.ssl.verification_mode: certificate
+    #xpack.security.transport.ssl.keystore.path: /usr/share/elasticsearch/data/elastic-ca.p12
+    #xpack.security.transport.ssl.truststore.path: /usr/share/elasticsearch/data/elastic-ca.p12
 
     #节点加入集群的必要条件，节点还需要单播或组播方式加入集群
     cluster.name: anan
@@ -58,14 +58,14 @@ data:
     node.ingest: true
 
     #选举主节点时需要看到最少多少个具有master资格的活节点，才能进行选举
-    discovery.zen.minimum_master_nodes: 2
+    #discovery.zen.minimum_master_nodes: 2
 
     #其他节点ping主节点多久时间没有响应就认为主节点不可用了（默认值是3秒）
     discovery.zen.ping_timeout: 10s
 
     #配置单播发现的主节点ip地址，其他从节点要加入进来，就得去询问单播发现机制里面配置的主节点我要加入到集群里面了
     #主节点同意以后才能加入，然后主节点再通知集群中的其他节点有新节点加入
-    discovery.zen.ping.unicast.hosts:
+    #discovery.zen.ping.unicast.hosts:
     {{- $replicaCount := int .Values.statefulset.replicaCount }}
     {{- $clusterPort := (index (index .Values.service.ports 1) "port") }}
     {{- range $i, $e := until $replicaCount -}}

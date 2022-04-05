@@ -16,9 +16,9 @@ containers:
     imagePullPolicy: Always
     resources:
       limits:
-        memory: 450Mi
+        memory: 512Mi
       requests:
-        memory: 360Mi
+        memory: 400Mi
     readinessProbe:
       periodSeconds: 45
       failureThreshold: 2

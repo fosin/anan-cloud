@@ -24,9 +24,9 @@ containers:
     imagePullPolicy: IfNotPresent
     resources:
       limits:
-        memory: 450Mi
+        memory: 550Mi
       requests:
-        memory: 360Mi
+        memory: 400Mi
     readinessProbe:
       periodSeconds: 45
       failureThreshold: 2
@@ -48,6 +48,11 @@ containers:
             - curl
             - -XPOST
             - http://localhost:51500/actuator/shutdown
+    env:
+      - name: MY_POD_IP
+        valueFrom:
+          fieldRef:
+            fieldPath: status.podIP
     envFrom:
       #如果使用nacos作为服务发现和配置中心，需要启用这段配置
       #- secretRef:
@@ -55,7 +60,7 @@ containers:
       - configMapRef:
           name: anan-env
 service:
-  type: ClusterIP
+  type: NodePort
   ports:
     - port: 51500
       name: http

@@ -8,6 +8,11 @@ kind: ConfigMap
 metadata:
   name: {{ include "anan.configmap.name" . }}
   namespace: {{ .Release.Namespace }}
+  labels:
+  {{- include "anan.lable.name" . | nindent 4 }}: {{ $.Release.Name }}
+  {{- with $.Values.configmap.labels }}
+  {{- toYaml . | nindent 4 }}
+  {{- end }}
   {{- with $.Values.configmap.annotations }}
   annotations:
   {{- toYaml . | nindent 4 }}

@@ -11,10 +11,13 @@ metadata:
   name: {{ $datax.name }}-{{ $.Release.Name }}-{{ $y }}
   namespace: {{ $.Release.Namespace }}
   labels:
-  {{- if $datax.lables }}
-  {{- $datax.lables | nindent 4 }}
-  {{- else }}
   {{- include "anan.lable.name" . | nindent 4 }}: {{ $datax.name }}-{{ $.Release.Name }}-{{ $y }}
+  {{- with $datax.labels }}
+  {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with $datax.annotations }}
+  annotations:
+  {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
   {{- with $datax.storageClassName }}
@@ -43,10 +46,13 @@ metadata:
   name: {{ $datax.name }}-{{ $.Release.Name }}-{{ $z }}
   namespace: {{ $.Release.Namespace }}
   labels:
-  {{- if $datax.lables }}
-  {{- $datax.lables | nindent 4 }}
-  {{- else }}
   {{- include "anan.lable.name" . | nindent 4 }}: {{ $datax.name }}-{{ $.Release.Name }}-{{ $z }}
+  {{- with $datax.labels }}
+  {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with $datax.annotations }}
+  annotations:
+  {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
   {{- with $datax.storageClassName }}

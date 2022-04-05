@@ -7,33 +7,70 @@ data:
   {{ .Release.Name }}.yaml: |-
     server:
       port: 51700
-      context-path: /sba
-    turbine:
-      cluster-name-expression: new String('default')
-      app-config: anan-zuulgateway
-    anan:
-      security:
-        web-ignoring:
-          - paths: /**
     spring:
-      boot:
-        admin:
-          context-path: /sba
-          ui:
-            #        favicon-danger: "assets/img/favicon-danger.png"
-            #        favicon: "assets/img/favicon.png"
-            title: "服务指标监控"
-          #        public-url:
-          #      instance-proxy:
-          #        ignored-headers: "Cookie", "Set-Cookie", "Authorization"
-          #      probed-endpoints: "health", "env", "metrics", "httptrace:trace", "threaddump:dump", "jolokia", "info", "logfile", "refresh", "flyway", "liquibase", "heapdump", "loggers", "auditevents"
-          notify:
-            mail:
-              additional-properties:
-              from: "Spring Boot Admin <noreply@localhost>"
-              cc:
-              to: "28860823@qq.com"
-              template: "classpath:/META-INF/spring-boot-admin-server/mail/status-changed.html"
-              ignore-changes: "UNKNOWN:UP"
-              enabled: true
-
+      boot.admin:
+        #设置该属性了，访问管理后台的路径就需要附加该路径
+        context-path: /sba
+        discovery:
+          enabled: true
+          #username: ${spring.security.user.name} #如果server端需要进行认证时，该属性用于配置用户名
+          #password: ${spring.security.user.password} #如果server端需要进行认证时，该属性用于配置密码
+          services:
+            - anan-authserver
+            - anan-cloudgateway
+            - anan-exam
+            - anan-mpi
+            - anan-platformserver
+            - anan-sbaserver
+            - anan-vhr
+            - anan-zuulgateway
+            - anan-configserver
+            - anan-eurekaserver
+            - zipkin
+        ui:
+          #用于在ui中构建基本href的基本URL,如果在反向代理后面运行（使用路径重写），则可用于进行正确的自我引用。
+          #如果不设置，则推断主机和端口+spring.boot.admin.context-path
+          public-url: https://anantest.fosin.top:11011${spring.boot.admin.context-path}
+          title: "Anan SBA指标监控" #页面标题
+          brand: "<img src=\"assets/img/icon-spring-boot-admin.svg\"><span>Anan SBA指标监控</span>" #导航栏中显示的品牌
+          #favicon: "assets/img/favicon.png" #自定义默认图标的图标，用于桌面通知的图标
+          #favicon-danger: "assets/img/favicon-danger.png" #当一项或多项服务关闭并用于桌面通知时，用作网站图标
+        #instance-proxy:
+          #ignored-headers: "Cookie", "Set-Cookie", "Authorization"
+        notify:
+          mail:
+            additional-properties:
+            from: "Spring Boot Admin <noreply@localhost>"
+            cc:
+            to: "28860823@qq.com"
+            template: "classpath:/META-INF/spring-boot-admin-server/mail/status-changed.html"
+            ignore-changes: "UNKNOWN:UP"
+            enabled: true
+        #monitor:
+           #status-interval: 10000 #更新client端状态的时间间隔，单位是毫秒
+           #status-lifetime: 10000 #client端状态的生命周期，该生命周期内不会更新client状态，单位是毫秒
+           #default-timeout: 2000 #查询client端状态信息时的连接超时，单位是毫秒
+           #default-retries: 0 #失败请求的默认重试次数。Modyfing请求（PUT，POST，PATCH，DELETE）将永远不会重试
+        #当不使用服务自动发现时，才需要使用client设置
+        #client:
+          #username: ${spring.security.user.name}
+          #password: ${spring.security.user.password}
+          #要注册的server端的url地址。如果要同时在多个server端口注册，则用逗号分隔各个server端的url地址
+          #url: http://localhost:${server.port}
+          #api-path: "sba/instances" #管理服务器上注册端点的Http路径
+          #probed-endpoints: "health","env","metrics","httptrace:trace","threaddump:dump","jolokia","info","logfile","refresh","flyway","liquibase","heapdump","loggers","auditevents"
+          #instance:
+            #该路径值在运行时进行获取并赋值给 base url。默认该属性值与management.port, service-url 以及server.servlet-path有关。
+            #management-base-url: http://${MY_POD_IP}:${server.port}
+            #如果可用的url不同的话可以重写该值。默认是与management-base-url和management.context-path两个属性组成。
+            #management-url:
+            #如果可用的url不同可以重写该值。默认该属性值与management-url 以及endpoints.health.id有关。
+            #health-url:
+            #name: ${spring.application.name}
+            #metadata: #与该应用有关的元数据，以键值对的形式赋值
+            #prefer-ip: false #是否使用注册的ip地址来取代上述各个url中hostname的值，默认值是false
+            #用于计算service-url 的基本URL。该路径值在运行时进行获取并赋值给 base url。默认该属性值与hostname, server.port有关。
+            #service-base-url: http://${MY_POD_IP}:${server.port}
+            #service-path: / #上下文路径，默认为/
+            #注册的service-url值。默认基于service-base-url和server.context-path进行赋值。
+            #service-url:

@@ -81,6 +81,14 @@ data:
     anan:
       security:
         oauth2:
+          authority:
+            authorities:
+              - paths: /*/*.html,/*/*.css,/*/*.js,/*/*.woff*,/*/*.ttf*,/*/*.map,/*/*.ico
+              - paths: /*/*.swf,/*/*.jpg,/*/*.png,/*/*.svg,/*/*.gif
+              - paths: /*/*/*/api-docs,/*/swagger-resources/**,/*/swagger-ui/**,/swagger-resources/**,/swagger-ui/**
+              - paths: /actuator/**
+              - paths: /gateway/auth/oauth/**,/gateway/auth/sso/**,/gateway/platform/*/international/status/*,/gateway/platform/*/international/code/*,/gateway/platform/*/international/default,/gateway/platform/*/international/charset/internationalId/*
+                methods: GET,POST
           session:
             session-creation-policy: stateless
           resource-server:
@@ -95,13 +103,6 @@ data:
                 allowed-headers: '*'
                 # exposed-headers: '*'
                 allow-credentials: true
-        web-ignoring:
-          - paths: /*/*.html,/*/*.css,/*/*.js,/*/*.woff*,/*/*.ttf*,/*/*.map,/*/*.ico
-          - paths: /*/*.swf,/*/*.jpg,/*/*.png,/*/*.svg,/*/*.gif
-          - paths: /*/*/*/api-docs,/*/swagger-resources/**,/*/swagger-ui/**,/swagger-resources/**,/swagger-ui/**
-          - paths: /actuator/**
-          - paths: /gateway/auth/oauth/**,/gateway/auth/sso/**,/gateway/platform/*/international/status/*,/gateway/platform/*/international/code/*,/gateway/platform/*/international/default,/gateway/platform/*/international/charset/internationalId/*
-            methods: GET,POST
       swagger:
         enabled: true
         title: ${spring.application.name}

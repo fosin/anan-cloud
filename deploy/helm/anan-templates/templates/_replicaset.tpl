@@ -3,16 +3,20 @@
 anan replicaset 模版(包括：statefulset、deployment、daemonset)
 */}}
 {{- define "anan.replicaset" -}}
+{{- $labels := "{}" }}
 {{- if $.Values.statefulset }}
 kind: "StatefulSet"
 apiVersion: {{ $.Values.statefulset.apiVersion | default "apps/v1" }}
+{{- $labels := $.Values.statefulset.labels }}
 {{- else }}
   {{- if $.Values.deployment }}
 kind: "Deployment"
 apiVersion: {{ $.Values.deployment.apiVersion | default "apps/v1" }}
+{{- $labels := $.Values.deployment.labels }}
   {{- else }}
 kind: "DaemonSet"
 apiVersion: {{ $.Values.daemonset.apiVersion | default "apps/v1" }}
+{{- $labels := $.Values.daemonset.labels }}
   {{- end }}
 {{- end }}
 metadata:
@@ -63,10 +67,33 @@ spec:
     metadata:
       labels:
       {{- include "anan.lable.name" . | nindent 8 }}: {{ $.Release.Name }}
-      {{- with $.Values.annotations }}
+      {{- if $.Values.statefulset }}
+        {{- with $.Values.statefulset.labels }}
+        {{- toYaml . | nindent 8 }}
+        {{ end }}
+        {{- with $.Values.statefulset.annotations }}
       annotations:
-      {{- toYaml . | nindent 8 }}
-      {{ end }}
+        {{- toYaml . | nindent 8 }}
+        {{ end }}
+      {{- else }}
+        {{- if $.Values.deployment }}
+            {{- with $.Values.deployment.labels }}
+            {{- toYaml . | nindent 8 }}
+            {{ end }}
+        {{- with $.Values.deployment.annotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+        {{ end }}
+        {{- else }}
+            {{- with $.Values.daemonset.labels }}
+            {{- toYaml . | nindent 8 }}
+            {{ end }}
+        {{- with $.Values.daemonset.annotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+        {{ end }}
+        {{- end }}
+    {{- end }}
     spec:
       {{- with $.Values.tolerations }}
       tolerations:

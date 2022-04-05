@@ -1,5 +1,5 @@
 daemonset:
-  lables: {}
+  labels: {}
   updateStrategy:
     type: RollingUpdate
   minReadySeconds: 60  #滚动升级时60s后认为该pod就绪

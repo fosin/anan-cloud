@@ -18,10 +18,10 @@ containers:
     imagePullPolicy: IfNotPresent
     resources:
       limits:
-        memory: 2500Mi
+        memory: 1200Mi
       requests:
         cpu: 1m
-        memory: 2200Mi
+        memory: 1100Mi
     readinessProbe:
       periodSeconds: 50
       failureThreshold: 2
@@ -38,7 +38,7 @@ containers:
           fieldRef:
             fieldPath: metadata.name
       - name: ES_JAVA_OPTS
-        value: "-Xms1024m -Xmx1024m"
+        value: "-Xms512m -Xmx512m"
       - name: "NAMESPACE"
         valueFrom:
           fieldRef:

@@ -16,9 +16,9 @@ containers:
     imagePullPolicy: IfNotPresent
     resources:
       limits:
-        memory: 450Mi
+        memory: 512Mi
       requests:
-        memory: 360Mi
+        memory: 400Mi
     readinessProbe:
       periodSeconds: 45
       failureThreshold: 2
@@ -45,6 +45,9 @@ containers:
           name: anan-env
 service:
   type: NodePort
+  #labels:
+  #  user.name: anan
+ #   user.password: local
   ports:
     - port: 51700
       nodePort: 0

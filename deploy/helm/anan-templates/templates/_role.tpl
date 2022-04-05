@@ -8,10 +8,13 @@ metadata:
   name: {{ $.Release.Name }}
   namespace: {{ $.Release.Namespace }}
   labels:
-  {{- if .Values.role.lables }}
-  {{- .Values.role.lables | nindent 4 }}
-  {{- else }}
   {{- include "anan.lable.name" . | nindent 4 }}: {{ $.Release.Name }}
+  {{- with $.Values.role.labels }}
+  {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with $.Values.role.annotations }}
+  annotations:
+  {{- toYaml . | nindent 4 }}
   {{- end }}
 {{- with $.Values.role.rules }}
 rules:
@@ -28,6 +31,15 @@ apiVersion: {{ $.Values.role.apiVersion | default "rbac.authorization.k8s.io/v1"
 metadata:
   name: {{ $.Release.Name }}
   namespace: {{ $.Release.Namespace }}
+  labels:
+  {{- include "anan.lable.name" . | nindent 4 }}: {{ $.Release.Name }}
+  {{- with $.Values.role.labels }}
+  {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with $.Values.role.annotations }}
+  annotations:
+  {{- toYaml . | nindent 4 }}
+  {{- end }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role

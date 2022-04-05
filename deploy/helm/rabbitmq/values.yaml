@@ -19,12 +19,12 @@ containers:
         memory: 128M
     readinessProbe:
       exec:
-        command: ["rabbitmqctl", "node_health_check"]
+        command: ["rabbitmq-diagnostics", "ping"]
       periodSeconds: 45
       failureThreshold: 2
     livenessProbe:
       exec:
-        command: ["rabbitmqctl", "node_health_check"]
+        command: ["rabbitmq-diagnostics", "ping"]
       periodSeconds: 45
       failureThreshold: 2
     lifecycle:
@@ -71,10 +71,12 @@ containers:
 configmap:
   existConfigMapName: rabbitmq
   files:
-  - mountPath: /etc/rabbitmq/
-    mountFiles:
-      rabbitmq.conf:
-      enabled_plugins:
+    - mountPath: /etc/rabbitmq/
+      readOnly: false
+      defaultMode: "0755"
+      mountFiles:
+        rabbitmq.conf:
+        enabled_plugins:
 persistence:
 - name: data
   mountPath: /var/lib/rabbitmq

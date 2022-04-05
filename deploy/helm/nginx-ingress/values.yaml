@@ -9,7 +9,7 @@ ingress:
       opentracing_propagate_context;
     #设置nginx的server配置
     nginx.org/server-snippets: |
-      opentracing off;
+      opentracing on;
       opentracing_operation_name $uri;
       ssl_session_timeout 5m;
       ssl_protocols SSLv3 TLSv1 TLSv1.1 TLSv1.2;
@@ -26,6 +26,7 @@ ingress:
       location = / {
         return 301 https://$http_host/anan-vue/;
       }
+
       location /redisinsight/ {
         proxy_pass http://redisinsight:8001/;
         proxy_hide_header X-Frame-Options;
@@ -63,6 +64,13 @@ ingress:
                 name: rabbitmq
                 port:
                   number: 15672
+          - path: /zipkin/
+            pathType: Prefix
+            backend:
+              service:
+                name: zipkin
+                port:
+                  number: 9411
 daemonset:
   strategy:
     rollingUpdate:

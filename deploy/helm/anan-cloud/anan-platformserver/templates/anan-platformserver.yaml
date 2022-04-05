@@ -8,9 +8,6 @@ data:
     server:
       port: 51500
     anan:
-      security:
-        web-ignoring:
-          - paths: /**
       swagger:
         enabled: true
         title: ${spring.application.name}

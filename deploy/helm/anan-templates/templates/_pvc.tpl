@@ -10,6 +10,15 @@ kind: PersistentVolumeClaim
 metadata:
   name: {{ $datax.name }}-{{ $.Release.Name }}-{{ $y }}
   namespace: {{ $.Release.Namespace }}
+  labels:
+  {{- include "anan.lable.name" . | nindent 4 }}: {{ $datax.name }}-{{ $.Release.Name }}-{{ $y }}
+  {{- with $datax.labels }}
+  {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with $datax.annotations }}
+  annotations:
+  {{- toYaml . | nindent 4 }}
+  {{- end }}
 spec:
   {{- with $datax.storageClassName }}
   storageClassName: {{ toYaml . }}
@@ -30,6 +39,15 @@ kind: PersistentVolumeClaim
 metadata:
   name: {{ $datax.name }}-{{ $.Release.Name }}-{{ $z }}
   namespace: {{ $.Release.Namespace }}
+  labels:
+  {{- include "anan.lable.name" . | nindent 4 }}: {{ $datax.name }}-{{ $.Release.Name }}-{{ $z }}
+  {{- with $datax.labels }}
+  {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with $datax.annotations }}
+  annotations:
+  {{- toYaml . | nindent 4 }}
+  {{- end }}
 spec:
   {{- with $datax.storageClassName }}
   storageClassName: {{ toYaml . }}

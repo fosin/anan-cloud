@@ -24,10 +24,9 @@ metadata:
   name: {{ include "anan.service.name" . }}
   namespace: {{ $.Release.Namespace }}
   labels:
-  {{- if $.Values.service.lables }}
-  {{- $.Values.service.lables | nindent 4 }}
-  {{- else }}
   {{- include "anan.lable.name" . | nindent 4 }}: {{ $.Release.Name }}
+  {{- with $.Values.service.labels }}
+  {{- toYaml . | nindent 4 }}
   {{- end }}
   {{- with $.Values.service.annotations }}
   annotations:
@@ -70,10 +69,13 @@ metadata:
   name: {{ include "anan.service.headless.name" . }}
   namespace: {{ $.Release.Namespace }}
   labels:
-  {{- if $.Values.service.lables }}
-  {{- $.Values.service.lables | nindent 4 }}
-  {{- else }}
   {{- include "anan.lable.name" . | nindent 4 }}: {{ include "anan.service.headless.name" . }}
+  {{- with $.Values.service.labels }}
+  {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with $.Values.service.annotations }}
+  annotations:
+  {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
   type: ClusterIP

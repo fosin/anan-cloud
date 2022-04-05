@@ -4,24 +4,18 @@ import de.codecentric.boot.admin.server.domain.entities.Instance;
 import de.codecentric.boot.admin.server.web.client.BasicAuthHttpHeaderProvider;
 import de.codecentric.boot.admin.server.web.client.HttpHeadersProvider;
 import org.springframework.http.HttpHeaders;
-import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
+import org.springframework.lang.NonNull;
 
 /**
  * @author fosin
  * @date 2018.8.12
  */
-@Component
+//@Component
 public class SbaHttpHeadersProvider implements HttpHeadersProvider {
-    @Override
-    public HttpHeaders getHeaders(Instance instance) {
-        String username = instance.getRegistration().getMetadata().get("user.name");
-        String password = instance.getRegistration().getMetadata().get("user.password");
-        HttpHeaders headers = new HttpHeaders();
 
-        if (StringUtils.hasText(username) && StringUtils.hasText(password)) {
-            headers = new BasicAuthHttpHeaderProvider().getHeaders(instance);
-        } else {
+    @Override
+    public HttpHeaders getHeaders(@NonNull Instance instance) {
+
 //            String authorization = null;
 //            HttpServletRequest httpServletRequest = getHttpServletRequest();
 //            if (httpServletRequest != null) {
@@ -43,9 +37,7 @@ public class SbaHttpHeadersProvider implements HttpHeadersProvider {
 //            if (StringUtils.hasText(authorization)) {
 //                headers.set(HttpHeaders.AUTHORIZATION, authorization);
 //            }
-        }
-
-        return headers;
+        return new BasicAuthHttpHeaderProvider().getHeaders(instance);
     }
 
 //    private String getAuthorization(String tokenType, String accessTokenValue) {

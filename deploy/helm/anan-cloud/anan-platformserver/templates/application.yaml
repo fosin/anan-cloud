@@ -34,8 +34,7 @@ data:
     spring:
       kubernetes:
         loadbalancer:
-          #使用K8S的Service进行负载均衡
-          mode: SERVICE
+          mode: SERVICE #使用K8S的Service进行负载均衡
         reload:
           enabled: true
           #监听模式：
@@ -50,7 +49,7 @@ data:
           strategy: shutdown
           monitoring-secrets: true #是否监控 Secret 的更改来执行更新
         discovery:
-          all-namespaces: true
+          all-namespaces: false
           include-not-ready-addresses: false
       datasource:
         url: jdbc:mysql://mysql-mgr:3306/anan_platform?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=GMT%2b8
@@ -120,19 +119,35 @@ data:
             max-attempts: 6
             max-interval: 2000
             multiplier: 1.1
+        bus:
+          destination: springCloudBus
+          enabled: false
+          trace:
+            enabled: false #用于开启/关闭息记录 Trace 的 Listener。
+          ack:
+            enabled: false #用于开启开启/关闭AckRemoteApplicationEvent事件的发送。
+          env:
+            enabled: false #用于开启/关闭配置新增/修改的 Endpoint。
+          refresh:
+            enabled: false #用于开启/关闭全局刷新的 Listener。
         stream:
-          default:
-            group: ${spring.application.name}-${spring.cloud.client.ip-address}-${server.port}
-          rabbit:
-            bindings:
-              springCloudBusInput:
-                consumer:
-                  # 队列声明重试次数
-                  queue-declaration-retries: 2000
-                  # 重试间隔(ms)
-                  recovery-interval: 5000
-                  # 为true时，使用‘group’作为配置刷新队列的名称
-                  queue-name-group-only: true
+          default-binder: rabbitmq #默认
+          bindings:
+            rabbitmq: #要绑定的rabbitmq的服务信息，自定义的名称，用于binding整合
+              destination: rabbitmq #表示要使用的Exchange名称
+              binder: rabbitmq #设置要绑定的消息服务的具体设置
+              content-type: application/json #设置消息类型，本次为json，文本则为"text/plain"
+              group: ${spring.application.name}
+          binders:
+            rabbitmq:
+              type: rabbit #消息组件类型
+              environment: #设置rabbitmq的相关环境配置
+                spring:
+                  rabbitmq:
+                    host: ${spring.rabbitmq.host}
+                    port: ${spring.rabbitmq.port}
+                    username: ${spring.rabbitmq.username}
+                    password: ${spring.rabbitmq.password}
       jpa:
         #Hibernate自动创建表的时候使用InnoDB存储引擎，不然就会以默认存储引擎MyISAM来建表，而MyISAM存储引擎是没有事务的。
         database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
@@ -145,24 +160,45 @@ data:
       #    hibernate:
       #      ddl-auto: update
       zipkin:
-        message-timeout: 10
-        #    baseUrl: http://zipkin:9411/
+        enabled: true
+        compression:
+          enabled: false #是否启用数据压缩
+        service:
+          name: ${spring.application.name} #默认值，zipkin监控调用链中的服务名
         sender:
           type: rabbit
-      #    locator:
-      #      discovery:
-      #        enabled: true
-      #    discovery-client-enabled: true
+        locator:
+          discovery:
+            enabled: false
+        message-timeout: 10
+        #以下设置当sender.type=web时有效
+        #base-url: http://zipkin/
+        #设置成false，那么就会把http://zipkin/当成一个URL，而不是服务名称了。
+        #discovery-client-enabled: true
       sleuth:
+        enabled: true
         web:
-          additional-skip-pattern: "/instances/.*|/actuator/.*"
-        #    enabled: false
+          #跟踪中应跳过的URL的其他模式。 这将附加到{@link SleuthWebProperties＃skipPattern}.
+          additionalSkipPattern: "/instances/.*|/actuator/.*"
+          webclient:
+            enabled: true
+          servlet:
+            enabled: true
         sampler:
           probability: 1.0
       #    feign:
       #      enabled: false
       #      processor:
       #        enabled: false
+      boot.admin:
+        instance-auth:
+          enabled: true
+          #default-user-name: "${spring.security.user.name}"
+          #default-password: "${spring.security.user.password}"
+          service-map:
+            anan-sbaserver:
+              user.name: "${spring.security.user.name}"
+              user.password: "${spring.security.user.password}"
       jackson:
         #日期格式化
         date-format: yyyy-MM-dd HH:mm:ss
@@ -233,6 +269,10 @@ data:
                 enabled: false
     anan:
       security:
+        oauth2:
+          authority:
+            authorities:
+              - paths: /**
         jwt:
           key-store: ${encrypt.key-store.location}
           key-alias: ${encrypt.key-store.alias}

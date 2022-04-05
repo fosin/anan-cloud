@@ -9,7 +9,12 @@ type: {{ $.Values.secret.type }}
 metadata:
   name: {{ include "anan.secret.name" . }}
   namespace: {{ .Release.Namespace }}
-  {{- with .Values.secret.annotations }}
+  labels:
+  {{- include "anan.lable.name" . | nindent 4 }}: {{ $.Release.Name }}
+  {{- with $.Values.secret.labels }}
+  {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with $.Values.secret.annotations }}
   annotations:
   {{- toYaml . | nindent 4 }}
   {{- end }}

@@ -23,7 +23,6 @@ public class SbaAutoConfiguration {
     @Bean
     @Primary
     @RefreshScope
-    @ConfigurationProperties("spring.boot.admin")
     public AdminServerProperties adminServerProperties() {
         return new AdminServerProperties();
     }

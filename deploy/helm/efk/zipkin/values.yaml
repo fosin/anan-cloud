@@ -19,9 +19,9 @@ containers:
     imagePullPolicy: IfNotPresent
     resources:
       limits:
-        memory: 768Mi
-      requests:
         memory: 512Mi
+      requests:
+        memory: 400Mi
     readinessProbe:
       periodSeconds: 45
       failureThreshold: 2
