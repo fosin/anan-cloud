@@ -2,5 +2,6 @@ apiVersion: v2
 description: Anan templates Helm chart for Kubernetes
 name: anan-templates
 version: 0.0.1
+appVersion: 0.0.1
 type: library
 home: https://github.com/fosin/anan-cloud/tree/master/deploy/helm/anan-templates
