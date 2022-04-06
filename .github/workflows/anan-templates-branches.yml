@@ -5,7 +5,7 @@ on:
     branches:
       - '*'
     paths:
-      - 'deploy/helm/anan-templates/**'
+      - 'deploy/helm/templates/**'
       - '.github/workflows/anan-templates-branches.yml'
 jobs:
   build:
@@ -31,4 +31,4 @@ jobs:
         env:
           CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
         with:
-          charts_dir: deploy/helm/anan-templates
+          charts_dir: deploy/helm/templates

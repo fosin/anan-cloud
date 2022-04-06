@@ -6,4 +6,4 @@ appVersion: "5.0"
 dependencies:
   - name: anan-templates
     version: 0.0.1
-    repository: file://../anan-templates
+    repository: file://../templates/anan-templates
