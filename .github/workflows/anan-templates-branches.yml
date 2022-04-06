@@ -1,0 +1,32 @@
+name: Helm Templates Publish
+
+on:
+  push:
+    branches:
+      - '*'
+    paths:
+      - 'deploy/helm/anan-templates/**'
+      - '.github/workflows/anan-templates-branches.yml'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v2
+
+      - name: Configure Git
+        run: |
+          git config user.name "$GITHUB_ACTOR"
+          git config user.email "28860823@qq.com"
+
+      - name: Install Helm
+        uses: azure/setup-helm@v1
+        with:
+          version: v3.8.1
+
+      - name: Publish Helm chart
+        uses: helm/chart-releaser-action@v1.4.0
+        env:
+          CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+        with:
+          charts_dir: deploy/helm/anan-templates

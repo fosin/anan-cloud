@@ -6,4 +6,4 @@ appVersion: 1.0.4
 dependencies:
   - name: anan-templates
     version: 0.0.1
-    repository: https://fosin.github.io/anan-templates
+    repository: file://../../anan-templates
