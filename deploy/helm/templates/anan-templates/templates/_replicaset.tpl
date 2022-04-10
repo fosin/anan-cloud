@@ -276,7 +276,7 @@ spec:
           {{- if $.Values.configmap }}
           {{- range $index, $file := $.Values.configmap.files }}
           {{- if $file.mountPath }}
-          {{- if eq (clean $file.mountPath) $file.mountPath }}
+          {{- if and (ne $file.mountPath "/") (eq (clean $file.mountPath) $file.mountPath) }}
             - name: {{ $.Release.Name }}-{{ $index }}
               mountPath: {{ $file.mountPath }}
               {{- with $file.readOnly }}
@@ -298,7 +298,7 @@ spec:
           {{- if $.Values.secret }}
           {{- range $index, $file := $.Values.secret.files }}
           {{- if $file.mountPath }}
-          {{- if eq (clean $file.mountPath) $file.mountPath }}
+          {{- if and (ne $file.mountPath "/") (eq (clean $file.mountPath) $file.mountPath) }}
             - name: {{ $.Release.Name }}-secret-{{ $index }}
               mountPath: {{ $file.mountPath }}
               {{- with $file.readOnly }}

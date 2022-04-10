@@ -96,6 +96,7 @@ persistence:
     nfs:
       - server: 127.0.0.1
         path: "/data/nfs"
+        readOnly: false
   #本地持久化存储(Local Persistent Volume)
   # name必填
   - name: lpv
@@ -114,10 +115,12 @@ persistence:
     mountPath: /data
     # 主机本地目录，必填
     local:
-      - hostname: hostname-0
-        path: /data
+      - hostname: hostname-0 #指定主机名（必填）
+        path: /data #文件目录或块设备、磁盘分区（必填）
+        fsType: "xfs" #文件系统类型，例如"ext4", "xfs", "ntfs"等，如果不指定则默认自动选择。
       - hostname: hostname-1
         path: /data2
+        fsType: "xfs"
 hostPath:
   - name: root #volume名称
     mountPath: /rootfs #挂载到容器的目录，必填

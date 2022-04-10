@@ -5,7 +5,7 @@ deployment:
       maxUnavailable: 1 #滚动升级时允许的最大Unavailable的pod个数
   minReadySeconds: 60  #滚动升级时60s后认为该pod就绪
   replicaCount: 1
-terminationGracePeriodSeconds: 30 #优雅关闭pod的等待时间，默认30s
+terminationGracePeriodSeconds: 15 #优雅关闭pod的等待时间，默认30s
 initContainers:
   - name: wait-mysql
     image: busybox
@@ -26,16 +26,23 @@ containers:
       limits:
         memory: 550Mi
       requests:
-        memory: 400Mi
+        memory: 450Mi
+    startupProbe:
+      periodSeconds: 5
+      failureThreshold: 12
+      httpGet:
+        scheme: HTTP
+        port: http
+        path: /actuator/health
     readinessProbe:
-      periodSeconds: 45
+      periodSeconds: 60
       failureThreshold: 2
       httpGet:
         scheme: HTTP
         port: http
         path: /actuator/health
     livenessProbe:
-      periodSeconds: 60
+      periodSeconds: 900
       failureThreshold: 2
       httpGet:
         scheme: HTTP
@@ -49,10 +56,8 @@ containers:
             - -XPOST
             - http://localhost:51500/actuator/shutdown
     env:
-      - name: MY_POD_IP
-        valueFrom:
-          fieldRef:
-            fieldPath: status.podIP
+      - name: JAVA_TOOL_OPTIONS
+        value: "-XX:+UseG1GC -Xms200M -Xmx260M -XX:MaxMetaspaceSize=160M -XX:MetaspaceSize=160M -XX:+DisableExplicitGC -XX:ErrorFile=/logs/hs_err_pid%p.log"
     envFrom:
       #如果使用nacos作为服务发现和配置中心，需要启用这段配置
       #- secretRef:

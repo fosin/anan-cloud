@@ -61,7 +61,7 @@ data:
         version: ${info.version}
         base-package: top.fosin.anan.auth
         authorization:
-          name: Oauth2.0 Authorization
+          name: Oauth2 Authorization
           keyName: Authorization
         #      authRegex: ^[^/oauth/token]$
         contact:

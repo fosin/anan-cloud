@@ -5,12 +5,11 @@ metadata:
   namespace: {{ .Release.Namespace }}
 data:
   #anan服务配置
-  {{- $profilesActive := "local" }}
+  {{- $profilesActive := "kubernetes" }}
   spring.profiles.active: {{ $profilesActive }}
   spring.security.user.name: {{ include "anan.user" . | quote }}
   spring.security.user.password: {{ include "anan.password" . | quote }}
-  JAVA_TOOL_OPTIONS: "-XX:+UseG1GC -Xmx280M -XX:MaxMetaspaceSize=160M -XX:MetaspaceSize=160M -XX:+DisableExplicitGC
-  -XX:ErrorFile=/logs/hs_err_pid%p.log"
+  JAVA_TOOL_OPTIONS: "-XX:+UseG1GC -Xms200M -Xmx240M -XX:MaxMetaspaceSize=160M -XX:MetaspaceSize=160M -XX:+DisableExplicitGC -XX:ErrorFile=/logs/hs_err_pid%p.log"
   #JAVA_TOOL_OPTIONS: "-XX:+UseG1GC -XX:MaxGCPauseMillis=200 -XX:MaxRAMPercentage=70 -XX:InitialRAMPercentage=50 -XX:MaxMetaspaceSize=160M -XX:MetaspaceSize=160M -XX:+DisableExplicitGC -XX:ErrorFile=/logs/hs_err_pid%p.log"
   #encrypt.key-store.location: "classpath:/anan.jks"
   #encrypt.key-store.password: "123456"
@@ -21,7 +20,8 @@ data:
   #开启k8s服务发现和配置服务
   spring.cloud.kubernetes.enabled: "true"
   spring.cloud.kubernetes.config.namespace: "default"
-  spring.cloud.kubernetes.secrets.namespace: "default"
+  #不加载spring.profiles.active附加的configmap，例如不加载application-kubernetes
+  spring.cloud.kubernetes.config.includeProfileSpecificSources: "false"
 
   #关闭nacos作为服务发现和配置中心
   spring.cloud.nacos.config.enabled: "false"

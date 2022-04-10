@@ -192,7 +192,7 @@ kubeadm init --kubernetes-version=v${K8S_VERSION} \
 --apiserver-advertise-address=${NODE_IPS[${NODE_INDEX}]} \
 --pod-network-cidr=10.244.0.0/16 \
 --control-plane-endpoint="${K8S_LB_IP}:6443" \
---service-cidr=10.96.0.0/12 \
+--service-cidr=10.96.0.0/16 \
 --upload-certs \
 --ignore-preflight-errors=Swap
 

@@ -15,7 +15,7 @@ data:
         version: ${info.version}
         base-package: top.fosin.anan.platform
         authorization:
-          name: Oauth2.0 Authorization
+          name: Oauth2 Authorization
           keyName: Authorization
         contact:
           name: fosin

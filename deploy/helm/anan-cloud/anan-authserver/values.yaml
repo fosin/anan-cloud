@@ -27,6 +27,13 @@ containers:
         memory: 512Mi
       requests:
         memory: 400Mi
+    startupProbe:
+      periodSeconds: 5
+      failureThreshold: 12
+      httpGet:
+        scheme: HTTP
+        port: http
+        path: /actuator/health
     readinessProbe:
       periodSeconds: 45
       failureThreshold: 2

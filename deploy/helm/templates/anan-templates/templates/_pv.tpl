@@ -32,6 +32,9 @@ spec:
   {{- end }}
   nfs:
     server: {{ $datay.server }}
+    {{- with $datay.readOnly }}
+    readOnly: {{ . }}
+    {{- end }}
     {{- if $datay.path }}
     path: {{ $datay.path }}
     {{- else }}
@@ -66,6 +69,7 @@ spec:
   persistentVolumeReclaimPolicy: {{ toYaml . }}
   {{- end }}
   local:
+    fsType: {{ $dataz.fsType }}
     path: {{ $dataz.path }}
   nodeAffinity:
   {{- if $datax.nodeAffinity }}

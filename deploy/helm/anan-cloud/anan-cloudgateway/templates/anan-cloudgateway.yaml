@@ -98,7 +98,7 @@ data:
             enabled: true
             cors:
               - path: /**
-                allowed-origins: 'http://localhost:9528,https://anantest.fosin.top:11011'
+                allowed-origins: 'http://localhost:9528,https://www.fosin.top:11011'
                 allowed-methods: '*'
                 allowed-headers: '*'
                 # exposed-headers: '*'
@@ -110,7 +110,7 @@ data:
         version: ${info.version}
         base-package: top.fosin.anan.cloudgateway
         authorization:
-          name: Oauth2.0 Authorization
+          name: Oauth2 Authorization
           keyName: Authorization
         #      authRegex: ^[^/oauth/token]$
         contact:

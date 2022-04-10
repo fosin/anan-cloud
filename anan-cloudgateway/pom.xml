@@ -54,9 +54,11 @@
             <groupId>com.github.ulisesbocchio</groupId>
             <artifactId>jasypt-spring-boot-starter</artifactId>
         </dependency>
+        <!--TODO 修复漏洞https://tanzu.vmware.com/security/cve-2022-22947-->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-gateway</artifactId>
+            <version>3.0.7</version>
         </dependency>
         <dependency>
             <groupId>com.squareup.okhttp3</groupId>

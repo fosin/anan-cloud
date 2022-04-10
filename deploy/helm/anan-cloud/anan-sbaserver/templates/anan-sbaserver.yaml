@@ -5,6 +5,10 @@ metadata:
   namespace: {{ .Release.Namespace }}
 data:
   {{ .Release.Name }}.yaml: |-
+    logging:
+      level:
+        #de.codecentric.boot.admin.server: debug
+        #org.springframework.security: DEBUG
     server:
       port: 51700
     spring:
@@ -13,8 +17,6 @@ data:
         context-path: /sba
         discovery:
           enabled: true
-          #username: ${spring.security.user.name} #如果server端需要进行认证时，该属性用于配置用户名
-          #password: ${spring.security.user.password} #如果server端需要进行认证时，该属性用于配置密码
           services:
             - anan-authserver
             - anan-cloudgateway
@@ -26,11 +28,10 @@ data:
             - anan-zuulgateway
             - anan-configserver
             - anan-eurekaserver
-            - zipkin
         ui:
           #用于在ui中构建基本href的基本URL,如果在反向代理后面运行（使用路径重写），则可用于进行正确的自我引用。
           #如果不设置，则推断主机和端口+spring.boot.admin.context-path
-          public-url: https://anantest.fosin.top:11011${spring.boot.admin.context-path}
+          public-url: https://www.fosin.top:11011/sba
           title: "Anan SBA指标监控" #页面标题
           brand: "<img src=\"assets/img/icon-spring-boot-admin.svg\"><span>Anan SBA指标监控</span>" #导航栏中显示的品牌
           #favicon: "assets/img/favicon.png" #自定义默认图标的图标，用于桌面通知的图标

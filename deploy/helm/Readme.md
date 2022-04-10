@@ -307,7 +307,7 @@ grafana-cli admin reset-admin-password admin@1234
 ```shell script
 
 #1、部署ingress和SSL证书
-kubectl create secret tls fosin.top --cert=1_fosin.top_bundle.crt --key=2_fosin.top.key
+kubectl create secret tls fosin.top --cert=fosin.top_bundle.crt --key=fosin.top.key
 
 helm install anan-nginx-ingress nginx-ingress/
 

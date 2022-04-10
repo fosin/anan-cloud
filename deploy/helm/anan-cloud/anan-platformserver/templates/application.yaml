@@ -32,25 +32,6 @@ data:
         #com.github.fosin.anan.security: DEBUG
         #org.springframework.security: DEBUG
     spring:
-      kubernetes:
-        loadbalancer:
-          mode: SERVICE #使用K8S的Service进行负载均衡
-        reload:
-          enabled: true
-          #监听模式：
-          #    (1)、polling：从 ConfigMap 和 Secret 中定期刷新配置，检测是否进行了修改。
-          #    (2)、event（默认）：监视配置映射或机密的更改。任何事件都会对配置进行重新检查，如果发生更改，则会重新加载。
-          mode: polling
-          period: 5000 #刷新间隔,单位(ms)
-          #刷新模式：
-          #(1)、refresh（默认）：仅注释@ConfigurationProperties或@RefreshScope重新加载的配置Bean
-          #(2)、restart_context：整个Spring ApplicationContext正常重启。使用新配置重新创建Bean。
-          #(3)、shutdown：关闭以激活容器的重启。使用此级别时，请确保将所有非守护程序线程的生命周期绑定到该级别，并将ApplicationContext 复制控制器或副本集配置为重新启动该pod。
-          strategy: shutdown
-          monitoring-secrets: true #是否监控 Secret 的更改来执行更新
-        discovery:
-          all-namespaces: false
-          include-not-ready-addresses: false
       datasource:
         url: jdbc:mysql://mysql-mgr:3306/anan_platform?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=GMT%2b8
         username: anan
@@ -111,7 +92,37 @@ data:
         port: 5672
         username: anan
         password: ENC(svOoGRZ5qlC1bRGGh+7YwA==)
+      boot.admin:
+        instance-auth:
+          enabled: true
+          #default-user-name: "${spring.security.user.name}"
+          #default-password: "${spring.security.user.password}"
+          service-map:
+            anan-sbaserver:
+              user-name: "${spring.security.user.name}"
+              user-password: "${spring.security.user.password}"
       cloud:
+        kubernetes:
+          loadbalancer:
+            mode: SERVICE #使用K8S的Service进行负载均衡
+          reload:
+            enabled: true
+            #监听模式：
+            #    (1)、polling：从 ConfigMap 和 Secret 中定期刷新配置，检测是否进行了修改。
+            #    (2)、event（默认）：监视配置映射或机密的更改。任何事件都会对配置进行重新检查，如果发生更改，则会重新加载。
+            # TODO event模式会与配置加密模块jasypt存在冲突
+            mode: polling
+            period: 5000 #刷新间隔,单位(ms)，当mode=polling时有效
+            #刷新模式：
+            #(1)、refresh（默认）：仅注释@ConfigurationProperties或@RefreshScope重新加载的配置Bean
+            #(2)、restart_context：整个Spring ApplicationContext正常重启。使用新配置重新创建Bean。
+            #(3)、shutdown：关闭以激活容器的重启。使用此级别时，请确保将所有非守护程序线程的生命周期绑定到该级别，并将ApplicationContext 复制控制器或副本集配置为重新启动该pod。
+            strategy: restart_context
+            monitoring-secrets: false #是否监控 Secret 的更改来执行更新
+            monitoring-config-maps: true #是否监控CongfigMap的更新来执行更新
+          discovery:
+            all-namespaces: false
+            include-not-ready-addresses: false
         config:
           fail-fast: true
           retry:
@@ -120,7 +131,7 @@ data:
             max-interval: 2000
             multiplier: 1.1
         bus:
-          destination: springCloudBus
+          destination: springCloudBus #默认是这个名称
           enabled: false
           trace:
             enabled: false #用于开启/关闭息记录 Trace 的 Listener。
@@ -131,13 +142,21 @@ data:
           refresh:
             enabled: false #用于开启/关闭全局刷新的 Listener。
         stream:
+          default:
+            group: ${spring.application.name}
           default-binder: rabbitmq #默认
           bindings:
-            rabbitmq: #要绑定的rabbitmq的服务信息，自定义的名称，用于binding整合
-              destination: rabbitmq #表示要使用的Exchange名称
-              binder: rabbitmq #设置要绑定的消息服务的具体设置
+            input: #要绑定的rabbitmq的服务信息，自定义的名称，用于binding整合
+              destination: input #表示要使用的Exchange名称
+              binder: rabbitmq #设置使用的binder名称
               content-type: application/json #设置消息类型，本次为json，文本则为"text/plain"
               group: ${spring.application.name}
+              consumer:
+                # 队列声明重试次数
+                queue-declaration-retries: 2000
+                # 重试间隔(ms)
+                recovery-interval: 5000
+                anonymous-group-prefix: "anonymous."
           binders:
             rabbitmq:
               type: rabbit #消息组件类型
@@ -148,17 +167,6 @@ data:
                     port: ${spring.rabbitmq.port}
                     username: ${spring.rabbitmq.username}
                     password: ${spring.rabbitmq.password}
-      jpa:
-        #Hibernate自动创建表的时候使用InnoDB存储引擎，不然就会以默认存储引擎MyISAM来建表，而MyISAM存储引擎是没有事务的。
-        database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
-        open-in-view: true
-        properties:
-          hibernate:
-            format_sql: true
-            use_sql_comments: true
-        #show-sql: true
-      #    hibernate:
-      #      ddl-auto: update
       zipkin:
         enabled: true
         compression:
@@ -190,15 +198,17 @@ data:
       #      enabled: false
       #      processor:
       #        enabled: false
-      boot.admin:
-        instance-auth:
-          enabled: true
-          #default-user-name: "${spring.security.user.name}"
-          #default-password: "${spring.security.user.password}"
-          service-map:
-            anan-sbaserver:
-              user.name: "${spring.security.user.name}"
-              user.password: "${spring.security.user.password}"
+      jpa:
+        #Hibernate自动创建表的时候使用InnoDB存储引擎，不然就会以默认存储引擎MyISAM来建表，而MyISAM存储引擎是没有事务的。
+        database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+        open-in-view: true
+        properties:
+          hibernate:
+            format_sql: true
+            use_sql_comments: true
+        #show-sql: true
+      #    hibernate:
+      #      ddl-auto: update
       jackson:
         #日期格式化
         date-format: yyyy-MM-dd HH:mm:ss
@@ -294,7 +304,7 @@ data:
       client:
         healthcheck:
           # 开启健康检查（需要spring-boot-starter-actuator依赖）
-          enabled: true
+          enabled: false
       instance:
         #续约到期时间（默认90秒）
         lease-expiration-duration-in-seconds: 10

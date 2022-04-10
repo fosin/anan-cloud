@@ -22,8 +22,13 @@ containers:
       requests:
         cpu: 1m
         memory: 1100Mi
+    startupProbe:
+      periodSeconds: 5
+      failureThreshold: 20
+      tcpSocket:
+        port: http
     readinessProbe:
-      periodSeconds: 50
+      periodSeconds: 60
       failureThreshold: 2
       tcpSocket:
         port: http
