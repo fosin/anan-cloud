@@ -54,7 +54,7 @@ containers:
           command:
             - curl
             - -XPOST
-            - http://localhost:51500/actuator/shutdown
+            - http://localhost:6150/actuator/shutdown
     env:
       - name: JAVA_TOOL_OPTIONS
         value: "-XX:+UseG1GC -Xms200M -Xmx260M -XX:MaxMetaspaceSize=160M -XX:MetaspaceSize=160M -XX:+DisableExplicitGC -XX:ErrorFile=/logs/hs_err_pid%p.log"
@@ -67,8 +67,14 @@ containers:
 service:
   type: NodePort
   ports:
-    - port: 51500
+    - port: 6150
       name: http
+configmap:
+  - name: "application" #configmap的名称，如果不设置，默认是模版anan.configmap.name定义的名称，只支持一个不设置
+    fromFiles:
+      application.yaml: "conf/application.yaml" #configmap的key名称：文件路径+名称
+  - fromFiles:
+      anan-platformserver.yaml: "conf/anan-platformserver.yaml"
 cluster:
   serviceAccountName: "default"
   role:

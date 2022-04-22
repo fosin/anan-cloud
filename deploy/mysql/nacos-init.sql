@@ -79,7 +79,7 @@ VALUES
     'anan-authserver.yaml',
     'DEFAULT_GROUP',
     'server:
-  port: 51400
+  port: 6140
 spring:
   session:
     store-type: redis
@@ -337,10 +337,10 @@ spring:
           provider: anan-authserver
       provider:
         anan-authserver:
-          authorization-uri: http://anan-authserver:51400/oauth2/authorize
-          token-uri: http://anan-authserver:51400/oauth2/token
-          user-info-uri: http://anan-authserver:51400/oauth2/userinfo/jwt
-          jwk-set-uri: http://anan-authserver:51400/oauth2/token_key
+          authorization-uri: http://anan-authserver:6140/oauth2/authorize
+          token-uri: http://anan-authserver:6140/oauth2/token
+          user-info-uri: http://anan-authserver:6140/oauth2/userinfo/jwt
+          jwk-set-uri: http://anan-authserver:6140/oauth2/token_key
 server:
   servlet:
     session:
@@ -391,7 +391,7 @@ anan:
     client:
       client-id: appServer
       client-secret: appServer
-      access-token-uri: http://anan-authserver:51400/oauth/token
+      access-token-uri: http://anan-authserver:6140/oauth/token
 security:
   oauth2:
     resource:
@@ -490,7 +490,7 @@ VALUES
     'anan-sbaserver.yaml',
     'DEFAULT_GROUP',
     'server:
-  port: 51700
+  port: 6170
 turbine:
   cluster-name-expression: new String(''default'')
   app-config: anan-zuulgateway
@@ -553,7 +553,7 @@ VALUES
     'anan-cloudgateway.yaml',
     'DEFAULT_GROUP',
     'server:
-  port: 51900
+  port: 6190
 spring:
   cloud:
     sentinel:
@@ -710,7 +710,7 @@ VALUES
     'anan-zuulgateway.yaml',
     'DEFAULT_GROUP',
     'server:
-  port: 51900
+  port: 6190
 zuul:
   add-host-header: true
   add-proxy-headers: true
@@ -915,7 +915,7 @@ VALUES
     'anan-platformserver.yaml',
     'DEFAULT_GROUP',
     'server:
-  port: 51500
+  port: 6150
 anan:
   security:
     oauth2:

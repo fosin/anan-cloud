@@ -1,0 +1,169 @@
+server:
+  port: 6190
+zuul:
+  add-host-header: true
+  add-proxy-headers: true
+  #如果不过滤，则须显式设为空，默认Cookie,Set-Cookie,Authorization。
+  #在Hoxton.SR6中这个参数在application.yaml不会生效，但是转移值bootstrap.yaml中就可以
+  #当前只能通过设置每个服务的custom-sensitive-headers: true来解决
+  sensitive-headers:
+  #  - Cookie
+  #  - Set-Cookie
+  #  - Authorization
+  #默认启用重试
+  retryable: true
+  ignored-services: '*'
+  #是否移除代理前缀,默认为true
+  #strip-prefix: true
+  #为所有http请求前增加/zuul前缀
+  prefix: /gateway
+  routes:
+    anan-platformserver:
+      path: /platform/**
+      serviceId: anan-platformserver
+      retryable: true
+      custom-sensitive-headers: true
+      sensitive-headers:
+    anan-authserver:
+      path: /auth/**
+      serviceId: anan-authserver
+      retryable: true
+      custom-sensitive-headers: true
+      sensitive-headers:
+    anan-zuulgateway:
+      path: /**
+      serviceId: anan-zuulgateway
+      retryable: true
+      custom-sensitive-headers: true
+      sensitive-headers:
+    anan-exam:
+      path: /exam/**
+      serviceId: anan-exam
+      retryable: true
+      custom-sensitive-headers: true
+      sensitive-headers:
+  #  semaphore:
+  #    max-semaphores: 100
+  #  ribbon-isolation-strategy: THREAD
+  #  thread-pool:
+  #    use-separate-thread-pools: true
+  #    thread-pool-key-prefix: zuulgw
+  ratelimit:
+    #对应用来标识请求的key的前缀
+    key-prefix: zuulgateway
+    enabled: true
+    #对应存储类型（用来存储统计信息）,可选值REDIS、IN_MEMORY、JPA、CONSUL,默认IN_MEMORY
+    repository: REDIS
+    #代理之后
+    behind-proxy: true
+    response-headers: VERBOSE
+    #可选 - 针对所有的路由配置的策略，除非特别配置了policies
+    default-policy-list:
+      - limit: 600000 #可选 - 每个刷新时间窗口对应的请求数量限制
+        quota: 100000 #可选-  每个刷新时间窗口对应的请求时间限制（秒）
+        refresh-interval: 60 #刷新时间窗口的时间，默认值 60(秒)
+        #可选 限流方式
+        type:
+          #用户粒度
+          #        - user
+          #ORIGIN粒度 (用户请求的origin作为粒度控制)
+          #        - origin
+          #接口粒度 (请求接口的地址作为粒度控制)
+          - url
+    policy-list:
+      anan-mpi:
+        - limit: 900
+          quota: 1000
+          refresh-interval: 60
+          type:
+            - url
+  host:
+    connect-timeout-millis: 10000
+    socket-timeout-millis: 10000
+ribbon:
+  #对所有操作请求都进行重试,默认false
+  OkToRetryOnAllOperations: false
+  #对当前实例的重试次数，默认0
+  MaxAutoRetries: 0
+  #对切换实例的重试次数，默认1
+  MaxAutoRetriesNextServer: 1
+  #负载均衡超时时间，默认值1000，单位ms
+  ReadTimeout: 10000
+  #ribbon请求连接的超时时间，默认值1000，单位ms
+  ConnectTimeout: 5000
+  #从注册中心刷新servelist的时间 默认30秒，单位ms
+  ServerListRefreshInterval: 15000
+hystrix:
+  threadpool:
+    default:
+      coreSize: 100
+      maximumSize: 2000
+      #允许maximumSize起作用
+      allowMaximumSizeToDivergeFromCoreSize: true
+      #如该值为-1，那么使用的是SynchronousQueue，否则使用的是LinkedBlockingQueue
+      maxQueueSize: -1
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            #断路器的超时时间；如果ribbon配置了重试那么该值必需大于ribbonTimeout = (ribbonReadTimeout + ribbonConnectTimeout) * (maxAutoRetries + 1) * (maxAutoRetriesNextServer + 1)，重试才能生效
+            timeoutInMilliseconds: 40001
+      timeout:
+        enabled: false
+      circuitBreaker:
+        enabled: true
+        #当在配置时间窗口内达到此数量的失败后，进行短路。默认20个
+        requestVolumeThreshold: 20
+        #短路多久以后开始尝试是否恢复，默认5s
+        sleepWindowInMilliseconds: 5000
+        #出错百分比阈值，当达到此阈值后，开始短路。默认50%
+        errorThresholdPercentage: 50%
+anan:
+  security:
+    oauth2:
+      authority:
+        authorities:
+          - paths: /**/*.html,/**/*.css,/**/*.js,/**/*.woff*,/**/*.ttf*,/**/*.map,/**/*.ico
+          - paths: /**/*.swf,/**/*.jpg,/**/*.png,/**/*.svg,/**/*.gif
+          - paths: /**/api-docs,/**/swagger-resources/**,/**/swagger-ui/**,/swagger-resources/**,/swagger-ui/**
+          - paths: /actuator/**
+          - paths: /gateway/auth/oauth/**,/gateway/auth/sso/**,/gateway/platform/**/international/status/*,/gateway/platform/**/international/code/*,/gateway/platform/**/international/default,/gateway/platform/**/international/charset/internationalId/*
+            methods: GET,POST
+      session:
+        session-creation-policy: stateless
+      resource-server:
+        enabled: true
+        token-type: jwt
+    corss:
+      enabled: true
+      cors:
+        - path: /**
+          allowed-origins: 'http://localhost:9528'
+          allowed-methods: '*'
+          allowed-headers: '*'
+          # exposed-headers: '*'
+          allow-credentials: true
+  swagger:
+    enabled: true
+    title: ${spring.application.name}
+    description: ${info.description}
+    version: ${info.version}
+    base-package: top.fosin.anan.zuulgateway
+    authorization:
+      name: Oauth2 Authorization
+      keyName: Authorization
+    #      authRegex: ^[^/oauth/token]$
+    contact:
+      name: fosin
+      email: 28860823@qq.com
+    ignoreResourceNames:
+      - anan-zuulgateway
+      - anan-cloudgateway
+  redis:
+    idempotent:
+      enabled: false
+    cache:
+      manager: false
+    session:
+      manager: true

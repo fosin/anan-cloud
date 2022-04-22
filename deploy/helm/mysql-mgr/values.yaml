@@ -6,8 +6,8 @@ statefulset:
   replicaCount: 1
 terminationGracePeriodSeconds: 45 #优雅关闭pod的等待时间，默认30s
 secret:
-  type: Opaque
-  confs:
+- type: Opaque
+  fromMap:
     mysql.root.password: "local"
     mysql.replication.user: "repl"
     mysql.platform.dbname: "anan_platform"

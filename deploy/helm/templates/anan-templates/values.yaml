@@ -137,49 +137,67 @@ hostPath:
     subPath: ""
 emptyDir:
   - /data #挂载目录
-configmap:
-  apiVersion: v1
-  annotations: {}
-  existConfigMapName: "nginx" #现存的configmap的名称，如果是单独创建的cm，可以使用该属性进行
-  confs: {} #配置类
-  files: #文件类
-    #以下是示例
-    - mountPath: / #1、挂载目录，如果为空，这不会生成volumes、volumeMounts的信息。2、非/路径（例如/data/），如果以/结尾则会使用subPath属性
-      readOnly: true
-      defaultMode: "0755"
-      mountFiles:
-        k8s.conf: |-
-          a=1
-          b=2
-          c=3
+configmap: #创建cm并挂载到pod指定目录的依据
+   #这些是挂载pod的设置
+  - mountPath: / #1、挂载目录，如果为空，这不会生成volumes、volumeMounts的信息。2、非/路径（例如/data/），如果以/结尾则会使用subPath属性
+    readOnly: true
+    defaultMode: "0755"
+
+    #以下是cm的相关设置
+    apiVersion: v1
+    annotations: {}
+    labels: {}
+    name: "nginx" #cm的名称，如果不设置，默认是模版anan.configmap.name定义的名称，只支持一个不设置
+    existName: "nginx" #现存的cm的名称，如果想关联外部cm，可以使用该属性。一旦设置该属性，将不会创建新的cm
+    fromMap: #从键值对配置创建
+      a: 1
+      b: 2
+    fromFiles: #从指定目录及文件创建cm，优先级1
+      application.yml: "conf/application.yaml" #cm的key名称：文件路径+名称
+      application.properties: "application.properties" #cm的key名称：文件路径+名称
+    fromTemps: #从模版创建cm，优先级2
+      nginx.conf: |-
+        a=1
+        b=2
+    fromDirs: #从指定目录中创建secret，文件名就是secret的key名称,优先级3
+      - "**.yaml"
+      - "conf/**.yaml"
 secret:
-  apiVersion: v1
-  base64: true #是否base64加密，true：使用data属性，false：使用stringData属性
-  labels: {}
-  annotations: {}
-  #Opaque用户定义的任意数据
-  #kubernetes.io/service-account-token服务账号令牌
-  #kubernetes.io/dockercfg文件~/.dockercfg的序列化形式
-  #kubernetes.io/dockerconfigjson文件~/.docker/config.json的序列化形式
-  #kubernetes.io/basic-auth用于基本身份认证的凭据
-  #kubernetes.io/ssh-auth用于 SSH 身份认证的凭据
-  #kubernetes.io/tls用于 TLS 客户端或者服务器端的数据
-  #bootstrap.kubernetes.io/token启动引导令牌数据
-  type: Opaque
-  confs: {} #配置类
-  existSecretName: "nginx" #现存的secret的名称，用于单独创建的secret
-  files: #文件类
-    #以下是示例
-    - mountPath: / #挂载目录，如果为空，不会自动生成volumes、volumeMounts的信息
-      readOnly: true
-      defaultMode: "0755"
-      secretName: ""
-      optional: false
-      mountFiles:
-        k8s.conf: |-
-          a=1
-          b=2
-          c=3
+  - name: "nginx" #secret的名称，如果不设置，默认是模版anan.secret.name定义的名称，只支持一个不设置
+    existName: "nginx" #现存的secret的名称，如果设置了该属性则不会创建的secret
+
+    #挂载pod的设置
+    mountPath: / #挂载目录，如果为空，不会自动生成volumes、volumeMounts的信息
+    readOnly: true
+    defaultMode: "0755"
+    optional: false
+
+    apiVersion: v1
+    base64: true #是否base64加密，true：使用data属性，false：使用stringData属性
+    labels: {}
+    annotations: {}
+    #Opaque：用户定义的任意数据
+    #kubernetes.io/service-account-token：服务账号令牌
+    #kubernetes.io/dockercfg：文件~/.dockercfg的序列化形式
+    #kubernetes.io/dockerconfigjson：文件~/.docker/config.json的序列化形式
+    #kubernetes.io/basic-auth：用于基本身份认证的凭据
+    #kubernetes.io/ssh-auth：用于 SSH 身份认证的凭据
+    #kubernetes.io/tls：用于 TLS 客户端或者服务器端的数据
+    #bootstrap.kubernetes.io/token：启动引导令牌数据
+    type: Opaque
+    fromMap: #从键值对配置创建
+      a: 1
+      b: 2
+    fromFiles: #从指定目录及文件创建cm，优先级1
+      application.yml: "conf/application.yaml" #cm的key名称：文件路径+名称
+      application.properties: "application.properties" #cm的key名称：文件路径+名称
+    fromTemps: #从模版创建secret，优先级2
+      k8s.conf: |-
+        a=1
+        b=2
+    fromDirs: #从指定目录中创建secret，文件名就是secret的key名称,优先级3
+      - "**.yaml"
+      - "conf/**.yaml"
 service:
   apiVersion: v1
   labels: {}

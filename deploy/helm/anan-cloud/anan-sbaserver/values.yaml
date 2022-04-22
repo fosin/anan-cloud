@@ -46,16 +46,19 @@ containers:
           command:
             - curl
             - -XPOST
-            - http://localhost:51700/actuator/shutdown
+            - http://localhost:6170/actuator/shutdown
     envFrom:
       - configMapRef:
           name: anan-env
+configmap:
+  - fromFiles:
+      anan-sbaserver.yaml: "anan-sbaserver.yaml"
 service:
   type: NodePort
   #labels:
   #  user.name: anan
  #   user.password: local
   ports:
-    - port: 51700
+    - port: 6170
       nodePort: 0
       name: http

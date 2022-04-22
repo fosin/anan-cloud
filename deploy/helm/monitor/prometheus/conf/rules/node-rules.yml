@@ -1,0 +1,45 @@
+groups:
+  - name: node.rules.yml
+    rules:
+      - alert: 主机【CPU】使用率超过60%告警
+        expr: ceil(100 - sum(increase(node_cpu_seconds_total{job="node",mode="idle"}[2m])) by(instance) / sum(increase(node_cpu_seconds_total{job="node"}[2m])) by(instance)*100) > 60
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          description: 1分钟内主机{{ $labels.node_name }}CPU使用率是{{ humanize $value}}%.
+      - alert: 主机【CPU】使用率超过90%告警
+        expr: ceil(100 - sum(increase(node_cpu_seconds_total{job="node",mode="idle"}[5m])) by(instance) / sum(increase(node_cpu_seconds_total{job="node"}[5m])) by(instance)*100) > 90
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          description: 5分钟内主机{{ $labels.node_name }}CPU使用率超过是{{ humanize $value}}%.
+      - alert: 主机【内存】使用率超过60%告警
+        expr: (node_memory_MemTotal_bytes - (node_memory_MemFree_bytes+node_memory_Buffers_bytes+node_memory_Cached_bytes )) / node_memory_MemTotal_bytes * 100 > 60
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          description: 1分钟内主机{{ $labels.node_name }}内存使用率是{{ humanize $value}}%.
+      - alert: 主机【内存】使用率超过90%告警
+        expr: (node_memory_MemTotal_bytes - (node_memory_MemFree_bytes+node_memory_Buffers_bytes+node_memory_Cached_bytes )) / node_memory_MemTotal_bytes * 100 > 90
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          description: 1分钟内主机{{ $labels.node_name }}内存使用率是{{ humanize $value}}%.
+      - alert: 主机【磁盘】使用率超过70%告警
+        expr: (node_filesystem_size_bytes - node_filesystem_avail_bytes) / node_filesystem_size_bytes * 100 > 70
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          description: 主机{{ $labels.node_name }}磁盘使用率是{{ humanize $value}}%.
+      - alert: 主机【磁盘】使用率超过90%告警
+        expr: (node_filesystem_size_bytes - node_filesystem_avail_bytes) / node_filesystem_size_bytes * 100 > 90
+        for: 8h
+        labels:
+          severity: critical
+        annotations:
+          description: 主机{{ $labels.node_name }}磁盘使用率超过90%已超过8小时。

@@ -1,0 +1,33 @@
+{{ define "email.html" }}
+{{- if eq .Status "firing" }}
+<h2>异常告警通知</h2>
+{{- else }}
+<h2>告警恢复通知</h2>
+{{- end }}
+<table border="5">
+<tr>
+<td>告警名称</td>
+<td>告警主机名</td>
+<td>告警详情</td>
+<td>告警级别</td>
+{{- if eq .Status "firing" }}
+<td>告警时间</td>
+{{- else }}
+<td>恢复时间</td>
+{{- end }}
+</tr>
+{{- range $index, $alert := .Alerts }}
+<tr>
+<td>{{ $alert.Labels.alertname }}</td>
+<td style="color:#32CD32">{{ $alert.Labels.instance }} {{ $alert.Labels.device }}</td>
+<td>{{ $alert.Annotations.description }}</td>
+<td>{{ $alert.Labels.severity }}</td>
+{{- if eq .Status "firing" }}
+<td style="color:#FF7F50">{{ ($alert.StartsAt.Add 28800e9).Format "2006-01-02 15:04:05" }}</td>
+{{- else }}
+<td style="color:#FF7F50">{{ ($alert.EndsAt.Add 28800e9).Format "2006-01-02 15:04:05" }}</td>
+{{- end }}
+</tr>
+{{- end }}
+</table>
+{{- end }}

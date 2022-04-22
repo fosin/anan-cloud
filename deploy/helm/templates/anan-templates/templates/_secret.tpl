@@ -2,40 +2,49 @@
 anan secret模版
 */}}
 {{- define "anan.secret" -}}
-{{- if not $.Values.secret.existSecretName }}
-apiVersion: {{ $.Values.secret.apiVersion | default "v1" }}
+{{- $secretName := (include "anan.secret.name" .) }}
+{{- range $x, $secret := $.Values.secret }}
+{{- if not $secret.existName }}
+apiVersion: {{ $secret.apiVersion | default "v1" }}
 kind: Secret
-type: {{ $.Values.secret.type }}
+type: {{ $secret.type }}
 metadata:
-  name: {{ include "anan.secret.name" . }}
-  namespace: {{ .Release.Namespace }}
+  name: {{ $secret.name | default $secretName }}
+  namespace: {{ $.Release.Namespace }}
   labels:
   {{- include "anan.lable.name" . | nindent 4 }}: {{ $.Release.Name }}
-  {{- with $.Values.secret.labels }}
+  {{- with $secret.labels }}
   {{- toYaml . | nindent 4 }}
   {{- end }}
-  {{- with $.Values.secret.annotations }}
+  {{- with $secret.annotations }}
   annotations:
   {{- toYaml . | nindent 4 }}
   {{- end }}
-{{- if (.Values.secret.b64enc | default true) }}
+{{- $b64enc := ($secret.b64enc | default true) }}
+{{- $dirFiles := dict }}
+{{- range $index, $dir := $secret.fromDirs }}
+  {{- range $path, $_ := $.Files.Glob $dir }}
+    {{- $dirFiles := (set $dirFiles (base $path) ($.Files.Get $path)) }}
+  {{- end }}
+{{- end }}
+{{- $fromFiles := dict }}
+{{- range $key, $val := $secret.fromFiles }}
+  {{- $fromFiles := (set $fromFiles $key ($.Files.Get $val)) }}
+{{- end }}
+{{- $fromMap := $secret.fromMap | default dict }}
+{{- $allFiles := (mergeOverwrite $fromMap $fromFiles ($secret.fromTemps | default dict) $dirFiles) }}
+{{- if $b64enc }}
 data:
-  {{- range $key, $val := .Values.secret.confs }}
-  {{ $key }}: {{ $val | b64enc | quote }}
-  {{- end }}
-  {{- range $index, $files := $.Values.secret.files }}
-  {{- range $fileName, $file := $files.mountFiles }}
-  {{ $fileName }}: {{ $file | b64enc | quote }}
-  {{- end }}
+  {{- range $key, $val := $allFiles }}
+  {{ $key }}: {{ $val | b64enc | quote  }}
   {{- end }}
 {{- else }}
 stringData:
-  {{- with $.Values.secret.confs }}
-    {{- toYaml . | nindent 2 }}
+  {{- range $key, $val := $allFiles }}
+  {{ $key }}: {{ $val }}
   {{- end }}
-  {{- range $index, $files := $.Values.secret.files }}
-    {{- toYaml $files.mountFiles | nindent 2 }}
-  {{- end }}
+{{- end }}
+---
 {{- end }}
 {{- end }}
 {{- end -}}

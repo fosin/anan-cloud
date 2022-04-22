@@ -1,0 +1,28 @@
+- type: docker
+  enabled: true
+  containers.ids:
+    - "*"
+  processors:
+    - add_kubernetes_metadata:
+        in_cluster: true
+#   - type: docker
+#     enabled: true
+#     paths:
+#     - /var/log/containers/*.log
+#     multiline: # 多行处理，正则表示如果前面几个数字不是4个数字开头，那么就会合并到一行,解决Java堆栈错误日志收集问题
+#       pattern: ^\d{4}-\d{1,2}-\d{1,2}\s\d{1,2}:\d{1,2}:\d{1,2} #匹配Java日志开头时间
+#       negate: true # 正则是否开启，默认false不开启
+#       match: after # 不匹配的正则的行是放在上面一行的前面还是后面
+#     processors:
+#     - add_kubernetes_metadata:
+#         in_cluster: true
+#         host: ${NODE_NAME}
+#         matchers:
+#         - logs_path:
+#             logs_path: "/var/log/containers/"
+#     - add_cloud_metadata:
+#     - add_kubernetes_metadata:
+#         matchers:
+#         - logs_path:
+#             logs_path: "/var/log/containers/"
+#     - add_docker_metadata:

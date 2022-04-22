@@ -35,14 +35,14 @@ containers:
         port: http
         path: /actuator/health
     readinessProbe:
-      periodSeconds: 45
+      periodSeconds: 60
       failureThreshold: 2
       httpGet:
         scheme: HTTP
         port: http
         path: /actuator/health
     livenessProbe:
-      periodSeconds: 65
+      periodSeconds: 60
       failureThreshold: 2
       httpGet:
         scheme: HTTP
@@ -54,12 +54,15 @@ containers:
           command:
             - curl
             - -XPOST
-            - http://localhost:51400/actuator/shutdown
+            - http://localhost:6140/actuator/shutdown
     envFrom:
       - configMapRef:
           name: anan-env
+configmap:
+  - fromFiles:
+      anan-authserver.yaml: "anan-authserver.yaml"
 service:
   type: NodePort
   ports:
-    - port: 51400
+    - port: 6140
       name: http

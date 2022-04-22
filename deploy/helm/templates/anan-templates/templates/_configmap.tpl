@@ -2,27 +2,43 @@
 anan configmap模版
 */}}
 {{- define "anan.configmap" -}}
-{{- if not $.Values.configmap.existConfigMapName }}
-apiVersion: {{ $.Values.configmap.apiVersion | default "v1" }}
+{{- $configmapName := (include "anan.configmap.name" .) }}
+{{- range $x,$cm := $.Values.configmap }}
+{{- if not $cm.existName }}
+apiVersion: {{ $cm.apiVersion | default "v1" }}
 kind: ConfigMap
 metadata:
-  name: {{ include "anan.configmap.name" . }}
-  namespace: {{ .Release.Namespace }}
+  name: {{ $cm.name | default $configmapName }}
+  namespace: {{ $.Release.Namespace }}
   labels:
-  {{- include "anan.lable.name" . | nindent 4 }}: {{ $.Release.Name }}
-  {{- with $.Values.configmap.labels }}
-  {{- toYaml . | nindent 4 }}
-  {{- end }}
-  {{- with $.Values.configmap.annotations }}
+    {{- include "anan.lable.name" . | nindent 4 }}: {{ $.Release.Name }}
+    {{- with $cm.labels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+  {{- with $cm.annotations }}
   annotations:
-  {{- toYaml . | nindent 4 }}
+    {{- toYaml . | nindent 4 }}
   {{- end }}
 data:
-{{- with $.Values.configmap.confs }}
+{{- with $cm.fromMap }}
   {{- toYaml . | nindent 2 }}
 {{- end }}
-{{- range $index, $files := $.Values.configmap.files }}
-  {{- toYaml $files.mountFiles | nindent 2 }}
+{{- $dirFiles := dict }}
+{{- range $index, $dir := $cm.fromDirs }}
+  {{- range $path, $_ := $.Files.Glob $dir }}
+    {{- $dirFiles := (set $dirFiles (base $path) ($.Files.Get $path)) }}
+  {{- end }}
+{{- end }}
+{{- $fromFiles := dict }}
+{{- range $key, $val := $cm.fromFiles }}
+  {{- $fromFiles := (set $fromFiles $key ($.Files.Get $val)) }}
+{{- end }}
+{{- $allFiles := (mergeOverwrite $fromFiles ($cm.fromTemps | default dict) $dirFiles) }}
+{{- range $key, $val := $allFiles }}
+  {{ $key }}: |-
+    {{- $val | nindent 4 }}
+{{- end }}
+---
 {{- end }}
 {{- end }}
 {{- end -}}

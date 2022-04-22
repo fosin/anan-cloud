@@ -3,20 +3,21 @@
 anan replicaset 模版(包括：statefulset、deployment、daemonset)
 */}}
 {{- define "anan.replicaset" -}}
-{{- $labels := "{}" }}
+{{- $hasMountPath1 := (hasKey (first ($.Values.configmap| default list)) "mountPath") }}
+{{- $hasMountPath2 := (hasKey (first ($.Values.secret | default list)) "mountPath") }}
+{{- $hasMountPath3 := (hasKey (first ($.Values.hostPath | default list)) "mountPath") }}
+{{- $hasMountPath4 := (gt (len ($.Values.emptyDir | default list)) 0) }}
+{{- $hasMountPath := or $hasMountPath1 $hasMountPath2 $hasMountPath3 $hasMountPath4 }}
 {{- if $.Values.statefulset }}
 kind: "StatefulSet"
 apiVersion: {{ $.Values.statefulset.apiVersion | default "apps/v1" }}
-{{- $labels := $.Values.statefulset.labels }}
 {{- else }}
   {{- if $.Values.deployment }}
 kind: "Deployment"
 apiVersion: {{ $.Values.deployment.apiVersion | default "apps/v1" }}
-{{- $labels := $.Values.deployment.labels }}
   {{- else }}
 kind: "DaemonSet"
 apiVersion: {{ $.Values.daemonset.apiVersion | default "apps/v1" }}
-{{- $labels := $.Values.daemonset.labels }}
   {{- end }}
 {{- end }}
 metadata:
@@ -263,7 +264,7 @@ spec:
           volumeMounts:
           {{- toYaml $dataz.volumeMounts | nindent 12 }}
           {{- else }}
-          {{- if or $.Values.persistence $.Values.configmap $.Values.hostPath $.Values.emptyDir $.Values.secret }}
+          {{- if or $.Values.persistence $hasMountPath }}
           volumeMounts:
           {{- range $x,$datax := $.Values.persistence }}
           {{- if $datax.name }}
@@ -273,51 +274,61 @@ spec:
           {{- end }}
               mountPath: {{ $datax.mountPath }}
           {{- end }}
-          {{- if $.Values.configmap }}
-          {{- range $index, $file := $.Values.configmap.files }}
-          {{- if $file.mountPath }}
-          {{- if and (ne $file.mountPath "/") (eq (clean $file.mountPath) $file.mountPath) }}
-            - name: {{ $.Release.Name }}-{{ $index }}
-              mountPath: {{ $file.mountPath }}
-              {{- with $file.readOnly }}
+          {{- range $cmi,$cm := $.Values.configmap }}
+          {{- if $cm.mountPath }}
+          {{- if and (ne $cm.mountPath "/") (eq (clean $cm.mountPath) $cm.mountPath) }}
+            - name: {{ $.Release.Name }}-{{ $cmi }}
+              mountPath: {{ $cm.mountPath }}
+              {{- with $cm.readOnly }}
               readOnly: {{ . }}
               {{- end }}
           {{- else }}
-          {{- range $key, $val := $file.mountFiles }}
-            - name: {{ $.Release.Name }}-{{ $index }}
-              mountPath: {{ $file.mountPath }}{{ $key }}
-              {{- with $file.readOnly }}
+            {{- $dirFiles := dict }}
+            {{- range $diri,$dir := $cm.fromDirs }}
+              {{- range $path, $_ := $.Files.Glob $dir }}
+                {{- $dirFiles := (set $dirFiles (base $path) $path) }}
+              {{- end }}
+            {{- end }}
+            {{- $allFiles := (mergeOverwrite ($cm.fromFiles | default dict) ($cm.fromTemps | default dict) $dirFiles) }}
+            {{- range $key,$val := $allFiles }}
+            - name: {{ $.Release.Name }}-{{ $cmi }}
+              mountPath: {{ $cm.mountPath }}{{ $key }}
+              {{- with $cm.readOnly }}
               readOnly: {{ . }}
               {{- end }}
               subPath: {{ $key }}
+            {{- end }}
           {{- end }}
           {{- end }}
           {{- end }}
-          {{- end }}
-          {{- end }}
-          {{- if $.Values.secret }}
-          {{- range $index, $file := $.Values.secret.files }}
-          {{- if $file.mountPath }}
-          {{- if and (ne $file.mountPath "/") (eq (clean $file.mountPath) $file.mountPath) }}
-            - name: {{ $.Release.Name }}-secret-{{ $index }}
-              mountPath: {{ $file.mountPath }}
-              {{- with $file.readOnly }}
+          {{- range $secrcti,$secrct := $.Values.secret }}
+          {{- if $secrct.mountPath }}
+          {{- if and (ne $secrct.mountPath "/") (eq (clean $secrct.mountPath) $secrct.mountPath) }}
+            - name: {{ $.Release.Name }}-secret-{{ $secrcti }}
+              mountPath: {{ $secrct.mountPath }}
+              {{- with $secrct.readOnly }}
               readOnly: {{ . }}
               {{- end }}
           {{- else }}
-          {{- range $key, $val := $file.mountFiles }}
-            - name: {{ $.Release.Name }}-secret-{{ $index }}
-              mountPath: {{ $file.mountPath }}{{ $key }}
-              {{- with $file.readOnly }}
+            {{- $dirFiles := dict }}
+            {{- range $index,$dir := $secrct.fromDirs }}
+              {{- range $path, $_ := $.Files.Glob $dir }}
+                {{- $dirFiles := (set $dirFiles (base $path) $path) }}
+              {{- end }}
+            {{- end }}
+            {{- $allFiles := (mergeOverwrite ($secrct.fromFiles | default dict) ($secrct.fromTemps | default dict) $dirFiles) }}
+            {{- range $key,$val := $allFiles }}
+            - name: {{ $.Release.Name }}-secret-{{ $secrcti }}
+              mountPath: {{ $secrct.mountPath }}{{ $key }}
+              {{- with $secrct.readOnly }}
               readOnly: {{ . }}
               {{- end }}
               subPath: {{ $key }}
+            {{- end }}
           {{- end }}
           {{- end }}
           {{- end }}
-          {{- end }}
-          {{- end }}
-          {{- range $index, $hostPath := $.Values.hostPath }}
+          {{- range $index,$hostPath := $.Values.hostPath }}
             - name: {{ $.Release.Name }}-hostpath-{{ $index }}
               mountPath: {{ $hostPath.mountPath }}
               {{- with $hostPath.readOnly }}
@@ -327,7 +338,7 @@ spec:
               subPath: {{ . }}
               {{- end }}
           {{- end }}
-          {{- range $index, $emptyDir := $.Values.emptyDir }}
+          {{- range $index,$emptyDir := $.Values.emptyDir }}
             - name: {{ $.Release.Name }}-emptydir-{{ $index }}
               mountPath: {{ $emptyDir }}
           {{- end }}
@@ -338,45 +349,57 @@ spec:
       volumes:
       {{- toYaml $.Values.volumes | nindent 8 }}
       {{- else }}
-      {{- if or $.Values.configmap $.Values.hostPath $.Values.emptyDir $.Values.secret }}
+      {{- if $hasMountPath }}
       volumes:
-      {{- if $.Values.configmap }}
-      {{- $configmapName := $.Values.configmap.existConfigMapName | default (include "anan.configmap.name" .) }}
-      {{- range $index, $file := $.Values.configmap.files }}
-        {{- if $file.mountPath }}
-        - name: {{ $.Release.Name }}-{{ $index }}
+      {{- $configmapName := (include "anan.configmap.name" .) }}
+      {{- range $cmi,$cm := $.Values.configmap }}
+        {{- if $cm.mountPath }}
+        - name: {{ $.Release.Name }}-{{ $cmi }}
           configMap:
-            name: {{ $configmapName }}
-            {{- with $file.defaultMode }}
+            {{- $configmapName2 := $cm.existName | default $cm.name }}
+            name: {{ $configmapName2 | default $configmapName }}
+            {{- with $cm.defaultMode }}
             defaultMode: {{ . }}
             {{- end }}
             items:
-        {{- range $key, $val := $file.mountFiles }}
+              {{- $dirFiles := dict }}
+              {{- range $index, $dir := $cm.fromDirs }}
+                {{- range $path, $_ := $.Files.Glob $dir }}
+                  {{- $dirFiles := (set $dirFiles (base $path) $path) }}
+                {{- end }}
+              {{- end }}
+              {{- $allFiles := (mergeOverwrite ($cm.fromFiles | default dict) ($cm.fromTemps | default dict) $dirFiles) }}
+              {{- range $key, $val := $allFiles }}
               - key: {{ $key }}
                 path: {{ $key }}
-        {{- end }}
+              {{- end }}
         {{- end }}
       {{- end }}
-      {{- end }}
-      {{- if $.Values.secret }}
-      {{- $secretName := $.Values.secret.existSecretName | default (include "anan.secret.name" .) }}
-      {{- range $index, $file := $.Values.secret.files }}
-        {{- if $file.mountPath }}
+      {{- $secretName := (include "anan.secret.name" .) }}
+      {{- range $index,$secrct := $.Values.secret }}
+        {{- if $secrct.mountPath }}
        - name: {{ $.Release.Name }}-secret-{{ $index }}
           secret:
-            name: {{ $secretName }}
-            {{- with $file.defaultMode }}
+            {{- $secretName2 := $secrct.existName | default $secrct.name }}
+            name: {{ $secretName2 | default $secretName }}
+            {{- with $secrct.defaultMode }}
             defaultMode: {{ . }}
             {{- end }}
             items:
-        {{- range $key, $val := $file.mountFiles }}
+              {{- $dirFiles := dict }}
+              {{- range $index,$dir := $secrct.fromDirs }}
+                {{- range $path, $_ := $.Files.Glob $dir }}
+                  {{- $dirFiles := (set $dirFiles (base $path) $path) }}
+                {{- end }}
+              {{- end }}
+              {{- $allFiles := (mergeOverwrite ($secrct.fromFiles | default dict) ($secrct.fromTemps | default dict) $dirFiles) }}
+              {{- range $key,$val := $allFiles }}
               - key: {{ $key }}
                 path: {{ $key }}
-        {{- end }}
+              {{- end }}
         {{- end }}
       {{- end }}
-      {{- end }}
-      {{- range $index, $hostPath := $.Values.hostPath }}
+      {{- range $index,$hostPath := $.Values.hostPath }}
         - name: {{ $.Release.Name }}-hostpath-{{ $index }}
           hostPath:
             path: {{ $hostPath.path }}

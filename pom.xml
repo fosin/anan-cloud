@@ -28,7 +28,6 @@
         <anan-spring-cloud-alibaba.version>2021.1</anan-spring-cloud-alibaba.version>
         <anan-spring-boot-admin.version>2.5.5</anan-spring-boot-admin.version>
         <sonar.host.url>http://192.168.137.8:9001/</sonar.host.url>
-        <log4j2.version>2.16.0</log4j2.version>
     </properties>
     <profiles>
         <profile>
@@ -51,7 +50,7 @@
                 <spring.cloud.nacos.sharedConfigs>application.yaml</spring.cloud.nacos.sharedConfigs>
                 <eureka.client.enabled>false</eureka.client.enabled>
                 <eureka.client.service-url.defaultZone>
-                    http://${anan-placeholder1}spring.security.user.name${anan-placeholder2}:${anan-placeholder1}spring.security.user.password${anan-placeholder2}${anan-at}anan-eurekaserver:51000/eureka/
+                    http://${anan-placeholder1}spring.security.user.name${anan-placeholder2}:${anan-placeholder1}spring.security.user.password${anan-placeholder2}${anan-at}anan-eurekaserver:6100/eureka/
                 </eureka.client.service-url.defaultZone>
                 <spring.cloud.config.enabled>false</spring.cloud.config.enabled>
                 <spring.cloud.config.profileActive>native</spring.cloud.config.profileActive>
@@ -98,7 +97,7 @@
                 <spring.cloud.nacos.sharedConfigs>application.yaml</spring.cloud.nacos.sharedConfigs>
                 <eureka.client.enabled>false</eureka.client.enabled>
                 <eureka.client.service-url.defaultZone>
-                    http://${anan-placeholder1}spring.security.user.name${anan-placeholder2}:${anan-placeholder1}spring.security.user.password${anan-placeholder2}${anan-at}localhost:51000/eureka/
+                    http://${anan-placeholder1}spring.security.user.name${anan-placeholder2}:${anan-placeholder1}spring.security.user.password${anan-placeholder2}${anan-at}localhost:6100/eureka/
                 </eureka.client.service-url.defaultZone>
                 <spring.cloud.config.enabled>false</spring.cloud.config.enabled>
                 <spring.cloud.config.profileActive>native</spring.cloud.config.profileActive>
@@ -143,7 +142,7 @@
                 <spring.cloud.nacos.sharedConfigs>application.yaml</spring.cloud.nacos.sharedConfigs>
                 <eureka.client.enabled>false</eureka.client.enabled>
                 <eureka.client.service-url.defaultZone>
-                    http://${anan-placeholder1}spring.security.user.name${anan-placeholder2}:${anan-placeholder1}spring.security.user.password${anan-placeholder2}${anan-at}anan-eurekaserver1:51000/eureka/,http://${anan-placeholder1}spring.security.user.name${anan-placeholder2}:${anan-placeholder1}spring.security.user.password${anan-placeholder2}${anan-at}anan-eurekaserver2:51000/eureka/
+                    http://${anan-placeholder1}spring.security.user.name${anan-placeholder2}:${anan-placeholder1}spring.security.user.password${anan-placeholder2}${anan-at}anan-eurekaserver1:6100/eureka/,http://${anan-placeholder1}spring.security.user.name${anan-placeholder2}:${anan-placeholder1}spring.security.user.password${anan-placeholder2}${anan-at}anan-eurekaserver2:6100/eureka/
                 </eureka.client.service-url.defaultZone>
                 <spring.cloud.config.enabled>false</spring.cloud.config.enabled>
                 <spring.cloud.config.profileActive>native</spring.cloud.config.profileActive>

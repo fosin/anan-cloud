@@ -1,17 +1,15 @@
 secret:
-  type: Opaque
-  confs:
-    spring.cloud.nacos.config.username: "nacos"
-    spring.cloud.nacos.config.password: "local"
-    spring.cloud.nacos.discovery.username: "nacos"
-    spring.cloud.nacos.discovery.password: "local"
+  - type: Opaque
+    fromMap:
+      spring.cloud.nacos.config.username: "nacos"
+      spring.cloud.nacos.config.password: "local"
+      spring.cloud.nacos.discovery.username: "nacos"
+      spring.cloud.nacos.discovery.password: "local"
 statefulset:
   updateStrategy:
     type: RollingUpdate
   replicaCount: 1
 terminationGracePeriodSeconds: 15
-nacos: true
-podAntiAffinity: requiredDuringSchedulingIgnoredDuringExecution
 containers:
   - image: nacos/nacos-server:1.4.2
     imagePullPolicy: IfNotPresent
@@ -83,19 +81,19 @@ service:
     - port: 7848
       name: rpc
 persistence:
-- name: logs
-  storageClassName: local-storage
-  size: 1G
-  accessMode: ReadWriteOnce
-  mountPath: /home/nacos/logs
-  local:
-    - hostname: examtest0
-      path: /data/logs/nacos0
-- name: data
-  storageClassName: local-storage
-  size: 1G
-  accessMode: ReadWriteOnce
-  mountPath: /home/nacos/data
-  local:
-    - hostname: examtest0
-      path: /data/nacos0
+  - name: logs
+    storageClassName: local-storage
+    size: 1G
+    accessMode: ReadWriteOnce
+    mountPath: /home/nacos/logs
+    local:
+      - hostname: examtest0
+        path: /data/logs/nacos0
+  - name: data
+    storageClassName: local-storage
+    size: 1G
+    accessMode: ReadWriteOnce
+    mountPath: /home/nacos/data
+    local:
+      - hostname: examtest0
+        path: /data/nacos0

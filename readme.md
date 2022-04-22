@@ -50,19 +50,19 @@
 
 ### 系统架构图
 
-![系统架构图](./docs/image/技术架构图.png)
+![系统架构图](docs/image/技术架构图.png)
 
 ### 网络拓扑图
 
-![网络拓扑图](./docs/image/网络拓扑图.png)
+![网络拓扑图](docs/image/网络拓扑图.png)
 
 ### 模块关系图
 
-![模块关系图](./docs/image/模块关系图.png)
+![模块关系图](docs/image/模块关系图.png)
 
 ### 功能设计图
 
-![功能设计图](./docs/image/功能设计图.png)
+![功能设计图](docs/image/功能设计图.png)
 
 ## 框架版本对照
 
@@ -75,8 +75,27 @@
     2.4.x               2.1.x                3.4.x
     2.5.x               2.2.x                3.4.x
     2.6.x               2.3.x                3.4.x
-    2.7.x               2.4.x                3.5.x
-    3.0.x               3.0.x                3.5.x
+    2.7.x               2.4.x                3.5.x~3.6.x
+    3.0.x               3.0.x                3.5.x~3.6.x
+
+## 服务与端口对照
+
+    anan平台服务名称       |     端口
+    -----------------------------------
+    anan-eurakaserver          6100
+    anan-configserver          6110
+    anan-codemaker             6120
+    anan-authserver            6140
+    anan-platformserver        6150
+    anan-sbaserver             6170
+    anan-zuulgateway           6190
+    anan-cloudgateway          6190
+
+    anan业务服务名称       |     端口
+    -----------------------------------
+    anan-vhr                   6200
+    anan-exam                  6210
+    anan-mpi                   6220
 
 ## 搭建环境
 
@@ -98,7 +117,7 @@
     
     当需要与K8S进行联调开发时，可以选择这种方式，不过部署比较复杂。
 
-详细介绍 [点这里Readme.md](deploy/helm/Readme.md)
+详细介绍 [点这里Readme-k8s-dev.md](deploy/k8s/Readme-k8s-dev.md)
 
 ### 1.3、运行前端项目anan-vue
 

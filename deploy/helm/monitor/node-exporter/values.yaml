@@ -1,5 +1,4 @@
 statefulset:
-  labels: {}
   updateStrategy:
     type: RollingUpdate
   #滚动升级时60s后认为该pod就绪

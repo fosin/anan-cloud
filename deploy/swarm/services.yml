@@ -8,7 +8,7 @@ services:
     volumes:
       - ../logs:/logs
     ports:
-      - 51400:51400
+      - 6140:6140
     depends_on:
       - redis
       - anan-platform-mysql
@@ -27,13 +27,13 @@ services:
 
   anan-platformserver:
     image: fosin/anan-platformserver:3.0.0-SNAPSHOT
-    entrypoint: "sh /anan/wait-for.sh anan-authserver:51400 -t 3600 -- /anan/entrypoint.sh"
+    entrypoint: "sh /anan/wait-for.sh anan-authserver:6140 -t 3600 -- /anan/entrypoint.sh"
     networks:
       - anan-overlay
     volumes:
       - ../logs:/logs
     ports:
-      - 51500:51500
+      - 6150:6150
     depends_on:
       - anan-configserver
       - redis
@@ -53,11 +53,11 @@ services:
 
   anan-zuulgateway:
     image: fosin/anan-zuulgateway:3.0.0-SNAPSHOT
-    entrypoint: "sh /anan/wait-for.sh anan-platformserver:51500 -t 3600 -- /anan/entrypoint.sh"
+    entrypoint: "sh /anan/wait-for.sh anan-platformserver:6150 -t 3600 -- /anan/entrypoint.sh"
     volumes:
       - ../logs:/logs
     ports:
-      - 51900:51900
+      - 6190:6190
     networks:
       - anan-overlay
     depends_on:
@@ -80,13 +80,13 @@ services:
 
   anan-sbaserver:
     image: fosin/anan-sbaserver:3.0.0-SNAPSHOT
-    entrypoint: "sh /anan/wait-for.sh anan-zuulgateway:51900 -t 3600 -- /anan/entrypoint.sh"
+    entrypoint: "sh /anan/wait-for.sh anan-zuulgateway:6190 -t 3600 -- /anan/entrypoint.sh"
     networks:
       - anan-overlay
     volumes:
       - ../logs:/logs
     ports:
-      - 51700:51700
+      - 6170:6170
     depends_on:
       - anan-zuulgateway
     deploy:

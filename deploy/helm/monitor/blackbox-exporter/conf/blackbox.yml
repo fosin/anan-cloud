@@ -1,0 +1,24 @@
+modules:
+  http_2xx:
+    prober: http
+    timeout: 10s
+    http:
+      valid_http_versions: ["HTTP/1.1", "HTTP/2"]
+      valid_status_codes: [200] #返回状态码，在grafana作图时用。
+      method: GET
+      preferred_ip_protocol: "ip4" #如果http监测是使用ipv4 就要写上，目前国内使用ipv6很少。
+  http_post_2xx: #http post 监测模块
+    prober: http
+    timeout: 10s
+    http:
+      valid_http_versions: ["HTTP/1.1", "HTTP/2"]
+      method: POST
+      preferred_ip_protocol: "ip4"
+  tcp_connect:
+    prober: tcp
+    timeout: 10s
+  icmp:
+    prober: icmp
+    timeout: 10s
+    icmp:
+      preferred_ip_protocol: "ip4"

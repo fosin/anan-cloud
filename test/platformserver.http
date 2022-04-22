@@ -1,5 +1,5 @@
 ### 获取token
-POST {{host}}:51400/oauth/token?username={{username}}&password={{password}}&grant_type=password
+POST {{host}}:6140/oauth/token?username={{username}}&password={{password}}&grant_type=password
 Accept: */*
 Cache-Control: no-cache
 Authorization: Basic {{secerityId}} {{secerityPass}}
@@ -7,11 +7,11 @@ Authorization: Basic {{secerityId}} {{secerityPass}}
 > {% client.global.set("access_token", response.body.access_token); %}
 
 ### 获取字典明细，字典id=7
-POST {{host}}:51500/v1/dictionaryDetail/byCode/7
+POST {{host}}:6150/v1/dictionaryDetail/byCode/7
 
 
 ### 获取系统参数
-POST {{host}}:51500/v1/parameter/value
+POST {{host}}:6150/v1/parameter/value
 Authorization: Bearer {{access_token}}
 Content-Type: application/json
 
@@ -23,11 +23,11 @@ Content-Type: application/json
 }
 
 ### 重置密码，用户id=3
-POST {{host}}:51500/v1/user/resetPassword/3
+POST {{host}}:6150/v1/user/resetPassword/3
 Authorization: Bearer {{access_token}}
 
 ### 获取用户admin信息
-POST {{host}}:51500/v1/user/usercode/admin
+POST {{host}}:6150/v1/user/usercode/admin
 Authorization: Bearer {{access_token}}
 
 ###

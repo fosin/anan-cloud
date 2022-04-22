@@ -9,7 +9,7 @@ terminationGracePeriodSeconds: 30 #优雅关闭pod的等待时间，默认30s
 initContainers:
   - name: wait-platformserver
     image: busybox
-    command: ['sh', '-c', 'until nc anan-platformserver 51500; do echo waiting for anan-platformserver; sleep 2; done;']
+    command: ['sh', '-c', 'until nc anan-platformserver 6150; do echo waiting for anan-platformserver; sleep 2; done;']
     imagePullPolicy: IfNotPresent
 containers:
   - image: registry.cn-hongkong.aliyuncs.com/fosin/anan-cloudgateway:3.0.0-SNAPSHOT
@@ -46,12 +46,15 @@ containers:
           command:
             - curl
             - -XPOST
-            - http://localhost:51900/actuator/shutdown
+            - http://localhost:6190/actuator/shutdown
     envFrom:
       - configMapRef:
           name: anan-env
+configmap:
+  - fromFiles:
+      anan-zuulgateway.yaml: "anan-zuulgateway.yaml"
 service:
   type: NodePort
   ports:
-    - port: 51900
+    - port: 6190
       name: http

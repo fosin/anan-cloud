@@ -29,14 +29,20 @@ containers:
         memory: "64Mi"
       limits:
         memory: "128Mi"
+    startupProbe:
+      periodSeconds: 5
+      failureThreshold: 10
+      httpGet:
+        path : /healthcheck/
+        port: http
     readinessProbe:
-      periodSeconds: 30
+      periodSeconds: 60
       failureThreshold: 2
       httpGet:
         path : /healthcheck/
         port: http
     livenessProbe:
-      periodSeconds: 45
+      periodSeconds: 60
       failureThreshold: 2
       httpGet:
         path : /healthcheck/

@@ -35,7 +35,7 @@ net.ipv4.ip_forward=1
 vm.swappiness=0 #禁止使用 swap 空间，只有当系统 OOM 时才允许使用它
 vm.overcommit_memory=1 #不检查物理内存是否够用
 vm.panic_on_oom=0 #开启OOM
-fs.inotify.max_user_instances=8192
+fs.inotify.max_user_instances=6192
 fs.inotify.max_user_watches=1048576
 fs.file-max=52706963
 fs.nr_open=52706963
@@ -201,7 +201,7 @@ kubeadm init --kubernetes-version=v${K8S_VERSION} \
   kubeadm init phase upload-certs --upload-certs
 
   #双网卡需要指定IP，增加 --apiserver-advertise-address参数
-  kubeadm join 172.16.1.30:6443 --token zfvx5r.mdfqh1jtfshu2svt \
+  kubeadm join ${K8S_LB_IP}:6443 --token zfvx5r.mdfqh1jtfshu2svt \
     --discovery-token-ca-cert-hash sha256:069708cc902cf1ec8caca18186cc376ba5a3a4cade9e850554fa63c44392bb09 \
     --control-plane --certificate-key 2e1d6ebcbcbf7afe7e19c2bdd1b4922ad4f7efcdc5412fdda1a8563698e85531 \
     --apiserver-advertise-address=${NODE_IPS[${NODE_INDEX}]}
@@ -212,7 +212,7 @@ kubeadm init --kubernetes-version=v${K8S_VERSION} \
   kubeadm token create --print-join-command
 
   #双网卡需要指定IP，增加--apiserver-advertise-address参数
-  kubeadm join 172.16.1.30:6443 --token ruvd9n.5rksmgwyye8h9mis \
+  kubeadm join ${K8S_LB_IP}:6443 --token ruvd9n.5rksmgwyye8h9mis \
       --discovery-token-ca-cert-hash sha256:e51320599d5ff7f0c5067a765a8403eb81b89043d446cacc3bb26b4a4598eb4a \
       --apiserver-advertise-address=${NODE_IPS[${NODE_INDEX}]}
 
@@ -222,15 +222,15 @@ kubeadm init --kubernetes-version=v${K8S_VERSION} \
 vim /etc/kubernetes/manifests/kube-apiserver.yaml
 
 # 开机自动启动kubelet
-systemctl daemon-reload && systemctl enable --now kubelet && systemctl status kubelet
+systemctl daemon-reload && systemctl enable --now kubelet && systemctl status kubelet -l
 
 ```
 
-### 2.7、Etcd 集群状态查看(所有控制平面节点都可执行)
+### 2.7、集群状态查看(所有控制平面节点都可执行)
 
 ```shell script
 
-# k8s > 1.18.x
+# 验证Etcd集群状态（k8s > 1.18.x）
 kubectl -n kube-system exec etcd-$(hostname) -- etcdctl \
 --endpoints=https://localhost:2379 \
 --cacert=/etc/kubernetes/pki/etcd/ca.crt \
@@ -239,6 +239,9 @@ kubectl -n kube-system exec etcd-$(hostname) -- etcdctl \
 
 kubectl get endpoints kube-controller-manager --namespace=kube-system -o yaml
 kubectl get endpoints kube-scheduler --namespace=kube-system -o yaml
+
+# 验证apiserver接口
+curl $K8S_APISERVER/api/v1/namespaces/default/pods/redis-0 --header "Authorization: Bearer $K8S_TOKEN" --insecure
 
 ```
 

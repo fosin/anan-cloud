@@ -1,0 +1,21 @@
+server:
+  port: 6150
+anan:
+  swagger:
+    enabled: true
+    title: ${spring.application.name}
+    description: ${info.description}
+    version: ${info.version}
+    base-package: top.fosin.anan.platform
+    authorization:
+      name: Oauth2 Authorization
+      keyName: Authorization
+    contact:
+      name: fosin
+      email: 28860823@qq.com
+              #  global-operation-parameters:
+              #  - name: Authorization
+              #    description: Oauth2.0令牌信息,格式例如：Bearer 58cb49cd-be59-4706-bbc5-9c41fc3cbef4
+              #    modelRef: string
+              #    parameterType: header
+      #    required: true

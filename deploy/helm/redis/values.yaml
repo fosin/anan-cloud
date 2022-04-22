@@ -1,7 +1,7 @@
 secret:
-  type: Opaque
-  confs:
-    password: "local"
+  - type: Opaque
+    fromMap:
+      password: "local"
 statefulset:
   updateStrategy:
     type: RollingUpdate
@@ -64,11 +64,10 @@ affinity:
                   - redis
           topologyKey: kubernetes.io/hostname
 configmap:
-  existConfigMapName: redis
-  files:
   - mountPath: /etc/redis
     defaultMode: "0755"
-    mountFiles:
+    existName: redis
+    fromTemps:
       redis.conf:
       fix-ip.sh:
 persistence:

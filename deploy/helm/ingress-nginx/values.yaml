@@ -1,0 +1,237 @@
+{{/*TODO 该方案还未完成，不要使用，目前推荐使用nginx-ingress（nginx官方的ingress-controller）*/}}
+ingressClass:
+  default: true
+  controller: "nginx.org/ingress-controller"
+ingress:
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    # nginx.ingress.kubernetes.io/use-regex: "true"
+    # nginx.ingress.kubernetes.io/rewrite-target: "/$1"
+    nginx.ingress.kubernetes.io/app-root: /anan-vue/
+    nginx.org/server-snippets: |
+      location /anan-vue/ {
+          root /usr/local/nginx/html;
+          index index.html;
+      }
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      rewrite ^(/anan-vue)$ $1/ redirect;
+      rewrite ^/rabbitmq/(.*)$ /$1 redirect;
+      rewrite ^/sba/(.*)$ /$1 redirect;
+      proxy_set_header Host $http_host;
+  tls:
+    - secretName: fosin.top
+      hosts:
+        - www.fosin.top
+  defaultBackend:
+    service:
+      name: anan-vue
+      port:
+        number: 80
+  rules:
+    - host: www.fosin.top
+      http:
+        paths:
+          - path: /sba/(.*)$
+            pathType: Prefix
+            backend:
+              service:
+                name: anan-sbaserver
+                port:
+                  number: 6170
+          - path: /gateway
+            pathType: Prefix
+            backend:
+              service:
+                name: anan-cloudgateway
+                port:
+                  number: 6190
+          - path: /rabbitmq/(.*)$
+            pathType: Prefix
+            backend:
+              service:
+                name: rabbitmq
+                port:
+                  number: 15672
+daemonset:
+  strategy:
+    rollingUpdate:
+      maxUnavailable: 1 #滚动升级时允许的最大Unavailable的pod个数
+  minReadySeconds: 60  #滚动升级时60s后认为该pod就绪
+terminationGracePeriodSeconds: 15 #优雅关闭pod的等待时间，默认30s
+containers:
+  - image: registry.cn-hongkong.aliyuncs.com/fosin/ingress-nginx-controller:3.5.0
+    imagePullPolicy: Always
+    resources:
+      limits:
+        memory: 128Mi
+      requests:
+        cpu: 1m
+        memory: 64Mi
+    env:
+      - name: TZ
+        value: Asia/Shanghai
+      - name: POD_NAMESPACE
+        valueFrom:
+          fieldRef:
+            fieldPath: metadata.namespace
+      - name: HELM_RELEASE_NAME
+        valueFrom:
+          fieldRef:
+            fieldPath: metadata.labels['anan-templates-release']
+    args:
+      - -enable-snippets=true
+      - -nginx-plus=false
+      - -nginx-reload-timeout=60000
+      - -enable-app-protect=false
+      - -enable-app-protect-dos=false
+      - -nginx-configmaps=$(POD_NAMESPACE)/$(HELM_RELEASE_NAME)
+      - -ingress-class=$(HELM_RELEASE_NAME)
+      - -nginx-debug=true
+      - -v=1
+      - -enable-prometheus-metrics=true
+      - -prometheus-metrics-listen-port=9113
+      - -health-status=true
+      - -health-status-uri=/nginx-health
+      - -ready-status=true
+      - -ready-status-port=8081
+      - -enable-latency-metrics=false
+      - -enable-custom-resources=false
+    startupProbe:
+      periodSeconds: 5
+      failureThreshold: 10
+      httpGet:
+        path: /nginx-ready
+        port: ready-status
+    readinessProbe:
+      periodSeconds: 60
+      failureThreshold: 2
+      httpGet:
+        path: /nginx-ready
+        port: ready-status
+    livenessProbe:
+      periodSeconds: 60
+      failureThreshold: 2
+      httpGet:
+        path: /nginx-health
+        port: http
+    lifecycle:
+      preStop:
+        exec:
+          command: ["/usr/sbin/nginx", "-s", "quit"]
+    securityContext:
+      allowPrivilegeEscalation: true
+      runAsUser: 101 #nginx
+      capabilities:
+        drop:
+        - ALL
+        add:
+        - NET_BIND_SERVICE
+service:
+  type: NodePort
+  ports:
+    - port: 80
+      name: http
+    - port: 443
+      name: https
+    - port: 8081
+      name: ready-status
+    - port: 9113
+      name: prometheus
+configmap:
+- mountPath: /etc/nginx/
+  fromMap:
+    # error-log-level: debug
+    # opentracing: "true"
+    opentracing-tracer: /usr/local/lib/libzipkin_opentracing_plugin.so
+    #自定义日志格式
+    #log-format: '$remote_addr - $remote_user [$time_local] "$request" $status $grpc_status $body_bytes_sent "$http_referer"  "$http_user_agent" "$http_x_forwarded_for" "$resource_name" "$resource_type" "$resource_namespace" "$service"'
+    #开启允许自定义header
+    #enable-underscores-in-headers: "true"
+  fromTemps:
+    opentracing-tracer-config: |
+      {
+        "service_name": "anan-nginx-ingress",
+        "service_address": "$(HELM_RELEASE_NAME)",
+        "collector_host": "zipkin",
+        "collector_port": 9411,
+        "sample_rate": 1.0
+      }
+cluster:
+  role:
+    rules:
+      - apiGroups:
+        - ""
+        resources:
+        - services
+        - endpoints
+        - secrets
+        verbs:
+        - get
+        - list
+        - watch
+      - apiGroups:
+        - ""
+        resources:
+        - configmaps
+        verbs:
+        - get
+        - list
+        - watch
+        - update
+        - create
+      - apiGroups:
+        - ""
+        resources:
+        - pods
+        verbs:
+        - list
+        - watch
+      - apiGroups:
+        - ""
+        resources:
+        - events
+        verbs:
+        - create
+        - patch
+        - list
+      - apiGroups:
+        - networking.k8s.io
+        resources:
+        - ingresses
+        verbs:
+        - get
+        - list
+        - watch
+      - apiGroups:
+        - networking.k8s.io
+        resources:
+        - ingressclasses
+        verbs:
+        - get
+      - apiGroups:
+        - networking.k8s.io
+        resources:
+        - ingresses/status
+        verbs:
+        - update
+      - apiGroups:
+        - k8s.nginx.org
+        resources:
+        - virtualservers
+        - virtualserverroutes
+        - globalconfigurations
+        - transportservers
+        - policies
+        verbs:
+        - list
+        - watch
+        - get
+      - apiGroups:
+        - k8s.nginx.org
+        resources:
+        - virtualservers/status
+        - virtualserverroutes/status
+        - policies/status
+        - transportservers/status
+        verbs:
+        - update

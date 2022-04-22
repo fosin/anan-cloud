@@ -1,6 +1,6 @@
 secret:
-  type: Opaque
-  confs:
+- type: Opaque
+  fromMap:
     password: "local"
 statefulset:
   updateStrategy:
@@ -38,6 +38,8 @@ containers:
       tcpSocket:
         port: http
     env:
+      - name: TZ
+        value: Asia/Shanghai
       - name: MY_POD_NAME
         valueFrom:
           fieldRef:
@@ -70,11 +72,10 @@ persistence:
     - hostname: exam2
       path: /data/es2
 configmap:
-  existConfigMapName: es
-  files:
   - mountPath: /usr/share/elasticsearch/config/
-    mountFiles:
+    fromTemps:
       elasticsearch.yml:
+    existName: es
 cluster:
   role:
     rules:

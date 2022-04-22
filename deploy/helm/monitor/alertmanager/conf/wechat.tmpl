@@ -1,0 +1,27 @@
+{{ define "wechat.text" }}
+{{- if eq .Status "firing" }}
+=======异常告警=======
+{{- else }}
+=======告警恢复=======
+{{- end }}
+{{- range $index, $alert := .Alerts }}
+告警主机名：{{ $alert.Labels.instance }} {{ $alert.Labels.device }}
+{{- if gt (len $alert.Labels.namespace) 0 }}
+故障实例所在namespace: {{ $alert.Labels.namespace }}
+{{- end }}
+{{- if gt (len $alert.Labels.node) 0 }}
+故障物理机ip: {{ $alert.Labels.node }}
+{{- end }}
+{{- if gt (len $alert.Labels.pod_name) 0 }}
+故障pod名称: {{ $alert.Labels.pod_name }}
+{{- end }}
+告警名称：{{ $alert.Labels.alertname }}
+告警级别：{{ $alert.Labels.severity }}
+告警详情：{{ $alert.Annotations.description }}
+告警时间：{{ ($alert.StartsAt.Add 28800e9).Format "2006-01-02 15:04:05" }}
+{{- if eq .Status "resolved" }}
+恢复时间：{{ ($alert.EndsAt.Add 28800e9).Format "2006-01-02 15:04:05" }}
+{{- end }}
+=====================
+{{- end }}
+{{- end }}

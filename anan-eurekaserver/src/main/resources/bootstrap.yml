@@ -1,5 +1,5 @@
 server:
-  port: 51000
+  port: 6100
 eureka:
   client:
     fetch-registry: false

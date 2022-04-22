@@ -27,7 +27,7 @@ data:
     appendfilename appendonly.aof
     dbfilename dump.rdb
     port 6379
-    requirepass {{ .Values.secret.confs.password | default ( include "anan.password" .) | quote }}
+    requirepass {{ index (index (index .Values.secret 0) "fromMap") "password" | quote }}
     maxmemory {{ index (index (index (index .Values.containers 0) "resources") "limits") "memory" }}B
     maxmemory-policy allkeys-lru
     databases 1

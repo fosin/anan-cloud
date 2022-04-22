@@ -1,5 +1,5 @@
 ### 获取token
-POST {{host}}:51400/oauth/token?username={{username}}&password={{password}}&grant_type=password
+POST {{host}}:6140/oauth/token?username={{username}}&password={{password}}&grant_type=password
 Accept: */*
 Cache-Control: no-cache
 Authorization: Basic {{secerityId}} {{secerityPass}}
@@ -7,23 +7,23 @@ Authorization: Basic {{secerityId}} {{secerityPass}}
 > {% client.global.set("access_token", response.body.access_token); %}
 
 ### 获取当前用户的登录信息、权限信息、角色信息
-#http://{{host}}:51400/oauth/principal
-POST {{host}}:51400/oauth/principal
+#http://{{host}}:6140/oauth/principal
+POST {{host}}:6140/oauth/principal
 Authorization: Bearer {{access_token}}
 
 ### 移除Token
-POST {{host}}:51400/oauth/removeToken
+POST {{host}}:6140/oauth/removeToken
 Authorization: Bearer {{access_token}}
 
 ### 授权码模式-获取code
-POST {{host}}:51400/oauth/authorize?client_id=sso&redirect_uri=http://localhost:51700/login&response_type=code&scope=all&state=C89ZEv
+POST {{host}}:6140/oauth/authorize?client_id=sso&redirect_uri=http://localhost:6170/login&response_type=code&scope=all&state=C89ZEv
 Accept: */*
 Cache-Control: no-cache
 Authorization: Basic {{secerityId}} {{secerityPass}}
 ###
 
 ### 查询服务下的权限列表
-POST http://{{host}}:51400/v1/permission/serviceCode/anan-platformserver
+POST http://{{host}}:6140/v1/permission/serviceCode/anan-platformserver
 Authorization: Bearer {{access_token}}
 
 

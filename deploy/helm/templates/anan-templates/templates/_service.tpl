@@ -69,7 +69,7 @@ metadata:
   name: {{ include "anan.service.headless.name" . }}
   namespace: {{ $.Release.Namespace }}
   labels:
-  {{- include "anan.lable.name" . | nindent 4 }}: {{ include "anan.service.headless.name" . }}
+  {{- include "anan.lable.name" . | nindent 4 }}: {{ $.Release.Name }}
   {{- with $.Values.service.labels }}
   {{- toYaml . | nindent 4 }}
   {{- end }}

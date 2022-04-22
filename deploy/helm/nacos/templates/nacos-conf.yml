@@ -1,4 +1,3 @@
-{{- if .Values.nacos  }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -33,4 +32,3 @@ data:
     #management.metrics.export.influx.auto-create-db=true
     #management.metrics.export.influx.consistency=one
     #management.metrics.export.influx.compressed=true
-{{- end }}

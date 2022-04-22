@@ -1,123 +1,3 @@
-configmap:
-  files:
-  - mountPath: /etc/alertmanager
-    mountFiles:
-      alertmanager.yml: |-
-        global:
-          resolve_timeout: 5m
-          # smtp配置
-          smtp_from: "28860823@qq.com"
-          smtp_smarthost: 'smtp.qq.com:465'
-          smtp_auth_username: "28860823@qq.com"
-          smtp_auth_password: "hzthblzjynqgbgja"
-          smtp_require_tls: false
-        templates:
-          - '/etc/alertmanager/*.tmpl'
-        #抑制器配置
-        inhibit_rules:
-          - source_match: #源标签警报触发时抑制含有目标标签的警报
-              severity: 'critical'  #此处的抑制匹配一定在route中配置的，否则会提示找不key。
-            target_match:
-              severity: 'warning' #目标标签值正则匹配，可以是正则表达式如: ".*MySQL.*"
-            equal: ['alertname'] #确保这个配置下的标签内容相同才会抑制。
-        route:
-          receiver: wechat
-          group_wait: 15s #分组等待的时间。用于等待抑制告警，或等待同一组告警采集更多初始告警后一起发送。
-          group_interval: 15s #上下两组发送告警的间隔时间
-          repeat_interval: 5m #重复发送告警时间。默认1h
-          group_by: [alertname] #采用哪个标签作为分组的依据
-          routes:
-            - receiver: tcfuture
-              group_wait: 15s
-              group_interval: 15s
-              repeat_interval: 5m
-              match:
-                severity: critical
-                #severity: warning
-        receivers:
-          - name: tcfuture
-            email_configs:
-              - to: 'huyx@tcfuture.tech'
-                html: '{{ template "email.html" . }}'
-                send_resolved: true
-                headers:
-                  subject: "[考试系统]报警邮件"
-                  from: "监控中心"
-                  to: "老胡"
-          - name: wechat
-            wechat_configs:
-              - corp_id: 'ww1eaedebccb46d50e'
-                message: '{{ template "wechat.text" . }}'
-                send_resolved: true
-                #接收者或者是用户或者是部门，选一个就行
-                #to_user: '@all'
-                to_party: '1'
-                agent_id: '1000004'
-                api_secret: 'uNhY-0jfmxRArRKU9P5glh7iBNCEg724vKyOyAZBqHQ'
-            # webhook_configs:
-            #   - url: https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=9ea46a62-d38e-47d9-accf-72fa05855163
-      email.tmpl: |-
-        {{ define "email.html" }}
-        {{- if eq .Status "firing" }}
-        <h2>异常告警通知</h2>
-        {{- else }}
-        <h2>告警恢复通知</h2>
-        {{- end }}
-        <table border="5">
-        <tr>
-        <td>告警名称</td>
-        <td>告警主机名</td>
-        <td>告警详情</td>
-        <td>告警级别</td>
-        {{- if eq .Status "firing" }}
-        <td>告警时间</td>
-        {{- else }}
-        <td>恢复时间</td>
-        {{- end }}
-        </tr>
-        {{- range $index, $alert := .Alerts }}
-        <tr>
-        <td>{{ $alert.Labels.alertname }}</td>
-        <td style="color:#32CD32">{{ $alert.Labels.instance }} {{ $alert.Labels.device }}</td>
-        <td>{{ $alert.Annotations.description }}</td>
-        <td>{{ $alert.Labels.severity }}</td>
-        {{- if eq .Status "firing" }}
-        <td style="color:#FF7F50">{{ ($alert.StartsAt.Add 28800e9).Format "2006-01-02 15:04:05" }}</td>
-        {{- else }}
-        <td style="color:#FF7F50">{{ ($alert.EndsAt.Add 28800e9).Format "2006-01-02 15:04:05" }}</td>
-        {{- end }}
-        </tr>
-        {{- end }}
-        </table>
-        {{- end }}
-      wechat.tmpl: |-
-        {{ define "wechat.text" }}
-        {{- if eq .Status "firing" }}
-        =======异常告警=======
-        {{- else }}
-        =======告警恢复=======
-        {{- end }}
-        {{- range $index, $alert := .Alerts }}
-        告警主机名：{{ $alert.Labels.instance }} {{ $alert.Labels.device }}
-        {{- if gt (len $alert.Labels.namespace) 0 }}
-        故障实例所在namespace: {{ $alert.Labels.namespace }}
-        {{- end }}
-        {{- if gt (len $alert.Labels.node) 0 }}
-        故障物理机ip: {{ $alert.Labels.node }}
-        {{- end }}
-        {{- if gt (len $alert.Labels.pod_name) 0 }}
-        故障pod名称: {{ $alert.Labels.pod_name }}
-        {{- end }}
-        告警名称：{{ $alert.Labels.alertname }}
-        告警级别：{{ $alert.Labels.severity }}
-        告警详情：{{ $alert.Annotations.description }}
-        告警时间：{{ ($alert.StartsAt.Add 28800e9).Format "2006-01-02 15:04:05" }}
-        {{- if eq .Status "resolved" }}
-        恢复时间：{{ ($alert.EndsAt.Add 28800e9).Format "2006-01-02 15:04:05" }}
-        {{- end }}
-        =====================
-        {{- end }}
-        {{- end }}
 statefulset:
   updateStrategy:
     type: RollingUpdate
@@ -197,6 +77,10 @@ persistence:
         path: /data/alertmanager
       - hostname: exam2
         path: /data/alertmanager
+configmap:
+  - mountPath: /etc/alertmanager
+    fromDirs:
+      - conf/**
 service:
   type: ClusterIP
   ports:

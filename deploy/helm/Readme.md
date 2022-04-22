@@ -29,6 +29,8 @@ export NODE_NAME_PREFIX=examtest
 export NODE_IPS=(172.16.1.198)
 export K8S_LB_IP=100.100.1.198
 export K8S_VERSION=1.19.16
+export K8S_APISERVER=$(kubectl config view --minify -o jsonpath='{.clusters[0].cluster.server}')
+export K8S_TOKEN=$(kubectl get secret $(kubectl get serviceaccount default -o jsonpath='{.secrets[0].name}') -o jsonpath='{.data.token}' | base64 --decode )
 export ANAN_WORKDIR=/data
 EOF
 
@@ -219,8 +221,9 @@ mkdir -p ${ANAN_WORKDIR}/logs/anan-sbaserver${NODE_INDEX}
 #获取加密密码(可选)
 java -cp E:\Tools\Apache\Maven\repository\org\jasypt\jasypt\1.9.3\jasypt-1.9.jar org.jasypt.intf.cli.JasyptPBEStringEncryptionCLI input="local" password=oF7tVrdfjrbQ0NfSsRL3 algorithm=PBEWithMD5AndDES
 
+#如果只需要配置文件可以使用以下命令（特殊情况下使用）
 kubectl create configmap application --from-file=anan-cloud/anan-platformserver/application.yaml
-kubectl create configmap anan-authserver --from-file=anan-cloud/anan-authserver/anan-authserver.yaml
+kubectl create configmap anan-platformserver --from-file=anan-cloud/anan-platformserver/anan-platformserver.yaml
 
 #安装服务
 helm install anan-platformserver anan-cloud/anan-platformserver
@@ -229,8 +232,8 @@ helm install anan-cloudgateway anan-cloud/anan-cloudgateway
 helm install anan-sbaserver anan-cloud/anan-sbaserver
 
 #查询健康状态
-curl http://`kubectl get pod -owide |grep anan-authserver | awk '{print $6}'`:51400/actuator/health -vvv
-curl -XPOST http://`kubectl get pod -owide |grep anan-authserver | awk '{print $6}'`:51400/actuator/shutdown -vvv
+curl http://`kubectl get pod -owide |grep anan-authserver | awk '{print $6}'`:6140/actuator/health -vvv
+curl -XPOST http://`kubectl get pod -owide |grep anan-authserver | awk '{print $6}'`:6140/actuator/shutdown -vvv
 
 ```
 
@@ -307,6 +310,8 @@ grafana-cli admin reset-admin-password admin@1234
 ```shell script
 
 #1、部署ingress和SSL证书
+# fosin.top_bundle.crt：nginx类型证书的cert
+# fosin.top.key：nginx类型证书的key
 kubectl create secret tls fosin.top --cert=fosin.top_bundle.crt --key=fosin.top.key
 
 helm install anan-nginx-ingress nginx-ingress/

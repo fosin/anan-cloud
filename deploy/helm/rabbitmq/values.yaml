@@ -1,6 +1,6 @@
 secret:
-  type: Opaque
-  confs:
+- type: Opaque
+  fromMap:
     password: "local"
     erlangCookie: SWQOKODSQALRPCLNMEQG
 statefulset:
@@ -69,14 +69,13 @@ containers:
       - name: RABBITMQ_NODENAME
         value: rabbit@$(MY_POD_NAME).$(MY_RABBITMQ_SERVICE_HEADLESS).$(MY_POD_NAMESPACE).svc.cluster.local
 configmap:
-  existConfigMapName: rabbitmq
-  files:
-    - mountPath: /etc/rabbitmq/
-      readOnly: false
-      defaultMode: "0755"
-      mountFiles:
-        rabbitmq.conf:
-        enabled_plugins:
+  - mountPath: /etc/rabbitmq/
+    existName: rabbitmq
+    readOnly: false
+    defaultMode: "0755"
+    fromTemps:
+      rabbitmq.conf:
+      enabled_plugins:
 persistence:
 - name: data
   mountPath: /var/lib/rabbitmq
