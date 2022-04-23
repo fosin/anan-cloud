@@ -38,9 +38,9 @@ ingress:
   tls:
     - secretName: fosin.top
       hosts:
-        - www.fosin.top
+        - "*.fosin.top"
   rules:
-    - host: www.fosin.top
+    - host: "*.fosin.top"
       http:
         paths:
           - path: /sba/

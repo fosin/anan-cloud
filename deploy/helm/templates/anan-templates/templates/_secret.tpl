@@ -3,8 +3,33 @@ anan secret模版
 */}}
 {{- define "anan.secret" -}}
 {{- $secretName := (include "anan.secret.name" .) }}
-{{- range $x, $secret := $.Values.secret }}
-{{- if not $secret.existName }}
+{{- $sectComposes := list }}
+{{- range $x,$secret := $.Values.secret }}
+  {{- if not $secret.existName }}
+    {{- $finded := false }}
+    {{- $source := ($secret.name | default $secretName) }}
+    {{- range $y,$sectCompose := $sectComposes }}
+      {{- $target := ($sectCompose.name | default $secretName) }}
+      {{- if eq $source $target }}
+         {{- $finded = true }}
+         {{- $sectCompose = set $sectCompose "name" $source }}
+         {{- $sectCompose = set $sectCompose "fromMap" (mergeOverwrite ($sectCompose.fromMap | default dict) ($secret.fromMap | default dict)) }}
+         {{- $sectCompose = set $sectCompose "fromFiles" (mergeOverwrite ($sectCompose.fromFiles | default dict) ($secret.fromFiles | default dict)) }}
+         {{- $sectCompose = set $sectCompose "fromTemps" (mergeOverwrite ($sectCompose.fromTemps | default dict) ($secret.fromTemps | default dict)) }}
+         {{- $sectCompose = set $sectCompose "fromDirs" (concat ($sectCompose.fromDirs | default list) ($secret.fromDirs | default list)) }}
+      {{- end }}
+    {{- end }}
+    {{- if not $finded }}
+       {{- $new := mergeOverwrite dict $secret }}
+       {{- $new = set $new "name" $source }}
+       {{- $new = set $new "fromTemps" ($new.fromTemps | default dict) }}
+       {{- $sectComposes = append $sectComposes $new }}
+    {{- end }}
+  {{- end }}
+{{- end }}
+
+
+{{- range $x, $secret := $sectComposes }}
 apiVersion: {{ $secret.apiVersion | default "v1" }}
 kind: Secret
 type: {{ $secret.type }}
@@ -32,7 +57,7 @@ metadata:
   {{- $fromFiles := (set $fromFiles $key ($.Files.Get $val)) }}
 {{- end }}
 {{- $fromMap := $secret.fromMap | default dict }}
-{{- $allFiles := (mergeOverwrite $fromMap $fromFiles ($secret.fromTemps | default dict) $dirFiles) }}
+{{- $allFiles := (mergeOverwrite $fromMap $fromFiles $secret.fromTemps $dirFiles) }}
 {{- if $b64enc }}
 data:
   {{- range $key, $val := $allFiles }}
@@ -45,7 +70,6 @@ stringData:
   {{- end }}
 {{- end }}
 ---
-{{- end }}
 {{- end }}
 {{- end -}}
 

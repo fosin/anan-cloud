@@ -3,7 +3,7 @@
 anan replicaset 模版(包括：statefulset、deployment、daemonset)
 */}}
 {{- define "anan.replicaset" -}}
-{{- $hasMountPath1 := (hasKey (first ($.Values.configmap| default list)) "mountPath") }}
+{{- $hasMountPath1 := (hasKey (first ($.Values.configmap | default list)) "mountPath") }}
 {{- $hasMountPath2 := (hasKey (first ($.Values.secret | default list)) "mountPath") }}
 {{- $hasMountPath3 := (hasKey (first ($.Values.hostPath | default list)) "mountPath") }}
 {{- $hasMountPath4 := (gt (len ($.Values.emptyDir | default list)) 0) }}
@@ -356,8 +356,8 @@ spec:
         {{- if $cm.mountPath }}
         - name: {{ $.Release.Name }}-{{ $cmi }}
           configMap:
-            {{- $configmapName2 := $cm.existName | default $cm.name }}
-            name: {{ $configmapName2 | default $configmapName }}
+            {{- $configmapName2 := $cm.existName | default ($cm.name | default $configmapName) }}
+            name: {{ $configmapName2 }}
             {{- with $cm.defaultMode }}
             defaultMode: {{ . }}
             {{- end }}
@@ -380,8 +380,8 @@ spec:
         {{- if $secrct.mountPath }}
        - name: {{ $.Release.Name }}-secret-{{ $index }}
           secret:
-            {{- $secretName2 := $secrct.existName | default $secrct.name }}
-            name: {{ $secretName2 | default $secretName }}
+            {{- $secretName2 := $secrct.existName | default ($secrct.name | default $secretName) }}
+            name: {{ $secretName2 }}
             {{- with $secrct.defaultMode }}
             defaultMode: {{ . }}
             {{- end }}

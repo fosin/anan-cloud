@@ -76,7 +76,6 @@ configmap:
     fromFiles:
       prometheus.yml: "conf/prometheus.yml"
   - mountPath: /etc/alert-rules
-    name: prometheus-alert-rules
     fromDirs:
       - conf/rules/**
 cluster:

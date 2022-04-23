@@ -65,6 +65,5 @@ configmap:
     fromFiles:
       filebeat.yml: conf/filebeat.yml
   - mountPath: /usr/share/filebeat/inputs.d
-    name: filebeat-inputs
     fromDirs:
       - conf/inputs/**
