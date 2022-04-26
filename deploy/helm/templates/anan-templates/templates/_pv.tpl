@@ -5,6 +5,7 @@ anan PersistentVolume
 {{- if $.Values.persistence }}
 {{- range $x,$datax := .Values.persistence }}
 {{- range $y,$datay := $datax.nfs }}
+---
 apiVersion: {{ $datax.apiVersion | default "v1" }}
 kind: PersistentVolume
 metadata:
@@ -40,9 +41,9 @@ spec:
     {{- else }}
     path: {{ include "anan.workdir.nfs" . }}{{ $.Release.Name }}_{{ $datax.name }}_{{ $y }}
     {{- end }}
----
 {{- end }}
 {{- range $z,$dataz := $datax.local }}
+---
 apiVersion: {{ $datax.apiVersion | default "v1" }}
 kind: PersistentVolume
 metadata:
@@ -85,8 +86,7 @@ spec:
           - {{ $dataz.hostname }}
   {{- end }}
   {{- end }}
----
+{{- end }}
 {{- end }}
 {{- end }}
 {{- end -}}
-{{- end }}

@@ -30,9 +30,10 @@ anan secret模版
 
 
 {{- range $x, $secret := $sectComposes }}
+---
 apiVersion: {{ $secret.apiVersion | default "v1" }}
 kind: Secret
-type: {{ $secret.type }}
+type: {{ $secret.type | default "Opaque" }}
 metadata:
   name: {{ $secret.name | default $secretName }}
   namespace: {{ $.Release.Namespace }}
@@ -69,7 +70,6 @@ stringData:
   {{ $key }}: {{ $val }}
   {{- end }}
 {{- end }}
----
 {{- end }}
 {{- end -}}
 

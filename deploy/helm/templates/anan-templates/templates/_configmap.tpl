@@ -29,6 +29,7 @@ anan configmap模版
 {{- end }}
 
 {{- range $x,$cm := $cmComposes }}
+---
 apiVersion: {{ $cm.apiVersion | default "v1" }}
 kind: ConfigMap
 metadata:
@@ -62,7 +63,6 @@ data:
   {{ $key }}: |-
     {{- $val | nindent 4 }}
 {{- end }}
----
 {{- end }}
 {{- end -}}
 

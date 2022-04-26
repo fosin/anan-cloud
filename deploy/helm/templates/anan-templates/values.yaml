@@ -1,3 +1,17 @@
+#第1优先级
+statefulset:
+  apiVersion: apps/v1
+  podManagementPolicy: Parallel #并行创建pod,默认为按顺序执行OrderedReady
+  labels: {}
+  annotations: {}
+  replicaCount: 3
+  serviceName: "" #服务名称，默认是headless无头服务
+  volumeClaimTemplates: []
+  updateStrategy:
+    type: RollingUpdate #支持OnDelete、RollingUpdate
+    rollingUpdate:
+      partition: 0 #保留的旧版本的个数，取值是0 <= N < replicaCount，一般用于灰度更新
+#第2优先级
 deployment:
   apiVersion: apps/v1
   labels: {}
@@ -10,6 +24,7 @@ deployment:
   replicaCount: 2
   minReadySeconds: 60  #滚动升级时60s后认为该pod就绪
 terminationGracePeriodSeconds: 30 #优雅关闭pod的等待时间，默认30s
+#第3优先级
 daemonset:
   apiVersion: apps/v1
   labels: {}
@@ -19,16 +34,6 @@ daemonset:
     rollingUpdate:
       maxUnavailable: 1 #滚动升级时允许的最大Unavailable的pod个数
   minReadySeconds: 60  #滚动升级时60s后认为该pod就绪
-statefulset:
-  apiVersion: apps/v1
-  podManagementPolicy: Parallel #并行创建pod,默认为按顺序执行OrderedReady
-  labels: {}
-  annotations: {}
-  replicaCount: 3
-  updateStrategy:
-    type: RollingUpdate #支持OnDelete、RollingUpdate
-    rollingUpdate:
-      partition: 0 #保留的旧版本的个数，取值是0 <= N < replicaCount，一般用于灰度更新
 revisionHistoryLimit: 10 #保留的历史版本个数
 nodeName: "" #调度到的主机的名称
 nodeSelector: {} #调度到某节点的选择器
@@ -62,7 +67,6 @@ containers:
     volumeDevices: []
     volumeMounts: []
 volumes: []
-volumeClaimTemplates: []
 affinity: {}
 #requiredDuringSchedulingIgnoredDuringExecution： 硬要求，必须满足，否则不执行调度
 #preferredDuringSchedulingIgnoredDuringExecution：软要求，尽量满足，不满足退而求其次
@@ -177,7 +181,7 @@ secret:
     base64: true #是否base64加密，true：使用data属性，false：使用stringData属性
     labels: {}
     annotations: {}
-    #Opaque：用户定义的任意数据
+    #Opaque：用户定义的任意数据,默认值
     #kubernetes.io/service-account-token：服务账号令牌
     #kubernetes.io/dockercfg：文件~/.dockercfg的序列化形式
     #kubernetes.io/dockerconfigjson：文件~/.docker/config.json的序列化形式

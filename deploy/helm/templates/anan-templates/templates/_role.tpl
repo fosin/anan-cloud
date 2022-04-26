@@ -2,6 +2,7 @@
 anan role
 */}}
 {{- define "anan.role" -}}
+---
 apiVersion: {{ $.Values.role.apiVersion | default "rbac.authorization.k8s.io/v1" }}
 kind: Role
 metadata:
@@ -26,6 +27,7 @@ rules:
 anan rolebinding
 */}}
 {{- define "anan.rolebinding" -}}
+---
 kind: RoleBinding
 apiVersion: {{ $.Values.role.apiVersion | default "rbac.authorization.k8s.io/v1" }}
 metadata:

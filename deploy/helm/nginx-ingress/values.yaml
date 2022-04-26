@@ -36,11 +36,11 @@ ingress:
         sub_filter /api/ /redisinsight/api/;
       }
   tls:
-    - secretName: fosin.top
+    - secretName: exam.assc.pro
       hosts:
-        - "*.fosin.top"
+        - exam.assc.pro
   rules:
-    - host: "*.fosin.top"
+    - host: exam.assc.pro
       http:
         paths:
           - path: /sba/
@@ -169,11 +169,14 @@ configmap:
           "sample_rate": 1.0
         }
 secret:
-  - name: fosin.top
+  - name: exam.assc.pro
     type: kubernetes.io/tls
+    # 需要自行添加域名SSL证书到ssl目录(目录也可以自定义)，并修改nginx-ingess中的设置
+    # exam.assc.pro_bundle.crt：nginx类型证书的cert
+    # exam.assc.pro.key：nginx类型证书的key
     fromFiles:
-      tls.key: "ssl/fosin.top.key"
-      tls.crt: "ssl/fosin.top_bundle.crt"
+      tls.key: "ssl/exam.assc.pro.key"
+      tls.crt: "ssl/exam.assc.pro_bundle.crt"
 cluster:
   role:
     rules:

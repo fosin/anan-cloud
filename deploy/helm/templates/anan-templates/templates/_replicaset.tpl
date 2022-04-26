@@ -3,29 +3,27 @@
 anan replicaset 模版(包括：statefulset、deployment、daemonset)
 */}}
 {{- define "anan.replicaset" -}}
-{{- $hasMountPath1 := (hasKey (first ($.Values.configmap | default list)) "mountPath") }}
+---
+{{- $hasMountPath1 := (hasKey (first (.Values.configmap | default list)) "mountPath") }}
 {{- $hasMountPath2 := (hasKey (first ($.Values.secret | default list)) "mountPath") }}
 {{- $hasMountPath3 := (hasKey (first ($.Values.hostPath | default list)) "mountPath") }}
 {{- $hasMountPath4 := (gt (len ($.Values.emptyDir | default list)) 0) }}
 {{- $hasMountPath := or $hasMountPath1 $hasMountPath2 $hasMountPath3 $hasMountPath4 }}
+{{- $replicaset := coalesce $.Values.statefulset $.Values.deployment $.Values.daemonset }}
 {{- if $.Values.statefulset }}
-kind: "StatefulSet"
-apiVersion: {{ $.Values.statefulset.apiVersion | default "apps/v1" }}
+kind: StatefulSet
+{{- else if $.Values.deployment }}
+kind: Deployment
 {{- else }}
-  {{- if $.Values.deployment }}
-kind: "Deployment"
-apiVersion: {{ $.Values.deployment.apiVersion | default "apps/v1" }}
-  {{- else }}
-kind: "DaemonSet"
-apiVersion: {{ $.Values.daemonset.apiVersion | default "apps/v1" }}
-  {{- end }}
+kind: DaemonSet
 {{- end }}
+apiVersion: {{ $replicaset.apiVersion | default "apps/v1" }}
 metadata:
   name: {{ $.Release.Name }}
   namespace: {{ $.Release.Namespace }}
 spec:
   {{- if $.Values.statefulset }}
-  serviceName: {{ include "anan.service.headless.name" . }}
+  serviceName: {{ $.Values.statefulset.serviceName | default (include "anan.service.headless.name" .) }}
   podManagementPolicy: {{ $.Values.statefulset.podManagementPolicy | default "Parallel" }}
   {{- end }}
   {{- with $.Values.revisionHistoryLimit }}
@@ -42,59 +40,37 @@ spec:
     {{- with $.Values.statefulset.replicaCount }}
   replicas: {{ . }}
     {{- end }}
-  {{- else }}
-    {{- if $.Values.deployment }}
-      {{- with $.Values.deployment.replicaCount }}
+  {{- else if $.Values.deployment }}
+    {{- with $.Values.deployment.replicaCount }}
   replicas: {{ . }}
-      {{- end }}
-      {{- with $.Values.deployment.strategy }}
+    {{- end }}
+    {{- with $.Values.deployment.strategy }}
   strategy:
-      {{- toYaml . | nindent 4 }}
-      {{- end }}
-      {{- with $.Values.deployment.minReadySeconds }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+    {{- with $.Values.deployment.minReadySeconds }}
   minReadySeconds: {{ . }}
-      {{- end }}
-    {{- else }}
-      {{- with $.Values.daemonset.updateStrategy }}
+    {{- end }}
+  {{- else }}
+    {{- with $.Values.daemonset.updateStrategy }}
   updateStrategy:
       {{- toYaml . | nindent 4 }}
-      {{- end }}
-      {{- with $.Values.daemonset.minReadySeconds }}
+    {{- end }}
+    {{- with $.Values.daemonset.minReadySeconds }}
   minReadySeconds: {{ . }}
-      {{- end }}
-  {{- end }}
+    {{- end }}
   {{- end }}
   template:
     metadata:
       labels:
-      {{- include "anan.lable.name" . | nindent 8 }}: {{ $.Release.Name }}
-      {{- if $.Values.statefulset }}
-        {{- with $.Values.statefulset.labels }}
+        {{- include "anan.lable.name" . | nindent 8 }}: {{ $.Release.Name }}
+        {{- with $replicaset.labels }}
         {{- toYaml . | nindent 8 }}
         {{ end }}
-        {{- with $.Values.statefulset.annotations }}
+        {{- with $replicaset.annotations }}
       annotations:
         {{- toYaml . | nindent 8 }}
         {{ end }}
-      {{- else }}
-        {{- if $.Values.deployment }}
-            {{- with $.Values.deployment.labels }}
-            {{- toYaml . | nindent 8 }}
-            {{ end }}
-        {{- with $.Values.deployment.annotations }}
-      annotations:
-        {{- toYaml . | nindent 8 }}
-        {{ end }}
-        {{- else }}
-            {{- with $.Values.daemonset.labels }}
-            {{- toYaml . | nindent 8 }}
-            {{ end }}
-        {{- with $.Values.daemonset.annotations }}
-      annotations:
-        {{- toYaml . | nindent 8 }}
-        {{ end }}
-        {{- end }}
-    {{- end }}
     spec:
       {{- with $.Values.tolerations }}
       tolerations:
@@ -154,10 +130,8 @@ spec:
       {{- end }}
       {{- if $.Values.cluster }}
       serviceAccountName: {{ $.Values.cluster.serviceAccountName | default $.Release.Name }}
-      {{- else }}
-      {{- if $.Values.role }}
+      {{- else if $.Values.role }}
       serviceAccountName: {{ $.Values.role.serviceAccountName | default $.Release.Name }}
-      {{- end }}
       {{- end }}
       {{- with $.Values.priorityClassName }}
       priorityClassName: {{ . }}
@@ -199,9 +173,7 @@ spec:
           {{- if $dataz.ports }}
           ports:
           {{- toYaml $dataz.ports | nindent 12 }}
-          {{- else }}
-          {{- if $.Values.service }}
-          {{- if $.Values.service.ports }}
+          {{- else if $.Values.service }}
           ports:
           {{- range $.Values.service.ports }}
             - name: {{ .name }}
@@ -209,8 +181,6 @@ spec:
               {{- with .protocol }}
               protocol: {{ . }}
               {{- end }}
-          {{- end }}
-          {{- end }}
           {{- end }}
           {{- end }}
           {{- with $dataz.workingDir }}
@@ -263,15 +233,10 @@ spec:
           {{- if $dataz.volumeMounts }}
           volumeMounts:
           {{- toYaml $dataz.volumeMounts | nindent 12 }}
-          {{- else }}
-          {{- if or $.Values.persistence $hasMountPath }}
+          {{- else if or $.Values.persistence $hasMountPath }}
           volumeMounts:
           {{- range $x,$datax := $.Values.persistence }}
-          {{- if $datax.name }}
-            - name: {{ $datax.name }}
-          {{- else }}
-            - name: {{ $.Release.Name }}-{{ $x }}
-          {{- end }}
+            - name: {{ default (print $.Release.Name "-" $x) $datax.name }}
               mountPath: {{ $datax.mountPath }}
           {{- end }}
           {{- range $cmi,$cm := $.Values.configmap }}
@@ -343,21 +308,18 @@ spec:
               mountPath: {{ $emptyDir }}
           {{- end }}
           {{- end }}
-          {{- end }}
       {{- end }}
       {{- if $.Values.volumes }}
       volumes:
       {{- toYaml $.Values.volumes | nindent 8 }}
-      {{- else }}
-      {{- if $hasMountPath }}
+      {{- else if $hasMountPath }}
       volumes:
       {{- $configmapName := (include "anan.configmap.name" .) }}
       {{- range $cmi,$cm := $.Values.configmap }}
         {{- if $cm.mountPath }}
         - name: {{ $.Release.Name }}-{{ $cmi }}
           configMap:
-            {{- $configmapName2 := $cm.existName | default ($cm.name | default $configmapName) }}
-            name: {{ $configmapName2 }}
+            name: {{ coalesce $cm.existName $cm.name $configmapName }}
             {{- with $cm.defaultMode }}
             defaultMode: {{ . }}
             {{- end }}
@@ -380,8 +342,7 @@ spec:
         {{- if $secrct.mountPath }}
        - name: {{ $.Release.Name }}-secret-{{ $index }}
           secret:
-            {{- $secretName2 := $secrct.existName | default ($secrct.name | default $secretName) }}
-            name: {{ $secretName2 }}
+            name: {{ coalesce $secrct.existName $secrct.name $secretName }}
             {{- with $secrct.defaultMode }}
             defaultMode: {{ . }}
             {{- end }}
@@ -412,21 +373,15 @@ spec:
           emptyDir: {}
       {{- end }}
       {{- end }}
-      {{- end }}
   {{- if $.Values.statefulset }}
-  {{- if $.Values.volumeClaimTemplates }}
+  {{- if $.Values.statefulset.volumeClaimTemplates }}
   volumeClaimTemplates:
-  {{- toYaml $.Values.volumeClaimTemplates | nindent 4 }}
-  {{- else }}
-  {{- if $.Values.persistence }}
+  {{- toYaml $.Values.statefulset.volumeClaimTemplates | nindent 4 }}
+  {{- else if $.Values.persistence }}
   volumeClaimTemplates:
   {{- range $x,$datax := .Values.persistence }}
     - metadata:
-        {{- if $datax.name }}
-        name: {{ $datax.name }}
-        {{- else }}
-        name: {{ $.Release.Name }}-{{ $x }}
-        {{- end }}
+        name: {{ default (print $.Release.Name "-" $x) $datax.name }}
         namespace: {{ $.Release.Namespace }}
       spec:
         accessModes: [ {{ $datax.accessMode }} ]
@@ -436,7 +391,6 @@ spec:
         resources:
           requests:
             storage: {{ $datax.size }}i
-  {{- end }}
   {{- end }}
   {{- end }}
   {{- end }}

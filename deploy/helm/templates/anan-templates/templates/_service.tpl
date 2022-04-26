@@ -17,6 +17,7 @@ anan headless service name
 anan service
 */}}
 {{- define "anan.service" -}}
+---
 {{- $serviceType := $.Values.service.type | default "ClusterIP" }}
 kind: Service
 apiVersion: {{ $.Values.service.apiVersion | default "v1" }}
@@ -39,8 +40,8 @@ spec:
     - name: {{ .name }}
       port: {{ .port }}
       targetPort: {{ .targetPort | default .port }}
-      {{- if .protocol }}
-      protocol: {{ .protocol }}
+      {{- with .protocol }}
+      protocol: {{ . }}
       {{- end }}
       {{- if eq $serviceType "NodePort" }}
       nodePort: {{ .nodePort | default .port }}
@@ -63,6 +64,7 @@ spec:
 anan headless service：一般用于statefulset集群内部互相访问
 */}}
 {{- define "anan.service.headless" -}}
+---
 kind: Service
 apiVersion: {{ $.Values.service.apiVersion | default "v1" }}
 metadata:
@@ -91,12 +93,14 @@ spec:
   publishNotReadyAddresses: {{ $.Values.service.publishNotReadyAddresses | default true }}
   ports:
     {{- range $.Values.service.ports }}
+    {{- if .port }}
     - name: {{ .name }}
       port: {{ .port }}
       targetPort: {{ .targetPort | default .port }}
-      {{- if .protocol }}
-      protocol: {{ .protocol }}
+      {{- with .protocol }}
+      protocol: {{ . }}
       {{- end }}
+    {{- end }}
     {{- end }}
   selector:
     {{- include "anan.lable.name" . | nindent 4 }}: {{ $.Release.Name }}

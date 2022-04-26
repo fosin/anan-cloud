@@ -3,6 +3,7 @@
 anan cluster role
 */}}
 {{- define "anan.cluster.role" -}}
+---
 apiVersion: {{ $.Values.cluster.role.apiVersion | default "rbac.authorization.k8s.io/v1" }}
 kind: ClusterRole
 metadata:
@@ -27,6 +28,7 @@ rules:
 anan cluster rolebinding
 */}}
 {{- define "anan.cluster.rolebinding" -}}
+---
 kind: ClusterRoleBinding
 apiVersion: {{ $.Values.cluster.role.apiVersion | default "rbac.authorization.k8s.io/v1" }}
 metadata:

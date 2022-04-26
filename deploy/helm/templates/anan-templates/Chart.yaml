@@ -4,4 +4,5 @@ name: anan-templates
 version: 0.0.2
 appVersion: 0.0.2
 type: library
+kubeVersion: ^1.18.0
 home: https://github.com/fosin/anan-cloud/tree/master/deploy/helm/templates/anan-templates

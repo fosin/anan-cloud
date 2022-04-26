@@ -2,8 +2,9 @@
 {{/*
 anan Ingress模版
 */}}
-{{- define "anan.ingress" -}}
-apiVersion: {{ $.Values.ingress.apiVersion | default "networking.k8s.io/v1" }}
+{{- define "anan.ingress" }}
+---
+apiVersion: {{ default (include "anan.ingress.apiVersion" .) $.Values.ingress.apiVersion }}
 kind: Ingress
 metadata:
   name: {{ $.Release.Name }}
@@ -22,18 +23,10 @@ spec:
   tls:
     {{- toYaml . | nindent 4 }}
   {{- end }}
-  {{- if $.Values.ingress.ingressClassName }}
-  ingressClassName: {{ $.Values.ingress.ingressClassName }}
-  {{- else }}
-  ingressClassName: {{ $.Release.Name }}
-  {{- end }}
+  ingressClassName: {{ default $.Release.Name $.Values.ingress.ingressClassName }}
   {{- with $.Values.ingress.defaultBackend }}
-  {{- if $.Values.ingress.apiVersion }}
-  {{- if eq $.Values.ingress.apiVersion "extensions/v1beta1" }}
+  {{- if (include "anan.ingress.isStable" .) }}
   backend:
-  {{- else }}
-  defaultBackend:
-  {{- end }}
   {{- else }}
   defaultBackend:
   {{- end }}
@@ -49,7 +42,7 @@ spec:
 {{/*
 anan ingressClass模版
 */}}
-{{- define "anan.ingressClass" -}}
+{{- define "anan.ingressClass" }}
 apiVersion: {{ $.Values.ingressClass.apiVersion | default "networking.k8s.io/v1" }}
 kind: IngressClass
 metadata:
@@ -75,3 +68,25 @@ spec:
     {{ toYaml . | indent 4 }}
   {{- end }}
 {{- end -}}
+
+{{/* Get Ingress API Version */}}
+{{- define "anan.ingress.apiVersion" }}
+  {{- if and (.Capabilities.APIVersions.Has "networking.k8s.io/v1") (semverCompare ">= 1.19.0" $.Capabilities.KubeVersion.Version) }}
+      {{- print "networking.k8s.io/v1" }}
+  {{- else if .Capabilities.APIVersions.Has "networking.k8s.io/v1beta1" }}
+    {{- print "networking.k8s.io/v1beta1" }}
+  {{- else }}
+    {{- print "extensions/v1beta1" }}
+  {{- end }}
+{{- end }}
+
+{{/* Check Ingress stability */}}
+{{- define "anan.ingress.isStable" }}
+  {{- eq (include "anan.ingress.apiVersion" .) "networking.k8s.io/v1" }}
+{{- end }}
+
+{{/* Check Ingress supports pathType */}}
+{{/* pathType was added to networking.k8s.io/v1beta1 in Kubernetes 1.18 */}}
+{{- define "anan.ingress.supportsPathType" }}
+  {{- or (eq (include "anan.ingress.isStable" .) "true") (and (eq (include "anan.ingress.apiVersion" .) "networking.k8s.io/v1beta1") (semverCompare ">= 1.18.0" $.Capabilities.KubeVersion.Version)) }}
+{{- end }}

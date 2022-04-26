@@ -5,6 +5,7 @@ anan nfs PersistentVolumeClaim
 {{- if $.Values.persistence }}
 {{- range $x,$datax := .Values.persistence }}
 {{- range $y,$datay := $datax.nfs }}
+---
 apiVersion: {{ $datax.apiVersion | default "v1" }}
 kind: PersistentVolumeClaim
 metadata:
@@ -31,9 +32,9 @@ spec:
   selector:
     matchLabels:
       {{- include "anan.lable.name" . | nindent 6 }}: {{ $datax.name }}-{{ $.Release.Name }}-{{ $y }}
----
 {{- end }}
 {{- range $z,$dataz := $datax.local }}
+---
 apiVersion: {{ $datax.apiVersion | default "v1" }}
 kind: PersistentVolumeClaim
 metadata:
@@ -60,8 +61,7 @@ spec:
   selector:
     matchLabels:
       {{- include "anan.lable.name" . | nindent 6 }}: {{ $datax.name }}-{{ $.Release.Name }}-{{ $z }}
----
+{{- end }}
 {{- end }}
 {{- end }}
 {{- end -}}
-{{- end }}
