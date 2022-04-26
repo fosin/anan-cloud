@@ -5,7 +5,9 @@
 ### 1.1、安装依赖包
 
 ```shell script
+
 yum install -y conntrack ntp ipvsadm ipset jq iptables curl sysstat libseccomp wget vim net-tools git
+
 ```
 
 ### 1.2、设置防火墙为 Iptables 并清空规则
@@ -120,6 +122,126 @@ sed -i 's/quiet"/quiet numa=off"/g' /etc/default/grub
 grub2-mkconfig -o /boot/grub2/grub.cfg
 
 ```
+### 1.11、配置负载均衡代理（单节点的k8s不需要）
+
+```shell script
+#所有主机安装keepalived代理，实现统一入口，也可以使用nginx、haproxy、LVS等
+
+yum -y install keepalived
+
+#所有控制平面节点创建apiserver检测脚本
+cat > /etc/keepalived/check_apiserver.sh << EOF
+#!/bin/sh
+errorExit() {
+    echo "*** $*" 1>&2
+    exit 1
+}
+
+curl --silent --max-time 2 --insecure https://localhost:6443/ -o /dev/null || errorExit "Error GET https://localhost:6443/"
+ps aux | grep mysqld | grep -v grep > /dev/null || errorExit "Error check mysqld process"
+if ip addr | grep -q ${K8S_LB_IP}; then
+    curl --silent --max-time 2 --insecure https://${K8S_LB_IP}:6443/ -o /dev/null || errorExit "Error GET https://${K8S_LB_IP}:6443/"
+fi
+
+EOF
+
+chmod +x /etc/keepalived/check_apiserver.sh && sh /etc/keepalived/check_apiserver.sh
+
+#设置ingress的健康检查脚本
+cat > /etc/keepalived/check_nginx.sh << EOF
+#!/bin/sh
+errorExit() {
+    echo "*** $*" 1>&2
+    exit 1
+}
+
+curl --silent --max-time 2 --insecure http://localhost/nginx-health -o /dev/null || errorExit "Error GET http://localhost/nginx-health"
+if ip addr | grep -q ${WORKER_LB_IP}; then
+    curl --silent --max-time 2 --insecure http://${WORKER_LB_IP}/nginx-health -o /dev/null || errorExit "Error GET http://${WORKER_LB_IP}/nginx-health"
+fi
+EOF
+
+chmod +x /etc/keepalived/check_nginx.sh && sh /etc/keepalived/check_nginx.sh
+
+#所有控制平面节点修改配置文件
+cat > /etc/keepalived/keepalived.conf << EOF
+! /etc/keepalived/keepalived.conf
+! Configuration File for keepalived
+global_defs {
+    #主机唯一标识，主机间不可相同(不需要修改)
+    router_id $(hostname)
+}
+vrrp_script check_apiserver {
+    script "/etc/keepalived/check_apiserver.sh"
+    interval 60
+    weight `expr 0 - ${#NODE_IPS[*]}`
+}
+vrrp_instance k8s {
+    #服务启动时的角色,0节点为MASTER，其余节点为BACKUP(不需要修改)
+    `if [ $NODE_INDEX -eq 0 ]; then
+    echo "state MASTER"
+    else
+    echo "state BACKUP"
+    fi`
+    #绑定的网卡名(需要修改成实际情况)
+    interface ens192
+    #虚拟路由，三台主机必须一致
+    virtual_router_id 188
+    #服务启动时，抢占VIP的优先级(不需要修改)
+    priority `expr 100 - $NODE_INDEX`
+    authentication {
+      auth_type PASS
+      #广播时的密码，必须一致
+      auth_pass 4567
+    }
+    virtual_ipaddress {
+      #VIP地址
+      ${K8S_LB_IP}/24
+    }
+    track_script {
+      check_apiserver
+    }
+}
+
+vrrp_script check_nginx {
+    script "/etc/keepalived/check_nginx.sh"
+    interval 60
+    weight `expr 0 - ${#NODE_IPS[*]}`
+}
+vrrp_instance ingress {
+    #服务启动时的角色,0节点为MASTER，其余节点为BACKUP(不需要修改)
+    `if [ $NODE_INDEX -eq 0 ]; then
+    echo "state MASTER"
+    else
+    echo "state BACKUP"
+    fi`
+    #绑定的网卡名(需要修改成实际情况)
+    interface ens224
+    #虚拟路由，三台主机必须一致
+    virtual_router_id 120
+    #服务启动时，抢占VIP的优先级(不需要修改)
+    priority `expr 100 - $NODE_INDEX`
+    authentication {
+      auth_type PASS
+      #广播时的密码，必须一致
+      auth_pass 6789
+    }
+    virtual_ipaddress {
+      #VIP地址
+      ${WORKER_LB_IP}/24
+    }
+    track_script {
+      check_nginx
+    }
+}
+EOF
+
+systemctl restart keepalived && systemctl status keepalived && systemctl enable keepalived
+
+# 第一个节点查看
+ip a s | grep ${K8S_LB_IP}
+
+```
 
 ## 2、Kubeadm 部署安装
 
@@ -190,9 +312,9 @@ kubectl completion bash >/etc/bash_completion.d/kubectl
 kubeadm init --kubernetes-version=v${K8S_VERSION} \
 --image-repository registry.aliyuncs.com/google_containers \
 --apiserver-advertise-address=${NODE_IPS[${NODE_INDEX}]} \
---pod-network-cidr=10.244.0.0/16 \
+--pod-network-cidr=${K8S_POD_CIDR} \
 --control-plane-endpoint="${K8S_LB_IP}:6443" \
---service-cidr=10.96.0.0/16 \
+--service-cidr=${K8S_SERVICE_CIDR} \
 --upload-certs \
 --ignore-preflight-errors=Swap
 
