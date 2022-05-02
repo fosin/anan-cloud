@@ -9,7 +9,7 @@ import org.springframework.util.Assert;
 import top.fosin.anan.cloudresource.constant.PlatformRedisConstant;
 import top.fosin.anan.cloudresource.dto.res.AnanRolePermissionRespDto;
 import top.fosin.anan.core.util.BeanUtil;
-import top.fosin.anan.platform.dto.req.AnanRolePermissionCreateDto;
+import top.fosin.anan.platform.dto.req.AnanRolePermissionReqDto;
 import top.fosin.anan.platform.entity.AnanRolePermissionEntity;
 import top.fosin.anan.platform.repository.RolePermissionRepository;
 import top.fosin.anan.platform.service.inter.RolePermissionService;
@@ -62,7 +62,7 @@ public class RolePermissionServiceImpl implements RolePermissionService {
 
             })
     @Transactional(rollbackFor = Exception.class)
-    public List<AnanRolePermissionRespDto> updateInBatch(String deleteCol, Long roleId, Collection<AnanRolePermissionCreateDto> dtos) {
+    public List<AnanRolePermissionRespDto> updateInBatch(String deleteCol, Long roleId, Collection<AnanRolePermissionReqDto> dtos) {
         Assert.notNull(roleId, "传入的角色ID不能为空!");
         Assert.isTrue(dtos.stream().allMatch(entity -> entity.getRoleId().equals(roleId)), "需要更新的数据集中有与用户ID不匹配的数据!");
         List<AnanRolePermissionEntity> afterRolePermissions = dtos.stream().map(permission -> {

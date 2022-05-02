@@ -58,13 +58,13 @@ public class AnanUserAllPermissionsRespDto extends PidDto<Long> {
     @ApiModelProperty(value = "一般用于前端菜单选项前的图标")
     private String icon;
 
-    @ApiModelProperty(value = "用户ID", required = true)
+    @ApiModelProperty(value = "用户序号", required = true)
     private Long userId;
 
     @ApiModelProperty(value = "补充方式：0=增加权限、1=删除权限", required = true)
     private Integer addMode;
 
-    @ApiModelProperty(value = "角色ID", required = true)
+    @ApiModelProperty(value = "角色序号", required = true)
     private Long roleId;
 
 }

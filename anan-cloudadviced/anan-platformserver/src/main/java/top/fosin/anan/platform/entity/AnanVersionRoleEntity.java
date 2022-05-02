@@ -29,7 +29,7 @@ public class AnanVersionRoleEntity extends CreateUpdateEntity<Long> {
   private static final long serialVersionUID = 49090001033551923L;
 
   @Basic
-  @ApiModelProperty(value = "版本ID", required = true)
+  @ApiModelProperty(value = "版本序号", required = true)
   @Column(name = "version_id", nullable = false)
   private Long versionId;
 

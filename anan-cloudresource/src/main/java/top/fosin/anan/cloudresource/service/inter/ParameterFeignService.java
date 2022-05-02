@@ -6,9 +6,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import top.fosin.anan.cloudresource.constant.ServiceConstant;
 import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
-import top.fosin.anan.cloudresource.dto.req.AnanParameterCreateDto;
-import top.fosin.anan.cloudresource.dto.req.AnanParameterRetrieveDto;
-import top.fosin.anan.cloudresource.dto.req.AnanParameterUpdateDto;
+import top.fosin.anan.cloudresource.dto.req.AnanParameterReqDto;
+import top.fosin.anan.cloudresource.dto.req.AnanParameterReqDto;
+import top.fosin.anan.cloudresource.dto.req.AnanParameterReqDto;
 import top.fosin.anan.cloudresource.dto.res.AnanParameterRespDto;
 import top.fosin.anan.cloudresource.service.ParameterFeignFallbackServiceImpl;
 import top.fosin.anan.model.constant.PathConstant;
@@ -35,10 +35,10 @@ public interface ParameterFeignService {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    ResponseEntity<AnanParameterRespDto> create(@RequestBody AnanParameterCreateDto entity);
+    ResponseEntity<AnanParameterRespDto> create(@RequestBody AnanParameterReqDto entity);
 
     @PutMapping
-    ResponseEntity<AnanParameterRespDto> update(@RequestBody AnanParameterUpdateDto entity);
+    ResponseEntity<AnanParameterRespDto> update(@RequestBody AnanParameterReqDto entity);
 
     @PostMapping(PATH_DTO)
     ResponseEntity<AnanParameterRespDto> getParameter(@RequestParam("type") Integer type,
@@ -51,7 +51,7 @@ public interface ParameterFeignService {
                                                              @RequestParam("name") String name);
 
     @PostMapping(PATH_VALUE)
-    ResponseEntity<String> getOrCreateParameter(@RequestBody AnanParameterRetrieveDto retrieveDto);
+    ResponseEntity<String> getOrCreateParameter(@RequestBody AnanParameterReqDto retrieveDto);
 
     @PostMapping(PATH_APPLY_ID)
     ResponseEntity<Boolean> applyChange(@PathVariable(TreeDto.ID_NAME) Long id);

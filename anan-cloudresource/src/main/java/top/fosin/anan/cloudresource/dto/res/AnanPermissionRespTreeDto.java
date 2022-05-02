@@ -7,7 +7,7 @@ import lombok.EqualsAndHashCode;
 import top.fosin.anan.model.dto.TreeDto;
 
 /**
- * 包含菜单、按钮两种权限(AnanPermission)查询DTO
+ * 包含菜单、按钮两种权限(AnanPermission)请求DTO
  *
  * @author fosin
  * @date 2021-05-10

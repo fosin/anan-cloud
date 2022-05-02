@@ -1,17 +1,16 @@
 package top.fosin.anan.platform.entity;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
-
-import org.hibernate.annotations.DynamicUpdate;
-
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.hibernate.annotations.DynamicUpdate;
 import top.fosin.anan.jpa.entity.OrganizIdCreateEntity;
+
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 /**
  * 系统机构授权表(AnanOrganizationAuth)实体类
@@ -30,12 +29,12 @@ public class AnanOrganizationAuthEntity extends OrganizIdCreateEntity<Long> {
     private static final long serialVersionUID = -99392087741484947L;
 
     @Basic
-    @ApiModelProperty(value = "版本ID", required = true)
+    @ApiModelProperty(value = "版本序号", required = true)
     @Column(name = "version_id", nullable = false)
     private Long versionId;
 
     @Basic
-    @ApiModelProperty(value = "订单ID", required = true)
+    @ApiModelProperty(value = "订单序号", required = true)
     @Column(name = "order_id", nullable = false)
     private Long orderId;
 

@@ -14,7 +14,7 @@
 
 ```shell script
 
-# 每个节点执行
+#每台控制平台节点上都执行
 cat >> .bash_profile <<EOF
 export NODE_NAME_PREFIX=examtest # 主机名称的前缀
 export NODE_IPS=(172.16.1.198) # 主机IP数组列表，第一个IP就是部署主IP
@@ -27,14 +27,7 @@ export HELM_VERSION=v3.7.2 # Helm的版本
 export ANAN_WORKDIR=/data # 部署主目录，后面不带/
 EOF
 
-#以下两个属性需要在K8S部署完成之后才能生效（按需开启）
-#每个节点执行
-cat >> .bash_profile <<EOF
-export K8S_APISERVER=$(kubectl config view --minify -o jsonpath='{.clusters[0].cluster.server}')
-export K8S_TOKEN=$(kubectl get secret $(kubectl get serviceaccount default -o jsonpath='{.secrets[0].name}') -o jsonpath='{.data.token}' | base64 --decode )
-EOF
-
-#按服务器节点执行
+#第1台控制平面上执行（依次类推）
 cat >> .bash_profile <<EOF
 export NODE_INDEX=0 # 主机唯一编号（与NODE_IPS属性数组一一对应），从0开始，每增加一台服务器数值+1
 EOF
@@ -56,6 +49,7 @@ hostnamectl set-hostname ${NODE_NAME_PREFIX}${NODE_INDEX}
 su -
 
 ```
+
 ## 2、部署Docker
 
 详细介绍 [点这里readme-docker.md](../docker/readme-docker.md)

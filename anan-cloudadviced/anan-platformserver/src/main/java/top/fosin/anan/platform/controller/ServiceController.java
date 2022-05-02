@@ -7,9 +7,9 @@ import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
 import top.fosin.anan.cloudresource.dto.res.AnanServiceRespDto;
 import top.fosin.anan.model.controller.ISimpleController;
 
-import top.fosin.anan.platform.dto.req.AnanServiceCreateDto;
-import top.fosin.anan.platform.dto.req.AnanServiceRetrieveDto;
-import top.fosin.anan.platform.dto.req.AnanServiceUpdateDto;
+import top.fosin.anan.platform.dto.req.AnanServiceReqDto;
+import top.fosin.anan.platform.dto.req.AnanServiceReqDto;
+import top.fosin.anan.platform.dto.req.AnanServiceReqDto;
 import top.fosin.anan.platform.service.inter.ServiceService;
 
 /**
@@ -22,7 +22,7 @@ import top.fosin.anan.platform.service.inter.ServiceService;
 @RequestMapping(UrlPrefixConstant.SERVICE)
 @Api(value = UrlPrefixConstant.SERVICE, tags = "服务管理")
 public class ServiceController implements ISimpleController<AnanServiceRespDto, Long,
-        AnanServiceCreateDto, AnanServiceRetrieveDto, AnanServiceUpdateDto> {
+        AnanServiceReqDto, AnanServiceReqDto, AnanServiceReqDto> {
 
     private final ServiceService serviceService;
 

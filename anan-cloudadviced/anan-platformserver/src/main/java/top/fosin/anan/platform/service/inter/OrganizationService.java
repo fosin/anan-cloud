@@ -5,11 +5,7 @@ import top.fosin.anan.cloudresource.dto.res.AnanOrganizationRespDto;
 import top.fosin.anan.cloudresource.dto.res.AnanOrganizationTreeDto;
 import top.fosin.anan.jpa.service.IRetrieveTreeJpaService;
 import top.fosin.anan.jpa.service.ISimpleJpaService;
-
-
-import top.fosin.anan.platform.dto.req.AnanOrganizationCreateDto;
-import top.fosin.anan.platform.dto.req.AnanOrganizationRetrieveDto;
-import top.fosin.anan.platform.dto.req.AnanOrganizationUpdateDto;
+import top.fosin.anan.platform.dto.req.AnanOrganizationReqDto;
 import top.fosin.anan.platform.entity.AnanOrganizationEntity;
 
 /**
@@ -19,9 +15,9 @@ import top.fosin.anan.platform.entity.AnanOrganizationEntity;
  */
 public interface OrganizationService extends ISimpleJpaService<AnanOrganizationEntity,
         AnanOrganizationRespDto,
-        Long, AnanOrganizationCreateDto, AnanOrganizationRetrieveDto, AnanOrganizationUpdateDto>,
+        Long, AnanOrganizationReqDto, AnanOrganizationReqDto, AnanOrganizationReqDto>,
         IRetrieveTreeJpaService<AnanOrganizationEntity, AnanOrganizationTreeDto,
-                Long, AnanOrganizationRetrieveDto> {
+                Long, AnanOrganizationReqDto> {
 
     AnanOrganizationTreeDto treeAllChildByid(Long id);
 }

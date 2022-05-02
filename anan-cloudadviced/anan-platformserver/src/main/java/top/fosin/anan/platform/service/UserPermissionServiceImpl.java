@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import top.fosin.anan.cloudresource.constant.PlatformRedisConstant;
 import top.fosin.anan.core.util.BeanUtil;
-import top.fosin.anan.platform.dto.req.AnanUserPermissionCreateDto;
+import top.fosin.anan.platform.dto.req.AnanUserPermissionReqDto;
 import top.fosin.anan.platform.dto.res.AnanUserPermissionRespDto;
 import top.fosin.anan.platform.entity.AnanUserPermissionEntity;
 import top.fosin.anan.platform.repository.UserPermissionRepository;
@@ -57,11 +57,11 @@ public class UserPermissionServiceImpl implements UserPermissionService {
                     @CacheEvict(value = PlatformRedisConstant.ANAN_USER_PERMISSION_TREE, key = "#userId")
 
             })
-    public Collection<AnanUserPermissionRespDto> updateInBatch(String deleteCol, Long userId, Collection<AnanUserPermissionCreateDto> dtos) {
+    public Collection<AnanUserPermissionRespDto> updateInBatch(String deleteCol, Long userId, Collection<AnanUserPermissionReqDto> dtos) {
         Assert.notNull(userId, "传入的用户ID不能为空!");
         Assert.isTrue(dtos.stream().allMatch(entity -> entity.getUserId().equals(userId)), "需要更新的数据集中有与用户ID不匹配的数据!");
-        long organizId = dtos.stream().distinct().map(AnanUserPermissionCreateDto::getOrganizId)
-                .findFirst().orElseThrow(() -> new IllegalArgumentException("没有找打破有效的机构ID"));
+        long organizId = dtos.stream().distinct().map(AnanUserPermissionReqDto::getOrganizId)
+                .findFirst().orElseThrow(() -> new IllegalArgumentException("没有找打破有效的机构序号"));
         List<AnanUserPermissionEntity> after0Permissions =
                 dtos.stream().filter(dto -> dto.getAddMode() == 0).map(permission -> {
                     AnanUserPermissionEntity entity = new AnanUserPermissionEntity();

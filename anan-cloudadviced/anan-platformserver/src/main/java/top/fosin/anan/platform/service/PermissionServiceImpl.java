@@ -8,10 +8,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import top.fosin.anan.cloudresource.constant.PlatformRedisConstant;
+import top.fosin.anan.cloudresource.dto.req.AnanPermissionReqDto;
 import top.fosin.anan.cloudresource.dto.res.AnanPermissionRespDto;
 import top.fosin.anan.core.util.BeanUtil;
-import top.fosin.anan.platform.dto.req.AnanPermissionCreateDto;
-import top.fosin.anan.platform.dto.req.AnanPermissionUpdateDto;
 import top.fosin.anan.platform.entity.AnanPermissionEntity;
 import top.fosin.anan.platform.entity.AnanServiceEntity;
 import top.fosin.anan.platform.repository.*;
@@ -56,7 +55,7 @@ public class PermissionServiceImpl implements PermissionService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public AnanPermissionRespDto create(AnanPermissionCreateDto dto) {
+    public AnanPermissionRespDto create(AnanPermissionReqDto dto) {
         Assert.notNull(dto, "传入的创建数据实体对象不能为空!");
 
         AnanPermissionEntity createEntity = BeanUtil.copyProperties(dto, AnanPermissionEntity.class);
@@ -80,7 +79,7 @@ public class PermissionServiceImpl implements PermissionService {
                     @CacheEvict(value = PlatformRedisConstant.ANAN_USER_PERMISSION_TREE, allEntries = true)
 
             })
-    public void update(AnanPermissionUpdateDto dto) {
+    public void update(AnanPermissionReqDto dto) {
         Long id = dto.getId();
         Assert.notNull(id, "传入了空ID!");
 
@@ -113,12 +112,12 @@ public class PermissionServiceImpl implements PermissionService {
         return BeanUtil.copyCollectionProperties(permissionRepository.findByPid(pid), AnanPermissionRespDto.class);
     }
 
-    protected List<AnanPermissionEntity> getUpdateCascadeChild(AnanPermissionUpdateDto originEntity, AnanPermissionEntity updateEntity) {
+    protected List<AnanPermissionEntity> getUpdateCascadeChild(AnanPermissionReqDto originEntity, AnanPermissionEntity updateEntity) {
         Long id = updateEntity.getId();
         Collection<AnanPermissionEntity> allByPid = permissionRepository.findByPid(id);
         List<AnanPermissionEntity> saves = new ArrayList<>();
         allByPid.forEach(entity -> {
-            AnanPermissionUpdateDto entity2 = new AnanPermissionUpdateDto();
+            AnanPermissionReqDto entity2 = new AnanPermissionReqDto();
             BeanUtils.copyProperties(entity, entity2);
             entity.setServiceId(originEntity.getServiceId());
             entity.setCode(entity.getCode().replace(updateEntity.getCode(), originEntity.getCode()));

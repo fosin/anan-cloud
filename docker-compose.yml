@@ -1,9 +1,9 @@
 version: '3'
 services:
-  mysql:
+  mysql-mgr:
     network_mode: host
-    container_name: mysql
-    hostname: mysql
+    container_name: mysql-mgr
+    hostname: mysql-mgr
     restart: always
     image: registry.cn-hongkong.aliyuncs.com/fosin/mysql:3.0.0
     #    build:
@@ -17,7 +17,8 @@ services:
       - MYSQL_USER=nacos
       - MYSQL_PASSWORD=local
     volumes:
-      - /data/mysql:/var/lib/mysql
+      - /data/mysql-mgr0:/var/lib/mysql
+      - /data/logs/mysql-mgr0:/var/log/mysql
   #    ports:
   #      - "3306:3306"
   nacos:
@@ -31,7 +32,7 @@ services:
       - PREFER_HOST_MODE=hostname
       - MODE=standalone
       - SPRING_DATASOURCE_PLATFORM=mysql
-      - MYSQL_SERVICE_HOST=mysql
+      - MYSQL_SERVICE_HOST=mysql-mgr
       - MYSQL_SERVICE_PORT=3306
       - MYSQL_SERVICE_DB_NAME=nacos
       - MYSQL_SERVICE_USER=nacos
@@ -42,10 +43,10 @@ services:
       - JVM_MS=160M
       - JVM_MMS=160M
     volumes:
-      - /data/nacos/logs/:/home/nacos/logs
-      - /data/nacos/data/:/home/nacos/data
+      - /data/logs/nacos0/:/home/nacos/logs
+      - /data/nacos0/:/home/nacos/data
     depends_on:
-      - mysql
+      - mysql-mgr
 
   rabbitmq:
     network_mode: host
@@ -58,8 +59,8 @@ services:
       - RABBITMQ_DEFAULT_PASS=local
       - RABBITMQ_DEFAULT_VHOST=/
       - TZ=Asia/Shanghai
-    #    volumes: TODO 启动后报错cookie file /var/lib/rabbitmq/.erlang.cookie must be accessible by owner only
-    #      - /data/rabbitmq:/var/lib/rabbitmq
+    volumes: #TODO 启动后报错cookie file /var/lib/rabbitmq/.erlang.cookie must be accessible by owner only
+      - /data/rabbitmq0:/var/lib/rabbitmq
     restart: always
   #    ports:
   #      - 15672:15672
@@ -68,7 +69,7 @@ services:
   anan-vue:
     network_mode: host
     container_name: anan-vue
-    image: registry.cn-hongkong.aliyuncs.com/fosin/anan-vue:3.5.0
+    image: registry.cn-hongkong.aliyuncs.com/fosin/anan-vue:3.6.0
     hostname: anan-vue
     restart: always
     environment:
@@ -88,7 +89,7 @@ services:
     environment:
       - TZ=Asia/Shanghai
     volumes:
-      - /data/redis:/data
+      - /data/redis0:/data
     restart: always
     #    ports:
     #      - 6379:6379
@@ -103,6 +104,9 @@ services:
     restart: always
     environment:
       - JAVA_TOOL_OPTIONS=-Xmx200M -XX:MaxMetaspaceSize=160M -XX:MetaspaceSize=160M -XX:+DisableExplicitGC -XX:ErrorFile=/logs/hs_err_pid%p.log
+      - spring.cloud.kubernetes.enabled=false
+      - spring.cloud.nacos.config.enabled=true
+      - spring.cloud.nacos.discovery.enabled=true
       #    ports:
       #      - 6140:6140
       #    volumes:
@@ -110,7 +114,7 @@ services:
     depends_on:
       - rabbitmq
       - redis
-      - mysql
+      - mysql-mgr
       - nacos
 
   anan-cloudgateway:
@@ -122,6 +126,9 @@ services:
     restart: always
     environment:
       - JAVA_TOOL_OPTIONS=-Xmx200M -XX:MaxMetaspaceSize=160M -XX:MetaspaceSize=160M -XX:+DisableExplicitGC -XX:ErrorFile=/logs/hs_err_pid%p.log
+      - spring.cloud.kubernetes.enabled=false
+      - spring.cloud.nacos.config.enabled=true
+      - spring.cloud.nacos.discovery.enabled=true
     depends_on:
       - rabbitmq
       - nacos
@@ -135,12 +142,15 @@ services:
     privileged: true
     environment:
       - JAVA_TOOL_OPTIONS=-Xmx200M -XX:MaxMetaspaceSize=160M -XX:MetaspaceSize=160M -XX:+DisableExplicitGC -XX:ErrorFile=/logs/hs_err_pid%p.log
+      - spring.cloud.kubernetes.enabled=false
+      - spring.cloud.nacos.config.enabled=true
+      - spring.cloud.nacos.discovery.enabled=true
       #    volumes:
       #- /data/logs/anan:/logs
     depends_on:
       - rabbitmq
       - redis
-      - mysql
+      - mysql-mgr
       - nacos
 
   anan-sbaserver:
@@ -152,6 +162,9 @@ services:
     restart: always
     environment:
       - JAVA_TOOL_OPTIONS=-Xmx200M -XX:MaxMetaspaceSize=160M -XX:MetaspaceSize=160M -XX:+DisableExplicitGC -XX:ErrorFile=/logs/hs_err_pid%p.log
+      - spring.cloud.kubernetes.enabled=false
+      - spring.cloud.nacos.config.enabled=true
+      - spring.cloud.nacos.discovery.enabled=true
     depends_on:
       - rabbitmq
       - redis
@@ -165,7 +178,9 @@ services:
     restart: always
     environment:
       - JAVA_TOOL_OPTIONS=-Xmx200M -XX:MaxMetaspaceSize=160M -XX:MetaspaceSize=160M -XX:+DisableExplicitGC -XX:ErrorFile=/logs/hs_err_pid%p.log
-
+      - spring.cloud.kubernetes.enabled=false
+      - spring.cloud.nacos.config.enabled=true
+      - spring.cloud.nacos.discovery.enabled=true
   anan-configserver:
     network_mode: host
     image: registry.cn-hongkong.aliyuncs.com/fosin/anan-configserver:3.0.0-SNAPSHOT
@@ -176,6 +191,9 @@ services:
     environment:
       - JAVA_TOOL_OPTIONS=-Xmx200M -XX:MaxMetaspaceSize=160M -XX:MetaspaceSize=160M -XX:+DisableExplicitGC -XX:ErrorFile=/logs/hs_err_pid%p.log
       - spring.cloud.config.server.native.search-locations=file:/anan-conf
+      - spring.cloud.kubernetes.enabled=false
+      - spring.cloud.nacos.config.enabled=true
+      - spring.cloud.nacos.discovery.enabled=true
       #    volumes:
       #- /data/logs/anan:/logs
       - /data/anan-conf:/anan-conf

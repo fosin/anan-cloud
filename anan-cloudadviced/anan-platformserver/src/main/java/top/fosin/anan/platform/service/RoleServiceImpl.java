@@ -11,15 +11,13 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 import top.fosin.anan.cloudresource.constant.SystemConstant;
+import top.fosin.anan.cloudresource.dto.req.AnanRoleReqDto;
 import top.fosin.anan.cloudresource.dto.res.AnanRoleRespDto;
 import top.fosin.anan.cloudresource.service.AnanUserDetailService;
 import top.fosin.anan.core.util.BeanUtil;
 import top.fosin.anan.model.module.PageModule;
 import top.fosin.anan.model.result.ListResult;
 import top.fosin.anan.model.result.ResultUtils;
-import top.fosin.anan.platform.dto.req.AnanRoleCreateDto;
-import top.fosin.anan.platform.dto.req.AnanRoleRetrieveDto;
-import top.fosin.anan.platform.dto.req.AnanRoleUpdateDto;
 import top.fosin.anan.platform.entity.AnanOrganizationEntity;
 import top.fosin.anan.platform.entity.AnanRoleEntity;
 import top.fosin.anan.platform.entity.AnanUserRoleEntity;
@@ -56,7 +54,7 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public AnanRoleRespDto create(AnanRoleCreateDto dto) {
+    public AnanRoleRespDto create(AnanRoleReqDto dto) {
         String value = dto.getValue();
         if (SystemConstant.ADMIN_ROLE_NAME.equalsIgnoreCase(value) &&
                 !SystemConstant.ADMIN_ROLE_NAME.equalsIgnoreCase(value)) {
@@ -76,7 +74,7 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void update(AnanRoleUpdateDto entity) {
+    public void update(AnanRoleReqDto entity) {
         Assert.notNull(entity, "传入了空对象!");
         Long id = entity.getId();
         Assert.notNull(id, "传入了空ID!");
@@ -139,9 +137,9 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public ListResult<AnanRoleRespDto> findPage(PageModule<AnanRoleRetrieveDto> pageModule) {
+    public ListResult<AnanRoleRespDto> findPage(PageModule<AnanRoleReqDto> pageModule) {
         Assert.notNull(pageModule, "传入的分页信息不能为空!");
-        AnanRoleRetrieveDto params = pageModule.getParams();
+        AnanRoleReqDto params = pageModule.getParams();
 
         PageRequest pageable = PageRequest.of(pageModule.getPageNumber() - 1, pageModule.getPageSize(), this.buildSortRules(params.getSortRules()));
 

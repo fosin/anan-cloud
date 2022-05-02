@@ -1,22 +1,12 @@
 package top.fosin.anan.platform.controller;
 
-import java.util.Collection;
-import java.util.List;
-
-import org.springframework.http.ResponseEntity;
-import org.springframework.util.Assert;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.http.ResponseEntity;
+import org.springframework.util.Assert;
+import org.springframework.web.bind.annotation.*;
 import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
 import top.fosin.anan.cloudresource.dto.req.RegisterDto;
 import top.fosin.anan.cloudresource.dto.res.AnanOrganizationRespDto;
@@ -24,15 +14,16 @@ import top.fosin.anan.cloudresource.dto.res.AnanOrganizationTreeDto;
 import top.fosin.anan.model.controller.BaseController;
 import top.fosin.anan.model.controller.IRetrieveTreeController;
 import top.fosin.anan.model.controller.ISimpleController;
-import top.fosin.anan.platform.dto.req.AnanOrganizationCreateDto;
-import top.fosin.anan.platform.dto.req.AnanOrganizationPermissionCreateDto;
-import top.fosin.anan.platform.dto.req.AnanOrganizationRetrieveDto;
-import top.fosin.anan.platform.dto.req.AnanOrganizationUpdateDto;
+import top.fosin.anan.platform.dto.req.AnanOrganizationPermissionReqDto;
+import top.fosin.anan.platform.dto.req.AnanOrganizationReqDto;
 import top.fosin.anan.platform.dto.res.AnanOrganizationAuthRespDto;
 import top.fosin.anan.platform.dto.res.AnanOrganizationPermissionRespDto;
 import top.fosin.anan.platform.service.inter.OrganizationAuthService;
 import top.fosin.anan.platform.service.inter.OrganizationPermissionService;
 import top.fosin.anan.platform.service.inter.OrganizationService;
+
+import java.util.Collection;
+import java.util.List;
 
 /**
  * @author fosin
@@ -42,9 +33,9 @@ import top.fosin.anan.platform.service.inter.OrganizationService;
 @Api(value = UrlPrefixConstant.ORGANIZATION, tags = "机构管理")
 public class OrganizationController extends BaseController
         implements ISimpleController<AnanOrganizationRespDto, Long,
-        AnanOrganizationCreateDto, AnanOrganizationRetrieveDto,
-        AnanOrganizationUpdateDto>,
-        IRetrieveTreeController<AnanOrganizationTreeDto, Long, AnanOrganizationRetrieveDto> {
+        AnanOrganizationReqDto, AnanOrganizationReqDto,
+        AnanOrganizationReqDto>,
+        IRetrieveTreeController<AnanOrganizationTreeDto, Long, AnanOrganizationReqDto> {
     private final OrganizationService organizationService;
     private final OrganizationAuthService organizationAuthService;
     private final OrganizationPermissionService organizationPermissionService;
@@ -72,7 +63,7 @@ public class OrganizationController extends BaseController
 
     })
     @PutMapping(value = "/permissions/{organizId}")
-    public ResponseEntity<Collection<AnanOrganizationPermissionRespDto>> permissions(@RequestBody List<AnanOrganizationPermissionCreateDto> dtos,
+    public ResponseEntity<Collection<AnanOrganizationPermissionRespDto>> permissions(@RequestBody List<AnanOrganizationPermissionReqDto> dtos,
                                                                                      @PathVariable("organizId") Long organizId) {
         return ResponseEntity.ok(organizationPermissionService.updateInBatch("organizId", organizId, dtos));
     }

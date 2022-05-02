@@ -3,9 +3,9 @@ package top.fosin.anan.platform.service.inter;
 import java.util.Collection;
 import java.util.List;
 
-import top.fosin.anan.cloudresource.dto.req.AnanParameterCreateDto;
-import top.fosin.anan.cloudresource.dto.req.AnanParameterRetrieveDto;
-import top.fosin.anan.cloudresource.dto.req.AnanParameterUpdateDto;
+import top.fosin.anan.cloudresource.dto.req.AnanParameterReqDto;
+import top.fosin.anan.cloudresource.dto.req.AnanParameterReqDto;
+import top.fosin.anan.cloudresource.dto.req.AnanParameterReqDto;
 import top.fosin.anan.cloudresource.dto.res.AnanParameterRespDto;
 import top.fosin.anan.jpa.service.ISimpleJpaService;
 import top.fosin.anan.platform.entity.AnanParameterEntity;
@@ -16,7 +16,7 @@ import top.fosin.anan.platform.entity.AnanParameterEntity;
  *
  */
 public interface ParameterService extends ISimpleJpaService<AnanParameterEntity, AnanParameterRespDto,
-        Long, AnanParameterCreateDto, AnanParameterRetrieveDto, AnanParameterUpdateDto> {
+        Long, AnanParameterReqDto, AnanParameterReqDto, AnanParameterReqDto> {
     void cancelDelete(Collection<Long> ids);
 
     AnanParameterRespDto getParameter(Integer type, String scope, String name);

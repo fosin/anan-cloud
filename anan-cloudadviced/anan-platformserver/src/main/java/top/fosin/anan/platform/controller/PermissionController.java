@@ -7,14 +7,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import top.fosin.anan.cloudresource.constant.RequestPath;
 import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
-import top.fosin.anan.cloudresource.dto.req.AnanPermissionRetrieveDto;
+import top.fosin.anan.cloudresource.dto.req.AnanPermissionReqDto;
 import top.fosin.anan.cloudresource.dto.res.AnanPermissionRespDto;
 import top.fosin.anan.cloudresource.dto.res.AnanPermissionRespTreeDto;
 import top.fosin.anan.model.controller.BaseController;
 import top.fosin.anan.model.controller.IRetrieveTreeController;
 import top.fosin.anan.model.controller.ISimpleController;
-import top.fosin.anan.platform.dto.req.AnanPermissionCreateDto;
-import top.fosin.anan.platform.dto.req.AnanPermissionUpdateDto;
 import top.fosin.anan.platform.service.inter.PermissionService;
 
 import javax.validation.constraints.NotBlank;
@@ -29,10 +27,10 @@ import java.util.List;
 @Api(value = UrlPrefixConstant.PERMISSION, tags = "权限管理")
 public class PermissionController extends BaseController
         implements ISimpleController<AnanPermissionRespDto, Long,
-        AnanPermissionCreateDto, AnanPermissionRetrieveDto,
-        AnanPermissionUpdateDto>,
+        AnanPermissionReqDto, AnanPermissionReqDto,
+        AnanPermissionReqDto>,
         IRetrieveTreeController<AnanPermissionRespTreeDto, Long,
-                AnanPermissionRetrieveDto> {
+                AnanPermissionReqDto> {
 
     private final PermissionService permissionService;
 

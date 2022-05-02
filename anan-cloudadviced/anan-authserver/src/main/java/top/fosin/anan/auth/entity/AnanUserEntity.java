@@ -1,27 +1,19 @@
 package top.fosin.anan.auth.entity;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import javax.persistence.Basic;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-
-import org.hibernate.annotations.DynamicUpdate;
-import org.springframework.beans.BeanUtils;
-
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.hibernate.annotations.DynamicUpdate;
+import org.springframework.beans.BeanUtils;
 import top.fosin.anan.cloudresource.dto.AnanUserAuthDto;
-import top.fosin.anan.cloudresource.dto.req.AnanUserRoleDto;
+import top.fosin.anan.cloudresource.dto.req.AnanRoleReqDto;
 import top.fosin.anan.jpa.entity.OrganizIdCreateUpdateEntity;
+
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * 系统用户表(AnanUser)实体类
@@ -44,12 +36,12 @@ public class AnanUserEntity extends OrganizIdCreateUpdateEntity<Long> {
         BeanUtils.copyProperties(this, userDto);
         userDto.setId(this.getId());
         List<AnanUserRoleEntity> userRoles = this.getUserRoles();
-        List<AnanUserRoleDto> userRoles2 = new ArrayList<>();
+        List<AnanRoleReqDto> userRoles2 = new ArrayList<>();
         if (userRoles != null) {
             userRoles.toString();
             if (userRoles.size() > 0) {
                 userRoles.forEach(userRole -> {
-                    AnanUserRoleDto role2 = new AnanUserRoleDto();
+                    AnanRoleReqDto role2 = new AnanRoleReqDto();
                     AnanRoleEntity role = userRole.getRole();
                     BeanUtils.copyProperties(role, role2);
                     role2.setId(role.getId());

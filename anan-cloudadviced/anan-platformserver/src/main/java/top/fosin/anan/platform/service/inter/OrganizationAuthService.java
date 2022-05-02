@@ -2,9 +2,9 @@ package top.fosin.anan.platform.service.inter;
 
 import top.fosin.anan.cloudresource.dto.req.RegisterDto;
 import top.fosin.anan.jpa.service.ISimpleJpaService;
-import top.fosin.anan.platform.dto.req.AnanOrganizationAuthCreateDto;
-import top.fosin.anan.platform.dto.req.AnanOrganizationAuthRetrieveDto;
-import top.fosin.anan.platform.dto.req.AnanOrganizationAuthUpdateDto;
+import top.fosin.anan.platform.dto.req.AnanOrganizationAuthReqDto;
+import top.fosin.anan.platform.dto.req.AnanOrganizationAuthReqDto;
+import top.fosin.anan.platform.dto.req.AnanOrganizationAuthReqDto;
 import top.fosin.anan.platform.dto.res.AnanOrganizationAuthRespDto;
 import top.fosin.anan.platform.entity.AnanOrganizationAuthEntity;
 
@@ -19,8 +19,8 @@ import java.util.List;
 public interface OrganizationAuthService extends
         ISimpleJpaService<AnanOrganizationAuthEntity,
                 AnanOrganizationAuthRespDto,
-                Long, AnanOrganizationAuthCreateDto,
-                AnanOrganizationAuthRetrieveDto, AnanOrganizationAuthUpdateDto> {
+                Long, AnanOrganizationAuthReqDto,
+                AnanOrganizationAuthReqDto, AnanOrganizationAuthReqDto> {
     List<AnanOrganizationAuthRespDto> findAllByVersionId(Long versionId);
 
     List<AnanOrganizationAuthRespDto> findAllByOrganizId(Long organizId);

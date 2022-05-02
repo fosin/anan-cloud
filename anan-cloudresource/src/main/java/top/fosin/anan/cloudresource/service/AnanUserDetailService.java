@@ -8,7 +8,7 @@ import top.fosin.anan.cloudresource.constant.SystemConstant;
 import top.fosin.anan.cloudresource.dto.AnanClient;
 import top.fosin.anan.cloudresource.dto.AnanUserAuthDto;
 import top.fosin.anan.cloudresource.dto.AnanUserDetail;
-import top.fosin.anan.cloudresource.dto.req.AnanUserRoleDto;
+import top.fosin.anan.cloudresource.dto.req.AnanRoleReqDto;
 import top.fosin.anan.security.util.AnanJwtTool;
 
 import java.util.*;
@@ -146,7 +146,7 @@ public class AnanUserDetailService extends AnanJwtTool<AnanUserDetail> implement
      * @return boolean true：是 false：否
      */
     public boolean hasAdminRole() {
-        List<AnanUserRoleDto> userRoles = this.getAnanUser().getUserRoles();
+        List<AnanRoleReqDto> userRoles = this.getAnanUser().getUserRoles();
         return userRoles.stream().anyMatch(userRole -> SystemConstant.ADMIN_ROLE_NAME.equals(userRole.getValue()));
     }
 
@@ -156,7 +156,7 @@ public class AnanUserDetailService extends AnanJwtTool<AnanUserDetail> implement
      * @return boolean true：是 false：否
      */
     public boolean hasSysAdminRole() {
-        List<AnanUserRoleDto> userRoles = this.getAnanUser().getUserRoles();
+        List<AnanRoleReqDto> userRoles = this.getAnanUser().getUserRoles();
         return userRoles.stream().anyMatch(userRole -> SystemConstant.ANAN_ROLE_NAME.equals(userRole.getValue()));
     }
 

@@ -6,12 +6,15 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import top.fosin.anan.cloudresource.dto.req.AnanUserRegisterDto;
+import top.fosin.anan.cloudresource.dto.req.AnanUserReqDto;
 import top.fosin.anan.cloudresource.dto.req.RegisterDto;
 import top.fosin.anan.cloudresource.dto.res.AnanOrganizationRespDto;
 import top.fosin.anan.cloudresource.dto.res.AnanUserRespDto;
 import top.fosin.anan.core.util.BeanUtil;
 import top.fosin.anan.core.util.DateTimeUtil;
-import top.fosin.anan.platform.dto.req.*;
+import top.fosin.anan.platform.dto.req.AnanOrganizationAuthReqDto;
+import top.fosin.anan.platform.dto.req.AnanOrganizationReqDto;
+import top.fosin.anan.platform.dto.req.AnanPayOrderReqDto;
 import top.fosin.anan.platform.dto.res.AnanOrganizationAuthRespDto;
 import top.fosin.anan.platform.dto.res.AnanPayOrderRespDto;
 import top.fosin.anan.platform.dto.res.AnanVersionRespDto;
@@ -78,20 +81,20 @@ public class OrganizationAuthServiceImpl implements OrganizationAuthService {
         Date now = new Date();
 
         //创建机构
-        AnanOrganizationCreateDto organization = new AnanOrganizationCreateDto();
+        AnanOrganizationReqDto organization = new AnanOrganizationReqDto();
         BeanUtils.copyProperties(registerDto.getOrganization(), organization);
         organization.setPid(0L);
         organization.setTopId(0L);
         organization.setStatus(0);
         AnanOrganizationRespDto organizationEntity = organizationService.create(organization);
-        AnanOrganizationUpdateDto updateDto = new AnanOrganizationUpdateDto();
+        AnanOrganizationReqDto updateDto = new AnanOrganizationReqDto();
         BeanUtils.copyProperties(organizationEntity, updateDto);
         updateDto.setTopId(organizationEntity.getId());
         organizationService.update(updateDto);
 
         //创建用户
         AnanUserRegisterDto registerDTO = registerDto.getUser();
-        AnanUserCreateDto createDTO = new AnanUserCreateDto();
+        AnanUserReqDto createDTO = new AnanUserReqDto();
         BeanUtils.copyProperties(registerDTO, createDTO);
         createDTO.setOrganizId(updateDto.getId());
 
@@ -108,7 +111,7 @@ public class OrganizationAuthServiceImpl implements OrganizationAuthService {
         AnanVersionRespDto respDto = versionService.findOneById(versionId);
 
         //创建订单
-        AnanPayOrderCreateDto orderEntity = new AnanPayOrderCreateDto();
+        AnanPayOrderReqDto orderEntity = new AnanPayOrderReqDto();
         orderEntity.setMoney(respDto.getPrice());
         orderEntity.setOrderTime(now);
         orderEntity.setVersionId(versionId);
@@ -123,7 +126,7 @@ public class OrganizationAuthServiceImpl implements OrganizationAuthService {
         AnanPayOrderRespDto payOrderRespDto = payOrderService.create(orderEntity);
 
         //创建机构认证信息
-        AnanOrganizationAuthCreateDto auth = new AnanOrganizationAuthCreateDto();
+        AnanOrganizationAuthReqDto auth = new AnanOrganizationAuthReqDto();
         auth.setVersionId(versionId);
         auth.setOrderId(payOrderRespDto.getId());
         auth.setMaxOrganizs(respDto.getMaxOrganizs());
@@ -139,7 +142,7 @@ public class OrganizationAuthServiceImpl implements OrganizationAuthService {
         return true;
     }
 
-    private String getAuthCode(AnanOrganizationAuthCreateDto auth) {
+    private String getAuthCode(AnanOrganizationAuthReqDto auth) {
         return passwordEncoder.encode(auth.toString());
     }
 }

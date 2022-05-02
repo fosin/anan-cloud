@@ -30,7 +30,7 @@ public class AnanPayDetailEntity extends IdEntity<Long> {
     private static final long serialVersionUID = -23058131683087837L;
 
     @Basic
-    @ApiModelProperty(value = "支付ID", required = true)
+    @ApiModelProperty(value = "支付序号", required = true)
     @Column(name = "pay_id", nullable = false)
     private Long payId;
 

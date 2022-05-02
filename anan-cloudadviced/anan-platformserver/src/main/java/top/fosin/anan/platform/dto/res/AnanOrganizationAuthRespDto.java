@@ -21,10 +21,10 @@ import top.fosin.anan.model.dto.OrganizIdDto;
 public class AnanOrganizationAuthRespDto extends OrganizIdDto<Long> {
     private static final long serialVersionUID = -14631872198139889L;
 
-    @ApiModelProperty(value = "版本ID", example = "Long")
+    @ApiModelProperty(value = "版本序号", example = "Long")
     private Long versionId;
 
-    @ApiModelProperty(value = "订单ID", example = "Long")
+    @ApiModelProperty(value = "订单序号", example = "Long")
     private Long orderId;
 
     @ApiModelProperty(value = "授权码", example = "String")

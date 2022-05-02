@@ -4,9 +4,9 @@ package top.fosin.anan.cloudresource.service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import top.fosin.anan.cloudresource.dto.req.AnanParameterCreateDto;
-import top.fosin.anan.cloudresource.dto.req.AnanParameterRetrieveDto;
-import top.fosin.anan.cloudresource.dto.req.AnanParameterUpdateDto;
+import top.fosin.anan.cloudresource.dto.req.AnanParameterReqDto;
+import top.fosin.anan.cloudresource.dto.req.AnanParameterReqDto;
+import top.fosin.anan.cloudresource.dto.req.AnanParameterReqDto;
 import top.fosin.anan.cloudresource.dto.res.AnanParameterRespDto;
 import top.fosin.anan.cloudresource.service.inter.ParameterFeignService;
 
@@ -24,14 +24,14 @@ import java.util.List;
 public class ParameterFeignFallbackServiceImpl implements ParameterFeignService {
 
     @Override
-    public ResponseEntity<AnanParameterRespDto> create(AnanParameterCreateDto ananParameterCreateDto) {
-        log.error("feign 远程创建通用系统参数失败:{}", ananParameterCreateDto);
+    public ResponseEntity<AnanParameterRespDto> create(AnanParameterReqDto AnanParameterReqDto) {
+        log.error("feign 远程创建通用系统参数失败:{}", AnanParameterReqDto);
         return null;
     }
 
     @Override
-    public ResponseEntity<AnanParameterRespDto> update(AnanParameterUpdateDto ananParameterUpdateDto) {
-        log.error("feign 远程更新通用系统参数失败:{}", ananParameterUpdateDto);
+    public ResponseEntity<AnanParameterRespDto> update(AnanParameterReqDto AnanParameterReqDto) {
+        log.error("feign 远程更新通用系统参数失败:{}", AnanParameterReqDto);
         return null;
     }
 
@@ -48,7 +48,7 @@ public class ParameterFeignFallbackServiceImpl implements ParameterFeignService 
     }
 
     @Override
-    public ResponseEntity<String> getOrCreateParameter(AnanParameterRetrieveDto retrieveDto) {
+    public ResponseEntity<String> getOrCreateParameter(AnanParameterReqDto retrieveDto) {
         log.error("feign 远程查询通用系统参数失败:{}", retrieveDto);
         return null;
     }

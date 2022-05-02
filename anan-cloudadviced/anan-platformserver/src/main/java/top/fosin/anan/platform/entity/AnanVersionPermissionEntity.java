@@ -1,16 +1,15 @@
 package top.fosin.anan.platform.entity;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
-
-import org.hibernate.annotations.DynamicUpdate;
-
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.hibernate.annotations.DynamicUpdate;
+
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 /**
  * 系统版本权限表(AnanVersionPermission)实体类
@@ -29,7 +28,7 @@ public class AnanVersionPermissionEntity extends PermissionEntity<Long> {
     private static final long serialVersionUID = 117455991817648863L;
 
     @Basic
-    @ApiModelProperty(value = "版本ID", required = true)
+    @ApiModelProperty(value = "版本序号", required = true)
     @Column(name = "version_id", nullable = false)
     private Long versionId;
 

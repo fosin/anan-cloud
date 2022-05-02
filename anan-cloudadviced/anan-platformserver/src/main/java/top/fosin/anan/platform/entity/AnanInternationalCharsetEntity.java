@@ -30,12 +30,12 @@ public class AnanInternationalCharsetEntity extends CreateUpdateEntity<Long> {
 
     @Basic
     @Column(name = "international_id")
-    @ApiModelProperty(value = "国际化语言ID")
+    @ApiModelProperty(value = "国际化语言序号")
     private Long internationalId;
 
     @Basic
     @Column(name = "service_id")
-    @ApiModelProperty(value = "服务ID")
+    @ApiModelProperty(value = "服务序号")
     private Long serviceId;
 
     @Basic

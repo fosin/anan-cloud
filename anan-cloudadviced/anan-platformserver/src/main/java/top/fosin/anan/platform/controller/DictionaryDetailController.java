@@ -9,13 +9,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
-import top.fosin.anan.cloudresource.dto.req.AnanDictionaryDetailRetrieveDto;
+import top.fosin.anan.cloudresource.dto.req.AnanDictionaryDetailReqDto;
 import top.fosin.anan.cloudresource.dto.res.AnanDictionaryDetailRespDto;
 import top.fosin.anan.core.exception.AnanControllerException;
 import top.fosin.anan.model.controller.ISimpleController;
-
-import top.fosin.anan.platform.dto.req.AnanDictionaryDetailCreateDto;
-import top.fosin.anan.platform.dto.req.AnanDictionaryDetailUpdateDto;
 import top.fosin.anan.platform.service.inter.DictionaryDetailService;
 
 import java.util.List;
@@ -29,7 +26,7 @@ import java.util.List;
 @RequestMapping(UrlPrefixConstant.DICTIONARY_DETAIL)
 @Api(value = UrlPrefixConstant.DICTIONARY_DETAIL, tags = "通用字典明细管理")
 public class DictionaryDetailController implements ISimpleController<AnanDictionaryDetailRespDto,
-        Long, AnanDictionaryDetailCreateDto, AnanDictionaryDetailRetrieveDto, AnanDictionaryDetailUpdateDto> {
+        Long, AnanDictionaryDetailReqDto, AnanDictionaryDetailReqDto, AnanDictionaryDetailReqDto> {
     private final DictionaryDetailService dictionaryDetailService;
 
     public DictionaryDetailController(DictionaryDetailService dictionaryDetailService) {

@@ -5,9 +5,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
 import top.fosin.anan.model.controller.ISimpleController;
-import top.fosin.anan.platform.dto.req.OauthClientDetailsCreateDto;
-import top.fosin.anan.platform.dto.req.OauthClientDetailsRetrieveDto;
-import top.fosin.anan.platform.dto.req.OauthClientDetailsUpdateDto;
+import top.fosin.anan.platform.dto.req.OauthClientDetailsReqDto;
 import top.fosin.anan.platform.dto.res.OauthClientDetailsRespDto;
 import top.fosin.anan.platform.service.inter.OauthClientService;
 
@@ -21,7 +19,7 @@ import top.fosin.anan.platform.service.inter.OauthClientService;
 @RequestMapping(UrlPrefixConstant.OAUTH_CLIENT)
 @Api(value = UrlPrefixConstant.OAUTH_CLIENT, tags = "OAuth2.0客户端授权管理")
 public class OauthClientController implements ISimpleController<OauthClientDetailsRespDto, String,
-        OauthClientDetailsCreateDto, OauthClientDetailsRetrieveDto, OauthClientDetailsUpdateDto> {
+        OauthClientDetailsReqDto, OauthClientDetailsReqDto, OauthClientDetailsReqDto> {
     private final OauthClientService oauthClientService;
 
     public OauthClientController(OauthClientService oauthClientService) {

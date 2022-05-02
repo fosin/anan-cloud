@@ -2,7 +2,7 @@ package top.fosin.anan.platform.service;
 
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
-import top.fosin.anan.cloudresource.dto.req.AnanParameterCreateDto;
+import top.fosin.anan.cloudresource.dto.req.AnanParameterReqDto;
 import top.fosin.anan.cloudresource.dto.res.AnanParameterRespDto;
 import top.fosin.anan.cloudresource.parameter.IParameter;
 import top.fosin.anan.cloudresource.parameter.IParameterStrategy;
@@ -31,7 +31,7 @@ public class LocalOrganParameter implements IParameter {
 
     @Override
     public AnanParameterRespDto setParameter(String scope, String name, String value, String description) {
-        AnanParameterCreateDto createDto = new AnanParameterCreateDto();
+        AnanParameterReqDto createDto = new AnanParameterReqDto();
         createDto.setValue(value);
         createDto.setType(this.getParameterStrategy().getType());
         createDto.setScope(scope);

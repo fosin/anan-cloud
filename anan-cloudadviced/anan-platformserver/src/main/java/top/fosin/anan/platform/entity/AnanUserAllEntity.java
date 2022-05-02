@@ -1,19 +1,17 @@
 package top.fosin.anan.platform.entity;
 
-import java.util.Date;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import org.hibernate.annotations.DynamicUpdate;
+import top.fosin.anan.jpa.entity.SoftDeleteEntity;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.DynamicUpdate;
-
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import top.fosin.anan.jpa.entity.SoftDeleteEntity;
+import java.util.Date;
 
 /**
  * 系统用户表(AnanUser)实体类
@@ -48,7 +46,7 @@ public class AnanUserAllEntity extends SoftDeleteEntity<Long> {
 
   @Column(name = "organiz_id", nullable = false)
   @Basic
-  @ApiModelProperty(value = "机构ID")
+  @ApiModelProperty(value = "机构序号")
   private Long organizId;
 
   @Basic

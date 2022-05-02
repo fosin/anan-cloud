@@ -20,7 +20,7 @@ import top.fosin.anan.model.dto.IdCreateUpdateDto;
 @ApiModel(value = "版本角色表响应DTO", description = "版本角色的响应DTO")
 public class AnanVersionRoleRespDto extends IdCreateUpdateDto<Long> {
     private static final long serialVersionUID = -39744614020133302L;
-    @ApiModelProperty(value = "版本ID", example = "Long")
+    @ApiModelProperty(value = "版本序号", example = "Long")
     private Long versionId;
 
     @ApiModelProperty(value = "角色名称", example = "String")

@@ -32,7 +32,7 @@ public class AnanUserRespDto extends OrganizIdCreateUpdateDto<Long> {
     @ApiModelProperty(value = "用户姓名", example = "String")
     private String username;
 
-    @ApiModelProperty(value = "顶级机构ID", example = "1")
+    @ApiModelProperty(value = "顶级机构序号", example = "1")
     private Long topId;
 
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)

@@ -1,15 +1,15 @@
 package top.fosin.anan.cloudresource.dto;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import top.fosin.anan.core.util.RegexUtil;
 import top.fosin.anan.model.dto.TreeDto;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 /**
  * 包含菜单、按钮两种权限(AnanPermission)更新DTO
@@ -72,17 +72,17 @@ public class AnanUserAllPermissionTreeDto extends TreeDto<AnanUserAllPermissionT
     @ApiModelProperty(value = "一般用于前端菜单选项前的图标")
     private String icon;
 
-    @ApiModelProperty(value = "用户ID", required = true)
+    @ApiModelProperty(value = "用户序号", required = true)
     private Long userId;
 
     @ApiModelProperty(value = "补充方式：0=增加权限、1=删除权限", required = true)
     private Integer addMode;
 
-    @NotNull(message = "角色ID" + "{javax.validation.constraints.NotNull.message}")
-    @ApiModelProperty(value = "角色ID", required = true)
+    @NotNull(message = "角色序号" + "{javax.validation.constraints.NotNull.message}")
+    @ApiModelProperty(value = "角色序号", required = true)
     private Long roleId;
 
-    @NotNull(message = "机构ID" + "{javax.validation.constraints.NotNull.message}")
-    @ApiModelProperty(value = "机构ID", required = true)
+    @NotNull(message = "机构序号" + "{javax.validation.constraints.NotNull.message}")
+    @ApiModelProperty(value = "机构序号", required = true)
     private Long organizId;
 }

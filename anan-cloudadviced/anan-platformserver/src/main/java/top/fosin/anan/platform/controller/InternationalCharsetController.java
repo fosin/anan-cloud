@@ -10,10 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
 import top.fosin.anan.model.controller.ISimpleController;
-
-import top.fosin.anan.platform.dto.req.AnanInternationalCharsetCreateDto;
-import top.fosin.anan.platform.dto.req.AnanInternationalCharsetRetrieveDto;
-import top.fosin.anan.platform.dto.req.AnanInternationalCharsetUpdateDto;
+import top.fosin.anan.platform.dto.req.AnanInternationalCharsetReqDto;
 import top.fosin.anan.platform.dto.res.AnanInternationalCharsetRespDto;
 import top.fosin.anan.platform.service.inter.InternationalCharsetService;
 
@@ -30,9 +27,9 @@ import java.util.List;
 @Api(value = UrlPrefixConstant.INTERNATIONAL_CHARSET, tags = "国际化语言字符集管理")
 public class InternationalCharsetController implements ISimpleController<AnanInternationalCharsetRespDto,
         Long,
-        AnanInternationalCharsetCreateDto,
-        AnanInternationalCharsetRetrieveDto,
-        AnanInternationalCharsetUpdateDto> {
+        AnanInternationalCharsetReqDto,
+        AnanInternationalCharsetReqDto,
+        AnanInternationalCharsetReqDto> {
 
     private final InternationalCharsetService internationalCharsetService;
 

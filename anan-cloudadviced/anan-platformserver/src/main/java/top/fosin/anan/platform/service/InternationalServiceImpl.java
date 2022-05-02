@@ -9,8 +9,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import top.fosin.anan.cloudresource.constant.PlatformRedisConstant;
 import top.fosin.anan.core.util.BeanUtil;
-import top.fosin.anan.platform.dto.req.AnanInternationalCreateDto;
-import top.fosin.anan.platform.dto.req.AnanInternationalUpdateDto;
+import top.fosin.anan.platform.dto.req.AnanInternationalReqDto;
+import top.fosin.anan.platform.dto.req.AnanInternationalReqDto;
 import top.fosin.anan.platform.dto.res.AnanInternationalRespDto;
 import top.fosin.anan.platform.repository.InternationalRepository;
 import top.fosin.anan.platform.service.inter.InternationalService;
@@ -64,7 +64,7 @@ public class InternationalServiceImpl implements InternationalService {
             }
     )
     @Transactional(rollbackFor = Exception.class)
-    public AnanInternationalRespDto create(AnanInternationalCreateDto entity) {
+    public AnanInternationalRespDto create(AnanInternationalReqDto entity) {
         return InternationalService.super.create(entity);
     }
 
@@ -105,7 +105,7 @@ public class InternationalServiceImpl implements InternationalService {
             }
     )
     @Transactional(rollbackFor = Exception.class)
-    public void update(AnanInternationalUpdateDto entity) {
+    public void update(AnanInternationalReqDto entity) {
         InternationalService.super.update(entity);
     }
 

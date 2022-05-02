@@ -6,8 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import top.fosin.anan.cloudresource.constant.SystemConstant;
 import top.fosin.anan.core.util.BeanUtil;
-import top.fosin.anan.platform.dto.req.AnanVersionRoleCreateDto;
-import top.fosin.anan.platform.dto.req.AnanVersionRoleUpdateDto;
+import top.fosin.anan.platform.dto.req.AnanVersionRoleReqDto;
 import top.fosin.anan.platform.dto.res.AnanVersionRoleRespDto;
 import top.fosin.anan.platform.entity.AnanVersionRoleEntity;
 import top.fosin.anan.platform.repository.VersionRoleRepository;
@@ -43,7 +42,7 @@ public class VersionRoleServiceImpl implements VersionRoleService {
      * @return entity 实例对象
      */
     @Override
-    public AnanVersionRoleRespDto create(AnanVersionRoleCreateDto entity) {
+    public AnanVersionRoleRespDto create(AnanVersionRoleReqDto entity) {
         Assert.notNull(entity, "创建数据的实体对象不能为空!");
         Assert.isTrue(!entity.getValue().equals(SystemConstant.ANAN_USER_CODE), "角色标识不能为:" + SystemConstant.ANAN_USER_CODE);
         AnanVersionRoleEntity createEntity = new AnanVersionRoleEntity();
@@ -58,7 +57,7 @@ public class VersionRoleServiceImpl implements VersionRoleService {
      * @return entity 实例对象
      */
     @Override
-    public void update(AnanVersionRoleUpdateDto entity) {
+    public void update(AnanVersionRoleReqDto entity) {
         Assert.notNull(entity, "更新数据的实体对象不能为空!");
         Long id = entity.getId();
         Assert.isTrue(id != null && id > 0, "传入的主键无效!");

@@ -9,8 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 import top.fosin.anan.core.util.BeanUtil;
-import top.fosin.anan.platform.dto.req.OauthClientDetailsCreateDto;
-import top.fosin.anan.platform.dto.req.OauthClientDetailsUpdateDto;
+import top.fosin.anan.platform.dto.req.OauthClientDetailsReqDto;
+import top.fosin.anan.platform.dto.req.OauthClientDetailsReqDto;
 import top.fosin.anan.platform.dto.res.OauthClientDetailsRespDto;
 import top.fosin.anan.platform.entity.OauthClientDetailsEntity;
 import top.fosin.anan.platform.repository.OauthClientRepository;
@@ -36,7 +36,7 @@ public class OauthClientServiceImpl implements OauthClientService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public OauthClientDetailsRespDto create(OauthClientDetailsCreateDto entity) {
+    public OauthClientDetailsRespDto create(OauthClientDetailsReqDto entity) {
         Assert.notNull(entity, "传入的创建数据实体对象不能为空!");
         String id = entity.getClientId();
         OauthClientDetailsEntity createEntity = oauthClientRepository.findById(id).orElse(null);
@@ -49,7 +49,7 @@ public class OauthClientServiceImpl implements OauthClientService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void update(OauthClientDetailsUpdateDto dto) {
+    public void update(OauthClientDetailsReqDto dto) {
         String id = dto.getClientId();
         Assert.isTrue(StringUtils.hasText(id), "更新数据时ClientId不能为空!");
         OauthClientDetailsEntity updateEntiy = oauthClientRepository.findById(id).orElseThrow(() -> {

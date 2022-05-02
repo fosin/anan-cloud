@@ -15,7 +15,7 @@ import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 import top.fosin.anan.cloudresource.constant.PlatformRedisConstant;
 import top.fosin.anan.cloudresource.constant.SystemConstant;
-import top.fosin.anan.cloudresource.dto.req.AnanUserRetrieveDto;
+import top.fosin.anan.cloudresource.dto.req.AnanUserReqDto;
 import top.fosin.anan.cloudresource.dto.res.AnanUserRespDto;
 import top.fosin.anan.cloudresource.service.AnanUserDetailService;
 import top.fosin.anan.core.util.BeanUtil;
@@ -24,8 +24,6 @@ import top.fosin.anan.model.dto.TreeDto;
 import top.fosin.anan.model.module.PageModule;
 import top.fosin.anan.model.result.ListResult;
 import top.fosin.anan.model.result.ResultUtils;
-import top.fosin.anan.platform.dto.req.AnanUserCreateDto;
-import top.fosin.anan.platform.dto.req.AnanUserUpdateDto;
 import top.fosin.anan.platform.dto.res.AnanUserRespPassDto;
 import top.fosin.anan.platform.entity.AnanOrganizationEntity;
 import top.fosin.anan.platform.entity.AnanUserAllEntity;
@@ -147,7 +145,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public AnanUserRespPassDto create(AnanUserCreateDto dto) {
+    public AnanUserRespPassDto create(AnanUserReqDto dto) {
         AnanUserRespDto entityDynamic = this.findByUsercode(dto.getUsercode());
         Assert.isNull(entityDynamic, "用户工号已存在，请核对!");
         AnanUserEntity createUser = new AnanUserEntity();
@@ -161,7 +159,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void update(AnanUserUpdateDto dto) {
+    public void update(AnanUserReqDto dto) {
         Long id = dto.getId();
         Assert.isTrue(id > 0, "更新的数据id不能为空或者小于1!");
         AnanUserEntity createUser = userRepository.findById(id).orElse(null);
@@ -230,7 +228,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ListResult<AnanUserRespDto> findPage(PageModule<AnanUserRetrieveDto> pageModule) {
+    public ListResult<AnanUserRespDto> findPage(PageModule<AnanUserReqDto> pageModule) {
         PageRequest pageable = PageRequest.of(pageModule.getPageNumber() - 1, pageModule.getPageSize(), this.buildSortRules(pageModule.getParams().getSortRules()));
 
         Specification<AnanUserEntity> condition = (root, query, cb) -> {
@@ -256,7 +254,7 @@ public class UserServiceImpl implements UserService {
 
                 organizId1 = cb.in(root.get("organizId")).value(subQuery);
             }
-            AnanUserRetrieveDto params = pageModule.getParams();
+            AnanUserReqDto params = pageModule.getParams();
 
             if (params == null) {
                 if (sysAdminUser) {

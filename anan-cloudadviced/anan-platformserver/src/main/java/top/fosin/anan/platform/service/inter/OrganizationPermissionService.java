@@ -1,8 +1,8 @@
 package top.fosin.anan.platform.service.inter;
 
 import top.fosin.anan.jpa.service.ICrudBatchJpaService;
-import top.fosin.anan.platform.dto.req.AnanOrganizationPermissionCreateDto;
-import top.fosin.anan.platform.dto.req.AnanOrganizationPermissionRetrieveDto;
+import top.fosin.anan.platform.dto.req.AnanOrganizationPermissionReqDto;
+import top.fosin.anan.platform.dto.req.AnanOrganizationPermissionReqDto;
 import top.fosin.anan.platform.dto.res.AnanOrganizationPermissionRespDto;
 import top.fosin.anan.platform.entity.AnanOrganizationPermissionEntity;
 
@@ -16,7 +16,7 @@ import java.util.List;
  */
 public interface OrganizationPermissionService extends
         ICrudBatchJpaService<AnanOrganizationPermissionEntity, AnanOrganizationPermissionRespDto, Long, Long,
-                AnanOrganizationPermissionCreateDto, AnanOrganizationPermissionRetrieveDto> {
+                AnanOrganizationPermissionReqDto, AnanOrganizationPermissionReqDto> {
     List<AnanOrganizationPermissionRespDto> findByOrganizId(Long organizId);
 
     long countByPermissionId(Long permissionId);

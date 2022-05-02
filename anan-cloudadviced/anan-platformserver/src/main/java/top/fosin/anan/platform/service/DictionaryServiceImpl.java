@@ -7,11 +7,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import top.fosin.anan.cloudresource.constant.SystemConstant;
+import top.fosin.anan.cloudresource.dto.req.AnanDictionaryReqDto;
 import top.fosin.anan.cloudresource.dto.res.AnanDictionaryRespDto;
 import top.fosin.anan.cloudresource.service.AnanUserDetailService;
 import top.fosin.anan.core.util.BeanUtil;
-import top.fosin.anan.platform.dto.req.AnanDictionaryCreateDto;
-import top.fosin.anan.platform.dto.req.AnanDictionaryUpdateDto;
 import top.fosin.anan.platform.entity.AnanDictionaryEntity;
 import top.fosin.anan.platform.repository.DictionaryDetailRepository;
 import top.fosin.anan.platform.repository.DictionaryRepository;
@@ -41,7 +40,7 @@ public class DictionaryServiceImpl implements DictionaryService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public AnanDictionaryRespDto create(AnanDictionaryCreateDto entity) {
+    public AnanDictionaryRespDto create(AnanDictionaryReqDto entity) {
         AnanDictionaryEntity createEntity = new AnanDictionaryEntity();
         BeanUtils.copyProperties(entity, createEntity);
         hasModifiedPrivileges(createEntity.getType());
@@ -57,7 +56,7 @@ public class DictionaryServiceImpl implements DictionaryService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void update(AnanDictionaryUpdateDto entity) {
+    public void update(AnanDictionaryReqDto entity) {
         Long id = entity.getId();
         Assert.notNull(id, "无效的字典代码id");
         AnanDictionaryEntity updateEntity = dictionaryRepository.findById(id).orElse(null);

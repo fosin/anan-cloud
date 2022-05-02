@@ -31,7 +31,7 @@ public class AnanPayOrderRespDto extends IdDto<Long> {
     @ApiModelProperty(value = "订单用户", example = "Long")
     private Long userId;
 
-    @ApiModelProperty(value = "版本ID", example = "Long")
+    @ApiModelProperty(value = "版本序号", example = "Long")
     private Long versionId;
 
     @ApiModelProperty(value = "版本金额", example = "Double")

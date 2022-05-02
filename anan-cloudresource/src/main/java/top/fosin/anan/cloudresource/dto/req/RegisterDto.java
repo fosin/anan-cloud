@@ -21,7 +21,7 @@ public class RegisterDto implements Serializable {
     @ApiModelProperty(value = "用户信息")
     private AnanUserRegisterDto user;
 
-    @ApiModelProperty(value = "版本ID")
+    @ApiModelProperty(value = "版本序号")
     private Long versionId;
 
     @ApiModelProperty(value = "版本价格")

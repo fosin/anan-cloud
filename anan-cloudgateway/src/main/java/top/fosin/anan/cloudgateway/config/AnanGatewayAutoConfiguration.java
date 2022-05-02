@@ -1,6 +1,7 @@
 package top.fosin.anan.cloudgateway.config;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
@@ -17,6 +18,10 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
+import org.springframework.remoting.RemoteAccessException;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Recover;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
@@ -56,6 +61,8 @@ public class AnanGatewayAutoConfiguration {
     }
 
     private final DiscoveryClient discoveryClient;
+    @Value("${spring.application.name}")
+    private final String applicationName = "anan-cloudgateway";
 
     public AnanGatewayAutoConfiguration(DiscoveryClient discoveryClient) {
         this.discoveryClient = discoveryClient;
@@ -63,36 +70,42 @@ public class AnanGatewayAutoConfiguration {
 
     private ServiceInstance getServiceRandomInstance() {
         List<ServiceInstance> serviceInstances = discoveryClient.getInstances(ServiceConstant.ANAN_PLATFORMSERVER);
-        Assert.isTrue(serviceInstances.size() > 0,"未找到服务的实例：" + ServiceConstant.ANAN_PLATFORMSERVER);
+        Assert.isTrue(serviceInstances.size() > 0, "未找到服务的实例：" + ServiceConstant.ANAN_PLATFORMSERVER);
         Random random = new Random();
         int nextInt = random.nextInt(serviceInstances.size());
         return serviceInstances.get(nextInt);
     }
 
+    @Retryable(value = {RemoteAccessException.class}, maxAttemptsExpression = "${retry.maxAttempts:5}",
+            backoff = @Backoff(delayExpression = "${retry.backoff:1000}"))
     public List<AnanPermissionRespDto> getPermissionsByRest(List<String> hosts) throws URISyntaxException {
         ServiceInstance instance = getServiceRandomInstance();
-        String url = "http://"
-                + instance.getHost() + ":" + instance.getPort() + "/"
-                + UrlPrefixConstant.PERMISSION + RequestPath.SERVICE_CODES;
+        String scheme = instance.getScheme();
+        URI uri = new URI(scheme == null ? "http" : scheme, null, instance.getHost(), instance.getPort(), "/" + UrlPrefixConstant.PERMISSION + RequestPath.SERVICE_CODES, null, null);
         RequestEntity<List<String>> request = RequestEntity
-                .post(new URI(url))
+                .post(uri)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(hosts);
         ResponseEntity<List<AnanPermissionRespDto>> res = restTemplate()
-                .exchange(url, HttpMethod.POST, request, new ParameterizedTypeReference<>() {
+                .exchange(uri.toString(), HttpMethod.POST, request, new ParameterizedTypeReference<>() {
                 });
         return res.getBody();
     }
 
+    @Recover
+    public List<AnanPermissionRespDto> getPermissionsByRestRecover(RemoteAccessException exception, List<String> hosts) {
+        throw exception;
+    }
+
     /**
-     *  TODO
+     * TODO
      *  如果bean名称是ananProgramAuthorities，则会出现源码跑无问题，编译打包运行报错：
      *  The bean 'ananProgramAuthorities', defined in class path resource [top/fosin/anan/cloudgateway/config/AnanGatewayAutoConfiguration.class], could not be registered. A bean with that name has already been defined in class path resource [top/fosin/anan/security/configurer/AnanSecurityAutoConfiguration.class] and overriding is disabled.
      * Action: Consider renaming one of the beans or enabling overriding by setting
      * spring.main.allow-bean-definition-overriding=true
-     *
-     *  即使设置了spring.main.allow-bean-definition-overriding=true还是会出现这个问题。
+     * <p>
+     * 即使设置了spring.main.allow-bean-definition-overriding=true还是会出现这个问题。
      *
      * @return AnanProgramAuthorities 编程权限
      * @throws URISyntaxException 异常
@@ -132,10 +145,11 @@ public class AnanGatewayAutoConfiguration {
     @ConditionalOnMissingBean
     public AnanSwaggerResourcesProvider ananSwaggerResourcesProvider(SwaggerProperties swaggerProperties) {
         List<RouteDefinition> routes = ananGatewayProperties().getRoutes();
+        String localPath = tranformPath(getRoutePath(routes, applicationName),"");
         List<SwaggerResource> swaggerResources = routes.stream().map(route -> {
             SwaggerResource swaggerResource = new SwaggerResource();
             swaggerResource.setName(route.getId());
-            String location = tranformPath(getRoutePath(route), "/v2/api-docs");
+            String location = tranformPath(getRoutePath(route).replace(localPath,""), "/v2/api-docs");
             swaggerResource.setLocation(location);
             swaggerResource.setSwaggerVersion(DocumentationType.SWAGGER_2.getVersion());
             return swaggerResource;

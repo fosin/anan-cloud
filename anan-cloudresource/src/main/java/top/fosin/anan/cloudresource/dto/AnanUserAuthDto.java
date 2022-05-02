@@ -7,7 +7,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import top.fosin.anan.cloudresource.dto.req.AnanUserRoleDto;
+import top.fosin.anan.cloudresource.dto.req.AnanRoleReqDto;
 import top.fosin.anan.cloudresource.dto.res.AnanUserRespDto;
 
 /**
@@ -25,7 +25,7 @@ public class AnanUserAuthDto extends AnanUserRespDto {
     private static final long serialVersionUID = -38545495043403316L;
 
     @ApiModelProperty(value = "用户拥有的角色")
-    private List<AnanUserRoleDto> userRoles;
+    private List<AnanRoleReqDto> userRoles;
 
     @ApiModelProperty(value = "用户密码", example = "123456")
     private String password;

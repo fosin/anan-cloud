@@ -7,6 +7,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
+import top.fosin.anan.cloudresource.dto.req.AnanRoleReqDto;
 import top.fosin.anan.cloudresource.dto.res.AnanRolePermissionRespDto;
 import top.fosin.anan.cloudresource.dto.res.AnanRoleRespDto;
 import top.fosin.anan.cloudresource.dto.res.AnanUserRespDto;
@@ -35,7 +36,7 @@ import java.util.List;
 @RequestMapping(UrlPrefixConstant.ROLE)
 @Api(value = UrlPrefixConstant.ROLE, tags = "角色管理")
 public class RoleController implements ISimpleController<AnanRoleRespDto, Long,
-        AnanRoleCreateDto, AnanRoleRetrieveDto, AnanRoleUpdateDto> {
+        AnanRoleReqDto, AnanRoleReqDto, AnanRoleReqDto> {
     private final RoleService roleService;
     private final RolePermissionService rolePermissionService;
     private final UserRoleService userRoleService;
@@ -64,7 +65,7 @@ public class RoleController implements ISimpleController<AnanRoleRespDto, Long,
                     required = true, dataTypeClass = Long.class, paramType = "path")
     })
     @PutMapping(value = "/permissions/{roleId}")
-    public ResponseEntity<Collection<AnanRolePermissionRespDto>> permissions(@NotNull @RequestBody List<AnanRolePermissionCreateDto> entities,
+    public ResponseEntity<Collection<AnanRolePermissionRespDto>> permissions(@NotNull @RequestBody List<AnanRolePermissionReqDto> entities,
                                                                              @Min(1) @PathVariable("roleId") Long roleId) {
         return ResponseEntity.ok(rolePermissionService.updateInBatch("roleId", roleId, entities));
     }
@@ -80,13 +81,13 @@ public class RoleController implements ISimpleController<AnanRoleRespDto, Long,
 
     @ApiOperation(value = "根据角色ID更新角色拥有的用户", notes = "更新角色拥有的用户，此操作将先删除原用户集合，再新增新用户集合")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "dtos", value = "角色用户集合(List<AnanUserRoleCreateDto>)",
+            @ApiImplicitParam(name = "dtos", value = "角色用户集合(List<AnanUserRoleReqDto>)",
                     required = true, dataTypeClass = List.class, paramType = "body"),
             @ApiImplicitParam(name = "roleId", value = "角色ID,取值于AnanRoleEntity.id",
                     required = true, dataTypeClass = Long.class, paramType = "path"),
     })
     @PutMapping(value = "/users/{roleId}")
-    public ResponseEntity<Boolean> putRoleUsers(@NotNull @RequestBody List<AnanUserRoleCreateDto> dtos,
+    public ResponseEntity<Boolean> putRoleUsers(@NotNull @RequestBody List<AnanUserRoleReqDto> dtos,
                                                 @Min(1) @PathVariable("roleId") Long roleId) {
         userRoleService.updateInBatch("roleId", roleId, dtos);
         return ResponseEntity.ok(true);
@@ -102,7 +103,7 @@ public class RoleController implements ISimpleController<AnanRoleRespDto, Long,
 
     @PostMapping({"/list/organizId/{organizId}"})
     @ApiOperation("根据机构ID查询该机构及子机构的所有角色")
-    @ApiImplicitParam(name = "organizId", value = "机构ID",
+    @ApiImplicitParam(name = "organizId", value = "机构序号",
             required = true, dataTypeClass = Long.class, paramType = "path")
     public ResponseEntity<List<AnanRoleRespDto>> findAllByOrganizId(@Min(1) @PathVariable("organizId") Long organizId) {
         return ResponseEntity.ok(roleService.findAllByOrganizId(organizId));

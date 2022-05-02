@@ -17,9 +17,7 @@ import top.fosin.anan.jpa.repository.IJpaRepository;
 import top.fosin.anan.model.module.LogicalQueryRule;
 import top.fosin.anan.model.module.RelaQueryRule;
 import top.fosin.anan.model.module.RelationalOperator;
-import top.fosin.anan.platform.dto.req.AnanOrganizationCreateDto;
-import top.fosin.anan.platform.dto.req.AnanOrganizationRetrieveDto;
-import top.fosin.anan.platform.dto.req.AnanOrganizationUpdateDto;
+import top.fosin.anan.platform.dto.req.AnanOrganizationReqDto;
 import top.fosin.anan.platform.entity.AnanOrganizationEntity;
 import top.fosin.anan.platform.repository.OrganizationRepository;
 import top.fosin.anan.platform.service.inter.OrganizationService;
@@ -49,10 +47,10 @@ public class OrganizationServiceImpl implements OrganizationService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     @CachePut(value = PlatformRedisConstant.ANAN_ORGANIZATION, key = "#result.id")
-    public AnanOrganizationRespDto create(AnanOrganizationCreateDto entity) {
+    public AnanOrganizationRespDto create(AnanOrganizationReqDto reqDto) {
         AnanOrganizationEntity createEntity = new AnanOrganizationEntity();
-        BeanUtils.copyProperties(entity, createEntity);
-        Long pid = entity.getPid();
+        BeanUtils.copyProperties(reqDto, createEntity);
+        Long pid = reqDto.getPid();
         int level = 1;
         if (pid == 0) {
             ananUserDetailService.clear();
@@ -73,15 +71,15 @@ public class OrganizationServiceImpl implements OrganizationService {
     }
 
     @Override
-    @CacheEvict(value = PlatformRedisConstant.ANAN_ORGANIZATION, key = "#entity.id")
+    @CacheEvict(value = PlatformRedisConstant.ANAN_ORGANIZATION, key = "#updateDto.id")
     @Transactional(rollbackFor = Exception.class)
-    public void update(AnanOrganizationUpdateDto entity) {
-        Long id = entity.getId();
+    public void update(AnanOrganizationReqDto updateDto) {
+        Long id = updateDto.getId();
         Assert.notNull(id, "无效的字典代码code");
         AnanOrganizationEntity updateEntity = organizationRepository.findById(id).orElse(null);
-        BeanUtils.copyProperties(entity, Objects.requireNonNull(updateEntity, "根据传入的机构ID" + id + "在数据库中未能找到对于数据!"));
+        BeanUtils.copyProperties(updateDto, Objects.requireNonNull(updateEntity, "根据传入的机构序号" + id + "在数据库中未能找到对于数据!"));
 
-        Long pid = entity.getPid();
+        Long pid = updateDto.getPid();
         if (!updateEntity.getPid().equals(pid)) {
             organizationRepository.findById(pid).ifPresent(sentity -> updateEntity.setLevel(sentity.getLevel() + 1));
         }
@@ -153,7 +151,7 @@ public class OrganizationServiceImpl implements OrganizationService {
     @Override
     public AnanOrganizationTreeDto treeAllChildByid(Long id) {
         AnanOrganizationEntity entity = organizationRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("根据ID查询不到数据!"));
-        AnanOrganizationRetrieveDto dto = new AnanOrganizationRetrieveDto();
+        AnanOrganizationReqDto dto = new AnanOrganizationReqDto();
         dto.setTopId(entity.getTopId());
         dto.setCode(entity.getCode());
         LogicalQueryRule logicalQueryRule = new LogicalQueryRule();

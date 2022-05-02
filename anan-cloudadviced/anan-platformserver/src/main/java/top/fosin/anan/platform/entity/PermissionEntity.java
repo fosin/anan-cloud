@@ -27,7 +27,7 @@ public class PermissionEntity<ID extends Serializable>
     private static final long serialVersionUID = 117455991817648863L;
 
     @Basic
-    @ApiModelProperty(value = "权限ID", required = true)
+    @ApiModelProperty(value = "权限序号", required = true)
     @Column(name = "permission_id", nullable = false)
     private Long permissionId;
 }

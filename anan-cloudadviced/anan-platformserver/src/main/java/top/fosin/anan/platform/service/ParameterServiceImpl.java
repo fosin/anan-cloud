@@ -13,9 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 import top.fosin.anan.cloudresource.constant.PlatformRedisConstant;
-import top.fosin.anan.cloudresource.dto.req.AnanParameterCreateDto;
-import top.fosin.anan.cloudresource.dto.req.AnanParameterRetrieveDto;
-import top.fosin.anan.cloudresource.dto.req.AnanParameterUpdateDto;
+import top.fosin.anan.cloudresource.dto.req.AnanParameterReqDto;
 import top.fosin.anan.cloudresource.dto.res.AnanParameterRespDto;
 import top.fosin.anan.cloudresource.parameter.OrganStrategy;
 import top.fosin.anan.cloudresource.parameter.ParameterStatus;
@@ -60,10 +58,10 @@ public class ParameterServiceImpl implements ParameterService {
     }
 
     @Override
-    public ListResult<AnanParameterRespDto> findPage(PageModule<AnanParameterRetrieveDto> pageModule) {
-        PageRequest pageable = PageRequest.of(pageModule.getPageNumber() - 1, pageModule.getPageSize(), this.buildSortRules(pageModule.getParams().getSortRules()));
-        AnanParameterRetrieveDto params = pageModule.getParams();
-        String search = params == null ? "%%" : "%" + params.getName() + "%";
+    public ListResult<AnanParameterRespDto> findPage(PageModule<AnanParameterReqDto> pageModule) {
+        AnanParameterReqDto params = pageModule.getParams();
+        PageRequest pageable = PageRequest.of(pageModule.getPageNumber() - 1, pageModule.getPageSize(), this.buildSortRules(params.getSortRules()));
+        String search = "%" + params.getName() + "%";
         Long organizId = ananUserDetailService.getAnanOrganizId();
         boolean sysAdminUser = ananUserDetailService.isSysAdminUser();
         int type = 2;
@@ -85,14 +83,14 @@ public class ParameterServiceImpl implements ParameterService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     @CachePut(value = PlatformRedisConstant.ANAN_PARAMETER, key = "#root.target.getCacheKey(#result)")
-    public AnanParameterRespDto create(AnanParameterCreateDto dto) {
+    public AnanParameterRespDto create(AnanParameterReqDto dto) {
         AnanParameterEntity createEntiy = BeanUtil.copyProperties(dto, AnanParameterEntity.class);
         return BeanUtil.copyProperties(getRepository().save(createEntiy), AnanParameterRespDto.class);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void update(AnanParameterUpdateDto dto) {
+    public void update(AnanParameterReqDto dto) {
         Long id = dto.getId();
         Assert.notNull(id, "ID不能为空!");
         AnanParameterEntity cEntity = parameterRepository.findById(id)
@@ -247,7 +245,7 @@ public class ParameterServiceImpl implements ParameterService {
             respDto = getNearestParameter(type, scope, name);
         } catch (IllegalArgumentException e) {
             log.debug("报异常说明没有找到任何相关参数，则需要创建一个无域参数，这样默认所有机构共享这一个参数，如果需要设置机构个性化参数则需要在前端手动创建");
-            AnanParameterCreateDto createDto = new AnanParameterCreateDto();
+            AnanParameterReqDto createDto = new AnanParameterReqDto();
             createDto.setValue(defaultValue);
             createDto.setType(type);
             createDto.setScope(scope);

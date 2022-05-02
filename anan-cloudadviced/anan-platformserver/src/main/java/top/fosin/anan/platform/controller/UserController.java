@@ -9,7 +9,7 @@ import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
-import top.fosin.anan.cloudresource.dto.req.AnanUserRetrieveDto;
+import top.fosin.anan.cloudresource.dto.req.AnanUserReqDto;
 import top.fosin.anan.cloudresource.dto.res.AnanRoleRespDto;
 import top.fosin.anan.cloudresource.dto.res.AnanUserRespDto;
 import top.fosin.anan.cloudresource.dto.res.AnanUserRoleRespDto;
@@ -20,10 +20,8 @@ import top.fosin.anan.model.controller.BaseController;
 import top.fosin.anan.model.controller.ISimpleController;
 import top.fosin.anan.model.dto.IdDto;
 import top.fosin.anan.model.dto.TreeDto;
-import top.fosin.anan.platform.dto.req.AnanUserCreateDto;
-import top.fosin.anan.platform.dto.req.AnanUserPermissionCreateDto;
-import top.fosin.anan.platform.dto.req.AnanUserRoleCreateDto;
-import top.fosin.anan.platform.dto.req.AnanUserUpdateDto;
+import top.fosin.anan.platform.dto.req.AnanUserPermissionReqDto;
+import top.fosin.anan.platform.dto.req.AnanUserRoleReqDto;
 import top.fosin.anan.platform.dto.res.AnanUserPermissionRespDto;
 import top.fosin.anan.platform.service.inter.RoleService;
 import top.fosin.anan.platform.service.inter.UserPermissionService;
@@ -45,7 +43,7 @@ import java.util.List;
 @RequestMapping(UrlPrefixConstant.USER)
 @Api(value = UrlPrefixConstant.USER, tags = "用户管理")
 public class UserController extends BaseController implements ISimpleController<AnanUserRespDto,
-        Long, AnanUserCreateDto, AnanUserRetrieveDto, AnanUserUpdateDto> {
+        Long, AnanUserReqDto, AnanUserReqDto, AnanUserReqDto> {
     private final UserService userService;
     private final UserRoleService userRoleService;
     private final RoleService roleService;
@@ -141,7 +139,7 @@ public class UserController extends BaseController implements ISimpleController<
     @ApiImplicitParams({
             @ApiImplicitParam(name = "userId", value = "用户ID,取值于AnanUserEntity.id",
                     required = true, dataTypeClass = String.class, paramType = "path"),
-            @ApiImplicitParam(name = "organizId", value = "机构ID",
+            @ApiImplicitParam(name = "organizId", value = "机构序号",
                     required = true, dataTypeClass = Long.class, paramType = "query")
     })
     @RequestMapping(value = "/permissions/{userId}", method = {RequestMethod.GET, RequestMethod.POST})
@@ -159,7 +157,7 @@ public class UserController extends BaseController implements ISimpleController<
     })
     @PutMapping(value = "/permissions/{userId}")
     public ResponseEntity<Collection<AnanUserPermissionRespDto>>
-    permissions(@NotNull @RequestBody List<AnanUserPermissionCreateDto> entities,
+    permissions(@NotNull @RequestBody List<AnanUserPermissionReqDto> entities,
                 @Min(1) @PathVariable Long userId) {
         return ResponseEntity.ok(userPermissionService.updateInBatch("userId", userId, entities));
     }
@@ -189,7 +187,7 @@ public class UserController extends BaseController implements ISimpleController<
     })
     @PutMapping(value = "/roles/{userId}")
     public ResponseEntity<Collection<AnanUserRoleRespDto>> putUserRoles
-            (@NotNull @RequestBody List<AnanUserRoleCreateDto> entities,
+            (@NotNull @RequestBody List<AnanUserRoleReqDto> entities,
              @Min(1) @PathVariable Long userId) throws
             AnanServiceException {
         return ResponseEntity.ok(userRoleService.updateInBatch("userId", userId, entities));
@@ -205,7 +203,7 @@ public class UserController extends BaseController implements ISimpleController<
 
     @PostMapping({"/list/organizId/{organizId}/{status}"})
     @ApiOperation("根据机构ID查询该机构及子机构的所有用户")
-    @ApiImplicitParam(name = "organizId", value = "机构ID",
+    @ApiImplicitParam(name = "organizId", value = "机构序号",
             required = true, dataTypeClass = Long.class, paramType = "path")
     public ResponseEntity<List<AnanUserRespDto>> listByOrganizId(@NotNull @PathVariable("organizId") Long organizId,
                                                                  @NotNull @PathVariable("status") Integer status) {
@@ -214,7 +212,7 @@ public class UserController extends BaseController implements ISimpleController<
 
     @PostMapping({"/list/topId/{topId}/{status}"})
     @ApiOperation("根据顶级机构ID查询其下所有用户")
-    @ApiImplicitParam(name = "topId", value = "顶级机构ID，传0表示默认查询当前用户的顶级机构ID",
+    @ApiImplicitParam(name = "topId", value = "顶级机构ID，传0表示默认查询当前用户的顶级机构序号",
             required = true, dataTypeClass = Long.class, paramType = "path")
     public ResponseEntity<List<AnanUserRespDto>> listAllChildByTopId(@NotNull @PathVariable("topId") Long topId,
                                                                      @NotNull @PathVariable("status") Integer status) {

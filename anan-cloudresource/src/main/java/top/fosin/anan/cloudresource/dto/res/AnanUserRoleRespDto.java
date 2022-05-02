@@ -20,13 +20,13 @@ import top.fosin.anan.model.dto.IdDto;
 @ApiModel(value = "用户角色表响应DTO", description = "用户角色的响应DTO")
 public class AnanUserRoleRespDto extends IdDto<Long> {
     private static final long serialVersionUID = -30073122110919311L;
-    @ApiModelProperty(value = "机构ID", example = "Long")
+    @ApiModelProperty(value = "机构序号", example = "Long")
     private Long organizId;
 
-    @ApiModelProperty(value = "用户ID", example = "Long")
+    @ApiModelProperty(value = "用户序号", example = "Long")
     private Long userId;
 
-    @ApiModelProperty(value = "角色ID", example = "Long")
+    @ApiModelProperty(value = "角色序号", example = "Long")
     private Long roleId;
 
 }

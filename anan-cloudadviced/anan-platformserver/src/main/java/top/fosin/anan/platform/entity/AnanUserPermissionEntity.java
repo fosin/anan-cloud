@@ -29,7 +29,7 @@ public class AnanUserPermissionEntity extends OrganizIdPermissionEntity<Long> {
     private static final long serialVersionUID = 539048606557875412L;
 
     @Basic
-    @ApiModelProperty(value = "用户ID", required = true)
+    @ApiModelProperty(value = "用户序号", required = true)
     @Column(name = "user_id", nullable = false)
     private Long userId;
 

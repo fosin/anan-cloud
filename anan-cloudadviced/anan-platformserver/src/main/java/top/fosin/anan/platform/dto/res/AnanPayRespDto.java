@@ -31,10 +31,10 @@ public class AnanPayRespDto extends IdDto<Long> {
     @ApiModelProperty(value = "付款用户", example = "Long")
     private Long userId;
 
-    @ApiModelProperty(value = "订单ID", example = "Long")
+    @ApiModelProperty(value = "订单序号", example = "Long")
     private Long orderId;
 
-    @ApiModelProperty(value = "发票ID", example = "Long")
+    @ApiModelProperty(value = "发票序号", example = "Long")
     private Long invoiceId;
 
     @ApiModelProperty(value = "交易类型：0=正交易 1：负交易", example = "Integer")

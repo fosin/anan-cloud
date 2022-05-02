@@ -6,7 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import top.fosin.anan.cloudresource.constant.PlatformRedisConstant;
 import top.fosin.anan.core.util.BeanUtil;
-import top.fosin.anan.platform.dto.req.AnanVersionPermissionCreateDto;
+import top.fosin.anan.platform.dto.req.AnanVersionPermissionReqDto;
 import top.fosin.anan.platform.dto.res.AnanVersionPermissionRespDto;
 import top.fosin.anan.platform.entity.*;
 import top.fosin.anan.platform.repository.*;
@@ -76,7 +76,7 @@ public class VersionPermissionServiceImpl implements VersionPermissionService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Collection<AnanVersionPermissionRespDto> updateInBatch(String deleteCol, Long versionId, Collection<AnanVersionPermissionCreateDto> entities) {
+    public Collection<AnanVersionPermissionRespDto> updateInBatch(String deleteCol, Long versionId, Collection<AnanVersionPermissionReqDto> entities) {
 
         Assert.notNull(versionId, "传入的版本ID不能为空!");
         Assert.isTrue(entities.stream().allMatch(entity -> entity.getVersionId().equals(versionId)), "需要更新的数据集中有与版本ID不匹配的数据!");

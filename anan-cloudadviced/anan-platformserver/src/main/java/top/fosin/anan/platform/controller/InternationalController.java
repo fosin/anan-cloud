@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.*;
 import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
 import top.fosin.anan.model.constant.PathConstant;
 import top.fosin.anan.model.controller.ISimpleController;
-import top.fosin.anan.platform.dto.req.AnanInternationalCreateDto;
-import top.fosin.anan.platform.dto.req.AnanInternationalRetrieveDto;
-import top.fosin.anan.platform.dto.req.AnanInternationalUpdateDto;
+import top.fosin.anan.platform.dto.req.AnanInternationalReqDto;
+import top.fosin.anan.platform.dto.req.AnanInternationalReqDto;
+import top.fosin.anan.platform.dto.req.AnanInternationalReqDto;
 import top.fosin.anan.platform.dto.res.AnanInternationalRespDto;
 import top.fosin.anan.platform.service.inter.InternationalService;
 
@@ -27,7 +27,7 @@ import java.util.List;
 @RequestMapping(UrlPrefixConstant.INTERNATIONAL)
 @Api(value = UrlPrefixConstant.INTERNATIONAL, tags = "国际化语言管理")
 public class InternationalController implements ISimpleController<AnanInternationalRespDto, Long,
-        AnanInternationalCreateDto, AnanInternationalRetrieveDto, AnanInternationalUpdateDto> {
+        AnanInternationalReqDto, AnanInternationalReqDto, AnanInternationalReqDto> {
 
     private final InternationalService internationalService;
 

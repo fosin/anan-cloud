@@ -7,8 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import top.fosin.anan.cloudresource.constant.PlatformRedisConstant;
 import top.fosin.anan.core.util.BeanUtil;
-import top.fosin.anan.platform.dto.req.AnanInternationalCharsetCreateDto;
-import top.fosin.anan.platform.dto.req.AnanInternationalCharsetUpdateDto;
+import top.fosin.anan.platform.dto.req.AnanInternationalCharsetReqDto;
+import top.fosin.anan.platform.dto.req.AnanInternationalCharsetReqDto;
 import top.fosin.anan.platform.dto.res.AnanInternationalCharsetRespDto;
 import top.fosin.anan.platform.repository.InternationalCharsetRepository;
 import top.fosin.anan.platform.service.inter.InternationalCharsetService;
@@ -47,7 +47,7 @@ public class InternationalCharsetServiceImpl implements InternationalCharsetServ
     @Override
     @Transactional(rollbackFor = Exception.class)
     @CacheEvict(value = PlatformRedisConstant.ANAN_INTERNATIONAL_CHARSET_ALL, key = "#dto.internationalId")
-    public AnanInternationalCharsetRespDto create(AnanInternationalCharsetCreateDto dto) {
+    public AnanInternationalCharsetRespDto create(AnanInternationalCharsetReqDto dto) {
         return InternationalCharsetService.super.create(dto);
     }
 
@@ -73,7 +73,7 @@ public class InternationalCharsetServiceImpl implements InternationalCharsetServ
     @Override
     @Transactional(rollbackFor = Exception.class)
     @CacheEvict(value = PlatformRedisConstant.ANAN_INTERNATIONAL_CHARSET_ALL, key = "#dto.internationalId")
-    public void update(AnanInternationalCharsetUpdateDto dto) {
+    public void update(AnanInternationalCharsetReqDto dto) {
         InternationalCharsetService.super.update(dto);
     }
 

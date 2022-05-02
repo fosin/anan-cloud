@@ -1,6 +1,6 @@
 package top.fosin.anan.cloudresource.service;
 
-import org.springframework.data.domain.AuditorAware;
+import org.springframework.data.domain.ReactiveAuditorAware;
 import org.springframework.lang.NonNull;
 import org.springframework.security.oauth2.jwt.ReactiveJwtDecoder;
 import org.springframework.util.Assert;
@@ -14,7 +14,6 @@ import top.fosin.anan.security.util.AnanReactiveJwtTool;
 
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -23,7 +22,7 @@ import java.util.Set;
  * @since 3.0.0
  */
 public class AnanReactiveUserDetailService extends AnanReactiveJwtTool<AnanUserDetail>
-        implements AuditorAware<Long> {
+        implements ReactiveAuditorAware<Long> {
 
     public AnanReactiveUserDetailService(ReactiveJwtDecoder jwtDecoder) {
         super(jwtDecoder);
@@ -176,7 +175,7 @@ public class AnanReactiveUserDetailService extends AnanReactiveJwtTool<AnanUserD
 
     @Override
     @NonNull
-    public Optional<Long> getCurrentAuditor() {
-        return Optional.ofNullable(this.getAnanUserId().block());
+    public Mono<Long> getCurrentAuditor() {
+        return this.getAnanUserId();
     }
 }

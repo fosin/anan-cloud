@@ -26,7 +26,7 @@ public class OrganizIdPermissionEntity<ID extends Serializable> extends Permissi
 
     @Column(name = "organiz_id", nullable = false)
     @Basic
-    @ApiModelProperty(value = "机构ID")
+    @ApiModelProperty(value = "机构序号")
     private ID organizId;
 
 }

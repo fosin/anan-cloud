@@ -37,13 +37,13 @@ public class AnanPayOrderEntity extends IdEntity<Long> {
     private Long userId;
 
     @Basic
-    @ApiModelProperty(value = "版本ID", required = true)
+    @ApiModelProperty(value = "版本序号", required = true)
     @Column(name = "version_id", nullable = false)
     private Long versionId;
 
     @Column(name = "organiz_id", nullable = false)
     @Basic
-    @ApiModelProperty(value = "机构ID")
+    @ApiModelProperty(value = "机构序号")
     private Long organizId;
 
     @Basic

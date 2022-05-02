@@ -20,7 +20,7 @@ import top.fosin.anan.model.dto.IdDto;
 @ApiModel(value = "支付明细表响应DTO", description = "支付明细的响应DTO")
 public class AnanPayDetailRespDto extends IdDto<Long> {
     private static final long serialVersionUID = 333646482553193487L;
-    @ApiModelProperty(value = "支付ID", example = "Long")
+    @ApiModelProperty(value = "支付序号", example = "Long")
     private Long payId;
 
     @ApiModelProperty(value = "付款方式", example = "Integer")

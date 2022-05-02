@@ -7,9 +7,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
-import top.fosin.anan.cloudresource.dto.req.AnanParameterCreateDto;
-import top.fosin.anan.cloudresource.dto.req.AnanParameterRetrieveDto;
-import top.fosin.anan.cloudresource.dto.req.AnanParameterUpdateDto;
+import top.fosin.anan.cloudresource.dto.req.AnanParameterReqDto;
 import top.fosin.anan.cloudresource.dto.res.AnanParameterRespDto;
 import top.fosin.anan.cloudresource.service.inter.ParameterFeignService;
 import top.fosin.anan.model.controller.ISimpleController;
@@ -31,7 +29,7 @@ import java.util.List;
 @RequestMapping(UrlPrefixConstant.PARAMETER)
 @Api(value = UrlPrefixConstant.PARAMETER, tags = "通用参数管理(参数获取、自动创建)")
 public class ParameterController implements ISimpleController<AnanParameterRespDto, Long,
-        AnanParameterCreateDto, AnanParameterRetrieveDto, AnanParameterUpdateDto> {
+        AnanParameterReqDto, AnanParameterReqDto, AnanParameterReqDto> {
     private final ParameterService parameterService;
 
     public ParameterController(ParameterService parameterService) {
@@ -73,8 +71,8 @@ public class ParameterController implements ISimpleController<AnanParameterRespD
     @ApiOperation(value = "获取或创建指定机构或指定用户参数值", notes = "type=1则是机构参数(机构参数系统会从当前机构向逐级上级机构查找该参数),type=2则是用户参数，如果缓存和数据库中都没有找到参数，则自动创建一个无域参数")
     @RequestMapping(value = ParameterFeignService.PATH_VALUE, method = {RequestMethod.POST, RequestMethod.GET})
     @ApiImplicitParam(name = TreeDto.ID_NAME, value = "参数ID,取值于AnanParameterEntity.id",
-            required = true, dataTypeClass = AnanParameterRetrieveDto.class, paramType = "body")
-    public ResponseEntity<String> getOrCreateParameter(@RequestBody AnanParameterRetrieveDto retrieveDto) {
+            required = true, dataTypeClass = AnanParameterReqDto.class, paramType = "body")
+    public ResponseEntity<String> getOrCreateParameter(@RequestBody AnanParameterReqDto retrieveDto) {
         int type = retrieveDto.getType();
         String scope = retrieveDto.getScope();
         String name = retrieveDto.getName();

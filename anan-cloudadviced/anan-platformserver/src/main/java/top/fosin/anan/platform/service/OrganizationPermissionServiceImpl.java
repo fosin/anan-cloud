@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import top.fosin.anan.core.util.BeanUtil;
-import top.fosin.anan.platform.dto.req.AnanOrganizationPermissionCreateDto;
+import top.fosin.anan.platform.dto.req.AnanOrganizationPermissionReqDto;
 import top.fosin.anan.platform.dto.res.AnanOrganizationPermissionRespDto;
 import top.fosin.anan.platform.entity.AnanOrganizationPermissionEntity;
 import top.fosin.anan.platform.repository.OrganizationPermissionRepository;
@@ -51,7 +51,7 @@ public class OrganizationPermissionServiceImpl implements OrganizationPermission
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public List<AnanOrganizationPermissionRespDto> updateInBatch(String deleteCol, Long organizId, Collection<AnanOrganizationPermissionCreateDto> dtos) {
+    public List<AnanOrganizationPermissionRespDto> updateInBatch(String deleteCol, Long organizId, Collection<AnanOrganizationPermissionReqDto> dtos) {
         Assert.notNull(organizId, "传入的机构ID不能为空!");
 
         Assert.isTrue(dtos.stream().allMatch(entity -> entity.getOrganizId().equals(organizId)), "需要更新的数据集中有与版本ID不匹配的数据!");

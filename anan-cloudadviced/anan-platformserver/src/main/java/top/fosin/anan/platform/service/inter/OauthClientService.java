@@ -1,9 +1,9 @@
 package top.fosin.anan.platform.service.inter;
 
 import top.fosin.anan.jpa.service.ISimpleJpaService;
-import top.fosin.anan.platform.dto.req.OauthClientDetailsCreateDto;
-import top.fosin.anan.platform.dto.req.OauthClientDetailsRetrieveDto;
-import top.fosin.anan.platform.dto.req.OauthClientDetailsUpdateDto;
+import top.fosin.anan.platform.dto.req.OauthClientDetailsReqDto;
+import top.fosin.anan.platform.dto.req.OauthClientDetailsReqDto;
+import top.fosin.anan.platform.dto.req.OauthClientDetailsReqDto;
 import top.fosin.anan.platform.dto.res.OauthClientDetailsRespDto;
 import top.fosin.anan.platform.entity.OauthClientDetailsEntity;
 
@@ -13,8 +13,8 @@ import top.fosin.anan.platform.entity.OauthClientDetailsEntity;
  *
  */
 public interface OauthClientService extends ISimpleJpaService<OauthClientDetailsEntity, OauthClientDetailsRespDto,
-        String, OauthClientDetailsCreateDto,
-        OauthClientDetailsRetrieveDto,
-        OauthClientDetailsUpdateDto> {
+        String, OauthClientDetailsReqDto,
+        OauthClientDetailsReqDto,
+        OauthClientDetailsReqDto> {
 
 }

@@ -20,10 +20,10 @@ import top.fosin.anan.cloudresource.dto.PermissionDto;
 @ApiModel(value = "用于增减用户的单项权限，通常实在角色的基础上增减单项权限响应DTO", description = "用户权限的响应DTO")
 public class AnanUserPermissionRespDto extends PermissionDto<Long> {
     private static final long serialVersionUID = -28245693115711034L;
-    @ApiModelProperty(value = "机构ID", example = "Long")
+    @ApiModelProperty(value = "机构序号", example = "Long")
     private Long organizId;
 
-    @ApiModelProperty(value = "用户ID", example = "Long")
+    @ApiModelProperty(value = "用户序号", example = "Long")
     private Long userId;
 
     @ApiModelProperty(value = "补充方式：0=增加权限、1=删除权限", example = "Integer")

@@ -138,7 +138,7 @@ public class AnanUserAllPermissionsEntity extends CreateUpdateEntity<Long> {
     private String icon;
 
     @Basic
-    @ApiModelProperty(value = "用户ID", required = true)
+    @ApiModelProperty(value = "用户序号", required = true)
     @Column(name = "user_id", nullable = false)
     private Long userId;
 
@@ -148,7 +148,7 @@ public class AnanUserAllPermissionsEntity extends CreateUpdateEntity<Long> {
     private Integer addMode;
 
     @Basic
-    @ApiModelProperty(value = "机构ID", required = true)
+    @ApiModelProperty(value = "机构序号", required = true)
     @Column(name = "organiz_id", nullable = false)
     private Long organizId;
 }

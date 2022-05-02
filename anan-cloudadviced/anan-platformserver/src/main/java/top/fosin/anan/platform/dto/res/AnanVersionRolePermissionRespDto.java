@@ -20,7 +20,7 @@ import top.fosin.anan.cloudresource.dto.PermissionDto;
 @ApiModel(value = "版本角色权限表响应DTO", description = "版本角色权限的响应DTO")
 public class AnanVersionRolePermissionRespDto extends PermissionDto<Long> {
     private static final long serialVersionUID = -72983140389430793L;
-    @ApiModelProperty(value = "角色ID", example = "Long")
+    @ApiModelProperty(value = "角色序号", example = "Long")
     private Long roleId;
 
 }

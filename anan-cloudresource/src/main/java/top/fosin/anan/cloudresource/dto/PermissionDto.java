@@ -1,12 +1,12 @@
 package top.fosin.anan.cloudresource.dto;
 
-import java.io.Serializable;
-
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import top.fosin.anan.model.dto.IdDto;
+
+import java.io.Serializable;
 
 /**
  * 系统版本权限表(AnanVersionPermission)创建DTO
@@ -21,7 +21,7 @@ import top.fosin.anan.model.dto.IdDto;
 public class PermissionDto<ID extends Serializable> extends IdDto<ID> {
     private static final long serialVersionUID = -16743805718001139L;
 
-    @ApiModelProperty(value = "权限ID", example = "Long")
+    @ApiModelProperty(value = "权限序号", example = "Long")
     private Long permissionId;
 
 }

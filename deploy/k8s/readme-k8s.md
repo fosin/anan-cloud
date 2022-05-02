@@ -363,6 +363,14 @@ kubectl get endpoints kube-controller-manager --namespace=kube-system -o yaml
 kubectl get endpoints kube-scheduler --namespace=kube-system -o yaml
 
 # 验证apiserver接口
+#每个控制平面节点执行
+cat >> .bash_profile <<EOF
+export K8S_APISERVER=$(kubectl config view --minify -o jsonpath='{.clusters[0].cluster.server}')
+export K8S_TOKEN=$(kubectl get secret $(kubectl get serviceaccount default -o jsonpath='{.secrets[0].name}') -o jsonpath='{.data.token}' | base64 --decode )
+EOF
+
+source .bash_profile
+
 curl $K8S_APISERVER/api/v1/namespaces/default/pods/redis-0 --header "Authorization: Bearer $K8S_TOKEN" --insecure
 
 ```

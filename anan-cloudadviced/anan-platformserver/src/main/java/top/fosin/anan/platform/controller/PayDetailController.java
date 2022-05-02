@@ -5,9 +5,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
 import top.fosin.anan.model.controller.ISimpleController;
-import top.fosin.anan.platform.dto.req.AnanPayDetailCreateDto;
-import top.fosin.anan.platform.dto.req.AnanPayDetailRetrieveDto;
-import top.fosin.anan.platform.dto.req.AnanPayDetailUpdateDto;
+import top.fosin.anan.platform.dto.req.AnanPayDetailReqDto;
 import top.fosin.anan.platform.dto.res.AnanPayDetailRespDto;
 import top.fosin.anan.platform.service.inter.PayDetailService;
 
@@ -20,7 +18,7 @@ import top.fosin.anan.platform.service.inter.PayDetailService;
 @RestController
 @RequestMapping(UrlPrefixConstant.PAY_DETAIL)
 @Api(value = UrlPrefixConstant.PAY_DETAIL, tags = "支付明细表管理")
-public class PayDetailController implements ISimpleController<AnanPayDetailRespDto, Long, AnanPayDetailCreateDto, AnanPayDetailRetrieveDto, AnanPayDetailUpdateDto> {
+public class PayDetailController implements ISimpleController<AnanPayDetailRespDto, Long, AnanPayDetailReqDto, AnanPayDetailReqDto, AnanPayDetailReqDto> {
     /**
      * 服务对象
      */

@@ -52,7 +52,7 @@ public class AnanUserEntity extends SoftDeleteEntity<Long> {
 
   @Column(name = "organiz_id", nullable = false)
   @Basic
-  @ApiModelProperty(value = "机构ID")
+  @ApiModelProperty(value = "机构序号")
   private Long organizId;
 
   @Basic

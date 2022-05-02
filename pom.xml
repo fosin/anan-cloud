@@ -35,14 +35,14 @@
             <properties>
                 <profileActive>local</profileActive>
                 <jasypt.encryptor.password>oF7tVrdfjrbQ0NfSsRL3</jasypt.encryptor.password>
-                <spring.cloud.kubernetes.enabled>true</spring.cloud.kubernetes.enabled>
-                <spring.cloud.kubernetes.discovery.enabled>true</spring.cloud.kubernetes.discovery.enabled>
-                <spring.cloud.kubernetes.config.enabled>true</spring.cloud.kubernetes.config.enabled>
+                <spring.cloud.kubernetes.enabled>false</spring.cloud.kubernetes.enabled>
+                <spring.cloud.kubernetes.discovery.enabled>false</spring.cloud.kubernetes.discovery.enabled>
+                <spring.cloud.kubernetes.config.enabled>false</spring.cloud.kubernetes.config.enabled>
                 <spring.cloud.kubernetes.secrets.enabled>false</spring.cloud.kubernetes.secrets.enabled>
                 <spring.cloud.kubernetes.namespace>default</spring.cloud.kubernetes.namespace>
                 <spring.cloud.kubernetes.sharedConfigMap>application</spring.cloud.kubernetes.sharedConfigMap>
                 <spring.cloud.kubernetes.sharedSecret>application</spring.cloud.kubernetes.sharedSecret>
-                <spring.cloud.nacos.enabled>false</spring.cloud.nacos.enabled>
+                <spring.cloud.nacos.enabled>true</spring.cloud.nacos.enabled>
                 <spring.cloud.nacos.username>nacos</spring.cloud.nacos.username>
                 <spring.cloud.nacos.password>local</spring.cloud.nacos.password>
                 <spring.cloud.nacos.server-addr>nacos:8848</spring.cloud.nacos.server-addr>

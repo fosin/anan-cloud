@@ -1,7 +1,7 @@
 package top.fosin.anan.cloudresource.parameter;
 
-import top.fosin.anan.cloudresource.dto.req.AnanParameterCreateDto;
-import top.fosin.anan.cloudresource.dto.req.AnanParameterRetrieveDto;
+import top.fosin.anan.cloudresource.dto.req.AnanParameterReqDto;
+import top.fosin.anan.cloudresource.dto.req.AnanParameterReqDto;
 import top.fosin.anan.cloudresource.dto.res.AnanParameterRespDto;
 import top.fosin.anan.cloudresource.service.inter.ParameterFeignService;
 
@@ -24,7 +24,7 @@ public class RemoteParameter implements IParameter {
 
     @Override
     public synchronized AnanParameterRespDto setParameter(String scope, String name, String value, String description) {
-        AnanParameterCreateDto createDto = new AnanParameterCreateDto();
+        AnanParameterReqDto createDto = new AnanParameterReqDto();
         createDto.setValue(value);
         createDto.setType(this.getParameterStrategy().getType());
         createDto.setScope(scope);
@@ -45,7 +45,7 @@ public class RemoteParameter implements IParameter {
 
     @Override
     public String getOrCreateParameter(String scope, String name, String defaultValue, String description) {
-        AnanParameterRetrieveDto dto = new AnanParameterRetrieveDto();
+        AnanParameterReqDto dto = new AnanParameterReqDto();
         dto.setScope(scope);
         dto.setType(this.getParameterStrategy().getType());
         dto.setName(name);

@@ -26,7 +26,7 @@ public class OauthClientDetailsEntity implements Serializable {
 
     @Id
     @Column(name = "client_id")
-    @ApiModelProperty(value = "客户端ID", example = "String")
+    @ApiModelProperty(value = "客户端序号", example = "String")
     @Pattern(regexp = "[\\w]{1,64}", message = "客户端ID只能大小写字母、数字、下杠(_)组合而成,长度不超过64位")
     private String clientId;
 

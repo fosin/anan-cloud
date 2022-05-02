@@ -3,8 +3,8 @@ package top.fosin.anan.platform.service.inter;
 
 import top.fosin.anan.cloudresource.dto.res.AnanRolePermissionRespDto;
 import top.fosin.anan.jpa.service.ICrudBatchJpaService;
-import top.fosin.anan.platform.dto.req.AnanRolePermissionCreateDto;
-import top.fosin.anan.platform.dto.req.AnanRolePermissionRetrieveDto;
+import top.fosin.anan.platform.dto.req.AnanRolePermissionReqDto;
+import top.fosin.anan.platform.dto.req.AnanRolePermissionReqDto;
 import top.fosin.anan.platform.entity.AnanRolePermissionEntity;
 
 import java.util.List;
@@ -18,8 +18,8 @@ public interface RolePermissionService extends
         ICrudBatchJpaService<AnanRolePermissionEntity,
                 AnanRolePermissionRespDto,
                 Long,
-                Long, AnanRolePermissionCreateDto,
-                AnanRolePermissionRetrieveDto> {
+                Long, AnanRolePermissionReqDto,
+                AnanRolePermissionReqDto> {
     List<AnanRolePermissionEntity> findByRoleId(Long roleId);
 
     long countByPermissionId(Long permissionId);

@@ -14,15 +14,15 @@
            anan-cloud下面的pom.xml中的profile local 的配置信息（spring security帐号密码）
        docker-compose.yml中redis、rabbitmq、nacos、mysql是后台开发环境必须启动的
        1.2.1、使用docker默认的host网络，需要在docker主机上设置hosts映射     
-            cat > /etc/hosts << EOF
-            192.168.137.8 redis
-            192.168.137.8 rabbitmq
-            192.168.137.8 nacos
-            192.168.137.8 mysql
+            cat >> /etc/hosts << EOF
+            100.100.1.198 redis
+            100.100.1.198 rabbitmq
+            100.100.1.198 nacos
+            100.100.1.198 mysql-mgr
             
-            192.168.137.8 anan-authserver
-            192.168.137.8 anan-platformserver
-            192.168.137.8 anan-cloudgateway
+            100.100.1.198 anan-authserver
+            100.100.1.198 anan-platformserver
+            100.100.1.198 anan-cloudgateway
             EOF
        1.2.2、启动mysql主从同步模式和nacos服务发现和配置管理
             docker-compose -f .\docker-compose.yml up -d mysql nacos
@@ -107,12 +107,12 @@
 
        1.6.1、安装jdk1.8及以上、lombok插件、ignore插件，开发工具推荐使用Idea
        1.6.2、Windows下修改c:/windows/system32/drives/etc/hosts文件增加以下信息，IP地址根据实际情况设定
-            192.168.137.1是本机IP，192.168.137.8是Docker容器的主机IP
+            192.168.137.1是本机IP，100.100.1.198是Docker容器的主机IP
 
-            192.168.137.8 nacos
-            192.168.137.8 redis
-            192.168.137.8 rabbitmq
-            192.168.137.8 mysql
+            100.100.1.198 nacos
+            100.100.1.198 redis
+            100.100.1.198 rabbitmq
+            100.100.1.198 mysql
             192.168.137.1 anan-eurekaserver
             192.168.137.1 anan-authserver
             

@@ -20,10 +20,10 @@ import top.fosin.anan.model.dto.IdCreateUpdateDto;
 @ApiModel(value = "国际化语言字符集响应DTO", description = "国际化语言字符集响应DTO")
 public class AnanInternationalCharsetRespDto extends IdCreateUpdateDto<Long> {
     private static final long serialVersionUID = 931996735216252232L;
-    @ApiModelProperty(value = "国际化语言ID", example = "Integer")
+    @ApiModelProperty(value = "国际化语言序号", example = "Integer")
     private Long internationalId;
 
-    @ApiModelProperty(value = "服务ID", example = "Integer")
+    @ApiModelProperty(value = "服务序号", example = "Integer")
     private Long serviceId;
 
     @ApiModelProperty(value = "自定义字符集", example = "String")

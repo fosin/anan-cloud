@@ -10,13 +10,13 @@ import org.springframework.web.bind.annotation.*;
 import top.fosin.anan.cloudresource.dto.res.AnanPermissionRespDto;
 import top.fosin.anan.model.controller.ISimpleController;
 import top.fosin.anan.model.dto.TreeDto;
-import top.fosin.anan.platform.dto.req.AnanVersionCreateDto;
-import top.fosin.anan.platform.dto.req.AnanVersionPermissionCreateDto;
-import top.fosin.anan.platform.dto.req.AnanVersionRetrieveDto;
-import top.fosin.anan.platform.dto.req.AnanVersionUpdateDto;
+import top.fosin.anan.platform.dto.req.AnanVersionPermissionReqDto;
+import top.fosin.anan.platform.dto.req.AnanVersionReqDto;
 import top.fosin.anan.platform.dto.res.AnanVersionPermissionRespDto;
 import top.fosin.anan.platform.dto.res.AnanVersionRespDto;
-import top.fosin.anan.platform.service.inter.*;
+import top.fosin.anan.platform.service.inter.PermissionService;
+import top.fosin.anan.platform.service.inter.VersionPermissionService;
+import top.fosin.anan.platform.service.inter.VersionService;
 
 import java.util.List;
 
@@ -30,7 +30,7 @@ import java.util.List;
 @RequestMapping("v1/version")
 @Api(value = "v1/version", tags = "版本管理")
 public class VersionController implements ISimpleController<AnanVersionRespDto,
-        Long, AnanVersionCreateDto, AnanVersionRetrieveDto, AnanVersionUpdateDto> {
+        Long, AnanVersionReqDto, AnanVersionReqDto, AnanVersionReqDto> {
     /**
      * 服务对象
      */
@@ -69,7 +69,7 @@ public class VersionController implements ISimpleController<AnanVersionRespDto,
 
     })
     @PutMapping(value = "/permissions/{versionId}")
-    public ResponseEntity<Boolean> permissions(@RequestBody List<AnanVersionPermissionCreateDto> dtos,
+    public ResponseEntity<Boolean> permissions(@RequestBody List<AnanVersionPermissionReqDto> dtos,
                                                @PathVariable("versionId") Long versionId) {
         //更新版本权限
         versionPermissionService.updateInBatch("versionId", versionId, dtos);

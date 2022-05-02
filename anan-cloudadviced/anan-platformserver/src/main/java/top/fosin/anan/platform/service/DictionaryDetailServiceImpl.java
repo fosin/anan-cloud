@@ -10,12 +10,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import top.fosin.anan.cloudresource.constant.PlatformRedisConstant;
 import top.fosin.anan.cloudresource.constant.SystemConstant;
+import top.fosin.anan.cloudresource.dto.req.AnanDictionaryDetailReqDto;
 import top.fosin.anan.cloudresource.dto.res.AnanDictionaryDetailRespDto;
 import top.fosin.anan.cloudresource.service.AnanUserDetailService;
 import top.fosin.anan.core.exception.AnanServiceException;
 import top.fosin.anan.core.util.BeanUtil;
-import top.fosin.anan.platform.dto.req.AnanDictionaryDetailCreateDto;
-import top.fosin.anan.platform.dto.req.AnanDictionaryDetailUpdateDto;
 import top.fosin.anan.platform.entity.AnanDictionaryEntity;
 import top.fosin.anan.platform.entity.DictionaryDetailEntity;
 import top.fosin.anan.platform.repository.DictionaryDetailRepository;
@@ -54,7 +53,7 @@ public class DictionaryDetailServiceImpl implements DictionaryDetailService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     @CacheEvict(value = PlatformRedisConstant.ANAN_DICTIONARY_DETAIL, key = "#result.dictionaryId")
-    public AnanDictionaryDetailRespDto create(AnanDictionaryDetailCreateDto entity) {
+    public AnanDictionaryDetailRespDto create(AnanDictionaryDetailReqDto entity) {
         Assert.notNull(entity, "传入的创建数据实体对象不能为空!");
         DictionaryDetailEntity createEntiy = new DictionaryDetailEntity();
         BeanUtils.copyProperties(entity, createEntiy);
@@ -64,15 +63,15 @@ public class DictionaryDetailServiceImpl implements DictionaryDetailService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    @CacheEvict(value = PlatformRedisConstant.ANAN_DICTIONARY_DETAIL, key = "#entity.dictionaryId")
-    public void update(AnanDictionaryDetailUpdateDto entity) {
-        Assert.notNull(entity, "传入的更新数据实体对象不能为空!");
-        Long id = entity.getId();
+    @CacheEvict(value = PlatformRedisConstant.ANAN_DICTIONARY_DETAIL, key = "#reqDto.dictionaryId")
+    public void update(AnanDictionaryDetailReqDto reqDto) {
+        Assert.notNull(reqDto, "传入的更新数据实体对象不能为空!");
+        Long id = reqDto.getId();
         Assert.notNull(id, "传入的更新数据实体对象主键不能为空!");
         DictionaryDetailEntity findEntity = dictionaryDetailRepository.findById(id).orElse(null);
         Assert.notNull(findEntity, "根据传入的主键[" + id + "]在数据库中未能找到数据!");
-        hasModifiedPrivileges(entity.getDictionaryId());
-        BeanUtils.copyProperties(entity, findEntity);
+        hasModifiedPrivileges(reqDto.getDictionaryId());
+        BeanUtils.copyProperties(reqDto, findEntity);
         dictionaryDetailRepository.save(findEntity);
     }
 

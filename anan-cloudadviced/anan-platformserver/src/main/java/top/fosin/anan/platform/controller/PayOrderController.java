@@ -4,9 +4,7 @@ import io.swagger.annotations.Api;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import top.fosin.anan.model.controller.ISimpleController;
-import top.fosin.anan.platform.dto.req.AnanPayOrderCreateDto;
-import top.fosin.anan.platform.dto.req.AnanPayOrderRetrieveDto;
-import top.fosin.anan.platform.dto.req.AnanPayOrderUpdateDto;
+import top.fosin.anan.platform.dto.req.AnanPayOrderReqDto;
 import top.fosin.anan.platform.dto.res.AnanPayOrderRespDto;
 import top.fosin.anan.platform.service.inter.PayOrderService;
 
@@ -19,7 +17,7 @@ import top.fosin.anan.platform.service.inter.PayOrderService;
 @RestController
 @RequestMapping("v1/order")
 @Api(value = "v1/order", tags = "支付订单管理")
-public class PayOrderController implements ISimpleController<AnanPayOrderRespDto, Long, AnanPayOrderCreateDto, AnanPayOrderRetrieveDto, AnanPayOrderUpdateDto> {
+public class PayOrderController implements ISimpleController<AnanPayOrderRespDto, Long, AnanPayOrderReqDto, AnanPayOrderReqDto, AnanPayOrderReqDto> {
     /**
      * 服务对象
      */

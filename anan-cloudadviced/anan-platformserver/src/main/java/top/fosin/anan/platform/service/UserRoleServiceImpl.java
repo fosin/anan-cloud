@@ -12,7 +12,7 @@ import top.fosin.anan.cloudresource.dto.res.AnanUserRoleRespDto;
 import top.fosin.anan.cloudresource.service.AnanUserDetailService;
 import top.fosin.anan.core.exception.AnanUserOrPassInvalidException;
 import top.fosin.anan.core.util.BeanUtil;
-import top.fosin.anan.platform.dto.req.AnanUserRoleCreateDto;
+import top.fosin.anan.platform.dto.req.AnanUserRoleReqDto;
 import top.fosin.anan.platform.entity.AnanRoleEntity;
 import top.fosin.anan.platform.entity.AnanUserEntity;
 import top.fosin.anan.platform.entity.AnanUserRoleEntity;
@@ -77,7 +77,7 @@ public class UserRoleServiceImpl implements UserRoleService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public List<AnanUserRoleRespDto> updateInBatch(String deleteCol, Long deleteValue, Collection<AnanUserRoleCreateDto> dtos) {
+    public List<AnanUserRoleRespDto> updateInBatch(String deleteCol, Long deleteValue, Collection<AnanUserRoleReqDto> dtos) {
         if ("userId".equals(deleteCol)) {
             Assert.isTrue(dtos.stream().allMatch(entity -> entity.getUserId().equals(deleteValue)), "需要更新的数据集中有与用户ID不匹配的数据!");
             //如果是用户角色，则只需要删除一个用户的缓存
@@ -86,7 +86,7 @@ public class UserRoleServiceImpl implements UserRoleService {
         } else {
             Assert.isTrue(dtos.stream().allMatch(entity -> entity.getRoleId().equals(deleteValue)), "需要更新的数据集中有与角色ID不匹配的数据!");
             //如果是角色用户，则需要删除所有角色相关用户的缓存
-            for (AnanUserRoleCreateDto dto : dtos) {
+            for (AnanUserRoleReqDto dto : dtos) {
                 clearUserCache(dto.getUserId());
             }
             userRoleRepository.deleteByRoleId(deleteValue);
@@ -106,13 +106,13 @@ public class UserRoleServiceImpl implements UserRoleService {
         ananCacheManger.evict(PlatformRedisConstant.ANAN_USER_PERMISSION_TREE, userId + "");
     }
 
-    private List<AnanUserRoleRespDto> getAnanUserRoleEntities(Collection<AnanUserRoleCreateDto> dtos) {
+    private List<AnanUserRoleRespDto> getAnanUserRoleEntities(Collection<AnanUserRoleReqDto> dtos) {
         List<AnanUserRoleEntity> saveEntities = new ArrayList<>();
         if (dtos == null || dtos.size() == 0) {
             return null;
         }
         Long organizId = ananUserDetailService.getAnanOrganizId();
-        for (AnanUserRoleCreateDto entity : dtos) {
+        for (AnanUserRoleReqDto entity : dtos) {
             AnanUserRoleEntity ananUserRoleEntity = new AnanUserRoleEntity();
             ananUserRoleEntity.setUserId(entity.getUserId());
             AnanRoleEntity ananRoleEntity = new AnanRoleEntity();
