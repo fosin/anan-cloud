@@ -10,8 +10,8 @@ import top.fosin.anan.model.module.SortRule;
 import top.fosin.anan.model.valid.group.Create;
 import top.fosin.anan.model.valid.group.Update;
 
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
 
 /**
  * 系统机构权限表(AnanOrganizationPermission)请求DTO
@@ -28,14 +28,14 @@ public class AnanOrganizationPermissionReqDto extends QuerySortRuleDto<LogicalQu
 
     @NotNull(message = "机构序号" + "{javax.validation.constraints.NotNull.message}",
             groups = {Create.class, Update.class})
-    @Min(value = 0, message = "机构序号" + "{javax.validation.constraints.Min.message}",
+    @PositiveOrZero(message = "机构序号" + "{javax.validation.constraints.Positive.message}",
             groups = {Create.class, Update.class})
     @ApiModelProperty(value = "机构序号", required = true)
     private Long organizId;
 
     @NotNull(message = "权限序号" + "{javax.validation.constraints.NotNull.message}",
             groups = {Create.class, Update.class})
-    @Min(value = 0, message = "权限序号" + "{javax.validation.constraints.Min.message}",
+    @PositiveOrZero(message = "权限序号" + "{javax.validation.constraints.Positive.message}",
             groups = {Create.class, Update.class})
     @ApiModelProperty(value = "权限序号", required = true)
     private Long permissionId;

@@ -12,10 +12,7 @@ import top.fosin.anan.model.valid.group.Create;
 import top.fosin.anan.model.valid.group.Delete;
 import top.fosin.anan.model.valid.group.Update;
 
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
+import javax.validation.constraints.*;
 
 /**
  * 系统机构表(AnanOrganization)创建DTO
@@ -30,14 +27,14 @@ import javax.validation.constraints.Pattern;
 public class AnanOrganizationReqDto extends QuerySortRuleDto<LogicalQueryRule, SortRule, Long> {
     private static final long serialVersionUID = 389815217019211695L;
 
-    @Min(value = 1, message = "父机构序号" + "{javax.validation.constraints.Min.message}",
+    @Positive(message = "父机构序号" + "{javax.validation.constraints.Positive.message}",
             groups = {Create.class, Update.class, Delete.class})
     @NotNull(message = "父机构序号" + "{javax.validation.constraints.NotNull.message}",
             groups = {Create.class, Update.class})
     @ApiModelProperty(value = "父机构编号：表示当前数据所属的父类机构，新增和修改数据时必填!")
     private Long pid;
 
-    @Min(value = 1, message = "顶级机构序号" + "{javax.validation.constraints.Min.message}",
+    @Positive(message = "顶级机构序号" + "{javax.validation.constraints.Positive.message}",
             groups = {Create.class, Update.class, Delete.class})
     @NotNull(message = "顶级机构序号" + "{javax.validation.constraints.NotNull.message}",
             groups = {Create.class, Update.class})
@@ -57,7 +54,7 @@ public class AnanOrganizationReqDto extends QuerySortRuleDto<LogicalQueryRule, S
             groups = {Create.class, Update.class, Delete.class})
     private String name;
 
-    @Min(value = 0, message = "深度" + "{javax.validation.constraints.Min.message}",
+    @PositiveOrZero(message = "深度" + "{javax.validation.constraints.Positive.message}",
             groups = {Create.class, Update.class})
     @NotNull(message = "深度" + "{javax.validation.constraints.NotNull.message}",
             groups = {Create.class, Update.class})
@@ -77,7 +74,7 @@ public class AnanOrganizationReqDto extends QuerySortRuleDto<LogicalQueryRule, S
     @ApiModelProperty(value = "机构电话")
     private String telphone;
 
-    @Min(value = 0, message = "使用状态" + "{javax.validation.constraints.Min.message}",
+    @PositiveOrZero(message = "使用状态" + "{javax.validation.constraints.Positive.message}",
             groups = {Create.class, Update.class})
     @NotNull(message = "使用状态" + "{javax.validation.constraints.NotNull.message}",
             groups = {Create.class, Update.class})

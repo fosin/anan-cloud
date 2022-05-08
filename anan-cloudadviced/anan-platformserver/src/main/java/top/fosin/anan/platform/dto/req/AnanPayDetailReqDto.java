@@ -10,8 +10,8 @@ import top.fosin.anan.model.module.SortRule;
 import top.fosin.anan.model.valid.group.Create;
 import top.fosin.anan.model.valid.group.Update;
 
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
 
 /**
  * 支付明细表(AnanPayDetail)请求DTO
@@ -28,13 +28,13 @@ public class AnanPayDetailReqDto extends QuerySortRuleDto<LogicalQueryRule, Sort
 
     @NotNull(message = "支付序号" + "{javax.validation.constraints.NotNull.message}",
             groups = {Create.class, Update.class})
-    @Min(value = 0, message = "使用状态" + "{javax.validation.constraints.Min.message}",
+    @PositiveOrZero(message = "使用状态" + "{javax.validation.constraints.Positive.message}",
             groups = {Create.class, Update.class})
     @ApiModelProperty(value = "支付序号", required = true)
     private Long payId;
 
     @NotNull(message = "付款方式" + "{javax.validation.constraints.NotNull.message}")
-    @Min(value = 0, message = "使用状态" + "{javax.validation.constraints.Min.message}",
+    @PositiveOrZero(message = "使用状态" + "{javax.validation.constraints.Positive.message}",
             groups = {Create.class, Update.class})
     @ApiModelProperty(value = "付款方式", required = true)
     private Integer payway;

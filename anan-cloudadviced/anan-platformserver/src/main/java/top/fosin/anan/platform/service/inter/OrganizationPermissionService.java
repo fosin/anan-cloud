@@ -2,7 +2,6 @@ package top.fosin.anan.platform.service.inter;
 
 import top.fosin.anan.jpa.service.ICrudBatchJpaService;
 import top.fosin.anan.platform.dto.req.AnanOrganizationPermissionReqDto;
-import top.fosin.anan.platform.dto.req.AnanOrganizationPermissionReqDto;
 import top.fosin.anan.platform.dto.res.AnanOrganizationPermissionRespDto;
 import top.fosin.anan.platform.entity.AnanOrganizationPermissionEntity;
 

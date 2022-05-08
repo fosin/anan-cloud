@@ -12,8 +12,9 @@ import top.fosin.anan.model.module.SortRule;
 import top.fosin.anan.model.valid.group.Create;
 import top.fosin.anan.model.valid.group.Update;
 
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 import java.util.Date;
 
 /**
@@ -31,35 +32,35 @@ public class AnanPayReqDto extends QuerySortRuleDto<LogicalQueryRule, SortRule, 
 
     @NotNull(message = "付款机构" + "{javax.validation.constraints.NotNull.message}",
             groups = {Create.class, Update.class})
-    @Min(value = 1, message = "付款机构" + "{javax.validation.constraints.Min.message}",
+    @Positive(message = "付款机构" + "{javax.validation.constraints.Positive.message}",
             groups = {Create.class, Update.class})
     @ApiModelProperty(value = "付款机构", required = true)
     private Long organizId;
 
     @NotNull(message = "付款用户" + "{javax.validation.constraints.NotNull.message}",
             groups = {Create.class, Update.class})
-    @Min(value = 1, message = "付款用户" + "{javax.validation.constraints.Min.message}",
+    @Positive(message = "付款用户" + "{javax.validation.constraints.Positive.message}",
             groups = {Create.class, Update.class})
     @ApiModelProperty(value = "付款用户", required = true)
     private Long userId;
 
     @NotNull(message = "订单序号" + "{javax.validation.constraints.NotNull.message}",
             groups = {Create.class, Update.class})
-    @Min(value = 1, message = "订单序号" + "{javax.validation.constraints.Min.message}",
+    @Positive(message = "订单序号" + "{javax.validation.constraints.Positive.message}",
             groups = {Create.class, Update.class})
     @ApiModelProperty(value = "订单序号", required = true)
     private Long orderId;
 
     @NotNull(message = "发票序号" + "{javax.validation.constraints.NotNull.message}",
             groups = {Create.class, Update.class})
-    @Min(value = 1, message = "发票序号" + "{javax.validation.constraints.Min.message}",
+    @Positive(message = "发票序号" + "{javax.validation.constraints.Positive.message}",
             groups = {Create.class, Update.class})
     @ApiModelProperty(value = "发票序号", required = true)
     private Long invoiceId;
 
     @NotNull(message = "交易类型" + "{javax.validation.constraints.NotNull.message}",
             groups = {Create.class, Update.class})
-    @Min(value = 0, message = "交易类型" + "{javax.validation.constraints.Min.message}",
+    @PositiveOrZero(message = "交易类型" + "{javax.validation.constraints.Positive.message}",
             groups = {Create.class, Update.class})
     @ApiModelProperty(value = "交易类型：0=正交易 1：负交易", required = true)
     private Integer payType;
@@ -90,7 +91,7 @@ public class AnanPayReqDto extends QuerySortRuleDto<LogicalQueryRule, SortRule, 
 
     @NotNull(message = "付款标志" + "{javax.validation.constraints.NotNull.message}",
             groups = {Create.class, Update.class})
-    @Min(value = 0, message = "付款标志" + "{javax.validation.constraints.Min.message}",
+    @PositiveOrZero(message = "付款标志" + "{javax.validation.constraints.Positive.message}",
             groups = {Create.class, Update.class})
     @ApiModelProperty(value = "付款标志：0=未付款，1=分期，2=付全款", required = true)
     private Integer payFlag;

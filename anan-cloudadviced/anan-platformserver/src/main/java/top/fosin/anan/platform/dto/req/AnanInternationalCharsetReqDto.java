@@ -10,8 +10,9 @@ import top.fosin.anan.model.module.SortRule;
 import top.fosin.anan.model.valid.group.Create;
 import top.fosin.anan.model.valid.group.Update;
 
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 
 /**
  * 国际化语言字符集请求DTO
@@ -28,14 +29,14 @@ public class AnanInternationalCharsetReqDto extends QuerySortRuleDto<LogicalQuer
 
     @NotNull(message = "国际化语言序号" + "{javax.validation.constraints.NotNull.message}",
             groups = {Create.class, Update.class})
-    @Min(value = 1, message = "国际化语言序号" + "{javax.validation.constraints.Min.message}",
+    @Positive(message = "国际化语言序号" + "{javax.validation.constraints.Positive.message}",
             groups = {Create.class, Update.class})
     @ApiModelProperty(value = "国际化语言序号", example = "0")
     private Long internationalId;
 
     @NotNull(message = "服务序号" + "{javax.validation.constraints.NotNull.message}",
             groups = {Create.class, Update.class})
-    @Min(value = 1, message = "服务序号" + "{javax.validation.constraints.Min.message}",
+    @Positive(message = "服务序号" + "{javax.validation.constraints.Positive.message}",
             groups = {Create.class, Update.class})
     @ApiModelProperty(value = "服务序号", example = "0")
     private Long serviceId;
@@ -45,7 +46,7 @@ public class AnanInternationalCharsetReqDto extends QuerySortRuleDto<LogicalQuer
 
     @NotNull(message = "使用状态" + "{javax.validation.constraints.NotNull.message}",
             groups = {Create.class, Update.class})
-    @Min(value = 0, message = "使用状态" + "{javax.validation.constraints.Min.message}",
+    @PositiveOrZero(message = "使用状态" + "{javax.validation.constraints.Positive.message}",
             groups = {Create.class, Update.class})
     @ApiModelProperty(value = "使用状态：0=启用，1=禁用", example = "0")
     private Integer status;

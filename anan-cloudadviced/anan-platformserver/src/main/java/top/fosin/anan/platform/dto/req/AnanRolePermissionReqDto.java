@@ -10,7 +10,7 @@ import top.fosin.anan.model.module.SortRule;
 import top.fosin.anan.model.valid.group.Create;
 import top.fosin.anan.model.valid.group.Update;
 
-import javax.validation.constraints.Min;
+import javax.validation.constraints.Positive;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -28,14 +28,14 @@ public class AnanRolePermissionReqDto extends QuerySortRuleDto<LogicalQueryRule,
 
     @NotNull(message = "角色序号" + "{javax.validation.constraints.NotNull.message}",
             groups = {Create.class, Update.class})
-    @Min(value = 1, message = "角色序号" + "{javax.validation.constraints.Min.message}",
+    @Positive(message = "角色序号" + "{javax.validation.constraints.Positive.message}",
             groups = {Create.class, Update.class})
     @ApiModelProperty(value = "角色序号", required = true)
     private Long roleId;
 
     @NotNull(message = "权限序号" + "{javax.validation.constraints.NotNull.message}",
             groups = {Create.class, Update.class})
-    @Min(value = 1, message = "权限序号" + "{javax.validation.constraints.Min.message}",
+    @Positive(message = "权限序号" + "{javax.validation.constraints.Positive.message}",
             groups = {Create.class, Update.class})
     @ApiModelProperty(value = "权限序号", required = true)
     private Long permissionId;

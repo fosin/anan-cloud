@@ -45,7 +45,7 @@ public class AnanRoleReqDto extends OrganizIdQuerySortRuleDto<LogicalQueryRule, 
             groups = {Create.class, Update.class})
     @Max(value = 1, message = "使用状态" + "{javax.validation.constraints.Max.message}",
             groups = {Create.class, Update.class})
-    @Min(value = 0, message = "使用状态" + "{javax.validation.constraints.Min.message}",
+    @PositiveOrZero(message = "使用状态" + "{javax.validation.constraints.Positive.message}",
             groups = {Create.class, Update.class})
     @ApiModelProperty(value = "使用状态：0=启用，1=禁用，具体取值于字典表anan_dictionary.id=11,创建和更新时必填")
     private Integer status;

@@ -7,8 +7,6 @@ import org.springframework.web.bind.annotation.*;
 import top.fosin.anan.cloudresource.constant.ServiceConstant;
 import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
 import top.fosin.anan.cloudresource.dto.req.AnanParameterReqDto;
-import top.fosin.anan.cloudresource.dto.req.AnanParameterReqDto;
-import top.fosin.anan.cloudresource.dto.req.AnanParameterReqDto;
 import top.fosin.anan.cloudresource.dto.res.AnanParameterRespDto;
 import top.fosin.anan.cloudresource.service.ParameterFeignFallbackServiceImpl;
 import top.fosin.anan.model.constant.PathConstant;

@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 import top.fosin.anan.cloudresource.constant.PlatformRedisConstant;
 import top.fosin.anan.core.util.BeanUtil;
 import top.fosin.anan.platform.dto.req.AnanInternationalReqDto;
-import top.fosin.anan.platform.dto.req.AnanInternationalReqDto;
 import top.fosin.anan.platform.dto.res.AnanInternationalRespDto;
 import top.fosin.anan.platform.repository.InternationalRepository;
 import top.fosin.anan.platform.service.inter.InternationalService;

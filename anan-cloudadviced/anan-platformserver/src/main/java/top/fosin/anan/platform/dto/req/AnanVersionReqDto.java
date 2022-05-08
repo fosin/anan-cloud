@@ -12,9 +12,10 @@ import top.fosin.anan.model.module.SortRule;
 import top.fosin.anan.model.valid.group.Create;
 import top.fosin.anan.model.valid.group.Update;
 
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 import java.util.Date;
 
 /**
@@ -37,7 +38,7 @@ public class AnanVersionReqDto extends QuerySortRuleDto<LogicalQueryRule, SortRu
 
     @NotNull(message = "版本类型" + "{javax.validation.constraints.NotNull.message}",
             groups = {Create.class, Update.class})
-    @Min(value = 0, message = "版本类型" + "{javax.validation.constraints.Min.message}",
+    @PositiveOrZero(message = "版本类型" + "{javax.validation.constraints.Positive.message}",
             groups = {Create.class, Update.class})
     @ApiModelProperty(value = "版本类型：0=收费版 1=免费版 2=开发版", required = true)
     private Integer type;
@@ -57,49 +58,49 @@ public class AnanVersionReqDto extends QuerySortRuleDto<LogicalQueryRule, SortRu
 
     @NotNull(message = "有效期" + "{javax.validation.constraints.NotNull.message}",
             groups = {Create.class, Update.class})
-    @Min(value = 1, message = "有效期" + "{javax.validation.constraints.Min.message}",
+    @Positive(message = "有效期" + "{javax.validation.constraints.Positive.message}",
             groups = {Create.class, Update.class})
     @ApiModelProperty(value = "有效期：一般按天计算", required = true)
     private Integer validity;
 
     @NotNull(message = "到期后保护期" + "{javax.validation.constraints.NotNull.message}",
             groups = {Create.class, Update.class})
-    @Min(value = 1, message = "到期后保护期" + "{javax.validation.constraints.Min.message}",
+    @Positive(message = "到期后保护期" + "{javax.validation.constraints.Positive.message}",
             groups = {Create.class, Update.class})
     @ApiModelProperty(value = "到期后保护期", required = true)
     private Integer protectDays;
 
     @NotNull(message = "最大机构数" + "{javax.validation.constraints.NotNull.message}",
             groups = {Create.class, Update.class})
-    @Min(value = 0, message = "最大机构数" + "{javax.validation.constraints.Min.message}",
+    @PositiveOrZero(message = "最大机构数" + "{javax.validation.constraints.Positive.message}",
             groups = {Create.class, Update.class})
     @ApiModelProperty(value = "最大机构数：0=无限制 n=限制数", required = true)
     private Integer maxOrganizs;
 
     @NotNull(message = "最大用户数" + "{javax.validation.constraints.NotNull.message}",
             groups = {Create.class, Update.class})
-    @Min(value = 0, message = "最大用户数" + "{javax.validation.constraints.Min.message}",
+    @PositiveOrZero(message = "最大用户数" + "{javax.validation.constraints.Positive.message}",
             groups = {Create.class, Update.class})
     @ApiModelProperty(value = "最大用户数：0=无限制 n=限制数", required = true)
     private Integer maxUsers;
 
     @NotNull(message = "是否试用" + "{javax.validation.constraints.NotNull.message}",
             groups = {Create.class, Update.class})
-    @Min(value = 0, message = "是否试用" + "{javax.validation.constraints.Min.message}",
+    @PositiveOrZero(message = "是否试用" + "{javax.validation.constraints.Positive.message}",
             groups = {Create.class, Update.class})
     @ApiModelProperty(value = "是否试用：0=不试用 1=试用", required = true)
     private Integer tryout;
 
     @NotNull(message = "试用天数" + "{javax.validation.constraints.NotNull.message}",
             groups = {Create.class, Update.class})
-    @Min(value = 1, message = "试用天数" + "{javax.validation.constraints.Min.message}",
+    @Positive(message = "试用天数" + "{javax.validation.constraints.Positive.message}",
             groups = {Create.class, Update.class})
     @ApiModelProperty(value = "试用天数", required = true)
     private Integer tryoutDays;
 
     @NotNull(message = "启用状态" + "{javax.validation.constraints.NotNull.message}",
             groups = {Create.class, Update.class})
-    @Min(value = 0, message = "启用状态" + "{javax.validation.constraints.Min.message}",
+    @PositiveOrZero(message = "启用状态" + "{javax.validation.constraints.Positive.message}",
             groups = {Create.class, Update.class})
     @ApiModelProperty(value = "启用状态：0=启用，1=禁用", required = true)
     private Integer status;

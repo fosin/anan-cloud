@@ -11,7 +11,7 @@ import top.fosin.anan.model.module.SortRule;
 import top.fosin.anan.model.valid.group.Create;
 import top.fosin.anan.model.valid.group.Update;
 
-import javax.validation.constraints.Min;
+import javax.validation.constraints.Positive;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -39,7 +39,7 @@ public class AnanPermissionReqDto extends QuerySortRuleDto<LogicalQueryRule, Sor
     @ApiModelProperty(value = "父权限ID，取值于id，表示当前数据的父类权限")
     @NotNull(message = "父权限序号" + "{javax.validation.constraints.NotNull.message}",
             groups = {Create.class, Update.class})
-    @Min(value = 1, message = "父权限序号" + "{javax.validation.constraints.Min.message}",
+    @Positive(message = "父权限序号" + "{javax.validation.constraints.Positive.message}",
             groups = {Create.class, Update.class})
     private Long pid;
 
@@ -60,7 +60,7 @@ public class AnanPermissionReqDto extends QuerySortRuleDto<LogicalQueryRule, Sor
     @ApiModelProperty(value = "菜单层级")
     @NotNull(message = "菜单层级" + "{javax.validation.constraints.NotNull.message}",
             groups = {Create.class, Update.class})
-    @Min(value = 1, message = "菜单层级" + "{javax.validation.constraints.Min.message}",
+    @Positive(message = "菜单层级" + "{javax.validation.constraints.Positive.message}",
             groups = {Create.class, Update.class})
     private Integer level;
 

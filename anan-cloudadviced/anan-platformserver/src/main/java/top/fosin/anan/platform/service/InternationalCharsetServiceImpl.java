@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 import top.fosin.anan.cloudresource.constant.PlatformRedisConstant;
 import top.fosin.anan.core.util.BeanUtil;
 import top.fosin.anan.platform.dto.req.AnanInternationalCharsetReqDto;
-import top.fosin.anan.platform.dto.req.AnanInternationalCharsetReqDto;
 import top.fosin.anan.platform.dto.res.AnanInternationalCharsetRespDto;
 import top.fosin.anan.platform.repository.InternationalCharsetRepository;
 import top.fosin.anan.platform.service.inter.InternationalCharsetService;

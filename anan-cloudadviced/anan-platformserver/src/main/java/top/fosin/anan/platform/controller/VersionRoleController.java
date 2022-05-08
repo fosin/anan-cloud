@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
 import top.fosin.anan.model.controller.ISimpleController;
-import top.fosin.anan.platform.dto.req.AnanVersionRolePermissionCreateDto;
+import top.fosin.anan.platform.dto.req.AnanVersionRolePermissionReqDto;
 import top.fosin.anan.platform.dto.req.AnanVersionRoleReqDto;
 import top.fosin.anan.platform.dto.res.AnanVersionRolePermissionRespDto;
 import top.fosin.anan.platform.dto.res.AnanVersionRoleRespDto;
@@ -53,7 +53,7 @@ public class VersionRoleController implements ISimpleController<AnanVersionRoleR
             @ApiImplicitParam(name = "roleId", value = "版本ID,取值于AnanVersionRoleEntity.id", required = true, dataTypeClass = Long.class, paramType = "path")
     })
     @PutMapping(value = "/permissions/{roleId}")
-    public ResponseEntity<Boolean> permissions(@RequestBody List<AnanVersionRolePermissionCreateDto> entities,
+    public ResponseEntity<Boolean> permissions(@RequestBody List<AnanVersionRolePermissionReqDto> entities,
                                                @PathVariable("roleId") Long roleId) {
         //更新版本权限
         versionRolePermissionService.updateInBatch("roleId", roleId, entities);

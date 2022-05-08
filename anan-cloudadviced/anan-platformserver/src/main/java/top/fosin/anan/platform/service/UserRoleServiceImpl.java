@@ -10,7 +10,6 @@ import top.fosin.anan.cloudresource.constant.PlatformRedisConstant;
 import top.fosin.anan.cloudresource.dto.res.AnanUserRespDto;
 import top.fosin.anan.cloudresource.dto.res.AnanUserRoleRespDto;
 import top.fosin.anan.cloudresource.service.AnanUserDetailService;
-import top.fosin.anan.core.exception.AnanUserOrPassInvalidException;
 import top.fosin.anan.core.util.BeanUtil;
 import top.fosin.anan.platform.dto.req.AnanUserRoleReqDto;
 import top.fosin.anan.platform.entity.AnanRoleEntity;
@@ -60,18 +59,11 @@ public class UserRoleServiceImpl implements UserRoleService {
     }
 
     @Override
-    public List<AnanUserRoleEntity> findByUsercodeAndPassword(String usercode, String password) throws AnanUserOrPassInvalidException {
+    public List<AnanUserRoleEntity> findByUsercodeAndPassword(String usercode, String password) {
         Assert.isTrue(null != usercode && !"".equals(usercode), "请输入用户名!");
         Assert.isTrue(null != password && !"".equals(password), "传入的用户ID不能为空!");
         AnanUserEntity entity = userRepository.findByUsercode(usercode);
-        if (null == entity || entity.getId() < 1) {
-            throw new AnanUserOrPassInvalidException();
-        }
-
-        if (!passwordEncoder.matches(password, entity.getPassword())) {
-            throw new AnanUserOrPassInvalidException();
-        }
-
+        Assert.isTrue(null != entity && entity.getId() > 0 && passwordEncoder.matches(password, entity.getPassword()), "用户或密码不正确!");
         return findByUserId(entity.getId());
     }
 

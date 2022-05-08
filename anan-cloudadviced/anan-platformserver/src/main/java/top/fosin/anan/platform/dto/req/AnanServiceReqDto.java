@@ -10,9 +10,9 @@ import top.fosin.anan.model.module.SortRule;
 import top.fosin.anan.model.valid.group.Create;
 import top.fosin.anan.model.valid.group.Update;
 
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
 
 /**
  * 系统服务表(AnanService)请求DTO
@@ -39,7 +39,7 @@ public class AnanServiceReqDto extends QuerySortRuleDto<LogicalQueryRule, SortRu
 
     @NotNull(message = "使用状态" + "{javax.validation.constraints.NotNull.message}",
             groups = {Create.class, Update.class})
-    @Min(value = 0, message = "使用状态" + "{javax.validation.constraints.Min.message}",
+    @PositiveOrZero(message = "使用状态" + "{javax.validation.constraints.Positive.message}",
             groups = {Create.class, Update.class})
     @ApiModelProperty(value = "使用状态：0：禁用 1：启用", example = "0")
     private Integer status;

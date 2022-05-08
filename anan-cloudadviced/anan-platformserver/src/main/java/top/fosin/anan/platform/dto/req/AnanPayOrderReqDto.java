@@ -12,8 +12,9 @@ import top.fosin.anan.model.module.SortRule;
 import top.fosin.anan.model.valid.group.Create;
 import top.fosin.anan.model.valid.group.Update;
 
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 import java.util.Date;
 
 /**
@@ -31,21 +32,21 @@ public class AnanPayOrderReqDto extends QuerySortRuleDto<LogicalQueryRule, SortR
 
     @NotNull(message = "订单机构" + "{javax.validation.constraints.NotNull.message}",
             groups = {Create.class, Update.class})
-    @Min(value = 1, message = "订单机构" + "{javax.validation.constraints.Min.message}",
+    @Positive(message = "订单机构" + "{javax.validation.constraints.Positive.message}",
             groups = {Create.class, Update.class})
     @ApiModelProperty(value = "订单机构", required = true)
     private Long organizId;
 
     @NotNull(message = "订单用户" + "{javax.validation.constraints.NotNull.message}",
             groups = {Create.class, Update.class})
-    @Min(value = 1, message = "订单用户" + "{javax.validation.constraints.Min.message}",
+    @Positive(message = "订单用户" + "{javax.validation.constraints.Positive.message}",
             groups = {Create.class, Update.class})
     @ApiModelProperty(value = "订单用户", required = true)
     private Long userId;
 
     @NotNull(message = "版本序号" + "{javax.validation.constraints.NotNull.message}",
             groups = {Create.class, Update.class})
-    @Min(value = 1, message = "版本序号" + "{javax.validation.constraints.Min.message}",
+    @Positive(message = "版本序号" + "{javax.validation.constraints.Positive.message}",
             groups = {Create.class, Update.class})
     @ApiModelProperty(value = "版本序号", required = true)
     private Long versionId;
@@ -61,7 +62,7 @@ public class AnanPayOrderReqDto extends QuerySortRuleDto<LogicalQueryRule, SortR
 
     @NotNull(message = "订单状态" + "{javax.validation.constraints.NotNull.message}",
             groups = {Create.class, Update.class})
-    @Min(value = 0, message = "订单状态" + "{javax.validation.constraints.Min.message}",
+    @PositiveOrZero(message = "订单状态" + "{javax.validation.constraints.Positive.message}",
             groups = {Create.class, Update.class})
     @ApiModelProperty(value = "订单状态：0=新建，1=支付，2=取消，3=作废", required = true)
     private Integer status;

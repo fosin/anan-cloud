@@ -10,7 +10,6 @@ import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 import top.fosin.anan.core.util.BeanUtil;
 import top.fosin.anan.platform.dto.req.OauthClientDetailsReqDto;
-import top.fosin.anan.platform.dto.req.OauthClientDetailsReqDto;
 import top.fosin.anan.platform.dto.res.OauthClientDetailsRespDto;
 import top.fosin.anan.platform.entity.OauthClientDetailsEntity;
 import top.fosin.anan.platform.repository.OauthClientRepository;

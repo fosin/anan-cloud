@@ -5,8 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import top.fosin.anan.cloudresource.dto.req.AnanParameterReqDto;
-import top.fosin.anan.cloudresource.dto.req.AnanParameterReqDto;
-import top.fosin.anan.cloudresource.dto.req.AnanParameterReqDto;
 import top.fosin.anan.cloudresource.dto.res.AnanParameterRespDto;
 import top.fosin.anan.cloudresource.service.inter.ParameterFeignService;
 

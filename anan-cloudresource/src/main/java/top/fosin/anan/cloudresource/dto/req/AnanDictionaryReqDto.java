@@ -11,7 +11,7 @@ import top.fosin.anan.model.module.SortRule;
 import top.fosin.anan.model.valid.group.Create;
 import top.fosin.anan.model.valid.group.Update;
 
-import javax.validation.constraints.Min;
+import javax.validation.constraints.Positive;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -37,7 +37,7 @@ public class AnanDictionaryReqDto extends QuerySortRuleDto<LogicalQueryRule, Sor
 
     @NotNull(message = "字典类别" + "{javax.validation.constraints.NotNull.message}",
             groups = {Create.class, Update.class})
-    @Min(value = 1, message = "字典类别" + "{javax.validation.constraints.Min.message}",
+    @Positive(message = "字典类别" + "{javax.validation.constraints.Positive.message}",
             groups = {Create.class, Update.class})
     @ApiModelProperty(value = "字典类别，区别字典的大分类，取值于表anan_dictionary.code = 1数据,创建和更新时必填")
     private Integer type;

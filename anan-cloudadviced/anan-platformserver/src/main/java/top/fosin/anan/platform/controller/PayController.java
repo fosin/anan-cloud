@@ -6,8 +6,6 @@ import org.springframework.web.bind.annotation.RestController;
 import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
 import top.fosin.anan.model.controller.ISimpleController;
 import top.fosin.anan.platform.dto.req.AnanPayReqDto;
-import top.fosin.anan.platform.dto.req.AnanPayReqDto;
-import top.fosin.anan.platform.dto.req.AnanPayReqDto;
 import top.fosin.anan.platform.dto.res.AnanPayRespDto;
 import top.fosin.anan.platform.service.inter.PayService;
 

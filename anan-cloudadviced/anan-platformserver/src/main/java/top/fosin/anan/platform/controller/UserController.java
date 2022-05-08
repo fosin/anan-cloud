@@ -28,7 +28,7 @@ import top.fosin.anan.platform.service.inter.UserPermissionService;
 import top.fosin.anan.platform.service.inter.UserRoleService;
 import top.fosin.anan.platform.service.inter.UserService;
 
-import javax.validation.constraints.Min;
+import javax.validation.constraints.Positive;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.Collection;
@@ -127,7 +127,7 @@ public class UserController extends BaseController implements ISimpleController<
             @ApiImplicitParam(name = "confirmPassword2", value = "确认新密码2(未加密)",
                     required = true, dataTypeClass = String.class, paramType = "query")
     })
-    public ResponseEntity<String> changePassword2(@Min(1) @RequestParam(TreeDto.ID_NAME) Long id,
+    public ResponseEntity<String> changePassword2(@Positive @RequestParam(TreeDto.ID_NAME) Long id,
                                                  @NotBlank @RequestParam("password") String password,
                                                  @NotBlank @RequestParam("confirmPassword1") String confirmPassword1,
                                                  @NotBlank @RequestParam("confirmPassword2") String confirmPassword2) throws AnanControllerException, AnanServiceException {
@@ -143,7 +143,7 @@ public class UserController extends BaseController implements ISimpleController<
                     required = true, dataTypeClass = Long.class, paramType = "query")
     })
     @RequestMapping(value = "/permissions/{userId}", method = {RequestMethod.GET, RequestMethod.POST})
-    public ResponseEntity<List<AnanUserPermissionRespDto>> permissions(@Min(1) @PathVariable Long userId,
+    public ResponseEntity<List<AnanUserPermissionRespDto>> permissions(@Positive @PathVariable Long userId,
                                                                        @RequestParam("organizId") Long organizId) {
         return ResponseEntity.ok(userPermissionService.findByUserIdAndOrganizId(userId, organizId));
     }
@@ -158,7 +158,7 @@ public class UserController extends BaseController implements ISimpleController<
     @PutMapping(value = "/permissions/{userId}")
     public ResponseEntity<Collection<AnanUserPermissionRespDto>>
     permissions(@NotNull @RequestBody List<AnanUserPermissionReqDto> entities,
-                @Min(1) @PathVariable Long userId) {
+                @Positive @PathVariable Long userId) {
         return ResponseEntity.ok(userPermissionService.updateInBatch("userId", userId, entities));
     }
 
@@ -166,7 +166,7 @@ public class UserController extends BaseController implements ISimpleController<
     @ApiImplicitParam(name = IdDto.ID_NAME, value = "用户ID,取值于AnanUserEntity.id",
             required = true, dataTypeClass = Long.class, paramType = "path")
     @PostMapping("/resetPassword/{id}")
-    public ResponseEntity<String> resetPassword(@Min(1) @PathVariable("id") Long id) {
+    public ResponseEntity<String> resetPassword(@Positive @PathVariable("id") Long id) {
         return ResponseEntity.ok(userService.resetPassword(id).getPassword());
     }
 
@@ -174,7 +174,7 @@ public class UserController extends BaseController implements ISimpleController<
     @ApiImplicitParam(name = "userId", value = "用户ID,取值于AnanUserEntity.id",
             required = true, dataTypeClass = Long.class, paramType = "path")
     @RequestMapping(value = "/roles/{userId}", method = {RequestMethod.GET, RequestMethod.POST})
-    public ResponseEntity<List<AnanRoleRespDto>> getUserRoles(@Min(1) @PathVariable("userId") Long userId) {
+    public ResponseEntity<List<AnanRoleRespDto>> getUserRoles(@Positive @PathVariable("userId") Long userId) {
         return ResponseEntity.ok(roleService.findRoleUsersByRoleId(userId));
     }
 
@@ -188,7 +188,7 @@ public class UserController extends BaseController implements ISimpleController<
     @PutMapping(value = "/roles/{userId}")
     public ResponseEntity<Collection<AnanUserRoleRespDto>> putUserRoles
             (@NotNull @RequestBody List<AnanUserRoleReqDto> entities,
-             @Min(1) @PathVariable Long userId) throws
+             @Positive @PathVariable Long userId) throws
             AnanServiceException {
         return ResponseEntity.ok(userRoleService.updateInBatch("userId", userId, entities));
     }
@@ -197,7 +197,7 @@ public class UserController extends BaseController implements ISimpleController<
     @ApiImplicitParam(name = "userId", value = "用户ID,对应AnanRoleEntity.id",
             required = true, dataTypeClass = Integer.class, paramType = "path")
     @RequestMapping(value = "/otherRoles/{userId}", method = {RequestMethod.GET, RequestMethod.POST})
-    public ResponseEntity<List<AnanRoleRespDto>> getOtherRoles(@Min(1) @PathVariable("userId") Long userId) {
+    public ResponseEntity<List<AnanRoleRespDto>> getOtherRoles(@Positive @PathVariable("userId") Long userId) {
         return ResponseEntity.ok(roleService.findOtherUsersByRoleId(userId));
     }
 

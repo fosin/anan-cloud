@@ -4,7 +4,6 @@ package top.fosin.anan.platform.service.inter;
 import top.fosin.anan.cloudresource.dto.res.AnanRolePermissionRespDto;
 import top.fosin.anan.jpa.service.ICrudBatchJpaService;
 import top.fosin.anan.platform.dto.req.AnanRolePermissionReqDto;
-import top.fosin.anan.platform.dto.req.AnanRolePermissionReqDto;
 import top.fosin.anan.platform.entity.AnanRolePermissionEntity;
 
 import java.util.List;

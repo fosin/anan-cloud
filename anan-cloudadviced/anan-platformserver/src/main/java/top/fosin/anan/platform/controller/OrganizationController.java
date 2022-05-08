@@ -33,8 +33,8 @@ import java.util.List;
 @Api(value = UrlPrefixConstant.ORGANIZATION, tags = "机构管理")
 public class OrganizationController extends BaseController
         implements ISimpleController<AnanOrganizationRespDto, Long,
-        AnanOrganizationReqDto, AnanOrganizationReqDto,
-        AnanOrganizationReqDto>,
+                AnanOrganizationReqDto, AnanOrganizationReqDto,
+                AnanOrganizationReqDto>,
         IRetrieveTreeController<AnanOrganizationTreeDto, Long, AnanOrganizationReqDto> {
     private final OrganizationService organizationService;
     private final OrganizationAuthService organizationAuthService;

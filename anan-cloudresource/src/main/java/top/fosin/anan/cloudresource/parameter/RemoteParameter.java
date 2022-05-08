@@ -1,7 +1,6 @@
 package top.fosin.anan.cloudresource.parameter;
 
 import top.fosin.anan.cloudresource.dto.req.AnanParameterReqDto;
-import top.fosin.anan.cloudresource.dto.req.AnanParameterReqDto;
 import top.fosin.anan.cloudresource.dto.res.AnanParameterRespDto;
 import top.fosin.anan.cloudresource.service.inter.ParameterFeignService;
 

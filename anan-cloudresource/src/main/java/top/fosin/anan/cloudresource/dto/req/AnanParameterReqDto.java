@@ -11,10 +11,7 @@ import top.fosin.anan.model.module.SortRule;
 import top.fosin.anan.model.valid.group.Create;
 import top.fosin.anan.model.valid.group.Update;
 
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
+import javax.validation.constraints.*;
 import java.util.Date;
 
 /**
@@ -43,7 +40,7 @@ public class AnanParameterReqDto extends QuerySortRuleDto<LogicalQueryRule, Sort
     @ApiModelProperty(value = "参数分类：具体取值于字典表anan_dictionary.code=10")
     @NotNull(message = "参数分类{javax.validation.constraints.NotNull.message}",
             groups = {Create.class, Update.class})
-    @Min(value = 1, message = "参数分类{javax.validation.constraints.Min.message}",
+    @Positive(message = "参数分类{javax.validation.constraints.Positive.message}",
             groups = {Create.class, Update.class})
     private Integer type;
 
@@ -60,7 +57,7 @@ public class AnanParameterReqDto extends QuerySortRuleDto<LogicalQueryRule, Sort
     @ApiModelProperty(value = "参数状态：0=正常状态、1=修改状态、2=删除状态")
     @NotNull(message = "参数状态" + "{javax.validation.constraints.NotNull.message}",
             groups = {Create.class, Update.class})
-    @Min(value = 0, message = "参数状态" + "{javax.validation.constraints.Min.message}",
+    @PositiveOrZero(message = "参数状态" + "{javax.validation.constraints.Positive.message}",
             groups = {Create.class, Update.class})
     private Integer status;
 

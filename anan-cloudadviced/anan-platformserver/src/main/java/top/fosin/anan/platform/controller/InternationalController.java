@@ -9,8 +9,6 @@ import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
 import top.fosin.anan.model.constant.PathConstant;
 import top.fosin.anan.model.controller.ISimpleController;
 import top.fosin.anan.platform.dto.req.AnanInternationalReqDto;
-import top.fosin.anan.platform.dto.req.AnanInternationalReqDto;
-import top.fosin.anan.platform.dto.req.AnanInternationalReqDto;
 import top.fosin.anan.platform.dto.res.AnanInternationalRespDto;
 import top.fosin.anan.platform.service.inter.InternationalService;
 

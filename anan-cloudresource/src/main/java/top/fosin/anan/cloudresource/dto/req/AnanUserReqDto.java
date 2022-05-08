@@ -46,7 +46,9 @@ public class AnanUserReqDto extends QuerySortRuleDto<LogicalQueryRule, SortRule,
     @Pattern(regexp = RegexUtil.SPECIAL, message = "用户姓名不能包含特殊字符")
     private String username;
 
-    @Past(message = "生日必须是一个过去的时间",
+    @Past(message = "生日" + "{javax.validation.constraints.Past.message}",
+            groups = {Create.class, Update.class})
+    @NotNull(message = "生日" + "{javax.validation.constraints.NotNull.message}",
             groups = {Create.class, Update.class})
     @ApiModelProperty(value = "生日,创建和更新时必填")
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
@@ -54,7 +56,7 @@ public class AnanUserReqDto extends QuerySortRuleDto<LogicalQueryRule, SortRule,
 
     @NotNull(message = "使用状态" + "{javax.validation.constraints.NotNull.message}",
             groups = {Create.class, Update.class})
-    @Min(value = 1, message = "使用状态" + "{javax.validation.constraints.Min.message}",
+    @Positive(message = "使用状态" + "{javax.validation.constraints.Positive.message}",
             groups = {Create.class, Update.class})
     @ApiModelProperty(value = "使用状态：具体取值于字典表anan_dictionary.code=15,创建和更新时必填")
     private Integer sex;
@@ -69,7 +71,7 @@ public class AnanUserReqDto extends QuerySortRuleDto<LogicalQueryRule, SortRule,
 
     @NotNull(message = "使用状态" + "{javax.validation.constraints.NotNull.message}",
             groups = {Create.class, Update.class})
-    @Min(value = 0, message = "使用状态" + "{javax.validation.constraints.Min.message}",
+    @PositiveOrZero(message = "使用状态" + "{javax.validation.constraints.Positive.message}",
             groups = {Create.class, Update.class})
     @ApiModelProperty(value = "使用状态：0=启用，1=禁用，具体取值于字典表anan_dictionary.code=11,创建和更新时必填")
     private Integer status;

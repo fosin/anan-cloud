@@ -12,7 +12,7 @@ import top.fosin.anan.model.module.SortRule;
 import top.fosin.anan.model.valid.group.Create;
 import top.fosin.anan.model.valid.group.Update;
 
-import javax.validation.constraints.Min;
+import javax.validation.constraints.Positive;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
@@ -32,7 +32,7 @@ public class AnanPayInvoiceReqDto extends QuerySortRuleDto<LogicalQueryRule, Sor
 
     @NotNull(message = "支付序号" + "{javax.validation.constraints.NotNull.message}",
             groups = {Create.class, Update.class})
-    @Min(value = 1, message = "使用状态" + "{javax.validation.constraints.Min.message}",
+    @Positive(message = "使用状态" + "{javax.validation.constraints.Positive.message}",
             groups = {Create.class, Update.class})
     @ApiModelProperty(value = "支付序号", required = true)
     private Long payId;

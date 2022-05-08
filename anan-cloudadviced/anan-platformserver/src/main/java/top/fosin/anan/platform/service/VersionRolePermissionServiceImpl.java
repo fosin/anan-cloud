@@ -1,12 +1,13 @@
 package top.fosin.anan.platform.service;
 
+
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import top.fosin.anan.cloudresource.constant.PlatformRedisConstant;
 import top.fosin.anan.core.util.BeanUtil;
-import top.fosin.anan.platform.dto.req.AnanVersionRolePermissionCreateDto;
+import top.fosin.anan.platform.dto.req.AnanVersionRolePermissionReqDto;
 import top.fosin.anan.platform.dto.res.AnanVersionRolePermissionRespDto;
 import top.fosin.anan.platform.entity.AnanOrganizationAuthEntity;
 import top.fosin.anan.platform.entity.AnanRoleEntity;
@@ -61,7 +62,7 @@ public class VersionRolePermissionServiceImpl implements VersionRolePermissionSe
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public List<AnanVersionRolePermissionRespDto> updateInBatch(String deleteCol, Long roleId, Collection<AnanVersionRolePermissionCreateDto> dtos) {
+    public List<AnanVersionRolePermissionRespDto> updateInBatch(String deleteCol, Long roleId, Collection<AnanVersionRolePermissionReqDto> dtos) {
         Assert.isTrue(roleId != null && dtos.size() > 0., "传入的版本ID或entities不能为空!");
         Assert.isTrue(dtos.stream().allMatch(entity -> entity.getRoleId().equals(roleId)), "需要更新的数据集中有与版本ID不匹配的数据!");
         versionRoleRepo.findById(roleId).ifPresent(versionRoleEntity -> {

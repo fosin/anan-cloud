@@ -14,9 +14,10 @@ import top.fosin.anan.model.controller.ISimpleController;
 import top.fosin.anan.model.dto.TreeDto;
 import top.fosin.anan.platform.service.inter.ParameterService;
 
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 import java.util.Collection;
 import java.util.List;
 
@@ -46,7 +47,7 @@ public class ParameterController implements ISimpleController<AnanParameterRespD
             @ApiImplicitParam(name = "name", value = "字典名称,取值于AnanParameterEntity.name",
                     required = true, dataTypeClass = String.class, paramType = "query")
     })
-    public ResponseEntity<AnanParameterRespDto> getNearestParameter(@Min(0) @RequestParam("type") Integer type,
+    public ResponseEntity<AnanParameterRespDto> getNearestParameter(@PositiveOrZero @RequestParam("type") Integer type,
                                                                     @RequestParam("scope") String scope,
                                                                     @NotBlank @RequestParam("name") String name) {
         return ResponseEntity.ok(parameterService.getNearestParameter(type, scope, name));
@@ -62,7 +63,7 @@ public class ParameterController implements ISimpleController<AnanParameterRespD
             @ApiImplicitParam(name = "name", value = "字典名称,取值于AnanParameterEntity.name",
                     required = true, dataTypeClass = String.class, paramType = "query")
     })
-    public ResponseEntity<AnanParameterRespDto> getParameter(@Min(0) @RequestParam("type") Integer type,
+    public ResponseEntity<AnanParameterRespDto> getParameter(@PositiveOrZero @RequestParam("type") Integer type,
                                                              @RequestParam("scope") String scope,
                                                              @NotBlank @RequestParam("name") String name) {
         return ResponseEntity.ok(parameterService.getParameter(type, scope, name));
@@ -85,7 +86,7 @@ public class ParameterController implements ISimpleController<AnanParameterRespD
     @ApiImplicitParam(name = TreeDto.ID_NAME, value = "参数ID,取值于AnanParameterEntity.id",
             required = true, dataTypeClass = Long.class, paramType = "path")
     @RequestMapping(value = ParameterFeignService.PATH_APPLY_ID, method = {RequestMethod.POST, RequestMethod.GET})
-    public ResponseEntity<Boolean> applyChange(@Min(1) @PathVariable(TreeDto.ID_NAME) Long id) {
+    public ResponseEntity<Boolean> applyChange(@Positive @PathVariable(TreeDto.ID_NAME) Long id) {
         return ResponseEntity.ok(parameterService.applyChange(id));
     }
 

@@ -2,9 +2,7 @@ package top.fosin.anan.platform.service.inter;
 
 
 import top.fosin.anan.cloudresource.dto.res.AnanUserRoleRespDto;
-import top.fosin.anan.core.exception.AnanUserOrPassInvalidException;
 import top.fosin.anan.jpa.service.ICrudBatchJpaService;
-import top.fosin.anan.platform.dto.req.AnanUserRoleReqDto;
 import top.fosin.anan.platform.dto.req.AnanUserRoleReqDto;
 import top.fosin.anan.platform.entity.AnanUserRoleEntity;
 
@@ -22,5 +20,5 @@ public interface UserRoleService extends ICrudBatchJpaService<AnanUserRoleEntity
 
     List<AnanUserRoleEntity> findByRoleId(Long roleId);
 
-    List<AnanUserRoleEntity> findByUsercodeAndPassword(String usercode, String password) throws AnanUserOrPassInvalidException;
+    List<AnanUserRoleEntity> findByUsercodeAndPassword(String usercode, String password);
 }
