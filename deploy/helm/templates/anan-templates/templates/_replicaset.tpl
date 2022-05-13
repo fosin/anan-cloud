@@ -81,51 +81,62 @@ spec:
       {{- toYaml $.Values.affinity | nindent 8 }}
       {{- else if or $.Values.podAntiAffinity $.Values.podAffinity $.Values.nodeAntiAffinity $.Values.nodeAffinity }}
       affinity:
+      {{- $releaseName := $.Release.Name }}
       {{- with $.Values.podAntiAffinity }}
         podAntiAffinity:
-          {{ . }}:
+        {{- if contains .duringScheduling "required" }}
+          requiredDuringSchedulingIgnoredDuringExecution:
             - labelSelector:
                 matchExpressions:
-                - key: {{ include "anan.lable.name" . }}
-                  operator: In
+                - key: {{ .key | default (include "anan.lable.name" .) }}
+                  operator: {{ .operator | default "In" }}
                   values:
-                  - {{ $.Release.Name }}
-              topologyKey: "kubernetes.io/hostname"
+                    - {{ .value | default $releaseName }}
+              topologyKey: {{ .topologyKey | default "kubernetes.io/hostname" }}
+        {{- else }}
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                  - key: {{ .key | default (include "anan.lable.name" .) }}
+                    operator: {{ .operator | default "In" }}
+                    values:
+                      - {{ .value | default $releaseName }}
+                topologyKey: {{ .topologyKey | default "kubernetes.io/hostname" }}
+        {{- end }}
       {{- end }}
       {{- with $.Values.podAffinity }}
         podAffinity:
-          {{ . }}:
+        {{- if contains .duringScheduling "required" }}
+          requiredDuringSchedulingIgnoredDuringExecution:
             - labelSelector:
                 matchExpressions:
-                - key: {{ include "anan.lable.name" . }}
-                  operator: In
+                - key: {{ .key | default (include "anan.lable.name" .) }}
+                  operator: {{ .operator | default "In" }}
                   values:
-                  - {{ $.Release.Name }}
-              topologyKey: "kubernetes.io/hostname"
+                    - {{ .value | default $releaseName }}
+              topologyKey: {{ .topologyKey | default "kubernetes.io/hostname" }}
+        {{- else }}
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                  - key: {{ .key | default (include "anan.lable.name" .) }}
+                    operator: {{ .operator | default "In" }}
+                    values:
+                      - {{ .value | default $releaseName }}
+                topologyKey: {{ .topologyKey | default "kubernetes.io/hostname" }}
+        {{- end }}
       {{- end }}
       {{- with $.Values.nodeAntiAffinity }}
-      {{- if and $.Values.nodeAntiAffinity.duringScheduling $.Values.nodeAntiAffinity.nodeNamePrefix }}
         nodeAntiAffinity:
-          {{ $.Values.nodeAntiAffinity.duringScheduling }}:
-            - labelSelector:
-                matchExpressions:
-                - key: kubernetes.io/hostname
-                  operator: In
-                  values:
-                  - {{ $.Values.nodeAntiAffinity.nodeNamePrefix }}
-      {{- end }}
+        {{- (include "anan.replicaset.nodeAffinity" .) | nindent 10 }}
       {{- end }}
       {{- with $.Values.nodeAffinity }}
-      {{- if and $.Values.nodeAffinity.duringScheduling $.Values.nodeAffinity.nodeNamePrefix }}
         nodeAffinity:
-          {{ $.Values.nodeAffinity.duringScheduling }}:
-            - labelSelector:
-                matchExpressions:
-                - key: kubernetes.io/hostname
-                  operator: In
-                  values:
-                  - {{ $.Values.nodeAffinity.nodeNamePrefix }}
-      {{- end }}
+        {{- (include "anan.replicaset.nodeAffinity" .) | nindent 10 }}
       {{- end }}
       {{- end }}
       {{- if $.Values.cluster }}
@@ -394,4 +405,50 @@ spec:
   {{- end }}
   {{- end }}
   {{- end }}
+{{- end -}}
+
+{{- define "anan.replicaset.nodeAffinity" -}}
+{{- if contains .duringScheduling "required" }}
+requiredDuringSchedulingIgnoredDuringExecution:
+  nodeSelectorTerms:
+  - matchExpressions:
+    - key: {{ .key | default "kubernetes.io/hostname" }}
+      operator: {{ .operator | default "In" }}
+      values:
+        - {{ required "NodeAffinity must have a value filed!" .value }}
+{{- else }}
+preferredDuringSchedulingIgnoredDuringExecution:
+  - weight: 100
+    preference:
+      matchExpressions:
+      - key: {{ .key | default "kubernetes.io/hostname" }}
+        operator: {{ .operator | default "In" }}
+        values:
+          - {{ required "NodeAffinity must have a value filed!" .value }}
+{{- end }}
+{{- end -}}
+
+{{- define "anan.replicaset.podAffinity" -}}
+{{- $releaseName := $.Release.Name }}
+{{- if contains .duringScheduling "required" }}
+requiredDuringSchedulingIgnoredDuringExecution:
+  - labelSelector:
+      matchExpressions:
+      - key: {{ .key | default (include "anan.lable.name" .) }}
+        operator: {{ .operator | default "In" }}
+        values:
+          - {{ .value | default $releaseName }}
+    topologyKey: {{ .topologyKey | default "kubernetes.io/hostname" }}
+{{- else }}
+preferredDuringSchedulingIgnoredDuringExecution:
+  - weight: 100
+    podAffinityTerm:
+      labelSelector:
+        matchExpressions:
+        - key: {{ .key | default (include "anan.lable.name" .) }}
+          operator: {{ .operator | default "In" }}
+          values:
+            - {{ .value | default $releaseName }}
+      topologyKey: {{ .topologyKey | default "kubernetes.io/hostname" }}
+{{- end }}
 {{- end -}}

@@ -68,16 +68,30 @@ containers:
     volumeMounts: []
 volumes: []
 affinity: {}
-#requiredDuringSchedulingIgnoredDuringExecution： 硬要求，必须满足，否则不执行调度
-#preferredDuringSchedulingIgnoredDuringExecution：软要求，尽量满足，不满足退而求其次
-podAntiAffinity: requiredDuringSchedulingIgnoredDuringExecution
-podAffinity: preferredDuringSchedulingIgnoredDuringExecution
+#required = requiredDuringSchedulingIgnoredDuringExecution： 硬要求，必须满足，否则不执行调度
+#preferred = preferredDuringSchedulingIgnoredDuringExecution：软要求，尽量满足，不满足退而求其次
+podAntiAffinity:
+  duringScheduling: preferred #非required就是preferredDuringSchedulingIgnoredDuringExecution
+  key: anan-templates-release
+  operator: In
+  value: exam
+  topologyKey: "kubernetes.io/hostname"
+podAffinity:
+  duringScheduling: required #required就是requiredDuringSchedulingIgnoredDuringExecution
+  key: anan-templates-release
+  operator: In
+  value: exam
+  topologyKey: "kubernetes.io/hostname"
 nodeAntiAffinity:
-  duringScheduling: requiredDuringSchedulingIgnoredDuringExecution
-  nodeNamePrefix: ""
+  duringScheduling: preferred #非required就是preferredDuringSchedulingIgnoredDuringExecution
+  key: kubernetes.io/hostname
+  operator: In
+  value: exam
 nodeAffinity:
-  duringScheduling: requiredDuringSchedulingIgnoredDuringExecution
-  nodeNamePrefix: ""
+  duringScheduling: required #required就是requiredDuringSchedulingIgnoredDuringExecution
+  key: kubernetes.io/hostname
+  operator: In
+  value: exam
 tolerations: []
 persistence:
   # 网络存储(NFS)

@@ -50,7 +50,8 @@ containers:
         valueFrom:
           fieldRef:
             fieldPath: metadata.namespace
-podAntiAffinity: requiredDuringSchedulingIgnoredDuringExecution
+podAntiAffinity:
+  duringScheduling: required
 service:
   type: ClusterIP
   ports:

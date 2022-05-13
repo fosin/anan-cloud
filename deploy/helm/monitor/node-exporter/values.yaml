@@ -5,7 +5,8 @@ statefulset:
   minReadySeconds: 45
   replicaCount: 3
 terminationGracePeriodSeconds: 15 #优雅关闭pod的等待时间，默认30s
-podAntiAffinity: requiredDuringSchedulingIgnoredDuringExecution
+podAntiAffinity:
+  duringScheduling: required
 containers:
   - image: prom/node-exporter
     imagePullPolicy: IfNotPresent

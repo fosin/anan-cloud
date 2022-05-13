@@ -25,6 +25,8 @@ logging:
     #com.github.fosin.anan.security: DEBUG
     #org.springframework.security: DEBUG
 spring:
+  web:
+    locale: zh_CN
   datasource:
     url: jdbc:mysql://mysql-mgr:3306/anan_platform?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=GMT%2b8
     username: anan

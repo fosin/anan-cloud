@@ -28,6 +28,7 @@
         <anan-spring-cloud-alibaba.version>2021.1</anan-spring-cloud-alibaba.version>
         <anan-spring-boot-admin.version>2.5.5</anan-spring-boot-admin.version>
         <sonar.host.url>http://192.168.137.8:9001/</sonar.host.url>
+        <java.version>11</java.version>
     </properties>
     <profiles>
         <profile>
@@ -36,8 +37,8 @@
                 <profileActive>local</profileActive>
                 <jasypt.encryptor.password>oF7tVrdfjrbQ0NfSsRL3</jasypt.encryptor.password>
                 <spring.cloud.kubernetes.enabled>false</spring.cloud.kubernetes.enabled>
-                <spring.cloud.kubernetes.discovery.enabled>false</spring.cloud.kubernetes.discovery.enabled>
-                <spring.cloud.kubernetes.config.enabled>false</spring.cloud.kubernetes.config.enabled>
+                <spring.cloud.kubernetes.discovery.enabled>true</spring.cloud.kubernetes.discovery.enabled>
+                <spring.cloud.kubernetes.config.enabled>true</spring.cloud.kubernetes.config.enabled>
                 <spring.cloud.kubernetes.secrets.enabled>false</spring.cloud.kubernetes.secrets.enabled>
                 <spring.cloud.kubernetes.namespace>default</spring.cloud.kubernetes.namespace>
                 <spring.cloud.kubernetes.sharedConfigMap>application</spring.cloud.kubernetes.sharedConfigMap>
@@ -82,14 +83,14 @@
             <properties>
                 <profileActive>dev</profileActive>
                 <jasypt.encryptor.password>oF7tVrdfjrbQ0NfSsRL3</jasypt.encryptor.password>
-                <spring.cloud.kubernetes.enabled>true</spring.cloud.kubernetes.enabled>
+                <spring.cloud.kubernetes.enabled>false</spring.cloud.kubernetes.enabled>
                 <spring.cloud.kubernetes.discovery.enabled>true</spring.cloud.kubernetes.discovery.enabled>
                 <spring.cloud.kubernetes.config.enabled>true</spring.cloud.kubernetes.config.enabled>
                 <spring.cloud.kubernetes.secrets.enabled>false</spring.cloud.kubernetes.secrets.enabled>
                 <spring.cloud.kubernetes.namespace>default</spring.cloud.kubernetes.namespace>
                 <spring.cloud.kubernetes.sharedConfigMap>application</spring.cloud.kubernetes.sharedConfigMap>
                 <spring.cloud.kubernetes.sharedSecret>application</spring.cloud.kubernetes.sharedSecret>
-                <spring.cloud.nacos.enabled>false</spring.cloud.nacos.enabled>
+                <spring.cloud.nacos.enabled>true</spring.cloud.nacos.enabled>
                 <spring.cloud.nacos.username>nacos</spring.cloud.nacos.username>
                 <spring.cloud.nacos.password>local</spring.cloud.nacos.password>
                 <spring.cloud.nacos.server-addr>nacos:8848</spring.cloud.nacos.server-addr>
@@ -125,14 +126,14 @@
             <properties>
                 <profileActive>prod</profileActive>
                 <jasypt.encryptor.password>oF7tVrdfjrbQ0NfSsRL3</jasypt.encryptor.password>
-                <spring.cloud.kubernetes.enabled>true</spring.cloud.kubernetes.enabled>
+                <spring.cloud.kubernetes.enabled>false</spring.cloud.kubernetes.enabled>
                 <spring.cloud.kubernetes.discovery.enabled>true</spring.cloud.kubernetes.discovery.enabled>
                 <spring.cloud.kubernetes.config.enabled>true</spring.cloud.kubernetes.config.enabled>
                 <spring.cloud.kubernetes.secrets.enabled>false</spring.cloud.kubernetes.secrets.enabled>
                 <spring.cloud.kubernetes.namespace>default</spring.cloud.kubernetes.namespace>
                 <spring.cloud.kubernetes.sharedConfigMap>application</spring.cloud.kubernetes.sharedConfigMap>
                 <spring.cloud.kubernetes.sharedSecret>application</spring.cloud.kubernetes.sharedSecret>
-                <spring.cloud.nacos.enabled>false</spring.cloud.nacos.enabled>
+                <spring.cloud.nacos.enabled>true</spring.cloud.nacos.enabled>
                 <spring.cloud.nacos.username>nacos</spring.cloud.nacos.username>
                 <spring.cloud.nacos.password>prod</spring.cloud.nacos.password>
                 <spring.cloud.nacos.server-addr>nacos:8848,nacos-1:8848
@@ -442,14 +443,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-help-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>11</source>
-                    <target>11</target>
-                </configuration>
             </plugin>
         </plugins>
     </build>

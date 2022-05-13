@@ -51,18 +51,11 @@ containers:
           secretKeyRef:
             name: redis
             key: password
-affinity:
-  podAntiAffinity:
-    preferredDuringSchedulingIgnoredDuringExecution:
-      - weight: 100
-        podAffinityTerm:
-          labelSelector:
-            matchExpressions:
-              - key: name
-                operator: In
-                values:
-                  - redis
-          topologyKey: kubernetes.io/hostname
+nodeAffinity:
+  duringScheduling: required
+  value: exam
+#podAntiAffinity:
+#  duringScheduling: preferred
 configmap:
   - mountPath: /etc/redis
     defaultMode: "0755"
