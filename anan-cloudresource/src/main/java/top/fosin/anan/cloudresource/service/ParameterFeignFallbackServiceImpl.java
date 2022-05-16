@@ -4,8 +4,8 @@ package top.fosin.anan.cloudresource.service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import top.fosin.anan.cloudresource.dto.req.AnanParameterReqDto;
-import top.fosin.anan.cloudresource.dto.res.AnanParameterRespDto;
+import top.fosin.anan.cloudresource.dto.req.ParameterReqDto;
+import top.fosin.anan.cloudresource.dto.res.ParameterRespDto;
 import top.fosin.anan.cloudresource.service.inter.ParameterFeignService;
 
 import java.util.Collection;
@@ -22,31 +22,31 @@ import java.util.List;
 public class ParameterFeignFallbackServiceImpl implements ParameterFeignService {
 
     @Override
-    public ResponseEntity<AnanParameterRespDto> create(AnanParameterReqDto AnanParameterReqDto) {
-        log.error("feign 远程创建通用系统参数失败:{}", AnanParameterReqDto);
+    public ResponseEntity<ParameterRespDto> create(ParameterReqDto ParameterReqDto) {
+        log.error("feign 远程创建通用系统参数失败:{}", ParameterReqDto);
         return null;
     }
 
     @Override
-    public ResponseEntity<AnanParameterRespDto> update(AnanParameterReqDto AnanParameterReqDto) {
-        log.error("feign 远程更新通用系统参数失败:{}", AnanParameterReqDto);
+    public ResponseEntity<ParameterRespDto> update(ParameterReqDto ParameterReqDto) {
+        log.error("feign 远程更新通用系统参数失败:{}", ParameterReqDto);
         return null;
     }
 
     @Override
-    public ResponseEntity<AnanParameterRespDto> getParameter(Integer type, String scope, String name) {
+    public ResponseEntity<ParameterRespDto> getParameter(Integer type, String scope, String name) {
         log.error("feign 远程查询通用系统参数失败:{}{}{}", type, scope, name);
         return null;
     }
 
     @Override
-    public ResponseEntity<AnanParameterRespDto> getNearestParameter(Integer type, String scope, String name) {
+    public ResponseEntity<ParameterRespDto> getNearestParameter(Integer type, String scope, String name) {
         log.error("feign 远程查询通用系统参数失败:{}{}{}", type, scope, name);
         return null;
     }
 
     @Override
-    public ResponseEntity<String> getOrCreateParameter(AnanParameterReqDto retrieveDto) {
+    public ResponseEntity<String> getOrCreateParameter(ParameterReqDto retrieveDto) {
         log.error("feign 远程查询通用系统参数失败:{}", retrieveDto);
         return null;
     }

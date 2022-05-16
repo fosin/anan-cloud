@@ -10,9 +10,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import top.fosin.anan.auth.service.inter.AuthService;
-import top.fosin.anan.cloudresource.dto.AnanUserAuthDto;
-import top.fosin.anan.cloudresource.dto.AnanUserDetail;
-import top.fosin.anan.cloudresource.dto.res.AnanUserAllPermissionsRespDto;
+import top.fosin.anan.cloudresource.dto.UserAuthDto;
+import top.fosin.anan.cloudresource.dto.UserDetail;
+import top.fosin.anan.cloudresource.dto.res.UserAllPermissionsRespDto;
 
 import java.util.List;
 import java.util.Set;
@@ -37,13 +37,13 @@ public class AnanUserDetailsServiceImpl implements UserDetailsService {
     @Override
     public User loadUserByUsername(String username) throws UsernameNotFoundException {
         //这里的username对应anan_user.usercode
-        AnanUserAuthDto userAuthDto = authService.findByUsercode(username);
+        UserAuthDto userAuthDto = authService.findByUsercode(username);
 
         if (userAuthDto == null) {
             throw new UsernameNotFoundException("用户:" + username + "不存在!");
         }
 
-        List<AnanUserAllPermissionsRespDto> permissionEntities = authService.findByUserId(userAuthDto.getId());
+        List<UserAllPermissionsRespDto> permissionEntities = authService.findByUserId(userAuthDto.getId());
         // 只操作状态为启用的权限，获取用户增权限
         Set<GrantedAuthority> grantedAuthoritySet = permissionEntities.stream().filter(entity -> entity.getStatus() == 0 && entity.getAddMode() == 0)
                 .map(entity -> new SimpleGrantedAuthority(entity.getId() + ""))
@@ -53,7 +53,7 @@ public class AnanUserDetailsServiceImpl implements UserDetailsService {
                 .map(entity -> new SimpleGrantedAuthority(entity.getId() + ""))
                 .collect(Collectors.toSet()));
 
-        AnanUserDetail user = new AnanUserDetail(userAuthDto, grantedAuthoritySet);
+        UserDetail user = new UserDetail(userAuthDto, grantedAuthoritySet);
         log.debug("UserDetailsServiceImpl User:" + user);
         return user;
     }

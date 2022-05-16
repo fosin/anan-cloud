@@ -83,13 +83,13 @@ podAffinity:
   value: exam
   topologyKey: "kubernetes.io/hostname"
 nodeAntiAffinity:
-  duringScheduling: preferred #非required就是preferredDuringSchedulingIgnoredDuringExecution
-  key: kubernetes.io/hostname
+  duringScheduling: preferred #与pod亲和性对应属性等同
+  key: "kubernetes.io/hostname"
   operator: In
   value: exam
 nodeAffinity:
-  duringScheduling: required #required就是requiredDuringSchedulingIgnoredDuringExecution
-  key: kubernetes.io/hostname
+  duringScheduling: required #与pod亲和性对应属性等同
+  key: "kubernetes.io/hostname"
   operator: In
   value: exam
 tolerations: []

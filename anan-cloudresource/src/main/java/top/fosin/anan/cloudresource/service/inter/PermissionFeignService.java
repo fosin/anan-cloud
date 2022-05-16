@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import top.fosin.anan.cloudresource.constant.RequestPath;
 import top.fosin.anan.cloudresource.constant.ServiceConstant;
 import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
-import top.fosin.anan.cloudresource.dto.res.AnanPermissionRespDto;
+import top.fosin.anan.cloudresource.dto.res.PermissionRespDto;
 import top.fosin.anan.cloudresource.service.PermissionFeignFallbackServiceImpl;
 
 import javax.validation.constraints.NotBlank;
@@ -33,7 +33,7 @@ public interface PermissionFeignService {
      * @return 应用权限列表
      */
     @PostMapping(RequestPath.SERVICE_CODE)
-    ResponseEntity<List<AnanPermissionRespDto>> findByServiceCode(@NotBlank @PathVariable("serviceCode") String serviceCode);
+    ResponseEntity<List<PermissionRespDto>> findByServiceCode(@NotBlank @PathVariable("serviceCode") String serviceCode);
 
     /**
      * 远程查询应用权限
@@ -42,5 +42,5 @@ public interface PermissionFeignService {
      * @return 应用权限列表
      */
     @PostMapping(value = RequestPath.SERVICE_CODES, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<List<AnanPermissionRespDto>> findByServiceCodes(@NotEmpty @RequestBody List<String> serviceCodes);
+    ResponseEntity<List<PermissionRespDto>> findByServiceCodes(@NotEmpty @RequestBody List<String> serviceCodes);
 }

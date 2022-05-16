@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import top.fosin.anan.cloudresource.constant.ServiceConstant;
 import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
-import top.fosin.anan.cloudresource.dto.res.AnanUserRespDto;
+import top.fosin.anan.cloudresource.dto.res.UserRespDto;
 import top.fosin.anan.cloudresource.service.UserFeignFallbackServiceImpl;
 import top.fosin.anan.model.constant.PathConstant;
 import top.fosin.anan.model.dto.TreeDto;
@@ -25,20 +25,20 @@ import java.util.List;
 public interface UserFeignService {
     @PostMapping({PathConstant.PATH_ID})
     @ApiOperation("根据主键ID查询一条数据")
-    ResponseEntity<AnanUserRespDto> findOneById(@PathVariable(TreeDto.ID_NAME) Long id);
+    ResponseEntity<UserRespDto> findOneById(@PathVariable(TreeDto.ID_NAME) Long id);
 
     @PostMapping({PathConstant.PATH_IDS})
     @ApiOperation("根据id查询多条数据")
-    ResponseEntity<List<AnanUserRespDto>> listByIds(@RequestBody List<Long> ids);
+    ResponseEntity<List<UserRespDto>> listByIds(@RequestBody List<Long> ids);
 
     @PostMapping("/usercode/{usercode}")
-    ResponseEntity<AnanUserRespDto> findOneByUsercode(@PathVariable("usercode") String usercode);
+    ResponseEntity<UserRespDto> findOneByUsercode(@PathVariable("usercode") String usercode);
 
     @PostMapping("/list/organizId/{organizId}/{status}")
-    ResponseEntity<List<AnanUserRespDto>> listByOrganizId(@PathVariable("organizId") Long organizId, @PathVariable("status") Integer status);
+    ResponseEntity<List<UserRespDto>> listByOrganizId(@PathVariable("organizId") Long organizId, @PathVariable("status") Integer status);
 
     @PostMapping("/list/topId/{topId}/{status}")
-    ResponseEntity<List<AnanUserRespDto>> listByTopId(@PathVariable("topId") Long topId,
-                                                      @PathVariable("status") Integer status);
+    ResponseEntity<List<UserRespDto>> listByTopId(@PathVariable("topId") Long topId,
+                                                  @PathVariable("status") Integer status);
 }
 

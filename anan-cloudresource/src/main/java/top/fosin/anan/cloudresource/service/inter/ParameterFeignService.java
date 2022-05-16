@@ -6,8 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import top.fosin.anan.cloudresource.constant.ServiceConstant;
 import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
-import top.fosin.anan.cloudresource.dto.req.AnanParameterReqDto;
-import top.fosin.anan.cloudresource.dto.res.AnanParameterRespDto;
+import top.fosin.anan.cloudresource.dto.req.ParameterReqDto;
+import top.fosin.anan.cloudresource.dto.res.ParameterRespDto;
 import top.fosin.anan.cloudresource.service.ParameterFeignFallbackServiceImpl;
 import top.fosin.anan.model.constant.PathConstant;
 import top.fosin.anan.model.dto.TreeDto;
@@ -33,23 +33,23 @@ public interface ParameterFeignService {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    ResponseEntity<AnanParameterRespDto> create(@RequestBody AnanParameterReqDto entity);
+    ResponseEntity<ParameterRespDto> create(@RequestBody ParameterReqDto entity);
 
     @PutMapping
-    ResponseEntity<AnanParameterRespDto> update(@RequestBody AnanParameterReqDto entity);
+    ResponseEntity<ParameterRespDto> update(@RequestBody ParameterReqDto entity);
 
     @PostMapping(PATH_DTO)
-    ResponseEntity<AnanParameterRespDto> getParameter(@RequestParam("type") Integer type,
-                                                      @RequestParam("scope") String scope,
-                                                      @RequestParam("name") String name);
+    ResponseEntity<ParameterRespDto> getParameter(@RequestParam("type") Integer type,
+                                                  @RequestParam("scope") String scope,
+                                                  @RequestParam("name") String name);
 
     @PostMapping(value = PATH_NEAREST)
-    ResponseEntity<AnanParameterRespDto> getNearestParameter(@RequestParam("type") Integer type,
-                                                             @RequestParam("scope") String scope,
-                                                             @RequestParam("name") String name);
+    ResponseEntity<ParameterRespDto> getNearestParameter(@RequestParam("type") Integer type,
+                                                         @RequestParam("scope") String scope,
+                                                         @RequestParam("name") String name);
 
     @PostMapping(PATH_VALUE)
-    ResponseEntity<String> getOrCreateParameter(@RequestBody AnanParameterReqDto retrieveDto);
+    ResponseEntity<String> getOrCreateParameter(@RequestBody ParameterReqDto retrieveDto);
 
     @PostMapping(PATH_APPLY_ID)
     ResponseEntity<Boolean> applyChange(@PathVariable(TreeDto.ID_NAME) Long id);

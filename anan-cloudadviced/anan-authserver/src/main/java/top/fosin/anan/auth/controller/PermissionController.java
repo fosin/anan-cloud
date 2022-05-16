@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 import top.fosin.anan.auth.service.inter.AuthService;
 import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
-import top.fosin.anan.cloudresource.dto.AnanUserAllPermissionTreeDto;
+import top.fosin.anan.cloudresource.dto.UserAllPermissionTreeDto;
 
 /**
  * @author fosin
@@ -30,8 +30,8 @@ public class PermissionController {
     @ApiOperation(value = "查询用户权限树", notes = "查询用户权限树")
     @ApiImplicitParam(name = "userId", value = "用户的唯一序号",
             required = true, dataTypeClass = Long.class, paramType = "path")
-    public ResponseEntity<AnanUserAllPermissionTreeDto> findTreeByUserId(@PathVariable("userId") Long userId) {
-        return ResponseEntity.ok(authService.findTreeByUserId(userId));
+    public ResponseEntity<UserAllPermissionTreeDto> findTreeByUserId(@PathVariable("userId") Long userId) {
+        return ResponseEntity.ok(authService.treeByUserId(userId));
     }
 
 }

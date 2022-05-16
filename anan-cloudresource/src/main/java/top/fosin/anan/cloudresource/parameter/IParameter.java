@@ -2,7 +2,7 @@ package top.fosin.anan.cloudresource.parameter;
 
 import cn.hutool.core.util.NumberUtil;
 import org.springframework.util.Assert;
-import top.fosin.anan.cloudresource.dto.res.AnanParameterRespDto;
+import top.fosin.anan.cloudresource.dto.res.ParameterRespDto;
 import top.fosin.anan.core.util.DateTimeUtil;
 
 import java.math.BigDecimal;
@@ -21,7 +21,7 @@ public interface IParameter {
      * @param description 参数描述
      * @return 参数数据
      */
-    default AnanParameterRespDto setParameter(String name, String value, String description) {
+    default ParameterRespDto setParameter(String name, String value, String description) {
         return setParameter(this.getParameterStrategy().getScope(), name, value, description);
     }
 
@@ -33,7 +33,7 @@ public interface IParameter {
      * @param description 参数描述
      * @return 参数数据
      */
-    AnanParameterRespDto setParameter(String scope, String name, String value, String description);
+    ParameterRespDto setParameter(String scope, String name, String value, String description);
 
     /**
      * 获取当前参数

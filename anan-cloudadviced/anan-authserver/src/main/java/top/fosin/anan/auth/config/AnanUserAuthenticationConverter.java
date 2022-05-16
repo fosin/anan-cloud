@@ -6,7 +6,7 @@ import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.oauth2.provider.token.DefaultUserAuthenticationConverter;
-import top.fosin.anan.cloudresource.dto.AnanUserDetail;
+import top.fosin.anan.cloudresource.dto.UserDetail;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -27,23 +27,23 @@ public class AnanUserAuthenticationConverter extends DefaultUserAuthenticationCo
         response.put(USERNAME, name);
 
         Object principal = authentication.getPrincipal();
-        AnanUserDetail ananUserDetail;
-        if (principal instanceof AnanUserDetail) {
-            ananUserDetail = (AnanUserDetail) principal;
+        UserDetail userDetail;
+        if (principal instanceof UserDetail) {
+            userDetail = (UserDetail) principal;
         } else {
-            //refresh_token默认不去调用userdetailService获取用户信息，这里我们手动去调用，得到 AnanUserDetail
+            //refresh_token默认不去调用userdetailService获取用户信息，这里我们手动去调用，得到 UserDetail
             UserDetails userDetails = userDetailsService.loadUserByUsername(name);
-            ananUserDetail = (AnanUserDetail) userDetails;
+            userDetail = (UserDetail) userDetails;
         }
 
-        response.put("user", ananUserDetail.getUser());
-        response.put("client", ananUserDetail.getAnanClient());
-        response.put("username", ananUserDetail.getUsername());
-        response.put("password", ananUserDetail.getUsername());
-        response.put("accountNonExpired", ananUserDetail.isAccountNonExpired());
-        response.put("accountNonLocked", ananUserDetail.isAccountNonLocked());
-        response.put("credentialsNonExpired", ananUserDetail.isCredentialsNonExpired());
-        response.put("enabled", ananUserDetail.isEnabled());
+        response.put("user", userDetail.getUser());
+        response.put("client", userDetail.getClient());
+        response.put("username", userDetail.getUsername());
+        response.put("password", userDetail.getUsername());
+        response.put("accountNonExpired", userDetail.isAccountNonExpired());
+        response.put("accountNonLocked", userDetail.isAccountNonLocked());
+        response.put("credentialsNonExpired", userDetail.isCredentialsNonExpired());
+        response.put("enabled", userDetail.isEnabled());
 
         if (authentication.getAuthorities() != null && !authentication.getAuthorities().isEmpty()) {
             response.put(AUTHORITIES, AuthorityUtils.authorityListToSet(authentication.getAuthorities()));

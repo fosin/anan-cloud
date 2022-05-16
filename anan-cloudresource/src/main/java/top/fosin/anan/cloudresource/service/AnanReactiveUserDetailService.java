@@ -7,9 +7,9 @@ import org.springframework.util.Assert;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import top.fosin.anan.cloudresource.constant.SystemConstant;
-import top.fosin.anan.cloudresource.dto.AnanClient;
-import top.fosin.anan.cloudresource.dto.AnanUserAuthDto;
-import top.fosin.anan.cloudresource.dto.AnanUserDetail;
+import top.fosin.anan.cloudresource.dto.Client;
+import top.fosin.anan.cloudresource.dto.UserAuthDto;
+import top.fosin.anan.cloudresource.dto.UserDetail;
 import top.fosin.anan.security.util.AnanReactiveJwtTool;
 
 import java.util.HashSet;
@@ -21,7 +21,7 @@ import java.util.Set;
  * @date 2021.12.25
  * @since 3.0.0
  */
-public class AnanReactiveUserDetailService extends AnanReactiveJwtTool<AnanUserDetail>
+public class AnanReactiveUserDetailService extends AnanReactiveJwtTool<UserDetail>
         implements ReactiveAuditorAware<Long> {
 
     public AnanReactiveUserDetailService(ReactiveJwtDecoder jwtDecoder) {
@@ -29,15 +29,15 @@ public class AnanReactiveUserDetailService extends AnanReactiveJwtTool<AnanUserD
     }
 
     @Override
-    public void removeCachedUser(Mono<AnanUserDetail> userDetail) {
+    public void removeCachedUser(Mono<UserDetail> userDetail) {
         Assert.notNull(userDetail, "用户信息不能为空!");
         userDetail.subscribe(ananUserDetail -> {
-            AnanUserAuthDto user = ananUserDetail.getUser();
+            UserAuthDto user = ananUserDetail.getUser();
             Set<String> needDelKeys = new HashSet<>();
-            Map<String, Mono<AnanUserDetail>> userCaches = this.getUserCaches();
+            Map<String, Mono<UserDetail>> userCaches = this.getUserCaches();
             for (String key : userCaches.keySet()) {
                 userCaches.get(key).subscribe(ananUserDetail1 -> {
-                    AnanUserAuthDto userEntity = ananUserDetail1.getUser();
+                    UserAuthDto userEntity = ananUserDetail1.getUser();
                     if (user.getId().equals(userEntity.getId())) {
                         needDelKeys.add(key);
                     }
@@ -52,11 +52,11 @@ public class AnanReactiveUserDetailService extends AnanReactiveJwtTool<AnanUserD
     /**
      * 得到当前登录用户的上下文信息
      *
-     * @return Mono<AnanUserDetail>
+     * @return Mono<UserDetail>
      */
 
-    public Mono<AnanUserAuthDto> getAnanUser() {
-        return this.getCachedUser().map(AnanUserDetail::getUser);
+    public Mono<UserAuthDto> getAnanUser() {
+        return this.getCachedUser().map(UserDetail::getUser);
     }
 
     /**
@@ -65,7 +65,7 @@ public class AnanReactiveUserDetailService extends AnanReactiveJwtTool<AnanUserD
      * @return Long 前登录用户的ID
      */
     public Mono<Long> getAnanUserId() {
-        return this.getAnanUser().map(AnanUserAuthDto::getId);
+        return this.getAnanUser().map(UserAuthDto::getId);
     }
 
     /**
@@ -74,7 +74,7 @@ public class AnanReactiveUserDetailService extends AnanReactiveJwtTool<AnanUserD
      * @return Long 前登录用户名
      */
     public Mono<String> getAnanUserName() {
-        return this.getAnanUser().map(AnanUserAuthDto::getUsername);
+        return this.getAnanUser().map(UserAuthDto::getUsername);
     }
 
     /**
@@ -83,7 +83,7 @@ public class AnanReactiveUserDetailService extends AnanReactiveJwtTool<AnanUserD
      * @return Long 前登录用户的机构ID
      */
     public Mono<Long> getAnanOrganizId() {
-        return this.getAnanUser().map(AnanUserAuthDto::getOrganizId);
+        return this.getAnanUser().map(UserAuthDto::getOrganizId);
     }
 
     /**
@@ -92,7 +92,7 @@ public class AnanReactiveUserDetailService extends AnanReactiveJwtTool<AnanUserD
      * @return Long 顶级机构ID
      */
     public Mono<Long> getAnanTopId() {
-        return this.getAnanUser().map(AnanUserAuthDto::getTopId);
+        return this.getAnanUser().map(UserAuthDto::getTopId);
     }
 
     /**
@@ -101,7 +101,7 @@ public class AnanReactiveUserDetailService extends AnanReactiveJwtTool<AnanUserD
      * @return Long 前登录用户工号
      */
     public Mono<String> getAnanUserCode() {
-        return this.getAnanUser().map(AnanUserAuthDto::getUsercode);
+        return this.getAnanUser().map(UserAuthDto::getUsercode);
     }
 
     /**
@@ -109,8 +109,8 @@ public class AnanReactiveUserDetailService extends AnanReactiveJwtTool<AnanUserD
      *
      * @return Client
      */
-    public Mono<AnanClient> getAnanClient() {
-        return this.getCachedUser().map(AnanUserDetail::getAnanClient);
+    public Mono<Client> getAnanClient() {
+        return this.getCachedUser().map(UserDetail::getClient);
     }
 
     /**
@@ -156,7 +156,7 @@ public class AnanReactiveUserDetailService extends AnanReactiveJwtTool<AnanUserD
      */
     public Mono<Boolean> hasAdminRole() {
         return this.getAnanUser()
-                .map(AnanUserAuthDto::getUserRoles)
+                .map(UserAuthDto::getUserRoles)
                 .flatMapMany(Flux::fromIterable)
                 .any(userRole -> SystemConstant.ADMIN_ROLE_NAME.equals(userRole.getValue()));
     }
@@ -168,7 +168,7 @@ public class AnanReactiveUserDetailService extends AnanReactiveJwtTool<AnanUserD
      */
     public Mono<Boolean> hasSysAdminRole() {
         return this.getAnanUser()
-                .map(AnanUserAuthDto::getUserRoles)
+                .map(UserAuthDto::getUserRoles)
                 .flatMapMany(Flux::fromIterable)
                 .any(userRole -> SystemConstant.ANAN_ROLE_NAME.equals(userRole.getValue()));
     }

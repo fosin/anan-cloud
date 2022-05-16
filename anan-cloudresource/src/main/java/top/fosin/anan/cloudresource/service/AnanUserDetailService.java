@@ -5,10 +5,10 @@ import org.springframework.lang.NonNull;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.util.Assert;
 import top.fosin.anan.cloudresource.constant.SystemConstant;
-import top.fosin.anan.cloudresource.dto.AnanClient;
-import top.fosin.anan.cloudresource.dto.AnanUserAuthDto;
-import top.fosin.anan.cloudresource.dto.AnanUserDetail;
-import top.fosin.anan.cloudresource.dto.req.AnanRoleReqDto;
+import top.fosin.anan.cloudresource.dto.Client;
+import top.fosin.anan.cloudresource.dto.UserAuthDto;
+import top.fosin.anan.cloudresource.dto.UserDetail;
+import top.fosin.anan.cloudresource.dto.req.RoleReqDto;
 import top.fosin.anan.security.util.AnanJwtTool;
 
 import java.util.*;
@@ -17,20 +17,20 @@ import java.util.*;
  * @author fosin
  * @date 2018.7.23
  */
-public class AnanUserDetailService extends AnanJwtTool<AnanUserDetail> implements AuditorAware<Long> {
+public class AnanUserDetailService extends AnanJwtTool<UserDetail> implements AuditorAware<Long> {
 
     public AnanUserDetailService(JwtDecoder jwtDecoder) {
         super(jwtDecoder);
     }
 
     @Override
-    public void removeCachedUser(AnanUserDetail userDetail) {
+    public void removeCachedUser(UserDetail userDetail) {
         Assert.notNull(userDetail, "用户信息不能为空!");
-        AnanUserAuthDto user = userDetail.getUser();
+        UserAuthDto user = userDetail.getUser();
         Set<String> needDelKeys = new HashSet<>();
-        Map<String, AnanUserDetail> userCaches = this.getUserCaches();
+        Map<String, UserDetail> userCaches = this.getUserCaches();
         for (String key : userCaches.keySet()) {
-            AnanUserAuthDto userEntity = userCaches.get(key).getUser();
+            UserAuthDto userEntity = userCaches.get(key).getUser();
             if (user.getId().equals(userEntity.getId())) {
                 needDelKeys.add(key);
             }
@@ -43,10 +43,10 @@ public class AnanUserDetailService extends AnanJwtTool<AnanUserDetail> implement
     /**
      * 得到当前登录用户的上下文信息
      *
-     * @return AnanUserDetail
+     * @return UserDetail
      */
 
-    public AnanUserAuthDto getAnanUser() {
+    public UserAuthDto getAnanUser() {
         return this.getCachedUser().getUser();
     }
 
@@ -100,8 +100,8 @@ public class AnanUserDetailService extends AnanJwtTool<AnanUserDetail> implement
      *
      * @return Client
      */
-    public AnanClient getAnanClient() {
-        return this.getCachedUser().getAnanClient();
+    public Client getAnanClient() {
+        return this.getCachedUser().getClient();
     }
 
     /**
@@ -146,7 +146,7 @@ public class AnanUserDetailService extends AnanJwtTool<AnanUserDetail> implement
      * @return boolean true：是 false：否
      */
     public boolean hasAdminRole() {
-        List<AnanRoleReqDto> userRoles = this.getAnanUser().getUserRoles();
+        List<RoleReqDto> userRoles = this.getAnanUser().getUserRoles();
         return userRoles.stream().anyMatch(userRole -> SystemConstant.ADMIN_ROLE_NAME.equals(userRole.getValue()));
     }
 
@@ -156,7 +156,7 @@ public class AnanUserDetailService extends AnanJwtTool<AnanUserDetail> implement
      * @return boolean true：是 false：否
      */
     public boolean hasSysAdminRole() {
-        List<AnanRoleReqDto> userRoles = this.getAnanUser().getUserRoles();
+        List<RoleReqDto> userRoles = this.getAnanUser().getUserRoles();
         return userRoles.stream().anyMatch(userRole -> SystemConstant.ANAN_ROLE_NAME.equals(userRole.getValue()));
     }
 

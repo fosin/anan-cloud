@@ -1,21 +1,22 @@
 package top.fosin.anan.auth.service;
 
+
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
-import top.fosin.anan.auth.entity.AnanOrganizationEntity;
-import top.fosin.anan.auth.entity.AnanUserAllPermissionsEntity;
-import top.fosin.anan.auth.entity.AnanUserEntity;
-import top.fosin.anan.auth.repository.OrganizationRepository;
-import top.fosin.anan.auth.repository.UserAllPermissionsRepository;
-import top.fosin.anan.auth.repository.UserRepository;
+import top.fosin.anan.auth.entity.User;
+import top.fosin.anan.auth.entity.UserAllPermissions;
+import top.fosin.anan.auth.dao.UserAllPermissionsDao;
+import top.fosin.anan.auth.dao.UserDao;
 import top.fosin.anan.auth.service.inter.AuthService;
 import top.fosin.anan.cloudresource.constant.PlatformRedisConstant;
 import top.fosin.anan.cloudresource.constant.SystemConstant;
-import top.fosin.anan.cloudresource.dto.AnanUserAllPermissionTreeDto;
-import top.fosin.anan.cloudresource.dto.AnanUserAuthDto;
-import top.fosin.anan.cloudresource.dto.res.AnanUserAllPermissionsRespDto;
+import top.fosin.anan.cloudresource.dto.UserAllPermissionTreeDto;
+import top.fosin.anan.cloudresource.dto.UserAuthDto;
+import top.fosin.anan.cloudresource.dto.res.OrganizationRespDto;
+import top.fosin.anan.cloudresource.dto.res.UserAllPermissionsRespDto;
+import top.fosin.anan.cloudresource.service.inter.OrganizationFeignService;
 import top.fosin.anan.core.util.BeanUtil;
 import top.fosin.anan.core.util.TreeUtil;
 import top.fosin.anan.model.dto.TreeDto;
@@ -30,28 +31,30 @@ import java.util.TreeSet;
  */
 @Service
 public class AuthServiceImpl implements AuthService {
-    private final UserAllPermissionsRepository userAllPermissionsRepo;
-    private final UserRepository userRepo;
-    private final OrganizationRepository orgRepo;
+    private final UserAllPermissionsDao userAllPermissionsRepo;
+    private final UserDao userRepo;
+    private final OrganizationFeignService orgFeignService;
 
-    public AuthServiceImpl(UserAllPermissionsRepository userAllPermissionsRepo,
-                           UserRepository userRepo, OrganizationRepository orgRepo) {
+    public AuthServiceImpl(UserAllPermissionsDao userAllPermissionsRepo,
+                           UserDao userRepo,
+                           OrganizationFeignService orgFeignService) {
         this.userAllPermissionsRepo = userAllPermissionsRepo;
         this.userRepo = userRepo;
-        this.orgRepo = orgRepo;
+        this.orgFeignService = orgFeignService;
     }
 
     @Override
     @Cacheable(value = PlatformRedisConstant.ANAN_USER, key = "#usercode", unless = "#result==null")
     @Transactional(readOnly = true)
-    public AnanUserAuthDto findByUsercode(String usercode) {
-        AnanUserEntity userEntity = userRepo.findByUsercode(usercode);
+    public UserAuthDto findByUsercode(String usercode) {
+        User userEntity = userRepo.findByUsercode(usercode);
         if (userEntity != null) {
-            AnanUserAuthDto dto = userEntity.conert2Dto();
+            UserAuthDto dto = userEntity.toAuthDto();
             Long organizId = dto.getOrganizId();
             if (organizId > 0) {
-                AnanOrganizationEntity organization = orgRepo.getById(organizId);
-                dto.setTopId(organization.getTopId());
+                OrganizationRespDto org = orgFeignService.findOneById(organizId).getBody();
+                Assert.notNull(org, "未找到对应机构信息" + organizId + ",请联系管理员核对!");
+                dto.setTopId(org.getTopId());
             }
             return dto;
         }
@@ -59,15 +62,17 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    @Cacheable(value = PlatformRedisConstant.ANAN_USER_ALL_PERMISSIONS, key = "#userId", unless = "#result == null || #result.size() == 0")
-    public List<AnanUserAllPermissionsRespDto> findByUserId(Long userId) {
-        return BeanUtil.copyCollectionProperties(userAllPermissionsRepo.findByUserId(userId), AnanUserAllPermissionsRespDto.class);
+    @Cacheable(value = PlatformRedisConstant.ANAN_USER_ALL_PERMISSIONS, key = "#userId",
+            unless = "#result == null || #result.size() == 0")
+    public List<UserAllPermissionsRespDto> findByUserId(Long userId) {
+        return BeanUtil.copyProperties(userAllPermissionsRepo.findByUserId(userId), UserAllPermissionsRespDto.class);
     }
 
     @Override
-    @Cacheable(value = PlatformRedisConstant.ANAN_USER_PERMISSION_TREE, key = "#userId", unless = "#result == null")
-    public AnanUserAllPermissionTreeDto findTreeByUserId(Long userId) {
-        Set<AnanUserAllPermissionTreeDto> userPermissions = new TreeSet<>((o1, o2) -> {
+    @Cacheable(value = PlatformRedisConstant.ANAN_USER_PERMISSION_TREE, key = "#userId",
+            unless = "#result == null")
+    public UserAllPermissionTreeDto treeByUserId(Long userId) {
+        Set<UserAllPermissionTreeDto> userPermissions = new TreeSet<>((o1, o2) -> {
             long subId = o1.getId() - o2.getId();
             if (subId == 0) {
                 return 0;
@@ -83,16 +88,16 @@ public class AuthServiceImpl implements AuthService {
 
             return o1.getCode().compareToIgnoreCase(o2.getCode());
         });
-        List<AnanUserAllPermissionsEntity> permissionEntities = userAllPermissionsRepo.findByUserId(userId);
+        List<UserAllPermissions> permissionEntities = userAllPermissionsRepo.findByUserId(userId);
 
-        for (AnanUserAllPermissionsEntity entity : permissionEntities) {
+        for (UserAllPermissions entity : permissionEntities) {
             // 只操作状态为启用的权限
             if (entity.getStatus() == 0) {
                 //获取用户增权限
                 if (entity.getAddMode() == 0) {
-                    userPermissions.add(entity.convert2Dto());
+                    userPermissions.add(entity.toTreeDto());
                 } else { //
-                    userPermissions.remove(entity.convert2Dto());
+                    userPermissions.remove(entity.toTreeDto());
                 }
             }
         }

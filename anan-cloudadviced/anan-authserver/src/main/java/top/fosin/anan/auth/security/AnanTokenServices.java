@@ -8,7 +8,7 @@ import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenEnhancer;
 import org.springframework.security.oauth2.provider.token.TokenStore;
-import top.fosin.anan.cloudresource.dto.AnanUserDetail;
+import top.fosin.anan.cloudresource.dto.UserDetail;
 
 import java.util.Date;
 import java.util.Optional;
@@ -37,7 +37,7 @@ public class AnanTokenServices extends DefaultTokenServices {
             Authentication userAuthentication = authentication.getUserAuthentication();
             boolean landFall = false;
             if (userAuthentication != null) {
-                AnanUserDetail principal = (AnanUserDetail) userAuthentication.getPrincipal();
+                UserDetail principal = (UserDetail) userAuthentication.getPrincipal();
                 if (principal != null) {
                     String oldClientIp = "";
                     OAuth2Authentication oldAuthentication = tokenStore.readAuthentication(existingAccessToken);
@@ -45,18 +45,18 @@ public class AnanTokenServices extends DefaultTokenServices {
                         //获取之前登录IP
                         Authentication oldUserAuthentication = oldAuthentication.getUserAuthentication();
 
-                        //由于直接通过(AnanUserDetail) userAuthentication.getPrincipal()获取oldPrincipal会和springboot-devtools
+                        //由于直接通过(UserDetail) userAuthentication.getPrincipal()获取oldPrincipal会和springboot-devtools
                         //产生ClassCastException,因此改成利用反射来获取字段值
 //                   Object oldPrincipal = oldUserAuthentication.getPrincipal();
 //                   oldClientIp = ReflectUtil.getValueByField("clientIp",oldPrincipal);
 //                   Client client = ReflectUtil.getValueByField("client",oldPrincipal);
 //                   oldClientIp = client.getIp();
-                        AnanUserDetail oldPrincipal = (AnanUserDetail) oldUserAuthentication.getPrincipal();
-                        oldClientIp = oldPrincipal.getAnanClient().getIp();
+                        UserDetail oldPrincipal = (UserDetail) oldUserAuthentication.getPrincipal();
+                        oldClientIp = oldPrincipal.getClient().getIp();
                     }
 
                     //获取当前登录IP
-                    String clientIp = Optional.of(principal.getAnanClient().getIp()).orElse("");
+                    String clientIp = Optional.of(principal.getClient().getIp()).orElse("");
                     //不一致则判断为异地登录
                     landFall = !clientIp.equalsIgnoreCase(oldClientIp);
                     log.debug("之前客户端IP:" + oldClientIp);

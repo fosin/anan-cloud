@@ -30,7 +30,7 @@ import springfox.documentation.swagger.web.SwaggerResource;
 import top.fosin.anan.cloudresource.constant.RequestPath;
 import top.fosin.anan.cloudresource.constant.ServiceConstant;
 import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
-import top.fosin.anan.cloudresource.dto.res.AnanPermissionRespDto;
+import top.fosin.anan.cloudresource.dto.res.PermissionRespDto;
 import top.fosin.anan.security.resource.AnanProgramAuthorities;
 import top.fosin.anan.security.resource.AnanSecurityProperties;
 import top.fosin.anan.security.resource.AuthorityPermission;
@@ -78,7 +78,7 @@ public class AnanGatewayAutoConfiguration {
 
     @Retryable(value = {RemoteAccessException.class}, maxAttemptsExpression = "${retry.maxAttempts:5}",
             backoff = @Backoff(delayExpression = "${retry.backoff:1000}"))
-    public List<AnanPermissionRespDto> getPermissionsByRest(List<String> hosts) throws URISyntaxException {
+    public List<PermissionRespDto> getPermissionsByRest(List<String> hosts) throws URISyntaxException {
         ServiceInstance instance = getServiceRandomInstance();
         String scheme = instance.getScheme();
         URI uri = new URI(scheme == null ? "http" : scheme, null, instance.getHost(), instance.getPort(), "/" + UrlPrefixConstant.PERMISSION + RequestPath.SERVICE_CODES, null, null);
@@ -87,14 +87,14 @@ public class AnanGatewayAutoConfiguration {
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(hosts);
-        ResponseEntity<List<AnanPermissionRespDto>> res = restTemplate()
+        ResponseEntity<List<PermissionRespDto>> res = restTemplate()
                 .exchange(uri.toString(), HttpMethod.POST, request, new ParameterizedTypeReference<>() {
                 });
         return res.getBody();
     }
 
     @Recover
-    public List<AnanPermissionRespDto> getPermissionsByRestRecover(RemoteAccessException exception, List<String> hosts) {
+    public List<PermissionRespDto> getPermissionsByRestRecover(RemoteAccessException exception, List<String> hosts) {
         throw exception;
     }
 
@@ -115,13 +115,13 @@ public class AnanGatewayAutoConfiguration {
     public AnanProgramAuthorities ananProgramAuthoritiesNew() throws URISyntaxException {
         List<RouteDefinition> routes = ananGatewayProperties().getRoutes();
         List<String> hosts = routes.stream().map(route -> route.getUri().getHost()).collect(Collectors.toList());
-        //List<AnanPermissionRespDto> dtos = permissionFeignService.findByServiceCodes(hosts).getBody();
-        List<AnanPermissionRespDto> dtos = getPermissionsByRest(hosts);
-        //List<AnanPermissionRespDto> dtos = webClientBuilder()
+        //List<PermissionRespDto> dtos = permissionFeignService.findByServiceCodes(hosts).getBody();
+        List<PermissionRespDto> dtos = getPermissionsByRest(hosts);
+        //List<PermissionRespDto> dtos = webClientBuilder()
         //        .build().get()
         //        .uri("http://" + ServiceConstant.ANAN_PLATFORMSERVER + "/v1/permission/serviceCodes")
         //        .retrieve()
-        //        .bodyToMono(new ParameterizedTypeReference<List<AnanPermissionRespDto>>() {})
+        //        .bodyToMono(new ParameterizedTypeReference<List<PermissionRespDto>>() {})
         //        .block();
         List<AnanSecurityProperties.Authority> authorities = new ArrayList<>();
         Objects.requireNonNull(dtos).forEach(dto -> {
