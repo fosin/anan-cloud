@@ -113,7 +113,7 @@ public class PermissionServiceImpl implements PermissionService {
     }
 
     @Override
-    public Collection<PermissionRespDto> findByPid(Long pid) {
+    public List<PermissionRespDto> findByPid(Long pid) {
         return BeanUtil.copyProperties(permissionDao.findByPid(pid), PermissionRespDto.class);
     }
 

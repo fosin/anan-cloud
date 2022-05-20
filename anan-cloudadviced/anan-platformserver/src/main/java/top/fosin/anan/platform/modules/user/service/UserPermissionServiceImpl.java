@@ -57,7 +57,7 @@ public class UserPermissionServiceImpl implements UserPermissionService {
                     @CacheEvict(value = PlatformRedisConstant.ANAN_USER_PERMISSION_TREE, key = "#userId")
 
             })
-    public Collection<UserPermissionRespDto> updateInBatch(String deleteCol, Long userId, Collection<UserPermissionReqDto> dtos) {
+    public List<UserPermissionRespDto> updateInBatch(String deleteCol, Long userId, Collection<UserPermissionReqDto> dtos) {
         Assert.notNull(userId, "传入的用户ID不能为空!");
         Assert.isTrue(dtos.stream().allMatch(entity -> entity.getUserId().equals(userId)), "需要更新的数据集中有与用户ID不匹配的数据!");
         long organizId = dtos.stream().distinct().map(UserPermissionReqDto::getOrganizId)

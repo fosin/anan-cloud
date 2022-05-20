@@ -8,7 +8,6 @@ import top.fosin.anan.jpa.service.IRetrieveTreeJpaService;
 import top.fosin.anan.jpa.service.ISimpleJpaService;
 import top.fosin.anan.platform.modules.pub.entity.Permission;
 
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -23,7 +22,7 @@ public interface PermissionService extends ISimpleJpaService<Permission,
         PermissionReqDto>,
         IRetrieveTreeJpaService<Permission,
                 PermissionRespTreeDto, Long, PermissionReqDto> {
-    Collection<PermissionRespDto> findByPid(Long pid);
+    List<PermissionRespDto> findByPid(Long pid);
 
     List<PermissionRespDto> findByServiceCode(String serviceCode);
 

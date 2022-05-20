@@ -6,6 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import top.fosin.anan.cloudresource.dto.res.OrganizationRespDto;
 import top.fosin.anan.cloudresource.service.inter.OrganizationFeignService;
+import top.fosin.anan.model.result.MultResult;
+import top.fosin.anan.model.result.SingleResult;
 
 import java.util.List;
 
@@ -20,31 +22,31 @@ import java.util.List;
 public class OrganizationFeignFallbackServiceImpl implements OrganizationFeignService {
 
     @Override
-    public ResponseEntity<List<OrganizationRespDto>> listChild(Long pid) {
+    public MultResult<OrganizationRespDto> listChild(Long pid) {
         log.error("feign 通过机构pid远程获取子组织机构权限失败:{}", pid);
         return null;
     }
 
     @Override
-    public ResponseEntity<List<OrganizationRespDto>> findAllByIds(List<Long> ids) {
+    public MultResult<OrganizationRespDto> findAllByIds(List<Long> ids) {
         log.error("feign 远程获取机构信息失败:{}", ids);
         return null;
     }
 
     @Override
-    public ResponseEntity<List<OrganizationRespDto>> listAllChild(Long pid) {
+    public MultResult<OrganizationRespDto> listAllChild(Long pid) {
         log.error("feign 通过机构pid远程获取所有组织机构失败:{}", pid);
         return null;
     }
 
     @Override
-    public ResponseEntity<List<OrganizationRespDto>> tree(Long topId) {
+    public MultResult<OrganizationRespDto> tree(Long topId) {
         log.error("feign 通过机构topId远程获取组织机构失败:{}", topId);
         return null;
     }
 
     @Override
-    public ResponseEntity<OrganizationRespDto> findOneById(Long id) {
+    public SingleResult<OrganizationRespDto> findOneById(Long id) {
         log.error("feign 通过机构ID远程查询一个组织机构失败:{}", id);
         return null;
     }

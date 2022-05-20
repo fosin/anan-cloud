@@ -31,15 +31,15 @@ import java.util.TreeSet;
  */
 @Service
 public class AuthServiceImpl implements AuthService {
-    private final UserAllPermissionsDao userAllPermissionsRepo;
-    private final UserDao userRepo;
+    private final UserAllPermissionsDao userAllPermissionsDao;
+    private final UserDao userDao;
     private final OrganizationFeignService orgFeignService;
 
-    public AuthServiceImpl(UserAllPermissionsDao userAllPermissionsRepo,
-                           UserDao userRepo,
+    public AuthServiceImpl(UserAllPermissionsDao userAllPermissionsDao,
+                           UserDao userDao,
                            OrganizationFeignService orgFeignService) {
-        this.userAllPermissionsRepo = userAllPermissionsRepo;
-        this.userRepo = userRepo;
+        this.userAllPermissionsDao = userAllPermissionsDao;
+        this.userDao = userDao;
         this.orgFeignService = orgFeignService;
     }
 
@@ -47,13 +47,13 @@ public class AuthServiceImpl implements AuthService {
     @Cacheable(value = PlatformRedisConstant.ANAN_USER, key = "#usercode", unless = "#result==null")
     @Transactional(readOnly = true)
     public UserAuthDto findByUsercode(String usercode) {
-        User userEntity = userRepo.findByUsercode(usercode);
+        User userEntity = userDao.findByUsercode(usercode);
         if (userEntity != null) {
             UserAuthDto dto = userEntity.toAuthDto();
             Long organizId = dto.getOrganizId();
             if (organizId > 0) {
-                OrganizationRespDto org = orgFeignService.findOneById(organizId).getBody();
-                Assert.notNull(org, "未找到对应机构信息" + organizId + ",请联系管理员核对!");
+                OrganizationRespDto org = orgFeignService.findOneById(organizId)
+                        .orElseThrow("未找到对应机构信息" + organizId + ",请联系管理员核对!");
                 dto.setTopId(org.getTopId());
             }
             return dto;
@@ -65,7 +65,7 @@ public class AuthServiceImpl implements AuthService {
     @Cacheable(value = PlatformRedisConstant.ANAN_USER_ALL_PERMISSIONS, key = "#userId",
             unless = "#result == null || #result.size() == 0")
     public List<UserAllPermissionsRespDto> findByUserId(Long userId) {
-        return BeanUtil.copyProperties(userAllPermissionsRepo.findByUserId(userId), UserAllPermissionsRespDto.class);
+        return BeanUtil.copyProperties(userAllPermissionsDao.findByUserId(userId), UserAllPermissionsRespDto.class);
     }
 
     @Override
@@ -88,7 +88,7 @@ public class AuthServiceImpl implements AuthService {
 
             return o1.getCode().compareToIgnoreCase(o2.getCode());
         });
-        List<UserAllPermissions> permissionEntities = userAllPermissionsRepo.findByUserId(userId);
+        List<UserAllPermissions> permissionEntities = userAllPermissionsDao.findByUserId(userId);
 
         for (UserAllPermissions entity : permissionEntities) {
             // 只操作状态为启用的权限

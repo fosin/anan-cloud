@@ -21,8 +21,8 @@ import top.fosin.anan.cloudresource.service.AnanUserDetailService;
 import top.fosin.anan.core.util.BeanUtil;
 import top.fosin.anan.core.util.RegexUtil;
 import top.fosin.anan.model.dto.TreeDto;
-import top.fosin.anan.model.module.PageModule;
-import top.fosin.anan.model.result.ListResult;
+import top.fosin.anan.model.dto.PageReqDto;
+import top.fosin.anan.model.result.PageResult;
 import top.fosin.anan.model.result.ResultUtils;
 import top.fosin.anan.platform.modules.pub.service.LocalOrganParameter;
 import top.fosin.anan.platform.modules.user.dto.UserPassRespDto;
@@ -227,8 +227,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ListResult<UserRespDto> findPage(PageModule<UserReqDto> pageModule) {
-        PageRequest pageable = PageRequest.of(pageModule.getPageNumber() - 1, pageModule.getPageSize(), this.buildSortRules(pageModule.getParams().getSortRules()));
+    public PageResult<UserRespDto> findPage(PageReqDto<UserReqDto> pageReqDto) {
+        PageRequest pageable = PageRequest.of(pageReqDto.getPageNumber() - 1, pageReqDto.getPageSize(), this.buildSortRules(pageReqDto.getParams().getSortRules()));
 
         Specification<User> condition = (root, query, cb) -> {
             Path<String> usercodePath = root.get("usercode");
@@ -253,7 +253,7 @@ public class UserServiceImpl implements UserService {
 
                 organizId1 = cb.in(root.get("organizId")).value(subQuery);
             }
-            UserReqDto params = pageModule.getParams();
+            UserReqDto params = pageReqDto.getParams();
 
             if (params == null) {
                 if (sysAdminUser) {

@@ -11,6 +11,7 @@ import top.fosin.anan.cloudresource.constant.ServiceConstant;
 import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
 import top.fosin.anan.cloudresource.dto.res.PermissionRespDto;
 import top.fosin.anan.cloudresource.service.PermissionFeignFallbackServiceImpl;
+import top.fosin.anan.model.result.MultResult;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
@@ -33,7 +34,7 @@ public interface PermissionFeignService {
      * @return 应用权限列表
      */
     @PostMapping(RequestPath.SERVICE_CODE)
-    ResponseEntity<List<PermissionRespDto>> findByServiceCode(@NotBlank @PathVariable("serviceCode") String serviceCode);
+    MultResult<PermissionRespDto> findByServiceCode(@NotBlank @PathVariable("serviceCode") String serviceCode);
 
     /**
      * 远程查询应用权限
@@ -42,5 +43,5 @@ public interface PermissionFeignService {
      * @return 应用权限列表
      */
     @PostMapping(value = RequestPath.SERVICE_CODES, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<List<PermissionRespDto>> findByServiceCodes(@NotEmpty @RequestBody List<String> serviceCodes);
+    MultResult<PermissionRespDto> findByServiceCodes(@NotEmpty @RequestBody List<String> serviceCodes);
 }

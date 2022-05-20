@@ -6,7 +6,6 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
@@ -25,6 +24,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 import top.fosin.anan.core.util.crypt.AesUtil;
+import top.fosin.anan.model.result.ResultUtils;
+import top.fosin.anan.model.result.SingleResult;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
@@ -69,7 +70,7 @@ public class OauthController {
             @ApiImplicitParam(name = "g", value = "iterationCount密钥加密次数", dataTypeClass = String.class,
                     required = true, paramType = "query"),
     })
-    public ResponseEntity<OAuth2AccessToken> secretAccessToken(Principal principal, HttpServletRequest request,
+    public SingleResult<OAuth2AccessToken> secretAccessToken(Principal principal, HttpServletRequest request,
                                                                @ApiIgnore @RequestParam Map<String, String> parameters) throws HttpRequestMethodNotSupportedException {
 
         String cipheru = parameters.get("a");
@@ -80,13 +81,13 @@ public class OauthController {
         int iterationCount = NumberUtil.parseInt(parameters.get("g"));
         String salt = parameters.get("e");
         Assert.isTrue(StringUtils.hasText(cipheru)
-                && StringUtils.hasText(cipherp)
-                && StringUtils.hasText(passphrase)
-                && StringUtils.hasText(iv)
-                && StringUtils.hasText(salt)
-                && iterationCount > 0
-                && keysize > 0
-                ,"参数异常!");
+                        && StringUtils.hasText(cipherp)
+                        && StringUtils.hasText(passphrase)
+                        && StringUtils.hasText(iv)
+                        && StringUtils.hasText(salt)
+                        && iterationCount > 0
+                        && keysize > 0
+                , "参数异常!");
 
         AesUtil aesUtil = new AesUtil(keysize, iterationCount);
         String username = aesUtil.decrypt(salt, iv, passphrase, cipheru);
@@ -112,39 +113,41 @@ public class OauthController {
             @ApiImplicitParam(name = "client_id", value = "客户端的ID，当grant_type=authorization_code时必选项", dataTypeClass = String.class, paramType = "query"),
             @ApiImplicitParam(name = "state", value = "客户端的当前状态，可以指定任意值，认证服务器会原封不动地返回这个值，当grant_type=authorization_code时才需要填写", dataTypeClass = String.class, paramType = "query")
     })
-    public ResponseEntity<OAuth2AccessToken> accessToken(Principal principal, HttpServletRequest request, @ApiIgnore @RequestParam Map<String, String> parameters) throws HttpRequestMethodNotSupportedException {
+    public SingleResult<OAuth2AccessToken> accessToken(Principal principal, HttpServletRequest request, @ApiIgnore @RequestParam Map<String, String> parameters) throws HttpRequestMethodNotSupportedException {
+        OAuth2AccessToken body;
         if (request.getMethod().equals(RequestMethod.POST.toString())) {
-            return tokenEndpoint.postAccessToken(principal, parameters);
+            body = tokenEndpoint.postAccessToken(principal, parameters).getBody();
         } else {
-            return tokenEndpoint.getAccessToken(principal, parameters);
+            body = tokenEndpoint.getAccessToken(principal, parameters).getBody();
         }
+        return ResultUtils.success(body);
     }
 
     @RequestMapping(value = "/userinfo/jwt", method = {RequestMethod.POST, RequestMethod.GET})
     @ApiOperation(value = "根据JWT令牌获取当前认证用户信息", notes = "根据JWT令牌获取当前认证用户信息，包括用户信息、客户端信息相关信息")
     @ApiImplicitParam(name = "Authorization", value = "认证信息,格式例如：Bearer c05b6fed-256c-4cd0-a55d-ae8ffdafbf75", required = true, dataTypeClass = String.class, paramType = "header")
-    public ResponseEntity<Jwt> index(@AuthenticationPrincipal Jwt jwt) {
-        return ResponseEntity.ok(jwt);
+    public SingleResult<Jwt> index(@AuthenticationPrincipal Jwt jwt) {
+        return ResultUtils.success(jwt);
     }
 
     @RequestMapping(value = "/userinfo/principal", method = {RequestMethod.GET, RequestMethod.POST})
     @ApiOperation(value = "根据令牌获取当前认证用户信息", notes = "根据令牌获取当前认证用户信息，包括用户信息、客户端信息、Oauth2.0相关信息")
     @ApiImplicitParam(name = "principal", value = "认证信息,格式例如：Bearer c05b6fed-256c-4cd0-a55d-ae8ffdafbf75", required = true, dataTypeClass = String.class, paramType = "header")
-    public ResponseEntity<Principal> principal(Principal principal) {
-        return ResponseEntity.ok(principal);
+    public SingleResult<Principal> principal(Principal principal) {
+        return ResultUtils.success(principal);
     }
 
     @RequestMapping(value = "/token_key", method = RequestMethod.GET)
     @ApiOperation(value = "根据令牌获取JWK", notes = "根据令牌获取JWT的公钥信息")
     @ApiImplicitParam(name = "Authorization", value = "认证信息,格式例如：Bearer c05b6fed-256c-4cd0-a55d-ae8ffdafbf75", required = true, dataTypeClass = String.class, paramType = "header")
-    public ResponseEntity<Map<String, String>> getKey(Principal principal) {
-        return ResponseEntity.ok(tokenKeyEndpoint.getKey(principal));
+    public SingleResult<Map<String, String>> getKey(Principal principal) {
+        return ResultUtils.success(tokenKeyEndpoint.getKey(principal));
     }
 
     @RequestMapping(value = "/removeToken", method = {RequestMethod.GET, RequestMethod.POST})
     @ApiOperation(value = "移除指定令牌信息", notes = "移除指定令牌信息，通常用于前端的退出登录操作")
     @ApiImplicitParam(name = "Authorization", value = "认证信息,格式例如：Bearer c05b6fed-256c-4cd0-a55d-ae8ffdafbf75", required = true, dataTypeClass = String.class, paramType = "header")
-    public ResponseEntity<Boolean> removeToken(Authentication authentication) {
+    public SingleResult<Boolean> removeToken(Authentication authentication) {
         boolean rc = false;
         if (authentication != null) {
             Object principal = authentication.getPrincipal();
@@ -158,7 +161,7 @@ public class OauthController {
             Assert.isTrue(StringUtils.hasText(token), "token不能为空!");
             rc = consumerTokenServices.revokeToken(token);
         }
-        return ResponseEntity.ok(rc);
+        return ResultUtils.success(rc);
     }
 
 //    //获取jwt的公钥
@@ -179,8 +182,8 @@ public class OauthController {
 //    @RequestMapping(value = "/authorize", method = {RequestMethod.GET, RequestMethod.POST})
 //    @ApiOperation(value = "根据令牌获取当前认证用户信息", notes = "根据令牌获取当前认证用户信息，包括用户信息、客户端信息、Oauth2.0相关信息")
 //    @ApiImplicitParam(name = "Authorization", value = "Basic认证信息,格式例如：Basic ouZTJoQk5BQVFLUjVVemlJSw==", required = true, dataTypeClass = String.class, paramType = "header")
-//    public ResponseEntity<Principal> authorize(Principal principal) {
-//        return ResponseEntity.ok(principal);
+//    public SingleResult<Principal> authorize(Principal principal) {
+//        return ResultUtils.success(principal);
 //    }
 
 }

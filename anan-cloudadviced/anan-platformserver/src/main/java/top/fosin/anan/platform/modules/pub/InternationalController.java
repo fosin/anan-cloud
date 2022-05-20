@@ -3,17 +3,18 @@ package top.fosin.anan.platform.modules.pub;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
 import top.fosin.anan.model.constant.PathConstant;
 import top.fosin.anan.model.controller.ISimpleController;
+import top.fosin.anan.model.result.MultResult;
+import top.fosin.anan.model.result.ResultUtils;
+import top.fosin.anan.model.result.SingleResult;
 import top.fosin.anan.platform.modules.pub.dto.InternationalReqDto;
 import top.fosin.anan.platform.modules.pub.dto.InternationalRespDto;
 import top.fosin.anan.platform.modules.pub.service.inter.InternationalService;
 
 import javax.validation.constraints.NotNull;
-import java.util.List;
 
 /**
  * 国际化语言控制层
@@ -43,14 +44,14 @@ public class InternationalController implements ISimpleController<InternationalR
             required = true,
             dataTypeClass = String.class
     )
-    public ResponseEntity<InternationalRespDto> findAllByCode(@PathVariable String code) {
-        return ResponseEntity.ok(internationalService.findByCode(code));
+    public SingleResult<InternationalRespDto> findAllByCode(@PathVariable String code) {
+        return ResultUtils.success(internationalService.findByCode(code));
     }
 
     @RequestMapping(path = "/default", method = {RequestMethod.GET, RequestMethod.POST})
     @ApiOperation("查找默认语言")
-    public ResponseEntity<InternationalRespDto> findByDefaultFlag() {
-        return ResponseEntity.ok(internationalService.findByDefaultFlag());
+    public SingleResult<InternationalRespDto> findByDefaultFlag() {
+        return ResultUtils.success(internationalService.findByDefaultFlag());
     }
 
     /**
@@ -62,8 +63,8 @@ public class InternationalController implements ISimpleController<InternationalR
     @ApiOperation(value = "改变多条数据的状态")
     @ApiImplicitParam(name = "status", value = "需改表的状态值", paramType = "path",
             required = true, dataTypeClass = Integer.class)
-    public ResponseEntity<List<InternationalRespDto>> listByStatus(@NotNull @PathVariable Integer status) {
-        return ResponseEntity.ok(getService().listByStatus(status));
+    public MultResult<InternationalRespDto> listByStatus(@NotNull @PathVariable Integer status) {
+        return ResultUtils.success(getService().listByStatus(status));
     }
 
     @Override

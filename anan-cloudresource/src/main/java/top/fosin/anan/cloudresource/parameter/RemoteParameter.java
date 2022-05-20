@@ -4,8 +4,6 @@ import top.fosin.anan.cloudresource.dto.req.ParameterReqDto;
 import top.fosin.anan.cloudresource.dto.res.ParameterRespDto;
 import top.fosin.anan.cloudresource.service.inter.ParameterFeignService;
 
-import java.util.Objects;
-
 /**
  * 远程参数类-远程调用方式
  *
@@ -29,17 +27,19 @@ public class RemoteParameter implements IParameter {
         createDto.setScope(scope);
         createDto.setName(name);
         createDto.setDescription(description);
-        return parameterService.create(createDto).getBody();
+        return parameterService.create(createDto).orElseThrow();
     }
 
     @Override
     public String getParameter(String scope, String name) {
-        return Objects.requireNonNull(parameterService.getParameter(this.getParameterStrategy().getType(), scope, name).getBody()).getValue();
+        return parameterService.getParameter(this.getParameterStrategy().getType(), scope, name)
+                .orElseThrow().getValue();
     }
 
     @Override
     public String getNearestParameter(String scope, String name) {
-        return Objects.requireNonNull(parameterService.getNearestParameter(this.getParameterStrategy().getType(), scope, name).getBody()).getValue();
+        return parameterService.getNearestParameter(this.getParameterStrategy().getType(), scope, name)
+                .orElseThrow().getValue();
     }
 
     @Override
@@ -51,7 +51,7 @@ public class RemoteParameter implements IParameter {
         dto.setValue(defaultValue);
         dto.setDefaultValue(defaultValue);
         dto.setDescription(description);
-        return parameterService.getOrCreateParameter(dto).getBody();
+        return parameterService.getOrCreateParameter(dto).orElseThrow();
     }
 
     @Override

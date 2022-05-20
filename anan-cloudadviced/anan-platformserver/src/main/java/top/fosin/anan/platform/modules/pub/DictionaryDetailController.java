@@ -13,9 +13,9 @@ import top.fosin.anan.cloudresource.dto.req.DictionaryDetailReqDto;
 import top.fosin.anan.cloudresource.dto.res.DictionaryDetailRespDto;
 import top.fosin.anan.core.exception.AnanControllerException;
 import top.fosin.anan.model.controller.ISimpleController;
+import top.fosin.anan.model.result.MultResult;
+import top.fosin.anan.model.result.ResultUtils;
 import top.fosin.anan.platform.modules.pub.service.inter.DictionaryDetailService;
-
-import java.util.List;
 
 /**
  * 字典明细控制器
@@ -42,8 +42,8 @@ public class DictionaryDetailController implements ISimpleController<DictionaryD
     @RequestMapping(value = "/byCode/{dictionaryId}", method = {RequestMethod.GET, RequestMethod.POST})
     @ApiImplicitParam(name = "dictionaryId", value = "字典代码,取值于AnanDictionaryEntity.id",
             required = true, dataTypeClass = Long.class, paramType = "path")
-    public ResponseEntity<List<DictionaryDetailRespDto>> getdicsByDicId(@PathVariable Long dictionaryId) throws AnanControllerException {
-        return ResponseEntity.ok(dictionaryDetailService.findByDictionaryId(dictionaryId));
+    public MultResult<DictionaryDetailRespDto> getdicsByDicId(@PathVariable Long dictionaryId) throws AnanControllerException {
+        return ResultUtils.success(dictionaryDetailService.findByDictionaryId(dictionaryId));
     }
 
 }

@@ -2,7 +2,6 @@ package top.fosin.anan.auth.controller;
 
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -11,6 +10,8 @@ import springfox.documentation.annotations.ApiIgnore;
 import top.fosin.anan.auth.service.inter.AuthService;
 import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
 import top.fosin.anan.cloudresource.dto.UserAllPermissionTreeDto;
+import top.fosin.anan.model.result.ResultUtils;
+import top.fosin.anan.model.result.SingleResult;
 
 /**
  * @author fosin
@@ -30,8 +31,8 @@ public class PermissionController {
     @ApiOperation(value = "查询用户权限树", notes = "查询用户权限树")
     @ApiImplicitParam(name = "userId", value = "用户的唯一序号",
             required = true, dataTypeClass = Long.class, paramType = "path")
-    public ResponseEntity<UserAllPermissionTreeDto> findTreeByUserId(@PathVariable("userId") Long userId) {
-        return ResponseEntity.ok(authService.treeByUserId(userId));
+    public SingleResult<UserAllPermissionTreeDto> findTreeByUserId(@PathVariable("userId") Long userId) {
+        return ResultUtils.success(authService.treeByUserId(userId));
     }
 
 }

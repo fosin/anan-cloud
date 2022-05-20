@@ -31,6 +31,7 @@ import top.fosin.anan.cloudresource.constant.RequestPath;
 import top.fosin.anan.cloudresource.constant.ServiceConstant;
 import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
 import top.fosin.anan.cloudresource.dto.res.PermissionRespDto;
+import top.fosin.anan.model.result.MultResult;
 import top.fosin.anan.security.resource.AnanProgramAuthorities;
 import top.fosin.anan.security.resource.AnanSecurityProperties;
 import top.fosin.anan.security.resource.AuthorityPermission;
@@ -87,10 +88,10 @@ public class AnanGatewayAutoConfiguration {
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(hosts);
-        ResponseEntity<List<PermissionRespDto>> res = restTemplate()
+        ResponseEntity<MultResult<PermissionRespDto>> res = restTemplate()
                 .exchange(uri.toString(), HttpMethod.POST, request, new ParameterizedTypeReference<>() {
                 });
-        return res.getBody();
+        return Objects.requireNonNull(res.getBody()).orElseThrow();
     }
 
     @Recover
@@ -115,7 +116,7 @@ public class AnanGatewayAutoConfiguration {
     public AnanProgramAuthorities ananProgramAuthoritiesNew() throws URISyntaxException {
         List<RouteDefinition> routes = ananGatewayProperties().getRoutes();
         List<String> hosts = routes.stream().map(route -> route.getUri().getHost()).collect(Collectors.toList());
-        //List<PermissionRespDto> dtos = permissionFeignService.findByServiceCodes(hosts).getBody();
+        //List<PermissionRespDto> dtos = permissionFeignService.findByServiceCodes(hosts).getData();
         List<PermissionRespDto> dtos = getPermissionsByRest(hosts);
         //List<PermissionRespDto> dtos = webClientBuilder()
         //        .build().get()

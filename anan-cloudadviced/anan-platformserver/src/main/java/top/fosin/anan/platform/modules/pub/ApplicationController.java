@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseEntity;
 import org.springframework.util.Assert;
 import org.springframework.util.Base64Utils;
 import org.springframework.util.StringUtils;
@@ -17,6 +16,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
+import top.fosin.anan.model.result.MultResult;
+import top.fosin.anan.model.result.ResultUtils;
+import top.fosin.anan.model.result.SingleResult;
 import top.fosin.anan.platform.modules.pub.dto.PageURI;
 
 import java.nio.charset.StandardCharsets;
@@ -40,15 +42,12 @@ public class ApplicationController {
         this.discoveryClient = discoveryClient;
     }
 
-//    @Autowired
-//    private IRule iRule;
-
     @ApiOperation(value = "获取服务名称列表", notes = "获取当前注册到Eureka注册中心的所有节点服务名称")
     @RequestMapping(value = "/serviceNames", method = {RequestMethod.POST})
-    public ResponseEntity<List<String>> getServiceNames() {
+    public MultResult<String> getServiceNames() {
         Assert.notNull(discoveryClient, "discoveryClient不能为空!");
         List<String> services = discoveryClient.getServices();
-        return ResponseEntity.ok(services);
+        return ResultUtils.success(services);
     }
 
     @ApiOperation(value = "根据服务名称获取对应实例管理web地址", notes = "获取当前注册到Eureka注册中心的实例地址")
@@ -58,10 +57,10 @@ public class ApplicationController {
                     required = true, dataTypeClass = String.class, paramType = "query"),
             @ApiImplicitParam(name = "path",
                     value = "当前服务节点管理端点的url",
-                    required = false, dataTypeClass = String.class, paramType = "query")
+                    dataTypeClass = String.class, paramType = "query")
     })
     @RequestMapping(value = "/ui/url", method = {RequestMethod.POST})
-    public ResponseEntity<PageURI> uiUrl(@RequestParam String serviceId, @RequestParam(value = "path", required = false) String path) {
+    public SingleResult<PageURI> uiUrl(@RequestParam String serviceId, @RequestParam(value = "path", required = false) String path) {
         Assert.isTrue(StringUtils.hasText(serviceId), "serviceId不能为空!");
         ServiceInstance serviceInstance = getServiceInstance(serviceId);
         Assert.notNull(serviceInstance, "未找到可用的服务实例!");
@@ -73,17 +72,17 @@ public class ApplicationController {
 
         HttpHeaders headers = getHeaders(serviceInstance);
 
-        return ResponseEntity.ok(new PageURI(url, headers));
+        return ResultUtils.success(new PageURI(url, headers));
     }
 
     private ServiceInstance getServiceInstance(String serviceId) {
         ServiceInstance rc = null;
         if (discoveryClient == null) {
-            return rc;
+            return null;
         }
         List<ServiceInstance> serviceInstances = discoveryClient.getInstances(serviceId);
         if (serviceInstances.size() == 0) {
-            return rc;
+            return null;
         }
         if (serviceInstances.size() == 1) {
             return serviceInstances.get(0);

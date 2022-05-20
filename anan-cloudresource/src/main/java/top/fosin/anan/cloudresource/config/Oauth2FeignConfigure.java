@@ -125,7 +125,7 @@ public class Oauth2FeignConfigure {
 //        }
 //
 //        @SuppressWarnings("unchecked")
-//        private <T> ResponseEntity<T> createResponse(Object instance, Response response) {
+//        private <T> SingleResult<T> createResponse(Object instance, Response response) {
 //
 //            MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
 //            for (String key : response.headers().keySet()) {

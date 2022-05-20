@@ -15,8 +15,8 @@ import top.fosin.anan.cloudresource.dto.req.RoleReqDto;
 import top.fosin.anan.cloudresource.dto.res.RoleRespDto;
 import top.fosin.anan.cloudresource.service.AnanUserDetailService;
 import top.fosin.anan.core.util.BeanUtil;
-import top.fosin.anan.model.module.PageModule;
-import top.fosin.anan.model.result.ListResult;
+import top.fosin.anan.model.dto.PageReqDto;
+import top.fosin.anan.model.result.PageResult;
 import top.fosin.anan.model.result.ResultUtils;
 import top.fosin.anan.platform.modules.organization.entity.Organization;
 import top.fosin.anan.platform.modules.role.entity.Role;
@@ -137,11 +137,11 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public ListResult<RoleRespDto> findPage(PageModule<RoleReqDto> pageModule) {
-        Assert.notNull(pageModule, "传入的分页信息不能为空!");
-        RoleReqDto params = pageModule.getParams();
+    public PageResult<RoleRespDto> findPage(PageReqDto<RoleReqDto> pageReqDto) {
+        Assert.notNull(pageReqDto, "传入的分页信息不能为空!");
+        RoleReqDto params = pageReqDto.getParams();
 
-        PageRequest pageable = PageRequest.of(pageModule.getPageNumber() - 1, pageModule.getPageSize(), this.buildSortRules(params.getSortRules()));
+        PageRequest pageable = PageRequest.of(pageReqDto.getPageNumber() - 1, pageReqDto.getPageSize(), this.buildSortRules(params.getSortRules()));
 
         Page<Role> page;
         Specification<Role> condition;

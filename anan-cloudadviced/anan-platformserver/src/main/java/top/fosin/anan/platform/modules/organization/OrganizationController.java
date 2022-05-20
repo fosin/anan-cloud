@@ -4,7 +4,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.http.ResponseEntity;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
@@ -14,15 +13,17 @@ import top.fosin.anan.cloudresource.dto.res.OrganizationTreeDto;
 import top.fosin.anan.model.controller.BaseController;
 import top.fosin.anan.model.controller.IRetrieveTreeController;
 import top.fosin.anan.model.controller.ISimpleController;
-import top.fosin.anan.platform.modules.organization.dto.OrganizationPermissionReqDto;
-import top.fosin.anan.platform.modules.organization.dto.OrganizationReqDto;
+import top.fosin.anan.model.result.MultResult;
+import top.fosin.anan.model.result.ResultUtils;
+import top.fosin.anan.model.result.SingleResult;
 import top.fosin.anan.platform.modules.organization.dto.OrganizationAuthRespDto;
+import top.fosin.anan.platform.modules.organization.dto.OrganizationPermissionReqDto;
 import top.fosin.anan.platform.modules.organization.dto.OrganizationPermissionRespDto;
+import top.fosin.anan.platform.modules.organization.dto.OrganizationReqDto;
 import top.fosin.anan.platform.modules.organization.service.inter.OrganizationAuthService;
 import top.fosin.anan.platform.modules.organization.service.inter.OrganizationPermissionService;
 import top.fosin.anan.platform.modules.organization.service.inter.OrganizationService;
 
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -50,22 +51,22 @@ public class OrganizationController extends BaseController
     @ApiImplicitParam(name = "organizId", value = "机构ID,取值于AnanOrganizationEntity.id",
             required = true, dataTypeClass = Long.class, paramType = "path")
     @RequestMapping(value = "/permissions/{organizId}", method = {RequestMethod.GET, RequestMethod.POST})
-    public ResponseEntity<List<OrganizationPermissionRespDto>> permissions(@PathVariable Long organizId) {
-        return ResponseEntity.ok(organizationPermissionService.findByOrganizId(organizId));
+    public MultResult<OrganizationPermissionRespDto> permissions(@PathVariable Long organizId) {
+        return ResultUtils.success(organizationPermissionService.findByOrganizId(organizId));
     }
 
     @ApiOperation(value = "根据版本ID更新版本权限", notes = "根据版本ID更新版本权限，此操作将先删除原权限，再新增新权限")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "dtos", value = "版本权限集合(List<OrganizationPermission>)",
+            @ApiImplicitParam(name = "dtos", value = "版本权限集合",
                     dataTypeClass = List.class, paramType = "body"),
             @ApiImplicitParam(name = "organizId", value = "机构ID,取值于AnanOrganizationEntity.id",
                     required = true, dataTypeClass = Long.class, paramType = "path")
 
     })
     @PutMapping(value = "/permissions/{organizId}")
-    public ResponseEntity<Collection<OrganizationPermissionRespDto>> permissions(@RequestBody List<OrganizationPermissionReqDto> dtos,
+    public MultResult<OrganizationPermissionRespDto> permissions(@RequestBody List<OrganizationPermissionReqDto> dtos,
                                                                                  @PathVariable("organizId") Long organizId) {
-        return ResponseEntity.ok(organizationPermissionService.updateInBatch("organizId", organizId, dtos));
+        return ResultUtils.success(organizationPermissionService.updateInBatch("organizId", organizId, dtos));
     }
 
     @ApiOperation(value = "机构注册", notes = "用户自助注册机构")
@@ -73,18 +74,18 @@ public class OrganizationController extends BaseController
             @ApiImplicitParam(name = "registerDto", required = true, dataTypeClass = RegisterDto.class, value = "注册新机构、新用户", paramType = "body")
     })
     @PutMapping(value = "/register")
-    public ResponseEntity<Boolean> register(@RequestBody RegisterDto registerDto) {
-        return ResponseEntity.ok(organizationAuthService.register(registerDto));
+    public SingleResult<Boolean> register(@RequestBody RegisterDto registerDto) {
+        return ResultUtils.success(organizationAuthService.register(registerDto));
     }
 
 
     @ApiOperation("根据父机构ID获取其孩子节点数据")
     @ApiImplicitParam(name = "organizId", required = true, dataTypeClass = Long.class, value = "机构ID,取值于AnanOrganizationEntity.id", paramType = "path")
     @PostMapping("/auth/{organizId}")
-    public ResponseEntity<OrganizationAuthRespDto> getOrganizAuth(@PathVariable("organizId") Long organizId) {
+    public SingleResult<OrganizationAuthRespDto> getOrganizAuth(@PathVariable("organizId") Long organizId) {
         List<OrganizationAuthRespDto> authRespDtos = organizationAuthService.findAllByOrganizId(organizId);
         Assert.isTrue(authRespDtos.size() > 0, "该机构还未购买服务器!");
-        return ResponseEntity.ok(authRespDtos.get(0));
+        return ResultUtils.success(authRespDtos.get(0));
     }
 
     @Override

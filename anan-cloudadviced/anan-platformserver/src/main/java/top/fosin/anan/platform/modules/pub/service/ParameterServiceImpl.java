@@ -20,13 +20,13 @@ import top.fosin.anan.cloudresource.parameter.ParameterStatus;
 import top.fosin.anan.cloudresource.service.AnanUserDetailService;
 import top.fosin.anan.core.exception.AnanServiceException;
 import top.fosin.anan.core.util.BeanUtil;
-import top.fosin.anan.model.module.PageModule;
-import top.fosin.anan.model.result.ListResult;
+import top.fosin.anan.model.dto.PageReqDto;
+import top.fosin.anan.model.result.PageResult;
 import top.fosin.anan.model.result.ResultUtils;
-import top.fosin.anan.platform.modules.organization.entity.Organization;
-import top.fosin.anan.platform.modules.pub.entity.Parameter;
 import top.fosin.anan.platform.modules.organization.dao.OrganizationDao;
+import top.fosin.anan.platform.modules.organization.entity.Organization;
 import top.fosin.anan.platform.modules.pub.dao.ParameterDao;
+import top.fosin.anan.platform.modules.pub.entity.Parameter;
 import top.fosin.anan.platform.modules.pub.service.inter.ParameterService;
 import top.fosin.anan.redis.cache.AnanCacheManger;
 
@@ -58,9 +58,9 @@ public class ParameterServiceImpl implements ParameterService {
     }
 
     @Override
-    public ListResult<ParameterRespDto> findPage(PageModule<ParameterReqDto> pageModule) {
-        ParameterReqDto params = pageModule.getParams();
-        PageRequest pageable = PageRequest.of(pageModule.getPageNumber() - 1, pageModule.getPageSize(), this.buildSortRules(params.getSortRules()));
+    public PageResult<ParameterRespDto> findPage(PageReqDto<ParameterReqDto> pageReqDto) {
+        ParameterReqDto params = pageReqDto.getParams();
+        PageRequest pageable = PageRequest.of(pageReqDto.getPageNumber() - 1, pageReqDto.getPageSize(), this.buildSortRules(params.getSortRules()));
         String search = "%" + params.getName() + "%";
         Long organizId = ananUserDetailService.getAnanOrganizId();
         boolean sysAdminUser = ananUserDetailService.isSysAdminUser();
@@ -68,9 +68,8 @@ public class ParameterServiceImpl implements ParameterService {
         String code = "";
         if (!sysAdminUser) {
             type = 1;
-            Organization organization =
-                    organizationDao.findById(organizId).orElseThrow(() -> new IllegalArgumentException(
-                            "未找到你的机构信息!"));
+            Organization organization = organizationDao.findById(organizId)
+                    .orElseThrow(() -> new IllegalArgumentException("未找到你的机构信息!"));
             code = organization.getCode();
         }
 
@@ -96,7 +95,7 @@ public class ParameterServiceImpl implements ParameterService {
         Parameter cEntity = parameterDao.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("通过ID：" + id + "未能找到对应的数据!"));
         if (!ananUserDetailService.isSysAdminUser()) {
-            Assert.isTrue(StringUtils.hasText(cEntity.getScope()),"非超级管理员不能修改公共参数!");
+            Assert.isTrue(StringUtils.hasText(cEntity.getScope()), "非超级管理员不能修改公共参数!");
         }
         String oldCacheKey = getCacheKey(cEntity);
         String newCacheKey = getCacheKey(dto.getType(), dto.getScope(), dto.getName());
@@ -109,8 +108,7 @@ public class ParameterServiceImpl implements ParameterService {
             //新key设置旧值，需要发布以后才刷新缓存换成本次更新的新值
             ParameterRespDto respDto = ananCacheManger.get(PlatformRedisConstant.ANAN_PARAMETER, oldCacheKey, ParameterRespDto.class);
             if (respDto != null) {
-                ananCacheManger.put(PlatformRedisConstant.ANAN_PARAMETER, newCacheKey,
-                        respDto);
+                ananCacheManger.put(PlatformRedisConstant.ANAN_PARAMETER, newCacheKey, respDto);
             }
             ananCacheManger.evict(PlatformRedisConstant.ANAN_PARAMETER, oldCacheKey);
         }
@@ -126,7 +124,7 @@ public class ParameterServiceImpl implements ParameterService {
     public void deleteById(Long id) {
         parameterDao.findById(id).ifPresent(entity -> {
             if (!ananUserDetailService.isSysAdminUser()) {
-                Assert.isTrue(StringUtils.hasText(entity.getScope()),"非超级管理员不能删除公共参数!");
+                Assert.isTrue(StringUtils.hasText(entity.getScope()), "非超级管理员不能删除公共参数!");
             }
             entity.setStatus(ParameterStatus.Deleted.getTypeValue());
             parameterDao.save(entity);
@@ -144,7 +142,7 @@ public class ParameterServiceImpl implements ParameterService {
         List<Parameter> entities = parameterDao.findAllById(ids);
         for (Parameter entity : entities) {
             if (!ananUserDetailService.isSysAdminUser()) {
-                Assert.isTrue(StringUtils.hasText(entity.getScope()),"非超级管理员不能删除公共参数!");
+                Assert.isTrue(StringUtils.hasText(entity.getScope()), "非超级管理员不能删除公共参数!");
             }
             entity.setStatus(ParameterStatus.Deleted.getTypeValue());
         }
@@ -162,7 +160,7 @@ public class ParameterServiceImpl implements ParameterService {
         List<Parameter> entities = parameterDao.findAllById(ids);
         for (Parameter entity : entities) {
             if (!ananUserDetailService.isSysAdminUser()) {
-                Assert.isTrue(StringUtils.hasText(entity.getScope()),"非超级管理员不能取消删除公共参数!");
+                Assert.isTrue(StringUtils.hasText(entity.getScope()), "非超级管理员不能取消删除公共参数!");
             }
             entity.setStatus(ParameterStatus.Normal.getTypeValue());
         }
@@ -264,7 +262,7 @@ public class ParameterServiceImpl implements ParameterService {
         Parameter entity = parameterDao.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("该参数[" + id + "]已经不存在!"));
         if (!ananUserDetailService.isSysAdminUser()) {
-            Assert.isTrue(StringUtils.hasText(entity.getScope()),"非超级管理员不能发布公共参数!");
+            Assert.isTrue(StringUtils.hasText(entity.getScope()), "非超级管理员不能发布公共参数!");
         }
         String cacheKey = getCacheKey(entity);
         boolean success;

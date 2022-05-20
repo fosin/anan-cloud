@@ -18,13 +18,13 @@ public class AnanTokenEndPoint {
 //    @ResponseBody
 //    @ApiOperation(value = "移除指定令牌信息", notes = "移除指定令牌信息，通常用于前端的退出登录操作")
 //    @ApiImplicitParam(value = "http头中的Authorization信息", name = "authorization")
-//    public ResponseEntity<Boolean> removeToken(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorization) {
+//    public SingleResult<Boolean> removeToken(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorization) {
 //        String[] arrays = authorization.split(" ");
 //        String accessToken = arrays[0];
 //        if (arrays.length > 1) {
 //            accessToken = arrays[1];
 //        }
-//        return ResponseEntity.ok(consumerTokenServices.revokeToken(accessToken));
+//        return ResultUtils.success(consumerTokenServices.revokeToken(accessToken));
 //    }
 
 //    @RequestMapping(value = "/oauth/getToken", method = RequestMethod.POST)

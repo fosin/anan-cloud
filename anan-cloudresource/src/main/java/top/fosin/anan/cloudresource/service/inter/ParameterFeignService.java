@@ -11,6 +11,7 @@ import top.fosin.anan.cloudresource.dto.res.ParameterRespDto;
 import top.fosin.anan.cloudresource.service.ParameterFeignFallbackServiceImpl;
 import top.fosin.anan.model.constant.PathConstant;
 import top.fosin.anan.model.dto.TreeDto;
+import top.fosin.anan.model.result.SingleResult;
 
 import javax.validation.constraints.NotEmpty;
 import java.util.Collection;
@@ -33,32 +34,32 @@ public interface ParameterFeignService {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    ResponseEntity<ParameterRespDto> create(@RequestBody ParameterReqDto entity);
+    SingleResult<ParameterRespDto> create(@RequestBody ParameterReqDto entity);
 
     @PutMapping
-    ResponseEntity<ParameterRespDto> update(@RequestBody ParameterReqDto entity);
+    SingleResult<ParameterRespDto> update(@RequestBody ParameterReqDto entity);
 
     @PostMapping(PATH_DTO)
-    ResponseEntity<ParameterRespDto> getParameter(@RequestParam("type") Integer type,
+    SingleResult<ParameterRespDto> getParameter(@RequestParam("type") Integer type,
                                                   @RequestParam("scope") String scope,
                                                   @RequestParam("name") String name);
 
     @PostMapping(value = PATH_NEAREST)
-    ResponseEntity<ParameterRespDto> getNearestParameter(@RequestParam("type") Integer type,
+    SingleResult<ParameterRespDto> getNearestParameter(@RequestParam("type") Integer type,
                                                          @RequestParam("scope") String scope,
                                                          @RequestParam("name") String name);
 
     @PostMapping(PATH_VALUE)
-    ResponseEntity<String> getOrCreateParameter(@RequestBody ParameterReqDto retrieveDto);
+    SingleResult<String> getOrCreateParameter(@RequestBody ParameterReqDto retrieveDto);
 
     @PostMapping(PATH_APPLY_ID)
-    ResponseEntity<Boolean> applyChange(@PathVariable(TreeDto.ID_NAME) Long id);
+    SingleResult<Boolean> applyChange(@PathVariable(TreeDto.ID_NAME) Long id);
 
     @GetMapping(PATH_APPLYS)
-    ResponseEntity<Boolean> applyChangeAll();
+    SingleResult<Boolean> applyChangeAll();
 
     @PostMapping(value = ParameterFeignService.PATH_APPLYS_IDS)
-    ResponseEntity<Boolean> applyChangeAll(@NotEmpty @RequestBody List<Long> ids);
+    SingleResult<Boolean> applyChangeAll(@NotEmpty @RequestBody List<Long> ids);
 
     @PostMapping(value = ParameterFeignService.PATH_CANCELDELETE)
     void cancelDelete(@NotEmpty @RequestBody Collection<Long> ids);

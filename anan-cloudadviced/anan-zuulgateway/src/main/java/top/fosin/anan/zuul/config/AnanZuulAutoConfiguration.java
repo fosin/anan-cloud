@@ -22,6 +22,7 @@ import top.fosin.anan.swagger.config.AnanSwaggerResourcesProvider;
 import top.fosin.anan.swagger.config.SwaggerProperties;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -39,7 +40,7 @@ public class AnanZuulAutoConfiguration {
                                                          PermissionFeignService permissionFeignService) {
         List<Route> routes = routeLocator.getRoutes();
         List<String> locations = routes.stream().map(Route::getLocation).collect(Collectors.toList());
-        List<PermissionRespDto> dtos = permissionFeignService.findByServiceCodes(locations).getBody();
+        Collection<PermissionRespDto> dtos = permissionFeignService.findByServiceCodes(locations).orElseThrow();
         List<AnanSecurityProperties.Authority> authorities = new ArrayList<>();
         Objects.requireNonNull(dtos).forEach(dto -> {
             String entityPath = dto.getPath();

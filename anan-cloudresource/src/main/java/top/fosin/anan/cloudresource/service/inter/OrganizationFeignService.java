@@ -14,6 +14,8 @@ import top.fosin.anan.cloudresource.service.OrganizationFeignFallbackServiceImpl
 import top.fosin.anan.model.constant.PathConstant;
 import top.fosin.anan.model.dto.IdDto;
 import top.fosin.anan.model.dto.PidDto;
+import top.fosin.anan.model.result.MultResult;
+import top.fosin.anan.model.result.SingleResult;
 
 import java.util.List;
 
@@ -27,20 +29,20 @@ import java.util.List;
 public interface OrganizationFeignService {
     @PostMapping({PathConstant.PATH_ID})
     @ApiOperation("根据主键ID查询一条数据")
-    ResponseEntity<OrganizationRespDto> findOneById(@PathVariable(IdDto.ID_NAME) Long id);
+    SingleResult<OrganizationRespDto> findOneById(@PathVariable(IdDto.ID_NAME) Long id);
 
     @PostMapping({PathConstant.PATH_IDS})
     @ApiOperation("根据id查询多条数据")
-    ResponseEntity<List<OrganizationRespDto>> findAllByIds(@RequestBody List<Long> ids);
+    MultResult<OrganizationRespDto> findAllByIds(@RequestBody List<Long> ids);
 
     @PostMapping("/listChild/{pid}")
-    ResponseEntity<List<OrganizationRespDto>> listChild(@PathVariable(PidDto.PID_NAME) Long pid);
+    MultResult<OrganizationRespDto> listChild(@PathVariable(PidDto.PID_NAME) Long pid);
 
     @PostMapping("/listAllChild/{pid}")
-    ResponseEntity<List<OrganizationRespDto>> listAllChild(@PathVariable(PidDto.PID_NAME) Long pid);
+    MultResult<OrganizationRespDto> listAllChild(@PathVariable(PidDto.PID_NAME) Long pid);
 
     @PostMapping("/tree/{topId}")
-    ResponseEntity<List<OrganizationRespDto>> tree(@PathVariable("topId") Long topId);
+    MultResult<OrganizationRespDto> tree(@PathVariable("topId") Long topId);
 
 }
 

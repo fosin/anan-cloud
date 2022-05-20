@@ -16,6 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import top.fosin.anan.model.result.MultResult;
+import top.fosin.anan.model.result.ResultUtils;
+import top.fosin.anan.model.result.SingleResult;
 import top.fosin.anan.zuul.dto.PageURI;
 
 import java.nio.charset.StandardCharsets;
@@ -44,10 +47,10 @@ public class ApplicationController {
 
     @ApiOperation(value = "获取服务名称列表", notes = "获取当前注册到Eureka注册中心的所有节点服务名称")
     @RequestMapping(value = "/serviceNames", method = {RequestMethod.POST})
-    public ResponseEntity<List<String>> getServiceNames() {
+    public MultResult<String> getServiceNames() {
         Assert.notNull(discoveryClient, "discoveryClient不能为空!");
         List<String> services = discoveryClient.getServices();
-        return ResponseEntity.ok(services);
+        return ResultUtils.success(services);
     }
 
     @ApiOperation(value = "根据服务名称获取对应实例管理web地址", notes = "获取当前注册到Eureka注册中心的实例地址")
@@ -60,7 +63,7 @@ public class ApplicationController {
                     required = false, dataTypeClass = String.class, paramType = "query")
     })
     @RequestMapping(value = "/ui/url", method = {RequestMethod.POST})
-    public ResponseEntity<PageURI> uiUrl(@RequestParam String serviceId, @RequestParam(value = "path", required = false) String path) {
+    public SingleResult<PageURI> uiUrl(@RequestParam String serviceId, @RequestParam(value = "path", required = false) String path) {
         Assert.isTrue(StringUtils.hasText(serviceId), "serviceId不能为空!");
         ServiceInstance serviceInstance = getServiceInstance(serviceId);
         Assert.notNull(serviceInstance, "未找到可用的服务实例!");
@@ -72,7 +75,7 @@ public class ApplicationController {
 
         HttpHeaders headers = getHeaders(serviceInstance);
 
-        return ResponseEntity.ok(new PageURI(url, headers));
+        return ResultUtils.success(new PageURI(url, headers));
     }
 
     private ServiceInstance getServiceInstance(String serviceId) {

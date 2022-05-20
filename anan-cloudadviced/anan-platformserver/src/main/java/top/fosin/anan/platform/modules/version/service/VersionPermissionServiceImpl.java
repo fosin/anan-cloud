@@ -90,7 +90,7 @@ public class VersionPermissionServiceImpl implements VersionPermissionService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Collection<VersionPermissionRespDto> updateInBatch(String deleteCol, Long versionId, Collection<VersionPermissionReqDto> entities) {
+    public List<VersionPermissionRespDto> updateInBatch(String deleteCol, Long versionId, Collection<VersionPermissionReqDto> entities) {
 
         Assert.notNull(versionId, "传入的版本ID不能为空!");
         Assert.isTrue(entities.stream().allMatch(entity -> entity.getVersionId().equals(versionId)), "需要更新的数据集中有与版本ID不匹配的数据!");
