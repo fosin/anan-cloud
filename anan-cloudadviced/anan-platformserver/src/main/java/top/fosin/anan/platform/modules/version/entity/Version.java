@@ -13,7 +13,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import top.fosin.anan.jpa.entity.CreateUpdateEntity;
+import top.fosin.anan.jpa.entity.IdCreateUpdateEntity;
 
 /**
  * 系统版本表(AnanVersion)实体类
@@ -28,7 +28,7 @@ import top.fosin.anan.jpa.entity.CreateUpdateEntity;
 @DynamicUpdate
 @Table(name = "anan_version")
 @ApiModel(value = "版本表实体类", description = "版本的实体类")
-public class Version extends CreateUpdateEntity<Long> {
+public class Version extends IdCreateUpdateEntity<Long> {
     private static final long serialVersionUID = -54459367678395780L;
 
     @Basic

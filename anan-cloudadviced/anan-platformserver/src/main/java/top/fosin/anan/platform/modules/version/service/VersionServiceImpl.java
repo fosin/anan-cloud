@@ -24,7 +24,7 @@ public class VersionServiceImpl implements VersionService {
      * 获取DAO
      */
     @Override
-    public VersionDao getRepository() {
+    public VersionDao getDao() {
         return ananSysVersionDao;
     }
 }

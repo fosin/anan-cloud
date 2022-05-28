@@ -37,21 +37,21 @@ public class InternationalServiceImpl implements InternationalService {
     @Cacheable(value = PlatformRedisConstant.ANAN_INTERNATIONAL_STATUS, key = "#status")
     public List<InternationalRespDto> listByStatus(Integer status) {
         return BeanUtil.copyProperties(
-                this.getRepository().findAllByStatus(status), InternationalRespDto.class);
+                this.getDao().findAllByStatus(status), InternationalRespDto.class);
     }
 
     @Override
     @Cacheable(value = PlatformRedisConstant.ANAN_INTERNATIONAL_CODE, key = "#code")
     public InternationalRespDto findByCode(String code) {
         InternationalRespDto respDto = new InternationalRespDto();
-        BeanUtils.copyProperties(this.getRepository().findByCode(code), respDto);
+        BeanUtils.copyProperties(this.getDao().findByCode(code), respDto);
         return respDto;
     }
 
     @Override
     public InternationalRespDto findByDefaultFlag() {
         InternationalRespDto respDto = new InternationalRespDto();
-        BeanUtils.copyProperties(this.getRepository().findByDefaultFlag(1), respDto);
+        BeanUtils.copyProperties(this.getDao().findByDefaultFlag(1), respDto);
         return respDto;
     }
 
@@ -112,7 +112,7 @@ public class InternationalServiceImpl implements InternationalService {
      * 获取DAO
      */
     @Override
-    public InternationalDao getRepository() {
+    public InternationalDao getDao() {
         return defaultRepository;
     }
 }

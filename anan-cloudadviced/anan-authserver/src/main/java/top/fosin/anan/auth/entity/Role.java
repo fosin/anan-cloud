@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.DynamicUpdate;
-import top.fosin.anan.jpa.entity.OrganizIdCreateUpdateEntity;
+import top.fosin.anan.jpa.entity.IdCreateUpdateOrganizEntity;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -25,7 +25,7 @@ import javax.persistence.Table;
 @DynamicUpdate
 @Table(name = "anan_role")
 @ApiModel(value = "角色表实体类", description = "角色的实体类")
-public class Role extends OrganizIdCreateUpdateEntity<Long> {
+public class Role extends IdCreateUpdateOrganizEntity<Long> {
     private static final long serialVersionUID = -64971271359941469L;
 
     @Basic
@@ -53,8 +53,4 @@ public class Role extends OrganizIdCreateUpdateEntity<Long> {
     @Column(name = "built_in", nullable = false)
     private Integer builtIn = 0;
 
-    @Override
-    public void setId(Long id) {
-        super.setId(id);
-    }
 }

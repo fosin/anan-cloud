@@ -4,8 +4,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import top.fosin.anan.jpa.entity.CreateEntity;
-
+import top.fosin.anan.jpa.entity.IdCreateEntity;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
@@ -23,7 +22,7 @@ import java.io.Serializable;
 @Data
 @MappedSuperclass
 public class PermissionEntity<ID extends Serializable>
-        extends CreateEntity<ID> {
+        extends IdCreateEntity<ID> {
     private static final long serialVersionUID = 117455991817648863L;
 
     @Basic

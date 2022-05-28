@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import top.fosin.anan.core.util.RegexUtil;
-import top.fosin.anan.model.dto.QuerySortRuleDto;
+import top.fosin.anan.model.dto.req.IdQuerySortDto;
 import top.fosin.anan.model.module.LogicalQueryRule;
 import top.fosin.anan.model.module.SortRule;
 import top.fosin.anan.model.valid.group.Create;
@@ -24,7 +24,7 @@ import javax.validation.constraints.*;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @ApiModel(value = "机构表创建DTO", description = "机构的创建DTO")
-public class OrganizationReqDto extends QuerySortRuleDto<LogicalQueryRule, SortRule, Long> {
+public class OrgReqDto extends IdQuerySortDto<LogicalQueryRule, SortRule, Long> {
     private static final long serialVersionUID = 389815217019211695L;
 
     @Positive(message = "父机构序号" + "{javax.validation.constraints.Positive.message}",

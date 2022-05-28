@@ -4,7 +4,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import top.fosin.anan.model.dto.QuerySortRuleDto;
+import top.fosin.anan.model.dto.req.IdQuerySortDto;
 import top.fosin.anan.model.module.LogicalQueryRule;
 import top.fosin.anan.model.module.SortRule;
 import top.fosin.anan.model.valid.group.Create;
@@ -24,7 +24,7 @@ import javax.validation.constraints.PositiveOrZero;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @ApiModel(value = "服务表请求DTO", description = "服务的请求DTO")
-public class ServiceReqDto extends QuerySortRuleDto<LogicalQueryRule, SortRule, Long> {
+public class ServiceReqDto extends IdQuerySortDto<LogicalQueryRule, SortRule, Long> {
     private static final long serialVersionUID = -95213722807513308L;
 
     @NotBlank(message = "服务标识" + "{javax.validation.constraints.NotBlank.message}",

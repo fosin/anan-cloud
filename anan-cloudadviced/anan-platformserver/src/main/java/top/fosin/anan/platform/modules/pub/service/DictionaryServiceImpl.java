@@ -94,7 +94,7 @@ public class DictionaryServiceImpl implements DictionaryService {
     }
 
     @Override
-    public DictionaryDao getRepository() {
+    public DictionaryDao getDao() {
         return dictionaryDao;
     }
 }

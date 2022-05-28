@@ -6,7 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import top.fosin.anan.model.dto.PidDto;
+import top.fosin.anan.model.dto.IdPidDto;
 
 /**
  * (AnanUserAllPermissions)响应DTO
@@ -19,7 +19,7 @@ import top.fosin.anan.model.dto.PidDto;
 @ToString
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value = "用户所有的权限响应DTO", description = "用户所有权限的响应DTO")
-public class UserAllPermissionsRespDto extends PidDto<Long> {
+public class UserAllPermissionsRespDto extends IdPidDto<Long> {
     private static final long serialVersionUID = 836500519130655446L;
 
     @ApiModelProperty(value = "权限编码，不能重复 不能为空", required = true)
@@ -66,5 +66,8 @@ public class UserAllPermissionsRespDto extends PidDto<Long> {
 
     @ApiModelProperty(value = "角色序号", required = true)
     private Long roleId;
+
+    @ApiModelProperty(value = "机构序号", required = true)
+    private Long organizId;
 
 }

@@ -54,20 +54,17 @@ public class DictionaryDetailServiceImpl implements DictionaryDetailService {
     @Transactional(rollbackFor = Exception.class)
     @CacheEvict(value = PlatformRedisConstant.ANAN_DICTIONARY_DETAIL, key = "#result.dictionaryId")
     public DictionaryDetailRespDto create(DictionaryDetailReqDto entity) {
-        Assert.notNull(entity, "传入的创建数据实体对象不能为空!");
         DictionaryDetail createEntiy = new DictionaryDetail();
         BeanUtils.copyProperties(entity, createEntiy);
         hasModifiedPrivileges(createEntiy.getDictionaryId());
-        return BeanUtil.copyProperties(getRepository().save(createEntiy), DictionaryDetailRespDto.class);
+        return BeanUtil.copyProperties(getDao().save(createEntiy), DictionaryDetailRespDto.class);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     @CacheEvict(value = PlatformRedisConstant.ANAN_DICTIONARY_DETAIL, key = "#reqDto.dictionaryId")
     public void update(DictionaryDetailReqDto reqDto) {
-        Assert.notNull(reqDto, "传入的更新数据实体对象不能为空!");
         Long id = reqDto.getId();
-        Assert.notNull(id, "传入的更新数据实体对象主键不能为空!");
         DictionaryDetail findEntity = dictionaryDetailDao.findById(id).orElse(null);
         Assert.notNull(findEntity, "根据传入的主键[" + id + "]在数据库中未能找到数据!");
         hasModifiedPrivileges(reqDto.getDictionaryId());
@@ -87,7 +84,6 @@ public class DictionaryDetailServiceImpl implements DictionaryDetailService {
     @Transactional(rollbackFor = Exception.class)
     @CacheEvict(value = PlatformRedisConstant.ANAN_DICTIONARY_DETAIL, key = "#result.dictionaryId")
     public void deleteById(Long id) {
-        Assert.notNull(id, "传入了空的ID!");
         dictionaryDetailDao.findById(id).ifPresent(entity -> {
             hasModifiedPrivileges(entity.getDictionaryId());
             dictionaryDetailDao.deleteById(id);
@@ -134,7 +130,7 @@ public class DictionaryDetailServiceImpl implements DictionaryDetailService {
     }
 
     @Override
-    public DictionaryDetailDao getRepository() {
+    public DictionaryDetailDao getDao() {
         return dictionaryDetailDao;
     }
 }

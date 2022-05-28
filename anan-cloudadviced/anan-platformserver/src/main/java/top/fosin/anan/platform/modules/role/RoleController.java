@@ -66,7 +66,7 @@ public class RoleController implements ISimpleController<RoleRespDto, Long,
     })
     @PutMapping(value = "/permissions/{roleId}")
     public MultResult<RolePermissionRespDto> permissions(@NotNull @RequestBody List<RolePermissionReqDto> entities,
-                                                                         @Positive @PathVariable("roleId") Long roleId) {
+                                                         @Positive @PathVariable("roleId") Long roleId) {
         return ResultUtils.success(rolePermissionService.updateInBatch("roleId", roleId, entities));
     }
 
@@ -88,7 +88,7 @@ public class RoleController implements ISimpleController<RoleRespDto, Long,
     })
     @PutMapping(value = "/users/{roleId}")
     public SingleResult<Boolean> putRoleUsers(@NotNull @RequestBody List<UserRoleReqDto> dtos,
-                                                              @Positive @PathVariable("roleId") Long roleId) {
+                                              @Positive @PathVariable("roleId") Long roleId) {
         userRoleService.updateInBatch("roleId", roleId, dtos);
         return ResultUtils.success(true);
     }

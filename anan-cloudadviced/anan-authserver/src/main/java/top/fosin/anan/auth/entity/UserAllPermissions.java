@@ -5,14 +5,12 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.DynamicUpdate;
-import org.springframework.beans.BeanUtils;
-import springfox.documentation.annotations.ApiIgnore;
-import top.fosin.anan.cloudresource.dto.UserAllPermissionTreeDto;
-import top.fosin.anan.jpa.entity.CreateUpdateEntity;
+import top.fosin.anan.jpa.entity.IdCreateUpdatePidEntity;
 
-import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 /**
  * 包含菜单、按钮两种权限(AnanPermission)实体类
@@ -27,54 +25,13 @@ import java.util.List;
 @DynamicUpdate
 @Table(name = "anan_user_all_permissions")
 @ApiModel(value = "用户的所有权限，包含角色权限、用户增减权限", description = "试图(anan_user_all_permissions)用户的所有权限，包含角色权限、用户增减权限")
-public class UserAllPermissions extends CreateUpdateEntity<Long> {
+public class UserAllPermissions extends IdCreateUpdatePidEntity<Long> {
     private static final long serialVersionUID = 5284105099273855621L;
-
-    public UserAllPermissionTreeDto toTreeDto() {
-        UserAllPermissionTreeDto dto = new UserAllPermissionTreeDto();
-        BeanUtils.copyProperties(this, dto);
-        dto.setId(getId());
-
-        List<UserAllPermissions> children = getChildren();
-        List<UserAllPermissionTreeDto> childrenPermission = new ArrayList<>();
-        if (children != null && children.size() > 0) {
-            children.forEach(permission -> childrenPermission.add(permission.toTreeDto()));
-        }
-        dto.setChildren(childrenPermission);
-        return dto;
-    }
-
-    @Transient
-    @ApiModelProperty(value = "孩子节点，虚拟字段，增删改时不需要关心", notes = "孩子节点，虚拟字段，增删改时不需要关心")
-    private List<UserAllPermissions> children;
-
-
-    @Transient
-    @ApiModelProperty(value = "是否叶子节点，虚拟字段，增删改时不需要关心", notes = "是否叶子节点，虚拟字段，增删改时不需要关心")
-    private Boolean leaf;
-
-    /**
-     * 当权限类型是1：组件菜单 3：目录菜单 表示该节点不是一个叶子节点
-     */
-    @ApiIgnore
-    public Boolean getLeaf() {
-        this.leaf = this.type != 1 && this.type != 3;
-        return leaf;
-    }
-
-    public void setLeaf(Boolean leaf) {
-        this.leaf = leaf;
-    }
 
     @Basic
     @ApiModelProperty(value = "权限编码，不能重复 不能为空", required = true)
     @Column(name = "code", nullable = false, length = 64)
     private String code;
-
-    @Basic
-    @ApiModelProperty(value = "父权限ID，取值于id，表示当前数据的父类权限", required = true)
-    @Column(name = "p_id", nullable = false)
-    private Long pid;
 
     @Basic
     @ApiModelProperty(value = "权限名称", required = true)

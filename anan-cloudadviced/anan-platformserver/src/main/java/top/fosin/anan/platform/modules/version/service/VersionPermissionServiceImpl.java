@@ -8,8 +8,8 @@ import top.fosin.anan.cloudresource.constant.PlatformRedisConstant;
 import top.fosin.anan.core.util.BeanUtil;
 import top.fosin.anan.platform.modules.version.dto.VersionPermissionReqDto;
 import top.fosin.anan.platform.modules.version.dto.VersionPermissionRespDto;
-import top.fosin.anan.platform.modules.organization.dao.OrganizationAuthDao;
-import top.fosin.anan.platform.modules.organization.dao.OrganizationPermissionDao;
+import top.fosin.anan.platform.modules.organization.dao.OrgAuthDao;
+import top.fosin.anan.platform.modules.organization.dao.OrgPermissionDao;
 import top.fosin.anan.platform.modules.organization.entity.OrganizationAuth;
 import top.fosin.anan.platform.modules.organization.entity.OrganizationPermission;
 import top.fosin.anan.platform.modules.role.dao.RolePermissionDao;
@@ -47,8 +47,8 @@ public class VersionPermissionServiceImpl implements VersionPermissionService {
     private final RoleDao roleDao;
     private final RolePermissionDao rolePermissionRepo;
     private final UserPermissionDao userPermissionRepo;
-    private final OrganizationAuthDao orgAuthRepository;
-    private final OrganizationPermissionDao orgPermissionRepo;
+    private final OrgAuthDao orgAuthRepository;
+    private final OrgPermissionDao orgPermissionRepo;
     private final AnanCacheManger ananCacheManger;
 
     public VersionPermissionServiceImpl(VersionPermissionDao versionPermissionRepo,
@@ -57,8 +57,8 @@ public class VersionPermissionServiceImpl implements VersionPermissionService {
                                         RoleDao roleDao,
                                         RolePermissionDao rolePermissionRepo,
                                         UserPermissionDao userPermissionRepo,
-                                        OrganizationAuthDao orgAuthRepository,
-                                        OrganizationPermissionDao orgPermissionRepo, AnanCacheManger ananCacheManger) {
+                                        OrgAuthDao orgAuthRepository,
+                                        OrgPermissionDao orgPermissionRepo, AnanCacheManger ananCacheManger) {
         this.versionPermissionRepo = versionPermissionRepo;
         this.versionRolePermissionRepo = versionRolePermissionRepo;
         this.versionRoleRepo = versionRoleRepo;
@@ -74,18 +74,18 @@ public class VersionPermissionServiceImpl implements VersionPermissionService {
      * 获取DAO
      */
     @Override
-    public VersionPermissionDao getRepository() {
+    public VersionPermissionDao getDao() {
         return versionPermissionRepo;
     }
 
     @Override
     public List<VersionPermissionRespDto> findByVersionId(Long versionId) {
-        return BeanUtil.copyProperties(getRepository().findByVersionId(versionId), VersionPermissionRespDto.class);
+        return BeanUtil.copyProperties(getDao().findByVersionId(versionId), VersionPermissionRespDto.class);
     }
 
     @Override
     public long countByPermissionId(Long permissionId) {
-        return getRepository().countByPermissionId(permissionId);
+        return getDao().countByPermissionId(permissionId);
     }
 
     @Override

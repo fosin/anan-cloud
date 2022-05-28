@@ -15,16 +15,17 @@ import top.fosin.anan.cloudresource.dto.req.RoleReqDto;
 import top.fosin.anan.cloudresource.dto.res.RoleRespDto;
 import top.fosin.anan.cloudresource.service.AnanUserDetailService;
 import top.fosin.anan.core.util.BeanUtil;
-import top.fosin.anan.model.dto.PageReqDto;
+import top.fosin.anan.jpa.util.JpaUtil;
+import top.fosin.anan.model.dto.req.PageDto;
 import top.fosin.anan.model.result.PageResult;
 import top.fosin.anan.model.result.ResultUtils;
+import top.fosin.anan.platform.modules.organization.dao.OrgDao;
 import top.fosin.anan.platform.modules.organization.entity.Organization;
-import top.fosin.anan.platform.modules.role.entity.Role;
-import top.fosin.anan.platform.modules.user.entity.UserRole;
-import top.fosin.anan.platform.modules.organization.dao.OrganizationDao;
 import top.fosin.anan.platform.modules.role.dao.RoleDao;
-import top.fosin.anan.platform.modules.user.dao.UserRoleDao;
+import top.fosin.anan.platform.modules.role.entity.Role;
 import top.fosin.anan.platform.modules.role.service.inter.RoleService;
+import top.fosin.anan.platform.modules.user.dao.UserRoleDao;
+import top.fosin.anan.platform.modules.user.entity.UserRole;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Path;
@@ -42,13 +43,13 @@ import java.util.Objects;
 public class RoleServiceImpl implements RoleService {
     private final RoleDao roleDao;
     private final UserRoleDao userRoleDao;
-    private final OrganizationDao organizationDao;
+    private final OrgDao orgDao;
     private final AnanUserDetailService ananUserDetailService;
 
-    public RoleServiceImpl(RoleDao roleDao, UserRoleDao userRoleDao, OrganizationDao organizationDao, AnanUserDetailService ananUserDetailService) {
+    public RoleServiceImpl(RoleDao roleDao, UserRoleDao userRoleDao, OrgDao orgDao, AnanUserDetailService ananUserDetailService) {
         this.roleDao = roleDao;
         this.userRoleDao = userRoleDao;
-        this.organizationDao = organizationDao;
+        this.orgDao = orgDao;
         this.ananUserDetailService = ananUserDetailService;
     }
 
@@ -62,7 +63,7 @@ public class RoleServiceImpl implements RoleService {
         }
         Assert.isTrue(!SystemConstant.ANAN_ROLE_NAME.equalsIgnoreCase(value),
                 "不能创建超级管理员角色帐号信息!");
-        Role entityDynamic = this.queryOneByDto(dto);
+        Role entityDynamic = JpaUtil.queryOneByDto(getDao(), dto, Role.class);
         Assert.isNull(entityDynamic, "该角色已存在，请核对!");
         Role saveEntity = new Role();
         BeanUtils.copyProperties(dto, saveEntity);
@@ -137,25 +138,26 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public PageResult<RoleRespDto> findPage(PageReqDto<RoleReqDto> pageReqDto) {
-        Assert.notNull(pageReqDto, "传入的分页信息不能为空!");
-        RoleReqDto params = pageReqDto.getParams();
+    public PageResult<RoleRespDto> findPage(PageDto<RoleReqDto> PageDto) {
+        Assert.notNull(PageDto, "传入的分页信息不能为空!");
+        RoleReqDto params = PageDto.getParams();
 
-        PageRequest pageable = PageRequest.of(pageReqDto.getPageNumber() - 1, pageReqDto.getPageSize(), this.buildSortRules(params.getSortRules()));
+        PageRequest pageable = PageRequest.of(PageDto.getPageNumber() - 1, PageDto.getPageSize(),
+                JpaUtil.buildSortRules(params.getSortRules()));
 
         Page<Role> page;
         Specification<Role> condition;
         if (ananUserDetailService.hasSysAdminRole()) {
-            condition = buildQueryRules(params, false);
+            condition = JpaUtil.buildQueryRules(params, Role.class, false);
         } else {
             Assert.notNull(params, "传入的分页信息不能为空!");
             Long organizId = params.getOrganizId();
             String name = params.getName();
             String value = params.getValue();
             Assert.notNull(organizId, "机构ID不能为空!");
-            Organization organiz = organizationDao.findById(organizId).orElse(null);
+            Organization organiz = orgDao.findById(organizId).orElse(null);
             Assert.notNull(organiz, "根据传入的机构编码没有找到任何数据!");
-            List<Organization> organizs = organizationDao.findByTopIdAndCodeStartingWithOrderByCodeAsc(organiz.getTopId(), organiz.getCode());
+            List<Organization> organizs = orgDao.findByTopIdAndCodeStartingWithOrderByCodeAsc(organiz.getTopId(), organiz.getCode());
 
             condition = (root, query, cb) -> {
                 Path<Long> organizIdPath = root.get("organizId");
@@ -187,10 +189,10 @@ public class RoleServiceImpl implements RoleService {
         if (ananUserDetailService.hasSysAdminRole()) {
             entities = roleDao.findAll();
         } else {
-            Organization organiz = organizationDao.findById(organizId).orElse(null);
+            Organization organiz = orgDao.findById(organizId).orElse(null);
             Assert.notNull(organiz, "根据传入的机构编码没有找到任何数据!");
-            Organization topOrganiz = organizationDao.findById(organiz.getTopId()).orElse(null);
-            List<Organization> organizs = organizationDao.findByTopIdAndCodeStartingWithOrderByCodeAsc(organiz.getTopId(), Objects.requireNonNull(topOrganiz).getCode());
+            Organization topOrganiz = orgDao.findById(organiz.getTopId()).orElse(null);
+            List<Organization> organizs = orgDao.findByTopIdAndCodeStartingWithOrderByCodeAsc(organiz.getTopId(), Objects.requireNonNull(topOrganiz).getCode());
 
             Specification<Role> condition = (root, query, cb) -> {
                 Path<Long> organizIdPath = root.get("organizId");
@@ -208,7 +210,7 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public RoleDao getRepository() {
+    public RoleDao getDao() {
         return roleDao;
     }
 }

@@ -9,7 +9,7 @@ import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.beans.BeanUtils;
 import top.fosin.anan.cloudresource.dto.UserAuthDto;
 import top.fosin.anan.cloudresource.dto.req.RoleReqDto;
-import top.fosin.anan.jpa.entity.OrganizIdCreateUpdateEntity;
+import top.fosin.anan.jpa.entity.IdCreateUpdateOrganizEntity;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -29,7 +29,7 @@ import java.util.List;
 @DynamicUpdate
 @Table(name = "anan_user")
 @ApiModel(value = "用户表实体类", description = "用户的实体类")
-public class User extends OrganizIdCreateUpdateEntity<Long> {
+public class User extends IdCreateUpdateOrganizEntity<Long> {
     private static final long serialVersionUID = 897030139778409164L;
 
     public UserAuthDto toAuthDto() {

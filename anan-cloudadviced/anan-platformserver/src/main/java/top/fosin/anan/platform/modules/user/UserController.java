@@ -17,7 +17,7 @@ import top.fosin.anan.core.util.crypt.AesUtil;
 import top.fosin.anan.model.controller.BaseController;
 import top.fosin.anan.model.controller.ISimpleController;
 import top.fosin.anan.model.dto.IdDto;
-import top.fosin.anan.model.dto.TreeDto;
+import top.fosin.anan.model.dto.res.TreeDto;
 import top.fosin.anan.model.result.MultResult;
 import top.fosin.anan.model.result.ResultUtils;
 import top.fosin.anan.model.result.SingleResult;

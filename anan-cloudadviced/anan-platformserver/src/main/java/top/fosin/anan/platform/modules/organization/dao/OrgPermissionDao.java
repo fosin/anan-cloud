@@ -15,7 +15,7 @@ import java.util.List;
  */
 @Repository
 @Lazy
-public interface OrganizationPermissionDao extends IJpaRepository<OrganizationPermission, Long> {
+public interface OrgPermissionDao extends IJpaRepository<OrganizationPermission, Long> {
     List<OrganizationPermission> findByOrganizId(Long organizId);
 
     long countByPermissionId(Long permissionId);

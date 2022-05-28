@@ -22,7 +22,7 @@ import com.netflix.zuul.context.RequestContext;
 import org.springframework.cloud.netflix.zuul.filters.support.FilterConstants;
 import org.springframework.util.StringUtils;
 import top.fosin.anan.core.util.crypt.AesUtil;
-import top.fosin.anan.model.dto.TreeDto;
+import top.fosin.anan.model.dto.res.TreeDto;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;

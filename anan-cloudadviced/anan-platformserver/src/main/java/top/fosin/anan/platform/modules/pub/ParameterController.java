@@ -4,15 +4,17 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
 import top.fosin.anan.cloudresource.dto.req.ParameterReqDto;
 import top.fosin.anan.cloudresource.dto.res.ParameterRespDto;
 import top.fosin.anan.cloudresource.service.inter.ParameterFeignService;
 import top.fosin.anan.model.controller.ISimpleController;
-import top.fosin.anan.model.dto.TreeDto;
+import top.fosin.anan.model.dto.res.TreeDto;
 import top.fosin.anan.model.result.ResultUtils;
 import top.fosin.anan.model.result.SingleResult;
+import top.fosin.anan.model.valid.group.SingleQuery;
 import top.fosin.anan.platform.modules.pub.service.inter.ParameterService;
 
 import javax.validation.constraints.NotBlank;
@@ -74,7 +76,7 @@ public class ParameterController implements ISimpleController<ParameterRespDto, 
     @RequestMapping(value = ParameterFeignService.PATH_VALUE, method = {RequestMethod.POST, RequestMethod.GET})
     @ApiImplicitParam(name = TreeDto.ID_NAME, value = "参数ID,取值于AnanParameterEntity.id",
             required = true, dataTypeClass = ParameterReqDto.class, paramType = "body")
-    public SingleResult<String> getOrCreateParameter(@RequestBody ParameterReqDto retrieveDto) {
+    public SingleResult<String> getOrCreateParameter(@Validated({SingleQuery.class}) @RequestBody ParameterReqDto retrieveDto) {
         int type = retrieveDto.getType();
         String scope = retrieveDto.getScope();
         String name = retrieveDto.getName();

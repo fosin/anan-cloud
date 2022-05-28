@@ -15,7 +15,7 @@ import java.util.List;
  */
 @Repository
 @Lazy
-public interface OrganizationAuthDao extends IJpaRepository<OrganizationAuth, Long> {
+public interface OrgAuthDao extends IJpaRepository<OrganizationAuth, Long> {
     List<OrganizationAuth> findAllByVersionId(Long versionId);
 
     List<OrganizationAuth> findAllByOrganizId(Long organizId);

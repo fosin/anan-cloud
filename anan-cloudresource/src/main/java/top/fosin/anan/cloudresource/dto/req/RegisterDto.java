@@ -16,7 +16,7 @@ public class RegisterDto implements Serializable {
 
     private static final long serialVersionUID = -9074869342835236663L;
     @ApiModelProperty(value = "机构信息")
-    private OrganizationRegisterReqDto organization;
+    private OrgRegisterReqDto organization;
 
     @ApiModelProperty(value = "用户信息")
     private UserRegisterDto user;

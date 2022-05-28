@@ -3,8 +3,6 @@ package top.fosin.anan.platform.modules.pub.dto;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import top.fosin.anan.model.dto.QueryRuleDto;
-import top.fosin.anan.model.dto.SortRuleDto;
 import top.fosin.anan.model.module.LogicalQueryRule;
 import top.fosin.anan.model.module.SortRule;
 import top.fosin.anan.model.prop.IdProp;
@@ -29,7 +27,8 @@ import java.util.List;
  */
 @Data
 @ApiModel(value = "OAuth2客户端接入配置请求DTO", description = "OAuth2客户端接入配置的请求DTO")
-public class OauthClientDetailsReqDto implements Serializable, IdProp<String>, QuerySortRuleProp<LogicalQueryRule, SortRule> {
+public class OauthClientDetailsReqDto implements Serializable, IdProp<String>,
+        QuerySortRuleProp<LogicalQueryRule, SortRule> {
     private static final long serialVersionUID = -19073929038045745L;
 
     @NotBlank(message = "客户端序号" + "{javax.validation.constraints.NotBlank.message}",
@@ -81,7 +80,7 @@ public class OauthClientDetailsReqDto implements Serializable, IdProp<String>, Q
      * @return 主键值
      */
     @Override
-    public String getIdValue() {
+    public String getId() {
         return clientId;
     }
 
@@ -96,52 +95,14 @@ public class OauthClientDetailsReqDto implements Serializable, IdProp<String>, Q
     }
 
 
-    @ApiModelProperty(value = QueryRuleDto.QUERY_RULE_DESCRIPTION)
-    @NotNull(message = QueryRuleDto.QUERY_RULE_DESCRIPTION + "{javax.validation.constraints.NotNull.message}",
+    @ApiModelProperty(value = QUERY_RULE_DESCRIPTION)
+    @NotNull(message = QUERY_RULE_DESCRIPTION + "{javax.validation.constraints.NotNull.message}",
             groups = {DynamicQuery.class})
     private LogicalQueryRule queryRule;
 
-    /**
-     * 获取查询规则对象属性值名
-     *
-     * @return 规则对象
-     */
-    @Override
-    public LogicalQueryRule getQueryRuleValue() {
-        return queryRule;
-    }
-
-    /**
-     * 获取查询规则对象属性名
-     *
-     * @return 属性名
-     */
-    @Override
-    public String getQueryRuleName() {
-        return "queryRule";
-    }
-
-    @ApiModelProperty(value = SortRuleDto.SORT_RULE_DESCRIPTION)
-    @NotEmpty(message = SortRuleDto.SORT_RULE_DESCRIPTION + "{javax.validation.constraints.NotEmpty.message}",
+    @ApiModelProperty(value = SORT_RULE_DESCRIPTION)
+    @NotEmpty(message = SORT_RULE_DESCRIPTION + "{javax.validation.constraints.NotEmpty.message}",
             groups = {SortQuery.class})
     private List<SortRule> sortRules;
-    /**
-     * 获取排序规则对象
-     *
-     * @return 排序规则对象
-     */
-    @Override
-    public List<SortRule> getSortRuleValue() {
-        return sortRules;
-    }
 
-    /**
-     * 获取排序规则d对象属性名
-     *
-     * @return 属性名
-     */
-    @Override
-    public String getSortRuleName() {
-        return "sortRules";
-    }
 }

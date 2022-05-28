@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.format.annotation.DateTimeFormat;
 import top.fosin.anan.core.util.DateTimeUtil;
-import top.fosin.anan.model.dto.QuerySortRuleDto;
+import top.fosin.anan.model.dto.req.IdQuerySortDto;
 import top.fosin.anan.model.module.LogicalQueryRule;
 import top.fosin.anan.model.module.SortRule;
 import top.fosin.anan.model.valid.group.Create;
@@ -27,7 +27,7 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @ApiModel(value = "支付订单表请求DTO", description = "支付订单的请求DTO")
-public class PayOrderReqDto extends QuerySortRuleDto<LogicalQueryRule, SortRule, Long> {
+public class PayOrderReqDto extends IdQuerySortDto<LogicalQueryRule, SortRule, Long> {
     private static final long serialVersionUID = -15118452601033466L;
 
     @NotNull(message = "订单机构" + "{javax.validation.constraints.NotNull.message}",

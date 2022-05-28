@@ -24,7 +24,7 @@ public class PayDetailServiceImpl implements PayDetailService {
      * 获取DAO
      */
     @Override
-    public PayDetailDao getRepository() {
+    public PayDetailDao getDao() {
         return ananSysPayDetailDao;
     }
 

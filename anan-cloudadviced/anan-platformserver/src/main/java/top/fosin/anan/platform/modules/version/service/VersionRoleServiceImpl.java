@@ -31,7 +31,7 @@ public class VersionRoleServiceImpl implements VersionRoleService {
      * 获取DAO
      */
     @Override
-    public VersionRoleDao getRepository() {
+    public VersionRoleDao getDao() {
         return ananSysVersionRoleDao;
     }
 
@@ -47,7 +47,7 @@ public class VersionRoleServiceImpl implements VersionRoleService {
         Assert.isTrue(!entity.getValue().equals(SystemConstant.ANAN_USER_CODE), "角色标识不能为:" + SystemConstant.ANAN_USER_CODE);
         VersionRole createEntity = new VersionRole();
         BeanUtils.copyProperties(entity, createEntity);
-        return BeanUtil.copyProperties(getRepository().save(createEntity), VersionRoleRespDto.class);
+        return BeanUtil.copyProperties(getDao().save(createEntity), VersionRoleRespDto.class);
     }
 
     /**
@@ -62,9 +62,9 @@ public class VersionRoleServiceImpl implements VersionRoleService {
         Long id = entity.getId();
         Assert.isTrue(id != null && id > 0, "传入的主键无效!");
         Assert.isTrue(!entity.getValue().equals(SystemConstant.ANAN_USER_CODE), "角色标识不能为:" + SystemConstant.ANAN_USER_CODE);
-        VersionRole createEntity = getRepository().findById(id).orElse(null);
+        VersionRole createEntity = getDao().findById(id).orElse(null);
         Assert.notNull(createEntity, "更新数据的实体对象不能为空!");
         BeanUtils.copyProperties(entity, createEntity);
-        getRepository().save(createEntity);
+        getDao().save(createEntity);
     }
 }

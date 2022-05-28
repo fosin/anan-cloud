@@ -15,7 +15,7 @@ import java.io.Serializable;
  */
 @Data
 @ApiModel(value = "创建机构")
-public class OrganizationRegisterReqDto implements Serializable {
+public class OrgRegisterReqDto implements Serializable {
 
     private static final long serialVersionUID = -2691405300807660308L;
     @NotBlank(message = "机构编码" + "{javax.validation.constraints.NotBlank.message}")

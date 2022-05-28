@@ -9,6 +9,8 @@ import top.fosin.anan.cloudresource.dto.Client;
 import top.fosin.anan.cloudresource.dto.UserAuthDto;
 import top.fosin.anan.cloudresource.dto.UserDetail;
 import top.fosin.anan.cloudresource.dto.req.RoleReqDto;
+import top.fosin.anan.model.aware.OrganizAware;
+import top.fosin.anan.model.aware.UserAware;
 import top.fosin.anan.security.util.AnanJwtTool;
 
 import java.util.*;
@@ -17,7 +19,11 @@ import java.util.*;
  * @author fosin
  * @date 2018.7.23
  */
-public class AnanUserDetailService extends AnanJwtTool<UserDetail> implements AuditorAware<Long> {
+public class AnanUserDetailService extends AnanJwtTool<UserDetail>
+        implements AuditorAware<Long>,
+        UserAware<Long>,
+        OrganizAware<Long>
+{
 
     public AnanUserDetailService(JwtDecoder jwtDecoder) {
         super(jwtDecoder);
@@ -163,6 +169,21 @@ public class AnanUserDetailService extends AnanJwtTool<UserDetail> implements Au
     @Override
     @NonNull
     public Optional<Long> getCurrentAuditor() {
+        return Optional.of(this.getAnanUserId());
+    }
+
+    @Override
+    public Optional<Long> getOrganizId() {
+        return Optional.of(this.getAnanOrganizId());
+    }
+
+    @Override
+    public Optional<Long> getTopId() {
+        return Optional.of(this.getAnanTopId());
+    }
+
+    @Override
+    public Optional<Long> getUserId() {
         return Optional.of(this.getAnanUserId());
     }
 }

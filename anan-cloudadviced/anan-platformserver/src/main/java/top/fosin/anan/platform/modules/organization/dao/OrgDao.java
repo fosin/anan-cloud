@@ -13,10 +13,6 @@ import java.util.List;
  */
 @Repository
 @Lazy
-public interface OrganizationDao extends IJpaRepository<Organization, Long> {
-    List<Organization> findByPidOrderByCodeAsc(Long pid);
-
+public interface OrgDao extends IJpaRepository<Organization, Long> {
     List<Organization> findByTopIdAndCodeStartingWithOrderByCodeAsc(Long topId, String code);
-
-    List<Organization> findByTopId(Long topId);
 }

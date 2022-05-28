@@ -4,7 +4,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import top.fosin.anan.model.dto.TreeDto;
+import top.fosin.anan.model.dto.res.TreeDto;
 
 /**
  * 包含菜单、按钮两种权限(AnanPermission)请求DTO

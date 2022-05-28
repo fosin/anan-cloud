@@ -13,7 +13,7 @@ import top.fosin.anan.platform.modules.organization.entity.OrganizationAuth;
 import top.fosin.anan.platform.modules.role.entity.Role;
 import top.fosin.anan.platform.modules.role.entity.RolePermission;
 import top.fosin.anan.platform.modules.version.entity.VersionRolePermission;
-import top.fosin.anan.platform.modules.organization.dao.OrganizationAuthDao;
+import top.fosin.anan.platform.modules.organization.dao.OrgAuthDao;
 import top.fosin.anan.platform.modules.role.dao.RolePermissionDao;
 import top.fosin.anan.platform.modules.role.dao.RoleDao;
 import top.fosin.anan.platform.modules.version.dao.VersionRolePermissionDao;
@@ -36,13 +36,13 @@ import java.util.stream.Collectors;
 @Lazy
 public class VersionRolePermissionServiceImpl implements VersionRolePermissionService {
     private final VersionRolePermissionDao versionRolePermissionRepo;
-    private final OrganizationAuthDao organizationAuthRepo;
+    private final OrgAuthDao organizationAuthRepo;
     private final VersionRoleDao versionRoleRepo;
     private final RoleDao roleDao;
     private final RolePermissionDao rolePermissionRepo;
     private final AnanCacheManger ananCacheManger;
 
-    public VersionRolePermissionServiceImpl(VersionRolePermissionDao versionRolePermissionRepo, OrganizationAuthDao organizationAuthRepo, VersionRoleDao versionRoleRepo, RoleDao roleDao, RolePermissionDao rolePermissionRepo, AnanCacheManger ananCacheManger) {
+    public VersionRolePermissionServiceImpl(VersionRolePermissionDao versionRolePermissionRepo, OrgAuthDao organizationAuthRepo, VersionRoleDao versionRoleRepo, RoleDao roleDao, RolePermissionDao rolePermissionRepo, AnanCacheManger ananCacheManger) {
         this.versionRolePermissionRepo = versionRolePermissionRepo;
         this.organizationAuthRepo = organizationAuthRepo;
         this.versionRoleRepo = versionRoleRepo;
@@ -55,13 +55,13 @@ public class VersionRolePermissionServiceImpl implements VersionRolePermissionSe
      * 获取DAOs
      */
     @Override
-    public VersionRolePermissionDao getRepository() {
+    public VersionRolePermissionDao getDao() {
         return versionRolePermissionRepo;
     }
 
     @Override
     public List<VersionRolePermissionRespDto> findByRoleId(Long roleId) {
-        return BeanUtil.copyProperties(getRepository().findByRoleId(roleId), VersionRolePermissionRespDto.class);
+        return BeanUtil.copyProperties(getDao().findByRoleId(roleId), VersionRolePermissionRespDto.class);
     }
 
     @Override

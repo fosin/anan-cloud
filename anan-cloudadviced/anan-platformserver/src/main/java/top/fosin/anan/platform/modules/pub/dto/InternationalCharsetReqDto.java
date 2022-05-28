@@ -4,7 +4,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import top.fosin.anan.model.dto.QuerySortRuleDto;
+import top.fosin.anan.model.dto.req.IdQuerySortDto;
 import top.fosin.anan.model.module.LogicalQueryRule;
 import top.fosin.anan.model.module.SortRule;
 import top.fosin.anan.model.valid.group.Create;
@@ -24,7 +24,7 @@ import javax.validation.constraints.PositiveOrZero;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @ApiModel(value = "国际化语言字符集请求DTO", description = "国际化语言字符集请求DTO")
-public class InternationalCharsetReqDto extends QuerySortRuleDto<LogicalQueryRule, SortRule, Long> {
+public class InternationalCharsetReqDto extends IdQuerySortDto<LogicalQueryRule, SortRule, Long> {
     private static final long serialVersionUID = 329752756986005664L;
 
     @NotNull(message = "国际化语言序号" + "{javax.validation.constraints.NotNull.message}",

@@ -24,7 +24,7 @@ public class PayOrderServiceImpl implements PayOrderService {
      * 获取DAO
      */
     @Override
-    public PayOrderDao getRepository() {
+    public PayOrderDao getDao() {
         return ananSysPayOrderDao;
     }
 }

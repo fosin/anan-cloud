@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import top.fosin.anan.cloudresource.dto.res.UserRespDto;
 import top.fosin.anan.cloudresource.service.inter.UserFeignService;
-import top.fosin.anan.model.dto.TreeDto;
+import top.fosin.anan.model.dto.res.TreeDto;
 import top.fosin.anan.model.result.MultResult;
 import top.fosin.anan.model.result.SingleResult;
 

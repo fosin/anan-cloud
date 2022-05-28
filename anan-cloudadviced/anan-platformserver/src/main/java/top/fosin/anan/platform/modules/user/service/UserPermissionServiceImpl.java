@@ -95,7 +95,7 @@ public class UserPermissionServiceImpl implements UserPermissionService {
     }
 
     @Override
-    public UserPermissionDao getRepository() {
+    public UserPermissionDao getDao() {
         return userPermissionRepo;
     }
 }

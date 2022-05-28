@@ -4,7 +4,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import top.fosin.anan.model.dto.TreeDto;
+import top.fosin.anan.model.dto.res.TreeDto;
 
 /**
  * 系统机构表(AnanOrganization)创建DTO
@@ -16,7 +16,7 @@ import top.fosin.anan.model.dto.TreeDto;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @ApiModel(value = "机构表树形响应DTO", description = "机构的创建DTO")
-public class OrganizationTreeDto extends TreeDto<OrganizationTreeDto, Long> {
+public class OrgTreeDto extends TreeDto<OrgTreeDto, Long> {
     private static final long serialVersionUID = 389815217019211695L;
 
     @ApiModelProperty(value = "顶级机构编号：一般指用户注册的机构，通常是一个集团组的最高级别机构，取值于id", required = true)

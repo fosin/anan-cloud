@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.DynamicUpdate;
-import top.fosin.anan.jpa.entity.PidCreateUpdateEntity;
+import top.fosin.anan.jpa.entity.IdCreateUpdatePidEntity;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -25,7 +25,7 @@ import javax.persistence.Table;
 @DynamicUpdate
 @Table(name = "anan_permission")
 @ApiModel(value = "包含菜单、按钮两种权限实体类", description = "权限的实体类")
-public class Permission extends PidCreateUpdateEntity<Long> {
+public class Permission extends IdCreateUpdatePidEntity<Long> {
     private static final long serialVersionUID = -77218975959330473L;
 
     @Basic

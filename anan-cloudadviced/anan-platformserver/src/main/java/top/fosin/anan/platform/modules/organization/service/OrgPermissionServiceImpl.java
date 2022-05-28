@@ -5,11 +5,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import top.fosin.anan.core.util.BeanUtil;
-import top.fosin.anan.platform.modules.organization.dto.OrganizationPermissionReqDto;
-import top.fosin.anan.platform.modules.organization.dto.OrganizationPermissionRespDto;
+import top.fosin.anan.platform.modules.organization.dto.OrgPermissionReqDto;
+import top.fosin.anan.platform.modules.organization.dto.OrgPermissionRespDto;
 import top.fosin.anan.platform.modules.organization.entity.OrganizationPermission;
-import top.fosin.anan.platform.modules.organization.dao.OrganizationPermissionDao;
-import top.fosin.anan.platform.modules.organization.service.inter.OrganizationPermissionService;
+import top.fosin.anan.platform.modules.organization.dao.OrgPermissionDao;
+import top.fosin.anan.platform.modules.organization.service.inter.OrgPermissionService;
 import top.fosin.anan.platform.util.PermissionUtil;
 
 import java.util.Collection;
@@ -24,10 +24,10 @@ import java.util.stream.Collectors;
  */
 @Service
 @Lazy
-public class OrganizationPermissionServiceImpl implements OrganizationPermissionService {
-    private final OrganizationPermissionDao orgPermissionRepository;
+public class OrgPermissionServiceImpl implements OrgPermissionService {
+    private final OrgPermissionDao orgPermissionRepository;
 
-    public OrganizationPermissionServiceImpl(OrganizationPermissionDao orgPermissionRepository) {
+    public OrgPermissionServiceImpl(OrgPermissionDao orgPermissionRepository) {
         this.orgPermissionRepository = orgPermissionRepository;
     }
 
@@ -35,23 +35,23 @@ public class OrganizationPermissionServiceImpl implements OrganizationPermission
      * 获取DAO
      */
     @Override
-    public OrganizationPermissionDao getRepository() {
+    public OrgPermissionDao getDao() {
         return orgPermissionRepository;
     }
 
     @Override
-    public List<OrganizationPermissionRespDto> findByOrganizId(Long organizId) {
-        return BeanUtil.copyProperties(getRepository().findByOrganizId(organizId), OrganizationPermissionRespDto.class);
+    public List<OrgPermissionRespDto> findByOrganizId(Long organizId) {
+        return BeanUtil.copyProperties(getDao().findByOrganizId(organizId), OrgPermissionRespDto.class);
     }
 
     @Override
     public long countByPermissionId(Long permissionId) {
-        return getRepository().countByPermissionId(permissionId);
+        return getDao().countByPermissionId(permissionId);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public List<OrganizationPermissionRespDto> updateInBatch(String deleteCol, Long organizId, Collection<OrganizationPermissionReqDto> dtos) {
+    public List<OrgPermissionRespDto> updateInBatch(String deleteCol, Long organizId, Collection<OrgPermissionReqDto> dtos) {
         Assert.notNull(organizId, "传入的机构ID不能为空!");
 
         Assert.isTrue(dtos.stream().allMatch(entity -> entity.getOrganizId().equals(organizId)), "需要更新的数据集中有与版本ID不匹配的数据!");
@@ -71,6 +71,6 @@ public class OrganizationPermissionServiceImpl implements OrganizationPermission
 
         orgPermissionRepository.deleteByOrganizId(organizId);
 
-        return BeanUtil.copyProperties(orgPermissionRepository.saveAll(afterPermissions), OrganizationPermissionRespDto.class);
+        return BeanUtil.copyProperties(orgPermissionRepository.saveAll(afterPermissions), OrgPermissionRespDto.class);
     }
 }

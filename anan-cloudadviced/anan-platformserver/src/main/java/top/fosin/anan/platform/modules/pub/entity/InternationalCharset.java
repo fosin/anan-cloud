@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.DynamicUpdate;
-import top.fosin.anan.jpa.entity.CreateUpdateEntity;
+import top.fosin.anan.jpa.entity.IdCreateUpdateEntity;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -25,7 +25,7 @@ import javax.persistence.Table;
 @DynamicUpdate
 @Table(name = "anan_international_charset")
 @ApiModel(value = "国际化语言字符集实体类", description = "国际化语言字符集实体类")
-public class InternationalCharset extends CreateUpdateEntity<Long> {
+public class InternationalCharset extends IdCreateUpdateEntity<Long> {
     private static final long serialVersionUID = -47422702414130736L;
 
     @Basic

@@ -10,7 +10,7 @@ import top.fosin.anan.cloudresource.dto.req.ParameterReqDto;
 import top.fosin.anan.cloudresource.dto.res.ParameterRespDto;
 import top.fosin.anan.cloudresource.service.ParameterFeignFallbackServiceImpl;
 import top.fosin.anan.model.constant.PathConstant;
-import top.fosin.anan.model.dto.TreeDto;
+import top.fosin.anan.model.dto.res.TreeDto;
 import top.fosin.anan.model.result.SingleResult;
 
 import javax.validation.constraints.NotEmpty;

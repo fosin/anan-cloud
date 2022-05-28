@@ -66,7 +66,7 @@ public class OauthClientServiceImpl implements OauthClientService {
     }
 
     @Override
-    public OauthClientDao getRepository() {
+    public OauthClientDao getDao() {
         return oauthClientDao;
     }
 }

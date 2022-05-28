@@ -18,7 +18,7 @@ import top.fosin.anan.cloudresource.dto.PermissionDto;
 @ToString
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value = "机构权限表响应DTO", description = "机构权限的响应DTO")
-public class OrganizationPermissionRespDto extends PermissionDto<Long> {
+public class OrgPermissionRespDto extends PermissionDto<Long> {
     private static final long serialVersionUID = 251414814078557449L;
     @ApiModelProperty(value = "机构序号", example = "Long")
     private Long organizId;

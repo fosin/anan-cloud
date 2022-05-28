@@ -20,10 +20,11 @@ import top.fosin.anan.cloudresource.parameter.ParameterStatus;
 import top.fosin.anan.cloudresource.service.AnanUserDetailService;
 import top.fosin.anan.core.exception.AnanServiceException;
 import top.fosin.anan.core.util.BeanUtil;
-import top.fosin.anan.model.dto.PageReqDto;
+import top.fosin.anan.jpa.util.JpaUtil;
+import top.fosin.anan.model.dto.req.PageDto;
 import top.fosin.anan.model.result.PageResult;
 import top.fosin.anan.model.result.ResultUtils;
-import top.fosin.anan.platform.modules.organization.dao.OrganizationDao;
+import top.fosin.anan.platform.modules.organization.dao.OrgDao;
 import top.fosin.anan.platform.modules.organization.entity.Organization;
 import top.fosin.anan.platform.modules.pub.dao.ParameterDao;
 import top.fosin.anan.platform.modules.pub.entity.Parameter;
@@ -47,20 +48,21 @@ import java.util.Objects;
 public class ParameterServiceImpl implements ParameterService {
     private final ParameterDao parameterDao;
     private final AnanUserDetailService ananUserDetailService;
-    private final OrganizationDao organizationDao;
+    private final OrgDao orgDao;
     private final AnanCacheManger ananCacheManger;
 
-    public ParameterServiceImpl(ParameterDao parameterDao, AnanUserDetailService ananUserDetailService, OrganizationDao organizationDao, AnanCacheManger ananCacheManger) {
+    public ParameterServiceImpl(ParameterDao parameterDao, AnanUserDetailService ananUserDetailService, OrgDao orgDao, AnanCacheManger ananCacheManger) {
         this.parameterDao = parameterDao;
         this.ananUserDetailService = ananUserDetailService;
-        this.organizationDao = organizationDao;
+        this.orgDao = orgDao;
         this.ananCacheManger = ananCacheManger;
     }
 
     @Override
-    public PageResult<ParameterRespDto> findPage(PageReqDto<ParameterReqDto> pageReqDto) {
-        ParameterReqDto params = pageReqDto.getParams();
-        PageRequest pageable = PageRequest.of(pageReqDto.getPageNumber() - 1, pageReqDto.getPageSize(), this.buildSortRules(params.getSortRules()));
+    public PageResult<ParameterRespDto> findPage(PageDto<ParameterReqDto> PageDto) {
+        ParameterReqDto params = PageDto.getParams();
+        PageRequest pageable = PageRequest.of(PageDto.getPageNumber() - 1, PageDto.getPageSize(),
+                JpaUtil.buildSortRules(params.getSortRules()));
         String search = "%" + params.getName() + "%";
         Long organizId = ananUserDetailService.getAnanOrganizId();
         boolean sysAdminUser = ananUserDetailService.isSysAdminUser();
@@ -68,7 +70,7 @@ public class ParameterServiceImpl implements ParameterService {
         String code = "";
         if (!sysAdminUser) {
             type = 1;
-            Organization organization = organizationDao.findById(organizId)
+            Organization organization = orgDao.findById(organizId)
                     .orElseThrow(() -> new IllegalArgumentException("未找到你的机构信息!"));
             code = organization.getCode();
         }
@@ -84,7 +86,7 @@ public class ParameterServiceImpl implements ParameterService {
     @CachePut(value = PlatformRedisConstant.ANAN_PARAMETER, key = "#root.target.getCacheKey(#result)")
     public ParameterRespDto create(ParameterReqDto dto) {
         Parameter createEntiy = BeanUtil.copyProperties(dto, Parameter.class);
-        return BeanUtil.copyProperties(getRepository().save(createEntiy), ParameterRespDto.class);
+        return BeanUtil.copyProperties(getDao().save(createEntiy), ParameterRespDto.class);
     }
 
     @Override
@@ -225,7 +227,7 @@ public class ParameterServiceImpl implements ParameterService {
         OrganStrategy organStrategy = new OrganStrategy(ananUserDetailService);
         if (type == organStrategy.getType()) {
             Long id = Long.parseLong(scope);
-            Organization entity = organizationDao.findById(id).orElse(null);
+            Organization entity = orgDao.findById(id).orElse(null);
             if (entity != null && entity.getLevel() != 0) {
                 rc = entity.getPid() + "";
             }
@@ -316,7 +318,7 @@ public class ParameterServiceImpl implements ParameterService {
     }
 
     @Override
-    public ParameterDao getRepository() {
+    public ParameterDao getDao() {
         return parameterDao;
     }
 }

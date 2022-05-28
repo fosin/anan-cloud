@@ -5,10 +5,11 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import top.fosin.anan.core.util.RegexUtil;
-import top.fosin.anan.model.dto.QuerySortRuleDto;
+import top.fosin.anan.model.dto.req.IdQuerySortDto;
 import top.fosin.anan.model.module.LogicalQueryRule;
 import top.fosin.anan.model.module.SortRule;
 import top.fosin.anan.model.valid.group.Create;
+import top.fosin.anan.model.valid.group.SingleQuery;
 import top.fosin.anan.model.valid.group.Update;
 
 import javax.validation.constraints.*;
@@ -24,14 +25,14 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @ApiModel(value = "用于存放各种分类分组的个性化参数请求DTO", description = "通用参数的请求DTO")
-public class ParameterReqDto extends QuerySortRuleDto<LogicalQueryRule, SortRule, Long> {
+public class ParameterReqDto extends IdQuerySortDto<LogicalQueryRule, SortRule, Long> {
     private static final long serialVersionUID = -95372770044687456L;
 
     @ApiModelProperty(value = "参数键")
     @NotBlank(message = "参数键{javax.validation.constraints.NotBlank.message}",
-            groups = {Create.class, Update.class})
+            groups = {Create.class, Update.class, SingleQuery.class})
     @Pattern(regexp = "[\\w]{1,64}", message = "参数键只能大小写字母、数字、下杠(_)组合而成,长度不超过64位",
-            groups = {Create.class, Update.class})
+            groups = {Create.class, Update.class, SingleQuery.class})
     private String name;
 
     @ApiModelProperty(value = "参数值")
@@ -39,9 +40,9 @@ public class ParameterReqDto extends QuerySortRuleDto<LogicalQueryRule, SortRule
 
     @ApiModelProperty(value = "参数分类：具体取值于字典表anan_dictionary.code=10")
     @NotNull(message = "参数分类{javax.validation.constraints.NotNull.message}",
-            groups = {Create.class, Update.class})
+            groups = {Create.class, Update.class, SingleQuery.class})
     @Positive(message = "参数分类{javax.validation.constraints.Positive.message}",
-            groups = {Create.class, Update.class})
+            groups = {Create.class, Update.class, SingleQuery.class})
     private Integer type;
 
     @ApiModelProperty(value = "参数作用域")

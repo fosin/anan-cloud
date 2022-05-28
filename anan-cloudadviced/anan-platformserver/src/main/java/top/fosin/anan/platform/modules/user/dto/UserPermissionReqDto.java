@@ -4,7 +4,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import top.fosin.anan.model.dto.QuerySortRuleDto;
+import top.fosin.anan.model.dto.req.IdQuerySortDto;
 import top.fosin.anan.model.module.LogicalQueryRule;
 import top.fosin.anan.model.module.SortRule;
 import top.fosin.anan.model.valid.group.Create;
@@ -24,7 +24,7 @@ import javax.validation.constraints.PositiveOrZero;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @ApiModel(value = "用于增减用户的单项权限，通常实在角色的基础上增减单项权限请求DTO", description = "用户权限的请求DTO")
-public class UserPermissionReqDto extends QuerySortRuleDto<LogicalQueryRule, SortRule, Long> {
+public class UserPermissionReqDto extends IdQuerySortDto<LogicalQueryRule, SortRule, Long> {
     private static final long serialVersionUID = 989390435758584592L;
 
     @NotNull(message = "机构序号" + "{javax.validation.constraints.NotNull.message}",

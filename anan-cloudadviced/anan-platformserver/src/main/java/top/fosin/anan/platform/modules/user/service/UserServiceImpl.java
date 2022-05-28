@@ -20,20 +20,21 @@ import top.fosin.anan.cloudresource.dto.res.UserRespDto;
 import top.fosin.anan.cloudresource.service.AnanUserDetailService;
 import top.fosin.anan.core.util.BeanUtil;
 import top.fosin.anan.core.util.RegexUtil;
-import top.fosin.anan.model.dto.TreeDto;
-import top.fosin.anan.model.dto.PageReqDto;
+import top.fosin.anan.jpa.util.JpaUtil;
+import top.fosin.anan.model.dto.res.TreeDto;
+import top.fosin.anan.model.dto.req.PageDto;
 import top.fosin.anan.model.result.PageResult;
 import top.fosin.anan.model.result.ResultUtils;
-import top.fosin.anan.platform.modules.pub.service.LocalOrganParameter;
-import top.fosin.anan.platform.modules.user.dto.UserPassRespDto;
+import top.fosin.anan.platform.modules.organization.dao.OrgDao;
 import top.fosin.anan.platform.modules.organization.entity.Organization;
-import top.fosin.anan.platform.modules.user.entity.UserAll;
-import top.fosin.anan.platform.modules.user.entity.User;
-import top.fosin.anan.platform.modules.user.entity.UserRole;
-import top.fosin.anan.platform.modules.organization.dao.OrganizationDao;
+import top.fosin.anan.platform.modules.pub.service.LocalOrganParameter;
 import top.fosin.anan.platform.modules.user.dao.UserAllDao;
 import top.fosin.anan.platform.modules.user.dao.UserDao;
 import top.fosin.anan.platform.modules.user.dao.UserRoleDao;
+import top.fosin.anan.platform.modules.user.dto.UserPassRespDto;
+import top.fosin.anan.platform.modules.user.entity.User;
+import top.fosin.anan.platform.modules.user.entity.UserAll;
+import top.fosin.anan.platform.modules.user.entity.UserRole;
 import top.fosin.anan.platform.modules.user.service.inter.UserService;
 import top.fosin.anan.redis.cache.AnanCacheManger;
 
@@ -58,9 +59,9 @@ public class UserServiceImpl implements UserService {
     private final LocalOrganParameter localOrganParameter;
     private final AnanCacheManger ananCacheManger;
     private final AnanUserDetailService ananUserDetailService;
-    private final OrganizationDao orgDao;
+    private final OrgDao orgDao;
 
-    public UserServiceImpl(UserDao userDao, UserAllDao userAllDao, UserRoleDao userRoleDao, PasswordEncoder passwordEncoder, LocalOrganParameter localOrganParameter, AnanCacheManger ananCacheManger, AnanUserDetailService ananUserDetailService, OrganizationDao orgDao) {
+    public UserServiceImpl(UserDao userDao, UserAllDao userAllDao, UserRoleDao userRoleDao, PasswordEncoder passwordEncoder, LocalOrganParameter localOrganParameter, AnanCacheManger ananCacheManger, AnanUserDetailService ananUserDetailService, OrgDao orgDao) {
         this.userDao = userDao;
         this.userAllDao = userAllDao;
         this.userRoleDao = userRoleDao;
@@ -227,8 +228,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public PageResult<UserRespDto> findPage(PageReqDto<UserReqDto> pageReqDto) {
-        PageRequest pageable = PageRequest.of(pageReqDto.getPageNumber() - 1, pageReqDto.getPageSize(), this.buildSortRules(pageReqDto.getParams().getSortRules()));
+    public PageResult<UserRespDto> findPage(PageDto<UserReqDto> PageDto) {
+        PageRequest pageable = PageRequest.of(PageDto.getPageNumber() - 1, PageDto.getPageSize(),
+                JpaUtil.buildSortRules(PageDto.getParams().getSortRules()));
 
         Specification<User> condition = (root, query, cb) -> {
             Path<String> usercodePath = root.get("usercode");
@@ -253,7 +255,7 @@ public class UserServiceImpl implements UserService {
 
                 organizId1 = cb.in(root.get("organizId")).value(subQuery);
             }
-            UserReqDto params = pageReqDto.getParams();
+            UserReqDto params = PageDto.getParams();
 
             if (params == null) {
                 if (sysAdminUser) {
@@ -419,17 +421,6 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * 根据传入的实体类动态查询多条符合条件的数据
-     *
-     * @return 动态查找的结果集
-     */
-    @Override
-    public List<UserRespDto> listAll() {
-        return BeanUtil.copyProperties(
-                userAllDao.findAll(), UserRespDto.class);
-    }
-
-    /**
      * 根据主键集合批量更新一个字段
      *
      * @param name  更新的字段名
@@ -454,7 +445,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDao getRepository() {
+    public UserDao getDao() {
         return userDao;
     }
 }

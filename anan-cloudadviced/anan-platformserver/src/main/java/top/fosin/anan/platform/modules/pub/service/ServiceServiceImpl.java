@@ -24,7 +24,7 @@ public class ServiceServiceImpl implements ServiceService {
      * 获取DAO
      */
     @Override
-    public ServiceDao getRepository() {
+    public ServiceDao getDao() {
         return serviceDao;
     }
 }

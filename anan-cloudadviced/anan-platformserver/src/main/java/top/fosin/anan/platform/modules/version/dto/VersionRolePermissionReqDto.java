@@ -4,7 +4,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import top.fosin.anan.model.dto.QuerySortRuleDto;
+import top.fosin.anan.model.dto.req.IdQuerySortDto;
 import top.fosin.anan.model.module.LogicalQueryRule;
 import top.fosin.anan.model.module.SortRule;
 import top.fosin.anan.model.valid.group.Create;
@@ -23,7 +23,7 @@ import javax.validation.constraints.NotNull;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @ApiModel(value = "版本角色权限表请求DTO", description = "版本角色权限的请求DTO")
-public class VersionRolePermissionReqDto extends QuerySortRuleDto<LogicalQueryRule, SortRule, Long> {
+public class VersionRolePermissionReqDto extends IdQuerySortDto<LogicalQueryRule, SortRule, Long> {
     private static final long serialVersionUID = -42309427704059941L;
 
     @NotNull(message = "角色序号" + "{javax.validation.constraints.NotNull.message}",

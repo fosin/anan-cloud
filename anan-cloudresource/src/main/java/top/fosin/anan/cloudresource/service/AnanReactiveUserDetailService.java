@@ -10,6 +10,8 @@ import top.fosin.anan.cloudresource.constant.SystemConstant;
 import top.fosin.anan.cloudresource.dto.Client;
 import top.fosin.anan.cloudresource.dto.UserAuthDto;
 import top.fosin.anan.cloudresource.dto.UserDetail;
+import top.fosin.anan.model.aware.reactive.OrganizAware;
+import top.fosin.anan.model.aware.reactive.UserAware;
 import top.fosin.anan.security.util.AnanReactiveJwtTool;
 
 import java.util.HashSet;
@@ -22,7 +24,9 @@ import java.util.Set;
  * @since 3.0.0
  */
 public class AnanReactiveUserDetailService extends AnanReactiveJwtTool<UserDetail>
-        implements ReactiveAuditorAware<Long> {
+        implements ReactiveAuditorAware<Long>,
+        UserAware<Long>,
+        OrganizAware<Long> {
 
     public AnanReactiveUserDetailService(ReactiveJwtDecoder jwtDecoder) {
         super(jwtDecoder);
@@ -176,6 +180,21 @@ public class AnanReactiveUserDetailService extends AnanReactiveJwtTool<UserDetai
     @Override
     @NonNull
     public Mono<Long> getCurrentAuditor() {
+        return this.getAnanUserId();
+    }
+
+    @Override
+    public Mono<Long> getOrganizId() {
+        return this.getAnanOrganizId();
+    }
+
+    @Override
+    public Mono<Long> getTopId() {
+        return this.getAnanTopId();
+    }
+
+    @Override
+    public Mono<Long> getUserId() {
         return this.getAnanUserId();
     }
 }

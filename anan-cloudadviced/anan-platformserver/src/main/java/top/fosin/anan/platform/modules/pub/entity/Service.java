@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.DynamicUpdate;
-import top.fosin.anan.jpa.entity.CreateUpdateEntity;
+import top.fosin.anan.jpa.entity.IdCreateUpdateEntity;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -25,7 +25,7 @@ import javax.persistence.Table;
 @DynamicUpdate
 @Table(name = "anan_service")
 @ApiModel(value = "服务的实体类", description = "服务的实体类")
-public class Service extends CreateUpdateEntity<Long> {
+public class Service extends IdCreateUpdateEntity<Long> {
   private static final long serialVersionUID = -94381323292251990L;
 
   @Basic

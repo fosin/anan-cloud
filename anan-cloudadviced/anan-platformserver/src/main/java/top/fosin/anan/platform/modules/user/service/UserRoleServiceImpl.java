@@ -118,7 +118,7 @@ public class UserRoleServiceImpl implements UserRoleService {
             saveEntities.add(userRole);
         }
 
-        return BeanUtil.copyProperties(getRepository().saveAll(saveEntities), UserRoleRespDto.class);
+        return BeanUtil.copyProperties(getDao().saveAll(saveEntities), UserRoleRespDto.class);
     }
 
     public String getCacheKey(Integer type, Iterable<UserRole> entitis) {
@@ -139,7 +139,7 @@ public class UserRoleServiceImpl implements UserRoleService {
     }
 
     @Override
-    public UserRoleDao getRepository() {
+    public UserRoleDao getDao() {
         return userRoleDao;
     }
 }

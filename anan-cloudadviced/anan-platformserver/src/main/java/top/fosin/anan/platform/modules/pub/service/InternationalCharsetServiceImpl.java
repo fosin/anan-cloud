@@ -39,7 +39,7 @@ public class InternationalCharsetServiceImpl implements InternationalCharsetServ
      * 获取DAO
      */
     @Override
-    public InternationalCharsetDao getRepository() {
+    public InternationalCharsetDao getDao() {
         return defaultRepository;
     }
 
@@ -80,7 +80,7 @@ public class InternationalCharsetServiceImpl implements InternationalCharsetServ
     @Cacheable(value = PlatformRedisConstant.ANAN_INTERNATIONAL_CHARSET_ALL, key = "#internationalId")
     public List<InternationalCharsetRespDto> findAllByInternationalId(Long internationalId) {
         return BeanUtil.copyProperties(
-                this.getRepository().findAllByInternationalId(internationalId),
+                this.getDao().findAllByInternationalId(internationalId),
                 InternationalCharsetRespDto.class);
     }
 

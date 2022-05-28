@@ -24,7 +24,7 @@ public class PayInvoiceServiceImpl implements PayInvoiceService {
      * 获取DAO
      */
     @Override
-    public PayInvoiceDao getRepository() {
+    public PayInvoiceDao getDao() {
         return ananSysPayInvoiceDao;
     }
 }

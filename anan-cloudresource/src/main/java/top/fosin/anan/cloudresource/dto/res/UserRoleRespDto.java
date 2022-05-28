@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import top.fosin.anan.model.dto.IdDto;
+import top.fosin.anan.model.dto.IdOrganizDto;
 
 /**
  * 系统用户角色表(AnanUserRole)响应DTO
@@ -18,10 +18,8 @@ import top.fosin.anan.model.dto.IdDto;
 @ToString
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value = "用户角色表响应DTO", description = "用户角色的响应DTO")
-public class UserRoleRespDto extends IdDto<Long> {
+public class UserRoleRespDto extends IdOrganizDto<Long> {
     private static final long serialVersionUID = -30073122110919311L;
-    @ApiModelProperty(value = "机构序号", example = "Long")
-    private Long organizId;
 
     @ApiModelProperty(value = "用户序号", example = "Long")
     private Long userId;

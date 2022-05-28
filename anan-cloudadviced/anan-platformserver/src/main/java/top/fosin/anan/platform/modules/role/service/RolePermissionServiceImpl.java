@@ -79,7 +79,7 @@ public class RolePermissionServiceImpl implements RolePermissionService {
     }
 
     @Override
-    public RolePermissionDao getRepository() {
+    public RolePermissionDao getDao() {
         return rolePermissionDao;
     }
 }

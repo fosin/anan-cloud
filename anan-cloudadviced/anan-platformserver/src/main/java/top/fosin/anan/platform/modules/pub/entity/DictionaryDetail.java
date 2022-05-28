@@ -7,7 +7,7 @@ import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
-import top.fosin.anan.jpa.entity.SoftDeleteEntity;
+import top.fosin.anan.jpa.entity.IdCreateUpdateDeleteEntity;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -29,8 +29,8 @@ import javax.persistence.Table;
 @Where(clause = "deleted = 0")
 @Table(name = "anan_dictionary_detail")
 @ApiModel(value = "通用字典明细表实体类", description = "通用字典明细的实体类")
-public class DictionaryDetail extends SoftDeleteEntity<Long> {
-  private static final long serialVersionUID = -36972961529681499L;
+public class DictionaryDetail extends IdCreateUpdateDeleteEntity<Long> {
+  private static final long serialVersionUID = -5294666385626195733L;
 
   @Basic
   @ApiModelProperty(value = "字典明细键，不能重复，字典内明细项唯一代码", required = true)
@@ -76,5 +76,4 @@ public class DictionaryDetail extends SoftDeleteEntity<Long> {
   @ApiModelProperty(value = "字典说明")
   @Column(name = "description", length = 120)
   private String description;
-
 }

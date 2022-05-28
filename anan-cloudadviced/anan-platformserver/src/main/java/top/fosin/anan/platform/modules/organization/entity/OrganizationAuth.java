@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.DynamicUpdate;
-import top.fosin.anan.jpa.entity.OrganizIdCreateEntity;
+import top.fosin.anan.jpa.entity.IdCreateOrganizEntity;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -25,7 +25,7 @@ import javax.persistence.Table;
 @DynamicUpdate
 @Table(name = "anan_organization_auth")
 @ApiModel(value = "机构授权表实体类", description = "机构授权的实体类")
-public class OrganizationAuth extends OrganizIdCreateEntity<Long> {
+public class OrganizationAuth extends IdCreateOrganizEntity<Long> {
     private static final long serialVersionUID = -99392087741484947L;
 
     @Basic

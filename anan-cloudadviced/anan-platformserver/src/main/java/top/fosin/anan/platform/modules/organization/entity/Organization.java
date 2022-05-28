@@ -5,7 +5,8 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.DynamicUpdate;
-import top.fosin.anan.jpa.entity.PidCreateUpdateEntity;
+import org.hibernate.annotations.SQLDelete;
+import top.fosin.anan.jpa.entity.IdCreateUpdatePidDeleteEntity;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -23,9 +24,10 @@ import javax.persistence.Table;
 @Entity
 @EqualsAndHashCode(callSuper = true)
 @DynamicUpdate
+@SQLDelete(sql = "update anan_organization set deleted = 1 where id = ?")
 @Table(name = "anan_organization")
 @ApiModel(value = "机构表实体类", description = "机构的实体类")
-public class Organization extends PidCreateUpdateEntity<Long> {
+public class Organization extends IdCreateUpdatePidDeleteEntity<Long> {
     private static final long serialVersionUID = -27331190994806707L;
 
     @Basic
@@ -67,8 +69,5 @@ public class Organization extends PidCreateUpdateEntity<Long> {
     @ApiModelProperty(value = "使用状态：0=启用，1=禁用，具体取值于字典表anan_dictionary.id=11", required = true)
     @Column(name = "status", nullable = false)
     private Integer status;
-
-
-
 
 }

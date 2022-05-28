@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.DynamicUpdate;
-import top.fosin.anan.jpa.entity.SoftDeleteEntity;
+import top.fosin.anan.jpa.entity.IdCreateUpdateDeleteEntity;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -26,7 +26,7 @@ import java.util.Date;
 @DynamicUpdate
 @Table(name = "anan_user")
 @ApiModel(value = "用户表实体类", description = "用户的实体类-包含软删除")
-public class UserAll extends SoftDeleteEntity<Long> {
+public class UserAll extends IdCreateUpdateDeleteEntity<Long> {
   private static final long serialVersionUID = 389805570221840757L;
 
   @Basic

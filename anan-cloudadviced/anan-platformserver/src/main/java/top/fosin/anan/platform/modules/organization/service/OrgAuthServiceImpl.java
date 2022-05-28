@@ -8,19 +8,19 @@ import org.springframework.transaction.annotation.Transactional;
 import top.fosin.anan.cloudresource.dto.req.UserRegisterDto;
 import top.fosin.anan.cloudresource.dto.req.UserReqDto;
 import top.fosin.anan.cloudresource.dto.req.RegisterDto;
-import top.fosin.anan.cloudresource.dto.res.OrganizationRespDto;
+import top.fosin.anan.cloudresource.dto.res.OrgRespDto;
 import top.fosin.anan.cloudresource.dto.res.UserRespDto;
 import top.fosin.anan.core.util.BeanUtil;
 import top.fosin.anan.core.util.DateTimeUtil;
-import top.fosin.anan.platform.modules.organization.dto.OrganizationAuthReqDto;
-import top.fosin.anan.platform.modules.organization.dto.OrganizationReqDto;
+import top.fosin.anan.platform.modules.organization.dto.OrgAuthReqDto;
+import top.fosin.anan.platform.modules.organization.dto.OrgReqDto;
 import top.fosin.anan.platform.modules.pay.dto.PayOrderReqDto;
-import top.fosin.anan.platform.modules.organization.dto.OrganizationAuthRespDto;
+import top.fosin.anan.platform.modules.organization.dto.OrgAuthRespDto;
 import top.fosin.anan.platform.modules.pay.dto.PayOrderRespDto;
 import top.fosin.anan.platform.modules.version.dto.VersionRespDto;
-import top.fosin.anan.platform.modules.organization.dao.OrganizationAuthDao;
-import top.fosin.anan.platform.modules.organization.service.inter.OrganizationAuthService;
-import top.fosin.anan.platform.modules.organization.service.inter.OrganizationService;
+import top.fosin.anan.platform.modules.organization.dao.OrgAuthDao;
+import top.fosin.anan.platform.modules.organization.service.inter.OrgAuthService;
+import top.fosin.anan.platform.modules.organization.service.inter.OrgService;
 import top.fosin.anan.platform.modules.pay.service.inter.PayOrderService;
 import top.fosin.anan.platform.modules.user.service.inter.UserService;
 import top.fosin.anan.platform.modules.version.service.inter.VersionService;
@@ -38,24 +38,24 @@ import java.util.List;
  */
 @Service
 @Lazy
-public class OrganizationAuthServiceImpl implements OrganizationAuthService {
-    private final OrganizationAuthDao ananSysOrganizationAuthDao;
+public class OrgAuthServiceImpl implements OrgAuthService {
+    private final OrgAuthDao ananSysOrgAuthDao;
 
     private final UserService userService;
 
     private final PayOrderService payOrderService;
 
     private final VersionService versionService;
-    private final OrganizationService organizationService;
+    private final OrgService orgService;
 
     private final PasswordEncoder passwordEncoder;
 
-    public OrganizationAuthServiceImpl(OrganizationAuthDao ananSysOrganizationAuthDao, UserService userService, PayOrderService payOrderService, VersionService versionService, OrganizationService organizationService, PasswordEncoder passwordEncoder) {
-        this.ananSysOrganizationAuthDao = ananSysOrganizationAuthDao;
+    public OrgAuthServiceImpl(OrgAuthDao ananSysOrgAuthDao, UserService userService, PayOrderService payOrderService, VersionService versionService, OrgService orgService, PasswordEncoder passwordEncoder) {
+        this.ananSysOrgAuthDao = ananSysOrgAuthDao;
         this.userService = userService;
         this.payOrderService = payOrderService;
         this.versionService = versionService;
-        this.organizationService = organizationService;
+        this.orgService = orgService;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -63,20 +63,20 @@ public class OrganizationAuthServiceImpl implements OrganizationAuthService {
      * 获取DAO
      */
     @Override
-    public OrganizationAuthDao getRepository() {
-        return ananSysOrganizationAuthDao;
+    public OrgAuthDao getDao() {
+        return ananSysOrgAuthDao;
     }
 
     @Override
-    public List<OrganizationAuthRespDto> findAllByVersionId(Long versionId) {
-        return BeanUtil.copyProperties(getRepository().findAllByVersionId(versionId),
-                OrganizationAuthRespDto.class);
+    public List<OrgAuthRespDto> findAllByVersionId(Long versionId) {
+        return BeanUtil.copyProperties(getDao().findAllByVersionId(versionId),
+                OrgAuthRespDto.class);
     }
 
     @Override
-    public List<OrganizationAuthRespDto> findAllByOrganizId(Long organizId) {
-        return BeanUtil.copyProperties(getRepository().findAllByOrganizId(organizId),
-                OrganizationAuthRespDto.class);
+    public List<OrgAuthRespDto> findAllByOrganizId(Long organizId) {
+        return BeanUtil.copyProperties(getDao().findAllByOrganizId(organizId),
+                OrgAuthRespDto.class);
     }
 
     @Override
@@ -85,16 +85,16 @@ public class OrganizationAuthServiceImpl implements OrganizationAuthService {
         Date now = new Date();
 
         //创建机构
-        OrganizationReqDto organization = new OrganizationReqDto();
+        OrgReqDto organization = new OrgReqDto();
         BeanUtils.copyProperties(registerDto.getOrganization(), organization);
         organization.setPid(0L);
         organization.setTopId(0L);
         organization.setStatus(0);
-        OrganizationRespDto organizationEntity = organizationService.create(organization);
-        OrganizationReqDto updateDto = new OrganizationReqDto();
+        OrgRespDto organizationEntity = orgService.create(organization);
+        OrgReqDto updateDto = new OrgReqDto();
         BeanUtils.copyProperties(organizationEntity, updateDto);
         updateDto.setTopId(organizationEntity.getId());
-        organizationService.update(updateDto);
+        orgService.update(updateDto);
 
         //创建用户
         UserRegisterDto registerDTO = registerDto.getUser();
@@ -130,7 +130,7 @@ public class OrganizationAuthServiceImpl implements OrganizationAuthService {
         PayOrderRespDto payOrderRespDto = payOrderService.create(orderEntity);
 
         //创建机构认证信息
-        OrganizationAuthReqDto auth = new OrganizationAuthReqDto();
+        OrgAuthReqDto auth = new OrgAuthReqDto();
         auth.setVersionId(versionId);
         auth.setOrderId(payOrderRespDto.getId());
         auth.setMaxOrganizs(respDto.getMaxOrganizs());
@@ -146,7 +146,7 @@ public class OrganizationAuthServiceImpl implements OrganizationAuthService {
         return true;
     }
 
-    private String getAuthCode(OrganizationAuthReqDto auth) {
+    private String getAuthCode(OrgAuthReqDto auth) {
         return passwordEncoder.encode(auth.toString());
     }
 }

@@ -10,7 +10,7 @@ import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
 import top.fosin.anan.cloudresource.dto.res.UserRespDto;
 import top.fosin.anan.cloudresource.service.UserFeignFallbackServiceImpl;
 import top.fosin.anan.model.constant.PathConstant;
-import top.fosin.anan.model.dto.TreeDto;
+import top.fosin.anan.model.dto.res.TreeDto;
 import top.fosin.anan.model.result.MultResult;
 import top.fosin.anan.model.result.SingleResult;
 

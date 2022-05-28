@@ -10,7 +10,7 @@ import top.fosin.anan.cloudresource.constant.PlatformRedisConstant;
 import top.fosin.anan.cloudresource.dto.req.PermissionReqDto;
 import top.fosin.anan.cloudresource.dto.res.PermissionRespDto;
 import top.fosin.anan.core.util.BeanUtil;
-import top.fosin.anan.platform.modules.organization.dao.OrganizationPermissionDao;
+import top.fosin.anan.platform.modules.organization.dao.OrgPermissionDao;
 import top.fosin.anan.platform.modules.pub.dao.PermissionDao;
 import top.fosin.anan.platform.modules.pub.dao.ServiceDao;
 import top.fosin.anan.platform.modules.pub.entity.Permission;
@@ -39,7 +39,7 @@ public class PermissionServiceImpl implements PermissionService {
     private final RolePermissionDao rolePermissionDao;
     private final VersionPermissionDao versionPermissionDao;
     private final VersionRolePermissionDao versionRolePermissionDao;
-    private final OrganizationPermissionDao organizationPermissionDao;
+    private final OrgPermissionDao orgPermissionDao;
     private final ServiceDao serviceDao;
 
     public PermissionServiceImpl(PermissionDao permissionDao,
@@ -47,14 +47,14 @@ public class PermissionServiceImpl implements PermissionService {
                                  RolePermissionDao rolePermissionDao,
                                  VersionPermissionDao versionPermissionDao,
                                  VersionRolePermissionDao versionRolePermissionDao,
-                                 OrganizationPermissionDao organizationPermissionDao,
+                                 OrgPermissionDao orgPermissionDao,
                                  ServiceDao serviceDao) {
         this.permissionDao = permissionDao;
         this.userPermissionDao = userPermissionDao;
         this.rolePermissionDao = rolePermissionDao;
         this.versionPermissionDao = versionPermissionDao;
         this.versionRolePermissionDao = versionRolePermissionDao;
-        this.organizationPermissionDao = organizationPermissionDao;
+        this.orgPermissionDao = orgPermissionDao;
         this.serviceDao = serviceDao;
     }
 
@@ -156,7 +156,7 @@ public class PermissionServiceImpl implements PermissionService {
         Assert.isTrue(countByPermissionId == 0, "还有版本在使用该权限，不能直接删除!");
         countByPermissionId = rolePermissionDao.countByPermissionId(id);
         Assert.isTrue(countByPermissionId == 0, "还有角色在使用该权限，不能直接删除!");
-        countByPermissionId = organizationPermissionDao.countByPermissionId(id);
+        countByPermissionId = orgPermissionDao.countByPermissionId(id);
         Assert.isTrue(countByPermissionId == 0, "还有机构在使用该权限，不能直接删除!");
         Collection<PermissionRespDto> entities = findByPid(id);
         Assert.isTrue(entities == null || entities.size() == 0, "该节点还存在子节点不能直接删除!");
@@ -212,7 +212,7 @@ public class PermissionServiceImpl implements PermissionService {
     }
 
     @Override
-    public PermissionDao getRepository() {
+    public PermissionDao getDao() {
         return permissionDao;
     }
 }

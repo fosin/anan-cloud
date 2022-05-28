@@ -7,7 +7,7 @@ import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
-import top.fosin.anan.jpa.entity.SoftDeleteEntity;
+import top.fosin.anan.jpa.entity.IdCreateUpdateDeleteEntity;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -30,7 +30,7 @@ import java.util.Date;
 @Where(clause = "deleted = 0")
 @Table(name = "anan_user")
 @ApiModel(value = "用户表实体类", description = "用户的实体类")
-public class User extends SoftDeleteEntity<Long> {
+public class User extends IdCreateUpdateDeleteEntity<Long> {
   private static final long serialVersionUID = 897030139778409164L;
 
   @Basic
