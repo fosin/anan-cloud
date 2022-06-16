@@ -13,10 +13,8 @@ import java.util.List;
  * @date 2017/12/27
  *
  */
-public interface UserService extends ISimpleJpaService<User,
-        UserRespDto,
-        Long,
-        UserReqDto, UserReqDto, UserReqDto> {
+public interface UserService extends ISimpleJpaService<UserReqDto,UserRespDto, Long, User> {
+
     UserRespDto findByUsercode(String usercode);
 
     UserRespDto changePassword(Long id, String password, String confirmPassword1, String confirmPassword2);

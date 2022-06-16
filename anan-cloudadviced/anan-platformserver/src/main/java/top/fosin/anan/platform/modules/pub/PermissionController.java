@@ -3,6 +3,7 @@ package top.fosin.anan.platform.modules.pub;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
+import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import top.fosin.anan.cloudresource.constant.RequestPath;
 import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
@@ -26,18 +27,11 @@ import java.util.List;
 @RestController
 @RequestMapping(UrlPrefixConstant.PERMISSION)
 @Api(value = UrlPrefixConstant.PERMISSION, tags = "权限管理")
+@AllArgsConstructor
 public class PermissionController extends BaseController
-        implements ISimpleController<PermissionRespDto, Long,
-        PermissionReqDto, PermissionReqDto,
-        PermissionReqDto>,
-        IRetrieveTreeController<PermissionRespTreeDto, Long,
-                PermissionReqDto> {
-
+        implements ISimpleController<PermissionReqDto, PermissionRespDto, Long>,
+        IRetrieveTreeController<PermissionReqDto, PermissionRespTreeDto, Long> {
     private final PermissionService permissionService;
-
-    public PermissionController(PermissionService permissionService) {
-        this.permissionService = permissionService;
-    }
 
     @PostMapping(RequestPath.SERVICE_CODE)
     @ApiImplicitParam(name = "serviceCode", value = "服务标识，等同于anan_service.code",

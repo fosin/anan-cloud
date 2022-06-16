@@ -18,8 +18,7 @@ import top.fosin.anan.platform.modules.pub.service.inter.OauthClientService;
 @RestController
 @RequestMapping(UrlPrefixConstant.OAUTH_CLIENT)
 @Api(value = UrlPrefixConstant.OAUTH_CLIENT, tags = "OAuth2.0客户端授权管理")
-public class OauthClientController implements ISimpleController<OauthClientDetailsRespDto, String,
-        OauthClientDetailsReqDto, OauthClientDetailsReqDto, OauthClientDetailsReqDto> {
+public class OauthClientController implements ISimpleController< OauthClientDetailsReqDto, OauthClientDetailsRespDto,String> {
     private final OauthClientService oauthClientService;
 
     public OauthClientController(OauthClientService oauthClientService) {

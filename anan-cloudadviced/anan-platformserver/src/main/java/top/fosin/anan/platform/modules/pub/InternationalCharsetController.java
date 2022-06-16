@@ -24,11 +24,7 @@ import top.fosin.anan.platform.modules.pub.service.inter.InternationalCharsetSer
 @RestController
 @RequestMapping(UrlPrefixConstant.INTERNATIONAL_CHARSET)
 @Api(value = UrlPrefixConstant.INTERNATIONAL_CHARSET, tags = "国际化语言字符集管理")
-public class InternationalCharsetController implements ISimpleController<InternationalCharsetRespDto,
-        Long,
-        InternationalCharsetReqDto,
-        InternationalCharsetReqDto,
-        InternationalCharsetReqDto> {
+public class InternationalCharsetController implements ISimpleController<InternationalCharsetReqDto, InternationalCharsetRespDto, Long> {
 
     private final InternationalCharsetService internationalCharsetService;
 

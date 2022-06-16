@@ -6,8 +6,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
-import top.fosin.anan.jpa.entity.IdCreateUpdateDeleteEntity;
+import top.fosin.anan.jpa.entity.IdCreateUpdateOrganizDeleteEntity;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -27,10 +26,9 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = true)
 @DynamicUpdate
 @SQLDelete(sql = "update anan_user set deleted = 1 where id = ?")
-@Where(clause = "deleted = 0")
 @Table(name = "anan_user")
 @ApiModel(value = "用户表实体类", description = "用户的实体类")
-public class User extends IdCreateUpdateDeleteEntity<Long> {
+public class User extends IdCreateUpdateOrganizDeleteEntity<Long> {
   private static final long serialVersionUID = 897030139778409164L;
 
   @Basic
@@ -47,11 +45,6 @@ public class User extends IdCreateUpdateDeleteEntity<Long> {
   @ApiModelProperty(value = "传入原始密码，后台会对原始密码进行加密后再存储", required = true)
   @Column(name = "password", nullable = false, length = 96)
   private String password;
-
-  @Column(name = "organiz_id", nullable = false)
-  @Basic
-  @ApiModelProperty(value = "机构序号")
-  private Long organizId;
 
   @Basic
   @ApiModelProperty(value = "生日", required = true)

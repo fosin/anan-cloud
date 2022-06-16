@@ -11,6 +11,6 @@ import top.fosin.anan.platform.modules.version.entity.Version;
  * @author fosin
  * @date 2018-11-18 17:26:40
  */
-public interface VersionService extends ISimpleJpaService<Version, VersionRespDto,
-        Long, VersionReqDto, VersionReqDto, VersionReqDto> {
+public interface VersionService extends ISimpleJpaService<VersionReqDto, VersionRespDto, Long,Version> {
+
 }

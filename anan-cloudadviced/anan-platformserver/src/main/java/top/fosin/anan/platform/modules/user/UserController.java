@@ -4,6 +4,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import lombok.AllArgsConstructor;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -12,7 +13,6 @@ import top.fosin.anan.cloudresource.dto.req.UserReqDto;
 import top.fosin.anan.cloudresource.dto.res.RoleRespDto;
 import top.fosin.anan.cloudresource.dto.res.UserRespDto;
 import top.fosin.anan.cloudresource.dto.res.UserRoleRespDto;
-import top.fosin.anan.core.exception.AnanServiceException;
 import top.fosin.anan.core.util.crypt.AesUtil;
 import top.fosin.anan.model.controller.BaseController;
 import top.fosin.anan.model.controller.ISimpleController;
@@ -42,19 +42,13 @@ import java.util.List;
 @RestController
 @RequestMapping(UrlPrefixConstant.USER)
 @Api(value = UrlPrefixConstant.USER, tags = "用户管理")
-public class UserController extends BaseController implements ISimpleController<UserRespDto,
-        Long, UserReqDto, UserReqDto, UserReqDto> {
+@AllArgsConstructor
+public class UserController extends BaseController
+        implements ISimpleController<UserReqDto,UserRespDto, Long> {
     private final UserService userService;
     private final UserRoleService userRoleService;
     private final RoleService roleService;
     private final UserPermissionService userPermissionService;
-
-    public UserController(UserService userService, UserRoleService userRoleService, RoleService roleService, UserPermissionService userPermissionService) {
-        this.userService = userService;
-        this.userRoleService = userRoleService;
-        this.roleService = roleService;
-        this.userPermissionService = userPermissionService;
-    }
 
     @PostMapping("/usercode/{usercode}")
     @ApiImplicitParam(name = "usercode", value = "用户工号,取值于AnanUserEntity.usercode",
@@ -159,18 +153,18 @@ public class UserController extends BaseController implements ISimpleController<
     public MultResult<UserPermissionRespDto>
     permissions(@NotNull @RequestBody List<UserPermissionReqDto> entities,
                 @Positive @PathVariable Long userId) {
-        return ResultUtils.success(userPermissionService.updateInBatch("userId", userId, entities));
+        return ResultUtils.success(userPermissionService.updateInBatch(userId, entities));
     }
 
     @ApiOperation(value = "根据用户ID重置用户密码", notes = "重置后的密码或是固定密码或是随机密码，具体由机构参数UserDefaultPasswordStrategy决定")
     @ApiImplicitParam(name = IdDto.ID_NAME, value = "用户ID,取值于AnanUserEntity.id",
             required = true, dataTypeClass = Long.class, paramType = "path")
     @PostMapping("/resetPassword/{id}")
-    public SingleResult<String> resetPassword(@Positive @PathVariable("id") Long id) {
+    public SingleResult<String> resetPassword(@Positive @PathVariable(IdDto.ID_NAME) Long id) {
         return ResultUtils.success(userService.resetPassword(id).getPassword());
     }
 
-    @ApiOperation("根据用户唯一id查找用户所有角色信息列表")
+    @ApiOperation("根据用户序号查找用户所有角色信息列表")
     @ApiImplicitParam(name = "userId", value = "用户ID,取值于AnanUserEntity.id",
             required = true, dataTypeClass = Long.class, paramType = "path")
     @RequestMapping(value = "/roles/{userId}", method = {RequestMethod.GET, RequestMethod.POST})
@@ -188,12 +182,11 @@ public class UserController extends BaseController implements ISimpleController<
     @PutMapping(value = "/roles/{userId}")
     public MultResult<UserRoleRespDto> putUserRoles
             (@NotNull @RequestBody List<UserRoleReqDto> entities,
-             @Positive @PathVariable Long userId) throws
-            AnanServiceException {
-        return ResultUtils.success(userRoleService.updateInBatch("userId", userId, entities));
+             @Positive @PathVariable Long userId) {
+        return ResultUtils.success(userRoleService.updateInBatch(userId, entities));
     }
 
-    @ApiOperation("根据用户唯一id查找用户所有角色信息")
+    @ApiOperation("根据用户序号查找用户所有角色信息")
     @ApiImplicitParam(name = "userId", value = "用户ID,对应AnanRoleEntity.id",
             required = true, dataTypeClass = Integer.class, paramType = "path")
     @RequestMapping(value = "/otherRoles/{userId}", method = {RequestMethod.GET, RequestMethod.POST})

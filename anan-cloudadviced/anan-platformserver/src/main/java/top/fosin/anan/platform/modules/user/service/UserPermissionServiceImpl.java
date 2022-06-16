@@ -1,5 +1,6 @@
 package top.fosin.anan.platform.modules.user.service;
 
+import lombok.AllArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.context.annotation.Lazy;
@@ -25,28 +26,14 @@ import java.util.stream.Collectors;
  */
 @Service
 @Lazy
+@AllArgsConstructor
 public class UserPermissionServiceImpl implements UserPermissionService {
     private final UserPermissionDao userPermissionRepo;
-    public UserPermissionServiceImpl(UserPermissionDao userPermissionRepo) {
-        this.userPermissionRepo = userPermissionRepo;
-    }
 
     @Override
     public List<UserPermissionRespDto> findByUserIdAndOrganizId(Long userId, Long organizId) {
         return BeanUtil.copyProperties(
                 userPermissionRepo.findByUserIdAndOrganizId(userId, organizId), UserPermissionRespDto.class);
-    }
-
-    @Override
-    @Transactional(rollbackFor = Exception.class)
-    public List<UserPermissionRespDto> findByUserId(Long userId) {
-        return BeanUtil.copyProperties(
-                userPermissionRepo.findByUserId(userId), UserPermissionRespDto.class);
-    }
-
-    @Override
-    public long countByPermissionId(Long permissionId) {
-        return userPermissionRepo.countByPermissionId(permissionId);
     }
 
     @Override
@@ -57,11 +44,11 @@ public class UserPermissionServiceImpl implements UserPermissionService {
                     @CacheEvict(value = PlatformRedisConstant.ANAN_USER_PERMISSION_TREE, key = "#userId")
 
             })
-    public List<UserPermissionRespDto> updateInBatch(String deleteCol, Long userId, Collection<UserPermissionReqDto> dtos) {
+    public List<UserPermissionRespDto> updateInBatch(Long userId, Collection<UserPermissionReqDto> dtos) {
         Assert.notNull(userId, "传入的用户ID不能为空!");
         Assert.isTrue(dtos.stream().allMatch(entity -> entity.getUserId().equals(userId)), "需要更新的数据集中有与用户ID不匹配的数据!");
-        long organizId = dtos.stream().distinct().map(UserPermissionReqDto::getOrganizId)
-                .findFirst().orElseThrow(() -> new IllegalArgumentException("没有找打破有效的机构序号"));
+        long organizId = dtos.stream().map(UserPermissionReqDto::getOrganizId).distinct()
+                .findFirst().orElseThrow(() -> new IllegalArgumentException("没有找到有效的机构序号"));
         List<UserPermission> after0Permissions =
                 dtos.stream().filter(dto -> dto.getAddMode() == 0).map(permission -> {
                     UserPermission entity = new UserPermission();

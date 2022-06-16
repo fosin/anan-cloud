@@ -1,5 +1,6 @@
 package top.fosin.anan.platform.modules.pub.service;
 
+import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import top.fosin.anan.cloudresource.dto.req.ParameterReqDto;
@@ -20,14 +21,10 @@ import java.util.Objects;
  */
 @Service
 @Lazy
+@AllArgsConstructor
 public class LocalOrganParameter implements IParameter {
     private final ParameterService parameterService;
     private final AnanUserDetailService ananUserDetailService;
-
-    public LocalOrganParameter(ParameterService parameterService, AnanUserDetailService ananUserDetailService) {
-        this.parameterService = parameterService;
-        this.ananUserDetailService = ananUserDetailService;
-    }
 
     @Override
     public ParameterRespDto setParameter(String scope, String name, String value, String description) {

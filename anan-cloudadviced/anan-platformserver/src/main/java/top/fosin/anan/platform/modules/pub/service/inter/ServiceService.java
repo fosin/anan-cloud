@@ -2,7 +2,6 @@ package top.fosin.anan.platform.modules.pub.service.inter;
 
 import top.fosin.anan.cloudresource.dto.res.ServiceRespDto;
 import top.fosin.anan.jpa.service.ISimpleJpaService;
-
 import top.fosin.anan.platform.modules.pub.dto.ServiceReqDto;
 import top.fosin.anan.platform.modules.pub.entity.Service;
 
@@ -12,6 +11,5 @@ import top.fosin.anan.platform.modules.pub.entity.Service;
  * @author fosin
  * @date 2020-12-04 17:47:40
  */
-public interface ServiceService extends ISimpleJpaService<Service, ServiceRespDto,
-        Long, ServiceReqDto, ServiceReqDto, ServiceReqDto> {
+public interface ServiceService extends ISimpleJpaService<ServiceReqDto, ServiceRespDto, Long,Service> {
 }

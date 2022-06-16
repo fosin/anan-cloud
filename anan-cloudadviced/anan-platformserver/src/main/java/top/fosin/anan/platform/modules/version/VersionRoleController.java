@@ -29,8 +29,7 @@ import java.util.List;
 @RestController
 @RequestMapping(UrlPrefixConstant.VERSION_ROLE)
 @Api(value = UrlPrefixConstant.VERSION_ROLE, tags = "版本角色管理")
-public class VersionRoleController implements ISimpleController<VersionRoleRespDto,
-        Long, VersionRoleReqDto, VersionRoleReqDto, VersionRoleReqDto> {
+public class VersionRoleController implements ISimpleController<VersionRoleReqDto,VersionRoleRespDto, Long> {
     /**
      * 服务对象
      */
@@ -43,22 +42,22 @@ public class VersionRoleController implements ISimpleController<VersionRoleRespD
     }
 
     @ApiOperation("根据角色ID获取版本权限")
-    @ApiImplicitParam(name = "roleId", value = "版本ID,取值于AnanVersionRoleEntity.id", required = true, dataTypeClass = Long.class, paramType = "path")
+    @ApiImplicitParam(name = "roleId", value = "版本ID,取值于VersionRole.id", required = true, dataTypeClass = Long.class, paramType = "path")
     @RequestMapping(value = "/permissions/{roleId}", method = {RequestMethod.GET, RequestMethod.POST})
     public MultResult<VersionRolePermissionRespDto> permissions(@PathVariable Long roleId) {
-        return ResultUtils.success(versionRolePermissionService.findByRoleId(roleId));
+        return ResultUtils.success(versionRolePermissionService.listByForeingKey(roleId));
     }
 
     @ApiOperation(value = "根据版本ID更新版本权限", notes = "根据版本ID更新版本权限，此操作将先删除原权限，再新增新权限")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "entities", value = "版本权限集合(List<VersionRolePermission>)", required = true, dataTypeClass = List.class, paramType = "body"),
-            @ApiImplicitParam(name = "roleId", value = "版本ID,取值于AnanVersionRoleEntity.id", required = true, dataTypeClass = Long.class, paramType = "path")
+            @ApiImplicitParam(name = "roleId", value = "版本ID,取值于VersionRole.id", required = true, dataTypeClass = Long.class, paramType = "path")
     })
     @PutMapping(value = "/permissions/{roleId}")
     public SingleResult<Boolean> permissions(@RequestBody List<VersionRolePermissionReqDto> entities,
-                                                             @PathVariable("roleId") Long roleId) {
+                                             @PathVariable("roleId") Long roleId) {
         //更新版本权限
-        versionRolePermissionService.updateInBatch("roleId", roleId, entities);
+        versionRolePermissionService.updateInBatch(roleId, entities);
         return ResultUtils.success(true);
     }
 

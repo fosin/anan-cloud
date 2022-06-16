@@ -7,11 +7,12 @@ import lombok.EqualsAndHashCode;
 import top.fosin.anan.model.dto.req.IdQuerySortDto;
 import top.fosin.anan.model.module.LogicalQueryRule;
 import top.fosin.anan.model.module.SortRule;
+import top.fosin.anan.model.prop.ForeignKeyProp;
 import top.fosin.anan.model.valid.group.Create;
 import top.fosin.anan.model.valid.group.Update;
 
-import javax.validation.constraints.Positive;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 
 /**
  * 系统版本权限表(AnanVersionPermission)请求DTO
@@ -23,7 +24,8 @@ import javax.validation.constraints.NotNull;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @ApiModel(value = "版本权限表请求DTO", description = "版本权限的请求DTO")
-public class VersionPermissionReqDto extends IdQuerySortDto<LogicalQueryRule, SortRule, Long> {
+public class VersionPermissionReqDto extends IdQuerySortDto<LogicalQueryRule, SortRule, Long>
+        implements ForeignKeyProp<Long> {
     private static final long serialVersionUID = 425131909775170449L;
 
     @NotNull(message = "版本序号" + "{javax.validation.constraints.NotNull.message}")
@@ -38,4 +40,18 @@ public class VersionPermissionReqDto extends IdQuerySortDto<LogicalQueryRule, So
     @ApiModelProperty(value = "权限序号", required = true)
     private Long permissionId;
 
+    @Override
+    public Long getFkValue() {
+        return versionId;
+    }
+
+    @Override
+    public void setFkValue(Long foreingKey) {
+        this.versionId = foreingKey;
+    }
+
+    @Override
+    public String getFkName() {
+        return "versionId";
+    }
 }

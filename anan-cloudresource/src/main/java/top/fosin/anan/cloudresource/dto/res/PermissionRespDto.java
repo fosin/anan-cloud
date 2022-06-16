@@ -32,7 +32,7 @@ public class PermissionRespDto extends IdPidDto<Long> {
     @ApiModelProperty(value = "路由地址，权限路径ant风格表达式，默认等于code", example = "String")
     private String routePath;
 
-    @ApiModelProperty(value = "权限类型：0=按钮、1=组件菜单，对应ur是前端组件、2=链接菜单，对应url是http(s)链接地址、3=目录菜单、4=系统模块，具体取值于字典表anan_dictionary.code=13，当权限类型是1、3、4：目录菜单时表示该节点不是一个叶子节点", example = "1")
+    @ApiModelProperty(value = "权限类型：具体取值于字典表anan_dictionary.code=13，除1、3、6之外的类型都是叶子节点", example = "1")
     private Integer type;
 
     @ApiModelProperty(value = "菜单层级", example = "1")

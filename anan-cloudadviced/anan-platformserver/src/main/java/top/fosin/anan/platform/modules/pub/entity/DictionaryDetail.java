@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
 import top.fosin.anan.jpa.entity.IdCreateUpdateDeleteEntity;
 
 import javax.persistence.Basic;
@@ -26,7 +25,6 @@ import javax.persistence.Table;
 @EqualsAndHashCode(callSuper = true)
 @DynamicUpdate
 @SQLDelete(sql = "update anan_dictionary_detail set deleted = 1 where id = ?")
-@Where(clause = "deleted = 0")
 @Table(name = "anan_dictionary_detail")
 @ApiModel(value = "通用字典明细表实体类", description = "通用字典明细的实体类")
 public class DictionaryDetail extends IdCreateUpdateDeleteEntity<Long> {

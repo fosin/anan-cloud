@@ -15,7 +15,6 @@ import top.fosin.anan.model.valid.group.Update;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -27,7 +26,7 @@ import java.util.List;
  */
 @Data
 @ApiModel(value = "OAuth2客户端接入配置请求DTO", description = "OAuth2客户端接入配置的请求DTO")
-public class OauthClientDetailsReqDto implements Serializable, IdProp<String>,
+public class OauthClientDetailsReqDto implements IdProp<String>,
         QuerySortRuleProp<LogicalQueryRule, SortRule> {
     private static final long serialVersionUID = -19073929038045745L;
 

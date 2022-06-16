@@ -1,19 +1,17 @@
 package top.fosin.anan.platform.modules.pub.service;
 
 
-import org.springframework.beans.BeanUtils;
+import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import top.fosin.anan.cloudresource.constant.SystemConstant;
 import top.fosin.anan.cloudresource.dto.req.DictionaryReqDto;
-import top.fosin.anan.cloudresource.dto.res.DictionaryRespDto;
 import top.fosin.anan.cloudresource.service.AnanUserDetailService;
-import top.fosin.anan.core.util.BeanUtil;
-import top.fosin.anan.platform.modules.pub.entity.Dictionary;
-import top.fosin.anan.platform.modules.pub.dao.DictionaryDetailDao;
 import top.fosin.anan.platform.modules.pub.dao.DictionaryDao;
+import top.fosin.anan.platform.modules.pub.dao.DictionaryDetailDao;
+import top.fosin.anan.platform.modules.pub.entity.Dictionary;
 import top.fosin.anan.platform.modules.pub.service.inter.DictionaryService;
 
 import java.util.Collection;
@@ -27,24 +25,16 @@ import java.util.List;
  */
 @Service
 @Lazy
+@AllArgsConstructor
 public class DictionaryServiceImpl implements DictionaryService {
     private final DictionaryDao dictionaryDao;
     private final DictionaryDetailDao dictionaryDetailDao;
     private final AnanUserDetailService ananUserDetailService;
 
-    public DictionaryServiceImpl(DictionaryDao dictionaryDao, DictionaryDetailDao dictionaryDetailDao, AnanUserDetailService ananUserDetailService) {
-        this.dictionaryDao = dictionaryDao;
-        this.dictionaryDetailDao = dictionaryDetailDao;
-        this.ananUserDetailService = ananUserDetailService;
-    }
-
     @Override
-    @Transactional(rollbackFor = Exception.class)
-    public DictionaryRespDto create(DictionaryReqDto entity) {
-        Dictionary createEntity = new Dictionary();
-        BeanUtils.copyProperties(entity, createEntity);
-        hasModifiedPrivileges(createEntity.getType());
-        return BeanUtil.copyProperties(dictionaryDao.save(createEntity), DictionaryRespDto.class);
+    public void preCreate(DictionaryReqDto reqDto) {
+        DictionaryService.super.preCreate(reqDto);
+        hasModifiedPrivileges(reqDto.getType());
     }
 
     private void hasModifiedPrivileges(int type) {
@@ -55,15 +45,9 @@ public class DictionaryServiceImpl implements DictionaryService {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
-    public void update(DictionaryReqDto entity) {
-        Long id = entity.getId();
-        Assert.notNull(id, "无效的字典代码id");
-        Dictionary updateEntity = dictionaryDao.findById(id).orElse(null);
-        Assert.notNull(updateEntity, "根据传入的字典code" + id + "在数据库中未能找到对于数据!");
-        BeanUtils.copyProperties(entity, updateEntity);
-        hasModifiedPrivileges(updateEntity.getType());
-        dictionaryDao.save(updateEntity);
+    public void preUpdate(DictionaryReqDto reqDto) {
+        DictionaryService.super.preUpdate(reqDto);
+        hasModifiedPrivileges(reqDto.getType());
     }
 
     @Override

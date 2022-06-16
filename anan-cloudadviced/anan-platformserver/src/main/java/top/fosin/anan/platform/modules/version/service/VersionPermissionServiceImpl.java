@@ -1,26 +1,27 @@
 package top.fosin.anan.platform.modules.version.service;
 
+import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import top.fosin.anan.cloudresource.constant.PlatformRedisConstant;
 import top.fosin.anan.core.util.BeanUtil;
-import top.fosin.anan.platform.modules.version.dto.VersionPermissionReqDto;
-import top.fosin.anan.platform.modules.version.dto.VersionPermissionRespDto;
 import top.fosin.anan.platform.modules.organization.dao.OrgAuthDao;
 import top.fosin.anan.platform.modules.organization.dao.OrgPermissionDao;
 import top.fosin.anan.platform.modules.organization.entity.OrganizationAuth;
 import top.fosin.anan.platform.modules.organization.entity.OrganizationPermission;
-import top.fosin.anan.platform.modules.role.dao.RolePermissionDao;
 import top.fosin.anan.platform.modules.role.dao.RoleDao;
+import top.fosin.anan.platform.modules.role.dao.RolePermissionDao;
 import top.fosin.anan.platform.modules.role.entity.Role;
 import top.fosin.anan.platform.modules.role.entity.RolePermission;
 import top.fosin.anan.platform.modules.user.dao.UserPermissionDao;
 import top.fosin.anan.platform.modules.user.entity.UserPermission;
 import top.fosin.anan.platform.modules.version.dao.VersionPermissionDao;
-import top.fosin.anan.platform.modules.version.dao.VersionRolePermissionDao;
 import top.fosin.anan.platform.modules.version.dao.VersionRoleDao;
+import top.fosin.anan.platform.modules.version.dao.VersionRolePermissionDao;
+import top.fosin.anan.platform.modules.version.dto.VersionPermissionReqDto;
+import top.fosin.anan.platform.modules.version.dto.VersionPermissionRespDto;
 import top.fosin.anan.platform.modules.version.entity.VersionPermission;
 import top.fosin.anan.platform.modules.version.entity.VersionRole;
 import top.fosin.anan.platform.modules.version.entity.VersionRolePermission;
@@ -40,6 +41,7 @@ import java.util.stream.Collectors;
  */
 @Service
 @Lazy
+@AllArgsConstructor
 public class VersionPermissionServiceImpl implements VersionPermissionService {
     private final VersionPermissionDao versionPermissionRepo;
     private final VersionRolePermissionDao versionRolePermissionRepo;
@@ -51,46 +53,9 @@ public class VersionPermissionServiceImpl implements VersionPermissionService {
     private final OrgPermissionDao orgPermissionRepo;
     private final AnanCacheManger ananCacheManger;
 
-    public VersionPermissionServiceImpl(VersionPermissionDao versionPermissionRepo,
-                                        VersionRolePermissionDao versionRolePermissionRepo,
-                                        VersionRoleDao versionRoleRepo,
-                                        RoleDao roleDao,
-                                        RolePermissionDao rolePermissionRepo,
-                                        UserPermissionDao userPermissionRepo,
-                                        OrgAuthDao orgAuthRepository,
-                                        OrgPermissionDao orgPermissionRepo, AnanCacheManger ananCacheManger) {
-        this.versionPermissionRepo = versionPermissionRepo;
-        this.versionRolePermissionRepo = versionRolePermissionRepo;
-        this.versionRoleRepo = versionRoleRepo;
-        this.roleDao = roleDao;
-        this.rolePermissionRepo = rolePermissionRepo;
-        this.userPermissionRepo = userPermissionRepo;
-        this.orgAuthRepository = orgAuthRepository;
-        this.orgPermissionRepo = orgPermissionRepo;
-        this.ananCacheManger = ananCacheManger;
-    }
-
-    /**
-     * 获取DAO
-     */
-    @Override
-    public VersionPermissionDao getDao() {
-        return versionPermissionRepo;
-    }
-
-    @Override
-    public List<VersionPermissionRespDto> findByVersionId(Long versionId) {
-        return BeanUtil.copyProperties(getDao().findByVersionId(versionId), VersionPermissionRespDto.class);
-    }
-
-    @Override
-    public long countByPermissionId(Long permissionId) {
-        return getDao().countByPermissionId(permissionId);
-    }
-
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public List<VersionPermissionRespDto> updateInBatch(String deleteCol, Long versionId, Collection<VersionPermissionReqDto> entities) {
+    public List<VersionPermissionRespDto> updateInBatch(Long versionId, Collection<VersionPermissionReqDto> entities) {
 
         Assert.notNull(versionId, "传入的版本ID不能为空!");
         Assert.isTrue(entities.stream().allMatch(entity -> entity.getVersionId().equals(versionId)), "需要更新的数据集中有与版本ID不匹配的数据!");
@@ -154,5 +119,13 @@ public class VersionPermissionServiceImpl implements VersionPermissionService {
         PermissionUtil.saveNewPermission(beforeVersionPermissions, afterVersionPermissions, versionPermissionRepo);
 
         return BeanUtil.copyProperties(afterVersionPermissions, VersionPermissionRespDto.class);
+    }
+
+    /**
+     * 获取DAO
+     */
+    @Override
+    public VersionPermissionDao getDao() {
+        return versionPermissionRepo;
     }
 }

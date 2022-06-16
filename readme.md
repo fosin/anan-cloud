@@ -77,6 +77,7 @@
     2.6.x               2.3.x                3.4.x
     2.7.x               2.4.x                3.5.x~3.6.x
     3.0.x               3.0.x                3.5.x~3.6.x
+    3.1.x               3.1.x                3.7.x
 
 ## 服务与端口对照
 
@@ -85,6 +86,7 @@
     anan-eurakaserver          6100
     anan-configserver          6110
     anan-codemaker             6120
+    anan-licenseserver         6130
     anan-authserver            6140
     anan-platformserver        6150
     anan-sbaserver             6170

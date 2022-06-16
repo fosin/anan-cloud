@@ -1,6 +1,6 @@
 package top.fosin.anan.platform.modules.pub.service;
 
-import org.springframework.beans.BeanUtils;
+import lombok.AllArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Lazy;
@@ -15,10 +15,9 @@ import top.fosin.anan.cloudresource.dto.res.DictionaryDetailRespDto;
 import top.fosin.anan.cloudresource.service.AnanUserDetailService;
 import top.fosin.anan.core.exception.AnanServiceException;
 import top.fosin.anan.core.util.BeanUtil;
-import top.fosin.anan.platform.modules.pub.entity.Dictionary;
-import top.fosin.anan.platform.modules.pub.entity.DictionaryDetail;
-import top.fosin.anan.platform.modules.pub.dao.DictionaryDetailDao;
 import top.fosin.anan.platform.modules.pub.dao.DictionaryDao;
+import top.fosin.anan.platform.modules.pub.dao.DictionaryDetailDao;
+import top.fosin.anan.platform.modules.pub.entity.Dictionary;
 import top.fosin.anan.platform.modules.pub.service.inter.DictionaryDetailService;
 import top.fosin.anan.redis.cache.AnanCacheManger;
 
@@ -34,42 +33,25 @@ import java.util.List;
  */
 @Service
 @Lazy
+@AllArgsConstructor
 public class DictionaryDetailServiceImpl implements DictionaryDetailService {
-
     private final DictionaryDetailDao dictionaryDetailDao;
     private final AnanUserDetailService ananUserDetailService;
     private final DictionaryDao dictionaryDao;
     private final AnanCacheManger ananCacheManger;
 
-    public DictionaryDetailServiceImpl(DictionaryDetailDao dictionaryDetailDao,
-                                       AnanUserDetailService ananUserDetailService,
-                                       DictionaryDao dictionaryDao, AnanCacheManger ananCacheManger) {
-        this.dictionaryDetailDao = dictionaryDetailDao;
-        this.ananUserDetailService = ananUserDetailService;
-        this.dictionaryDao = dictionaryDao;
-        this.ananCacheManger = ananCacheManger;
-    }
-
     @Override
-    @Transactional(rollbackFor = Exception.class)
-    @CacheEvict(value = PlatformRedisConstant.ANAN_DICTIONARY_DETAIL, key = "#result.dictionaryId")
-    public DictionaryDetailRespDto create(DictionaryDetailReqDto entity) {
-        DictionaryDetail createEntiy = new DictionaryDetail();
-        BeanUtils.copyProperties(entity, createEntiy);
-        hasModifiedPrivileges(createEntiy.getDictionaryId());
-        return BeanUtil.copyProperties(getDao().save(createEntiy), DictionaryDetailRespDto.class);
-    }
-
-    @Override
-    @Transactional(rollbackFor = Exception.class)
-    @CacheEvict(value = PlatformRedisConstant.ANAN_DICTIONARY_DETAIL, key = "#reqDto.dictionaryId")
-    public void update(DictionaryDetailReqDto reqDto) {
-        Long id = reqDto.getId();
-        DictionaryDetail findEntity = dictionaryDetailDao.findById(id).orElse(null);
-        Assert.notNull(findEntity, "根据传入的主键[" + id + "]在数据库中未能找到数据!");
+    public void preCreate(DictionaryDetailReqDto reqDto) {
+        DictionaryDetailService.super.preCreate(reqDto);
         hasModifiedPrivileges(reqDto.getDictionaryId());
-        BeanUtils.copyProperties(reqDto, findEntity);
-        dictionaryDetailDao.save(findEntity);
+        ananCacheManger.evict(PlatformRedisConstant.ANAN_DICTIONARY_DETAIL, reqDto.getDictionaryId() + "");
+    }
+
+    @Override
+    public void preUpdate(DictionaryDetailReqDto reqDto) {
+        DictionaryDetailService.super.preUpdate(reqDto);
+        hasModifiedPrivileges(reqDto.getDictionaryId());
+        ananCacheManger.evict(PlatformRedisConstant.ANAN_DICTIONARY_DETAIL, reqDto.getDictionaryId() + "");
     }
 
     private void hasModifiedPrivileges(Long dictionaryId) {
@@ -82,7 +64,6 @@ public class DictionaryDetailServiceImpl implements DictionaryDetailService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    @CacheEvict(value = PlatformRedisConstant.ANAN_DICTIONARY_DETAIL, key = "#result.dictionaryId")
     public void deleteById(Long id) {
         dictionaryDetailDao.findById(id).ifPresent(entity -> {
             hasModifiedPrivileges(entity.getDictionaryId());
@@ -92,6 +73,7 @@ public class DictionaryDetailServiceImpl implements DictionaryDetailService {
             } catch (InterruptedException e) {
                 throw new AnanServiceException(e);
             }
+            ananCacheManger.evict(PlatformRedisConstant.ANAN_DICTIONARY_DETAIL, entity.getDictionaryId() + "");
         });
     }
 
@@ -109,7 +91,7 @@ public class DictionaryDetailServiceImpl implements DictionaryDetailService {
 
     @Override
     @Cacheable(value = PlatformRedisConstant.ANAN_DICTIONARY_DETAIL, key = "#dictionaryId")
-    public List<DictionaryDetailRespDto> findByDictionaryId(Long dictionaryId) {
+    public List<DictionaryDetailRespDto> listByForeingKey(Long dictionaryId) {
         Sort sort = Sort.by(Sort.Direction.fromString("ASC"), "sort");
         return BeanUtil.copyProperties(dictionaryDetailDao.findAllByDictionaryId(dictionaryId, sort), DictionaryDetailRespDto.class);
     }

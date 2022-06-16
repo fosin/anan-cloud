@@ -15,10 +15,7 @@ import java.util.List;
  * @date 2018-11-18 17:26:40
  */
 public interface OrgAuthService extends
-        ISimpleJpaService<OrganizationAuth,
-                OrgAuthRespDto,
-                Long, OrgAuthReqDto,
-                OrgAuthReqDto, OrgAuthReqDto> {
+        ISimpleJpaService<OrgAuthReqDto,OrgAuthRespDto,Long,OrganizationAuth> {
     List<OrgAuthRespDto> findAllByVersionId(Long versionId);
 
     List<OrgAuthRespDto> findAllByOrganizId(Long organizId);

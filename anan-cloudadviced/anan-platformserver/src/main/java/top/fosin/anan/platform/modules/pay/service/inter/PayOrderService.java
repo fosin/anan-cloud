@@ -11,6 +11,5 @@ import top.fosin.anan.platform.modules.pay.entity.PayOrder;
  * @author fosin
  * @date 2018-11-18 17:26:40
  */
-public interface PayOrderService extends ISimpleJpaService<PayOrder, PayOrderRespDto,
-        Long, PayOrderReqDto, PayOrderReqDto, PayOrderReqDto> {
+public interface PayOrderService extends ISimpleJpaService<PayOrderReqDto, PayOrderRespDto, Long,PayOrder> {
 }

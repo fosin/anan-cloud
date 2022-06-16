@@ -9,8 +9,10 @@ import org.springframework.web.bind.annotation.*;
 import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
 import top.fosin.anan.cloudresource.dto.req.RegisterDto;
 import top.fosin.anan.cloudresource.dto.res.OrgRespDto;
+import top.fosin.anan.cloudresource.dto.res.OrgTreeDto;
 import top.fosin.anan.model.controller.BaseController;
 import top.fosin.anan.model.controller.ICrudController;
+import top.fosin.anan.model.controller.IRetrieveTreeController;
 import top.fosin.anan.model.result.MultResult;
 import top.fosin.anan.model.result.ResultUtils;
 import top.fosin.anan.model.result.SingleResult;
@@ -31,9 +33,8 @@ import java.util.List;
 @RequestMapping(UrlPrefixConstant.ORGANIZATION)
 @Api(value = UrlPrefixConstant.ORGANIZATION, tags = "机构管理")
 public class OrgController extends BaseController
-        implements ICrudController<OrgRespDto, Long,
-        OrgReqDto, OrgReqDto,
-        OrgReqDto> {
+        implements ICrudController<OrgReqDto, OrgRespDto, Long>,
+        IRetrieveTreeController<OrgReqDto, OrgTreeDto, Long> {
     private final OrgService orgService;
     private final OrgAuthService orgAuthService;
     private final OrgPermissionService orgPermissionService;
@@ -49,7 +50,7 @@ public class OrgController extends BaseController
             required = true, dataTypeClass = Long.class, paramType = "path")
     @RequestMapping(value = "/permissions/{organizId}", method = {RequestMethod.GET, RequestMethod.POST})
     public MultResult<OrgPermissionRespDto> permissions(@PathVariable Long organizId) {
-        return ResultUtils.success(orgPermissionService.findByOrganizId(organizId));
+        return ResultUtils.success(orgPermissionService.listByForeingKey(organizId));
     }
 
     @ApiOperation(value = "根据版本ID更新版本权限", notes = "根据版本ID更新版本权限，此操作将先删除原权限，再新增新权限")
@@ -64,7 +65,7 @@ public class OrgController extends BaseController
     public MultResult<OrgPermissionRespDto> permissions(
             @RequestBody List<OrgPermissionReqDto> dtos,
             @PathVariable("organizId") Long organizId) {
-        return ResultUtils.success(orgPermissionService.updateInBatch("organizId", organizId, dtos));
+        return ResultUtils.success(orgPermissionService.updateInBatch(organizId, dtos));
     }
 
     @ApiOperation(value = "机构注册", notes = "用户自助注册机构")

@@ -13,10 +13,7 @@ import java.util.List;
  * @author fosin
  * @date 2020-12-04 11:05:28
  */
-public interface InternationalService extends ISimpleJpaService<International,
-        InternationalRespDto,
-        Long,
-        InternationalReqDto, InternationalReqDto, InternationalReqDto> {
+public interface InternationalService extends ISimpleJpaService<InternationalReqDto, InternationalRespDto, Long,International> {
     List<InternationalRespDto> listByStatus(Integer status);
 
     InternationalRespDto findByCode(String code);

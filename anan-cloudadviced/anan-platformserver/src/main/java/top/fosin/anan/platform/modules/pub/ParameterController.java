@@ -32,8 +32,7 @@ import java.util.List;
 @RestController
 @RequestMapping(UrlPrefixConstant.PARAMETER)
 @Api(value = UrlPrefixConstant.PARAMETER, tags = "通用参数管理(参数获取、自动创建)")
-public class ParameterController implements ISimpleController<ParameterRespDto, Long,
-        ParameterReqDto, ParameterReqDto, ParameterReqDto> {
+public class ParameterController implements ISimpleController<ParameterReqDto,ParameterRespDto, Long> {
     private final ParameterService parameterService;
 
     public ParameterController(ParameterService parameterService) {

@@ -17,7 +17,7 @@ import top.fosin.anan.platform.modules.pay.service.inter.PayInvoiceService;
 @RestController
 @RequestMapping("v1/invoice")
 @Api(value = "v1/invoice", tags = "支付发票管理")
-public class PayInvoiceController implements ISimpleController<PayInvoiceRespDto, Long, PayInvoiceReqDto, PayInvoiceReqDto, PayInvoiceReqDto> {
+public class PayInvoiceController implements ISimpleController<PayInvoiceReqDto, PayInvoiceRespDto, Long> {
     /**
      * 服务对象
      */

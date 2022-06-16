@@ -18,7 +18,7 @@ import top.fosin.anan.platform.modules.pay.service.inter.PayService;
 @RestController
 @RequestMapping(UrlPrefixConstant.PAY)
 @Api(value = UrlPrefixConstant.PAY, tags = "支付管理")
-public class PayController implements ISimpleController<PayRespDto, Long, PayReqDto, PayReqDto, PayReqDto> {
+public class PayController implements ISimpleController<PayReqDto, PayRespDto, Long> {
     /**
      * 服务对象
      */

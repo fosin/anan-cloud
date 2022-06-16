@@ -1,19 +1,21 @@
-package top.fosin.anan.platform.modules.user.service;
+package top.fosin.anan.platform.modules.role.service;
 
 
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 import top.fosin.anan.cloudresource.constant.PlatformRedisConstant;
 import top.fosin.anan.cloudresource.dto.res.UserRespDto;
 import top.fosin.anan.cloudresource.dto.res.UserRoleRespDto;
 import top.fosin.anan.cloudresource.service.AnanUserDetailService;
 import top.fosin.anan.core.util.BeanUtil;
+import top.fosin.anan.platform.modules.role.dto.RoleUserReqDto;
 import top.fosin.anan.platform.modules.role.entity.Role;
+import top.fosin.anan.platform.modules.role.service.inter.RoleUserService;
 import top.fosin.anan.platform.modules.user.dao.UserRoleDao;
-import top.fosin.anan.platform.modules.user.dto.UserRoleReqDto;
 import top.fosin.anan.platform.modules.user.entity.UserRole;
-import top.fosin.anan.platform.modules.user.service.inter.UserRoleService;
 import top.fosin.anan.redis.cache.AnanCacheManger;
 
 import java.util.ArrayList;
@@ -27,15 +29,16 @@ import java.util.List;
 @Service
 @Lazy
 @AllArgsConstructor
-public class UserRoleServiceImpl implements UserRoleService {
+public class RoleUserServiceImpl implements RoleUserService {
     private final UserRoleDao userRoleDao;
     private final AnanCacheManger ananCacheManger;
     private final AnanUserDetailService ananUserDetailService;
 
     @Override
-    public List<UserRoleRespDto> createInBatch(Collection<UserRoleReqDto> dtos) {
+    @Transactional(rollbackFor = Exception.class)
+    public List<UserRoleRespDto> createInBatch(Collection<RoleUserReqDto> dtos) {
         List<UserRole> saveEntities = new ArrayList<>();
-        for (UserRoleReqDto dto : dtos) {
+        for (RoleUserReqDto dto : dtos) {
             UserRole userRole = new UserRole();
             userRole.setUserId(dto.getUserId());
             Role role = new Role();
@@ -52,10 +55,17 @@ public class UserRoleServiceImpl implements UserRoleService {
     }
 
     @Override
-    public void deleteInBatch(Long userId) {
+    @Transactional(rollbackFor = Exception.class)
+    public void deleteInBatch(Long roleId) {
+        Assert.notNull(roleId, "roleId：" + roleId + "属性值无效!");
+        RoleUserReqDto reqDto = new RoleUserReqDto();
+        reqDto.setFkValue(roleId);
+        List<UserRole> userRoles = entitiesByDto(reqDto);
         //如果是用户角色，则只需要删除一个用户的缓存
-        clearUserCache(userId);
-        UserRoleService.super.deleteInBatch(userId);
+        for (UserRole dto : userRoles) {
+            clearUserCache(dto.getUserId());
+        }
+        getDao().deleteAllInBatch(userRoles);
     }
 
     private void clearUserCache(Long userId) {

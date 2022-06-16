@@ -4,6 +4,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
 import top.fosin.anan.cloudresource.dto.req.RoleReqDto;
@@ -16,11 +17,10 @@ import top.fosin.anan.model.result.MultResult;
 import top.fosin.anan.model.result.ResultUtils;
 import top.fosin.anan.model.result.SingleResult;
 import top.fosin.anan.platform.modules.role.dto.RolePermissionReqDto;
-import top.fosin.anan.platform.modules.role.entity.RolePermission;
+import top.fosin.anan.platform.modules.role.dto.RoleUserReqDto;
 import top.fosin.anan.platform.modules.role.service.inter.RolePermissionService;
 import top.fosin.anan.platform.modules.role.service.inter.RoleService;
-import top.fosin.anan.platform.modules.user.dto.UserRoleReqDto;
-import top.fosin.anan.platform.modules.user.service.inter.UserRoleService;
+import top.fosin.anan.platform.modules.role.service.inter.RoleUserService;
 import top.fosin.anan.platform.modules.user.service.inter.UserService;
 
 import javax.validation.constraints.NotNull;
@@ -35,26 +35,20 @@ import java.util.List;
 @RestController
 @RequestMapping(UrlPrefixConstant.ROLE)
 @Api(value = UrlPrefixConstant.ROLE, tags = "角色管理")
-public class RoleController implements ISimpleController<RoleRespDto, Long,
-        RoleReqDto, RoleReqDto, RoleReqDto> {
-    private final RoleService roleService;
-    private final RolePermissionService rolePermissionService;
-    private final UserRoleService userRoleService;
-    private final UserService userService;
+@AllArgsConstructor
+public class RoleController implements ISimpleController<RoleReqDto, RoleRespDto, Long> {
 
-    public RoleController(RoleService roleService, RolePermissionService rolePermissionService, UserRoleService userRoleService, UserService userService) {
-        this.roleService = roleService;
-        this.rolePermissionService = rolePermissionService;
-        this.userRoleService = userRoleService;
-        this.userService = userService;
-    }
+    private final RoleService roleService;
+    private final UserService userService;
+    private final RolePermissionService rolePermissionService;
+    private final RoleUserService roleUserService;
 
     @ApiOperation("根据角色ID获取角色权限")
     @ApiImplicitParam(name = "roleId", value = "角色ID,取值于AnanRoleEntity.id",
             required = true, dataTypeClass = Long.class, paramType = "path")
     @RequestMapping(value = "/permissions/{roleId}", method = {RequestMethod.GET, RequestMethod.POST})
-    public MultResult<RolePermission> permissions(@Positive @PathVariable Long roleId) {
-        return ResultUtils.success(rolePermissionService.findByRoleId(roleId));
+    public MultResult<RolePermissionRespDto> permissions(@Positive @PathVariable Long roleId) {
+        return ResultUtils.success(rolePermissionService.listByForeingKey(roleId));
     }
 
     @ApiOperation(value = "根据角色ID更新角色权限", notes = "根据角色ID更新角色权限，此操作将先删除原权限，再新增新权限")
@@ -65,19 +59,19 @@ public class RoleController implements ISimpleController<RoleRespDto, Long,
                     required = true, dataTypeClass = Long.class, paramType = "path")
     })
     @PutMapping(value = "/permissions/{roleId}")
-    public MultResult<RolePermissionRespDto> permissions(@NotNull @RequestBody List<RolePermissionReqDto> entities,
-                                                         @Positive @PathVariable("roleId") Long roleId) {
-        return ResultUtils.success(rolePermissionService.updateInBatch("roleId", roleId, entities));
+    public MultResult<RolePermissionRespDto> permissions(
+            @NotNull @RequestBody List<RolePermissionReqDto> entities,
+            @Positive @PathVariable("roleId") Long roleId) {
+        return ResultUtils.success(rolePermissionService.updateInBatch(roleId, entities));
     }
 
-    @ApiOperation("根据角色唯一id查找该角色所有用户信息")
+    @ApiOperation("根据角色序号查找该角色所有用户信息")
     @ApiImplicitParam(name = "roleId", value = "角色ID,取值于AnanRoleEntity.id",
             required = true, dataTypeClass = Long.class, paramType = "path")
     @RequestMapping(value = "/users/{roleId}", method = {RequestMethod.GET, RequestMethod.POST})
     public MultResult<UserRespDto> getRoleUsers(@Positive @PathVariable("roleId") Long roleId) {
         return ResultUtils.success(userService.findRoleUsersByRoleId(roleId));
     }
-
 
     @ApiOperation(value = "根据角色ID更新角色拥有的用户", notes = "更新角色拥有的用户，此操作将先删除原用户集合，再新增新用户集合")
     @ApiImplicitParams({
@@ -87,13 +81,13 @@ public class RoleController implements ISimpleController<RoleRespDto, Long,
                     required = true, dataTypeClass = Long.class, paramType = "path"),
     })
     @PutMapping(value = "/users/{roleId}")
-    public SingleResult<Boolean> putRoleUsers(@NotNull @RequestBody List<UserRoleReqDto> dtos,
+    public SingleResult<Boolean> putRoleUsers(@NotNull @RequestBody List<RoleUserReqDto> dtos,
                                               @Positive @PathVariable("roleId") Long roleId) {
-        userRoleService.updateInBatch("roleId", roleId, dtos);
+        roleUserService.updateInBatch(roleId, dtos);
         return ResultUtils.success(true);
     }
 
-    @ApiOperation("根据用户唯一id查找用户目前不拥有的所有角色信息")
+    @ApiOperation("根据用户序号查找用户目前不拥有的所有角色信息")
     @ApiImplicitParam(name = "roleId", value = "角色ID,取值于AnanRoleEntity.id",
             required = true, dataTypeClass = Long.class, paramType = "path")
     @RequestMapping(value = "/otherUsers/{roleId}", method = {RequestMethod.POST})

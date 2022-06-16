@@ -1,9 +1,8 @@
 package top.fosin.anan.platform.modules.pub.service;
 
 
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
-import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
@@ -20,7 +19,6 @@ import top.fosin.anan.cloudresource.parameter.ParameterStatus;
 import top.fosin.anan.cloudresource.service.AnanUserDetailService;
 import top.fosin.anan.core.exception.AnanServiceException;
 import top.fosin.anan.core.util.BeanUtil;
-import top.fosin.anan.jpa.util.JpaUtil;
 import top.fosin.anan.model.dto.req.PageDto;
 import top.fosin.anan.model.result.PageResult;
 import top.fosin.anan.model.result.ResultUtils;
@@ -45,24 +43,18 @@ import java.util.Objects;
 @Service
 @Lazy
 @Slf4j
+@AllArgsConstructor
 public class ParameterServiceImpl implements ParameterService {
     private final ParameterDao parameterDao;
     private final AnanUserDetailService ananUserDetailService;
     private final OrgDao orgDao;
     private final AnanCacheManger ananCacheManger;
 
-    public ParameterServiceImpl(ParameterDao parameterDao, AnanUserDetailService ananUserDetailService, OrgDao orgDao, AnanCacheManger ananCacheManger) {
-        this.parameterDao = parameterDao;
-        this.ananUserDetailService = ananUserDetailService;
-        this.orgDao = orgDao;
-        this.ananCacheManger = ananCacheManger;
-    }
-
     @Override
-    public PageResult<ParameterRespDto> findPage(PageDto<ParameterReqDto> PageDto) {
-        ParameterReqDto params = PageDto.getParams();
-        PageRequest pageable = PageRequest.of(PageDto.getPageNumber() - 1, PageDto.getPageSize(),
-                JpaUtil.buildSortRules(params.getSortRules()));
+    public PageResult<ParameterRespDto> findPage(PageDto<ParameterReqDto> pageDto) {
+        ParameterReqDto params = pageDto.getParams();
+        PageRequest pageable = PageRequest.of(pageDto.getPageNumber() - 1, pageDto.getPageSize(),
+                buildSortRules(params.getSortRules()));
         String search = "%" + params.getName() + "%";
         Long organizId = ananUserDetailService.getAnanOrganizId();
         boolean sysAdminUser = ananUserDetailService.isSysAdminUser();
@@ -82,17 +74,14 @@ public class ParameterServiceImpl implements ParameterService {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
-    @CachePut(value = PlatformRedisConstant.ANAN_PARAMETER, key = "#root.target.getCacheKey(#result)")
-    public ParameterRespDto create(ParameterReqDto dto) {
-        Parameter createEntiy = BeanUtil.copyProperties(dto, Parameter.class);
-        return BeanUtil.copyProperties(getDao().save(createEntiy), ParameterRespDto.class);
+    public void postCreate(ParameterReqDto reqDto, ParameterRespDto respDto) {
+        ananCacheManger.put(PlatformRedisConstant.ANAN_PARAMETER, getCacheKey(respDto), respDto);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void update(ParameterReqDto dto) {
-        Long id = dto.getId();
+    public void update(ParameterReqDto reqDto, String[] ignoreProperties) {
+        Long id = reqDto.getId();
         Assert.notNull(id, "ID不能为空!");
         Parameter cEntity = parameterDao.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("通过ID：" + id + "未能找到对应的数据!"));
@@ -100,9 +89,9 @@ public class ParameterServiceImpl implements ParameterService {
             Assert.isTrue(StringUtils.hasText(cEntity.getScope()), "非超级管理员不能修改公共参数!");
         }
         String oldCacheKey = getCacheKey(cEntity);
-        String newCacheKey = getCacheKey(dto.getType(), dto.getScope(), dto.getName());
+        String newCacheKey = getCacheKey(reqDto.getType(), reqDto.getScope(), reqDto.getName());
 
-        BeanUtils.copyProperties(dto, cEntity);
+        BeanUtil.copyProperties(reqDto, cEntity, ignoreProperties);
         cEntity.setStatus(ParameterStatus.Modified.getTypeValue());
         parameterDao.save(cEntity);
         //如果修改了type、scope、name则需要删除以前的缓存并设置新缓存

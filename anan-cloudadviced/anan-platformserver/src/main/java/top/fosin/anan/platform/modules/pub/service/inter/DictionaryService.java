@@ -10,6 +10,5 @@ import top.fosin.anan.platform.modules.pub.entity.Dictionary;
  * @date 2017/12/29
  *
  */
-public interface DictionaryService extends ISimpleJpaService<Dictionary, DictionaryRespDto,
-        Long, DictionaryReqDto, DictionaryReqDto, DictionaryReqDto> {
+public interface DictionaryService extends ISimpleJpaService<DictionaryReqDto, DictionaryRespDto, Long,Dictionary> {
 }

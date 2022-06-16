@@ -1,7 +1,7 @@
 package top.fosin.anan.platform.modules.role.service;
 
 
-import org.springframework.beans.BeanUtils;
+import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -15,7 +15,6 @@ import top.fosin.anan.cloudresource.dto.req.RoleReqDto;
 import top.fosin.anan.cloudresource.dto.res.RoleRespDto;
 import top.fosin.anan.cloudresource.service.AnanUserDetailService;
 import top.fosin.anan.core.util.BeanUtil;
-import top.fosin.anan.jpa.util.JpaUtil;
 import top.fosin.anan.model.dto.req.PageDto;
 import top.fosin.anan.model.result.PageResult;
 import top.fosin.anan.model.result.ResultUtils;
@@ -40,21 +39,14 @@ import java.util.Objects;
  */
 @Service
 @Lazy
+@AllArgsConstructor
 public class RoleServiceImpl implements RoleService {
     private final RoleDao roleDao;
     private final UserRoleDao userRoleDao;
     private final OrgDao orgDao;
     private final AnanUserDetailService ananUserDetailService;
 
-    public RoleServiceImpl(RoleDao roleDao, UserRoleDao userRoleDao, OrgDao orgDao, AnanUserDetailService ananUserDetailService) {
-        this.roleDao = roleDao;
-        this.userRoleDao = userRoleDao;
-        this.orgDao = orgDao;
-        this.ananUserDetailService = ananUserDetailService;
-    }
-
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public RoleRespDto create(RoleReqDto dto) {
         String value = dto.getValue();
         if (SystemConstant.ADMIN_ROLE_NAME.equalsIgnoreCase(value) &&
@@ -63,33 +55,28 @@ public class RoleServiceImpl implements RoleService {
         }
         Assert.isTrue(!SystemConstant.ANAN_ROLE_NAME.equalsIgnoreCase(value),
                 "不能创建超级管理员角色帐号信息!");
-        Role entityDynamic = JpaUtil.queryOneByDto(getDao(), dto, Role.class);
+        Role entityDynamic = entityByDto(dto);
         Assert.isNull(entityDynamic, "该角色已存在，请核对!");
-        Role saveEntity = new Role();
-        BeanUtils.copyProperties(dto, saveEntity);
+        Role saveEntity = BeanUtil.copyProperties(dto, Role.class);
         Role save = roleDao.save(saveEntity);
-        RoleRespDto respDto = new RoleRespDto();
-        BeanUtils.copyProperties(save, respDto);
-        return respDto;
+        return BeanUtil.copyProperties(save, RoleRespDto.class);
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
-    public void update(RoleReqDto entity) {
-        Assert.notNull(entity, "传入了空对象!");
-        Long id = entity.getId();
+    public void update(RoleReqDto reqDto, String[] ignoreProperties) {
+        Assert.notNull(reqDto, "传入了空对象!");
+        Long id = reqDto.getId();
         Assert.notNull(id, "传入了空ID!");
 
         Role oldEntity = roleDao.findById(id).orElse(null);
         Assert.notNull(oldEntity, "通过传入的ID：" + id + "未能找到数据!");
         if (SystemConstant.ADMIN_ROLE_NAME.equalsIgnoreCase(oldEntity.getValue()) &&
-                !SystemConstant.ADMIN_ROLE_NAME.equalsIgnoreCase(entity.getValue())) {
+                !SystemConstant.ADMIN_ROLE_NAME.equalsIgnoreCase(reqDto.getValue())) {
             throw new IllegalArgumentException("不能修改角色标识" + SystemConstant.ADMIN_ROLE_NAME + "!");
         }
         Assert.isTrue(!SystemConstant.ANAN_ROLE_NAME.equalsIgnoreCase(oldEntity.getValue()),
                 "不能修改超级管理员角色帐号信息!");
-        Role saveEntity = new Role();
-        BeanUtils.copyProperties(entity, saveEntity);
+        Role saveEntity = BeanUtil.copyProperties(reqDto, Role.class, ignoreProperties);
         roleDao.save(saveEntity);
     }
 
@@ -138,25 +125,24 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public PageResult<RoleRespDto> findPage(PageDto<RoleReqDto> PageDto) {
-        Assert.notNull(PageDto, "传入的分页信息不能为空!");
-        RoleReqDto params = PageDto.getParams();
+    public PageResult<RoleRespDto> findPage(PageDto<RoleReqDto> pageDto) {
+        Assert.notNull(pageDto, "传入的分页信息不能为空!");
+        RoleReqDto params = pageDto.getParams();
 
-        PageRequest pageable = PageRequest.of(PageDto.getPageNumber() - 1, PageDto.getPageSize(),
-                JpaUtil.buildSortRules(params.getSortRules()));
+        PageRequest pageable = PageRequest.of(pageDto.getPageNumber() - 1, pageDto.getPageSize(),
+                buildSortRules(params.getSortRules()));
 
         Page<Role> page;
         Specification<Role> condition;
         if (ananUserDetailService.hasSysAdminRole()) {
-            condition = JpaUtil.buildQueryRules(params, Role.class, false);
+            condition = buildQueryRules(params, false);
         } else {
             Assert.notNull(params, "传入的分页信息不能为空!");
             Long organizId = params.getOrganizId();
             String name = params.getName();
             String value = params.getValue();
             Assert.notNull(organizId, "机构ID不能为空!");
-            Organization organiz = orgDao.findById(organizId).orElse(null);
-            Assert.notNull(organiz, "根据传入的机构编码没有找到任何数据!");
+            Organization organiz = orgDao.findById(organizId).orElseThrow(() -> new IllegalArgumentException("根据传入的机构编码没有找到任何数据!"));
             List<Organization> organizs = orgDao.findByTopIdAndCodeStartingWithOrderByCodeAsc(organiz.getTopId(), organiz.getCode());
 
             condition = (root, query, cb) -> {

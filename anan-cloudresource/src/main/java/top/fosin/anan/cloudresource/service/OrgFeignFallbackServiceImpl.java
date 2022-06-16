@@ -22,31 +22,31 @@ public class OrgFeignFallbackServiceImpl implements OrgFeignService {
 
     @Override
     public MultResult<OrgRespDto> listChild(Long pid) {
-        log.error("feign 通过机构pid远程获取子组织机构权限失败:{}", pid);
+        log.error("feign 根据父序号pid远程其直接子节点的数据集合:{}", pid);
         return null;
     }
 
     @Override
     public MultResult<OrgRespDto> findAllByIds(List<Long> ids) {
-        log.error("feign 远程获取机构信息失败:{}", ids);
+        log.error("feign 根据用户序号集合远程查询多条数据:{}", ids);
         return null;
     }
 
     @Override
     public MultResult<OrgRespDto> listAllChild(Long pid) {
-        log.error("feign 通过机构pid远程获取所有组织机构失败:{}", pid);
+        log.error("feign 根据父序号pid远程其所有孩子数据集合失败:{}", pid);
         return null;
     }
 
     @Override
-    public MultResult<OrgRespDto> tree(Long topId) {
-        log.error("feign 通过机构topId远程获取组织机构失败:{}", topId);
+    public MultResult<OrgRespDto> treeAllChild(Long topId) {
+        log.error("feign 根据父序号pid远程查询其所有孩子数据，并构建树型对象失败:{}", topId);
         return null;
     }
 
     @Override
     public SingleResult<OrgRespDto> findOneById(Long id) {
-        log.error("feign 通过机构ID远程查询一个组织机构失败:{}", id);
+        log.error("feign 根据主键序号远程查询一条数据:{}", id);
         return null;
     }
 

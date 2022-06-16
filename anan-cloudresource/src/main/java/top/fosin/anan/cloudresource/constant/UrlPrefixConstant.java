@@ -11,7 +11,11 @@ public class UrlPrefixConstant {
     public static final String PAY = "v1/pay";
     public static final String PAY_DETAIL = "v1/paydetail";
     public static final String USER = "v1/user";
+    public static final String USER_ROLE = "v1/user/role";
+    public static final String USER_PERMISSION = "v1/user/permission";
     public static final String ROLE = "v1/role";
+    public static final String ROLE_USER = "v1/role/user";
+    public static final String ROLE_PERMISSION = "v1/role/permission";
     public static final String DICTIONARY_DETAIL = "v1/dictionarydetail";
     public static final String DICTIONARY = "v1/dictionary";
     public static final String OAUTH_CLIENT = "v1/oauthclient";

@@ -17,8 +17,7 @@ import top.fosin.anan.platform.modules.pub.service.inter.DictionaryService;
 @RestController
 @RequestMapping(UrlPrefixConstant.DICTIONARY)
 @Api(value = UrlPrefixConstant.DICTIONARY, tags = "通用字典管理")
-public class DictionaryController implements ISimpleController<DictionaryRespDto,
-        Long, DictionaryReqDto, DictionaryReqDto, DictionaryReqDto> {
+public class DictionaryController implements ISimpleController<DictionaryReqDto, DictionaryRespDto, Long> {
     private final DictionaryService dictionaryService;
 
     public DictionaryController(DictionaryService dictionaryService) {

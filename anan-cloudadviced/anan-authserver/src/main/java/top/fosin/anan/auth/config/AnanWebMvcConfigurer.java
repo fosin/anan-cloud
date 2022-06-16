@@ -112,7 +112,6 @@ public class AnanWebMvcConfigurer implements WebMvcConfigurer {
 
     /**
      * 消息内容转换配置
-     * 配置fastJson返回json转换
      *
      * @param converters
      */

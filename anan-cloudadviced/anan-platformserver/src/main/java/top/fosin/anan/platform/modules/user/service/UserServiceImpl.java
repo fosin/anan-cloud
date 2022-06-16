@@ -1,6 +1,6 @@
 package top.fosin.anan.platform.modules.user.service;
 
-import org.springframework.beans.BeanUtils;
+import lombok.AllArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
@@ -20,20 +20,17 @@ import top.fosin.anan.cloudresource.dto.res.UserRespDto;
 import top.fosin.anan.cloudresource.service.AnanUserDetailService;
 import top.fosin.anan.core.util.BeanUtil;
 import top.fosin.anan.core.util.RegexUtil;
-import top.fosin.anan.jpa.util.JpaUtil;
-import top.fosin.anan.model.dto.res.TreeDto;
 import top.fosin.anan.model.dto.req.PageDto;
+import top.fosin.anan.model.dto.res.TreeDto;
 import top.fosin.anan.model.result.PageResult;
 import top.fosin.anan.model.result.ResultUtils;
 import top.fosin.anan.platform.modules.organization.dao.OrgDao;
 import top.fosin.anan.platform.modules.organization.entity.Organization;
 import top.fosin.anan.platform.modules.pub.service.LocalOrganParameter;
-import top.fosin.anan.platform.modules.user.dao.UserAllDao;
 import top.fosin.anan.platform.modules.user.dao.UserDao;
 import top.fosin.anan.platform.modules.user.dao.UserRoleDao;
 import top.fosin.anan.platform.modules.user.dto.UserPassRespDto;
 import top.fosin.anan.platform.modules.user.entity.User;
-import top.fosin.anan.platform.modules.user.entity.UserAll;
 import top.fosin.anan.platform.modules.user.entity.UserRole;
 import top.fosin.anan.platform.modules.user.service.inter.UserService;
 import top.fosin.anan.redis.cache.AnanCacheManger;
@@ -51,37 +48,15 @@ import java.util.Random;
  */
 @Service
 @Lazy
+@AllArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserDao userDao;
-    private final UserAllDao userAllDao;
     private final UserRoleDao userRoleDao;
     private final PasswordEncoder passwordEncoder;
     private final LocalOrganParameter localOrganParameter;
     private final AnanCacheManger ananCacheManger;
     private final AnanUserDetailService ananUserDetailService;
     private final OrgDao orgDao;
-
-    public UserServiceImpl(UserDao userDao, UserAllDao userAllDao, UserRoleDao userRoleDao, PasswordEncoder passwordEncoder, LocalOrganParameter localOrganParameter, AnanCacheManger ananCacheManger, AnanUserDetailService ananUserDetailService, OrgDao orgDao) {
-        this.userDao = userDao;
-        this.userAllDao = userAllDao;
-        this.userRoleDao = userRoleDao;
-        this.passwordEncoder = passwordEncoder;
-        this.localOrganParameter = localOrganParameter;
-        this.ananCacheManger = ananCacheManger;
-        this.ananUserDetailService = ananUserDetailService;
-        this.orgDao = orgDao;
-    }
-
-    /**
-     * 根据主键编号查找所有数据服务(包括软删除)
-     *
-     * @param ids 主键编号
-     * @return 查找结果集
-     */
-    @Override
-    public List<UserRespDto> listByIds(Collection<Long> ids) {
-        return BeanUtil.copyProperties(userAllDao.findAllById(ids), UserRespDto.class);
-    }
 
     /**
      * 根据用户工号查找数据服务(包括软删除)
@@ -94,7 +69,7 @@ public class UserServiceImpl implements UserService {
     @Transactional(readOnly = true)
     public UserRespDto findByUsercode(String usercode) {
         Assert.notNull(usercode, "用户工号不能为空!");
-        User userEntity = userAllDao.findByUsercode(usercode);
+        User userEntity = userDao.findByUsercode(usercode);
         if (userEntity == null) {
             return null;
         }
@@ -117,8 +92,8 @@ public class UserServiceImpl implements UserService {
     @Override
     @Cacheable(value = PlatformRedisConstant.ANAN_USER, key = "#id+'-id'", unless = "#result == null")
     @Transactional(readOnly = true)
-    public UserRespDto findOneById(Long id) {
-        UserAll userEntity = userAllDao.findById(id).orElseThrow(() -> new IllegalArgumentException("未找到对应数据!"));
+    public UserRespDto findOneById(Long id, boolean refs) {
+        User userEntity = userDao.findById(id).orElseThrow(() -> new IllegalArgumentException("未找到对应数据!"));
         UserRespDto respDto = BeanUtil.copyProperties(userEntity, UserRespDto.class);
         Long organizId = userEntity.getOrganizId();
         if (organizId > 0) {
@@ -136,20 +111,18 @@ public class UserServiceImpl implements UserService {
             password = getPassword();
         } else {
             int length = localOrganParameter.getOrCreateParameter("UserInitPasswordLength", 6,
-                            "用户初始密码长度");
-            Assert.isTrue(password.length() >= length, "用户初始密码最少"+length+"位!");
+                    "用户初始密码长度");
+            Assert.isTrue(password.length() >= length, "用户初始密码最少" + length + "位!");
         }
         entity.setPassword(passwordEncoder.encode(password));
         return password;
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public UserPassRespDto create(UserReqDto dto) {
         UserRespDto entityDynamic = this.findByUsercode(dto.getUsercode());
         Assert.isNull(entityDynamic, "用户工号已存在，请核对!");
-        User createUser = new User();
-        BeanUtils.copyProperties(dto, createUser);
+        User createUser = BeanUtil.copyProperties(dto, User.class);
         String password = encryptBeforeSave(createUser);
         createUser = userDao.save(createUser);
         UserPassRespDto respPassDto = BeanUtil.copyProperties(createUser, UserPassRespDto.class);
@@ -158,19 +131,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
-    public void update(UserReqDto dto) {
-        Long id = dto.getId();
+    public void update(UserReqDto reqDto, String[] ignoreProperties) {
+        Long id = reqDto.getId();
         Assert.isTrue(id > 0, "更新的数据id不能为空或者小于1!");
-        User createUser = userDao.findById(id).orElse(null);
-        String usercode = Objects.requireNonNull(createUser, "通过ID：" + id + "未能找到对应的数据!").getUsercode().toLowerCase();
+        User createUser = userDao.findById(id).orElseThrow(() -> new IllegalArgumentException("通过ID：" + id + "未能找到对应的数据!"));
+        String usercode = createUser.getUsercode().toLowerCase();
         if (ananUserDetailService.isAdminUser(usercode) &&
-                !ananUserDetailService.isAdminUser(dto.getUsercode().toLowerCase())) {
+                !ananUserDetailService.isAdminUser(reqDto.getUsercode().toLowerCase())) {
             throw new IllegalArgumentException("不能修改管理员" + SystemConstant.ADMIN_USER_CODE + "的帐号名称!");
         }
         Assert.isTrue(!ananUserDetailService.isSysAdminUser(usercode),
                 "不能修改超级管理员帐号信息!");
-        BeanUtils.copyProperties(dto, createUser);
+        BeanUtil.copyProperties(reqDto, createUser, ignoreProperties);
         ananCacheManger.evict(PlatformRedisConstant.ANAN_USER, usercode);
         ananCacheManger.evict(PlatformRedisConstant.ANAN_USER, id + "-id");
         ananCacheManger.evict(PlatformRedisConstant.ANAN_USER_ALL_PERMISSIONS, id + "");
@@ -228,41 +200,44 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public PageResult<UserRespDto> findPage(PageDto<UserReqDto> PageDto) {
-        PageRequest pageable = PageRequest.of(PageDto.getPageNumber() - 1, PageDto.getPageSize(),
-                JpaUtil.buildSortRules(PageDto.getParams().getSortRules()));
+    public PageResult<UserRespDto> findPage(PageDto<UserReqDto> pageDto) {
+        boolean sysAdminUser = ananUserDetailService.isSysAdminUser();
 
+        if (sysAdminUser) {
+            return UserService.super.findPage(pageDto);
+        }
+
+        PageRequest pageable = PageRequest.of(pageDto.getPageNumber() - 1, pageDto.getPageSize(),
+                buildSortRules(pageDto.getParams().getSortRules()));
+        UserReqDto params = pageDto.getParams();
         Specification<User> condition = (root, query, cb) -> {
             Path<String> usercodePath = root.get("usercode");
             Path<String> usernamePath = root.get("username");
             Path<String> phonePath = root.get("phone");
             Path<String> emailPath = root.get("email");
+            Path<Integer> deletePath = root.get(params.getDeletedName());
 
-            CriteriaBuilder.In<Object> organizId1 = null;
-            boolean sysAdminUser = ananUserDetailService.isSysAdminUser();
-            if (!sysAdminUser) {
-                Long organizId = ananUserDetailService.getAnanOrganizId();
-                Organization organization = orgDao.findById(organizId).orElse(null);
+            Long organizId = ananUserDetailService.getAnanOrganizId();
+            Organization organization = orgDao.findById(organizId).orElse(null);
 
-                Subquery<Integer> subQuery = query.subquery(Integer.class);
-                //从哪张表查询
-                Root<Organization> celluseRoot = subQuery.from(Organization.class);
-                //查询出什么
-                subQuery.select(celluseRoot.get(TreeDto.ID_NAME));
-                //条件是什么
-                Predicate p = cb.like(celluseRoot.get("code"), Objects.requireNonNull(organization, "通过organizId：" + organizId + "未能找到对应的数据!").getCode() + "%");
-                subQuery.where(p);
+            Subquery<Integer> subQuery = query.subquery(Integer.class);
+            //从哪张表查询
+            Root<Organization> celluseRoot = subQuery.from(Organization.class);
+            //查询出什么
+            subQuery.select(celluseRoot.get(TreeDto.ID_NAME));
+            //条件是什么
+            Predicate p = cb.like(celluseRoot.get("code"), Objects.requireNonNull(organization, "通过organizId：" + organizId + "未能找到对应的数据!").getCode() + "%");
+            subQuery.where(p);
 
-                organizId1 = cb.in(root.get("organizId")).value(subQuery);
+            Predicate defaultPredicate = cb.and(cb.notEqual(usercodePath, SystemConstant.ANAN_USER_CODE),
+                    cb.in(root.get("organizId")).value(subQuery));
+            Integer deleted = params.getDeleted();
+            if (deleted != null) {
+                defaultPredicate = cb.and(cb.equal(deletePath, deleted), defaultPredicate);
             }
-            UserReqDto params = PageDto.getParams();
 
-            if (params == null) {
-                if (sysAdminUser) {
-                    return query.getRestriction();
-                } else {
-                    return cb.and(cb.notEqual(usercodePath, SystemConstant.ANAN_USER_CODE), organizId1);
-                }
+            if (cn.hutool.core.bean.BeanUtil.isEmpty(params)) {
+                return defaultPredicate;
             } else {
                 String username = params.getUsername();
                 String usercode = params.getUsercode();
@@ -273,21 +248,13 @@ public class UserServiceImpl implements UserService {
                         && !StringUtils.hasText(phone)
                         && !StringUtils.hasText(email)
                 ) {
-                    if (sysAdminUser) {
-                        return query.getRestriction();
-                    } else {
-                        return cb.and(cb.notEqual(usercodePath, SystemConstant.ANAN_USER_CODE), organizId1);
-                    }
+                    return defaultPredicate;
                 }
                 Predicate predicate = cb.or(cb.like(usernamePath, "%" + username + "%"),
                         cb.like(usercodePath, "%" + usercode + "%"),
                         cb.like(phonePath, "%" + phone + "%"),
                         cb.like(emailPath, "%" + email + "%"));
-                if (sysAdminUser) {
-                    return predicate;
-                } else {
-                    return cb.and(cb.notEqual(usercodePath, SystemConstant.ANAN_USER_CODE), predicate, organizId1);
-                }
+                return cb.and(defaultPredicate, predicate);
             }
         };
         //分页查找

@@ -11,6 +11,5 @@ import top.fosin.anan.platform.modules.pay.entity.PayInvoice;
  * @author fosin
  * @date 2018-11-18 17:26:40
  */
-public interface PayInvoiceService extends ISimpleJpaService<PayInvoice, PayInvoiceRespDto,
-        Long, PayInvoiceReqDto, PayInvoiceReqDto, PayInvoiceReqDto> {
+public interface PayInvoiceService extends ISimpleJpaService<PayInvoiceReqDto, PayInvoiceRespDto, Long,PayInvoice> {
 }

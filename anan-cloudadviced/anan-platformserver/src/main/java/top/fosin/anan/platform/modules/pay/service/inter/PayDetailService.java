@@ -11,6 +11,5 @@ import top.fosin.anan.platform.modules.pay.entity.PayDetail;
  * @author fosin
  * @date 2018-11-18 17:26:40
  */
-public interface PayDetailService extends ISimpleJpaService<PayDetail, PayDetailRespDto,
-        Long, PayDetailReqDto, PayDetailReqDto, PayDetailReqDto> {
+public interface PayDetailService extends ISimpleJpaService<PayDetailReqDto, PayDetailRespDto, Long,PayDetail> {
 }

@@ -7,7 +7,7 @@ import lombok.EqualsAndHashCode;
 import org.springframework.format.annotation.DateTimeFormat;
 import top.fosin.anan.core.util.DateTimeUtil;
 import top.fosin.anan.core.util.RegexUtil;
-import top.fosin.anan.model.dto.req.IdQuerySortDto;
+import top.fosin.anan.model.dto.req.IdQuerySortOrganizDeleteDto;
 import top.fosin.anan.model.module.LogicalQueryRule;
 import top.fosin.anan.model.module.SortRule;
 import top.fosin.anan.model.valid.group.Create;
@@ -26,13 +26,8 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @ApiModel(value = "用户表请求DTO", description = "用户的请求DTO")
-public class UserReqDto extends IdQuerySortDto<LogicalQueryRule, SortRule, Long> {
+public class UserReqDto extends IdQuerySortOrganizDeleteDto<LogicalQueryRule, SortRule, Long> {
     private static final long serialVersionUID = -24340282458700184L;
-
-    @NotNull(message = "机构序号" + "{javax.validation.constraints.NotNull.message}",
-            groups = {Create.class, Update.class})
-    @ApiModelProperty(value = "机构ID,创建和更新时必填")
-    private Long organizId;
 
     @NotBlank(message = "用户工号" + "{javax.validation.constraints.NotBlank.message}",
             groups = {Create.class, Update.class})

@@ -8,6 +8,7 @@ import top.fosin.anan.core.util.RegexUtil;
 import top.fosin.anan.model.dto.req.IdQuerySortDto;
 import top.fosin.anan.model.module.LogicalQueryRule;
 import top.fosin.anan.model.module.SortRule;
+import top.fosin.anan.model.prop.ForeignKeyProp;
 import top.fosin.anan.model.valid.group.Create;
 import top.fosin.anan.model.valid.group.Update;
 
@@ -24,7 +25,8 @@ import javax.validation.constraints.Pattern;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @ApiModel(value = "通用字典明细表请求DTO", description = "通用字典明细的请求DTO")
-public class DictionaryDetailReqDto extends IdQuerySortDto<LogicalQueryRule, SortRule, Long> {
+public class DictionaryDetailReqDto extends IdQuerySortDto<LogicalQueryRule, SortRule, Long>
+        implements ForeignKeyProp<Long> {
     private static final long serialVersionUID = 507206776709737910L;
 
     @NotNull(message = "字典明细键" + "{javax.validation.constraints.NotNull.message}",
@@ -66,4 +68,19 @@ public class DictionaryDetailReqDto extends IdQuerySortDto<LogicalQueryRule, Sor
 
     @ApiModelProperty(value = "字典说明")
     private String description;
+
+    @Override
+    public Long getFkValue() {
+        return dictionaryId;
+    }
+
+    @Override
+    public void setFkValue(Long foreingKey) {
+        this.dictionaryId = foreingKey;
+    }
+
+    @Override
+    public String getFkName() {
+        return "dictionaryId";
+    }
 }

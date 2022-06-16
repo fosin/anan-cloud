@@ -25,8 +25,7 @@ import javax.validation.constraints.NotNull;
 @RestController
 @RequestMapping(UrlPrefixConstant.INTERNATIONAL)
 @Api(value = UrlPrefixConstant.INTERNATIONAL, tags = "国际化语言管理")
-public class InternationalController implements ISimpleController<InternationalRespDto, Long,
-        InternationalReqDto, InternationalReqDto, InternationalReqDto> {
+public class InternationalController implements ISimpleController<InternationalReqDto,InternationalRespDto, Long> {
 
     private final InternationalService internationalService;
 
@@ -61,8 +60,7 @@ public class InternationalController implements ISimpleController<InternationalR
      */
     @GetMapping(value = PathConstant.PATH_STATUS + "/{status}")
     @ApiOperation(value = "改变多条数据的状态")
-    @ApiImplicitParam(name = "status", value = "需改表的状态值", paramType = "path",
-            required = true, dataTypeClass = Integer.class)
+    @ApiImplicitParam(name = "status", value = "需改表的状态值", paramType = "path", required = true, dataTypeClass = Integer.class)
     public MultResult<InternationalRespDto> listByStatus(@NotNull @PathVariable Integer status) {
         return ResultUtils.success(getService().listByStatus(status));
     }

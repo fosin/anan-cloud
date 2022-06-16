@@ -4,7 +4,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import top.fosin.anan.model.dto.req.IdQuerySortDto;
+import top.fosin.anan.model.dto.req.IdQuerySortOrganizDto;
 import top.fosin.anan.model.module.LogicalQueryRule;
 import top.fosin.anan.model.module.SortRule;
 import top.fosin.anan.model.prop.ForeignKeyProp;
@@ -15,32 +15,32 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
 /**
- * 系统角色权限表(AnanRolePermission)请求DTO
+ * 系统角色用户表(AnanUserRole)请求DTO
  *
  * @author fosin
- * @date 2019-01-27 19:33:26
+ * @date 2019-02-19 18:17:04
  * @since 1.0.0
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-@ApiModel(value = "角色权限表请求DTO", description = "角色权限的请求DTO")
-public class RolePermissionReqDto extends IdQuerySortDto<LogicalQueryRule, SortRule, Long>
-        implements ForeignKeyProp<Long> {
-    private static final long serialVersionUID = -44755376359236777L;
+@ApiModel(value = "角色用户表请求DTO", description = "角色用户的请求DTO")
+public class RoleUserReqDto extends IdQuerySortOrganizDto<LogicalQueryRule, SortRule, Long> implements ForeignKeyProp<Long> {
+    private static final long serialVersionUID = 818450290607468187L;
 
-    @NotNull(message = "角色序号" + "{javax.validation.constraints.NotNull.message}",
+    @NotNull(message = "用户序号" + "{javax.validation.constraints.NotNull.message}")
+    @Positive(message = "用户序号" + "{javax.validation.constraints.Positive.message}",
             groups = {Create.class, Update.class})
+    @ApiModelProperty(value = "用户ID,创建和更新时必填")
+    private Long userId;
+
+    @NotNull(message = "角色序号" + "{javax.validation.constraints.NotNull.message}")
     @Positive(message = "角色序号" + "{javax.validation.constraints.Positive.message}",
             groups = {Create.class, Update.class})
-    @ApiModelProperty(value = "角色序号", required = true)
+    @ApiModelProperty(value = "角色ID,创建和更新时必填")
     private Long roleId;
 
-    @NotNull(message = "权限序号" + "{javax.validation.constraints.NotNull.message}",
-            groups = {Create.class, Update.class})
-    @Positive(message = "权限序号" + "{javax.validation.constraints.Positive.message}",
-            groups = {Create.class, Update.class})
-    @ApiModelProperty(value = "权限序号", required = true)
-    private Long permissionId;
+    @ApiModelProperty(value = "该值由后台维护，更改数据时前端不需要关心，取值于anan_user.id")
+    private Long createBy;
 
     @Override
     public Long getFkValue() {
@@ -56,5 +56,4 @@ public class RolePermissionReqDto extends IdQuerySortDto<LogicalQueryRule, SortR
     public String getFkName() {
         return "roleId";
     }
-
 }

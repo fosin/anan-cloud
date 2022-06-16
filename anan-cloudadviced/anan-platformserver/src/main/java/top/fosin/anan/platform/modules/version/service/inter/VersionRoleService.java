@@ -11,6 +11,5 @@ import top.fosin.anan.platform.modules.version.entity.VersionRole;
  * @author fosin
  * @date 2018-11-18 17:26:40
  */
-public interface VersionRoleService extends ISimpleJpaService<VersionRole, VersionRoleRespDto,
-        Long, VersionRoleReqDto, VersionRoleReqDto, VersionRoleReqDto> {
+public interface VersionRoleService extends ISimpleJpaService<VersionRoleReqDto, VersionRoleRespDto, Long,VersionRole> {
 }

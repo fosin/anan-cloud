@@ -5,8 +5,9 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import top.fosin.anan.cloudresource.dto.res.PermissionRespDto;
+import top.fosin.anan.cloudresource.dto.res.PermissionRespTreeDto;
 import top.fosin.anan.model.controller.ISimpleController;
 import top.fosin.anan.model.dto.res.TreeDto;
 import top.fosin.anan.model.result.MultResult;
@@ -31,20 +32,11 @@ import java.util.List;
 @RestController
 @RequestMapping("v1/version")
 @Api(value = "v1/version", tags = "版本管理")
-public class VersionController implements ISimpleController<VersionRespDto,
-        Long, VersionReqDto, VersionReqDto, VersionReqDto> {
-    /**
-     * 服务对象
-     */
+@AllArgsConstructor
+public class VersionController implements ISimpleController<VersionReqDto, VersionRespDto, Long> {
     private final VersionService versionService;
     private final VersionPermissionService versionPermissionService;
     private final PermissionService permissionService;
-
-    public VersionController(VersionService versionService, VersionPermissionService versionPermissionService, PermissionService permissionService) {
-        this.versionService = versionService;
-        this.versionPermissionService = versionPermissionService;
-        this.permissionService = permissionService;
-    }
 
     @ApiOperation(value = "根据父权限ID获取其孩子数据列表")
     @RequestMapping(value = "/listChild/{pid}", method = {RequestMethod.POST})
@@ -52,29 +44,27 @@ public class VersionController implements ISimpleController<VersionRespDto,
             @ApiImplicitParam(name = "versionId", required = true, dataTypeClass = Long.class, value = "版本ID,取值于AnanVersionEntity.id", paramType = "query"),
             @ApiImplicitParam(name = TreeDto.PID_NAME, required = true, dataTypeClass = Long.class, value = "父权限ID,VersionPermission.id", paramType = "path")
     })
-    public MultResult<PermissionRespDto> getListChild(@PathVariable Long pid, @RequestParam Long versionId) {
-        List<PermissionRespDto> list = permissionService.findByPidAndVersionId(pid, versionId);
-        return ResultUtils.success(list);
+    public MultResult<PermissionRespTreeDto> getListChild(@PathVariable Long pid, @RequestParam Long versionId) {
+        return ResultUtils.success(permissionService.findByPidAndVersionId(pid, versionId));
     }
 
     @ApiOperation("根据版本ID获取版本权限")
     @ApiImplicitParam(name = "versionId", required = true, dataTypeClass = Long.class, value = "版本ID,取值于AnanVersionEntity.id", paramType = "path")
     @RequestMapping(value = "/permissions/{versionId}", method = {RequestMethod.GET, RequestMethod.POST})
     public MultResult<VersionPermissionRespDto> permissions(@PathVariable Long versionId) {
-        return ResultUtils.success(versionPermissionService.findByVersionId(versionId));
+        return ResultUtils.success(versionPermissionService.listByForeingKey(versionId));
     }
 
     @ApiOperation(value = "根据版本ID更新版本权限", notes = "根据版本ID更新版本权限，此操作将先删除原权限，再新增新权限")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "dtos", required = true, dataTypeClass = List.class, value = "版本权限集合(List<VersionPermission>)", paramType = "body"),
             @ApiImplicitParam(name = "versionId", required = true, dataTypeClass = Long.class, value = "版本ID,取值于AnanVersionEntity.id", paramType = "path")
-
     })
     @PutMapping(value = "/permissions/{versionId}")
     public SingleResult<Boolean> permissions(@RequestBody List<VersionPermissionReqDto> dtos,
-                                                             @PathVariable("versionId") Long versionId) {
+                                             @PathVariable("versionId") Long versionId) {
         //更新版本权限
-        versionPermissionService.updateInBatch("versionId", versionId, dtos);
+        versionPermissionService.updateInBatch(versionId, dtos);
         return ResultUtils.success(true);
     }
 

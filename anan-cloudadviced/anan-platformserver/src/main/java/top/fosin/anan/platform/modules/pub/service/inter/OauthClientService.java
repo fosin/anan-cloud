@@ -8,11 +8,7 @@ import top.fosin.anan.platform.modules.pub.entity.OauthClientDetails;
 /**
  * @author fosin
  * @date 2017/12/29
- *
  */
-public interface OauthClientService extends ISimpleJpaService<OauthClientDetails, OauthClientDetailsRespDto,
-        String, OauthClientDetailsReqDto,
-        OauthClientDetailsReqDto,
-        OauthClientDetailsReqDto> {
+public interface OauthClientService extends ISimpleJpaService<OauthClientDetailsReqDto, OauthClientDetailsRespDto, String,OauthClientDetails> {
 
 }

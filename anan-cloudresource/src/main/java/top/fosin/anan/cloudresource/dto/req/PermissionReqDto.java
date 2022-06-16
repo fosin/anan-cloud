@@ -5,16 +5,16 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import top.fosin.anan.core.util.RegexUtil;
-import top.fosin.anan.model.dto.req.IdQuerySortDto;
+import top.fosin.anan.model.dto.req.IdQuerySortPidDto;
 import top.fosin.anan.model.module.LogicalQueryRule;
 import top.fosin.anan.model.module.SortRule;
 import top.fosin.anan.model.valid.group.Create;
 import top.fosin.anan.model.valid.group.Update;
 
-import javax.validation.constraints.Positive;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Positive;
 
 /**
  * 包含菜单、按钮两种权限(AnanPermission)请求DTO
@@ -26,7 +26,7 @@ import javax.validation.constraints.Pattern;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @ApiModel(value = "包含菜单、按钮两种权限请求DTO", description = "权限的请求DTO")
-public class PermissionReqDto extends IdQuerySortDto<LogicalQueryRule, SortRule, Long> {
+public class PermissionReqDto extends IdQuerySortPidDto<LogicalQueryRule, SortRule, Long> {
     private static final long serialVersionUID = -61984917164013694L;
 
     @NotBlank(message = "权限编码" + "{javax.validation.constraints.NotBlank.message}",
@@ -35,13 +35,6 @@ public class PermissionReqDto extends IdQuerySortDto<LogicalQueryRule, SortRule,
     @Pattern(regexp = "[A-Z][a-zA-Z0-9]{1,64}", message = "权限编码只能大写字母开始，大小写字母、数字组合而成,长度不超过64位",
             groups = {Create.class, Update.class})
     private String code;
-
-    @ApiModelProperty(value = "父权限ID，取值于id，表示当前数据的父类权限")
-    @NotNull(message = "父权限序号" + "{javax.validation.constraints.NotNull.message}",
-            groups = {Create.class, Update.class})
-    @Positive(message = "父权限序号" + "{javax.validation.constraints.Positive.message}",
-            groups = {Create.class, Update.class})
-    private Long pid;
 
     @NotBlank(message = "权限名称" + "{javax.validation.constraints.NotBlank.message}",
             groups = {Create.class, Update.class})
@@ -53,8 +46,8 @@ public class PermissionReqDto extends IdQuerySortDto<LogicalQueryRule, SortRule,
     @Pattern(regexp = "[A-Za-z0-9/:.@#?=& -]*", message = "资源路径只支持大小写字母 数字 & / : . @ - ? = #")
     private String url;
 
-    @ApiModelProperty(value = "权限类型：0=按钮、1=组件菜单，对应ur是前端组件l、2=链接菜单，对应url是http(s)链接地址、3=目录菜单，对应是目录菜单，具体取值于字典表anan_dictionary.code=13，当权限类型是1：组件菜单 3：目录菜单时表示该节点不是一个叶子节点")
-    @NotNull(message = "权限类型：0=按钮、1=组件菜单，对应ur是前端组件l、2=链接菜单，对应url是http(s)链接地址、3=目录菜单，对应是目录菜单，具体取值于字典表anan_dictionary.code=13，当权限类型是1：组件菜单 3：目录菜单时表示该节点不是一个叶子节点" + "{javax.validation.constraints.NotNull.message}")
+    @ApiModelProperty(value = "权限类型：具体取值于字典表anan_dictionary.code=13，除1、3、6之外的类型都是叶子节点")
+    @NotNull(message = "权限类型" + "{javax.validation.constraints.NotNull.message}")
     private Integer type;
 
     @ApiModelProperty(value = "菜单层级")

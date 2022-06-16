@@ -1,11 +1,11 @@
 package top.fosin.anan.cloudresource.dto;
 
 import lombok.Getter;
-import org.springframework.beans.BeanUtils;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import top.fosin.anan.core.util.BeanUtil;
 import top.fosin.anan.core.util.ClientUtil;
 
 import javax.servlet.http.HttpServletRequest;
@@ -33,8 +33,7 @@ public class UserDetail extends User {
 
     public UserDetail(UserAuthDto user, Collection<? extends GrantedAuthority> authorities) {
         super(user.getUsercode(), user.getPassword(), user.getStatus() == 0, user.getExpireTime().after(new Date()), true, user.getStatus() != 9, authorities);
-        this.user = new UserAuthDto();
-        BeanUtils.copyProperties(user, this.user);
+        this.user = BeanUtil.copyProperties(user, UserAuthDto.class);
         this.user.setPassword(null);
         client = new Client();
         ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();

@@ -1,5 +1,6 @@
 package top.fosin.anan.platform.modules.pub.service;
 
+import lombok.AllArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Lazy;
@@ -7,9 +8,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import top.fosin.anan.cloudresource.constant.PlatformRedisConstant;
 import top.fosin.anan.core.util.BeanUtil;
+import top.fosin.anan.platform.modules.pub.dao.InternationalCharsetDao;
 import top.fosin.anan.platform.modules.pub.dto.InternationalCharsetReqDto;
 import top.fosin.anan.platform.modules.pub.dto.InternationalCharsetRespDto;
-import top.fosin.anan.platform.modules.pub.dao.InternationalCharsetDao;
 import top.fosin.anan.platform.modules.pub.service.inter.InternationalCharsetService;
 import top.fosin.anan.redis.cache.AnanCacheManger;
 
@@ -25,29 +26,26 @@ import java.util.List;
  */
 @Service
 @Lazy
+@AllArgsConstructor
 public class InternationalCharsetServiceImpl implements InternationalCharsetService {
-
     private final InternationalCharsetDao defaultRepository;
     private final AnanCacheManger ananCacheManger;
 
-    public InternationalCharsetServiceImpl(InternationalCharsetDao defaultRepository, AnanCacheManger ananCacheManger) {
-        this.defaultRepository = defaultRepository;
-        this.ananCacheManger = ananCacheManger;
-    }
-
-    /**
-     * 获取DAO
-     */
     @Override
     public InternationalCharsetDao getDao() {
         return defaultRepository;
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
-    @CacheEvict(value = PlatformRedisConstant.ANAN_INTERNATIONAL_CHARSET_ALL, key = "#dto.internationalId")
-    public InternationalCharsetRespDto create(InternationalCharsetReqDto dto) {
-        return InternationalCharsetService.super.create(dto);
+    public void postCreate(InternationalCharsetReqDto reqDto, InternationalCharsetRespDto respDto) {
+        InternationalCharsetService.super.postCreate(reqDto, respDto);
+        ananCacheManger.evict(PlatformRedisConstant.ANAN_INTERNATIONAL_CHARSET_ALL, reqDto.getInternationalId() + "");
+    }
+
+    @Override
+    public void postUpdate(InternationalCharsetReqDto reqDto) {
+        InternationalCharsetService.super.postUpdate(reqDto);
+        ananCacheManger.evict(PlatformRedisConstant.ANAN_INTERNATIONAL_CHARSET_ALL, reqDto.getInternationalId() + "");
     }
 
     @Override
@@ -69,12 +67,6 @@ public class InternationalCharsetServiceImpl implements InternationalCharsetServ
         InternationalCharsetService.super.deleteByIds(ids);
     }
 
-    @Override
-    @Transactional(rollbackFor = Exception.class)
-    @CacheEvict(value = PlatformRedisConstant.ANAN_INTERNATIONAL_CHARSET_ALL, key = "#dto.internationalId")
-    public void update(InternationalCharsetReqDto dto) {
-        InternationalCharsetService.super.update(dto);
-    }
 
     @Override
     @Cacheable(value = PlatformRedisConstant.ANAN_INTERNATIONAL_CHARSET_ALL, key = "#internationalId")

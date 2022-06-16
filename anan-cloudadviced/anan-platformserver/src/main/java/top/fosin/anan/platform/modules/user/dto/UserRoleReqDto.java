@@ -7,6 +7,7 @@ import lombok.EqualsAndHashCode;
 import top.fosin.anan.model.dto.req.IdQuerySortOrganizDto;
 import top.fosin.anan.model.module.LogicalQueryRule;
 import top.fosin.anan.model.module.SortRule;
+import top.fosin.anan.model.prop.ForeignKeyProp;
 import top.fosin.anan.model.valid.group.Create;
 import top.fosin.anan.model.valid.group.Update;
 
@@ -23,7 +24,8 @@ import javax.validation.constraints.Positive;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @ApiModel(value = "用户角色表请求DTO", description = "用户角色的请求DTO")
-public class UserRoleReqDto extends IdQuerySortOrganizDto<LogicalQueryRule, SortRule, Long> {
+public class UserRoleReqDto extends IdQuerySortOrganizDto<LogicalQueryRule, SortRule, Long>
+        implements ForeignKeyProp<Long> {
     private static final long serialVersionUID = 818450290607468187L;
 
     @NotNull(message = "用户序号" + "{javax.validation.constraints.NotNull.message}")
@@ -41,4 +43,18 @@ public class UserRoleReqDto extends IdQuerySortOrganizDto<LogicalQueryRule, Sort
     @ApiModelProperty(value = "该值由后台维护，更改数据时前端不需要关心，取值于anan_user.id")
     private Long createBy;
 
+    @Override
+    public Long getFkValue() {
+        return userId;
+    }
+
+    @Override
+    public void setFkValue(Long foreingKey) {
+        this.userId = foreingKey;
+    }
+
+    @Override
+    public String getFkName() {
+        return "userId";
+    }
 }

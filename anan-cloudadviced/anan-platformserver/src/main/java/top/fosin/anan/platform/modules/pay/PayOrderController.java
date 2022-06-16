@@ -17,7 +17,7 @@ import top.fosin.anan.platform.modules.pay.service.inter.PayOrderService;
 @RestController
 @RequestMapping("v1/order")
 @Api(value = "v1/order", tags = "支付订单管理")
-public class PayOrderController implements ISimpleController<PayOrderRespDto, Long, PayOrderReqDto, PayOrderReqDto, PayOrderReqDto> {
+public class PayOrderController implements ISimpleController<PayOrderReqDto, PayOrderRespDto, Long> {
     /**
      * 服务对象
      */

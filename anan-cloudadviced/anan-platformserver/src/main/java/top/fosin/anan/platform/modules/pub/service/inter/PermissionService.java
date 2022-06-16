@@ -13,20 +13,12 @@ import java.util.List;
 /**
  * @author fosin
  * @date 2017/12/29
- *
  */
-public interface PermissionService extends ISimpleJpaService<Permission,
-        PermissionRespDto,
-        Long, PermissionReqDto,
-        PermissionReqDto,
-        PermissionReqDto>,
-        IRetrieveTreeJpaService<Permission,
-                PermissionRespTreeDto, Long, PermissionReqDto> {
-    List<PermissionRespDto> findByPid(Long pid);
-
+public interface PermissionService extends ISimpleJpaService<PermissionReqDto, PermissionRespDto, Long,Permission>,
+        IRetrieveTreeJpaService<PermissionReqDto, PermissionRespTreeDto, Long, Permission> {
     List<PermissionRespDto> findByServiceCode(String serviceCode);
 
-    List<PermissionRespDto> findByPidAndVersionId(Long pid, Long versionId);
+    List<PermissionRespTreeDto> findByPidAndVersionId(Long pid, Long versionId);
 
     List<PermissionRespDto> findByServiceCodes(List<String> serviceCodes);
 }

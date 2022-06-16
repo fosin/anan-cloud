@@ -1,28 +1,27 @@
 package top.fosin.anan.platform.modules.organization.service;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import top.fosin.anan.cloudresource.dto.req.RegisterDto;
 import top.fosin.anan.cloudresource.dto.req.UserRegisterDto;
 import top.fosin.anan.cloudresource.dto.req.UserReqDto;
-import top.fosin.anan.cloudresource.dto.req.RegisterDto;
 import top.fosin.anan.cloudresource.dto.res.OrgRespDto;
 import top.fosin.anan.cloudresource.dto.res.UserRespDto;
 import top.fosin.anan.core.util.BeanUtil;
 import top.fosin.anan.core.util.DateTimeUtil;
-import top.fosin.anan.platform.modules.organization.dto.OrgAuthReqDto;
-import top.fosin.anan.platform.modules.organization.dto.OrgReqDto;
-import top.fosin.anan.platform.modules.pay.dto.PayOrderReqDto;
-import top.fosin.anan.platform.modules.organization.dto.OrgAuthRespDto;
-import top.fosin.anan.platform.modules.pay.dto.PayOrderRespDto;
-import top.fosin.anan.platform.modules.version.dto.VersionRespDto;
 import top.fosin.anan.platform.modules.organization.dao.OrgAuthDao;
+import top.fosin.anan.platform.modules.organization.dto.OrgAuthReqDto;
+import top.fosin.anan.platform.modules.organization.dto.OrgAuthRespDto;
+import top.fosin.anan.platform.modules.organization.dto.OrgReqDto;
 import top.fosin.anan.platform.modules.organization.service.inter.OrgAuthService;
 import top.fosin.anan.platform.modules.organization.service.inter.OrgService;
+import top.fosin.anan.platform.modules.pay.dto.PayOrderReqDto;
+import top.fosin.anan.platform.modules.pay.dto.PayOrderRespDto;
 import top.fosin.anan.platform.modules.pay.service.inter.PayOrderService;
 import top.fosin.anan.platform.modules.user.service.inter.UserService;
+import top.fosin.anan.platform.modules.version.dto.VersionRespDto;
 import top.fosin.anan.platform.modules.version.service.inter.VersionService;
 
 import java.text.ParseException;
@@ -40,14 +39,10 @@ import java.util.List;
 @Lazy
 public class OrgAuthServiceImpl implements OrgAuthService {
     private final OrgAuthDao ananSysOrgAuthDao;
-
     private final UserService userService;
-
     private final PayOrderService payOrderService;
-
     private final VersionService versionService;
     private final OrgService orgService;
-
     private final PasswordEncoder passwordEncoder;
 
     public OrgAuthServiceImpl(OrgAuthDao ananSysOrgAuthDao, UserService userService, PayOrderService payOrderService, VersionService versionService, OrgService orgService, PasswordEncoder passwordEncoder) {
@@ -86,20 +81,20 @@ public class OrgAuthServiceImpl implements OrgAuthService {
 
         //创建机构
         OrgReqDto organization = new OrgReqDto();
-        BeanUtils.copyProperties(registerDto.getOrganization(), organization);
+        BeanUtil.copyProperties(registerDto.getOrganization(), organization);
         organization.setPid(0L);
         organization.setTopId(0L);
         organization.setStatus(0);
         OrgRespDto organizationEntity = orgService.create(organization);
         OrgReqDto updateDto = new OrgReqDto();
-        BeanUtils.copyProperties(organizationEntity, updateDto);
+        BeanUtil.copyProperties(organizationEntity, updateDto);
         updateDto.setTopId(organizationEntity.getId());
-        orgService.update(updateDto);
+        orgService.processUpdate(updateDto);
 
         //创建用户
         UserRegisterDto registerDTO = registerDto.getUser();
         UserReqDto createDTO = new UserReqDto();
-        BeanUtils.copyProperties(registerDTO, createDTO);
+        BeanUtil.copyProperties(registerDTO, createDTO);
         createDTO.setOrganizId(updateDto.getId());
 
         try {

@@ -4,14 +4,12 @@ package top.fosin.anan.auth.service;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
 import top.fosin.anan.auth.dao.UserAllPermissionsDao;
 import top.fosin.anan.auth.dao.UserDao;
 import top.fosin.anan.auth.entity.User;
 import top.fosin.anan.auth.entity.UserAllPermissions;
 import top.fosin.anan.auth.service.inter.AuthService;
 import top.fosin.anan.cloudresource.constant.PlatformRedisConstant;
-import top.fosin.anan.cloudresource.constant.SystemConstant;
 import top.fosin.anan.cloudresource.dto.UserAllPermissionTreeDto;
 import top.fosin.anan.cloudresource.dto.UserAuthDto;
 import top.fosin.anan.cloudresource.dto.res.OrgRespDto;
@@ -19,7 +17,8 @@ import top.fosin.anan.cloudresource.dto.res.UserAllPermissionsRespDto;
 import top.fosin.anan.cloudresource.service.inter.OrgFeignService;
 import top.fosin.anan.core.util.BeanUtil;
 import top.fosin.anan.core.util.TreeUtil;
-import top.fosin.anan.model.dto.res.TreeDto;
+import top.fosin.anan.model.prop.PidProp;
+import top.fosin.anan.model.prop.TreeProp;
 
 import java.util.List;
 import java.util.Set;
@@ -101,7 +100,12 @@ public class AuthServiceImpl implements AuthService {
                 }
             }
         }
-        Assert.isTrue(userPermissions.stream().anyMatch(treeDto -> SystemConstant.ROOT_PERMISSION_ID.equals(treeDto.getId())), "未分配根节点权限,请联系管理员核对权限!");
-        return TreeUtil.createTree(userPermissions, SystemConstant.ROOT_PERMISSION_ID, TreeDto.ID_NAME, TreeDto.PID_NAME, TreeDto.CHILDREN_NAME);
+        //找到permission权限树唯一的一个根节点
+        UserAllPermissionTreeDto treeDto = userPermissions.stream()
+                .filter(PidProp::isRoot)
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("未分配根节点权限,请联系管理员核对权限!"));
+        return TreeUtil.createTree(userPermissions, treeDto.getId(), TreeProp.ID_NAME,
+                TreeProp.PID_NAME, TreeProp.CHILDREN_NAME, TreeProp.LEAF_NAME);
     }
 }

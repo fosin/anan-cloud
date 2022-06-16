@@ -1,6 +1,6 @@
 package top.fosin.anan.platform.modules.pub.service;
 
-import org.springframework.beans.BeanUtils;
+import lombok.AllArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.context.annotation.Lazy;
@@ -9,7 +9,9 @@ import org.springframework.util.Assert;
 import top.fosin.anan.cloudresource.constant.PlatformRedisConstant;
 import top.fosin.anan.cloudresource.dto.req.PermissionReqDto;
 import top.fosin.anan.cloudresource.dto.res.PermissionRespDto;
+import top.fosin.anan.cloudresource.dto.res.PermissionRespTreeDto;
 import top.fosin.anan.core.util.BeanUtil;
+import top.fosin.anan.model.constant.ValueConstant;
 import top.fosin.anan.platform.modules.organization.dao.OrgPermissionDao;
 import top.fosin.anan.platform.modules.pub.dao.PermissionDao;
 import top.fosin.anan.platform.modules.pub.dao.ServiceDao;
@@ -33,6 +35,7 @@ import java.util.stream.Collectors;
  */
 @org.springframework.stereotype.Service
 @Lazy
+@AllArgsConstructor
 public class PermissionServiceImpl implements PermissionService {
     private final PermissionDao permissionDao;
     private final UserPermissionDao userPermissionDao;
@@ -42,34 +45,14 @@ public class PermissionServiceImpl implements PermissionService {
     private final OrgPermissionDao orgPermissionDao;
     private final ServiceDao serviceDao;
 
-    public PermissionServiceImpl(PermissionDao permissionDao,
-                                 UserPermissionDao userPermissionDao,
-                                 RolePermissionDao rolePermissionDao,
-                                 VersionPermissionDao versionPermissionDao,
-                                 VersionRolePermissionDao versionRolePermissionDao,
-                                 OrgPermissionDao orgPermissionDao,
-                                 ServiceDao serviceDao) {
-        this.permissionDao = permissionDao;
-        this.userPermissionDao = userPermissionDao;
-        this.rolePermissionDao = rolePermissionDao;
-        this.versionPermissionDao = versionPermissionDao;
-        this.versionRolePermissionDao = versionRolePermissionDao;
-        this.orgPermissionDao = orgPermissionDao;
-        this.serviceDao = serviceDao;
-    }
-
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public PermissionRespDto create(PermissionReqDto dto) {
-        Assert.notNull(dto, "传入的创建数据实体对象不能为空!");
-
         Permission createEntity = BeanUtil.copyProperties(dto, Permission.class);
         Long pid = dto.getPid();
 
         int level = 1;
-        if (pid != 0) {
-            Permission parentEntity = permissionDao.findById(pid).orElse(null);
-            Assert.notNull(parentEntity, "传入的创建数据实体找不到对于的父节点数据!");
+        if (!Objects.equals(pid, ValueConstant.TREE_ROOT_PID)) {
+            Permission parentEntity = permissionDao.findById(pid).orElseThrow(() -> new IllegalArgumentException("传入的创建数据实体找不到对于的父节点数据!"));
             level = parentEntity.getLevel() + 1;
         }
         createEntity.setLevel(level);
@@ -77,14 +60,12 @@ public class PermissionServiceImpl implements PermissionService {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     @Caching(
             evict = {
                     @CacheEvict(value = PlatformRedisConstant.ANAN_USER_ALL_PERMISSIONS, allEntries = true),
                     @CacheEvict(value = PlatformRedisConstant.ANAN_USER_PERMISSION_TREE, allEntries = true)
-
             })
-    public void update(PermissionReqDto dto) {
+    public void update(PermissionReqDto dto, String[] ignoreProperties) {
         Long id = dto.getId();
         Assert.notNull(id, "传入了空ID!");
 
@@ -100,7 +81,7 @@ public class PermissionServiceImpl implements PermissionService {
             }
         }
 
-        BeanUtils.copyProperties(dto, Objects.requireNonNull(updateEntity, "通过ID：" + id + "未能找到对应的数据!"));
+        BeanUtil.copyProperties(dto, Objects.requireNonNull(updateEntity, "通过ID：" + id + "未能找到对应的数据!"), ignoreProperties);
         Long pid = dto.getPid();
         if (!updateEntity.getPid().equals(pid)) {
             Permission parentEntity = permissionDao.findById(pid).orElse(null);
@@ -112,18 +93,12 @@ public class PermissionServiceImpl implements PermissionService {
         permissionDao.saveAll(saveEntities);
     }
 
-    @Override
-    public List<PermissionRespDto> findByPid(Long pid) {
-        return BeanUtil.copyProperties(permissionDao.findByPid(pid), PermissionRespDto.class);
-    }
-
     protected List<Permission> getUpdateCascadeChild(PermissionReqDto originEntity, Permission updateEntity) {
         Long id = updateEntity.getId();
         Collection<Permission> allByPid = permissionDao.findByPid(id);
         List<Permission> saves = new ArrayList<>();
         allByPid.forEach(entity -> {
-            PermissionReqDto entity2 = new PermissionReqDto();
-            BeanUtils.copyProperties(entity, entity2);
+            PermissionReqDto entity2 = BeanUtil.copyProperties(entity, PermissionReqDto.class);
             entity.setServiceId(originEntity.getServiceId());
             entity.setCode(entity.getCode().replace(updateEntity.getCode(), originEntity.getCode()));
             saves.add(entity);
@@ -148,18 +123,12 @@ public class PermissionServiceImpl implements PermissionService {
 
     private void deleteByEntity(Permission entity) {
         long id = entity.getId();
-        long countByPermissionId = userPermissionDao.countByPermissionId(id);
-        Assert.isTrue(countByPermissionId == 0, "还有用户在使用该权限，不能直接删除!");
-        countByPermissionId = versionRolePermissionDao.countByPermissionId(id);
-        Assert.isTrue(countByPermissionId == 0, "还有版本角色在使用该权限，不能直接删除!");
-        countByPermissionId = versionPermissionDao.countByPermissionId(id);
-        Assert.isTrue(countByPermissionId == 0, "还有版本在使用该权限，不能直接删除!");
-        countByPermissionId = rolePermissionDao.countByPermissionId(id);
-        Assert.isTrue(countByPermissionId == 0, "还有角色在使用该权限，不能直接删除!");
-        countByPermissionId = orgPermissionDao.countByPermissionId(id);
-        Assert.isTrue(countByPermissionId == 0, "还有机构在使用该权限，不能直接删除!");
-        Collection<PermissionRespDto> entities = findByPid(id);
-        Assert.isTrue(entities == null || entities.size() == 0, "该节点还存在子节点不能直接删除!");
+        Assert.isTrue(permissionDao.countByPid(id) == 0, "该节点还存在子节点不能直接删除!");
+        Assert.isTrue(versionRolePermissionDao.countByPermissionId(id) == 0, "还有版本角色在使用该权限，不能直接删除!");
+        Assert.isTrue(versionPermissionDao.countByPermissionId(id) == 0, "还有版本在使用该权限，不能直接删除!");
+        Assert.isTrue(rolePermissionDao.countByPermissionId(id) == 0, "还有角色在使用该权限，不能直接删除!");
+        Assert.isTrue(orgPermissionDao.countByPermissionId(id) == 0, "还有机构在使用该权限，不能直接删除!");
+        Assert.isTrue(userPermissionDao.countByPermissionId(id) == 0, "还有用户在使用该权限，不能直接删除!");
         permissionDao.delete(entity);
     }
 
@@ -184,9 +153,9 @@ public class PermissionServiceImpl implements PermissionService {
     }
 
     @Override
-    public List<PermissionRespDto> findByPidAndVersionId(Long pid, Long versionId) {
+    public List<PermissionRespTreeDto> findByPidAndVersionId(Long pid, Long versionId) {
         List<Permission> entities = permissionDao.findAllByPidAndVersionId(pid, versionId);
-        return BeanUtil.copyProperties(entities, PermissionRespDto.class);
+        return BeanUtil.copyProperties(entities, PermissionRespTreeDto.class);
     }
 
     @Override

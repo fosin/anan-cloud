@@ -19,8 +19,7 @@ import top.fosin.anan.platform.modules.pub.service.inter.ServiceService;
 @RestController
 @RequestMapping(UrlPrefixConstant.SERVICE)
 @Api(value = UrlPrefixConstant.SERVICE, tags = "服务管理")
-public class ServiceController implements ISimpleController<ServiceRespDto, Long,
-        ServiceReqDto, ServiceReqDto, ServiceReqDto> {
+public class ServiceController implements ISimpleController<ServiceReqDto, ServiceRespDto, Long> {
 
     private final ServiceService serviceService;
 

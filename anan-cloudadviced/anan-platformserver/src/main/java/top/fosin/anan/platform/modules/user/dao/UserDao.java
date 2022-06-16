@@ -23,8 +23,7 @@ public interface UserDao extends IJpaRepository<User, Long> {
     @Query(value = "select * from anan_user where id in (select user_id from anan_user_role where role_id =?1)", nativeQuery = true)
     List<User> findRoleUsersByRoleId(Long roleId);
 
-    @Query(value = "select * from anan_user where organiz_id in (select id from anan_organization where top_id =?1) " +
-            "and (status=?2 or ?2=-1)",nativeQuery = true)
+    @Query(value = "select * from anan_user where organiz_id in (select id from anan_organization where top_id =?1) and (status=?2 or ?2=-1)",nativeQuery = true)
     List<User> findByTopIdAndStatus(Long topId, Integer status);
 }
 

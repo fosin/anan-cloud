@@ -7,6 +7,7 @@ import lombok.EqualsAndHashCode;
 import top.fosin.anan.model.dto.req.IdQuerySortDto;
 import top.fosin.anan.model.module.LogicalQueryRule;
 import top.fosin.anan.model.module.SortRule;
+import top.fosin.anan.model.prop.ForeignKeyProp;
 import top.fosin.anan.model.valid.group.Create;
 import top.fosin.anan.model.valid.group.Update;
 
@@ -23,7 +24,7 @@ import javax.validation.constraints.PositiveOrZero;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @ApiModel(value = "机构权限表请求DTO", description = "机构权限的请求DTO")
-public class OrgPermissionReqDto extends IdQuerySortDto<LogicalQueryRule, SortRule, Long> {
+public class OrgPermissionReqDto extends IdQuerySortDto<LogicalQueryRule, SortRule, Long> implements ForeignKeyProp<Long> {
     private static final long serialVersionUID = 258891966081450196L;
 
     @NotNull(message = "机构序号" + "{javax.validation.constraints.NotNull.message}",
@@ -40,4 +41,18 @@ public class OrgPermissionReqDto extends IdQuerySortDto<LogicalQueryRule, SortRu
     @ApiModelProperty(value = "权限序号", required = true)
     private Long permissionId;
 
+    @Override
+    public Long getFkValue() {
+        return organizId;
+    }
+
+    @Override
+    public void setFkValue(Long foreingKey) {
+        this.organizId = foreingKey;
+    }
+
+    @Override
+    public String getFkName() {
+        return "organizId";
+    }
 }
