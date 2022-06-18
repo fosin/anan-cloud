@@ -27,7 +27,7 @@ public class RemoteParameter implements IParameter {
         createDto.setScope(scope);
         createDto.setName(name);
         createDto.setDescription(description);
-        return parameterService.create(createDto).orElseThrow();
+        return parameterService.processCreate(createDto).orElseThrow();
     }
 
     @Override

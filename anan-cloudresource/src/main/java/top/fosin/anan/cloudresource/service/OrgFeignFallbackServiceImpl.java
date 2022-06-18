@@ -27,7 +27,7 @@ public class OrgFeignFallbackServiceImpl implements OrgFeignService {
     }
 
     @Override
-    public MultResult<OrgRespDto> findAllByIds(List<Long> ids) {
+    public MultResult<OrgRespDto> listByIds(List<Long> ids) {
         log.error("feign 根据用户序号集合远程查询多条数据:{}", ids);
         return null;
     }

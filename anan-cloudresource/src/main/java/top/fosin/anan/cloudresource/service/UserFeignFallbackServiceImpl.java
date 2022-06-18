@@ -47,7 +47,7 @@ public class UserFeignFallbackServiceImpl implements UserFeignService {
     }
 
     @Override
-    public MultResult<UserRespDto> listByTopId(Long topId, Integer status) {
+    public MultResult<UserRespDto> listAllChildByTopId(Long topId, Integer status) {
         log.error("feign 远程查询顶级机构下的用户信息失败:{}", topId);
         return null;
     }

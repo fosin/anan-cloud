@@ -55,7 +55,8 @@ public class ParameterServiceImpl implements ParameterService {
         ParameterReqDto params = pageDto.getParams();
         PageRequest pageable = PageRequest.of(pageDto.getPageNumber() - 1, pageDto.getPageSize(),
                 buildSortRules(params.getSortRules()));
-        String search = "%" + params.getName() + "%";
+        String name = params.getName();
+        String search = "%" + (name == null ? "" : name) + "%";
         Long organizId = ananUserDetailService.getAnanOrganizId();
         boolean sysAdminUser = ananUserDetailService.isSysAdminUser();
         int type = 2;

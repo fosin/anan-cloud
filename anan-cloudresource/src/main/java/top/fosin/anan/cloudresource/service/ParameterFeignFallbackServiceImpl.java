@@ -2,7 +2,6 @@ package top.fosin.anan.cloudresource.service;
 
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import top.fosin.anan.cloudresource.dto.req.ParameterReqDto;
 import top.fosin.anan.cloudresource.dto.res.ParameterRespDto;
@@ -23,13 +22,13 @@ import java.util.List;
 public class ParameterFeignFallbackServiceImpl implements ParameterFeignService {
 
     @Override
-    public SingleResult<ParameterRespDto> create(ParameterReqDto ParameterReqDto) {
+    public SingleResult<ParameterRespDto> processCreate(ParameterReqDto ParameterReqDto) {
         log.error("feign 远程创建通用系统参数失败:{}", ParameterReqDto);
         return null;
     }
 
     @Override
-    public SingleResult<ParameterRespDto> update(ParameterReqDto ParameterReqDto) {
+    public SingleResult<ParameterRespDto> processUpdate(ParameterReqDto ParameterReqDto) {
         log.error("feign 远程更新通用系统参数失败:{}", ParameterReqDto);
         return null;
     }

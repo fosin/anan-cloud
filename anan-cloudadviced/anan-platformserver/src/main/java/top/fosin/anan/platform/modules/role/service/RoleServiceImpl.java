@@ -135,10 +135,15 @@ public class RoleServiceImpl implements RoleService {
         Page<Role> page;
         Specification<Role> condition;
         if (ananUserDetailService.hasSysAdminRole()) {
+            //超过管理员不需要通过机构序号间接查询
+            params.setOrganizId(null);
             condition = buildQueryRules(params, false);
         } else {
             Assert.notNull(params, "传入的分页信息不能为空!");
             Long organizId = params.getOrganizId();
+            if (organizId == null || organizId < 1) {
+                organizId = ananUserDetailService.getAnanOrganizId();
+            }
             String name = params.getName();
             String value = params.getValue();
             Assert.notNull(organizId, "机构ID不能为空!");

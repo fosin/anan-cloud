@@ -31,7 +31,7 @@ public interface OrgFeignService {
 
     @PostMapping({PathConstant.PATH_IDS})
     @ApiOperation("根据用户序号集合远程查询多条数据")
-    MultResult<OrgRespDto> findAllByIds(@RequestBody List<Long> ids);
+    MultResult<OrgRespDto> listByIds(@RequestBody List<Long> ids);
 
     @PostMapping(PathConstant.PATH_LIST_CHILD_PID)
     @ApiOperation(value = "根据父序号pid远程其直接子节点的数据集合")

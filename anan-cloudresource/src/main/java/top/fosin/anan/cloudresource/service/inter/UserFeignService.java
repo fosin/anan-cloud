@@ -39,7 +39,7 @@ public interface UserFeignService {
     MultResult<UserRespDto> listByOrganizId(@PathVariable("organizId") Long organizId, @PathVariable("status") Integer status);
 
     @PostMapping("/list/topId/{topId}/{status}")
-    MultResult<UserRespDto> listByTopId(@PathVariable("topId") Long topId,
-                                                  @PathVariable("status") Integer status);
+    MultResult<UserRespDto> listAllChildByTopId(@PathVariable("topId") Long topId,
+                                        @PathVariable("status") Integer status);
 }
 

@@ -2,7 +2,6 @@ package top.fosin.anan.cloudresource.service.inter;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import top.fosin.anan.cloudresource.constant.ServiceConstant;
 import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
@@ -34,10 +33,10 @@ public interface ParameterFeignService {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    SingleResult<ParameterRespDto> create(@RequestBody ParameterReqDto entity);
+    SingleResult<ParameterRespDto> processCreate(@RequestBody ParameterReqDto entity);
 
     @PutMapping
-    SingleResult<ParameterRespDto> update(@RequestBody ParameterReqDto entity);
+    SingleResult<ParameterRespDto> processUpdate(@RequestBody ParameterReqDto entity);
 
     @PostMapping(PATH_DTO)
     SingleResult<ParameterRespDto> getParameter(@RequestParam("type") Integer type,

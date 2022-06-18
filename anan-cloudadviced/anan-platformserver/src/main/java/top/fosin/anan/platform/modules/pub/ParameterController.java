@@ -4,6 +4,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import lombok.AllArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
@@ -32,12 +33,9 @@ import java.util.List;
 @RestController
 @RequestMapping(UrlPrefixConstant.PARAMETER)
 @Api(value = UrlPrefixConstant.PARAMETER, tags = "通用参数管理(参数获取、自动创建)")
-public class ParameterController implements ISimpleController<ParameterReqDto,ParameterRespDto, Long> {
+@AllArgsConstructor
+public class ParameterController implements ISimpleController<ParameterReqDto, ParameterRespDto, Long> {
     private final ParameterService parameterService;
-
-    public ParameterController(ParameterService parameterService) {
-        this.parameterService = parameterService;
-    }
 
     @ApiOperation(value = "获取指定机构或指定用户的参数整条数据", notes = "type=1则是机构参数(机构参数系统会从当前机构向逐级上级机构查找该参数),type=2则是用户参数,如果缓存和数据库中都没有找到参数，返回null值")
     @RequestMapping(value = ParameterFeignService.PATH_NEAREST, method = {RequestMethod.POST, RequestMethod.GET})
@@ -50,8 +48,8 @@ public class ParameterController implements ISimpleController<ParameterReqDto,Pa
                     required = true, dataTypeClass = String.class, paramType = "query")
     })
     public SingleResult<ParameterRespDto> getNearestParameter(@PositiveOrZero @RequestParam("type") Integer type,
-                                                                              @RequestParam("scope") String scope,
-                                                                              @NotBlank @RequestParam("name") String name) {
+                                                              @RequestParam("scope") String scope,
+                                                              @NotBlank @RequestParam("name") String name) {
         return ResultUtils.success(parameterService.getNearestParameter(type, scope, name));
     }
 
@@ -66,8 +64,8 @@ public class ParameterController implements ISimpleController<ParameterReqDto,Pa
                     required = true, dataTypeClass = String.class, paramType = "query")
     })
     public SingleResult<ParameterRespDto> getParameter(@PositiveOrZero @RequestParam("type") Integer type,
-                                                         @RequestParam("scope") String scope,
-                                                         @NotBlank @RequestParam("name") String name) {
+                                                       @RequestParam("scope") String scope,
+                                                       @NotBlank @RequestParam("name") String name) {
         return ResultUtils.success(parameterService.getParameter(type, scope, name));
     }
 

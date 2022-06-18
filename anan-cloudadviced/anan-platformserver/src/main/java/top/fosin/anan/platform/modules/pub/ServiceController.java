@@ -1,6 +1,7 @@
 package top.fosin.anan.platform.modules.pub;
 
 import io.swagger.annotations.Api;
+import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
@@ -19,13 +20,9 @@ import top.fosin.anan.platform.modules.pub.service.inter.ServiceService;
 @RestController
 @RequestMapping(UrlPrefixConstant.SERVICE)
 @Api(value = UrlPrefixConstant.SERVICE, tags = "服务管理")
+@AllArgsConstructor
 public class ServiceController implements ISimpleController<ServiceReqDto, ServiceRespDto, Long> {
-
     private final ServiceService serviceService;
-
-    public ServiceController(ServiceService serviceService) {
-        this.serviceService = serviceService;
-    }
 
     @Override
     public ServiceService getService() {

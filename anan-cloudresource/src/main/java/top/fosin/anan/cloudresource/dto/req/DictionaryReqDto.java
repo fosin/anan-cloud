@@ -5,16 +5,16 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import top.fosin.anan.core.util.RegexUtil;
-import top.fosin.anan.model.dto.req.IdQuerySortDto;
+import top.fosin.anan.model.dto.req.IdQuerySortDeleteDto;
 import top.fosin.anan.model.module.LogicalQueryRule;
 import top.fosin.anan.model.module.SortRule;
 import top.fosin.anan.model.valid.group.Create;
 import top.fosin.anan.model.valid.group.Update;
 
-import javax.validation.constraints.Positive;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Positive;
 
 /**
  * 系统通用字典表(AnanDictionary)请求DTO
@@ -26,7 +26,7 @@ import javax.validation.constraints.Pattern;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @ApiModel(value = "通用字典表请求DTO", description = "通用字典的请求DTO")
-public class DictionaryReqDto extends IdQuerySortDto<LogicalQueryRule, SortRule, Long> {
+public class DictionaryReqDto extends IdQuerySortDeleteDto<LogicalQueryRule, SortRule, Long> {
     private static final long serialVersionUID = 480249603699448721L;
 
     @NotBlank(message = "字典名称" + "{javax.validation.constraints.NotBlank.message}",

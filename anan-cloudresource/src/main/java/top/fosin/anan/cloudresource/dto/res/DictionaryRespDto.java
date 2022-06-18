@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import top.fosin.anan.model.dto.res.IdCreateUpdateDto;
+import top.fosin.anan.model.dto.res.IdCreateUpdateDeleteDto;
 
 /**
  * 系统通用字典表(AnanDictionary)响应DTO
@@ -18,7 +18,7 @@ import top.fosin.anan.model.dto.res.IdCreateUpdateDto;
 @ToString
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value = "通用字典表响应DTO", description = "通用字典的响应DTO")
-public class DictionaryRespDto extends IdCreateUpdateDto<Long> {
+public class DictionaryRespDto extends IdCreateUpdateDeleteDto<Long> {
     private static final long serialVersionUID = 611539841082760505L;
     @ApiModelProperty(value = "字典名称", example = "String")
     private String name;
