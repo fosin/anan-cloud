@@ -11,7 +11,7 @@ import java.util.List;
  * @author fosin
  * @date 2017/12/29
  */
-public interface RoleService extends ISimpleJpaService<RoleReqDto, RoleRespDto, Long,Role> {
+public interface RoleService extends ISimpleJpaService<RoleReqDto, RoleRespDto, Long, Role> {
 
     List<RoleRespDto> findOtherUsersByRoleId(Long userId);
 

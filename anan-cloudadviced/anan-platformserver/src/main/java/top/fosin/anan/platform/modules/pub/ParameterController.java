@@ -40,11 +40,11 @@ public class ParameterController implements ISimpleController<ParameterReqDto, P
     @ApiOperation(value = "获取指定机构或指定用户的参数整条数据", notes = "type=1则是机构参数(机构参数系统会从当前机构向逐级上级机构查找该参数),type=2则是用户参数,如果缓存和数据库中都没有找到参数，返回null值")
     @RequestMapping(value = ParameterFeignService.PATH_NEAREST, method = {RequestMethod.POST, RequestMethod.GET})
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "type", value = "字典类型,取值于AnanParameterEntity.type",
+            @ApiImplicitParam(name = "type", value = "字典类型,取值于Parameter.type",
                     required = true, dataTypeClass = Integer.class, paramType = "query"),
-            @ApiImplicitParam(name = "scope", value = "字典作用域,取值于AnanParameterEntity.scope",
+            @ApiImplicitParam(name = "scope", value = "字典作用域,取值于Parameter.scope",
                     required = true, dataTypeClass = String.class, paramType = "query"),
-            @ApiImplicitParam(name = "name", value = "字典名称,取值于AnanParameterEntity.name",
+            @ApiImplicitParam(name = "name", value = "字典名称,取值于Parameter.name",
                     required = true, dataTypeClass = String.class, paramType = "query")
     })
     public SingleResult<ParameterRespDto> getNearestParameter(@PositiveOrZero @RequestParam("type") Integer type,
@@ -56,11 +56,11 @@ public class ParameterController implements ISimpleController<ParameterReqDto, P
     @ApiOperation(value = "获取指定机构或指定用户的参数整条数据", notes = "type=1则是机构参数,只找当前机构,type=2则是用户参数,如果缓存和数据库中都没有找到参数，返回null值")
     @RequestMapping(value = ParameterFeignService.PATH_DTO, method = {RequestMethod.POST, RequestMethod.GET})
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "type", value = "字典类型,取值于AnanParameterEntity.type",
+            @ApiImplicitParam(name = "type", value = "字典类型,取值于Parameter.type",
                     required = true, dataTypeClass = Integer.class, paramType = "query"),
-            @ApiImplicitParam(name = "scope", value = "字典作用域,取值于AnanParameterEntity.scope",
+            @ApiImplicitParam(name = "scope", value = "字典作用域,取值于Parameter.scope",
                     required = true, dataTypeClass = String.class, paramType = "query"),
-            @ApiImplicitParam(name = "name", value = "字典名称,取值于AnanParameterEntity.name",
+            @ApiImplicitParam(name = "name", value = "字典名称,取值于Parameter.name",
                     required = true, dataTypeClass = String.class, paramType = "query")
     })
     public SingleResult<ParameterRespDto> getParameter(@PositiveOrZero @RequestParam("type") Integer type,
@@ -71,7 +71,7 @@ public class ParameterController implements ISimpleController<ParameterReqDto, P
 
     @ApiOperation(value = "获取或创建指定机构或指定用户参数值", notes = "type=1则是机构参数(机构参数系统会从当前机构向逐级上级机构查找该参数),type=2则是用户参数，如果缓存和数据库中都没有找到参数，则自动创建一个无域参数")
     @RequestMapping(value = ParameterFeignService.PATH_VALUE, method = {RequestMethod.POST, RequestMethod.GET})
-    @ApiImplicitParam(name = TreeDto.ID_NAME, value = "参数ID,取值于AnanParameterEntity.id",
+    @ApiImplicitParam(name = TreeDto.ID_NAME, value = "参数ID,取值于Parameter.id",
             required = true, dataTypeClass = ParameterReqDto.class, paramType = "body")
     public SingleResult<String> getOrCreateParameter(@Validated({SingleQuery.class}) @RequestBody ParameterReqDto retrieveDto) {
         int type = retrieveDto.getType();
@@ -83,7 +83,7 @@ public class ParameterController implements ISimpleController<ParameterReqDto, P
     }
 
     @ApiOperation(value = "根据参数ID刷新参数缓存信息", notes = "该方法是幂等性的，可以重复调用")
-    @ApiImplicitParam(name = TreeDto.ID_NAME, value = "参数ID,取值于AnanParameterEntity.id",
+    @ApiImplicitParam(name = TreeDto.ID_NAME, value = "参数ID,取值于Parameter.id",
             required = true, dataTypeClass = Long.class, paramType = "path")
     @RequestMapping(value = ParameterFeignService.PATH_APPLY_ID, method = {RequestMethod.POST, RequestMethod.GET})
     public SingleResult<Boolean> applyChange(@Positive @PathVariable(TreeDto.ID_NAME) Long id) {

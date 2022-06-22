@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import top.fosin.anan.model.dto.res.IdCreateUpdateDeleteDto;
+import top.fosin.anan.model.dto.res.IdCreateUpdateDto;
 
 /**
  * 系统通用字典明细表(AnanDictionaryDetail)响应DTO
@@ -18,7 +18,7 @@ import top.fosin.anan.model.dto.res.IdCreateUpdateDeleteDto;
 @ToString
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value = "通用字典明细表响应DTO", description = "通用字典明细的响应DTO")
-public class DictionaryDetailRespDto extends IdCreateUpdateDeleteDto<Long> {
+public class DictionaryDetailRespDto extends IdCreateUpdateDto<Long> {
     private static final long serialVersionUID = -17948374006352783L;
     @ApiModelProperty(value = "字典明细键，不能重复，字典内明细项唯一代码", example = "Long")
     private Long name;
@@ -26,7 +26,7 @@ public class DictionaryDetailRespDto extends IdCreateUpdateDeleteDto<Long> {
     @ApiModelProperty(value = "字典明细值表示字面意义", example = "String")
     private String value;
 
-    @ApiModelProperty(value = "取值于字典明细表AnanDictionaryDetailEntity.code", example = "Long")
+    @ApiModelProperty(value = "取值于字典明细表DictionaryDetail.code", example = "Long")
     private Long dictionaryId;
 
     @ApiModelProperty(value = "顺序，用于显示数据时的顺序，数值越小越靠前", example = "Integer")

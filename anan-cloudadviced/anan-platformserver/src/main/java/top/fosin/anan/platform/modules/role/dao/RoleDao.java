@@ -16,14 +16,11 @@ import java.util.List;
 @Lazy
 public interface RoleDao extends IJpaRepository<Role, Long> {
 
-    @Query(value = "select * from anan_role where id not in (select role_id from anan_user_role where user_id =?1)", nativeQuery = true)
+    @Query(value = "select * from anan_role where id not in (select role_id from anan_user_role where user_id =?1) and status=0", nativeQuery = true)
     List<Role> findOtherRolesByUserId(Long userId);
 
-    @Query(value = "select * from anan_role where id in (select role_id from anan_user_role where user_id =?1)", nativeQuery = true)
+    @Query(value = "select * from anan_role where id in (select role_id from anan_user_role where user_id =?1) and status=0", nativeQuery = true)
     List<Role> findUserRolesByUserId(Long userId);
-
-//    @Query(value = "select a.* from Role a where a.organizId in (select b.id from anan_organization b where b.code like :code + '%') ")
-//    Page<Role> findAllByOrganizCode(String code, PageRequest pageable);
 
     List<Role> findAllByOrganizId(Long organizId);
 

@@ -7,7 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
 import top.fosin.anan.core.util.DateTimeUtil;
-import top.fosin.anan.model.dto.res.IdCreateUpdateOrganizDeleteDto;
+import top.fosin.anan.model.dto.res.IdCreateUpdateOrganizDto;
 
 import java.util.Date;
 
@@ -22,7 +22,7 @@ import java.util.Date;
 @ToString
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value = "用户表响应DTO", description = "用户的响应DTO")
-public class UserRespDto extends IdCreateUpdateOrganizDeleteDto<Long> {
+public class UserRespDto extends IdCreateUpdateOrganizDto<Long> {
     private static final long serialVersionUID = -37913233914512798L;
 
     @ApiModelProperty(value = "用户工号", example = "String")

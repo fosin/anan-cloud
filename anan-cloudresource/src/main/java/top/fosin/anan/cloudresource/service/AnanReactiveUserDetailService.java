@@ -24,9 +24,7 @@ import java.util.Set;
  * @since 3.0.0
  */
 public class AnanReactiveUserDetailService extends AnanReactiveJwtTool<UserDetail>
-        implements ReactiveAuditorAware<Long>,
-        UserAware<Long>,
-        OrganizAware<Long> {
+        implements ReactiveAuditorAware<Long>, UserAware<Long>, OrganizAware<Long> {
 
     public AnanReactiveUserDetailService(ReactiveJwtDecoder jwtDecoder) {
         super(jwtDecoder);

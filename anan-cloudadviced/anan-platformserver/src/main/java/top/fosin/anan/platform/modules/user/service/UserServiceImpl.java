@@ -133,11 +133,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public void update(UserReqDto reqDto, String[] ignoreProperties) {
         Long id = reqDto.getId();
-        Assert.isTrue(id > 0, "更新的数据id不能为空或者小于1!");
         User createUser = userDao.findById(id).orElseThrow(() -> new IllegalArgumentException("通过ID：" + id + "未能找到对应的数据!"));
         String usercode = createUser.getUsercode().toLowerCase();
-        if (ananUserDetailService.isAdminUser(usercode) &&
-                !ananUserDetailService.isAdminUser(reqDto.getUsercode().toLowerCase())) {
+        if (ananUserDetailService.isAdminUser(usercode) && !usercode.equals(reqDto.getUsercode().toLowerCase())) {
             throw new IllegalArgumentException("不能修改管理员" + SystemConstant.ADMIN_USER_CODE + "的帐号名称!");
         }
         Assert.isTrue(!ananUserDetailService.isSysAdminUser(usercode),
@@ -161,12 +159,11 @@ public class UserServiceImpl implements UserService {
     )
     @Transactional(rollbackFor = Exception.class)
     public void deleteById(Long id) {
-        Assert.isTrue(id != null && id > 0, "传入的用户ID无效！");
         User entity = ananCacheManger.get(PlatformRedisConstant.ANAN_USER, id + "-id", User.class);
         if (entity == null) {
-            entity = userDao.findById(id).orElse(null);
+            entity = userDao.findById(id)
+                    .orElseThrow(() -> new IllegalArgumentException("通过该ID没有找到相应的用户数据!"));
         }
-        Assert.notNull(entity, "通过该ID没有找到相应的用户数据!");
         deleteByEntity(entity);
     }
 
@@ -202,20 +199,17 @@ public class UserServiceImpl implements UserService {
     @Override
     public PageResult<UserRespDto> findPage(PageDto<UserReqDto> pageDto) {
         boolean sysAdminUser = ananUserDetailService.isSysAdminUser();
+        UserReqDto params = pageDto.getParams();
 
         if (sysAdminUser) {
             return UserService.super.findPage(pageDto);
         }
 
-        PageRequest pageable = PageRequest.of(pageDto.getPageNumber() - 1, pageDto.getPageSize(),
-                buildSortRules(pageDto.getParams().getSortRules()));
-        UserReqDto params = pageDto.getParams();
         Specification<User> condition = (root, query, cb) -> {
             Path<String> usercodePath = root.get("usercode");
             Path<String> usernamePath = root.get("username");
             Path<String> phonePath = root.get("phone");
             Path<String> emailPath = root.get("email");
-            Path<Integer> deletePath = root.get(params.getDeletedName());
 
             Long organizId = ananUserDetailService.getAnanOrganizId();
             Organization organization = orgDao.findById(organizId).orElse(null);
@@ -231,10 +225,6 @@ public class UserServiceImpl implements UserService {
 
             Predicate defaultPredicate = cb.and(cb.notEqual(usercodePath, SystemConstant.ANAN_USER_CODE),
                     cb.in(root.get("organizId")).value(subQuery));
-            Integer deleted = params.getDeleted();
-            if (deleted != null) {
-                defaultPredicate = cb.and(cb.equal(deletePath, deleted), defaultPredicate);
-            }
 
             if (cn.hutool.core.bean.BeanUtil.isEmpty(params)) {
                 return defaultPredicate;
@@ -258,6 +248,7 @@ public class UserServiceImpl implements UserService {
             }
         };
         //分页查找
+        PageRequest pageable = toPage(pageDto);
         Page<User> page = userDao.findAll(condition, pageable);
         return ResultUtils.success(page.getTotalElements(), page.getTotalPages(),
                 BeanUtil.copyProperties(page.getContent(), UserRespDto.class));
@@ -362,21 +353,20 @@ public class UserServiceImpl implements UserService {
         if (ananUserDetailService.isUserRequest() && ananUserDetailService.hasSysAdminRole()) {
             entities = userDao.findAll();
         } else {
-            Organization organiz = orgDao.findById(organizId).orElse(null);
-            Assert.notNull(organiz, "根据传入的机构编码没有找到任何数据!");
-            Long topId = organiz.getTopId();
-            Organization topOrganiz = orgDao.findById(topId).orElse(null);
-            List<Organization> organizs = orgDao.findByTopIdAndCodeStartingWithOrderByCodeAsc(topId, Objects.requireNonNull(topOrganiz, "通过topId：" + topId + "未找到对应的用户信息!").getCode());
+            Organization organiz = orgDao.findById(organizId).orElseThrow(() -> new IllegalArgumentException("根据传入的机构编码没有找到任何数据!"));
+            List<Organization> organizs = orgDao.findByTopIdAndCodeStartingWithOrderByCodeAsc(organiz.getTopId(),organiz.getCode());
 
             Specification<User> condition = (root, query, cb) -> {
                 Path<Long> organizIdPath = root.get("organizId");
                 Path<Integer> statusPath = root.get("status");
+                Path<Integer> deletedPath = root.get("deleted");
                 Path<String> usercodePath = root.get("usercode");
                 Predicate predicate = cb.notEqual(usercodePath, SystemConstant.ANAN_USER_CODE);
                 CriteriaBuilder.In<Long> in = cb.in(organizIdPath);
                 for (Organization entity : organizs) {
                     in.value(entity.getId());
                 }
+                predicate = cb.and(predicate, cb.equal(deletedPath, 0));
                 if (status != -1) {
                     predicate = cb.and(predicate, cb.equal(statusPath, status));
                 }

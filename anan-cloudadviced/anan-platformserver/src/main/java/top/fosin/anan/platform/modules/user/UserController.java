@@ -51,7 +51,7 @@ public class UserController extends BaseController
     private final UserPermissionService userPermissionService;
 
     @PostMapping("/usercode/{usercode}")
-    @ApiImplicitParam(name = "usercode", value = "用户工号,取值于AnanUserEntity.usercode",
+    @ApiImplicitParam(name = "usercode", value = "用户工号,取值于User.usercode",
             required = true, dataTypeClass = String.class, paramType = "path")
     @ApiOperation("根据用户工号查找用户信息")
     public SingleResult<UserRespDto> findOneByUsercode(@NotBlank @PathVariable("usercode") String usercode) {
@@ -77,7 +77,7 @@ public class UserController extends BaseController
                     required = true, paramType = "query"),
             @ApiImplicitParam(name = "h", value = "确认新密码2(未加密)",
                     required = true, dataTypeClass = String.class, paramType = "query"),
-            @ApiImplicitParam(name = "i", value = "用户ID,取值于AnanUserEntity.id",
+            @ApiImplicitParam(name = "i", value = "用户ID,取值于User.id",
                     required = true, dataTypeClass = Long.class, paramType = "query")
     })
     public SingleResult<String> changePassword(@RequestParam("a") String password,
@@ -112,7 +112,7 @@ public class UserController extends BaseController
     @ApiOperation("修改用户帐号密码")
     @PostMapping("/changePassword/real")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = TreeDto.ID_NAME, value = "参数类型,取值于AnanUserEntity.id",
+            @ApiImplicitParam(name = TreeDto.ID_NAME, value = "参数类型,取值于User.id",
                     required = true, dataTypeClass = Long.class, paramType = "query"),
             @ApiImplicitParam(name = "password", value = "原密码(未加密)",
                     required = true, dataTypeClass = String.class, paramType = "query"),
@@ -131,7 +131,7 @@ public class UserController extends BaseController
 
     @ApiOperation("根据用户ID查询用户权限列表")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "userId", value = "用户ID,取值于AnanUserEntity.id",
+            @ApiImplicitParam(name = "userId", value = "用户ID,取值于User.id",
                     required = true, dataTypeClass = String.class, paramType = "path"),
             @ApiImplicitParam(name = "organizId", value = "机构序号",
                     required = true, dataTypeClass = Long.class, paramType = "query")
@@ -146,7 +146,7 @@ public class UserController extends BaseController
     @ApiImplicitParams({
             @ApiImplicitParam(name = "entities", value = "用户权限集合(List<UserPermission>)",
                     required = true, dataTypeClass = List.class, paramType = "body"),
-            @ApiImplicitParam(name = "userId", value = "用户ID,取值于AnanUserEntity.id",
+            @ApiImplicitParam(name = "userId", value = "用户ID,取值于User.id",
                     required = true, dataTypeClass = Long.class, paramType = "path"),
     })
     @PutMapping(value = "/permissions/{userId}")
@@ -157,7 +157,7 @@ public class UserController extends BaseController
     }
 
     @ApiOperation(value = "根据用户ID重置用户密码", notes = "重置后的密码或是固定密码或是随机密码，具体由机构参数UserDefaultPasswordStrategy决定")
-    @ApiImplicitParam(name = IdDto.ID_NAME, value = "用户ID,取值于AnanUserEntity.id",
+    @ApiImplicitParam(name = IdDto.ID_NAME, value = "用户ID,取值于User.id",
             required = true, dataTypeClass = Long.class, paramType = "path")
     @PostMapping("/resetPassword/{id}")
     public SingleResult<String> resetPassword(@Positive @PathVariable(IdDto.ID_NAME) Long id) {
@@ -165,7 +165,7 @@ public class UserController extends BaseController
     }
 
     @ApiOperation("根据用户序号查找用户所有角色信息列表")
-    @ApiImplicitParam(name = "userId", value = "用户ID,取值于AnanUserEntity.id",
+    @ApiImplicitParam(name = "userId", value = "用户ID,取值于User.id",
             required = true, dataTypeClass = Long.class, paramType = "path")
     @RequestMapping(value = "/roles/{userId}", method = {RequestMethod.GET, RequestMethod.POST})
     public MultResult<RoleRespDto> getUserRoles(@Positive @PathVariable("userId") Long userId) {
@@ -176,7 +176,7 @@ public class UserController extends BaseController
     @ApiImplicitParams({
             @ApiImplicitParam(name = "entities", value = "用户角色集合(List<UserRole>)",
                     required = true, dataTypeClass = List.class, paramType = "path"),
-            @ApiImplicitParam(name = "userId", value = "用户ID,取值于AnanUserEntity.id",
+            @ApiImplicitParam(name = "userId", value = "用户ID,取值于User.id",
                     required = true, dataTypeClass = Long.class, paramType = "path")
     })
     @PutMapping(value = "/roles/{userId}")
@@ -187,7 +187,7 @@ public class UserController extends BaseController
     }
 
     @ApiOperation("根据用户序号查找用户所有角色信息")
-    @ApiImplicitParam(name = "userId", value = "用户ID,对应AnanRoleEntity.id",
+    @ApiImplicitParam(name = "userId", value = "用户ID,对应Role.id",
             required = true, dataTypeClass = Integer.class, paramType = "path")
     @RequestMapping(value = "/otherRoles/{userId}", method = {RequestMethod.GET, RequestMethod.POST})
     public MultResult<RoleRespDto> getOtherRoles(@Positive @PathVariable("userId") Long userId) {

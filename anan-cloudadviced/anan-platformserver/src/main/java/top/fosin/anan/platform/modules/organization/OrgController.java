@@ -46,7 +46,7 @@ public class OrgController extends BaseController
     }
 
     @ApiOperation("根据机构ID获取机构权限")
-    @ApiImplicitParam(name = "organizId", value = "机构ID,取值于AnanOrganizationEntity.id",
+    @ApiImplicitParam(name = "organizId", value = "机构ID,取值于Organization.id",
             required = true, dataTypeClass = Long.class, paramType = "path")
     @RequestMapping(value = "/permissions/{organizId}", method = {RequestMethod.GET, RequestMethod.POST})
     public MultResult<OrgPermissionRespDto> permissions(@PathVariable Long organizId) {
@@ -57,7 +57,7 @@ public class OrgController extends BaseController
     @ApiImplicitParams({
             @ApiImplicitParam(name = "dtos", value = "版本权限集合",
                     dataTypeClass = List.class, paramType = "body"),
-            @ApiImplicitParam(name = "organizId", value = "机构ID,取值于AnanOrganizationEntity.id",
+            @ApiImplicitParam(name = "organizId", value = "机构ID,取值于Organization.id",
                     required = true, dataTypeClass = Long.class, paramType = "path")
 
     })
@@ -79,7 +79,7 @@ public class OrgController extends BaseController
 
 
     @ApiOperation("根据父机构ID获取其孩子节点数据")
-    @ApiImplicitParam(name = "organizId", required = true, dataTypeClass = Long.class, value = "机构ID,取值于AnanOrganizationEntity.id", paramType = "path")
+    @ApiImplicitParam(name = "organizId", required = true, dataTypeClass = Long.class, value = "机构ID,取值于Organization.id", paramType = "path")
     @PostMapping("/auth/{organizId}")
     public SingleResult<OrgAuthRespDto> getOrganizAuth(@PathVariable("organizId") Long organizId) {
         List<OrgAuthRespDto> authRespDtos = orgAuthService.findAllByOrganizId(organizId);

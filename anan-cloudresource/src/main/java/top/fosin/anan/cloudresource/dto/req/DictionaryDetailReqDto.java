@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import top.fosin.anan.core.util.RegexUtil;
-import top.fosin.anan.model.dto.req.IdQuerySortDeleteDto;
+import top.fosin.anan.model.dto.req.IdQuerySortDto;
 import top.fosin.anan.model.module.LogicalQueryRule;
 import top.fosin.anan.model.module.SortRule;
 import top.fosin.anan.model.prop.ForeignKeyProp;
@@ -25,7 +25,7 @@ import javax.validation.constraints.Pattern;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @ApiModel(value = "通用字典明细表请求DTO", description = "通用字典明细的请求DTO")
-public class DictionaryDetailReqDto extends IdQuerySortDeleteDto<LogicalQueryRule, SortRule, Long>
+public class DictionaryDetailReqDto extends IdQuerySortDto<LogicalQueryRule, SortRule, Long>
         implements ForeignKeyProp<Long> {
     private static final long serialVersionUID = 507206776709737910L;
 
@@ -40,7 +40,7 @@ public class DictionaryDetailReqDto extends IdQuerySortDeleteDto<LogicalQueryRul
 
     @NotNull(message = "字典序号" + "{javax.validation.constraints.NotNull.message}",
             groups = {Create.class, Update.class})
-    @ApiModelProperty(value = "字典ID，取值于字典明细表AnanDictionaryDetailEntity.code,创建和更新时必填")
+    @ApiModelProperty(value = "字典ID，取值于字典明细表DictionaryDetail.code,创建和更新时必填")
     private Long dictionaryId;
 
     @NotNull(message = "顺序" + "{javax.validation.constraints.NotNull.message}",

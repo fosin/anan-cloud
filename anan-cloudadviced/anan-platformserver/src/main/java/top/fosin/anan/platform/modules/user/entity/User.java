@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 import top.fosin.anan.jpa.entity.IdCreateUpdateOrganizDeleteEntity;
 
 import javax.persistence.Basic;
@@ -27,6 +28,7 @@ import java.util.Date;
 @DynamicUpdate
 @SQLDelete(sql = "update anan_user set deleted = 1 where id = ?")
 @Table(name = "anan_user")
+@Where(clause = "deleted=0")
 @ApiModel(value = "用户表实体类", description = "用户的实体类")
 public class User extends IdCreateUpdateOrganizDeleteEntity<Long> {
   private static final long serialVersionUID = 897030139778409164L;

@@ -17,13 +17,13 @@ import java.util.List;
 public interface UserDao extends IJpaRepository<User, Long> {
     User findByUsercode(String usercode);
 
-    @Query(value = "select * from anan_user where id not in (select user_id from anan_user_role where role_id =?1)", nativeQuery = true)
+    @Query(value = "select * from anan_user where id not in (select user_id from anan_user_role where role_id =?1) and deleted=0 and status=0", nativeQuery = true)
     List<User> findOtherUsersByRoleId(Long roleId);
 
-    @Query(value = "select * from anan_user where id in (select user_id from anan_user_role where role_id =?1)", nativeQuery = true)
+    @Query(value = "select a.* from anan_user a,anan_user_role b where a.id=b.user_id and b.role_id =?1 and a.deleted=0 and a.status=0", nativeQuery = true)
     List<User> findRoleUsersByRoleId(Long roleId);
 
-    @Query(value = "select * from anan_user where organiz_id in (select id from anan_organization where top_id =?1) and (status=?2 or ?2=-1)",nativeQuery = true)
+    @Query(value = "select * from anan_user where organiz_id in (select id from anan_organization where top_id =?1) and (status=?2 or ?2=-1) and deleted=0 and status=0", nativeQuery = true)
     List<User> findByTopIdAndStatus(Long topId, Integer status);
 }
 

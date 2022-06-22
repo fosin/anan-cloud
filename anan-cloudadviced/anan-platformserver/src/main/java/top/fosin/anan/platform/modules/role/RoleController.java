@@ -44,7 +44,7 @@ public class RoleController implements ISimpleController<RoleReqDto, RoleRespDto
     private final RoleUserService roleUserService;
 
     @ApiOperation("根据角色ID获取角色权限")
-    @ApiImplicitParam(name = "roleId", value = "角色ID,取值于AnanRoleEntity.id",
+    @ApiImplicitParam(name = "roleId", value = "角色ID,取值于Role.id",
             required = true, dataTypeClass = Long.class, paramType = "path")
     @RequestMapping(value = "/permissions/{roleId}", method = {RequestMethod.GET, RequestMethod.POST})
     public MultResult<RolePermissionRespDto> permissions(@Positive @PathVariable Long roleId) {
@@ -55,7 +55,7 @@ public class RoleController implements ISimpleController<RoleReqDto, RoleRespDto
     @ApiImplicitParams({
             @ApiImplicitParam(name = "entities", value = "角色权限集合(List<RolePermission>)",
                     required = true, dataTypeClass = List.class, paramType = "body"),
-            @ApiImplicitParam(name = "roleId", value = "角色ID,取值于AnanRoleEntity.id",
+            @ApiImplicitParam(name = "roleId", value = "角色ID,取值于Role.id",
                     required = true, dataTypeClass = Long.class, paramType = "path")
     })
     @PutMapping(value = "/permissions/{roleId}")
@@ -66,7 +66,7 @@ public class RoleController implements ISimpleController<RoleReqDto, RoleRespDto
     }
 
     @ApiOperation("根据角色序号查找该角色所有用户信息")
-    @ApiImplicitParam(name = "roleId", value = "角色ID,取值于AnanRoleEntity.id",
+    @ApiImplicitParam(name = "roleId", value = "角色ID,取值于Role.id",
             required = true, dataTypeClass = Long.class, paramType = "path")
     @RequestMapping(value = "/users/{roleId}", method = {RequestMethod.GET, RequestMethod.POST})
     public MultResult<UserRespDto> getRoleUsers(@Positive @PathVariable("roleId") Long roleId) {
@@ -75,9 +75,9 @@ public class RoleController implements ISimpleController<RoleReqDto, RoleRespDto
 
     @ApiOperation(value = "根据角色ID更新角色拥有的用户", notes = "更新角色拥有的用户，此操作将先删除原用户集合，再新增新用户集合")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "dtos", value = "角色用户集合(List<UserRoleReqDto>)",
+            @ApiImplicitParam(name = "dtos", value = "角色用户集合(List<RoleUserReqDto>)",
                     required = true, dataTypeClass = List.class, paramType = "body"),
-            @ApiImplicitParam(name = "roleId", value = "角色ID,取值于AnanRoleEntity.id",
+            @ApiImplicitParam(name = "roleId", value = "角色ID,取值于Role.id",
                     required = true, dataTypeClass = Long.class, paramType = "path"),
     })
     @PutMapping(value = "/users/{roleId}")
@@ -88,7 +88,7 @@ public class RoleController implements ISimpleController<RoleReqDto, RoleRespDto
     }
 
     @ApiOperation("根据用户序号查找用户目前不拥有的所有角色信息")
-    @ApiImplicitParam(name = "roleId", value = "角色ID,取值于AnanRoleEntity.id",
+    @ApiImplicitParam(name = "roleId", value = "角色ID,取值于Role.id",
             required = true, dataTypeClass = Long.class, paramType = "path")
     @RequestMapping(value = "/otherUsers/{roleId}", method = {RequestMethod.POST})
     public MultResult<UserRespDto> getOtherUsers(@Positive @PathVariable("roleId") Long roleId) throws AnanControllerException {

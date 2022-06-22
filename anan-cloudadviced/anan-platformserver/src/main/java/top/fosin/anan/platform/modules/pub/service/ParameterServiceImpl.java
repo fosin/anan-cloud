@@ -53,8 +53,7 @@ public class ParameterServiceImpl implements ParameterService {
     @Override
     public PageResult<ParameterRespDto> findPage(PageDto<ParameterReqDto> pageDto) {
         ParameterReqDto params = pageDto.getParams();
-        PageRequest pageable = PageRequest.of(pageDto.getPageNumber() - 1, pageDto.getPageSize(),
-                buildSortRules(params.getSortRules()));
+
         String name = params.getName();
         String search = "%" + (name == null ? "" : name) + "%";
         Long organizId = ananUserDetailService.getAnanOrganizId();
@@ -69,6 +68,7 @@ public class ParameterServiceImpl implements ParameterService {
         }
 
         //分页查找
+        PageRequest pageable = toPage(pageDto);
         Page<Parameter> page = parameterDao.findPage(search, code, type, pageable);
         return ResultUtils.success(page.getTotalElements(), page.getTotalPages(),
                 BeanUtil.copyProperties(page.getContent(), ParameterRespDto.class));

@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 import top.fosin.anan.jpa.entity.IdCreateUpdatePidDeleteEntity;
 
 import javax.persistence.Basic;
@@ -26,6 +27,7 @@ import javax.persistence.Table;
 @DynamicUpdate
 @SQLDelete(sql = "update anan_organization set deleted = 1 where id = ?")
 @Table(name = "anan_organization")
+@Where(clause = "deleted=0")
 @ApiModel(value = "机构表实体类", description = "机构的实体类")
 public class Organization extends IdCreateUpdatePidDeleteEntity<Long> {
     private static final long serialVersionUID = -27331190994806707L;

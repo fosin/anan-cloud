@@ -41,7 +41,7 @@ public class VersionController implements ISimpleController<VersionReqDto, Versi
     @ApiOperation(value = "根据父权限ID获取其孩子数据列表")
     @RequestMapping(value = "/listChild/{pid}", method = {RequestMethod.POST})
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "versionId", required = true, dataTypeClass = Long.class, value = "版本ID,取值于AnanVersionEntity.id", paramType = "query"),
+            @ApiImplicitParam(name = "versionId", required = true, dataTypeClass = Long.class, value = "版本ID,取值于Version.id", paramType = "query"),
             @ApiImplicitParam(name = TreeDto.PID_NAME, required = true, dataTypeClass = Long.class, value = "父权限ID,VersionPermission.id", paramType = "path")
     })
     public MultResult<PermissionRespTreeDto> getListChild(@PathVariable Long pid, @RequestParam Long versionId) {
@@ -49,7 +49,7 @@ public class VersionController implements ISimpleController<VersionReqDto, Versi
     }
 
     @ApiOperation("根据版本ID获取版本权限")
-    @ApiImplicitParam(name = "versionId", required = true, dataTypeClass = Long.class, value = "版本ID,取值于AnanVersionEntity.id", paramType = "path")
+    @ApiImplicitParam(name = "versionId", required = true, dataTypeClass = Long.class, value = "版本ID,取值于Version.id", paramType = "path")
     @RequestMapping(value = "/permissions/{versionId}", method = {RequestMethod.GET, RequestMethod.POST})
     public MultResult<VersionPermissionRespDto> permissions(@PathVariable Long versionId) {
         return ResultUtils.success(versionPermissionService.listByForeingKey(versionId));
@@ -58,7 +58,7 @@ public class VersionController implements ISimpleController<VersionReqDto, Versi
     @ApiOperation(value = "根据版本ID更新版本权限", notes = "根据版本ID更新版本权限，此操作将先删除原权限，再新增新权限")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "dtos", required = true, dataTypeClass = List.class, value = "版本权限集合(List<VersionPermission>)", paramType = "body"),
-            @ApiImplicitParam(name = "versionId", required = true, dataTypeClass = Long.class, value = "版本ID,取值于AnanVersionEntity.id", paramType = "path")
+            @ApiImplicitParam(name = "versionId", required = true, dataTypeClass = Long.class, value = "版本ID,取值于Version.id", paramType = "path")
     })
     @PutMapping(value = "/permissions/{versionId}")
     public SingleResult<Boolean> permissions(@RequestBody List<VersionPermissionReqDto> dtos,

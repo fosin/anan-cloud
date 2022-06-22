@@ -20,10 +20,7 @@ import java.util.*;
  * @date 2018.7.23
  */
 public class AnanUserDetailService extends AnanJwtTool<UserDetail>
-        implements AuditorAware<Long>,
-        UserAware<Long>,
-        OrganizAware<Long>
-{
+        implements AuditorAware<Long>, UserAware<Long>, OrganizAware<Long> {
 
     public AnanUserDetailService(JwtDecoder jwtDecoder) {
         super(jwtDecoder);

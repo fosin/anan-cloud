@@ -129,10 +129,6 @@ public class RoleServiceImpl implements RoleService {
         Assert.notNull(pageDto, "传入的分页信息不能为空!");
         RoleReqDto params = pageDto.getParams();
 
-        PageRequest pageable = PageRequest.of(pageDto.getPageNumber() - 1, pageDto.getPageSize(),
-                buildSortRules(params.getSortRules()));
-
-        Page<Role> page;
         Specification<Role> condition;
         if (ananUserDetailService.hasSysAdminRole()) {
             //超过管理员不需要通过机构序号间接查询
@@ -148,7 +144,7 @@ public class RoleServiceImpl implements RoleService {
             String value = params.getValue();
             Assert.notNull(organizId, "机构ID不能为空!");
             Organization organiz = orgDao.findById(organizId).orElseThrow(() -> new IllegalArgumentException("根据传入的机构编码没有找到任何数据!"));
-            List<Organization> organizs = orgDao.findByTopIdAndCodeStartingWithOrderByCodeAsc(organiz.getTopId(), organiz.getCode());
+            List<Organization> organizs = orgDao.findByTopIdAndCodeStartingWithOrderByCodeAsc(organiz.getTopId(),organiz.getCode());
 
             condition = (root, query, cb) -> {
                 Path<Long> organizIdPath = root.get("organizId");
@@ -167,7 +163,8 @@ public class RoleServiceImpl implements RoleService {
                 return predicate;
             };
         }
-        page = roleDao.findAll(condition, pageable);
+        PageRequest pageable = toPage(pageDto);
+        Page<Role> page = roleDao.findAll(condition, pageable);
 
         return ResultUtils.success(page.getTotalElements(), page.getTotalPages(),
                 BeanUtil.copyProperties(page.getContent(), RoleRespDto.class));
