@@ -65,7 +65,7 @@ public class OrgController extends BaseController
     public MultResult<OrgPermissionRespDto> permissions(
             @RequestBody List<OrgPermissionReqDto> dtos,
             @PathVariable("organizId") Long organizId) {
-        return ResultUtils.success(orgPermissionService.updateInBatch(organizId, dtos));
+        return ResultUtils.success(orgPermissionService.processInBatch(organizId, dtos,false));
     }
 
     @ApiOperation(value = "机构注册", notes = "用户自助注册机构")

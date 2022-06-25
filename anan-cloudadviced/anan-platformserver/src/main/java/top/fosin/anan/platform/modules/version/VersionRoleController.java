@@ -57,7 +57,7 @@ public class VersionRoleController implements ISimpleController<VersionRoleReqDt
     public SingleResult<Boolean> permissions(@RequestBody List<VersionRolePermissionReqDto> entities,
                                              @PathVariable("roleId") Long roleId) {
         //更新版本权限
-        versionRolePermissionService.updateInBatch(roleId, entities);
+        versionRolePermissionService.processInBatch(roleId, entities, false);
         return ResultUtils.success(true);
     }
 

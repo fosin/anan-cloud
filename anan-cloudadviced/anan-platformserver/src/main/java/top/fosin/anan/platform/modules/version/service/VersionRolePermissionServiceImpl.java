@@ -46,9 +46,8 @@ public class VersionRolePermissionServiceImpl implements VersionRolePermissionSe
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public List<VersionRolePermissionRespDto> updateInBatch(Long roleId, Collection<VersionRolePermissionReqDto> dtos) {
-        Assert.isTrue(roleId != null && dtos.size() > 0., "传入的版本ID或entities不能为空!");
-        Assert.isTrue(dtos.stream().allMatch(entity -> entity.getRoleId().equals(roleId)), "需要更新的数据集中有与版本ID不匹配的数据!");
+    public List<VersionRolePermissionRespDto> processInBatch(Long roleId, Collection<VersionRolePermissionReqDto> reqDtos, boolean... processAction) {
+        Assert.isTrue(reqDtos.stream().allMatch(entity -> entity.getRoleId().equals(roleId)), "需要更新的数据集中有与版本ID不匹配的数据!");
         versionRoleRepo.findById(roleId).ifPresent(versionRoleEntity -> {
             Long versionId = versionRoleEntity.getVersionId();
             String roleValue = versionRoleEntity.getValue();
@@ -60,7 +59,7 @@ public class VersionRolePermissionServiceImpl implements VersionRolePermissionSe
                 //角色权限同步
                 Role role = roleDao.findByOrganizIdAndValue(organizId, roleValue);
                 Long roleId1 = role.getId();
-                List<RolePermission> afterRolePermissions = dtos.stream().map(permission -> {
+                List<RolePermission> afterRolePermissions = reqDtos.stream().map(permission -> {
                     RolePermission entity = new RolePermission();
                     entity.setRoleId(roleId1);
                     entity.setPermissionId(permission.getPermissionId());
@@ -75,7 +74,7 @@ public class VersionRolePermissionServiceImpl implements VersionRolePermissionSe
 
             //同步版本角色权限
             List<VersionRolePermission> beforeVersionRolePermissions = versionRolePermissionRepo.findByRoleId(roleId);
-            List<VersionRolePermission> afterVersionRolePermissions = dtos.stream().map(dto -> {
+            List<VersionRolePermission> afterVersionRolePermissions = reqDtos.stream().map(dto -> {
                 VersionRolePermission entity = new VersionRolePermission();
                 entity.setRoleId(roleId);
                 entity.setPermissionId(dto.getPermissionId());
@@ -86,7 +85,7 @@ public class VersionRolePermissionServiceImpl implements VersionRolePermissionSe
             PermissionUtil.saveNewPermission(beforeVersionRolePermissions, afterVersionRolePermissions, versionRolePermissionRepo);
         });
 
-        return BeanUtil.copyProperties(dtos, VersionRolePermissionRespDto.class);
+        return BeanUtil.copyProperties(reqDtos, VersionRolePermissionRespDto.class);
     }
 
     /**

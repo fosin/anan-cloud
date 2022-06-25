@@ -12,7 +12,6 @@ import top.fosin.anan.platform.modules.version.entity.VersionPermission;
  * @author fosin
  * @date 2018-11-18 17:26:40
  */
-public interface VersionPermissionService extends AnanPermissionService<VersionPermissionReqDto, VersionPermissionRespDto, Long, VersionPermission
-        > {
+public interface VersionPermissionService extends AnanPermissionService<VersionPermissionReqDto, VersionPermissionRespDto, Long, VersionPermission> {
 
 }

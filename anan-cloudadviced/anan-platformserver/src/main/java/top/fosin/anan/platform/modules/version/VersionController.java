@@ -64,7 +64,7 @@ public class VersionController implements ISimpleController<VersionReqDto, Versi
     public SingleResult<Boolean> permissions(@RequestBody List<VersionPermissionReqDto> dtos,
                                              @PathVariable("versionId") Long versionId) {
         //更新版本权限
-        versionPermissionService.updateInBatch(versionId, dtos);
+        versionPermissionService.processInBatch(versionId, dtos, false);
         return ResultUtils.success(true);
     }
 

@@ -80,7 +80,7 @@ public class OrgServiceImpl implements OrgService {
 
     @Override
     @Cacheable(value = PlatformRedisConstant.ANAN_ORGANIZATION, key = "#id")
-    public OrgRespDto findOneById(Long id, boolean findRefs) {
+    public OrgRespDto findOneById(Long id, boolean... findRefs) {
         return OrgService.super.findOneById(id, findRefs);
     }
 

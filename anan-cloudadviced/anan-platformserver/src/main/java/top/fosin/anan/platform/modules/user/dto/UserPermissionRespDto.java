@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import top.fosin.anan.cloudresource.dto.PermissionDto;
+import top.fosin.anan.cloudresource.dto.OrganizIdPermissionDto;
 
 /**
  * 用于增减用户的单项权限，通常实在角色的基础上增减单项权限(AnanUserPermission)响应DTO
@@ -18,10 +18,8 @@ import top.fosin.anan.cloudresource.dto.PermissionDto;
 @ToString
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value = "用于增减用户的单项权限，通常实在角色的基础上增减单项权限响应DTO", description = "用户权限的响应DTO")
-public class UserPermissionRespDto extends PermissionDto<Long> {
+public class UserPermissionRespDto extends OrganizIdPermissionDto<Long> {
     private static final long serialVersionUID = -28245693115711034L;
-    @ApiModelProperty(value = "机构序号", example = "Long")
-    private Long organizId;
 
     @ApiModelProperty(value = "用户序号", example = "Long")
     private Long userId;

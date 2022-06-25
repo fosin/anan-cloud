@@ -92,7 +92,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Cacheable(value = PlatformRedisConstant.ANAN_USER, key = "#id+'-id'", unless = "#result == null")
     @Transactional(readOnly = true)
-    public UserRespDto findOneById(Long id, boolean refs) {
+    public UserRespDto findOneById(Long id, boolean... findRefs) {
         User userEntity = userDao.findById(id).orElseThrow(() -> new IllegalArgumentException("未找到对应数据!"));
         UserRespDto respDto = BeanUtil.copyProperties(userEntity, UserRespDto.class);
         Long organizId = userEntity.getOrganizId();

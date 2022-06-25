@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.DynamicUpdate;
-import top.fosin.anan.platform.modules.pub.entity.PermissionEntity;
+import top.fosin.anan.platform.modules.pub.entity.PermissionId;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -25,7 +25,7 @@ import javax.persistence.Table;
 @DynamicUpdate
 @Table(name = "anan_version_role_permission")
 @ApiModel(value = "版本角色权限表实体类", description = "版本角色权限的实体类")
-public class VersionRolePermission extends PermissionEntity<Long> {
+public class VersionRolePermission extends PermissionId<Long> {
     private static final long serialVersionUID = -46739456017788098L;
 
     @Basic

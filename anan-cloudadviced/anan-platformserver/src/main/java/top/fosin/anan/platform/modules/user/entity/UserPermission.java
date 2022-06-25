@@ -1,17 +1,16 @@
 package top.fosin.anan.platform.modules.user.entity;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
-
-import org.hibernate.annotations.DynamicUpdate;
-
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import top.fosin.anan.platform.modules.organization.entity.OrganizIdPermission;
+import org.hibernate.annotations.DynamicUpdate;
+import top.fosin.anan.platform.modules.organization.entity.OrganizIdPermissionId;
+
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 /**
  * 用于增减用户的单项权限，通常实在角色的基础上增减单项权限(AnanUserPermission)实体类
@@ -26,7 +25,7 @@ import top.fosin.anan.platform.modules.organization.entity.OrganizIdPermission;
 @DynamicUpdate
 @Table(name = "anan_user_permission")
 @ApiModel(value = "用于增减用户的单项权限，通常实在角色的基础上增减单项权限实体类", description = "用户权限的实体类")
-public class UserPermission extends OrganizIdPermission<Long> {
+public class UserPermission extends OrganizIdPermissionId<Long> {
     private static final long serialVersionUID = 539048606557875412L;
 
     @Basic

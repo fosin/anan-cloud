@@ -53,16 +53,16 @@ public class RoleController implements ISimpleController<RoleReqDto, RoleRespDto
 
     @ApiOperation(value = "根据角色ID更新角色权限", notes = "根据角色ID更新角色权限，此操作将先删除原权限，再新增新权限")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "entities", value = "角色权限集合(List<RolePermission>)",
+            @ApiImplicitParam(name = "reqDtos", value = "角色权限集合(List<RolePermission>)",
                     required = true, dataTypeClass = List.class, paramType = "body"),
             @ApiImplicitParam(name = "roleId", value = "角色ID,取值于Role.id",
                     required = true, dataTypeClass = Long.class, paramType = "path")
     })
     @PutMapping(value = "/permissions/{roleId}")
     public MultResult<RolePermissionRespDto> permissions(
-            @NotNull @RequestBody List<RolePermissionReqDto> entities,
+            @NotNull @RequestBody List<RolePermissionReqDto> reqDtos,
             @Positive @PathVariable("roleId") Long roleId) {
-        return ResultUtils.success(rolePermissionService.updateInBatch(roleId, entities));
+        return ResultUtils.success(rolePermissionService.processInBatch(roleId, reqDtos, false));
     }
 
     @ApiOperation("根据角色序号查找该角色所有用户信息")
@@ -75,15 +75,15 @@ public class RoleController implements ISimpleController<RoleReqDto, RoleRespDto
 
     @ApiOperation(value = "根据角色ID更新角色拥有的用户", notes = "更新角色拥有的用户，此操作将先删除原用户集合，再新增新用户集合")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "dtos", value = "角色用户集合(List<RoleUserReqDto>)",
+            @ApiImplicitParam(name = "reqDtos", value = "角色用户集合(List<RoleUserReqDto>)",
                     required = true, dataTypeClass = List.class, paramType = "body"),
             @ApiImplicitParam(name = "roleId", value = "角色ID,取值于Role.id",
                     required = true, dataTypeClass = Long.class, paramType = "path"),
     })
     @PutMapping(value = "/users/{roleId}")
-    public SingleResult<Boolean> putRoleUsers(@NotNull @RequestBody List<RoleUserReqDto> dtos,
+    public SingleResult<Boolean> putRoleUsers(@NotNull @RequestBody List<RoleUserReqDto> reqDtos,
                                               @Positive @PathVariable("roleId") Long roleId) {
-        roleUserService.updateInBatch(roleId, dtos);
+        roleUserService.processInBatch(roleId, reqDtos);
         return ResultUtils.success(true);
     }
 

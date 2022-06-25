@@ -153,7 +153,7 @@ public class UserController extends BaseController
     public MultResult<UserPermissionRespDto>
     permissions(@NotNull @RequestBody List<UserPermissionReqDto> entities,
                 @Positive @PathVariable Long userId) {
-        return ResultUtils.success(userPermissionService.updateInBatch(userId, entities));
+        return ResultUtils.success(userPermissionService.processInBatch(userId, entities, false));
     }
 
     @ApiOperation(value = "根据用户ID重置用户密码", notes = "重置后的密码或是固定密码或是随机密码，具体由机构参数UserDefaultPasswordStrategy决定")
@@ -183,7 +183,7 @@ public class UserController extends BaseController
     public MultResult<UserRoleRespDto> putUserRoles
             (@NotNull @RequestBody List<UserRoleReqDto> entities,
              @Positive @PathVariable Long userId) {
-        return ResultUtils.success(userRoleService.updateInBatch(userId, entities));
+        return ResultUtils.success(userRoleService.processInBatch(userId, entities));
     }
 
     @ApiOperation("根据用户序号查找用户所有角色信息")
