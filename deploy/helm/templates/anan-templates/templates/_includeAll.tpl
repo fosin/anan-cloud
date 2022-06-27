@@ -51,4 +51,12 @@
 {{- if .Values.daemonset }}
 {{ include "anan.daemonset" . }}
 {{- end }}
+
+{{- if .Values.job }}
+{{ include "anan.job" . }}
+{{- end }}
+
+{{- if .Values.cronjob }}
+{{ include "anan.cronjob" . }}
+{{- end }}
 {{- end -}}

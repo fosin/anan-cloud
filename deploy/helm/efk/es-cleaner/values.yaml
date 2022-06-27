@@ -1,0 +1,29 @@
+cronjob:
+  schedule: "0 14 * * *" #每天22点执行
+  startingDeadlineSeconds: 30 #每次运行 Job 的时候，它最长可以等多长时间，有时这个 Job 可能运行很长时间也不会启动。所以这时，如果超过较长时间的话，CronJob 就会停止这个 Job；
+  concurrencyPolicy: Forbid #否允许并行运行。所谓的并行运行就是，比如说我每分钟执行一次，但是这个 Job 可能运行的时间特别长，假如两分钟才能运行成功，也就是第二个 Job 要到时间需要去运行的时候，上一个 Job 还没完成。如果这个 policy 设置为 true 的话，那么不管你前面的 Job 是否运行完成，每分钟都会去执行；如果是 false，它就会等上一个 Job 运行完成之后才会运行下一个；
+  successfulJobsHistoryLimit: 52 #每一次 CronJob 运行完之后，它都会遗留上一个 Job 的运行历史、查看时间。
+  failedJobsHistoryLimit: 52 #失败运行历史、查看时间。
+  parallelism: 1 #并行执行的Pod个数
+  completions: 1 #指定每个Pod队列执行次数
+  backoffLimit: 1 #失败重试次数限制
+restartPolicy: Never #Pod重启策略：Always、OnFailure 和 Never。CronJob不支持Always。
+containers:
+  - image: centos:centos7
+    imagePullPolicy: IfNotPresent
+    env:
+      - name: TZ
+        value: Asia/Shanghai
+      - name: ES_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: es
+            key: password
+    command:
+      - /bin/sh
+      - -c
+      - |
+        #批量删除30天之前的数据
+        ES_USER='elastic:'$ES_PASSWORD
+        curl -XDELETE  -u$ES_USER http://es-2.es-headless:9200/*-`date -d "-30 days" "+%Y.%m.%d"`
+        curl -XDELETE  -u$ES_USER http://es-2.es-headless:9200/*-`date -d "-30 days" "+%Y-%m-%d"`

@@ -1,23 +1,19 @@
-
 {{/*
 anan replicaset 模版(包括：statefulset、deployment、daemonset)
 */}}
 {{- define "anan.replicaset" -}}
 ---
-{{- $hasMountPath1 := (hasKey (first (.Values.configmap | default list)) "mountPath") }}
-{{- $hasMountPath2 := (hasKey (first ($.Values.secret | default list)) "mountPath") }}
-{{- $hasMountPath3 := (hasKey (first ($.Values.hostPath | default list)) "mountPath") }}
-{{- $hasMountPath4 := (gt (len ($.Values.emptyDir | default list)) 0) }}
-{{- $hasMountPath := or $hasMountPath1 $hasMountPath2 $hasMountPath3 $hasMountPath4 }}
 {{- $replicaset := coalesce $.Values.statefulset $.Values.deployment $.Values.daemonset }}
 {{- if $.Values.statefulset }}
 kind: StatefulSet
+apiVersion: {{ $replicaset.apiVersion | default "apps/v1" }}
 {{- else if $.Values.deployment }}
 kind: Deployment
-{{- else }}
-kind: DaemonSet
-{{- end }}
 apiVersion: {{ $replicaset.apiVersion | default "apps/v1" }}
+{{- else if $.Values.daemonset }}
+kind: DaemonSet
+apiVersion: {{ $replicaset.apiVersion | default "apps/v1" }}
+{{- end }}
 metadata:
   name: {{ $.Release.Name }}
   namespace: {{ $.Release.Namespace }}
@@ -51,7 +47,7 @@ spec:
     {{- with $.Values.deployment.minReadySeconds }}
   minReadySeconds: {{ . }}
     {{- end }}
-  {{- else }}
+  {{- else if $.Values.daemonset }}
     {{- with $.Values.daemonset.updateStrategy }}
   updateStrategy:
       {{- toYaml . | nindent 4 }}
@@ -66,324 +62,13 @@ spec:
         {{- include "anan.lable.name" . | nindent 8 }}: {{ $.Release.Name }}
         {{- with $replicaset.labels }}
         {{- toYaml . | nindent 8 }}
-        {{ end }}
+        {{- end }}
         {{- with $replicaset.annotations }}
       annotations:
         {{- toYaml . | nindent 8 }}
-        {{ end }}
+        {{- end }}
     spec:
-      {{- with $.Values.tolerations }}
-      tolerations:
-      {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- if $.Values.affinity }}
-      affinity:
-      {{- toYaml $.Values.affinity | nindent 8 }}
-      {{- else if or $.Values.podAntiAffinity $.Values.podAffinity $.Values.nodeAntiAffinity $.Values.nodeAffinity }}
-      affinity:
-      {{- $releaseName := $.Release.Name }}
-      {{- with $.Values.podAntiAffinity }}
-        podAntiAffinity:
-        {{- if contains .duringScheduling "required" }}
-          requiredDuringSchedulingIgnoredDuringExecution:
-            - labelSelector:
-                matchExpressions:
-                - key: {{ .key | default (include "anan.lable.name" .) }}
-                  operator: {{ .operator | default "In" }}
-                  values:
-                    - {{ .value | default $releaseName }}
-              topologyKey: {{ .topologyKey | default "kubernetes.io/hostname" }}
-        {{- else }}
-          preferredDuringSchedulingIgnoredDuringExecution:
-            - weight: 100
-              podAffinityTerm:
-                labelSelector:
-                  matchExpressions:
-                  - key: {{ .key | default (include "anan.lable.name" .) }}
-                    operator: {{ .operator | default "In" }}
-                    values:
-                      - {{ .value | default $releaseName }}
-                topologyKey: {{ .topologyKey | default "kubernetes.io/hostname" }}
-        {{- end }}
-      {{- end }}
-      {{- with $.Values.podAffinity }}
-        podAffinity:
-        {{- if contains .duringScheduling "required" }}
-          requiredDuringSchedulingIgnoredDuringExecution:
-            - labelSelector:
-                matchExpressions:
-                - key: {{ .key | default (include "anan.lable.name" .) }}
-                  operator: {{ .operator | default "In" }}
-                  values:
-                    - {{ .value | default $releaseName }}
-              topologyKey: {{ .topologyKey | default "kubernetes.io/hostname" }}
-        {{- else }}
-          preferredDuringSchedulingIgnoredDuringExecution:
-            - weight: 100
-              podAffinityTerm:
-                labelSelector:
-                  matchExpressions:
-                  - key: {{ .key | default (include "anan.lable.name" .) }}
-                    operator: {{ .operator | default "In" }}
-                    values:
-                      - {{ .value | default $releaseName }}
-                topologyKey: {{ .topologyKey | default "kubernetes.io/hostname" }}
-        {{- end }}
-      {{- end }}
-      {{- with $.Values.nodeAntiAffinity }}
-        nodeAntiAffinity:
-        {{- (include "anan.replicaset.nodeAffinity" .) | nindent 10 }}
-      {{- end }}
-      {{- with $.Values.nodeAffinity }}
-        nodeAffinity:
-        {{- (include "anan.replicaset.nodeAffinity" .) | nindent 10 }}
-      {{- end }}
-      {{- end }}
-      {{- if $.Values.cluster }}
-      serviceAccountName: {{ $.Values.cluster.serviceAccountName | default $.Release.Name }}
-      {{- else if $.Values.role }}
-      serviceAccountName: {{ $.Values.role.serviceAccountName | default $.Release.Name }}
-      {{- end }}
-      {{- with $.Values.priorityClassName }}
-      priorityClassName: {{ . }}
-      {{- end }}
-      {{- with $.Values.hostNetwork }}
-      hostNetwork: {{ . }}
-      {{- end }}
-      {{- with $.Values.hostIPC }}
-      hostIPC: {{ . }}
-      {{- end }}
-      {{- with $.Values.hostPID }}
-      hostPID: {{ . }}
-      {{- end }}
-      {{- with $.Values.hostname }}
-      hostname: {{ . }}
-      {{- end }}
-      {{- with $.Values.nodeName }}
-      nodeName: {{ . }}
-      {{- end }}
-      {{- with $.Values.nodeSelector }}
-      nodeSelector:
-      {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with $.Values.restartPolicy }}
-      restartPolicy: {{ . }}
-      {{- end }}
-      {{- with $.Values.terminationGracePeriodSeconds }}
-      terminationGracePeriodSeconds: {{ . }}
-      {{- end }}
-      {{- with $.Values.initContainers }}
-      initContainers:
-      {{- toYaml . | nindent 8 }}
-      {{ end }}
-      containers:
-      {{- range $z,$dataz := $.Values.containers }}
-        - name: {{ $dataz.name | default $.Release.Name }}
-          image: {{ $dataz.image }}
-          imagePullPolicy: {{ $dataz.imagePullPolicy }}
-          {{- if $dataz.ports }}
-          ports:
-          {{- toYaml $dataz.ports | nindent 12 }}
-          {{- else if $.Values.service }}
-          ports:
-          {{- range $.Values.service.ports }}
-            - name: {{ .name }}
-              containerPort: {{ .targetPort | default .port }}
-              {{- with .protocol }}
-              protocol: {{ . }}
-              {{- end }}
-          {{- end }}
-          {{- end }}
-          {{- with $dataz.workingDir }}
-          workingDir: {{ . }}
-          {{- end }}
-          {{- with $dataz.envFrom }}
-          envFrom:
-          {{- toYaml . | nindent 12 }}
-          {{- end }}
-          {{- with $dataz.env }}
-          env:
-          {{- toYaml . | nindent 12 }}
-          {{- end }}
-          {{- with $dataz.command }}
-          command:
-          {{- toYaml . | nindent 12 }}
-          {{- end }}
-          {{- with $dataz.args }}
-          args:
-          {{- toYaml . | nindent 12 }}
-          {{- end }}
-          {{- with $dataz.securityContext }}
-          securityContext:
-          {{- toYaml . | nindent 12 }}
-          {{- end }}
-          {{- with $dataz.lifecycle }}
-          lifecycle:
-          {{- toYaml . | nindent 12 }}
-          {{- end }}
-          {{- with $dataz.resources }}
-          resources:
-          {{- toYaml . | nindent 12 }}
-          {{- end }}
-          {{- with $dataz.livenessProbe }}
-          livenessProbe:
-          {{- toYaml . | nindent 12 }}
-          {{- end }}
-          {{- with $dataz.readinessProbe }}
-          readinessProbe:
-          {{- toYaml . | nindent 12 }}
-          {{- end }}
-          {{- with $dataz.startupProbe }}
-          startupProbe:
-          {{- toYaml . | nindent 12 }}
-          {{- end }}
-          {{- with $dataz.volumeDevices }}
-          volumeDevices:
-          {{- toYaml . | nindent 12 }}
-          {{- end }}
-          {{- if $dataz.volumeMounts }}
-          volumeMounts:
-          {{- toYaml $dataz.volumeMounts | nindent 12 }}
-          {{- else if or $.Values.persistence $hasMountPath }}
-          volumeMounts:
-          {{- range $x,$datax := $.Values.persistence }}
-            - name: {{ default (print $.Release.Name "-" $x) $datax.name }}
-              mountPath: {{ $datax.mountPath }}
-          {{- end }}
-          {{- range $cmi,$cm := $.Values.configmap }}
-          {{- if $cm.mountPath }}
-          {{- if and (ne $cm.mountPath "/") (eq (clean $cm.mountPath) $cm.mountPath) }}
-            - name: {{ $.Release.Name }}-{{ $cmi }}
-              mountPath: {{ $cm.mountPath }}
-              {{- with $cm.readOnly }}
-              readOnly: {{ . }}
-              {{- end }}
-          {{- else }}
-            {{- $dirFiles := dict }}
-            {{- range $diri,$dir := $cm.fromDirs }}
-              {{- range $path, $_ := $.Files.Glob $dir }}
-                {{- $dirFiles := (set $dirFiles (base $path) $path) }}
-              {{- end }}
-            {{- end }}
-            {{- $allFiles := (mergeOverwrite ($cm.fromFiles | default dict) ($cm.fromTemps | default dict) $dirFiles) }}
-            {{- range $key,$val := $allFiles }}
-            - name: {{ $.Release.Name }}-{{ $cmi }}
-              mountPath: {{ $cm.mountPath }}{{ $key }}
-              {{- with $cm.readOnly }}
-              readOnly: {{ . }}
-              {{- end }}
-              subPath: {{ $key }}
-            {{- end }}
-          {{- end }}
-          {{- end }}
-          {{- end }}
-          {{- range $secrcti,$secrct := $.Values.secret }}
-          {{- if $secrct.mountPath }}
-          {{- if and (ne $secrct.mountPath "/") (eq (clean $secrct.mountPath) $secrct.mountPath) }}
-            - name: {{ $.Release.Name }}-secret-{{ $secrcti }}
-              mountPath: {{ $secrct.mountPath }}
-              {{- with $secrct.readOnly }}
-              readOnly: {{ . }}
-              {{- end }}
-          {{- else }}
-            {{- $dirFiles := dict }}
-            {{- range $index,$dir := $secrct.fromDirs }}
-              {{- range $path, $_ := $.Files.Glob $dir }}
-                {{- $dirFiles := (set $dirFiles (base $path) $path) }}
-              {{- end }}
-            {{- end }}
-            {{- $allFiles := (mergeOverwrite ($secrct.fromFiles | default dict) ($secrct.fromTemps | default dict) $dirFiles) }}
-            {{- range $key,$val := $allFiles }}
-            - name: {{ $.Release.Name }}-secret-{{ $secrcti }}
-              mountPath: {{ $secrct.mountPath }}{{ $key }}
-              {{- with $secrct.readOnly }}
-              readOnly: {{ . }}
-              {{- end }}
-              subPath: {{ $key }}
-            {{- end }}
-          {{- end }}
-          {{- end }}
-          {{- end }}
-          {{- range $index,$hostPath := $.Values.hostPath }}
-            - name: {{ $.Release.Name }}-hostpath-{{ $index }}
-              mountPath: {{ $hostPath.mountPath }}
-              {{- with $hostPath.readOnly }}
-              readOnly: {{ . }}
-              {{- end }}
-              {{- with $hostPath.subPath }}
-              subPath: {{ . }}
-              {{- end }}
-          {{- end }}
-          {{- range $index,$emptyDir := $.Values.emptyDir }}
-            - name: {{ $.Release.Name }}-emptydir-{{ $index }}
-              mountPath: {{ $emptyDir }}
-          {{- end }}
-          {{- end }}
-      {{- end }}
-      {{- if $.Values.volumes }}
-      volumes:
-      {{- toYaml $.Values.volumes | nindent 8 }}
-      {{- else if $hasMountPath }}
-      volumes:
-      {{- $configmapName := (include "anan.configmap.name" .) }}
-      {{- range $cmi,$cm := $.Values.configmap }}
-        {{- if $cm.mountPath }}
-        - name: {{ $.Release.Name }}-{{ $cmi }}
-          configMap:
-            name: {{ coalesce $cm.existName $cm.name $configmapName }}
-            {{- with $cm.defaultMode }}
-            defaultMode: {{ . }}
-            {{- end }}
-            items:
-              {{- $dirFiles := dict }}
-              {{- range $index, $dir := $cm.fromDirs }}
-                {{- range $path, $_ := $.Files.Glob $dir }}
-                  {{- $dirFiles := (set $dirFiles (base $path) $path) }}
-                {{- end }}
-              {{- end }}
-              {{- $allFiles := (mergeOverwrite ($cm.fromFiles | default dict) ($cm.fromTemps | default dict) $dirFiles) }}
-              {{- range $key, $val := $allFiles }}
-              - key: {{ $key }}
-                path: {{ $key }}
-              {{- end }}
-        {{- end }}
-      {{- end }}
-      {{- $secretName := (include "anan.secret.name" .) }}
-      {{- range $index,$secrct := $.Values.secret }}
-        {{- if $secrct.mountPath }}
-       - name: {{ $.Release.Name }}-secret-{{ $index }}
-          secret:
-            name: {{ coalesce $secrct.existName $secrct.name $secretName }}
-            {{- with $secrct.defaultMode }}
-            defaultMode: {{ . }}
-            {{- end }}
-            items:
-              {{- $dirFiles := dict }}
-              {{- range $index,$dir := $secrct.fromDirs }}
-                {{- range $path, $_ := $.Files.Glob $dir }}
-                  {{- $dirFiles := (set $dirFiles (base $path) $path) }}
-                {{- end }}
-              {{- end }}
-              {{- $allFiles := (mergeOverwrite ($secrct.fromFiles | default dict) ($secrct.fromTemps | default dict) $dirFiles) }}
-              {{- range $key,$val := $allFiles }}
-              - key: {{ $key }}
-                path: {{ $key }}
-              {{- end }}
-        {{- end }}
-      {{- end }}
-      {{- range $index,$hostPath := $.Values.hostPath }}
-        - name: {{ $.Release.Name }}-hostpath-{{ $index }}
-          hostPath:
-            path: {{ $hostPath.path }}
-            {{- with $hostPath.type }}
-            type: {{ . }}
-            {{- end }}
-      {{- end }}
-      {{- range $index, $emptyDir := $.Values.emptyDir }}
-        - name: {{ $.Release.Name }}-emptydir-{{ $index }}
-          emptyDir: {}
-      {{- end }}
-      {{- end }}
+      {{- include "anan.podspec" . | nindent 6 }}
   {{- if $.Values.statefulset }}
   {{- if $.Values.statefulset.volumeClaimTemplates }}
   volumeClaimTemplates:
@@ -407,48 +92,3 @@ spec:
   {{- end }}
 {{- end -}}
 
-{{- define "anan.replicaset.nodeAffinity" -}}
-{{- if contains .duringScheduling "required" }}
-requiredDuringSchedulingIgnoredDuringExecution:
-  nodeSelectorTerms:
-  - matchExpressions:
-    - key: {{ .key | default "kubernetes.io/hostname" }}
-      operator: {{ .operator | default "In" }}
-      values:
-        - {{ required "NodeAffinity must have a value filed!" .value }}
-{{- else }}
-preferredDuringSchedulingIgnoredDuringExecution:
-  - weight: 100
-    preference:
-      matchExpressions:
-      - key: {{ .key | default "kubernetes.io/hostname" }}
-        operator: {{ .operator | default "In" }}
-        values:
-          - {{ required "NodeAffinity must have a value filed!" .value }}
-{{- end }}
-{{- end -}}
-
-{{- define "anan.replicaset.podAffinity" -}}
-{{- $releaseName := $.Release.Name }}
-{{- if contains .duringScheduling "required" }}
-requiredDuringSchedulingIgnoredDuringExecution:
-  - labelSelector:
-      matchExpressions:
-      - key: {{ .key | default (include "anan.lable.name" .) }}
-        operator: {{ .operator | default "In" }}
-        values:
-          - {{ .value | default $releaseName }}
-    topologyKey: {{ .topologyKey | default "kubernetes.io/hostname" }}
-{{- else }}
-preferredDuringSchedulingIgnoredDuringExecution:
-  - weight: 100
-    podAffinityTerm:
-      labelSelector:
-        matchExpressions:
-        - key: {{ .key | default (include "anan.lable.name" .) }}
-          operator: {{ .operator | default "In" }}
-          values:
-            - {{ .value | default $releaseName }}
-      topologyKey: {{ .topologyKey | default "kubernetes.io/hostname" }}
-{{- end }}
-{{- end -}}

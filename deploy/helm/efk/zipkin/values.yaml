@@ -42,6 +42,8 @@ containers:
       #       key: JAVA_TOOL_OPTIONS
       - name: STORAGE_TYPE
         value: "elasticsearch"
+      - name: ES_DATE_SEPARATOR
+        value: "."
       - name: ES_HOSTS
         valueFrom:
           configMapKeyRef:

@@ -9,7 +9,7 @@ name: redis
 version: x.y.z
 dependencies:
   - name: anan-templates
-    version: 0.0.2
+    version: 0.0.3
     repository: https://fosin.github.io/anan-cloud
 
 ```

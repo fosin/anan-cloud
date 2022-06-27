@@ -43,6 +43,7 @@ spec:
 anan ingressClass模版
 */}}
 {{- define "anan.ingressClass" }}
+---
 apiVersion: {{ $.Values.ingressClass.apiVersion | default "networking.k8s.io/v1" }}
 kind: IngressClass
 metadata:
@@ -65,7 +66,7 @@ spec:
   controller: {{ $.Values.ingressClass.controller | default "nginx.org/ingress-controller" }}
   {{- with $.Values.ingressClass.parameters }}
   parameters:
-    {{ toYaml . | indent 4 }}
+    {{- toYaml . | indent 4 }}
   {{- end }}
 {{- end -}}
 

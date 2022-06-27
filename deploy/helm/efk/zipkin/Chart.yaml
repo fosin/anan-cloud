@@ -1,9 +1,9 @@
 apiVersion: v2
 description: A Helm chart for Kubernetes
 name: zipkin
-version: 0.0.2
+version: 0.0.3
 appVersion: 2.x
 dependencies:
   - name: anan-templates
-    version: 0.0.2
+    version: 0.0.3
     repository: file://../../templates/anan-templates

@@ -7,6 +7,7 @@
 cd deploy\helm
 
 helm dependency update .\mysql-mgr
+helm dependency update .\mysql-backup
 helm dependency update .\rabbitmq
 helm dependency update .\redis
 helm dependency update .\redisinsight
@@ -18,6 +19,7 @@ helm dependency update .\anan-cloud\anan-sbaserver
 helm dependency update .\anan-cloud\anan-zuulgateway
 
 helm dependency update .\efk\es
+helm dependency update .\efk\es-cleaner
 helm dependency update .\efk\filebeat
 helm dependency update .\efk\kibana
 helm dependency update .\efk\elastichd
@@ -51,6 +53,7 @@ chmod 777 -R ${ANAN_WORKDIR}/logs/mysql-mgr${NODE_INDEX}
 #2、创建基础ConfigMap和启动mysql数据库、容器会自动创建对应的数据库，并启用主从同步
 
 helm install mysql-mgr mysql-mgr/
+helm install mysql-backup mysql-backup/
 
 #所有的节点都执行安装MGR插件
 INSTALL PLUGIN group_replication SONAME 'group_replication.so';
@@ -176,6 +179,7 @@ mkdir -p ${ANAN_WORKDIR}/es${NODE_INDEX}
 chmod 777 -R ${ANAN_WORKDIR}/es${NODE_INDEX}
 
 helm install es efk/es/
+helm install es efk/es-cleaner/
 
 #如果是第一次创建ES需要开启X-Pack认证
 cd /usr/share/elasticsearch

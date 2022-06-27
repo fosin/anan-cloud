@@ -23,7 +23,6 @@ deployment:
       maxUnavailable: 1 #滚动升级时允许的最大Unavailable的pod个数
   replicaCount: 2
   minReadySeconds: 60  #滚动升级时60s后认为该pod就绪
-terminationGracePeriodSeconds: 30 #优雅关闭pod的等待时间，默认30s
 #第3优先级
 daemonset:
   apiVersion: apps/v1
@@ -34,7 +33,37 @@ daemonset:
     rollingUpdate:
       maxUnavailable: 1 #滚动升级时允许的最大Unavailable的pod个数
   minReadySeconds: 60  #滚动升级时60s后认为该pod就绪
+#Job任务
+job:
+  apiVersion: batch/v1
+  labels: {}
+  annotations: {}
+  parallelism: 1 #并行执行的Pod个数
+  completions: 16 #指定每个Pod队列执行次数
+  backoffLimit: 3 #失败重试次数限制
+  activeDeadlineSeconds: #该值适用于 Job 的整个生命期，无论 Job 创建了多少个 Pod。 一旦 Job 运行时间达到 activeDeadlineSeconds 秒，其所有运行中的 Pod 都会被终止，并且 Job 的状态更新为 type: Failed 及 reason: DeadlineExceeded。
+  manualSelector: #不使用系统通常自动为你 生成的选择算符，使用自定义选择器
+  ttlSecondsAfterFinished: 100 #可以让该控制器清理掉 已结束的资源
+#CronJob定时任务
+cronjob:
+  apiVersion: batch/v1beta1
+  labels: {}
+  annotations: {}
+  schedule: "*/1 * * * *" #设置时间格式，它的时间格式和 Linux 的 crontime 是一样的，所以直接根据 Linux 的 crontime 书写格式来书写就可以了。
+  startingDeadlineSeconds: 15 #每次运行 Job 的时候，它最长可以等多长时间，不能小于10，
+  concurrencyPolicy: Allow #否允许并行运行,可选值Allow默认：schedule时间到了就新增任务、Forbid：接着上一个任务执行、Replace：取消上一个任务新增一个新任务执行。所谓的并行运行就是，比如说我每分钟执行一次，但是这个 Job 可能运行的时间特别长，假如两分钟才能运行成功，也就是第二个 Job 要到时间需要去运行的时候，上一个 Job 还没完成。如果这个 policy 设置为 true 的话，那么不管你前面的 Job 是否运行完成，每分钟都会去执行；如果是 false，它就会等上一个 Job 运行完成之后才会运行下一个；
+  successfulJobsHistoryLimit: 100 #每一次 CronJob 运行完之后，它都会遗留上一个 Job 的运行历史、查看时间。
+  failedJobsHistoryLimit: 3 #失败运行历史、查看时间。
+  #以下设置就是Job的设置
+  parallelism: 1 #并行执行的Pod个数
+  completions: 16 #指定每个Pod队列执行次数
+  backoffLimit: 3 #失败重试次数限制
+  activeDeadlineSeconds: #该值适用于 Job 的整个生命期，无论 Job 创建了多少个 Pod。 一旦 Job 运行时间达到 activeDeadlineSeconds 秒，其所有运行中的 Pod 都会被终止，并且 Job 的状态更新为 type: Failed 及 reason: DeadlineExceeded。
+  manualSelector: #不使用系统通常自动为你 生成的选择算符，使用自定义选择器
+  ttlSecondsAfterFinished: 100 #可以让该控制器清理掉 已结束的资源
+
 revisionHistoryLimit: 10 #保留的历史版本个数
+terminationGracePeriodSeconds: 30 #优雅关闭pod的等待时间，默认30s
 nodeName: "" #调度到的主机的名称
 nodeSelector: {} #调度到某节点的选择器
 hostNetwork: false #使用主机网络
@@ -155,6 +184,10 @@ hostPath:
     subPath: ""
 emptyDir:
   - /data #挂载目录
+#指定PVC名称和挂载目录
+pvc:
+  - name: pvc
+    mountPath: /data
 configmap: #创建cm并挂载到pod指定目录的依据
   - name: "nginx" #cm的名称，如果不设置，默认是模版anan.configmap.name定义的名称,并支持按name合并创建一个cm
     existName: "nginx" #现存的cm的名称，如果想挂载现有的cm，可以使用该属性。一旦设置该属性，将不会创建新的cm
