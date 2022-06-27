@@ -2,6 +2,18 @@ apiVersion: v1
 entries:
   anan-templates:
   - apiVersion: v2
+    appVersion: 0.0.3
+    created: "2022-06-27T07:52:01.060605744Z"
+    description: Anan templates Helm chart for Kubernetes
+    digest: 97537d0b5595fd985d2b54428739199f9eff1ffb9d774fa18947cfd13fcf39ae
+    home: https://github.com/fosin/anan-cloud/tree/master/deploy/helm/templates/anan-templates
+    kubeVersion: ^1.18.0
+    name: anan-templates
+    type: library
+    urls:
+    - https://github.com/fosin/anan-cloud/releases/download/anan-templates-0.0.3/anan-templates-0.0.3.tgz
+    version: 0.0.3
+  - apiVersion: v2
     appVersion: 0.0.2
     created: "2022-04-22T14:32:17.579339781Z"
     description: Anan templates Helm chart for Kubernetes
@@ -23,4 +35,4 @@ entries:
     urls:
     - https://github.com/fosin/anan-cloud/releases/download/anan-templates-0.0.1/anan-templates-0.0.1.tgz
     version: 0.0.1
-generated: "2022-04-22T14:32:17.579368183Z"
+generated: "2022-06-27T07:52:01.060633444Z"
