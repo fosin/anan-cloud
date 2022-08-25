@@ -3,7 +3,7 @@ package top.fosin.anan.platform.modules.pub.service.inter;
 import top.fosin.anan.jpa.service.ISimpleJpaService;
 import top.fosin.anan.platform.modules.pub.dto.InternationalReqDto;
 import top.fosin.anan.platform.modules.pub.dto.InternationalRespDto;
-import top.fosin.anan.platform.modules.pub.entity.International;
+import top.fosin.anan.platform.modules.pub.po.International;
 
 import java.util.List;
 

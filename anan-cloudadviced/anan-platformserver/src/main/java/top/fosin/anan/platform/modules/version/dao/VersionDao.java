@@ -3,7 +3,7 @@ package top.fosin.anan.platform.modules.version.dao;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
 import top.fosin.anan.jpa.repository.IJpaRepository;
-import top.fosin.anan.platform.modules.version.entity.Version;
+import top.fosin.anan.platform.modules.version.po.Version;
 
 /**
  * 系统版本表数据库访问层
@@ -13,5 +13,5 @@ import top.fosin.anan.platform.modules.version.entity.Version;
  */
 @Repository
 @Lazy
-public interface VersionDao extends IJpaRepository<Version, Long> {
+public interface VersionDao extends IJpaRepository<Long, Version> {
 }

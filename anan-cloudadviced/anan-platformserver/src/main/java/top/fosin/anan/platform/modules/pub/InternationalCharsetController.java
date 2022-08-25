@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
-import top.fosin.anan.model.controller.ISimpleController;
-import top.fosin.anan.model.result.MultResult;
-import top.fosin.anan.model.result.ResultUtils;
+import top.fosin.anan.data.controller.ISimpleController;
+import top.fosin.anan.data.result.MultResult;
+import top.fosin.anan.data.result.ResultUtils;
 import top.fosin.anan.platform.modules.pub.dto.InternationalCharsetReqDto;
 import top.fosin.anan.platform.modules.pub.dto.InternationalCharsetRespDto;
 import top.fosin.anan.platform.modules.pub.service.inter.InternationalCharsetService;
@@ -22,7 +22,7 @@ import top.fosin.anan.platform.modules.pub.service.inter.InternationalCharsetSer
  * @date 2020-12-04 11:05:46
  */
 @RestController
-@RequestMapping(UrlPrefixConstant.INTERNATIONAL_CHARSET)
+@RequestMapping(value = UrlPrefixConstant.INTERNATIONAL_CHARSET, params = UrlPrefixConstant.DEFAULT_VERSION_PARAM)
 @Api(value = UrlPrefixConstant.INTERNATIONAL_CHARSET, tags = "国际化语言字符集管理")
 public class InternationalCharsetController implements ISimpleController<InternationalCharsetReqDto, InternationalCharsetRespDto, Long> {
 

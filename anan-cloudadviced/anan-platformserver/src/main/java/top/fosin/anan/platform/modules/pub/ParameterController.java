@@ -11,11 +11,11 @@ import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
 import top.fosin.anan.cloudresource.dto.req.ParameterReqDto;
 import top.fosin.anan.cloudresource.dto.res.ParameterRespDto;
 import top.fosin.anan.cloudresource.service.inter.ParameterFeignService;
-import top.fosin.anan.model.controller.ISimpleController;
-import top.fosin.anan.model.dto.res.TreeDto;
-import top.fosin.anan.model.result.ResultUtils;
-import top.fosin.anan.model.result.SingleResult;
-import top.fosin.anan.model.valid.group.SingleQuery;
+import top.fosin.anan.data.controller.ISimpleController;
+import top.fosin.anan.data.entity.res.TreeVO;
+import top.fosin.anan.data.result.ResultUtils;
+import top.fosin.anan.data.result.SingleResult;
+import top.fosin.anan.data.valid.group.SingleQuery;
 import top.fosin.anan.platform.modules.pub.service.inter.ParameterService;
 
 import javax.validation.constraints.NotBlank;
@@ -31,7 +31,7 @@ import java.util.List;
  * @author fosin
  */
 @RestController
-@RequestMapping(UrlPrefixConstant.PARAMETER)
+@RequestMapping(value = UrlPrefixConstant.PARAMETER)
 @Api(value = UrlPrefixConstant.PARAMETER, tags = "通用参数管理(参数获取、自动创建)")
 @AllArgsConstructor
 public class ParameterController implements ISimpleController<ParameterReqDto, ParameterRespDto, Long> {
@@ -71,22 +71,22 @@ public class ParameterController implements ISimpleController<ParameterReqDto, P
 
     @ApiOperation(value = "获取或创建指定机构或指定用户参数值", notes = "type=1则是机构参数(机构参数系统会从当前机构向逐级上级机构查找该参数),type=2则是用户参数，如果缓存和数据库中都没有找到参数，则自动创建一个无域参数")
     @RequestMapping(value = ParameterFeignService.PATH_VALUE, method = {RequestMethod.POST, RequestMethod.GET})
-    @ApiImplicitParam(name = TreeDto.ID_NAME, value = "参数ID,取值于Parameter.id",
+    @ApiImplicitParam(name = TreeVO.ID_NAME, value = "参数ID,取值于Parameter.id",
             required = true, dataTypeClass = ParameterReqDto.class, paramType = "body")
-    public SingleResult<String> getOrCreateParameter(@Validated({SingleQuery.class}) @RequestBody ParameterReqDto retrieveDto) {
-        int type = retrieveDto.getType();
-        String scope = retrieveDto.getScope();
-        String name = retrieveDto.getName();
-        String defaultValue = retrieveDto.getDefaultValue();
-        String description = retrieveDto.getDescription();
+    public SingleResult<String> getOrCreateParameter(@Validated({SingleQuery.class}) @RequestBody ParameterReqDto reqDto) {
+        int type = reqDto.getType();
+        String scope = reqDto.getScope();
+        String name = reqDto.getName();
+        String defaultValue = reqDto.getDefaultValue();
+        String description = reqDto.getDescription();
         return ResultUtils.success(parameterService.getOrCreateParameter(type, scope, name, defaultValue, description).getValue());
     }
 
     @ApiOperation(value = "根据参数ID刷新参数缓存信息", notes = "该方法是幂等性的，可以重复调用")
-    @ApiImplicitParam(name = TreeDto.ID_NAME, value = "参数ID,取值于Parameter.id",
+    @ApiImplicitParam(name = TreeVO.ID_NAME, value = "参数ID,取值于Parameter.id",
             required = true, dataTypeClass = Long.class, paramType = "path")
     @RequestMapping(value = ParameterFeignService.PATH_APPLY_ID, method = {RequestMethod.POST, RequestMethod.GET})
-    public SingleResult<Boolean> applyChange(@Positive @PathVariable(TreeDto.ID_NAME) Long id) {
+    public SingleResult<Boolean> applyChange(@Positive @PathVariable(TreeVO.ID_NAME) Long id) {
         return ResultUtils.success(parameterService.applyChange(id));
     }
 

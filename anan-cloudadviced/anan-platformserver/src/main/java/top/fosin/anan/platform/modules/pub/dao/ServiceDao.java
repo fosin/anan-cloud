@@ -2,7 +2,7 @@ package top.fosin.anan.platform.modules.pub.dao;
 
 import org.springframework.stereotype.Repository;
 import top.fosin.anan.jpa.repository.IJpaRepository;
-import top.fosin.anan.platform.modules.pub.entity.Service;
+import top.fosin.anan.platform.modules.pub.po.Service;
 
 import java.util.List;
 
@@ -13,7 +13,7 @@ import java.util.List;
  * @date 2020-12-04 17:48:02
  */
 @Repository
-public interface ServiceDao extends IJpaRepository<Service, Long> {
+public interface ServiceDao extends IJpaRepository<Long, Service> {
     /**
      * 根据状态码查找所有服务数据
      *

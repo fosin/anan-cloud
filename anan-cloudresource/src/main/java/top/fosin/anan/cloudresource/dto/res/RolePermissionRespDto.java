@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import top.fosin.anan.cloudresource.dto.PermissionDto;
+import top.fosin.anan.cloudresource.dto.PermissionId;
 
 /**
  * 系统角色权限表(AnanRolePermission)响应DTO
@@ -18,7 +18,7 @@ import top.fosin.anan.cloudresource.dto.PermissionDto;
 @ToString
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value = "角色权限表响应DTO", description = "角色权限的响应DTO")
-public class RolePermissionRespDto extends PermissionDto<Long> {
+public class RolePermissionRespDto extends PermissionId<Long> {
     private static final long serialVersionUID = 785551683787615699L;
     @ApiModelProperty(value = "角色序号", example = "Long")
     private Long roleId;

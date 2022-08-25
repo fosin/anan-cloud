@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import top.fosin.anan.cloudresource.dto.req.ParameterReqDto;
 import top.fosin.anan.cloudresource.dto.res.ParameterRespDto;
 import top.fosin.anan.cloudresource.service.inter.ParameterFeignService;
-import top.fosin.anan.model.result.SingleResult;
+import top.fosin.anan.data.result.SingleResult;
 
 import java.util.Collection;
 import java.util.List;
@@ -22,14 +22,14 @@ import java.util.List;
 public class ParameterFeignFallbackServiceImpl implements ParameterFeignService {
 
     @Override
-    public SingleResult<ParameterRespDto> processCreate(ParameterReqDto ParameterReqDto) {
-        log.error("feign 远程创建通用系统参数失败:{}", ParameterReqDto);
+    public SingleResult<ParameterRespDto> processCreate(ParameterReqDto reqDto) {
+        log.error("feign 远程创建通用系统参数失败:{}", reqDto);
         return null;
     }
 
     @Override
-    public SingleResult<ParameterRespDto> processUpdate(ParameterReqDto ParameterReqDto) {
-        log.error("feign 远程更新通用系统参数失败:{}", ParameterReqDto);
+    public SingleResult<ParameterRespDto> processUpdate(ParameterReqDto reqDto) {
+        log.error("feign 远程更新通用系统参数失败:{}", reqDto);
         return null;
     }
 
@@ -46,8 +46,8 @@ public class ParameterFeignFallbackServiceImpl implements ParameterFeignService 
     }
 
     @Override
-    public SingleResult<String> getOrCreateParameter(ParameterReqDto retrieveDto) {
-        log.error("feign 远程查询通用系统参数失败:{}", retrieveDto);
+    public SingleResult<String> getOrCreateParameter(ParameterReqDto reqDto) {
+        log.error("feign 远程查询通用系统参数失败:{}", reqDto);
         return null;
     }
 

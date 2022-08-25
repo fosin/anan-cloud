@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import top.fosin.anan.core.util.RegexUtil;
-import top.fosin.anan.model.dto.res.TreeDto;
+import top.fosin.anan.data.entity.res.TreeVO;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -21,7 +21,7 @@ import javax.validation.constraints.Pattern;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @ApiModel(value = "用户所有的权限", description = "用户所有的权限，包含用户权限和角色权限")
-public class UserAllPermissionTreeDto extends TreeDto<UserAllPermissionTreeDto, Long> {
+public class UserAllPermissionTreeDto extends TreeVO<UserAllPermissionTreeDto, Long> {
     private static final long serialVersionUID = 900297768117165756L;
 
     @NotBlank(message = "权限编码" + "{javax.validation.constraints.NotBlank.message}")

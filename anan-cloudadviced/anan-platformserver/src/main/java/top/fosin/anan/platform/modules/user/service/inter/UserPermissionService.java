@@ -4,7 +4,7 @@ package top.fosin.anan.platform.modules.user.service.inter;
 import top.fosin.anan.jpa.service.ICrudBatchJpaService;
 import top.fosin.anan.platform.modules.user.dto.UserPermissionReqDto;
 import top.fosin.anan.platform.modules.user.dto.UserPermissionRespDto;
-import top.fosin.anan.platform.modules.user.entity.UserPermission;
+import top.fosin.anan.platform.modules.user.po.UserPermission;
 
 import java.util.List;
 

@@ -19,13 +19,13 @@ import top.fosin.anan.cloudresource.parameter.ParameterStatus;
 import top.fosin.anan.cloudresource.service.AnanUserDetailService;
 import top.fosin.anan.core.exception.AnanServiceException;
 import top.fosin.anan.core.util.BeanUtil;
-import top.fosin.anan.model.dto.req.PageDto;
-import top.fosin.anan.model.result.PageResult;
-import top.fosin.anan.model.result.ResultUtils;
+import top.fosin.anan.data.entity.req.PageQuery;
+import top.fosin.anan.data.result.PageResult;
+import top.fosin.anan.data.result.ResultUtils;
 import top.fosin.anan.platform.modules.organization.dao.OrgDao;
-import top.fosin.anan.platform.modules.organization.entity.Organization;
+import top.fosin.anan.platform.modules.organization.po.Organization;
 import top.fosin.anan.platform.modules.pub.dao.ParameterDao;
-import top.fosin.anan.platform.modules.pub.entity.Parameter;
+import top.fosin.anan.platform.modules.pub.po.Parameter;
 import top.fosin.anan.platform.modules.pub.service.inter.ParameterService;
 import top.fosin.anan.redis.cache.AnanCacheManger;
 
@@ -51,8 +51,8 @@ public class ParameterServiceImpl implements ParameterService {
     private final AnanCacheManger ananCacheManger;
 
     @Override
-    public PageResult<ParameterRespDto> findPage(PageDto<ParameterReqDto> pageDto) {
-        ParameterReqDto params = pageDto.getParams();
+    public PageResult<ParameterRespDto> findPage(PageQuery<ParameterReqDto> PageQuery) {
+        ParameterReqDto params = PageQuery.getParams();
 
         String name = params.getName();
         String search = "%" + (name == null ? "" : name) + "%";
@@ -68,7 +68,7 @@ public class ParameterServiceImpl implements ParameterService {
         }
 
         //分页查找
-        PageRequest pageable = toPage(pageDto);
+        PageRequest pageable = toPage(PageQuery);
         Page<Parameter> page = parameterDao.findPage(search, code, type, pageable);
         return ResultUtils.success(page.getTotalElements(), page.getTotalPages(),
                 BeanUtil.copyProperties(page.getContent(), ParameterRespDto.class));
@@ -235,15 +235,15 @@ public class ParameterServiceImpl implements ParameterService {
             respDto = getNearestParameter(type, scope, name);
         } catch (IllegalArgumentException e) {
             log.debug("报异常说明没有找到任何相关参数，则需要创建一个无域参数，这样默认所有机构共享这一个参数，如果需要设置机构个性化参数则需要在前端手动创建");
-            ParameterReqDto createDto = new ParameterReqDto();
-            createDto.setValue(defaultValue);
-            createDto.setType(type);
-            createDto.setScope(scope);
-            createDto.setName(name);
-            createDto.setDefaultValue(defaultValue);
-            createDto.setDescription(description);
-            createDto.setStatus(0);
-            respDto = create(createDto);
+            ParameterReqDto reqDto = new ParameterReqDto();
+            reqDto.setValue(defaultValue);
+            reqDto.setType(type);
+            reqDto.setScope(scope);
+            reqDto.setName(name);
+            reqDto.setDefaultValue(defaultValue);
+            reqDto.setDescription(description);
+            reqDto.setStatus(0);
+            respDto = create(reqDto);
         }
         return respDto;
     }

@@ -8,9 +8,9 @@ import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
 import top.fosin.anan.cloudresource.dto.req.ParameterReqDto;
 import top.fosin.anan.cloudresource.dto.res.ParameterRespDto;
 import top.fosin.anan.cloudresource.service.ParameterFeignFallbackServiceImpl;
-import top.fosin.anan.model.constant.PathConstant;
-import top.fosin.anan.model.dto.res.TreeDto;
-import top.fosin.anan.model.result.SingleResult;
+import top.fosin.anan.data.constant.PathConstant;
+import top.fosin.anan.data.entity.res.TreeVO;
+import top.fosin.anan.data.result.SingleResult;
 
 import javax.validation.constraints.NotEmpty;
 import java.util.Collection;
@@ -21,7 +21,7 @@ import java.util.List;
  * @date 2019-3-26
  */
 @FeignClient(name = ServiceConstant.ANAN_PLATFORMSERVER, path = UrlPrefixConstant.PARAMETER,
-        fallback = ParameterFeignFallbackServiceImpl.class,contextId = "parameterFeignService")
+        fallback = ParameterFeignFallbackServiceImpl.class, contextId = "parameterFeignService")
 public interface ParameterFeignService {
     String PATH_VALUE = "value";
     String PATH_DTO = PathConstant.PATH_DTO;
@@ -31,30 +31,30 @@ public interface ParameterFeignService {
     String PATH_APPLYS_IDS = PATH_APPLYS + PathConstant.PATH_IDS;
     String PATH_CANCELDELETE = "/cancelDelete" + PathConstant.PATH_IDS;
 
-    @PostMapping
+    @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    SingleResult<ParameterRespDto> processCreate(@RequestBody ParameterReqDto entity);
+    SingleResult<ParameterRespDto> processCreate(@RequestBody ParameterReqDto reqDto);
 
-    @PutMapping
-    SingleResult<ParameterRespDto> processUpdate(@RequestBody ParameterReqDto entity);
+    @PutMapping()
+    SingleResult<ParameterRespDto> processUpdate(@RequestBody ParameterReqDto reqDto);
 
-    @PostMapping(PATH_DTO)
+    @PostMapping(value = PATH_DTO)
     SingleResult<ParameterRespDto> getParameter(@RequestParam("type") Integer type,
-                                                  @RequestParam("scope") String scope,
-                                                  @RequestParam("name") String name);
+                                                @RequestParam("scope") String scope,
+                                                @RequestParam("name") String name);
 
     @PostMapping(value = PATH_NEAREST)
     SingleResult<ParameterRespDto> getNearestParameter(@RequestParam("type") Integer type,
-                                                         @RequestParam("scope") String scope,
-                                                         @RequestParam("name") String name);
+                                                       @RequestParam("scope") String scope,
+                                                       @RequestParam("name") String name);
 
-    @PostMapping(PATH_VALUE)
-    SingleResult<String> getOrCreateParameter(@RequestBody ParameterReqDto retrieveDto);
+    @PostMapping(value = PATH_VALUE)
+    SingleResult<String> getOrCreateParameter(@RequestBody ParameterReqDto reqDto);
 
-    @PostMapping(PATH_APPLY_ID)
-    SingleResult<Boolean> applyChange(@PathVariable(TreeDto.ID_NAME) Long id);
+    @PostMapping(value = PATH_APPLY_ID)
+    SingleResult<Boolean> applyChange(@PathVariable(TreeVO.ID_NAME) Long id);
 
-    @GetMapping(PATH_APPLYS)
+    @GetMapping(value = PATH_APPLYS)
     SingleResult<Boolean> applyChangeAll();
 
     @PostMapping(value = ParameterFeignService.PATH_APPLYS_IDS)

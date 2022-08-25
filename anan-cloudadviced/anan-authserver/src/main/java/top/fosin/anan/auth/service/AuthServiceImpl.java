@@ -6,10 +6,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import top.fosin.anan.auth.dao.UserAllPermissionsDao;
 import top.fosin.anan.auth.dao.UserDao;
-import top.fosin.anan.auth.entity.User;
-import top.fosin.anan.auth.entity.UserAllPermissions;
+import top.fosin.anan.auth.po.User;
+import top.fosin.anan.auth.po.UserAllPermissions;
 import top.fosin.anan.auth.service.inter.AuthService;
 import top.fosin.anan.cloudresource.constant.PlatformRedisConstant;
+import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
 import top.fosin.anan.cloudresource.dto.UserAllPermissionTreeDto;
 import top.fosin.anan.cloudresource.dto.UserAuthDto;
 import top.fosin.anan.cloudresource.dto.res.OrgRespDto;
@@ -17,8 +18,8 @@ import top.fosin.anan.cloudresource.dto.res.UserAllPermissionsRespDto;
 import top.fosin.anan.cloudresource.service.inter.OrgFeignService;
 import top.fosin.anan.core.util.BeanUtil;
 import top.fosin.anan.core.util.TreeUtil;
-import top.fosin.anan.model.prop.PidProp;
-import top.fosin.anan.model.prop.TreeProp;
+import top.fosin.anan.data.prop.PidProp;
+import top.fosin.anan.data.prop.TreeProp;
 
 import java.util.List;
 import java.util.Set;
@@ -51,7 +52,7 @@ public class AuthServiceImpl implements AuthService {
             UserAuthDto dto = userEntity.toAuthDto();
             Long organizId = dto.getOrganizId();
             if (organizId > 0) {
-                OrgRespDto org = orgFeignService.findOneById(organizId)
+                OrgRespDto org = orgFeignService.findOneById(organizId, UrlPrefixConstant.API_VERSION_VALUE)
                         .orElseThrow("未找到对应机构信息" + organizId + ",请联系管理员核对!");
                 dto.setTopId(org.getTopId());
             }

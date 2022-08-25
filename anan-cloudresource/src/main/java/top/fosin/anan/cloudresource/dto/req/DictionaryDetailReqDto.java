@@ -5,12 +5,12 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import top.fosin.anan.core.util.RegexUtil;
-import top.fosin.anan.model.dto.req.IdQuerySortDto;
-import top.fosin.anan.model.module.LogicalQueryRule;
-import top.fosin.anan.model.module.SortRule;
-import top.fosin.anan.model.prop.ForeignKeyProp;
-import top.fosin.anan.model.valid.group.Create;
-import top.fosin.anan.model.valid.group.Update;
+import top.fosin.anan.data.entity.req.IdLogiSortQuery;
+import top.fosin.anan.data.module.LogicalQueryRule;
+import top.fosin.anan.data.module.SortRule;
+import top.fosin.anan.data.prop.ForeignKeyProp;
+import top.fosin.anan.data.valid.group.Create;
+import top.fosin.anan.data.valid.group.Update;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -25,7 +25,7 @@ import javax.validation.constraints.Pattern;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @ApiModel(value = "通用字典明细表请求DTO", description = "通用字典明细的请求DTO")
-public class DictionaryDetailReqDto extends IdQuerySortDto<LogicalQueryRule, SortRule, Long>
+public class DictionaryDetailReqDto extends IdLogiSortQuery<LogicalQueryRule, SortRule, Long>
         implements ForeignKeyProp<Long> {
     private static final long serialVersionUID = 507206776709737910L;
 

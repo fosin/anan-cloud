@@ -17,7 +17,7 @@ import java.io.Serializable;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @ApiModel(value = "机构序号DTO", description = "机构序号DTO")
-public class OrganizIdPermissionDto<ID extends Serializable> extends PermissionDto<ID> {
+public class OrganizIdPermissionDto<ID extends Serializable> extends PermissionId<ID> {
     private static final long serialVersionUID = -16743805718001139L;
 
     @ApiModelProperty(value = "机构序号")

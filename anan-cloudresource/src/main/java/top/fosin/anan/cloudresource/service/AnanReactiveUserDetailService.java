@@ -10,8 +10,8 @@ import top.fosin.anan.cloudresource.constant.SystemConstant;
 import top.fosin.anan.cloudresource.dto.Client;
 import top.fosin.anan.cloudresource.dto.UserAuthDto;
 import top.fosin.anan.cloudresource.dto.UserDetail;
-import top.fosin.anan.model.aware.reactive.OrganizAware;
-import top.fosin.anan.model.aware.reactive.UserAware;
+import top.fosin.anan.data.aware.reactive.OrganizAware;
+import top.fosin.anan.data.aware.reactive.UserAware;
 import top.fosin.anan.security.util.AnanReactiveJwtTool;
 
 import java.util.HashSet;

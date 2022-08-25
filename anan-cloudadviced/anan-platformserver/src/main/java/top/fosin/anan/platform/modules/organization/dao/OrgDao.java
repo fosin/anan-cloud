@@ -3,7 +3,7 @@ package top.fosin.anan.platform.modules.organization.dao;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
 import top.fosin.anan.jpa.repository.IJpaRepository;
-import top.fosin.anan.platform.modules.organization.entity.Organization;
+import top.fosin.anan.platform.modules.organization.po.Organization;
 
 import java.util.List;
 
@@ -13,7 +13,7 @@ import java.util.List;
  */
 @Repository
 @Lazy
-public interface OrgDao extends IJpaRepository<Organization, Long> {
+public interface OrgDao extends IJpaRepository<Long, Organization> {
     List<Organization> findByTopIdAndCodeStartingWithOrderByCodeAsc(Long topId, String code);
 
     List<Organization> findByPidOrderByCodeAsc(Long pid);

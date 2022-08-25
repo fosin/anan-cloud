@@ -4,7 +4,7 @@ import top.fosin.anan.cloudresource.dto.req.RegisterDto;
 import top.fosin.anan.jpa.service.ISimpleJpaService;
 import top.fosin.anan.platform.modules.organization.dto.OrgAuthReqDto;
 import top.fosin.anan.platform.modules.organization.dto.OrgAuthRespDto;
-import top.fosin.anan.platform.modules.organization.entity.OrganizationAuth;
+import top.fosin.anan.platform.modules.organization.po.OrganizationAuth;
 
 import java.util.List;
 

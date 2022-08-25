@@ -3,7 +3,7 @@ package top.fosin.anan.platform.modules.version.dao;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
 import top.fosin.anan.jpa.repository.IJpaRepository;
-import top.fosin.anan.platform.modules.version.entity.VersionRolePermission;
+import top.fosin.anan.platform.modules.version.po.VersionRolePermission;
 
 import java.util.List;
 
@@ -15,7 +15,7 @@ import java.util.List;
  */
 @Repository
 @Lazy
-public interface VersionRolePermissionDao extends IJpaRepository<VersionRolePermission, Long> {
+public interface VersionRolePermissionDao extends IJpaRepository<Long, VersionRolePermission> {
     List<VersionRolePermission> findByRoleId(Long roleId);
 
     void deleteByRoleId(Long roleId);

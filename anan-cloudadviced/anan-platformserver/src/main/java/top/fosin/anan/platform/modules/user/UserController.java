@@ -14,13 +14,13 @@ import top.fosin.anan.cloudresource.dto.res.RoleRespDto;
 import top.fosin.anan.cloudresource.dto.res.UserRespDto;
 import top.fosin.anan.cloudresource.dto.res.UserRoleRespDto;
 import top.fosin.anan.core.util.crypt.AesUtil;
-import top.fosin.anan.model.controller.BaseController;
-import top.fosin.anan.model.controller.ISimpleController;
-import top.fosin.anan.model.dto.IdDto;
-import top.fosin.anan.model.dto.res.TreeDto;
-import top.fosin.anan.model.result.MultResult;
-import top.fosin.anan.model.result.ResultUtils;
-import top.fosin.anan.model.result.SingleResult;
+import top.fosin.anan.data.controller.BaseController;
+import top.fosin.anan.data.controller.ISimpleController;
+import top.fosin.anan.data.entity.Id;
+import top.fosin.anan.data.entity.res.TreeVO;
+import top.fosin.anan.data.result.MultResult;
+import top.fosin.anan.data.result.ResultUtils;
+import top.fosin.anan.data.result.SingleResult;
 import top.fosin.anan.platform.modules.role.service.inter.RoleService;
 import top.fosin.anan.platform.modules.user.dto.UserPermissionReqDto;
 import top.fosin.anan.platform.modules.user.dto.UserPermissionRespDto;
@@ -40,11 +40,11 @@ import java.util.List;
  * @author fosin
  */
 @RestController
-@RequestMapping(UrlPrefixConstant.USER)
+@RequestMapping(value = UrlPrefixConstant.USER, params = UrlPrefixConstant.DEFAULT_VERSION_PARAM)
 @Api(value = UrlPrefixConstant.USER, tags = "用户管理")
 @AllArgsConstructor
 public class UserController extends BaseController
-        implements ISimpleController<UserReqDto,UserRespDto, Long> {
+        implements ISimpleController<UserReqDto, UserRespDto, Long> {
     private final UserService userService;
     private final UserRoleService userRoleService;
     private final RoleService roleService;
@@ -112,7 +112,7 @@ public class UserController extends BaseController
     @ApiOperation("修改用户帐号密码")
     @PostMapping("/changePassword/real")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = TreeDto.ID_NAME, value = "参数类型,取值于User.id",
+            @ApiImplicitParam(name = TreeVO.ID_NAME, value = "参数类型,取值于User.id",
                     required = true, dataTypeClass = Long.class, paramType = "query"),
             @ApiImplicitParam(name = "password", value = "原密码(未加密)",
                     required = true, dataTypeClass = String.class, paramType = "query"),
@@ -121,7 +121,7 @@ public class UserController extends BaseController
             @ApiImplicitParam(name = "confirmPassword2", value = "确认新密码2(未加密)",
                     required = true, dataTypeClass = String.class, paramType = "query")
     })
-    public SingleResult<String> changePassword2(@Positive @RequestParam(TreeDto.ID_NAME) Long id,
+    public SingleResult<String> changePassword2(@Positive @RequestParam(TreeVO.ID_NAME) Long id,
                                                 @NotBlank @RequestParam("password") String password,
                                                 @NotBlank @RequestParam("confirmPassword1") String confirmPassword1,
                                                 @NotBlank @RequestParam("confirmPassword2") String confirmPassword2) {
@@ -157,10 +157,10 @@ public class UserController extends BaseController
     }
 
     @ApiOperation(value = "根据用户ID重置用户密码", notes = "重置后的密码或是固定密码或是随机密码，具体由机构参数UserDefaultPasswordStrategy决定")
-    @ApiImplicitParam(name = IdDto.ID_NAME, value = "用户ID,取值于User.id",
+    @ApiImplicitParam(name = Id.ID_NAME, value = "用户ID,取值于User.id",
             required = true, dataTypeClass = Long.class, paramType = "path")
     @PostMapping("/resetPassword/{id}")
-    public SingleResult<String> resetPassword(@Positive @PathVariable(IdDto.ID_NAME) Long id) {
+    public SingleResult<String> resetPassword(@Positive @PathVariable(Id.ID_NAME) Long id) {
         return ResultUtils.success(userService.resetPassword(id).getPassword());
     }
 

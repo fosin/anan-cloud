@@ -3,7 +3,7 @@ package top.fosin.anan.platform.modules.user.dao;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
 import top.fosin.anan.jpa.repository.IJpaRepository;
-import top.fosin.anan.platform.modules.user.entity.UserRole;
+import top.fosin.anan.platform.modules.user.po.UserRole;
 
 import java.util.List;
 
@@ -13,7 +13,7 @@ import java.util.List;
  */
 @Repository
 @Lazy
-public interface UserRoleDao extends IJpaRepository<UserRole, Long> {
+public interface UserRoleDao extends IJpaRepository<Long, UserRole> {
     List<UserRole> findByUserId(Long userId);
 
     List<UserRole> findByRoleId(Long roleId);

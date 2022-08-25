@@ -3,7 +3,7 @@ package top.fosin.anan.platform.modules.pub.dto;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import top.fosin.anan.model.prop.IdProp;
+import top.fosin.anan.data.prop.IdProp;
 
 /**
  * OAuth2客户端接入配置(OauthClientDetails)响应DTO

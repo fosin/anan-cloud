@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import top.fosin.anan.model.dto.res.IdCreateUpdateDto;
+import top.fosin.anan.data.entity.res.IdCreateUpdateDto;
 
 /**
  * 系统通用字典明细表(AnanDictionaryDetail)响应DTO

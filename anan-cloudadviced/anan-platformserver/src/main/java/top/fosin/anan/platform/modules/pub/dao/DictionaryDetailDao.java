@@ -4,7 +4,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 import top.fosin.anan.jpa.repository.IJpaRepository;
-import top.fosin.anan.platform.modules.pub.entity.DictionaryDetail;
+import top.fosin.anan.platform.modules.pub.po.DictionaryDetail;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ import java.util.List;
  */
 @Repository
 @Lazy
-public interface DictionaryDetailDao extends IJpaRepository<DictionaryDetail, Long> {
+public interface DictionaryDetailDao extends IJpaRepository<Long, DictionaryDetail> {
     List<DictionaryDetail> findAllByDictionaryId(Long dictionaryId, Sort sort);
 
     void deleteAllByDictionaryId(Long dictionaryId);

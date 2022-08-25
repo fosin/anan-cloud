@@ -20,18 +20,18 @@ import top.fosin.anan.cloudresource.dto.res.UserRespDto;
 import top.fosin.anan.cloudresource.service.AnanUserDetailService;
 import top.fosin.anan.core.util.BeanUtil;
 import top.fosin.anan.core.util.RegexUtil;
-import top.fosin.anan.model.dto.req.PageDto;
-import top.fosin.anan.model.dto.res.TreeDto;
-import top.fosin.anan.model.result.PageResult;
-import top.fosin.anan.model.result.ResultUtils;
+import top.fosin.anan.data.entity.req.PageQuery;
+import top.fosin.anan.data.entity.res.TreeVO;
+import top.fosin.anan.data.result.PageResult;
+import top.fosin.anan.data.result.ResultUtils;
 import top.fosin.anan.platform.modules.organization.dao.OrgDao;
-import top.fosin.anan.platform.modules.organization.entity.Organization;
+import top.fosin.anan.platform.modules.organization.po.Organization;
 import top.fosin.anan.platform.modules.pub.service.LocalOrganParameter;
 import top.fosin.anan.platform.modules.user.dao.UserDao;
 import top.fosin.anan.platform.modules.user.dao.UserRoleDao;
 import top.fosin.anan.platform.modules.user.dto.UserPassRespDto;
-import top.fosin.anan.platform.modules.user.entity.User;
-import top.fosin.anan.platform.modules.user.entity.UserRole;
+import top.fosin.anan.platform.modules.user.po.User;
+import top.fosin.anan.platform.modules.user.po.UserRole;
 import top.fosin.anan.platform.modules.user.service.inter.UserService;
 import top.fosin.anan.redis.cache.AnanCacheManger;
 
@@ -197,12 +197,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public PageResult<UserRespDto> findPage(PageDto<UserReqDto> pageDto) {
+    public PageResult<UserRespDto> findPage(PageQuery<UserReqDto> PageQuery) {
         boolean sysAdminUser = ananUserDetailService.isSysAdminUser();
-        UserReqDto params = pageDto.getParams();
+        UserReqDto params = PageQuery.getParams();
 
         if (sysAdminUser) {
-            return UserService.super.findPage(pageDto);
+            return UserService.super.findPage(PageQuery);
         }
 
         Specification<User> condition = (root, query, cb) -> {
@@ -218,7 +218,7 @@ public class UserServiceImpl implements UserService {
             //从哪张表查询
             Root<Organization> celluseRoot = subQuery.from(Organization.class);
             //查询出什么
-            subQuery.select(celluseRoot.get(TreeDto.ID_NAME));
+            subQuery.select(celluseRoot.get(TreeVO.ID_NAME));
             //条件是什么
             Predicate p = cb.like(celluseRoot.get("code"), Objects.requireNonNull(organization, "通过organizId：" + organizId + "未能找到对应的数据!").getCode() + "%");
             subQuery.where(p);
@@ -248,7 +248,7 @@ public class UserServiceImpl implements UserService {
             }
         };
         //分页查找
-        PageRequest pageable = toPage(pageDto);
+        PageRequest pageable = toPage(PageQuery);
         Page<User> page = userDao.findAll(condition, pageable);
         return ResultUtils.success(page.getTotalElements(), page.getTotalPages(),
                 BeanUtil.copyProperties(page.getContent(), UserRespDto.class));

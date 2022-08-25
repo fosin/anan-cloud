@@ -2,8 +2,8 @@ package top.fosin.anan.platform.modules.pub.service.inter;
 
 
 import top.fosin.anan.jpa.service.ICrudBatchJpaService;
-import top.fosin.anan.model.prop.ForeignKeyProp;
-import top.fosin.anan.model.prop.IdProp;
+import top.fosin.anan.data.prop.ForeignKeyProp;
+import top.fosin.anan.data.prop.IdProp;
 
 import java.io.Serializable;
 import java.util.Collection;

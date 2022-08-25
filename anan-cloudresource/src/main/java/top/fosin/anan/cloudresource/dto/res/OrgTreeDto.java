@@ -4,7 +4,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import top.fosin.anan.model.prop.TreeProp;
+import top.fosin.anan.data.prop.TreeProp;
 
 import java.util.List;
 

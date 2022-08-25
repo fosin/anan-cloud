@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import top.fosin.anan.model.dto.res.IdCreateUpdateOrganizDto;
+import top.fosin.anan.data.entity.res.IdCreateUpdateOrganizDto;
 
 /**
  * 系统角色表(AnanRole)响应DTO

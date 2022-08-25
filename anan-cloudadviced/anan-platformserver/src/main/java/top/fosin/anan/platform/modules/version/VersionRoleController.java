@@ -7,10 +7,10 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
-import top.fosin.anan.model.controller.ISimpleController;
-import top.fosin.anan.model.result.MultResult;
-import top.fosin.anan.model.result.ResultUtils;
-import top.fosin.anan.model.result.SingleResult;
+import top.fosin.anan.data.controller.ISimpleController;
+import top.fosin.anan.data.result.MultResult;
+import top.fosin.anan.data.result.ResultUtils;
+import top.fosin.anan.data.result.SingleResult;
 import top.fosin.anan.platform.modules.version.dto.VersionRolePermissionReqDto;
 import top.fosin.anan.platform.modules.version.dto.VersionRolePermissionRespDto;
 import top.fosin.anan.platform.modules.version.dto.VersionRoleReqDto;
@@ -27,7 +27,7 @@ import java.util.List;
  * @date 2018-11-18 17:50:28
  */
 @RestController
-@RequestMapping(UrlPrefixConstant.VERSION_ROLE)
+@RequestMapping(value = UrlPrefixConstant.VERSION_ROLE, params = UrlPrefixConstant.DEFAULT_VERSION_PARAM)
 @Api(value = UrlPrefixConstant.VERSION_ROLE, tags = "版本角色管理")
 public class VersionRoleController implements ISimpleController<VersionRoleReqDto,VersionRoleRespDto, Long> {
     /**

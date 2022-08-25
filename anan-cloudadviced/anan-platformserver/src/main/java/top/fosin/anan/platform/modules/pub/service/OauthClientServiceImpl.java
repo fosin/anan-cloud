@@ -10,7 +10,7 @@ import org.springframework.util.StringUtils;
 import top.fosin.anan.core.util.BeanUtil;
 import top.fosin.anan.platform.modules.pub.dao.OauthClientDao;
 import top.fosin.anan.platform.modules.pub.dto.OauthClientDetailsReqDto;
-import top.fosin.anan.platform.modules.pub.entity.OauthClientDetails;
+import top.fosin.anan.platform.modules.pub.po.OauthClientDetails;
 import top.fosin.anan.platform.modules.pub.service.inter.OauthClientService;
 
 import java.util.Objects;

@@ -3,7 +3,7 @@ package top.fosin.anan.platform.modules.pub.service.inter;
 import top.fosin.anan.jpa.service.ISimpleJpaService;
 import top.fosin.anan.platform.modules.pub.dto.InternationalCharsetReqDto;
 import top.fosin.anan.platform.modules.pub.dto.InternationalCharsetRespDto;
-import top.fosin.anan.platform.modules.pub.entity.InternationalCharset;
+import top.fosin.anan.platform.modules.pub.po.InternationalCharset;
 
 import java.util.List;
 

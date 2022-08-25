@@ -3,7 +3,7 @@ package top.fosin.anan.platform.modules.organization.dao;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
 import top.fosin.anan.jpa.repository.IJpaRepository;
-import top.fosin.anan.platform.modules.organization.entity.OrganizationAuth;
+import top.fosin.anan.platform.modules.organization.po.OrganizationAuth;
 
 import java.util.List;
 
@@ -15,7 +15,7 @@ import java.util.List;
  */
 @Repository
 @Lazy
-public interface OrgAuthDao extends IJpaRepository<OrganizationAuth, Long> {
+public interface OrgAuthDao extends IJpaRepository<Long, OrganizationAuth> {
     List<OrganizationAuth> findAllByVersionId(Long versionId);
 
     List<OrganizationAuth> findAllByOrganizId(Long organizId);

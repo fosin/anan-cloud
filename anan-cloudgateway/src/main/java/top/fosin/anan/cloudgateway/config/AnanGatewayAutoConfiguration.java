@@ -31,7 +31,7 @@ import top.fosin.anan.cloudresource.constant.RequestPath;
 import top.fosin.anan.cloudresource.constant.ServiceConstant;
 import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
 import top.fosin.anan.cloudresource.dto.res.PermissionRespDto;
-import top.fosin.anan.model.result.MultResult;
+import top.fosin.anan.data.result.MultResult;
 import top.fosin.anan.security.resource.AnanProgramAuthorities;
 import top.fosin.anan.security.resource.AnanSecurityProperties;
 import top.fosin.anan.security.resource.AuthorityPermission;
@@ -82,7 +82,7 @@ public class AnanGatewayAutoConfiguration {
     public List<PermissionRespDto> getPermissionsByRest(List<String> hosts) throws URISyntaxException {
         ServiceInstance instance = getServiceRandomInstance();
         String scheme = instance.getScheme();
-        URI uri = new URI(scheme == null ? "http" : scheme, null, instance.getHost(), instance.getPort(), "/" + UrlPrefixConstant.PERMISSION + RequestPath.SERVICE_CODES, null, null);
+        URI uri = new URI(scheme == null ? "http" : scheme, null, instance.getHost(), instance.getPort(), "/" + UrlPrefixConstant.PERMISSION + RequestPath.SERVICE_CODES , UrlPrefixConstant.DEFAULT_VERSION_PARAM, null);
         RequestEntity<List<String>> request = RequestEntity
                 .post(uri)
                 .accept(MediaType.APPLICATION_JSON)
@@ -126,10 +126,10 @@ public class AnanGatewayAutoConfiguration {
         //        .block();
         List<AnanSecurityProperties.Authority> authorities = new ArrayList<>();
         Objects.requireNonNull(dtos).forEach(dto -> {
-            String entityPath = dto.getPath();
-            if (StringUtils.hasText(entityPath)) {
-                String joinPath = tranformPath(joinPath(getRoutePath(routes, dto.getServiceCode()), entityPath),
-                        "/*");
+            String path = dto.getPath();
+            if (StringUtils.hasText(path)) {
+                String joinPath = tranformPath(joinPath(getRoutePath(routes, dto.getServiceCode()), path),
+                        "");
                 String method = dto.getMethod();
                 AnanSecurityProperties.Authority authority = new AnanSecurityProperties.Authority();
                 authority.setPaths(joinPath);

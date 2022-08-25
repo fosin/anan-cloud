@@ -2,7 +2,7 @@ package top.fosin.anan.auth.dao;
 
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
-import top.fosin.anan.auth.entity.UserAllPermissions;
+import top.fosin.anan.auth.po.UserAllPermissions;
 import top.fosin.anan.jpa.repository.IJpaRepository;
 
 import java.util.List;
@@ -12,7 +12,7 @@ import java.util.List;
  */
 @Repository
 @Lazy
-public interface UserAllPermissionsDao extends IJpaRepository<UserAllPermissions, Long> {
+public interface UserAllPermissionsDao extends IJpaRepository<Long, UserAllPermissions> {
 
     List<UserAllPermissions> findByUserId(Long userId);
 

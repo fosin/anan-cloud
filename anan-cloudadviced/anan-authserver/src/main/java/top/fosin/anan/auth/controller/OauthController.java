@@ -24,8 +24,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 import top.fosin.anan.core.util.crypt.AesUtil;
-import top.fosin.anan.model.result.ResultUtils;
-import top.fosin.anan.model.result.SingleResult;
+import top.fosin.anan.data.result.ResultUtils;
+import top.fosin.anan.data.result.SingleResult;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;

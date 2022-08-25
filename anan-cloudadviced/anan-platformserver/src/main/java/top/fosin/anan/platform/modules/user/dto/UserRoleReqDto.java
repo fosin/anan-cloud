@@ -4,12 +4,12 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import top.fosin.anan.model.dto.req.IdQuerySortOrganizDto;
-import top.fosin.anan.model.module.LogicalQueryRule;
-import top.fosin.anan.model.module.SortRule;
-import top.fosin.anan.model.prop.ForeignKeyProp;
-import top.fosin.anan.model.valid.group.Create;
-import top.fosin.anan.model.valid.group.Update;
+import top.fosin.anan.data.entity.req.IdLogiSortOrganizQuery;
+import top.fosin.anan.data.module.LogicalQueryRule;
+import top.fosin.anan.data.module.SortRule;
+import top.fosin.anan.data.prop.ForeignKeyProp;
+import top.fosin.anan.data.valid.group.Create;
+import top.fosin.anan.data.valid.group.Update;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
@@ -24,7 +24,7 @@ import javax.validation.constraints.Positive;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @ApiModel(value = "用户角色表请求DTO", description = "用户角色的请求DTO")
-public class UserRoleReqDto extends IdQuerySortOrganizDto<LogicalQueryRule, SortRule, Long>
+public class UserRoleReqDto extends IdLogiSortOrganizQuery<LogicalQueryRule, SortRule, Long>
         implements ForeignKeyProp<Long> {
     private static final long serialVersionUID = 818450290607468187L;
 

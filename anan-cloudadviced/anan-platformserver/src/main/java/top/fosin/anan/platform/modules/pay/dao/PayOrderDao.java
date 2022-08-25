@@ -3,7 +3,7 @@ package top.fosin.anan.platform.modules.pay.dao;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
 import top.fosin.anan.jpa.repository.IJpaRepository;
-import top.fosin.anan.platform.modules.pay.entity.PayOrder;
+import top.fosin.anan.platform.modules.pay.po.PayOrder;
 
 /**
  * 支付订单表数据库访问层
@@ -13,5 +13,5 @@ import top.fosin.anan.platform.modules.pay.entity.PayOrder;
  */
 @Repository
 @Lazy
-public interface PayOrderDao extends IJpaRepository<PayOrder, Long> {
+public interface PayOrderDao extends IJpaRepository<Long, PayOrder> {
 }

@@ -11,7 +11,7 @@ import top.fosin.anan.cloudresource.dto.req.DictionaryReqDto;
 import top.fosin.anan.cloudresource.service.AnanUserDetailService;
 import top.fosin.anan.platform.modules.pub.dao.DictionaryDao;
 import top.fosin.anan.platform.modules.pub.dao.DictionaryDetailDao;
-import top.fosin.anan.platform.modules.pub.entity.Dictionary;
+import top.fosin.anan.platform.modules.pub.po.Dictionary;
 import top.fosin.anan.platform.modules.pub.service.inter.DictionaryService;
 
 import java.util.Collection;

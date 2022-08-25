@@ -17,7 +17,7 @@ jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-      #从11位截取GITHUB_REF变量中的分支号，例如:refs/heads/master，结果就是master
+      #从11位截取GITHUB_REF变量中的分支号，例如:refs/heads/main，结果就是main
       - name: Set GITHUB_REF
         run: |
           echo BRANCHE_VERSION=$(echo ${GITHUB_REF:11}) >> $GITHUB_ENV

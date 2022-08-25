@@ -12,11 +12,10 @@ import top.fosin.anan.cloudresource.dto.res.OrgRespDto;
 import top.fosin.anan.cloudresource.dto.res.OrgTreeDto;
 import top.fosin.anan.cloudresource.service.AnanUserDetailService;
 import top.fosin.anan.core.util.BeanUtil;
-import top.fosin.anan.jpa.repository.IJpaRepository;
-import top.fosin.anan.model.service.ICrudBatchService;
+import top.fosin.anan.data.service.ICrudBatchService;
 import top.fosin.anan.platform.modules.organization.dao.OrgDao;
 import top.fosin.anan.platform.modules.organization.dto.OrgReqDto;
-import top.fosin.anan.platform.modules.organization.entity.Organization;
+import top.fosin.anan.platform.modules.organization.po.Organization;
 import top.fosin.anan.platform.modules.organization.service.inter.OrgService;
 import top.fosin.anan.redis.cache.AnanCacheManger;
 
@@ -144,7 +143,7 @@ public class OrgServiceImpl implements OrgService {
     }
 
     @Override
-    public IJpaRepository<Organization, Long> getDao() {
+    public OrgDao getDao() {
         return orgDao;
     }
 }

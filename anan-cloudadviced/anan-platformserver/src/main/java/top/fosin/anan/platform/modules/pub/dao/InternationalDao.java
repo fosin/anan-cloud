@@ -2,7 +2,7 @@ package top.fosin.anan.platform.modules.pub.dao;
 
 import org.springframework.stereotype.Repository;
 import top.fosin.anan.jpa.repository.IJpaRepository;
-import top.fosin.anan.platform.modules.pub.entity.International;
+import top.fosin.anan.platform.modules.pub.po.International;
 
 import java.util.List;
 
@@ -13,7 +13,7 @@ import java.util.List;
  * @date 2020-12-04 11:05:40
  */
 @Repository
-public interface InternationalDao extends IJpaRepository<International, Long> {
+public interface InternationalDao extends IJpaRepository<Long, International> {
     List<International> findAllByStatus(Integer status);
 
     International findByCode(String code);

@@ -17,7 +17,7 @@ import top.fosin.anan.core.exception.AnanServiceException;
 import top.fosin.anan.core.util.BeanUtil;
 import top.fosin.anan.platform.modules.pub.dao.DictionaryDao;
 import top.fosin.anan.platform.modules.pub.dao.DictionaryDetailDao;
-import top.fosin.anan.platform.modules.pub.entity.Dictionary;
+import top.fosin.anan.platform.modules.pub.po.Dictionary;
 import top.fosin.anan.platform.modules.pub.service.inter.DictionaryDetailService;
 import top.fosin.anan.redis.cache.AnanCacheManger;
 

@@ -3,7 +3,7 @@ package top.fosin.anan.platform.modules.version.service.inter;
 import top.fosin.anan.platform.modules.pub.service.inter.AnanPermissionService;
 import top.fosin.anan.platform.modules.version.dto.VersionRolePermissionReqDto;
 import top.fosin.anan.platform.modules.version.dto.VersionRolePermissionRespDto;
-import top.fosin.anan.platform.modules.version.entity.VersionRolePermission;
+import top.fosin.anan.platform.modules.version.po.VersionRolePermission;
 
 /**
  * 系统版本角色权限系统版本角色权限表服务接口

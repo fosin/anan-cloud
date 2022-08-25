@@ -3,7 +3,7 @@ package top.fosin.anan.platform.modules.role.service.inter;
 import top.fosin.anan.cloudresource.dto.req.RoleReqDto;
 import top.fosin.anan.cloudresource.dto.res.RoleRespDto;
 import top.fosin.anan.jpa.service.ISimpleJpaService;
-import top.fosin.anan.platform.modules.role.entity.Role;
+import top.fosin.anan.platform.modules.role.po.Role;
 
 import java.util.List;
 

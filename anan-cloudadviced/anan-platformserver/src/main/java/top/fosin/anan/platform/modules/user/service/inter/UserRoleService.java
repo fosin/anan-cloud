@@ -4,7 +4,7 @@ package top.fosin.anan.platform.modules.user.service.inter;
 import top.fosin.anan.cloudresource.dto.res.UserRoleRespDto;
 import top.fosin.anan.jpa.service.ICrudBatchJpaService;
 import top.fosin.anan.platform.modules.user.dto.UserRoleReqDto;
-import top.fosin.anan.platform.modules.user.entity.UserRole;
+import top.fosin.anan.platform.modules.user.po.UserRole;
 
 /**
  * @author fosin

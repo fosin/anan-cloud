@@ -10,12 +10,12 @@ import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
 import top.fosin.anan.cloudresource.dto.req.RegisterDto;
 import top.fosin.anan.cloudresource.dto.res.OrgRespDto;
 import top.fosin.anan.cloudresource.dto.res.OrgTreeDto;
-import top.fosin.anan.model.controller.BaseController;
-import top.fosin.anan.model.controller.ICrudController;
-import top.fosin.anan.model.controller.IRetrieveTreeController;
-import top.fosin.anan.model.result.MultResult;
-import top.fosin.anan.model.result.ResultUtils;
-import top.fosin.anan.model.result.SingleResult;
+import top.fosin.anan.data.controller.BaseController;
+import top.fosin.anan.data.controller.ICrudController;
+import top.fosin.anan.data.controller.IRetrieveTreeController;
+import top.fosin.anan.data.result.MultResult;
+import top.fosin.anan.data.result.ResultUtils;
+import top.fosin.anan.data.result.SingleResult;
 import top.fosin.anan.platform.modules.organization.dto.OrgAuthRespDto;
 import top.fosin.anan.platform.modules.organization.dto.OrgPermissionReqDto;
 import top.fosin.anan.platform.modules.organization.dto.OrgPermissionRespDto;
@@ -30,7 +30,7 @@ import java.util.List;
  * @author fosin
  */
 @RestController
-@RequestMapping(UrlPrefixConstant.ORGANIZATION)
+@RequestMapping(value = UrlPrefixConstant.ORGANIZATION, params = UrlPrefixConstant.DEFAULT_VERSION_PARAM)
 @Api(value = UrlPrefixConstant.ORGANIZATION, tags = "机构管理")
 public class OrgController extends BaseController
         implements ICrudController<OrgReqDto, OrgRespDto, Long>,

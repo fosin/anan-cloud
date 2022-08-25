@@ -3,7 +3,7 @@ package top.fosin.anan.platform.modules.organization.dao;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
 import top.fosin.anan.jpa.repository.IJpaRepository;
-import top.fosin.anan.platform.modules.organization.entity.OrganizationPermission;
+import top.fosin.anan.platform.modules.organization.po.OrganizationPermission;
 
 import java.util.List;
 
@@ -15,7 +15,7 @@ import java.util.List;
  */
 @Repository
 @Lazy
-public interface OrgPermissionDao extends IJpaRepository<OrganizationPermission, Long> {
+public interface OrgPermissionDao extends IJpaRepository<Long, OrganizationPermission> {
     List<OrganizationPermission> findByOrganizId(Long organizId);
 
     long countByPermissionId(Long permissionId);

@@ -4,7 +4,7 @@ import top.fosin.anan.cloudresource.dto.req.DictionaryDetailReqDto;
 import top.fosin.anan.cloudresource.dto.res.DictionaryDetailRespDto;
 import top.fosin.anan.jpa.service.ICrudBatchJpaService;
 import top.fosin.anan.jpa.service.ISimpleJpaService;
-import top.fosin.anan.platform.modules.pub.entity.DictionaryDetail;
+import top.fosin.anan.platform.modules.pub.po.DictionaryDetail;
 
 /**
  * @author fosin

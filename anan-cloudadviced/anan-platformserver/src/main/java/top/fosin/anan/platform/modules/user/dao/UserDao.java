@@ -4,7 +4,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import top.fosin.anan.jpa.repository.IJpaRepository;
-import top.fosin.anan.platform.modules.user.entity.User;
+import top.fosin.anan.platform.modules.user.po.User;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ import java.util.List;
  */
 @Repository
 @Lazy
-public interface UserDao extends IJpaRepository<User, Long> {
+public interface UserDao extends IJpaRepository<Long, User> {
     User findByUsercode(String usercode);
 
     @Query(value = "select * from anan_user where id not in (select user_id from anan_user_role where role_id =?1) and deleted=0 and status=0", nativeQuery = true)

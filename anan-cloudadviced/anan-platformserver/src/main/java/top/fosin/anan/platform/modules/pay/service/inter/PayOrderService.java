@@ -3,7 +3,7 @@ package top.fosin.anan.platform.modules.pay.service.inter;
 import top.fosin.anan.jpa.service.ISimpleJpaService;
 import top.fosin.anan.platform.modules.pay.dto.PayOrderReqDto;
 import top.fosin.anan.platform.modules.pay.dto.PayOrderRespDto;
-import top.fosin.anan.platform.modules.pay.entity.PayOrder;
+import top.fosin.anan.platform.modules.pay.po.PayOrder;
 
 /**
  * 支付订单表服务接口

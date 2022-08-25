@@ -3,7 +3,7 @@ package top.fosin.anan.platform.modules.version.service.inter;
 import top.fosin.anan.jpa.service.ISimpleJpaService;
 import top.fosin.anan.platform.modules.version.dto.VersionReqDto;
 import top.fosin.anan.platform.modules.version.dto.VersionRespDto;
-import top.fosin.anan.platform.modules.version.entity.Version;
+import top.fosin.anan.platform.modules.version.po.Version;
 
 /**
  * 系统版本表服务接口

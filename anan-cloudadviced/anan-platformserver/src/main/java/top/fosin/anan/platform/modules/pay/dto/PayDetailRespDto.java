@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import top.fosin.anan.model.dto.IdDto;
+import top.fosin.anan.data.entity.Id;
 
 /**
  * 支付明细表(AnanPayDetail)响应DTO
@@ -18,7 +18,7 @@ import top.fosin.anan.model.dto.IdDto;
 @ToString
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value = "支付明细表响应DTO", description = "支付明细的响应DTO")
-public class PayDetailRespDto extends IdDto<Long> {
+public class PayDetailRespDto extends Id<Long> {
     private static final long serialVersionUID = 333646482553193487L;
     @ApiModelProperty(value = "支付序号", example = "Long")
     private Long payId;

@@ -6,7 +6,7 @@ import top.fosin.anan.cloudresource.dto.res.OrgTreeDto;
 import top.fosin.anan.jpa.service.ICrudJpaService;
 import top.fosin.anan.jpa.service.IRetrieveTreeJpaService;
 import top.fosin.anan.platform.modules.organization.dto.OrgReqDto;
-import top.fosin.anan.platform.modules.organization.entity.Organization;
+import top.fosin.anan.platform.modules.organization.po.Organization;
 
 /**
  * @author fosin

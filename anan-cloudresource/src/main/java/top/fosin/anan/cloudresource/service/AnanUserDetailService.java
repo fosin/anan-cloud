@@ -9,8 +9,8 @@ import top.fosin.anan.cloudresource.dto.Client;
 import top.fosin.anan.cloudresource.dto.UserAuthDto;
 import top.fosin.anan.cloudresource.dto.UserDetail;
 import top.fosin.anan.cloudresource.dto.req.RoleReqDto;
-import top.fosin.anan.model.aware.OrganizAware;
-import top.fosin.anan.model.aware.UserAware;
+import top.fosin.anan.data.aware.OrganizAware;
+import top.fosin.anan.data.aware.UserAware;
 import top.fosin.anan.security.util.AnanJwtTool;
 
 import java.util.*;

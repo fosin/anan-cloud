@@ -6,7 +6,7 @@ import top.fosin.anan.cloudresource.dto.res.PermissionRespDto;
 import top.fosin.anan.cloudresource.dto.res.PermissionRespTreeDto;
 import top.fosin.anan.jpa.service.IRetrieveTreeJpaService;
 import top.fosin.anan.jpa.service.ISimpleJpaService;
-import top.fosin.anan.platform.modules.pub.entity.Permission;
+import top.fosin.anan.platform.modules.pub.po.Permission;
 
 import java.util.List;
 

@@ -15,16 +15,16 @@ import top.fosin.anan.cloudresource.dto.req.RoleReqDto;
 import top.fosin.anan.cloudresource.dto.res.RoleRespDto;
 import top.fosin.anan.cloudresource.service.AnanUserDetailService;
 import top.fosin.anan.core.util.BeanUtil;
-import top.fosin.anan.model.dto.req.PageDto;
-import top.fosin.anan.model.result.PageResult;
-import top.fosin.anan.model.result.ResultUtils;
+import top.fosin.anan.data.entity.req.PageQuery;
+import top.fosin.anan.data.result.PageResult;
+import top.fosin.anan.data.result.ResultUtils;
 import top.fosin.anan.platform.modules.organization.dao.OrgDao;
-import top.fosin.anan.platform.modules.organization.entity.Organization;
+import top.fosin.anan.platform.modules.organization.po.Organization;
 import top.fosin.anan.platform.modules.role.dao.RoleDao;
-import top.fosin.anan.platform.modules.role.entity.Role;
+import top.fosin.anan.platform.modules.role.po.Role;
 import top.fosin.anan.platform.modules.role.service.inter.RoleService;
 import top.fosin.anan.platform.modules.user.dao.UserRoleDao;
-import top.fosin.anan.platform.modules.user.entity.UserRole;
+import top.fosin.anan.platform.modules.user.po.UserRole;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Path;
@@ -55,7 +55,7 @@ public class RoleServiceImpl implements RoleService {
         }
         Assert.isTrue(!SystemConstant.ANAN_ROLE_NAME.equalsIgnoreCase(value),
                 "不能创建超级管理员角色帐号信息!");
-        Role entityDynamic = entityByDto(dto);
+        Role entityDynamic = poByEntity(dto);
         Assert.isNull(entityDynamic, "该角色已存在，请核对!");
         Role saveEntity = BeanUtil.copyProperties(dto, Role.class);
         Role save = roleDao.save(saveEntity);
@@ -125,9 +125,9 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public PageResult<RoleRespDto> findPage(PageDto<RoleReqDto> pageDto) {
-        Assert.notNull(pageDto, "传入的分页信息不能为空!");
-        RoleReqDto params = pageDto.getParams();
+    public PageResult<RoleRespDto> findPage(PageQuery<RoleReqDto> PageQuery) {
+        Assert.notNull(PageQuery, "传入的分页信息不能为空!");
+        RoleReqDto params = PageQuery.getParams();
 
         Specification<Role> condition;
         if (ananUserDetailService.hasSysAdminRole()) {
@@ -163,7 +163,7 @@ public class RoleServiceImpl implements RoleService {
                 return predicate;
             };
         }
-        PageRequest pageable = toPage(pageDto);
+        PageRequest pageable = toPage(PageQuery);
         Page<Role> page = roleDao.findAll(condition, pageable);
 
         return ResultUtils.success(page.getTotalElements(), page.getTotalPages(),

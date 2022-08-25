@@ -5,7 +5,7 @@
     <parent>
         <groupId>top.fosin.anan</groupId>
         <artifactId>anan-cloudadviced</artifactId>
-        <version>3.1.0-SNAPSHOT</version>
+        <version>3.2.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>anan-platformserver</artifactId>
@@ -17,7 +17,7 @@
     <dependencies>
         <dependency>
             <groupId>top.fosin.anan</groupId>
-            <artifactId>anan-jpa</artifactId>
+            <artifactId>anan-data-jpa</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

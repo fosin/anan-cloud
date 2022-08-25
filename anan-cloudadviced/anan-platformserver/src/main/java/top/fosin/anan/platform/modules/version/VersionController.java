@@ -7,12 +7,13 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
 import top.fosin.anan.cloudresource.dto.res.PermissionRespTreeDto;
-import top.fosin.anan.model.controller.ISimpleController;
-import top.fosin.anan.model.dto.res.TreeDto;
-import top.fosin.anan.model.result.MultResult;
-import top.fosin.anan.model.result.ResultUtils;
-import top.fosin.anan.model.result.SingleResult;
+import top.fosin.anan.data.controller.ISimpleController;
+import top.fosin.anan.data.entity.res.TreeVO;
+import top.fosin.anan.data.result.MultResult;
+import top.fosin.anan.data.result.ResultUtils;
+import top.fosin.anan.data.result.SingleResult;
 import top.fosin.anan.platform.modules.pub.service.inter.PermissionService;
 import top.fosin.anan.platform.modules.version.dto.VersionPermissionReqDto;
 import top.fosin.anan.platform.modules.version.dto.VersionPermissionRespDto;
@@ -30,8 +31,8 @@ import java.util.List;
  * @date 2018-11-18 17:50:28
  */
 @RestController
-@RequestMapping("v1/version")
-@Api(value = "v1/version", tags = "版本管理")
+@RequestMapping(value = UrlPrefixConstant.VERSION, params = UrlPrefixConstant.DEFAULT_VERSION_PARAM)
+@Api(value = UrlPrefixConstant.VERSION, tags = "版本管理")
 @AllArgsConstructor
 public class VersionController implements ISimpleController<VersionReqDto, VersionRespDto, Long> {
     private final VersionService versionService;
@@ -42,7 +43,7 @@ public class VersionController implements ISimpleController<VersionReqDto, Versi
     @RequestMapping(value = "/listChild/{pid}", method = {RequestMethod.POST})
     @ApiImplicitParams({
             @ApiImplicitParam(name = "versionId", required = true, dataTypeClass = Long.class, value = "版本ID,取值于Version.id", paramType = "query"),
-            @ApiImplicitParam(name = TreeDto.PID_NAME, required = true, dataTypeClass = Long.class, value = "父权限ID,VersionPermission.id", paramType = "path")
+            @ApiImplicitParam(name = TreeVO.PID_NAME, required = true, dataTypeClass = Long.class, value = "父权限ID,VersionPermission.id", paramType = "path")
     })
     public MultResult<PermissionRespTreeDto> getListChild(@PathVariable Long pid, @RequestParam Long versionId) {
         return ResultUtils.success(permissionService.findByPidAndVersionId(pid, versionId));

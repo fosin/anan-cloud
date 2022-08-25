@@ -10,8 +10,8 @@ import springfox.documentation.annotations.ApiIgnore;
 import top.fosin.anan.auth.service.inter.AuthService;
 import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
 import top.fosin.anan.cloudresource.dto.UserAllPermissionTreeDto;
-import top.fosin.anan.model.result.ResultUtils;
-import top.fosin.anan.model.result.SingleResult;
+import top.fosin.anan.data.result.ResultUtils;
+import top.fosin.anan.data.result.SingleResult;
 
 /**
  * @author fosin
@@ -19,7 +19,7 @@ import top.fosin.anan.model.result.SingleResult;
  */
 @RestController
 @ApiIgnore
-@RequestMapping(UrlPrefixConstant.PERMISSION)
+@RequestMapping(value = UrlPrefixConstant.PERMISSION, params = UrlPrefixConstant.DEFAULT_VERSION_PARAM)
 public class PermissionController {
     private final AuthService authService;
 

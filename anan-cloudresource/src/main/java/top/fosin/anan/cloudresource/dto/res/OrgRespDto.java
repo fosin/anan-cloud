@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import top.fosin.anan.model.dto.IdPidDto;
+import top.fosin.anan.data.entity.IdPid;
 
 /**
  * 系统机构表(AnanOrganization)响应DTO
@@ -18,7 +18,7 @@ import top.fosin.anan.model.dto.IdPidDto;
 @ToString
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value = "机构表响应DTO", description = "机构的响应DTO")
-public class OrgRespDto extends IdPidDto<Long> {
+public class OrgRespDto extends IdPid<Long> {
     private static final long serialVersionUID = 386478582280754215L;
     @ApiModelProperty(value = "顶级机构编码：一般指用户注册的机构，通常是一个集团组的最高级别机构，取值于id", example = "Long")
     private Long topId;

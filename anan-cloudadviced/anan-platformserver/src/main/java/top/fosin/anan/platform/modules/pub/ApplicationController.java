@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
-import top.fosin.anan.model.result.MultResult;
-import top.fosin.anan.model.result.ResultUtils;
-import top.fosin.anan.model.result.SingleResult;
+import top.fosin.anan.data.result.MultResult;
+import top.fosin.anan.data.result.ResultUtils;
+import top.fosin.anan.data.result.SingleResult;
 import top.fosin.anan.platform.modules.pub.dto.PageURI;
 
 import java.nio.charset.StandardCharsets;
@@ -30,7 +30,7 @@ import java.util.Random;
  * @date 2018.8.20
  */
 @RestController
-@RequestMapping(UrlPrefixConstant.APPLICATION)
+@RequestMapping(value = UrlPrefixConstant.APPLICATION, params = UrlPrefixConstant.DEFAULT_VERSION_PARAM)
 @Api(value = UrlPrefixConstant.APPLICATION, tags = "应用集群管理")
 public class ApplicationController {
     private final DiscoveryClient discoveryClient;

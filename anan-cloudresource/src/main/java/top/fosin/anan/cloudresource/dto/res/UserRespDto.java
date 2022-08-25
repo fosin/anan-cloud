@@ -7,7 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
 import top.fosin.anan.core.util.DateTimeUtil;
-import top.fosin.anan.model.dto.res.IdCreateUpdateOrganizDto;
+import top.fosin.anan.data.entity.res.IdCreateUpdateOrganizDto;
 
 import java.util.Date;
 

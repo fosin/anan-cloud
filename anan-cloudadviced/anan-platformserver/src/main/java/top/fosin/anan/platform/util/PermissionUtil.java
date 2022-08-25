@@ -1,7 +1,7 @@
 package top.fosin.anan.platform.util;
 
 import top.fosin.anan.jpa.repository.IJpaRepository;
-import top.fosin.anan.platform.modules.pub.entity.PermissionId;
+import top.fosin.anan.platform.modules.pub.po.PermissionId;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -16,7 +16,8 @@ import java.util.stream.Collectors;
 public class PermissionUtil {
     public static <Entity extends PermissionId<ID>,
             ID extends Serializable> void saveNewPermission(Collection<Entity> beforeEntities,
-                                                            Collection<Entity> afterEntities, IJpaRepository<Entity, ID> iJpaRepository) {
+                                                            Collection<Entity> afterEntities,
+                                                            IJpaRepository<ID, Entity> iJpaRepository) {
         //保存新增的权限
         List<Entity> entities = afterEntities.stream().filter(after -> beforeEntities.stream().noneMatch(before -> before.getPermissionId().equals(after.getPermissionId()))).collect(Collectors.toList());
         if (entities.size() > 0) {
@@ -24,7 +25,7 @@ public class PermissionUtil {
         }
     }
 
-    public static <Before extends PermissionId<ID>, after extends PermissionId<ID>, ID extends Serializable> void deletePermission(Collection<Before> beforeEntities, Collection<after> afterEntities, IJpaRepository<Before, ID> iJpaRepository) {
+    public static <Before extends PermissionId<ID>, after extends PermissionId<ID>, ID extends Serializable> void deletePermission(Collection<Before> beforeEntities, Collection<after> afterEntities, IJpaRepository<ID, Before> iJpaRepository) {
         //删除版本权限中不在版本新权限中的权限
         List<Before> entityList =
                 beforeEntities.stream().filter(before -> afterEntities.stream().noneMatch(after -> after.getPermissionId().equals(before.getPermissionId()))).collect(Collectors.toList());

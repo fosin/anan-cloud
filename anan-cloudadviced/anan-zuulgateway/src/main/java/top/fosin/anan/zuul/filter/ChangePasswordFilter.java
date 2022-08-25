@@ -22,7 +22,7 @@ import com.netflix.zuul.context.RequestContext;
 import org.springframework.cloud.netflix.zuul.filters.support.FilterConstants;
 import org.springframework.util.StringUtils;
 import top.fosin.anan.core.util.crypt.AesUtil;
-import top.fosin.anan.model.dto.res.TreeDto;
+import top.fosin.anan.data.entity.res.TreeVO;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -102,7 +102,7 @@ public class ChangePasswordFilter extends ZuulFilter {
 
         List<String> idList = new ArrayList<>();
         idList.add(id);
-        params.put(TreeDto.ID_NAME, idList);
+        params.put(TreeVO.ID_NAME, idList);
 
         List<String> passwordList = new ArrayList<>();
         passwordList.add(aesUtil.decrypt(salt, iv, passphrase, password));

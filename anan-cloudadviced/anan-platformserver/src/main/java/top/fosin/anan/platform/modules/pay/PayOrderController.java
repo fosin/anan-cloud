@@ -3,7 +3,8 @@ package top.fosin.anan.platform.modules.pay;
 import io.swagger.annotations.Api;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import top.fosin.anan.model.controller.ISimpleController;
+import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
+import top.fosin.anan.data.controller.ISimpleController;
 import top.fosin.anan.platform.modules.pay.dto.PayOrderReqDto;
 import top.fosin.anan.platform.modules.pay.dto.PayOrderRespDto;
 import top.fosin.anan.platform.modules.pay.service.inter.PayOrderService;
@@ -15,8 +16,8 @@ import top.fosin.anan.platform.modules.pay.service.inter.PayOrderService;
  * @date 2018-11-18 17:50:28
  */
 @RestController
-@RequestMapping("v1/order")
-@Api(value = "v1/order", tags = "支付订单管理")
+@RequestMapping(value = UrlPrefixConstant.PAY_ORDER, params = UrlPrefixConstant.DEFAULT_VERSION_PARAM)
+@Api(value = UrlPrefixConstant.PAY_ORDER, tags = "支付订单管理")
 public class PayOrderController implements ISimpleController<PayOrderReqDto, PayOrderRespDto, Long> {
     /**
      * 服务对象

@@ -10,7 +10,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import top.fosin.anan.core.util.DateTimeUtil;
-import top.fosin.anan.model.dto.res.IdCreateUpdateDto;
+import top.fosin.anan.data.entity.res.IdCreateUpdateDto;
 
 /**
  * 用于存放各种分类分组的个性化参数(AnanParameter)响应DTO

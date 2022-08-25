@@ -3,7 +3,7 @@ package top.fosin.anan.platform.modules.pub.dao;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
 import top.fosin.anan.jpa.repository.IJpaRepository;
-import top.fosin.anan.platform.modules.pub.entity.Dictionary;
+import top.fosin.anan.platform.modules.pub.po.Dictionary;
 
 /**
  * @author fosin
@@ -11,5 +11,5 @@ import top.fosin.anan.platform.modules.pub.entity.Dictionary;
  */
 @Repository
 @Lazy
-public interface DictionaryDao extends IJpaRepository<Dictionary, Long> {
+public interface DictionaryDao extends IJpaRepository<Long, Dictionary> {
 }

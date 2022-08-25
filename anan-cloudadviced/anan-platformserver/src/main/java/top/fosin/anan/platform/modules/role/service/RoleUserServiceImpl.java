@@ -12,10 +12,10 @@ import top.fosin.anan.cloudresource.dto.res.UserRoleRespDto;
 import top.fosin.anan.cloudresource.service.AnanUserDetailService;
 import top.fosin.anan.core.util.BeanUtil;
 import top.fosin.anan.platform.modules.role.dto.RoleUserReqDto;
-import top.fosin.anan.platform.modules.role.entity.Role;
+import top.fosin.anan.platform.modules.role.po.Role;
 import top.fosin.anan.platform.modules.role.service.inter.RoleUserService;
 import top.fosin.anan.platform.modules.user.dao.UserRoleDao;
-import top.fosin.anan.platform.modules.user.entity.UserRole;
+import top.fosin.anan.platform.modules.user.po.UserRole;
 import top.fosin.anan.redis.cache.AnanCacheManger;
 
 import java.util.ArrayList;
@@ -60,7 +60,7 @@ public class RoleUserServiceImpl implements RoleUserService {
         Assert.notNull(roleId, "roleId：" + roleId + "属性值无效!");
         RoleUserReqDto reqDto = new RoleUserReqDto();
         reqDto.setFkValue(roleId);
-        List<UserRole> userRoles = entitiesByDto(reqDto);
+        List<UserRole> userRoles = posByEntity(reqDto);
         //如果是用户角色，则只需要删除一个用户的缓存
         for (UserRole dto : userRoles) {
             clearUserCache(dto.getUserId());

@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import top.fosin.anan.cloudresource.dto.PermissionDto;
+import top.fosin.anan.cloudresource.dto.PermissionId;
 
 /**
  * 系统版本权限表(AnanVersionPermission)响应DTO
@@ -18,7 +18,7 @@ import top.fosin.anan.cloudresource.dto.PermissionDto;
 @ToString
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value = "版本权限表响应DTO", description = "版本权限的响应DTO")
-public class VersionPermissionRespDto extends PermissionDto<Long> {
+public class VersionPermissionRespDto extends PermissionId<Long> {
     private static final long serialVersionUID = 632049633274326678L;
     @ApiModelProperty(value = "版本序号", example = "Long")
     private Long versionId;

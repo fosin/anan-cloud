@@ -6,7 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import top.fosin.anan.jpa.repository.IJpaRepository;
-import top.fosin.anan.platform.modules.pub.entity.Parameter;
+import top.fosin.anan.platform.modules.pub.po.Parameter;
 
 import java.util.List;
 
@@ -16,7 +16,7 @@ import java.util.List;
  */
 @Repository
 @Lazy
-public interface ParameterDao extends IJpaRepository<Parameter, Long> {
+public interface ParameterDao extends IJpaRepository<Long, Parameter> {
     Parameter findByTypeAndScopeAndName(Integer type, String scope, String name);
 
     List<Parameter> findByStatusNot(Integer status);

@@ -4,7 +4,7 @@ import top.fosin.anan.cloudresource.dto.req.UserReqDto;
 import top.fosin.anan.cloudresource.dto.res.UserRespDto;
 import top.fosin.anan.jpa.service.ISimpleJpaService;
 import top.fosin.anan.platform.modules.user.dto.UserPassRespDto;
-import top.fosin.anan.platform.modules.user.entity.User;
+import top.fosin.anan.platform.modules.user.po.User;
 
 import java.util.List;
 

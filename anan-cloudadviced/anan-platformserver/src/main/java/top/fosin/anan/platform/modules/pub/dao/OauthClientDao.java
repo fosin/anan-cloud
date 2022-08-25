@@ -3,7 +3,7 @@ package top.fosin.anan.platform.modules.pub.dao;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
 import top.fosin.anan.jpa.repository.IJpaRepository;
-import top.fosin.anan.platform.modules.pub.entity.OauthClientDetails;
+import top.fosin.anan.platform.modules.pub.po.OauthClientDetails;
 
 /**
  * @author fosin
@@ -11,5 +11,5 @@ import top.fosin.anan.platform.modules.pub.entity.OauthClientDetails;
  */
 @Repository
 @Lazy
-public interface OauthClientDao extends IJpaRepository<OauthClientDetails, String> {
+public interface OauthClientDao extends IJpaRepository<String, OauthClientDetails> {
 }

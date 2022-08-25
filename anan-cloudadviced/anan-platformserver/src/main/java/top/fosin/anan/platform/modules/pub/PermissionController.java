@@ -10,11 +10,11 @@ import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
 import top.fosin.anan.cloudresource.dto.req.PermissionReqDto;
 import top.fosin.anan.cloudresource.dto.res.PermissionRespDto;
 import top.fosin.anan.cloudresource.dto.res.PermissionRespTreeDto;
-import top.fosin.anan.model.controller.BaseController;
-import top.fosin.anan.model.controller.IRetrieveTreeController;
-import top.fosin.anan.model.controller.ISimpleController;
-import top.fosin.anan.model.result.MultResult;
-import top.fosin.anan.model.result.ResultUtils;
+import top.fosin.anan.data.controller.BaseController;
+import top.fosin.anan.data.controller.IRetrieveTreeController;
+import top.fosin.anan.data.controller.ISimpleController;
+import top.fosin.anan.data.result.MultResult;
+import top.fosin.anan.data.result.ResultUtils;
 import top.fosin.anan.platform.modules.pub.service.inter.PermissionService;
 
 import javax.validation.constraints.NotBlank;
@@ -25,7 +25,7 @@ import java.util.List;
  * @author fosin
  */
 @RestController
-@RequestMapping(UrlPrefixConstant.PERMISSION)
+@RequestMapping(value = UrlPrefixConstant.PERMISSION, params = UrlPrefixConstant.DEFAULT_VERSION_PARAM)
 @Api(value = UrlPrefixConstant.PERMISSION, tags = "权限管理")
 @AllArgsConstructor
 public class PermissionController extends BaseController

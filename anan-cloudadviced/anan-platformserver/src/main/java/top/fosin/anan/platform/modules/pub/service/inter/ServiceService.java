@@ -3,7 +3,7 @@ package top.fosin.anan.platform.modules.pub.service.inter;
 import top.fosin.anan.cloudresource.dto.res.ServiceRespDto;
 import top.fosin.anan.jpa.service.ISimpleJpaService;
 import top.fosin.anan.platform.modules.pub.dto.ServiceReqDto;
-import top.fosin.anan.platform.modules.pub.entity.Service;
+import top.fosin.anan.platform.modules.pub.po.Service;
 
 /**
  * 系统服务表服务接口
