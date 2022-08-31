@@ -50,7 +50,7 @@ public class UserController extends BaseController
     private final RoleService roleService;
     private final UserPermissionService userPermissionService;
 
-    @PostMapping("/usercode/{usercode}")
+    @GetMapping("/usercode/{usercode}")
     @ApiImplicitParam(name = "usercode", value = "用户工号,取值于User.usercode",
             required = true, dataTypeClass = String.class, paramType = "path")
     @ApiOperation("根据用户工号查找用户信息")
@@ -59,7 +59,7 @@ public class UserController extends BaseController
     }
 
     @ApiOperation("修改用户帐号密码")
-    @PostMapping("/changePassword")
+    @GetMapping("/changePassword")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "a", value = "原密码(未加密)",
                     required = true, dataTypeClass = String.class, paramType = "query"),
@@ -110,7 +110,7 @@ public class UserController extends BaseController
     }
 
     @ApiOperation("修改用户帐号密码")
-    @PostMapping("/changePassword/real")
+    @GetMapping("/changePassword/real")
     @ApiImplicitParams({
             @ApiImplicitParam(name = TreeVO.ID_NAME, value = "参数类型,取值于User.id",
                     required = true, dataTypeClass = Long.class, paramType = "query"),
@@ -136,7 +136,7 @@ public class UserController extends BaseController
             @ApiImplicitParam(name = "organizId", value = "机构序号",
                     required = true, dataTypeClass = Long.class, paramType = "query")
     })
-    @RequestMapping(value = "/permissions/{userId}", method = {RequestMethod.GET, RequestMethod.POST})
+    @GetMapping(value = "/permissions/{userId}")
     public MultResult<UserPermissionRespDto> permissions(@Positive @PathVariable Long userId,
                                                          @RequestParam("organizId") Long organizId) {
         return ResultUtils.success(userPermissionService.findByUserIdAndOrganizId(userId, organizId));
@@ -159,7 +159,7 @@ public class UserController extends BaseController
     @ApiOperation(value = "根据用户ID重置用户密码", notes = "重置后的密码或是固定密码或是随机密码，具体由机构参数UserDefaultPasswordStrategy决定")
     @ApiImplicitParam(name = Id.ID_NAME, value = "用户ID,取值于User.id",
             required = true, dataTypeClass = Long.class, paramType = "path")
-    @PostMapping("/resetPassword/{id}")
+    @GetMapping("/resetPassword/{id}")
     public SingleResult<String> resetPassword(@Positive @PathVariable(Id.ID_NAME) Long id) {
         return ResultUtils.success(userService.resetPassword(id).getPassword());
     }
@@ -167,7 +167,7 @@ public class UserController extends BaseController
     @ApiOperation("根据用户序号查找用户所有角色信息列表")
     @ApiImplicitParam(name = "userId", value = "用户ID,取值于User.id",
             required = true, dataTypeClass = Long.class, paramType = "path")
-    @RequestMapping(value = "/roles/{userId}", method = {RequestMethod.GET, RequestMethod.POST})
+    @GetMapping(value = "/roles/{userId}")
     public MultResult<RoleRespDto> getUserRoles(@Positive @PathVariable("userId") Long userId) {
         return ResultUtils.success(roleService.findRoleUsersByRoleId(userId));
     }
@@ -189,12 +189,12 @@ public class UserController extends BaseController
     @ApiOperation("根据用户序号查找用户所有角色信息")
     @ApiImplicitParam(name = "userId", value = "用户ID,对应Role.id",
             required = true, dataTypeClass = Integer.class, paramType = "path")
-    @RequestMapping(value = "/otherRoles/{userId}", method = {RequestMethod.GET, RequestMethod.POST})
+    @GetMapping(value = "/otherRoles/{userId}")
     public MultResult<RoleRespDto> getOtherRoles(@Positive @PathVariable("userId") Long userId) {
         return ResultUtils.success(roleService.findOtherUsersByRoleId(userId));
     }
 
-    @PostMapping({"/list/organizId/{organizId}/{status}"})
+    @GetMapping({"/list/organizId/{organizId}/{status}"})
     @ApiOperation("根据机构ID查询该机构及子机构的所有用户")
     @ApiImplicitParam(name = "organizId", value = "机构序号",
             required = true, dataTypeClass = Long.class, paramType = "path")
@@ -203,7 +203,7 @@ public class UserController extends BaseController
         return ResultUtils.success(userService.listByOrganizId(organizId, status));
     }
 
-    @PostMapping({"/list/topId/{topId}/{status}"})
+    @GetMapping({"/list/topId/{topId}/{status}"})
     @ApiOperation("根据顶级机构ID查询其下所有用户")
     @ApiImplicitParam(name = "topId", value = "顶级机构ID，传0表示默认查询当前用户的顶级机构序号",
             required = true, dataTypeClass = Long.class, paramType = "path")

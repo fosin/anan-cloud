@@ -3,10 +3,7 @@ package top.fosin.anan.platform.modules.pub;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
 import top.fosin.anan.data.controller.ISimpleController;
 import top.fosin.anan.data.result.MultResult;
@@ -32,7 +29,7 @@ public class InternationalCharsetController implements ISimpleController<Interna
         this.internationalCharsetService = internationalCharsetService;
     }
 
-    @RequestMapping(path = "/internationalId/{internationalId}", method = {RequestMethod.GET, RequestMethod.POST})
+    @GetMapping(path = "/internationalId/{internationalId}")
     @ApiOperation("根据语言ID查找所有字符集清单")
     @ApiImplicitParam(
             name = "internationalId",

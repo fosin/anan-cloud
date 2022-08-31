@@ -38,7 +38,7 @@ public class ParameterController implements ISimpleController<ParameterReqDto, P
     private final ParameterService parameterService;
 
     @ApiOperation(value = "获取指定机构或指定用户的参数整条数据", notes = "type=1则是机构参数(机构参数系统会从当前机构向逐级上级机构查找该参数),type=2则是用户参数,如果缓存和数据库中都没有找到参数，返回null值")
-    @RequestMapping(value = ParameterFeignService.PATH_NEAREST, method = {RequestMethod.POST, RequestMethod.GET})
+    @GetMapping(value = ParameterFeignService.PATH_NEAREST)
     @ApiImplicitParams({
             @ApiImplicitParam(name = "type", value = "字典类型,取值于Parameter.type",
                     required = true, dataTypeClass = Integer.class, paramType = "query"),
@@ -54,7 +54,7 @@ public class ParameterController implements ISimpleController<ParameterReqDto, P
     }
 
     @ApiOperation(value = "获取指定机构或指定用户的参数整条数据", notes = "type=1则是机构参数,只找当前机构,type=2则是用户参数,如果缓存和数据库中都没有找到参数，返回null值")
-    @RequestMapping(value = ParameterFeignService.PATH_DTO, method = {RequestMethod.POST, RequestMethod.GET})
+    @GetMapping(value = ParameterFeignService.PATH_DTO)
     @ApiImplicitParams({
             @ApiImplicitParam(name = "type", value = "字典类型,取值于Parameter.type",
                     required = true, dataTypeClass = Integer.class, paramType = "query"),
@@ -85,13 +85,13 @@ public class ParameterController implements ISimpleController<ParameterReqDto, P
     @ApiOperation(value = "根据参数ID刷新参数缓存信息", notes = "该方法是幂等性的，可以重复调用")
     @ApiImplicitParam(name = TreeVO.ID_NAME, value = "参数ID,取值于Parameter.id",
             required = true, dataTypeClass = Long.class, paramType = "path")
-    @RequestMapping(value = ParameterFeignService.PATH_APPLY_ID, method = {RequestMethod.POST, RequestMethod.GET})
+    @GetMapping(value = ParameterFeignService.PATH_APPLY_ID)
     public SingleResult<Boolean> applyChange(@Positive @PathVariable(TreeVO.ID_NAME) Long id) {
         return ResultUtils.success(parameterService.applyChange(id));
     }
 
     @ApiOperation(value = "刷新所有已更改参数缓存信息", notes = "该方法只能在有修改参数信息的情况下使用，这是一个批量刷新参数缓存的操作")
-    @PostMapping(value = ParameterFeignService.PATH_APPLYS)
+    @GetMapping(value = ParameterFeignService.PATH_APPLYS)
     public SingleResult<Boolean> applyChangeAll() {
         return ResultUtils.success(parameterService.applyChangeAll());
     }

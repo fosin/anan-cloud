@@ -40,7 +40,7 @@ public class VersionController implements ISimpleController<VersionReqDto, Versi
     private final PermissionService permissionService;
 
     @ApiOperation(value = "根据父权限ID获取其孩子数据列表")
-    @RequestMapping(value = "/listChild/{pid}", method = {RequestMethod.POST})
+    @GetMapping(value = "/listChild/{pid}")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "versionId", required = true, dataTypeClass = Long.class, value = "版本ID,取值于Version.id", paramType = "query"),
             @ApiImplicitParam(name = TreeVO.PID_NAME, required = true, dataTypeClass = Long.class, value = "父权限ID,VersionPermission.id", paramType = "path")
@@ -51,7 +51,7 @@ public class VersionController implements ISimpleController<VersionReqDto, Versi
 
     @ApiOperation("根据版本ID获取版本权限")
     @ApiImplicitParam(name = "versionId", required = true, dataTypeClass = Long.class, value = "版本ID,取值于Version.id", paramType = "path")
-    @RequestMapping(value = "/permissions/{versionId}", method = {RequestMethod.GET, RequestMethod.POST})
+    @GetMapping(value = "/permissions/{versionId}")
     public MultResult<VersionPermissionRespDto> permissions(@PathVariable Long versionId) {
         return ResultUtils.success(versionPermissionService.listByForeingKey(versionId));
     }

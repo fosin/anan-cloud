@@ -38,12 +38,12 @@ public interface ParameterFeignService {
     @PutMapping()
     SingleResult<ParameterRespDto> processUpdate(@RequestBody ParameterReqDto reqDto);
 
-    @PostMapping(value = PATH_DTO)
+    @GetMapping(value = PATH_DTO)
     SingleResult<ParameterRespDto> getParameter(@RequestParam("type") Integer type,
                                                 @RequestParam("scope") String scope,
                                                 @RequestParam("name") String name);
 
-    @PostMapping(value = PATH_NEAREST)
+    @GetMapping(value = PATH_NEAREST)
     SingleResult<ParameterRespDto> getNearestParameter(@RequestParam("type") Integer type,
                                                        @RequestParam("scope") String scope,
                                                        @RequestParam("name") String name);
@@ -51,7 +51,7 @@ public interface ParameterFeignService {
     @PostMapping(value = PATH_VALUE)
     SingleResult<String> getOrCreateParameter(@RequestBody ParameterReqDto reqDto);
 
-    @PostMapping(value = PATH_APPLY_ID)
+    @GetMapping(value = PATH_APPLY_ID)
     SingleResult<Boolean> applyChange(@PathVariable(TreeVO.ID_NAME) Long id);
 
     @GetMapping(value = PATH_APPLYS)

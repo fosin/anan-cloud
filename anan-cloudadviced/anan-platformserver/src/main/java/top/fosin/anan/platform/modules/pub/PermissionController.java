@@ -33,7 +33,7 @@ public class PermissionController extends BaseController
         IRetrieveTreeController<PermissionReqDto, PermissionRespTreeDto, Long> {
     private final PermissionService permissionService;
 
-    @PostMapping(RequestPath.SERVICE_CODE)
+    @GetMapping(RequestPath.SERVICE_CODE)
     @ApiImplicitParam(name = "serviceCode", value = "服务标识，等同于anan_service.code",
             required = true, dataTypeClass = String.class, paramType = "path")
     @ApiOperation(value = "查询服务对应权限", notes = "根据服务标识(anan_service.code)查询其权限列表")

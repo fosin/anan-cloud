@@ -2,10 +2,7 @@ package top.fosin.anan.cloudresource.service.inter;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import top.fosin.anan.cloudresource.constant.RequestPath;
 import top.fosin.anan.cloudresource.constant.ServiceConstant;
 import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
@@ -34,7 +31,7 @@ public interface PermissionFeignService {
      * @param version api版本号
      * @return 应用权限列表
      */
-    @PostMapping(value = RequestPath.SERVICE_CODE)
+    @GetMapping(value = RequestPath.SERVICE_CODE)
     MultResult<PermissionRespDto> findByServiceCode(@NotBlank @PathVariable("serviceCode") String serviceCode, @RequestParam(value = UrlPrefixConstant.API_VERSION_NAME) String version);
 
     /**

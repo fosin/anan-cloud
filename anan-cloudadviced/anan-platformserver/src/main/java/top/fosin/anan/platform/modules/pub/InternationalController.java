@@ -33,8 +33,7 @@ public class InternationalController implements ISimpleController<InternationalR
         this.internationalService = internationalService;
     }
 
-    @RequestMapping(path = "/code/{code}", method = {RequestMethod.GET,
-            RequestMethod.POST, RequestMethod.OPTIONS})
+    @GetMapping(path = "/code/{code}")
     @ApiOperation("根据国际化语言编码查找国际化语言")
     @ApiImplicitParam(
             name = "code",
@@ -47,7 +46,7 @@ public class InternationalController implements ISimpleController<InternationalR
         return ResultUtils.success(internationalService.findByCode(code));
     }
 
-    @RequestMapping(path = "/default", method = {RequestMethod.GET, RequestMethod.POST})
+    @GetMapping(path = "/default")
     @ApiOperation("查找默认语言")
     public SingleResult<InternationalRespDto> findByDefaultFlag() {
         return ResultUtils.success(internationalService.findByDefaultFlag());

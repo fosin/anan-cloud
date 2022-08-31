@@ -11,10 +11,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.util.Assert;
 import org.springframework.util.Base64Utils;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
 import top.fosin.anan.data.result.MultResult;
 import top.fosin.anan.data.result.ResultUtils;
@@ -43,7 +40,7 @@ public class ApplicationController {
     }
 
     @ApiOperation(value = "获取服务名称列表", notes = "获取当前注册到Eureka注册中心的所有节点服务名称")
-    @RequestMapping(value = "/serviceNames", method = {RequestMethod.POST})
+    @GetMapping(value = "/serviceNames")
     public MultResult<String> getServiceNames() {
         Assert.notNull(discoveryClient, "discoveryClient不能为空!");
         List<String> services = discoveryClient.getServices();
@@ -59,7 +56,7 @@ public class ApplicationController {
                     value = "当前服务节点管理端点的url",
                     dataTypeClass = String.class, paramType = "query")
     })
-    @RequestMapping(value = "/ui/url", method = {RequestMethod.POST})
+    @GetMapping(value = "/ui/url")
     public SingleResult<PageURI> uiUrl(@RequestParam String serviceId, @RequestParam(value = "path", required = false) String path) {
         Assert.isTrue(StringUtils.hasText(serviceId), "serviceId不能为空!");
         ServiceInstance serviceInstance = getServiceInstance(serviceId);

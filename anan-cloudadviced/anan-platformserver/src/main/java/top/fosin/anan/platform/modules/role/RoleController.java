@@ -46,7 +46,7 @@ public class RoleController implements ISimpleController<RoleReqDto, RoleRespDto
     @ApiOperation("根据角色ID获取角色权限")
     @ApiImplicitParam(name = "roleId", value = "角色ID,取值于Role.id",
             required = true, dataTypeClass = Long.class, paramType = "path")
-    @RequestMapping(value = "/permissions/{roleId}", method = {RequestMethod.GET, RequestMethod.POST})
+    @GetMapping(value = "/permissions/{roleId}")
     public MultResult<RolePermissionRespDto> permissions(@Positive @PathVariable Long roleId) {
         return ResultUtils.success(rolePermissionService.listByForeingKey(roleId));
     }
@@ -68,7 +68,7 @@ public class RoleController implements ISimpleController<RoleReqDto, RoleRespDto
     @ApiOperation("根据角色序号查找该角色所有用户信息")
     @ApiImplicitParam(name = "roleId", value = "角色ID,取值于Role.id",
             required = true, dataTypeClass = Long.class, paramType = "path")
-    @RequestMapping(value = "/users/{roleId}", method = {RequestMethod.GET, RequestMethod.POST})
+    @GetMapping(value = "/users/{roleId}")
     public MultResult<UserRespDto> getRoleUsers(@Positive @PathVariable("roleId") Long roleId) {
         return ResultUtils.success(userService.findRoleUsersByRoleId(roleId));
     }
@@ -90,12 +90,12 @@ public class RoleController implements ISimpleController<RoleReqDto, RoleRespDto
     @ApiOperation("根据用户序号查找用户目前不拥有的所有角色信息")
     @ApiImplicitParam(name = "roleId", value = "角色ID,取值于Role.id",
             required = true, dataTypeClass = Long.class, paramType = "path")
-    @RequestMapping(value = "/otherUsers/{roleId}", method = {RequestMethod.POST})
+    @GetMapping(value = "/otherUsers/{roleId}")
     public MultResult<UserRespDto> getOtherUsers(@Positive @PathVariable("roleId") Long roleId) throws AnanControllerException {
         return ResultUtils.success(userService.findOtherUsersByRoleId(roleId));
     }
 
-    @PostMapping({"/list/organizId/{organizId}"})
+    @GetMapping({"/list/organizId/{organizId}"})
     @ApiOperation("根据机构ID查询该机构及子机构的所有角色")
     @ApiImplicitParam(name = "organizId", value = "机构序号",
             required = true, dataTypeClass = Long.class, paramType = "path")

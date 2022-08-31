@@ -2,10 +2,7 @@ package top.fosin.anan.cloudresource.service.inter;
 
 import io.swagger.annotations.ApiOperation;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import top.fosin.anan.cloudresource.constant.ServiceConstant;
 import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
 import top.fosin.anan.cloudresource.dto.res.UserRespDto;
@@ -24,7 +21,7 @@ import java.util.List;
 @FeignClient(value = ServiceConstant.ANAN_PLATFORMSERVER, path = UrlPrefixConstant.USER,
         fallback = UserFeignFallbackServiceImpl.class, contextId = "userFeignService")
 public interface UserFeignService {
-    @PostMapping(value = {PathConstant.PATH_ID})
+    @GetMapping(value = {PathConstant.PATH_ID})
     @ApiOperation("根据主键ID查询一条数据")
     SingleResult<UserRespDto> findOneById(@PathVariable(TreeVO.ID_NAME) Long id, @RequestParam(value = UrlPrefixConstant.API_VERSION_NAME) String version);
 
@@ -32,15 +29,15 @@ public interface UserFeignService {
     @ApiOperation("根据id查询多条数据")
     MultResult<UserRespDto> listByIds(@RequestBody List<Long> ids, @RequestParam(value = UrlPrefixConstant.API_VERSION_NAME) String version);
 
-    @PostMapping(value = "/usercode/{usercode}")
+    @GetMapping(value = "/usercode/{usercode}")
     SingleResult<UserRespDto> findOneByUsercode(@PathVariable("usercode") String usercode, @RequestParam(value = UrlPrefixConstant.API_VERSION_NAME) String version);
 
-    @PostMapping(value = "/list/organizId/{organizId}/{status}")
+    @GetMapping(value = "/list/organizId/{organizId}/{status}")
     MultResult<UserRespDto> listByOrganizId(@PathVariable("organizId") Long organizId,
                                             @PathVariable("status") Integer status,
                                             @RequestParam(value = UrlPrefixConstant.API_VERSION_NAME) String version);
 
-    @PostMapping(value = "/list/topId/{topId}/{status}")
+    @GetMapping(value = "/list/topId/{topId}/{status}")
     MultResult<UserRespDto> listAllChildByTopId(@PathVariable("topId") Long topId,
                                                 @PathVariable("status") Integer status,
                                                 @RequestParam(value = UrlPrefixConstant.API_VERSION_NAME) String version);

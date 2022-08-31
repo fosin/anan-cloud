@@ -43,7 +43,7 @@ public class VersionRoleController implements ISimpleController<VersionRoleReqDt
 
     @ApiOperation("根据角色ID获取版本权限")
     @ApiImplicitParam(name = "roleId", value = "版本ID,取值于VersionRole.id", required = true, dataTypeClass = Long.class, paramType = "path")
-    @RequestMapping(value = "/permissions/{roleId}", method = {RequestMethod.GET, RequestMethod.POST})
+    @GetMapping(value = "/permissions/{roleId}")
     public MultResult<VersionRolePermissionRespDto> permissions(@PathVariable Long roleId) {
         return ResultUtils.success(versionRolePermissionService.listByForeingKey(roleId));
     }
