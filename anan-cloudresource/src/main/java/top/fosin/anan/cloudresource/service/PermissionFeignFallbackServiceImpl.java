@@ -4,7 +4,7 @@ package top.fosin.anan.cloudresource.service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
-import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
+import top.fosin.anan.cloudresource.constant.PathPrefixConstant;
 import top.fosin.anan.cloudresource.dto.res.PermissionRespDto;
 import top.fosin.anan.cloudresource.service.inter.PermissionFeignService;
 import top.fosin.anan.data.result.MultResult;
@@ -22,7 +22,7 @@ import java.util.List;
 public class PermissionFeignFallbackServiceImpl implements PermissionFeignService {
 
     @Override
-    public MultResult<PermissionRespDto> findByServiceCode(String serviceCode, @RequestParam(value = UrlPrefixConstant.API_VERSION_NAME) String version) {
+    public MultResult<PermissionRespDto> findByServiceCode(String serviceCode, @RequestParam(value = PathPrefixConstant.API_VERSION_NAME) String version) {
         log.error("feign 远程查询当前应用权限失败:{}", serviceCode);
         return null;
     }
@@ -35,7 +35,7 @@ public class PermissionFeignFallbackServiceImpl implements PermissionFeignServic
      * @return 应用权限列表
      */
     @Override
-    public MultResult<PermissionRespDto> findByServiceCodes(List<String> serviceCodes, @RequestParam(value = UrlPrefixConstant.API_VERSION_NAME) String version) {
+    public MultResult<PermissionRespDto> findByServiceCodes(List<String> serviceCodes, @RequestParam(value = PathPrefixConstant.API_VERSION_NAME) String version) {
         log.error("feign 远程批量查询当前应用权限失败:{}", serviceCodes);
         return null;
     }

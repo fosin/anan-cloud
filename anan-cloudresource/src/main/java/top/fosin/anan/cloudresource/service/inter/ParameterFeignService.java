@@ -3,8 +3,8 @@ package top.fosin.anan.cloudresource.service.inter;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import top.fosin.anan.cloudresource.constant.PathPrefixConstant;
 import top.fosin.anan.cloudresource.constant.ServiceConstant;
-import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
 import top.fosin.anan.cloudresource.dto.req.ParameterReqDto;
 import top.fosin.anan.cloudresource.dto.res.ParameterRespDto;
 import top.fosin.anan.cloudresource.service.ParameterFeignFallbackServiceImpl;
@@ -12,7 +12,6 @@ import top.fosin.anan.data.constant.PathConstant;
 import top.fosin.anan.data.entity.res.TreeVO;
 import top.fosin.anan.data.result.SingleResult;
 
-import javax.validation.constraints.NotEmpty;
 import java.util.Collection;
 import java.util.List;
 
@@ -20,7 +19,7 @@ import java.util.List;
  * @author fosin
  * @date 2019-3-26
  */
-@FeignClient(name = ServiceConstant.ANAN_PLATFORMSERVER, path = UrlPrefixConstant.PARAMETER,
+@FeignClient(name = ServiceConstant.ANAN_PLATFORMSERVER, path = PathPrefixConstant.PARAMETER,
         fallback = ParameterFeignFallbackServiceImpl.class, contextId = "parameterFeignService")
 public interface ParameterFeignService {
     String PATH_VALUE = "value";
@@ -58,8 +57,8 @@ public interface ParameterFeignService {
     SingleResult<Boolean> applyChangeAll();
 
     @PostMapping(value = ParameterFeignService.PATH_APPLYS_IDS)
-    SingleResult<Boolean> applyChangeAll(@NotEmpty @RequestBody List<Long> ids);
+    SingleResult<Boolean> applyChangeAll(@RequestBody List<Long> ids);
 
     @PostMapping(value = ParameterFeignService.PATH_CANCELDELETE)
-    void cancelDelete(@NotEmpty @RequestBody Collection<Long> ids);
+    void cancelDelete(@RequestBody Collection<Long> ids);
 }

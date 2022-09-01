@@ -7,7 +7,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
+import top.fosin.anan.cloudresource.constant.PathPrefixConstant;
 import top.fosin.anan.cloudresource.dto.req.ParameterReqDto;
 import top.fosin.anan.cloudresource.dto.res.ParameterRespDto;
 import top.fosin.anan.cloudresource.service.inter.ParameterFeignService;
@@ -31,8 +31,8 @@ import java.util.List;
  * @author fosin
  */
 @RestController
-@RequestMapping(value = UrlPrefixConstant.PARAMETER)
-@Api(value = UrlPrefixConstant.PARAMETER, tags = "通用参数管理(参数获取、自动创建)")
+@RequestMapping(value = PathPrefixConstant.PARAMETER)
+@Api(value = PathPrefixConstant.PARAMETER, tags = "通用参数管理(参数获取、自动创建)")
 @AllArgsConstructor
 public class ParameterController implements ISimpleController<ParameterReqDto, ParameterRespDto, Long> {
     private final ParameterService parameterService;

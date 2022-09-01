@@ -9,7 +9,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 import top.fosin.anan.core.util.crypt.AesUtil;
-import top.fosin.anan.data.entity.Id;
+import top.fosin.anan.data.prop.IdProp;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,7 +74,7 @@ public class ChangePasswordGatewayFilter implements GatewayFilter, Ordered {
 
             List<String> idList = new ArrayList<>();
             idList.add(id);
-            params.put(Id.ID_NAME, idList);
+            params.put(IdProp.ID_NAME, idList);
 
             List<String> passwordList = new ArrayList<>();
             passwordList.add(aesUtil.decrypt(salt, iv, passphrase, password));

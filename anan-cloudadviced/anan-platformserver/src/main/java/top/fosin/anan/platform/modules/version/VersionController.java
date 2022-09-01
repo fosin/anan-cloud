@@ -7,7 +7,7 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
+import top.fosin.anan.cloudresource.constant.PathPrefixConstant;
 import top.fosin.anan.cloudresource.dto.res.PermissionRespTreeDto;
 import top.fosin.anan.data.controller.ISimpleController;
 import top.fosin.anan.data.entity.res.TreeVO;
@@ -31,8 +31,8 @@ import java.util.List;
  * @date 2018-11-18 17:50:28
  */
 @RestController
-@RequestMapping(value = UrlPrefixConstant.VERSION, params = UrlPrefixConstant.DEFAULT_VERSION_PARAM)
-@Api(value = UrlPrefixConstant.VERSION, tags = "版本管理")
+@RequestMapping(value = PathPrefixConstant.VERSION, params = PathPrefixConstant.DEFAULT_VERSION_PARAM)
+@Api(value = PathPrefixConstant.VERSION, tags = "版本管理")
 @AllArgsConstructor
 public class VersionController implements ISimpleController<VersionReqDto, VersionRespDto, Long> {
     private final VersionService versionService;

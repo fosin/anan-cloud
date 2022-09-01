@@ -151,7 +151,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Caching(
             evict = {
-                    @CacheEvict(value = PlatformRedisConstant.ANAN_USER, key = "#root.caches[0].get(#id).get().usercode", condition = "#root.caches[0].get(#id) != null"),
+                    @CacheEvict(value = PlatformRedisConstant.ANAN_USER, key = "#root.caches[0].get(#id+'-id').get().usercode", condition = "#root.caches[0].get(#id+'-id') != null"),
                     @CacheEvict(value = PlatformRedisConstant.ANAN_USER, key = "#id+'-id'"),
                     @CacheEvict(value = PlatformRedisConstant.ANAN_USER_PERMISSION_TREE, key = "#id"),
                     @CacheEvict(value = PlatformRedisConstant.ANAN_USER_ALL_PERMISSIONS, key = "#id")
@@ -259,10 +259,10 @@ public class UserServiceImpl implements UserService {
     @Caching(
             evict = {
                     @CacheEvict(value = PlatformRedisConstant.ANAN_USER, key = "#id+'-id'"),
-                    @CacheEvict(value = PlatformRedisConstant.ANAN_USER, key = "#result.usercode")
+                    @CacheEvict(value = PlatformRedisConstant.ANAN_USER, key = "#root.caches[0].get(#id+'-id').get().usercode", condition = "#root.caches[0].get(#id+'-id') != null")
             }
     )
-    public UserRespDto changePassword(Long id, String password, String confirmPassword1, String confirmPassword2) {
+    public void changePassword(Long id, String password, String confirmPassword1, String confirmPassword2) {
         Assert.isTrue(StringUtils.hasText(confirmPassword1) &&
                 StringUtils.hasText(confirmPassword2) && confirmPassword1.equals(confirmPassword2), "新密码和确认新密码不能为空且必须一致!");
         Assert.isTrue(!confirmPassword1.equals(password), "新密码和原密码不能相同!");
@@ -275,7 +275,7 @@ public class UserServiceImpl implements UserService {
         Assert.isTrue(passwordEncoder.matches(password, Objects.requireNonNull(user, "通过ID：" + id + "未找到对应的用户信息!").getPassword()), "原密码不正确!");
         user.setPassword(confirmPassword1);
         encryptBeforeSave(user);
-        return BeanUtil.copyProperties(userDao.save(user), UserRespDto.class);
+        userDao.save(user);
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -283,10 +283,10 @@ public class UserServiceImpl implements UserService {
     @Caching(
             evict = {
                     @CacheEvict(value = PlatformRedisConstant.ANAN_USER, key = "#id+'-id'"),
-                    @CacheEvict(value = PlatformRedisConstant.ANAN_USER, key = "#result.usercode")
+                    @CacheEvict(value = PlatformRedisConstant.ANAN_USER, key = "#root.caches[0].get(#id+'-id').get().usercode", condition = "#root.caches[0].get(#id+'-id') != null")
             }
     )
-    public UserPassRespDto resetPassword(Long id) {
+    public String resetPassword(Long id) {
         Assert.notNull(id, "用户ID不能为空!");
 
         Long loginId = ananUserDetailService.getAnanUserId();
@@ -296,9 +296,7 @@ public class UserServiceImpl implements UserService {
         Objects.requireNonNull(user, "通过ID：" + id + "未找到对应的用户信息!").setPassword(password);
         encryptBeforeSave(user);
         userDao.save(user);
-        UserPassRespDto respPassDto = BeanUtil.copyProperties(user, UserPassRespDto.class);
-        respPassDto.setPassword(password);
-        return respPassDto;
+        return password;
     }
 
     public String getPassword() {

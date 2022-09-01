@@ -12,7 +12,7 @@ import org.springframework.util.Assert;
 import org.springframework.util.Base64Utils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
-import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
+import top.fosin.anan.cloudresource.constant.PathPrefixConstant;
 import top.fosin.anan.data.result.MultResult;
 import top.fosin.anan.data.result.ResultUtils;
 import top.fosin.anan.data.result.SingleResult;
@@ -27,8 +27,8 @@ import java.util.Random;
  * @date 2018.8.20
  */
 @RestController
-@RequestMapping(value = UrlPrefixConstant.APPLICATION, params = UrlPrefixConstant.DEFAULT_VERSION_PARAM)
-@Api(value = UrlPrefixConstant.APPLICATION, tags = "应用集群管理")
+@RequestMapping(value = PathPrefixConstant.APPLICATION, params = PathPrefixConstant.DEFAULT_VERSION_PARAM)
+@Api(value = PathPrefixConstant.APPLICATION, tags = "应用集群管理")
 public class ApplicationController {
     private final DiscoveryClient discoveryClient;
 

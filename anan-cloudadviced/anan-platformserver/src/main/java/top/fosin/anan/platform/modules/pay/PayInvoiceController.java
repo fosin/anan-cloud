@@ -3,7 +3,7 @@ package top.fosin.anan.platform.modules.pay;
 import io.swagger.annotations.Api;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
+import top.fosin.anan.cloudresource.constant.PathPrefixConstant;
 import top.fosin.anan.data.controller.ISimpleController;
 import top.fosin.anan.platform.modules.pay.dto.PayInvoiceReqDto;
 import top.fosin.anan.platform.modules.pay.dto.PayInvoiceRespDto;
@@ -16,8 +16,8 @@ import top.fosin.anan.platform.modules.pay.service.inter.PayInvoiceService;
  * @date 2018-11-18 17:50:28
  */
 @RestController
-@RequestMapping(value = UrlPrefixConstant.PAY_INVOICE, params = UrlPrefixConstant.DEFAULT_VERSION_PARAM)
-@Api(value = UrlPrefixConstant.PAY_INVOICE, tags = "支付发票管理")
+@RequestMapping(value = PathPrefixConstant.PAY_INVOICE, params = PathPrefixConstant.DEFAULT_VERSION_PARAM)
+@Api(value = PathPrefixConstant.PAY_INVOICE, tags = "支付发票管理")
 public class PayInvoiceController implements ISimpleController<PayInvoiceReqDto, PayInvoiceRespDto, Long> {
     /**
      * 服务对象

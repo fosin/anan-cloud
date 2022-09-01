@@ -1,11 +1,14 @@
 package top.fosin.anan.platform.modules.user.service.inter;
 
+import org.springframework.validation.annotation.Validated;
 import top.fosin.anan.cloudresource.dto.req.UserReqDto;
 import top.fosin.anan.cloudresource.dto.res.UserRespDto;
 import top.fosin.anan.jpa.service.ISimpleJpaService;
-import top.fosin.anan.platform.modules.user.dto.UserPassRespDto;
 import top.fosin.anan.platform.modules.user.po.User;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
 /**
@@ -13,19 +16,20 @@ import java.util.List;
  * @date 2017/12/27
  *
  */
+@Validated
 public interface UserService extends ISimpleJpaService<UserReqDto,UserRespDto, Long, User> {
 
-    UserRespDto findByUsercode(String usercode);
+    UserRespDto findByUsercode(@NotBlank String usercode);
 
-    UserRespDto changePassword(Long id, String password, String confirmPassword1, String confirmPassword2);
+    void changePassword(@Positive Long id, @NotBlank String password, @NotBlank String confirmPassword1, @NotBlank String confirmPassword2);
 
-    UserPassRespDto resetPassword(Long id);
+    String resetPassword(@Positive Long id);
 
-    List<UserRespDto> findOtherUsersByRoleId(Long roleId);
+    List<UserRespDto> findOtherUsersByRoleId(@Positive Long roleId);
 
-    List<UserRespDto> findRoleUsersByRoleId(Long roleId);
+    List<UserRespDto> findRoleUsersByRoleId(@Positive Long roleId);
 
-    List<UserRespDto> listByOrganizId(Long organizId, Integer status);
+    List<UserRespDto> listByOrganizId(@Positive Long organizId, Integer status);
 
-    List<UserRespDto> listAllChildByTopId(Long topId, Integer status);
+    List<UserRespDto> listAllChildByTopId(@PositiveOrZero Long topId, Integer status);
 }

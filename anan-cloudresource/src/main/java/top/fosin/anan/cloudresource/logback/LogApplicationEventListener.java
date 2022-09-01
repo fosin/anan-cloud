@@ -15,6 +15,7 @@ import org.springframework.core.ResolvableType;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.MutablePropertySources;
 import org.springframework.core.env.PropertySource;
+import top.fosin.anan.cloudresource.constant.FieldConstant;
 
 /**
  * TODO
@@ -47,7 +48,7 @@ public class LogApplicationEventListener implements GenericApplicationListener {
 
             if (ps != null && ps.containsProperty("spring.application.name")) {
                 String serviceCode = (String) ps.getProperty("spring.application.name");
-                MDC.put("serviceCode", serviceCode);
+                MDC.put(FieldConstant.SERVICE_CODE, serviceCode);
             }
 
         }

@@ -10,7 +10,7 @@ import top.fosin.anan.auth.po.User;
 import top.fosin.anan.auth.po.UserAllPermissions;
 import top.fosin.anan.auth.service.inter.AuthService;
 import top.fosin.anan.cloudresource.constant.PlatformRedisConstant;
-import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
+import top.fosin.anan.cloudresource.constant.PathPrefixConstant;
 import top.fosin.anan.cloudresource.dto.UserAllPermissionTreeDto;
 import top.fosin.anan.cloudresource.dto.UserAuthDto;
 import top.fosin.anan.cloudresource.dto.res.OrgRespDto;
@@ -52,7 +52,7 @@ public class AuthServiceImpl implements AuthService {
             UserAuthDto dto = userEntity.toAuthDto();
             Long organizId = dto.getOrganizId();
             if (organizId > 0) {
-                OrgRespDto org = orgFeignService.findOneById(organizId, UrlPrefixConstant.API_VERSION_VALUE)
+                OrgRespDto org = orgFeignService.findOneById(organizId, PathPrefixConstant.API_VERSION_VALUE)
                         .orElseThrow("未找到对应机构信息" + organizId + ",请联系管理员核对!");
                 dto.setTopId(org.getTopId());
             }

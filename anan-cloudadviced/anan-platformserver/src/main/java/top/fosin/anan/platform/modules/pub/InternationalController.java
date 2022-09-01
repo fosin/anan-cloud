@@ -4,7 +4,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
-import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
+import top.fosin.anan.cloudresource.constant.PathPrefixConstant;
 import top.fosin.anan.data.constant.PathConstant;
 import top.fosin.anan.data.controller.ISimpleController;
 import top.fosin.anan.data.result.MultResult;
@@ -23,8 +23,8 @@ import javax.validation.constraints.NotNull;
  * @date 2020-12-04 11:05:46
  */
 @RestController
-@RequestMapping(value = UrlPrefixConstant.INTERNATIONAL, params = UrlPrefixConstant.DEFAULT_VERSION_PARAM)
-@Api(value = UrlPrefixConstant.INTERNATIONAL, tags = "国际化语言管理")
+@RequestMapping(value = PathPrefixConstant.INTERNATIONAL, params = PathPrefixConstant.DEFAULT_VERSION_PARAM)
+@Api(value = PathPrefixConstant.INTERNATIONAL, tags = "国际化语言管理")
 public class InternationalController implements ISimpleController<InternationalReqDto,InternationalRespDto, Long> {
 
     private final InternationalService internationalService;

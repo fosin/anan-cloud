@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 import springfox.documentation.swagger.web.SwaggerResource;
-import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
+import top.fosin.anan.cloudresource.constant.PathPrefixConstant;
 import top.fosin.anan.cloudresource.dto.res.PermissionRespDto;
 import top.fosin.anan.cloudresource.service.inter.PermissionFeignService;
 import top.fosin.anan.security.resource.AnanProgramAuthorities;
@@ -41,7 +41,7 @@ public class AnanZuulAutoConfiguration {
                                                          PermissionFeignService permissionFeignService) {
         List<Route> routes = routeLocator.getRoutes();
         List<String> locations = routes.stream().map(Route::getLocation).collect(Collectors.toList());
-        Collection<PermissionRespDto> dtos = permissionFeignService.findByServiceCodes(locations, UrlPrefixConstant.API_VERSION_NAME).orElseThrow();
+        Collection<PermissionRespDto> dtos = permissionFeignService.findByServiceCodes(locations, PathPrefixConstant.API_VERSION_NAME).orElseThrow();
         List<AnanSecurityProperties.Authority> authorities = new ArrayList<>();
         Objects.requireNonNull(dtos).forEach(dto -> {
             String entityPath = dto.getPath();

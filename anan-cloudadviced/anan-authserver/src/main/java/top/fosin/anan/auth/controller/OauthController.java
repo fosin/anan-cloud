@@ -70,8 +70,10 @@ public class OauthController {
             @ApiImplicitParam(name = "g", value = "iterationCount密钥加密次数", dataTypeClass = String.class,
                     required = true, paramType = "query"),
     })
-    public SingleResult<OAuth2AccessToken> secretAccessToken(Principal principal, HttpServletRequest request,
-                                                               @ApiIgnore @RequestParam Map<String, String> parameters) throws HttpRequestMethodNotSupportedException {
+    public SingleResult<OAuth2AccessToken> secretAccessToken(Principal principal,
+                                                             HttpServletRequest request,
+                                                             @ApiIgnore @RequestParam Map<String, String> parameters)
+            throws HttpRequestMethodNotSupportedException {
 
         String cipheru = parameters.get("a");
         String cipherp = parameters.get("b");

@@ -6,7 +6,8 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
-import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
+import top.fosin.anan.cloudresource.constant.FieldConstant;
+import top.fosin.anan.cloudresource.constant.PathPrefixConstant;
 import top.fosin.anan.cloudresource.dto.req.RegisterDto;
 import top.fosin.anan.cloudresource.dto.res.OrgRespDto;
 import top.fosin.anan.cloudresource.dto.res.OrgTreeDto;
@@ -30,8 +31,8 @@ import java.util.List;
  * @author fosin
  */
 @RestController
-@RequestMapping(value = UrlPrefixConstant.ORGANIZATION, params = UrlPrefixConstant.DEFAULT_VERSION_PARAM)
-@Api(value = UrlPrefixConstant.ORGANIZATION, tags = "机构管理")
+@RequestMapping(value = PathPrefixConstant.ORGANIZATION, params = PathPrefixConstant.DEFAULT_VERSION_PARAM)
+@Api(value = PathPrefixConstant.ORGANIZATION, tags = "机构管理")
 public class OrgController extends BaseController
         implements ICrudController<OrgReqDto, OrgRespDto, Long>,
         IRetrieveTreeController<OrgReqDto, OrgTreeDto, Long> {
@@ -46,7 +47,7 @@ public class OrgController extends BaseController
     }
 
     @ApiOperation("根据机构ID获取机构权限")
-    @ApiImplicitParam(name = "organizId", value = "机构ID,取值于Organization.id",
+    @ApiImplicitParam(name = FieldConstant.ORGANIZ_ID, value = "机构ID,取值于Organization.id",
             required = true, dataTypeClass = Long.class, paramType = "path")
     @GetMapping(value = "/permissions/{organizId}")
     public MultResult<OrgPermissionRespDto> permissions(@PathVariable Long organizId) {
@@ -57,14 +58,14 @@ public class OrgController extends BaseController
     @ApiImplicitParams({
             @ApiImplicitParam(name = "dtos", value = "版本权限集合",
                     dataTypeClass = List.class, paramType = "body"),
-            @ApiImplicitParam(name = "organizId", value = "机构ID,取值于Organization.id",
+            @ApiImplicitParam(name = FieldConstant.ORGANIZ_ID, value = "机构ID,取值于Organization.id",
                     required = true, dataTypeClass = Long.class, paramType = "path")
 
     })
     @PutMapping(value = "/permissions/{organizId}")
     public MultResult<OrgPermissionRespDto> permissions(
             @RequestBody List<OrgPermissionReqDto> dtos,
-            @PathVariable("organizId") Long organizId) {
+            @PathVariable(FieldConstant.ORGANIZ_ID) Long organizId) {
         return ResultUtils.success(orgPermissionService.processInBatch(organizId, dtos,false));
     }
 
@@ -79,9 +80,9 @@ public class OrgController extends BaseController
 
 
     @ApiOperation("根据父机构ID获取其孩子节点数据")
-    @ApiImplicitParam(name = "organizId", required = true, dataTypeClass = Long.class, value = "机构ID,取值于Organization.id", paramType = "path")
+    @ApiImplicitParam(name = FieldConstant.ORGANIZ_ID, required = true, dataTypeClass = Long.class, value = "机构ID,取值于Organization.id", paramType = "path")
     @GetMapping("/auth/{organizId}")
-    public SingleResult<OrgAuthRespDto> getOrganizAuth(@PathVariable("organizId") Long organizId) {
+    public SingleResult<OrgAuthRespDto> getOrganizAuth(@PathVariable(FieldConstant.ORGANIZ_ID) Long organizId) {
         List<OrgAuthRespDto> authRespDtos = orgAuthService.findAllByOrganizId(organizId);
         Assert.isTrue(authRespDtos.size() > 0, "该机构还未购买服务器!");
         return ResultUtils.success(authRespDtos.get(0));

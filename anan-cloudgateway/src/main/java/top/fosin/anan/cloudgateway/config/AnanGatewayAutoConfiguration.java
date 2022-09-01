@@ -27,9 +27,9 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.swagger.web.SwaggerResource;
-import top.fosin.anan.cloudresource.constant.RequestPath;
+import top.fosin.anan.cloudresource.constant.PathPrefixConstant;
+import top.fosin.anan.cloudresource.constant.PathSuffixConstant;
 import top.fosin.anan.cloudresource.constant.ServiceConstant;
-import top.fosin.anan.cloudresource.constant.UrlPrefixConstant;
 import top.fosin.anan.cloudresource.dto.res.PermissionRespDto;
 import top.fosin.anan.data.result.MultResult;
 import top.fosin.anan.security.resource.AnanProgramAuthorities;
@@ -82,7 +82,7 @@ public class AnanGatewayAutoConfiguration {
     public List<PermissionRespDto> getPermissionsByRest(List<String> hosts) throws URISyntaxException {
         ServiceInstance instance = getServiceRandomInstance();
         String scheme = instance.getScheme();
-        URI uri = new URI(scheme == null ? "http" : scheme, null, instance.getHost(), instance.getPort(), "/" + UrlPrefixConstant.PERMISSION + RequestPath.SERVICE_CODES , UrlPrefixConstant.DEFAULT_VERSION_PARAM, null);
+        URI uri = new URI(scheme == null ? "http" : scheme, null, instance.getHost(), instance.getPort(), "/" + PathPrefixConstant.PERMISSION + PathSuffixConstant.SERVICE_CODES , PathPrefixConstant.DEFAULT_VERSION_PARAM, null);
         RequestEntity<List<String>> request = RequestEntity
                 .post(uri)
                 .accept(MediaType.APPLICATION_JSON)

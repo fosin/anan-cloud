@@ -4,7 +4,7 @@ package top.fosin.anan.cloudresource.constant;
  * @author fosin
  * @date 2019/3/28
  */
-public class UrlPrefixConstant {
+public class PathPrefixConstant {
     public static final String API = "api";
     public static final String API_VERSION_NAME = "version";
     public static final String API_VERSION_VALUE = "2018-10-17";
