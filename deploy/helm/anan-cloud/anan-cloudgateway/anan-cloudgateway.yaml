@@ -80,7 +80,7 @@ anan:
           - paths: /*/*.swf,/*/*.jpg,/*/*.png,/*/*.svg,/*/*.gif
           - paths: /*/*/*/api-docs,/*/swagger-resources/**,/*/swagger-ui/**,/swagger-resources/**,/swagger-ui/**
           - paths: /actuator/**
-          - paths: /gateway/auth/oauth/**,/gateway/auth/sso/**,/gateway/platform/*/international/status/*,/gateway/platform/*/international/code/*,/gateway/platform/*/international/default,/gateway/platform/*/international/charset/internationalId/*
+          - paths: /gateway/auth/oauth/**,/gateway/auth/sso/**,/gateway/platform/api/international/status/*,/gateway/platform/api/international/code/*,/gateway/platform/api/international/default,/gateway/platform/api/international/charset/internationalId/*
             methods: GET,POST
       session:
         session-creation-policy: stateless

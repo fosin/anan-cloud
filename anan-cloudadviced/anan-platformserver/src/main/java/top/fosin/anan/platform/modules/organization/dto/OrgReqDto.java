@@ -27,13 +27,6 @@ import javax.validation.constraints.*;
 public class OrgReqDto extends IdLogiSortPidQuery<LogicalQueryRule, SortRule, Long> {
     private static final long serialVersionUID = 389815217019211695L;
 
-    @Positive(message = "父机构序号" + "{javax.validation.constraints.Positive.message}",
-            groups = {Create.class, Update.class, Delete.class})
-    @NotNull(message = "父机构序号" + "{javax.validation.constraints.NotNull.message}",
-            groups = {Create.class, Update.class})
-    @ApiModelProperty(value = "父机构编号：表示当前数据所属的父类机构，新增和修改数据时必填!")
-    private Long pid;
-
     @Positive(message = "顶级机构序号" + "{javax.validation.constraints.Positive.message}",
             groups = {Create.class, Update.class, Delete.class})
     @NotNull(message = "顶级机构序号" + "{javax.validation.constraints.NotNull.message}",

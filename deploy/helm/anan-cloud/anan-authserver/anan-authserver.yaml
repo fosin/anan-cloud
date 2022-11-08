@@ -15,7 +15,7 @@ anan:
         authorities:
           - paths: /**/*.html,/**/*.css,/**/*.js,/**/*.woff*,/**/*.ttf*,/**/*.map,/**/*.ico
           - paths: /**/*.swf,/**/*.jpg,/**/*.png,/**/*.svg,/**/*.gif
-          - paths: /error,/**/api-docs,/actuator/**,/v1/permission/**
+          - paths: /error,/**/api-docs,/actuator/**,/api/permission/**
       form-login:
         enabled: true
         login-page: /sso/login

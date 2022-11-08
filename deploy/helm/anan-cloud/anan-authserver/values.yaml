@@ -20,7 +20,7 @@ initContainers:
     command: ['sh', '-c', 'until nc rabbitmq 5672; do echo waiting for rabbitmq; sleep 2; done;']
     imagePullPolicy: IfNotPresent
 containers:
-  - image: registry.cn-hongkong.aliyuncs.com/fosin/anan-authserver:3.0.0-SNAPSHOT
+  - image: registry.cn-hongkong.aliyuncs.com/fosin/anan-authserver:3.2.0-SNAPSHOT
     imagePullPolicy: IfNotPresent
     resources:
       limits:

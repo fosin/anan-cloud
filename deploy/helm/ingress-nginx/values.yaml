@@ -59,7 +59,7 @@ daemonset:
   minReadySeconds: 60  #滚动升级时60s后认为该pod就绪
 terminationGracePeriodSeconds: 15 #优雅关闭pod的等待时间，默认30s
 containers:
-  - image: registry.cn-hongkong.aliyuncs.com/fosin/ingress-nginx-controller:3.5.0
+  - image: registry.cn-hongkong.aliyuncs.com/fosin/ingress-nginx-controller:3.8.0
     imagePullPolicy: Always
     resources:
       limits:

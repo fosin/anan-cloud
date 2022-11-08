@@ -1,9 +1,7 @@
 package top.fosin.anan.platform.modules.user.service;
 
 import lombok.AllArgsConstructor;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.cache.annotation.Caching;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -149,14 +147,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Caching(
-            evict = {
-                    @CacheEvict(value = PlatformRedisConstant.ANAN_USER, key = "#root.caches[0].get(#id+'-id').get().usercode", condition = "#root.caches[0].get(#id+'-id') != null"),
-                    @CacheEvict(value = PlatformRedisConstant.ANAN_USER, key = "#id+'-id'"),
-                    @CacheEvict(value = PlatformRedisConstant.ANAN_USER_PERMISSION_TREE, key = "#id"),
-                    @CacheEvict(value = PlatformRedisConstant.ANAN_USER_ALL_PERMISSIONS, key = "#id")
-            }
-    )
     @Transactional(rollbackFor = Exception.class)
     public void deleteById(Long id) {
         User entity = ananCacheManger.get(PlatformRedisConstant.ANAN_USER, id + "-id", User.class);
@@ -172,6 +162,10 @@ public class UserServiceImpl implements UserService {
                 && !ananUserDetailService.isAdminUser(entity.getUsercode()), "不能删除管理员帐号!");
         List<UserRole> userRoles = userRoleDao.findByUserId(entity.getId());
         Assert.isTrue(userRoles.size() == 0, "该用户下还存在角色信息,不能直接删除用户!");
+        ananCacheManger.evict(PlatformRedisConstant.ANAN_USER, entity.getUsercode());
+        ananCacheManger.evict(PlatformRedisConstant.ANAN_USER, entity.getId() + "-id");
+        ananCacheManger.evict(PlatformRedisConstant.ANAN_USER_ALL_PERMISSIONS, entity.getId() + "");
+        ananCacheManger.evict(PlatformRedisConstant.ANAN_USER_PERMISSION_TREE, entity.getId() + "");
         userDao.delete(entity);
     }
 
@@ -186,13 +180,6 @@ public class UserServiceImpl implements UserService {
         List<User> entities = userDao.findAllById(ids);
         for (User entity : entities) {
             deleteByEntity(entity);
-        }
-        for (User entity : entities) {
-            String id = entity.getId() + "";
-            ananCacheManger.evict(PlatformRedisConstant.ANAN_USER, id + "-id");
-            ananCacheManger.evict(PlatformRedisConstant.ANAN_USER, entity.getUsercode());
-            ananCacheManger.evict(PlatformRedisConstant.ANAN_USER_ALL_PERMISSIONS, id);
-            ananCacheManger.evict(PlatformRedisConstant.ANAN_USER_PERMISSION_TREE, id);
         }
     }
 
@@ -256,12 +243,6 @@ public class UserServiceImpl implements UserService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    @Caching(
-            evict = {
-                    @CacheEvict(value = PlatformRedisConstant.ANAN_USER, key = "#id+'-id'"),
-                    @CacheEvict(value = PlatformRedisConstant.ANAN_USER, key = "#root.caches[0].get(#id+'-id').get().usercode", condition = "#root.caches[0].get(#id+'-id') != null")
-            }
-    )
     public void changePassword(Long id, String password, String confirmPassword1, String confirmPassword2) {
         Assert.isTrue(StringUtils.hasText(confirmPassword1) &&
                 StringUtils.hasText(confirmPassword2) && confirmPassword1.equals(confirmPassword2), "新密码和确认新密码不能为空且必须一致!");
@@ -275,17 +256,13 @@ public class UserServiceImpl implements UserService {
         Assert.isTrue(passwordEncoder.matches(password, Objects.requireNonNull(user, "通过ID：" + id + "未找到对应的用户信息!").getPassword()), "原密码不正确!");
         user.setPassword(confirmPassword1);
         encryptBeforeSave(user);
+        ananCacheManger.evict(PlatformRedisConstant.ANAN_USER, user.getUsercode());
+        ananCacheManger.evict(PlatformRedisConstant.ANAN_USER, id + "-id");
         userDao.save(user);
     }
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    @Caching(
-            evict = {
-                    @CacheEvict(value = PlatformRedisConstant.ANAN_USER, key = "#id+'-id'"),
-                    @CacheEvict(value = PlatformRedisConstant.ANAN_USER, key = "#root.caches[0].get(#id+'-id').get().usercode", condition = "#root.caches[0].get(#id+'-id') != null")
-            }
-    )
     public String resetPassword(Long id) {
         Assert.notNull(id, "用户ID不能为空!");
 
@@ -295,6 +272,8 @@ public class UserServiceImpl implements UserService {
         String password = getPassword();
         Objects.requireNonNull(user, "通过ID：" + id + "未找到对应的用户信息!").setPassword(password);
         encryptBeforeSave(user);
+        ananCacheManger.evict(PlatformRedisConstant.ANAN_USER, user.getUsercode());
+        ananCacheManger.evict(PlatformRedisConstant.ANAN_USER, id + "-id");
         userDao.save(user);
         return password;
     }
