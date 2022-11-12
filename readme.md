@@ -39,6 +39,7 @@
     Hibernate Validator                    | Hibernate验证框架 
     lombok                                 | 一个通过注解自动生成get/set方法的类库 
     Thymeleaf                              | HTML5模板引擎  
+    Flyway                                 | 数据库管理  
     Maven                                  | 项目构建管理  
     Redis                                  | 缓存内存数据库 
     Mysql                                  | 对象关系数据库 
@@ -78,6 +79,7 @@
     2.7.x               2.4.x                3.5.x~3.6.x
     3.0.x               3.0.x                3.5.x~3.6.x
     3.1.x               3.1.x                3.7.x
+    3.2.x               3.2.x                3.8.x
 
 ## 服务与端口对照
 

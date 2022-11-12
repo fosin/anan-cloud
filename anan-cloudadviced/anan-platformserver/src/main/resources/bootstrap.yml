@@ -49,6 +49,13 @@ spring:
     user:
       name: @spring.security.user.name@
       password: @spring.security.user.password@
+  flyway:
+    #开启自动创建flyway元数据表标识 默认: false
+    baseline-on-migrate: true
+    #这个路径指的是fly版本控制的sql语句存放的路径,可以多个，可以给每个环境使用不同位置,比如classpath:db/migration,classpath:test/db/migration
+    locations: classpath:db/{vendor}
+    #禁止flyway执行清理
+    clean-disabled: true
 encrypt:
   key-store:
     location: @encrypt.key-store.location@

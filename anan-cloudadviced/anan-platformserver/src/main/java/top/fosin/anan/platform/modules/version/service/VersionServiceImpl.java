@@ -14,10 +14,10 @@ import top.fosin.anan.platform.modules.version.service.inter.VersionService;
 @Service
 @Lazy
 public class VersionServiceImpl implements VersionService {
-    private final VersionDao ananSysVersionDao;
+    private final VersionDao versionDao;
 
-    public VersionServiceImpl(VersionDao ananSysVersionDao) {
-        this.ananSysVersionDao = ananSysVersionDao;
+    public VersionServiceImpl(VersionDao versionDao) {
+        this.versionDao = versionDao;
     }
 
     /**
@@ -25,6 +25,6 @@ public class VersionServiceImpl implements VersionService {
      */
     @Override
     public VersionDao getDao() {
-        return ananSysVersionDao;
+        return versionDao;
     }
 }
