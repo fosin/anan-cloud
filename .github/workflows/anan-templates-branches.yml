@@ -3,7 +3,7 @@ name: Helm Templates Publish
 on:
   push:
     branches:
-      - '*'
+      - 'main'
     paths:
       - 'deploy/helm/templates/**'
       - '.github/workflows/anan-templates-branches.yml'

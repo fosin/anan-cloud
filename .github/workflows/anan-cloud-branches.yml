@@ -2,7 +2,7 @@ name: anan-cloud Branches CI
 on:
   push:
     branches:
-      - '*'
+      - 'main'
     paths:
       - 'pom.xml'
       - 'anan-cloudresource/**'
