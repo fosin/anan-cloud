@@ -9,14 +9,14 @@ import top.fosin.anan.cloudresource.constant.ServiceConstant;
 import top.fosin.anan.cloudresource.dto.req.ParameterReqDto;
 import top.fosin.anan.cloudresource.dto.res.ParameterRespDto;
 import top.fosin.anan.cloudresource.grpc.parameter.*;
-import top.fosin.anan.cloudresource.service.inter.PermissionProxyService;
+import top.fosin.anan.cloudresource.service.inter.PermissionRpcService;
 
 import java.util.Date;
 import java.util.List;
 
 
 @Component
-public class ParameterGrpcServiceImpl implements PermissionProxyService {
+public class ParameterGrpcServiceImpl implements PermissionRpcService {
     @GrpcClient(ServiceConstant.ANAN_PLATFORMSERVER)
     private ParameterServiceGrpc.ParameterServiceBlockingStub blockingStubService;
 

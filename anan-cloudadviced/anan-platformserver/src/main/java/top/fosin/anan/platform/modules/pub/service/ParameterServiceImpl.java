@@ -10,7 +10,6 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.devh.boot.grpc.server.service.GrpcService;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -183,13 +182,18 @@ public class ParameterServiceImpl extends ParameterServiceGrpc.ParameterServiceI
     }
 
     @Override
-    @Cacheable(value = PlatformRedisConstant.ANAN_PARAMETER, key = "#root.target.getCacheKey(#type,#scope,#name)")
     public ParameterRespDto getParameter(Integer type, String scope, String name) {
-        Parameter entity = parameterDao.findByTypeAndScopeAndName(type, scope, name);
-        ParameterRespDto respDto = BeanUtil.copyProperties(entity, ParameterRespDto.class);
-        //因为参数会逐级上上级机构查找，为减少没有必要的查询，该代码为解决Spring Cache默认不缓存null值问题
+        String cacheKey = getCacheKey(type, scope, name);
+        ParameterRespDto respDto = ananCacheManger.get(PlatformRedisConstant.ANAN_PARAMETER, cacheKey, ParameterRespDto.class);
         if (respDto == null) {
-            respDto = new ParameterRespDto();
+            Parameter entity = findByTypeAndScopeAndName(type, scope, name);
+            //因为参数会逐级上上级机构查找，为减少没有必要的查询，该代码为解决Spring Cache默认不缓存null值问题
+            if (entity == null) {
+                respDto = new ParameterRespDto();
+            } else {
+                respDto = BeanUtil.copyProperties(entity, ParameterRespDto.class);
+                ananCacheManger.put(PlatformRedisConstant.ANAN_PARAMETER, cacheKey, respDto);
+            }
         }
         return respDto;
     }
@@ -202,21 +206,30 @@ public class ParameterServiceImpl extends ParameterServiceGrpc.ParameterServiceI
      * @return 参数
      */
     @Override
-    @Cacheable(value = PlatformRedisConstant.ANAN_PARAMETER, key = "#root.target.getCacheKey(#type,#scope,#name)")
-    @Transactional(rollbackFor = Exception.class)
     public ParameterRespDto getNearestParameter(int type, String scope, String name) {
-        Parameter parameter = parameterDao.findByTypeAndScopeAndName(type, scope, name);
-        boolean finded = parameter != null && parameter.getId() != null;
-        ParameterRespDto respDto;
-        if (finded) {
-            respDto = BeanUtil.copyProperties(parameter, ParameterRespDto.class);
-        } else {
-            //parameter为空表示没有参数记录，则依次向上找父机构的参数
-            Assert.isTrue(StringUtils.hasText(scope), "没有从参数[" + "type:" + type + " scope:" + scope + " name:" + name + "]中查询到参数");
-            respDto = getNearestParameter(type, getNearestScope(type, scope), name);
+        String cacheKey = getCacheKey(type, scope, name);
+        ParameterRespDto respDto = ananCacheManger.get(PlatformRedisConstant.ANAN_PARAMETER, cacheKey, ParameterRespDto.class);
+        if (respDto == null) {
+            Parameter parameter = findByTypeAndScopeAndName(type, scope, name);
+            boolean finded = parameter != null && parameter.getId() != null;
+            if (finded) {
+                respDto = BeanUtil.copyProperties(parameter, ParameterRespDto.class);
+                ananCacheManger.put(PlatformRedisConstant.ANAN_PARAMETER, cacheKey, respDto);
+            } else {
+                //parameter为空表示没有参数记录，则依次向上找父机构的参数
+                Assert.isTrue(StringUtils.hasText(scope), "没有从参数[" + "type:" + type + " scope:" + scope + " name:" + name + "]中查询到参数");
+                respDto = getNearestParameter(type, getNearestScope(type, scope), name);
+            }
         }
-
         return respDto;
+    }
+
+    private Parameter findByTypeAndScopeAndName(int type, String scope, String name) {
+        //如果传入了空字符串，则设置成null，因为数据库中是空值
+        if (!StringUtils.hasText(scope)) {
+            scope = null;
+        }
+        return parameterDao.findByTypeAndScopeAndName(type, scope, name);
     }
 
     private String getNearestScope(int type, String scope) {
@@ -234,15 +247,23 @@ public class ParameterServiceImpl extends ParameterServiceGrpc.ParameterServiceI
     }
 
     @Override
-    @Cacheable(value = PlatformRedisConstant.ANAN_PARAMETER, key = "#root.target.getCacheKey(#type,#scope,#name)")
     @Transactional(rollbackFor = Exception.class)
     public String getOrCreateParameter(int type, String scope, String name, String defaultValue, String description) {
         String rc;
         try {
             rc = getNearestParameter(type, scope, name).getValue();
         } catch (IllegalArgumentException e) {
-            log.debug("报异常说明没有找到任何相关参数，则需要创建一个无域参数，这样默认所有机构共享这一个参数，如果需要设置机构个性化参数则需要在前端手动创建");
-            rc = defaultValue;
+            ParameterReqDto reqDto = new ParameterReqDto();
+            reqDto.setType(type);
+            reqDto.setScope(scope);
+            reqDto.setName(name);
+            reqDto.setDefaultValue(defaultValue);
+            reqDto.setValue(defaultValue);
+            reqDto.setDescription(description);
+            reqDto.setStatus(0);
+            ParameterRespDto respDto = processCreate(reqDto);
+            rc = respDto.getValue();
+            log.debug("报异常说明没有找到任何相关参数，则需要创建一个：" + respDto);
         }
         return rc;
     }
@@ -339,14 +360,12 @@ public class ParameterServiceImpl extends ParameterServiceGrpc.ParameterServiceI
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public void getParameter(ParameterThreeArgsReq request, StreamObserver<ParameterResp> responseObserver) {
         ParameterRespDto parameter = getParameter(request.getType(), request.getScope(), request.getName());
         toGrpcResp(responseObserver, parameter);
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public void getNearestParameter(ParameterThreeArgsReq request, StreamObserver<ParameterResp> responseObserver) {
         ParameterRespDto parameter = getNearestParameter(request.getType(), request.getScope(), request.getName());
         toGrpcResp(responseObserver, parameter);

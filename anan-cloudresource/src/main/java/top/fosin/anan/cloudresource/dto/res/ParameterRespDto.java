@@ -1,16 +1,15 @@
 package top.fosin.anan.cloudresource.dto.res;
 
-import java.util.Date;
-
-import org.springframework.format.annotation.DateTimeFormat;
-
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.springframework.format.annotation.DateTimeFormat;
 import top.fosin.anan.core.util.DateTimeUtil;
 import top.fosin.anan.data.entity.res.IdCreateUpdateDto;
+
+import java.util.Date;
 
 /**
  * 用于存放各种分类分组的个性化参数(AnanParameter)响应DTO
@@ -20,7 +19,7 @@ import top.fosin.anan.data.entity.res.IdCreateUpdateDto;
  * @since 2.6.0
  */
 @Data
-@ToString
+@ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value = "用于存放各种分类分组的个性化参数响应DTO", description = "通用参数的响应DTO")
 public class ParameterRespDto extends IdCreateUpdateDto<Long> {

@@ -4,6 +4,6 @@ import top.fosin.anan.cloudresource.dto.req.ParameterReqDto;
 
 import javax.validation.constraints.NotNull;
 
-public interface PermissionProxyService extends ParameterBaseService {
+public interface PermissionRpcService extends ParameterBaseService {
     void processUpdate(@NotNull ParameterReqDto reqDto);
 }
