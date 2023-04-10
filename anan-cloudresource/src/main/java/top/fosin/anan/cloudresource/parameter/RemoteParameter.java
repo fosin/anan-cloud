@@ -2,7 +2,7 @@ package top.fosin.anan.cloudresource.parameter;
 
 import top.fosin.anan.cloudresource.dto.req.ParameterReqDto;
 import top.fosin.anan.cloudresource.dto.res.ParameterRespDto;
-import top.fosin.anan.cloudresource.service.inter.ParameterFeignService;
+import top.fosin.anan.cloudresource.service.PermissionProxyServiceImpl;
 import top.fosin.anan.core.util.BeanUtil;
 
 /**
@@ -13,47 +13,40 @@ import top.fosin.anan.core.util.BeanUtil;
  */
 public class RemoteParameter implements IParameter {
     private final IParameterStrategy parameterStrategy;
-    private final ParameterFeignService parameterFeignService;
+    private final PermissionProxyServiceImpl permissionProxyService;
 
-    public RemoteParameter(IParameterStrategy parameterStrategy, ParameterFeignService parameterFeignService) {
+    public RemoteParameter(IParameterStrategy parameterStrategy) {
         this.parameterStrategy = parameterStrategy;
-        this.parameterFeignService = parameterFeignService;
+        this.permissionProxyService = new PermissionProxyServiceImpl();
     }
 
     @Override
     public synchronized ParameterRespDto setParameter(String scope, String name, String value, String description) {
         int type = this.getParameterStrategy().getType();
-        ParameterRespDto parameter = parameterFeignService.getParameter(type, scope, name).orElseThrow("未找到对应参数type: " + type + "scope: " + scope + "name: " + name);
+        ParameterRespDto parameter = permissionProxyService.getParameter(type, scope, name);
         parameter.setValue(value);
         parameter.setType(type);
         parameter.setScope(scope);
         parameter.setName(name);
         parameter.setDescription(description);
-        return parameterFeignService.processUpdate(BeanUtil.copyProperties(parameter, ParameterReqDto.class)).orElseThrow();
+        permissionProxyService.processUpdate(BeanUtil.copyProperties(parameter, ParameterReqDto.class));
+        return parameter;
     }
 
     @Override
     public String getParameter(String scope, String name) {
-        return parameterFeignService.getParameter(this.getParameterStrategy().getType(), scope, name)
-                .orElseThrow().getValue();
+        return permissionProxyService.getParameter(this.getParameterStrategy().getType(), scope, name).getValue();
     }
 
     @Override
     public String getNearestParameter(String scope, String name) {
-        return parameterFeignService.getNearestParameter(this.getParameterStrategy().getType(), scope, name)
-                .orElseThrow().getValue();
+        return permissionProxyService.getNearestParameter(this.getParameterStrategy().getType(), scope, name)
+                .getValue();
     }
 
     @Override
     public String getOrCreateParameter(String scope, String name, String defaultValue, String description) {
-        ParameterReqDto dto = new ParameterReqDto();
-        dto.setScope(scope);
-        dto.setType(this.getParameterStrategy().getType());
-        dto.setName(name);
-        dto.setValue(defaultValue);
-        dto.setDefaultValue(defaultValue);
-        dto.setDescription(description);
-        return parameterFeignService.getOrCreateParameter(dto).orElseThrow();
+        return permissionProxyService.getOrCreateParameter(this.getParameterStrategy().getType(), scope, name, defaultValue, description);
     }
 
     @Override

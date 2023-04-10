@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import top.fosin.anan.cloudresource.constant.PlatformRedisConstant;
 import top.fosin.anan.cloudresource.dto.res.UserRespDto;
 import top.fosin.anan.cloudresource.dto.res.UserRoleRespDto;
-import top.fosin.anan.cloudresource.service.AnanUserDetailService;
+import top.fosin.anan.cloudresource.service.UserInfoService;
 import top.fosin.anan.core.util.BeanUtil;
 import top.fosin.anan.platform.modules.role.po.Role;
 import top.fosin.anan.platform.modules.user.dao.UserRoleDao;
@@ -30,7 +30,7 @@ import java.util.List;
 public class UserRoleServiceImpl implements UserRoleService {
     private final UserRoleDao userRoleDao;
     private final AnanCacheManger ananCacheManger;
-    private final AnanUserDetailService ananUserDetailService;
+    private final UserInfoService userInfoService;
 
     @Override
     public List<UserRoleRespDto> createInBatch(Collection<UserRoleReqDto> dtos) {
@@ -42,7 +42,7 @@ public class UserRoleServiceImpl implements UserRoleService {
             role.setId(dto.getRoleId());
             userRole.setRole(role);
             if (dto.getOrganizId() == null) {
-                userRole.setOrganizId(ananUserDetailService.getAnanOrganizId());
+                userRole.setOrganizId(userInfoService.getAnanOrganizId());
             } else {
                 userRole.setOrganizId(dto.getOrganizId());
             }

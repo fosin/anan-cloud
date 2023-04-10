@@ -62,6 +62,7 @@ encrypt:
     password: @encrypt.key-store.password@
     alias: @encrypt.key-store.alias@
     secret: @encrypt.key-store.secret@
+    type: @encrypt.key-store.type@
   rsa:
     algorithm: default
     strong: false

@@ -1,10 +1,10 @@
 # 设计定位
-    经过几个月，内部大重构的3.0来了，对外功能无变化，使用更强、更快、更好用了！！！
+    经过几个月，内部大重构的3.3来了，对外功能无变化，使用更强、更快、更好用了！！！
 
     第一步：正式启用anan-cloudgateway网关模块（基于Reactive的WebFlux技术栈），原网关项目anan-zuulgateway不再支持，Servlet和Reactive两种模式并行使用。（已完成）
     第二步：逐步将剩余模块从Servlet技术栈迁移至Reactive技术栈。（进行中）
 
-    anan基于JDK11、Spring Boot 2.5.x、Spring Cloud 2020生态体系技术，采用微服务前后端分离架构，供开发人员学习和交流。
+    anan基于JDK11、Spring Boot 2.7.x、Spring Cloud 2021生态体系技术，采用微服务前后端分离架构，供开发人员学习和交流。
     包括服务注册与发现、服务监控、服务管理、服务治理、服务网关、服务熔断、配置管理、OAuth2认证授权中心等常见微服务组件。
     服务注册与发现：支持K8S、Nacos、Eureka；
     配置中心：支持K8S、Nacos、SpringCloudConfig；

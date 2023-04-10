@@ -35,7 +35,7 @@ public interface ParameterFeignService {
     SingleResult<ParameterRespDto> processCreate(@RequestBody ParameterReqDto reqDto);
 
     @PutMapping()
-    SingleResult<ParameterRespDto> processUpdate(@RequestBody ParameterReqDto reqDto);
+    void processUpdate(@RequestBody ParameterReqDto reqDto);
 
     @GetMapping(value = PATH_DTO)
     SingleResult<ParameterRespDto> getParameter(@RequestParam("type") Integer type,
@@ -57,7 +57,7 @@ public interface ParameterFeignService {
     SingleResult<Boolean> applyChangeAll();
 
     @PostMapping(value = ParameterFeignService.PATH_APPLYS_IDS)
-    SingleResult<Boolean> applyChangeAll(@RequestBody List<Long> ids);
+    SingleResult<Boolean> applyChanges(@RequestBody List<Long> ids);
 
     @PostMapping(value = ParameterFeignService.PATH_CANCELDELETE)
     void cancelDelete(@RequestBody Collection<Long> ids);

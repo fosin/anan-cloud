@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import top.fosin.anan.data.entity.req.IdLogiSortOrganizQuery;
-import top.fosin.anan.data.module.LogicalQueryRule;
+import top.fosin.anan.data.module.LogiQueryRule;
 import top.fosin.anan.data.module.SortRule;
 import top.fosin.anan.data.prop.ForeignKeyProp;
 import top.fosin.anan.data.valid.group.Create;
@@ -25,7 +25,7 @@ import javax.validation.constraints.PositiveOrZero;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @ApiModel(value = "用于增减用户的单项权限，通常实在角色的基础上增减单项权限请求DTO", description = "用户权限的请求DTO")
-public class UserPermissionReqDto extends IdLogiSortOrganizQuery<LogicalQueryRule, SortRule, Long>
+public class UserPermissionReqDto extends IdLogiSortOrganizQuery<LogiQueryRule, SortRule, Long>
         implements ForeignKeyProp<Long> {
     private static final long serialVersionUID = 989390435758584592L;
 

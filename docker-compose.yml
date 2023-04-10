@@ -1,26 +1,24 @@
 version: '3'
 services:
-  mysql-mgr:
+  mysql:
     network_mode: host
-    container_name: mysql-mgr
-    hostname: mysql-mgr
+    container_name: mysql
+    hostname: mysql
     restart: always
-    image: mysql:5.7
+    image: mysql:8.0
+    security_opt:
+      - seccomp:unconfined
     environment:
       - TZ=Asia/Shanghai
       - MYSQL_ROOT_PASSWORD=local
-      - MYSQL_REPLICATION_USER=anan_ru
-      - MYSQL_REPLICATION_PASSWORD=local
-      - MYSQL_DATABASE=nacos
-      - MYSQL_USER=nacos
       - MYSQL_PASSWORD=local
     volumes:
-      - /data/mysql-mgr0:/var/lib/mysql
-      - /data/logs/mysql-mgr0:/var/log/mysql
+      - /data/mysql:/var/lib/mysql
+      - /data/logs/mysql:/var/log/mysql
   #    ports:
   #      - "3306:3306"
   nacos:
-    image: nacos/nacos-server:1.4.2
+    image: nacos/nacos-server:v2.1.2
     container_name: nacos
     hostname: nacos
     restart: always
@@ -30,11 +28,12 @@ services:
       - PREFER_HOST_MODE=hostname
       - MODE=standalone
       - SPRING_DATASOURCE_PLATFORM=mysql
-      - MYSQL_SERVICE_HOST=mysql-mgr
+      - MYSQL_SERVICE_HOST=mysql
       - MYSQL_SERVICE_PORT=3306
       - MYSQL_SERVICE_DB_NAME=nacos
       - MYSQL_SERVICE_USER=nacos
       - MYSQL_SERVICE_PASSWORD=local
+      - MYSQL_SERVICE_DB_PARAM=characterEncoding=utf8&connectTimeout=10000&socketTimeout=30000&autoReconnect=true&useUnicode=true&serverTimezone=Asia/Shanghai
       - JVM_XMS=512M
       - JVM_XMX=512M
       - JVM_XMN=170M
@@ -44,7 +43,7 @@ services:
       - /data/logs/nacos0/:/home/nacos/logs
       - /data/nacos0/:/home/nacos/data
     depends_on:
-      - mysql-mgr
+      - mysql
 
   rabbitmq:
     network_mode: host
@@ -95,7 +94,7 @@ services:
 
   anan-authserver:
     network_mode: host
-    image: registry.cn-hongkong.aliyuncs.com/fosin/anan-authserver:3.2.0-SNAPSHOT
+    image: registry.cn-hongkong.aliyuncs.com/fosin/anan-authserver:4.0.0-SNAPSHOT
 #    entrypoint: 'sh /anan/wait-for.sh nacos:8848 -t 3600 -- /anan/entrypoint.sh'
     container_name: anan-authserver
     hostname: anan-authserver
@@ -112,12 +111,12 @@ services:
     depends_on:
       - rabbitmq
       - redis
-      - mysql-mgr
+      - mysql
       - nacos
 
   anan-cloudgateway:
     network_mode: host
-    image: registry.cn-hongkong.aliyuncs.com/fosin/anan-cloudgateway:3.2.0-SNAPSHOT
+    image: registry.cn-hongkong.aliyuncs.com/fosin/anan-cloudgateway:4.0.0-SNAPSHOT
     entrypoint: 'sh /anan/wait-for.sh anan-platformserver:6150 -t 3600 -- /anan/entrypoint.sh'
     container_name: anan-cloudgateway
     hostname: anan-cloudgateway
@@ -133,13 +132,13 @@ services:
 
   anan-platformserver:
     network_mode: host
-    image: registry.cn-hongkong.aliyuncs.com/fosin/anan-platformserver:3.2.0-SNAPSHOT
+    image: registry.cn-hongkong.aliyuncs.com/fosin/anan-platformserver:4.0.0-SNAPSHOT
     container_name: anan-platformserver
     hostname: anan-platformserver
     restart: always
     privileged: true
+    entrypoint: java -XX:NativeMemoryTracking=summary -Xmx200M -XX:MaxMetaspaceSize=160M -XX:MetaspaceSize=160M -XX:+DisableExplicitGC -XX:ErrorFile=/logs/hs_err_pid%p.log -Dloader.path=/anan/dependency -Djava.security.egd=file:/dev/./urandom -jar /anan/app.jar
     environment:
-      - JAVA_TOOL_OPTIONS=-Xmx200M -XX:MaxMetaspaceSize=160M -XX:MetaspaceSize=160M -XX:+DisableExplicitGC -XX:ErrorFile=/logs/hs_err_pid%p.log
       - spring.cloud.kubernetes.enabled=false
       - spring.cloud.nacos.config.enabled=true
       - spring.cloud.nacos.discovery.enabled=true
@@ -148,12 +147,12 @@ services:
     depends_on:
       - rabbitmq
       - redis
-      - mysql-mgr
+      - mysql
       - nacos
 
   anan-sbaserver:
     network_mode: host
-    image: registry.cn-hongkong.aliyuncs.com/fosin/anan-sbaserver:3.2.0-SNAPSHOT
+    image: registry.cn-hongkong.aliyuncs.com/fosin/anan-sbaserver:4.0.0-SNAPSHOT
     entrypoint: 'sh /anan/wait-for.sh anan-cloudgateway:6190 -t 3600 -- /anan/entrypoint.sh'
     container_name: anan-sbaserver
     hostname: anan-sbaserver
@@ -170,7 +169,7 @@ services:
 
   anan-eurekaserver:
     network_mode: host
-    image: registry.cn-hongkong.aliyuncs.com/fosin/anan-eurekaserver:3.2.0-SNAPSHOT
+    image: registry.cn-hongkong.aliyuncs.com/fosin/anan-eurekaserver:4.0.0-SNAPSHOT
     container_name: anan-eurekaserver
     hostname: anan-eurekaserver
     restart: always
@@ -181,7 +180,7 @@ services:
       - spring.cloud.nacos.discovery.enabled=true
   anan-configserver:
     network_mode: host
-    image: registry.cn-hongkong.aliyuncs.com/fosin/anan-configserver:3.2.0-SNAPSHOT
+    image: registry.cn-hongkong.aliyuncs.com/fosin/anan-configserver:4.0.0-SNAPSHOT
     entrypoint: 'sh /anan/wait-for.sh anan-eurekaserver:6100 -t 3600 -- /anan/entrypoint.sh'
     container_name: anan-configserver
     hostname: anan-configserver
@@ -421,6 +420,7 @@ services:
 
   phpredisadmin:
     network_mode: host
+    container_name: phpredisadmin
     image: erikdubbelboer/phpredisadmin
     environment:
       - TZ=Asia/Shanghai
@@ -429,3 +429,14 @@ services:
       - REDIS_1_AUTH=local
       - REDIS_1_HOST=redis
       - REDIS_1_PORT=6379
+
+  redisinsight:
+    network_mode: host
+    container_name: redisinsight
+    image: redislabs/redisinsight:1.13.1
+    environment:
+      - TZ=Asia/Shanghai
+      - RIPROXYPATH=/redisinsight
+      - RILOGLEVEL="WARNING"
+    volumes:
+      - /data/redisinsight/:/db

@@ -1,5 +1,6 @@
 package top.fosin.anan.cloudresource.dto;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -17,6 +18,7 @@ import java.util.HashSet;
  * @author fosin
  * @date 2018.7.9
  */
+@JsonTypeInfo(use = JsonTypeInfo.Id.CLASS)
 public class UserDetail extends User {
     private static final long serialVersionUID = -8649502953562240792L;
     @Getter

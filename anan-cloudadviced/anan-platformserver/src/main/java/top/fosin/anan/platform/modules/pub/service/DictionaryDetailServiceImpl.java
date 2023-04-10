@@ -12,7 +12,7 @@ import top.fosin.anan.cloudresource.constant.PlatformRedisConstant;
 import top.fosin.anan.cloudresource.constant.SystemConstant;
 import top.fosin.anan.cloudresource.dto.req.DictionaryDetailReqDto;
 import top.fosin.anan.cloudresource.dto.res.DictionaryDetailRespDto;
-import top.fosin.anan.cloudresource.service.AnanUserDetailService;
+import top.fosin.anan.cloudresource.service.UserInfoService;
 import top.fosin.anan.core.exception.AnanServiceException;
 import top.fosin.anan.core.util.BeanUtil;
 import top.fosin.anan.platform.modules.pub.dao.DictionaryDao;
@@ -36,7 +36,7 @@ import java.util.List;
 @AllArgsConstructor
 public class DictionaryDetailServiceImpl implements DictionaryDetailService {
     private final DictionaryDetailDao dictionaryDetailDao;
-    private final AnanUserDetailService ananUserDetailService;
+    private final UserInfoService userInfoService;
     private final DictionaryDao dictionaryDao;
     private final AnanCacheManger ananCacheManger;
 
@@ -58,7 +58,7 @@ public class DictionaryDetailServiceImpl implements DictionaryDetailService {
         Dictionary dictionaryEntity = dictionaryDao.findById(dictionaryId).orElse(new Dictionary());
         if (SystemConstant.SYSTEM_DICTIONARY_TYPE.equals(dictionaryEntity.getType())) {
             //非超级管理员不能修改系统字典
-            Assert.isTrue(ananUserDetailService.hasSysAdminRole(), "没有权限增删改系统字典!");
+            Assert.isTrue(userInfoService.hasSysAdminRole(), "没有权限增删改系统字典!");
         }
     }
 

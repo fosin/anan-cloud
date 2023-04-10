@@ -13,7 +13,7 @@ import org.springframework.util.StringUtils;
 import top.fosin.anan.cloudresource.constant.SystemConstant;
 import top.fosin.anan.cloudresource.dto.req.RoleReqDto;
 import top.fosin.anan.cloudresource.dto.res.RoleRespDto;
-import top.fosin.anan.cloudresource.service.AnanUserDetailService;
+import top.fosin.anan.cloudresource.service.UserInfoService;
 import top.fosin.anan.core.util.BeanUtil;
 import top.fosin.anan.data.entity.req.PageQuery;
 import top.fosin.anan.data.result.PageResult;
@@ -44,7 +44,7 @@ public class RoleServiceImpl implements RoleService {
     private final RoleDao roleDao;
     private final UserRoleDao userRoleDao;
     private final OrgDao orgDao;
-    private final AnanUserDetailService ananUserDetailService;
+    private final UserInfoService userInfoService;
 
     @Override
     public RoleRespDto create(RoleReqDto dto) {
@@ -130,7 +130,7 @@ public class RoleServiceImpl implements RoleService {
         RoleReqDto params = PageQuery.getParams();
 
         Specification<Role> condition;
-        if (ananUserDetailService.hasSysAdminRole()) {
+        if (userInfoService.hasSysAdminRole()) {
             //超过管理员不需要通过机构序号间接查询
             params.setOrganizId(null);
             condition = buildQueryRules(params, false);
@@ -138,7 +138,7 @@ public class RoleServiceImpl implements RoleService {
             Assert.notNull(params, "传入的分页信息不能为空!");
             Long organizId = params.getOrganizId();
             if (organizId == null || organizId < 1) {
-                organizId = ananUserDetailService.getAnanOrganizId();
+                organizId = userInfoService.getAnanOrganizId();
             }
             String name = params.getName();
             String value = params.getValue();
@@ -174,7 +174,7 @@ public class RoleServiceImpl implements RoleService {
     public List<RoleRespDto> findAllByOrganizId(Long organizId) {
         Assert.notNull(organizId, "机构ID不能为空!");
         List<Role> entities;
-        if (ananUserDetailService.hasSysAdminRole()) {
+        if (userInfoService.hasSysAdminRole()) {
             entities = roleDao.findAll();
         } else {
             Organization organiz = orgDao.findById(organizId).orElse(null);

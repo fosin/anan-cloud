@@ -20,9 +20,8 @@ import java.util.List;
 @Validated
 public interface PermissionService extends ISimpleJpaService<PermissionReqDto, PermissionRespDto, Long,Permission>,
         IRetrieveTreeJpaService<PermissionReqDto, PermissionRespTreeDto, Long, Permission> {
-    List<PermissionRespDto> findByServiceCode(@NotBlank String serviceCode);
-
     List<PermissionRespTreeDto> findByPidAndVersionId(Long pid, Long versionId);
+    List<PermissionRespDto> findByServiceCode(@NotBlank String serviceCode);
 
     List<PermissionRespDto> findByServiceCodes(@NotEmpty List<String> serviceCodes);
 }

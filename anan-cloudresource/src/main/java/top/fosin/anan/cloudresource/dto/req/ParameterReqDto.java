@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import top.fosin.anan.core.util.RegexUtil;
 import top.fosin.anan.data.entity.req.IdLogiSortQuery;
-import top.fosin.anan.data.module.LogicalQueryRule;
+import top.fosin.anan.data.module.LogiQueryRule;
 import top.fosin.anan.data.module.SortRule;
 import top.fosin.anan.data.valid.group.Create;
 import top.fosin.anan.data.valid.group.SingleQuery;
@@ -25,7 +25,7 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @ApiModel(value = "用于存放各种分类分组的个性化参数请求DTO", description = "通用参数的请求DTO")
-public class ParameterReqDto extends IdLogiSortQuery<LogicalQueryRule, SortRule, Long> {
+public class ParameterReqDto extends IdLogiSortQuery<LogiQueryRule, SortRule, Long> {
     private static final long serialVersionUID = -95372770044687456L;
 
     @ApiModelProperty(value = "参数键")

@@ -1,6 +1,8 @@
 package top.fosin.anan.platform.modules.pub.service;
 
+import io.grpc.stub.StreamObserver;
 import lombok.AllArgsConstructor;
+import net.devh.boot.grpc.server.service.GrpcService;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.context.annotation.Lazy;
@@ -10,6 +12,8 @@ import top.fosin.anan.cloudresource.constant.PlatformRedisConstant;
 import top.fosin.anan.cloudresource.dto.req.PermissionReqDto;
 import top.fosin.anan.cloudresource.dto.res.PermissionRespDto;
 import top.fosin.anan.cloudresource.dto.res.PermissionRespTreeDto;
+import top.fosin.anan.cloudresource.grpc.permission.*;
+import top.fosin.anan.cloudresource.grpc.util.StringUtil;
 import top.fosin.anan.core.util.BeanUtil;
 import top.fosin.anan.data.constant.ValueConstant;
 import top.fosin.anan.platform.modules.organization.dao.OrgPermissionDao;
@@ -33,10 +37,10 @@ import java.util.stream.Collectors;
  * @author fosin
  * @date 2017/12/29
  */
-@org.springframework.stereotype.Service
 @Lazy
 @AllArgsConstructor
-public class PermissionServiceImpl implements PermissionService {
+@GrpcService
+public class PermissionServiceImpl extends PermissionServiceGrpc.PermissionServiceImplBase implements PermissionService {
     private final PermissionDao permissionDao;
     private final UserPermissionDao userPermissionDao;
     private final RolePermissionDao rolePermissionDao;
@@ -159,6 +163,65 @@ public class PermissionServiceImpl implements PermissionService {
     }
 
     @Override
+    public void findByServiceCode(ServiceCodeReq request, StreamObserver<PermissionsResp> responseObserver) {
+        String serviceCode = request.getServiceCode();
+        List<Permission> entities = permissionDao.findAllByServiceId(serviceDao.findOneByCode(serviceCode).getId());
+        PermissionsResp permissionsResp = PermissionsResp.newBuilder().addAllPermission(entities.stream().map(entity -> {
+            PermissionResp.Builder builder = PermissionResp.newBuilder();
+            //BeanUtil复制方式会将空字符串变成null值复制到新对象，这里由于GRPC不允许null值导致报错NullPointerException
+//            BeanUtil.copyProperties(entity, builder, BeanUtil.getNullProperties(entity));
+//            builder.setServiceCode(serviceCode);
+            builder.setId(entity.getId())
+                    .setPid(entity.getPid())
+                    .setCode(entity.getCode())
+                    .setName(entity.getName())
+                    .setUrl(StringUtil.getNonNullValue(entity.getUrl()))
+                    .setRoutePath(StringUtil.getNonNullValue(entity.getRoutePath()))
+                    .setType(entity.getType())
+                    .setLevel(entity.getLevel())
+                    .setSort(entity.getSort())
+                    .setStatus(entity.getStatus())
+                    .setServiceId(entity.getServiceId())
+                    .setServiceCode(serviceCode)
+                    .setPath(StringUtil.getNonNullValue(entity.getPath()))
+                    .setMethod(StringUtil.getNonNullValue(entity.getMethod()))
+                    .setIcon(StringUtil.getNonNullValue(entity.getIcon()));
+            return builder.build();
+        }).collect(Collectors.toList())).build();
+        responseObserver.onNext(permissionsResp);
+        responseObserver.onCompleted();
+    }
+    
+    @Override
+    public void findByServiceCodes(ServiceCodesReq request, StreamObserver<PermissionsResp> responseObserver) {
+        List<String> serviceCodes = new ArrayList<>(request.getServiceCodesList());
+        List<Service> services = serviceDao.findByCodeIn(serviceCodes);
+        List<Permission> permissions =
+                permissionDao.findByServiceIdIn(services.stream().map(Service::getId).collect(Collectors.toList()));
+        PermissionsResp permissionsResp = PermissionsResp.newBuilder().addAllPermission(permissions.stream().map(entity -> {
+            PermissionResp.Builder builder = PermissionResp.newBuilder();
+            builder.setId(entity.getId())
+                    .setPid(entity.getPid())
+                    .setCode(entity.getCode())
+                    .setName(entity.getName())
+                    .setUrl(StringUtil.getNonNullValue(entity.getUrl()))
+                    .setRoutePath(StringUtil.getNonNullValue(entity.getRoutePath()))
+                    .setType(entity.getType())
+                    .setLevel(entity.getLevel())
+                    .setSort(entity.getSort())
+                    .setStatus(entity.getStatus())
+                    .setServiceId(entity.getServiceId())
+                    .setServiceCode(services.stream().filter(service -> service.getId().equals(entity.getServiceId())).findFirst().get().getCode())
+                    .setPath(StringUtil.getNonNullValue(entity.getPath()))
+                    .setMethod(StringUtil.getNonNullValue(entity.getMethod()))
+                    .setIcon(StringUtil.getNonNullValue(entity.getIcon()));
+            return builder.build();
+        }).collect(Collectors.toList())).build();
+        responseObserver.onNext(permissionsResp);
+        responseObserver.onCompleted();
+    }
+
+    @Override
     public List<PermissionRespDto> findByServiceCode(String serviceCode) {
         List<Permission> entities = permissionDao.findAllByServiceId(serviceDao.findOneByCode(serviceCode).getId());
         return BeanUtil.copyProperties(entities, PermissionRespDto.class);
@@ -166,12 +229,12 @@ public class PermissionServiceImpl implements PermissionService {
 
     @Override
     public List<PermissionRespDto> findByServiceCodes(List<String> serviceCodes) {
-        List<Service> serviceEntities = serviceDao.findByCodeIn(serviceCodes);
+        List<Service> services = serviceDao.findByCodeIn(serviceCodes);
         List<Permission> permissionEntities =
-                permissionDao.findByServiceIdIn(serviceEntities.stream().map(Service::getId).collect(Collectors.toList()));
+                permissionDao.findByServiceIdIn(services.stream().map(Service::getId).collect(Collectors.toList()));
         List<PermissionRespDto> permissionRespDtos = BeanUtil.copyProperties(permissionEntities, PermissionRespDto.class);
         for (PermissionRespDto permissionRespDto : permissionRespDtos) {
-            for (Service serviceEntity : serviceEntities) {
+            for (Service serviceEntity : services) {
                 if (serviceEntity.getId().equals(permissionRespDto.getServiceId())) {
                     permissionRespDto.setServiceCode(serviceEntity.getCode());
                 }

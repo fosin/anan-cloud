@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+package top.fosin.anan.cloudresource.grpc.permission;
+
+option java_multiple_files = true;
+option java_package = "top.fosin.anan.cloudresource.grpc.permission";
+option java_outer_classname = "PermissionProto";
+
+service PermissionService {
+  //通过单个服务编码获取权限清单
+  rpc findByServiceCode (ServiceCodeReq) returns (PermissionsResp) {}
+  //通过多个服务编码获取权限清单
+  rpc findByServiceCodes (ServiceCodesReq) returns (PermissionsResp) {}
+}
+
+//服务编码
+message ServiceCodeReq {
+  string serviceCode = 1;
+}
+
+//服务编码集合
+message ServiceCodesReq {
+  repeated string serviceCodes = 1;
+}
+
+//权限实体类集合
+message PermissionsResp {
+  repeated PermissionResp permission = 1;
+}
+// 权限实体类
+message PermissionResp {
+  string code = 1;
+  string name = 2;
+  optional string url = 3;
+  optional string routePath = 4;
+  int32 type = 5;
+  int32 level = 6;
+  int32 sort = 7;
+  int32 status = 8;
+  int64 serviceId = 9;
+  string serviceCode = 10;
+  optional string path = 11;
+  optional string method = 12;
+  optional string icon = 13;
+  int64 id = 14;
+  int64 pid = 15;
+}

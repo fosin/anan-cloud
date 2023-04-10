@@ -1,6 +1,5 @@
 package top.fosin.anan.cloudresource.service.inter;
 
-import io.swagger.annotations.ApiOperation;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 import top.fosin.anan.cloudresource.constant.FieldConstant;
@@ -24,11 +23,9 @@ import java.util.List;
         fallback = UserFeignFallbackServiceImpl.class, contextId = "userFeignService")
 public interface UserFeignService {
     @GetMapping({PathConstant.PATH_ID})
-    @ApiOperation("根据主键ID查询一条数据")
     SingleResult<UserRespDto> findOneById(@PathVariable(TreeVO.ID_NAME) Long id, @RequestParam(PathPrefixConstant.API_VERSION_NAME) String version);
 
     @PostMapping({PathConstant.PATH_IDS})
-    @ApiOperation("根据id查询多条数据")
     MultResult<UserRespDto> listByIds(@RequestBody List<Long> ids, @RequestParam(PathPrefixConstant.API_VERSION_NAME) String version);
 
     @GetMapping(PathSuffixConstant.USER_CODE)

@@ -25,6 +25,23 @@ spring:
     user:
       name: @spring.security.user.name@
       password: @spring.security.user.password@
+  cloud:
+    kubernetes:
+      enabled: @spring.cloud.kubernetes.enabled@
+      config:
+        enabled:  @spring.cloud.kubernetes.config.enabled@
+        namespace: @spring.cloud.kubernetes.namespace@
+        sources:
+          - name: @spring.cloud.kubernetes.sharedConfigMap@ #指定 ConfigMap 名称
+          - name: ${spring.application.name} #指定 ConfigMap 名称
+      secrets:
+        enabled:  @spring.cloud.kubernetes.secrets.enabled@
+        namespace: @spring.cloud.kubernetes.namespace@    #指定 Namespace 名称
+        sources:
+          - name: @spring.cloud.kubernetes.sharedSecret@ #指定 ConfigMap 名称
+          - name: ${spring.application.name} #指定 ConfigMap 名称
+      discovery:
+        enabled: @spring.cloud.kubernetes.discovery.enabled@
 management:
   endpoints:
     web:
@@ -39,6 +56,7 @@ encrypt:
     password: @encrypt.key-store.password@
     alias: @encrypt.key-store.alias@
     secret: @encrypt.key-store.secret@
+    type: @encrypt.key-store.type@
   rsa:
     algorithm: default
     strong: false

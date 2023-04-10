@@ -1,6 +1,7 @@
 package top.fosin.anan.auth.service;
 
 
+import lombok.AllArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -9,8 +10,8 @@ import top.fosin.anan.auth.dao.UserDao;
 import top.fosin.anan.auth.po.User;
 import top.fosin.anan.auth.po.UserAllPermissions;
 import top.fosin.anan.auth.service.inter.AuthService;
-import top.fosin.anan.cloudresource.constant.PlatformRedisConstant;
 import top.fosin.anan.cloudresource.constant.PathPrefixConstant;
+import top.fosin.anan.cloudresource.constant.PlatformRedisConstant;
 import top.fosin.anan.cloudresource.dto.UserAllPermissionTreeDto;
 import top.fosin.anan.cloudresource.dto.UserAuthDto;
 import top.fosin.anan.cloudresource.dto.res.OrgRespDto;
@@ -30,18 +31,11 @@ import java.util.TreeSet;
  * @date 2017/12/29
  */
 @Service
+@AllArgsConstructor
 public class AuthServiceImpl implements AuthService {
     private final UserAllPermissionsDao userAllPermissionsDao;
     private final UserDao userDao;
     private final OrgFeignService orgFeignService;
-
-    public AuthServiceImpl(UserAllPermissionsDao userAllPermissionsDao,
-                           UserDao userDao,
-                           OrgFeignService orgFeignService) {
-        this.userAllPermissionsDao = userAllPermissionsDao;
-        this.userDao = userDao;
-        this.orgFeignService = orgFeignService;
-    }
 
     @Override
     @Cacheable(value = PlatformRedisConstant.ANAN_USER, key = "#usercode", unless = "#result==null")

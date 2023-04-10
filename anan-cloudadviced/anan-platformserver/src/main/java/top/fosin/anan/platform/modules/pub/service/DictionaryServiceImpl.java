@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import top.fosin.anan.cloudresource.constant.SystemConstant;
 import top.fosin.anan.cloudresource.dto.req.DictionaryReqDto;
-import top.fosin.anan.cloudresource.service.AnanUserDetailService;
+import top.fosin.anan.cloudresource.service.UserInfoService;
 import top.fosin.anan.platform.modules.pub.dao.DictionaryDao;
 import top.fosin.anan.platform.modules.pub.dao.DictionaryDetailDao;
 import top.fosin.anan.platform.modules.pub.po.Dictionary;
@@ -29,7 +29,7 @@ import java.util.List;
 public class DictionaryServiceImpl implements DictionaryService {
     private final DictionaryDao dictionaryDao;
     private final DictionaryDetailDao dictionaryDetailDao;
-    private final AnanUserDetailService ananUserDetailService;
+    private final UserInfoService userInfoService;
 
     @Override
     public void preCreate(DictionaryReqDto reqDto) {
@@ -40,7 +40,7 @@ public class DictionaryServiceImpl implements DictionaryService {
     private void hasModifiedPrivileges(int type) {
         if (SystemConstant.SYSTEM_DICTIONARY_TYPE.equals(type)) {
             //非超级管理员不能修改系统字典
-            Assert.isTrue(ananUserDetailService.hasSysAdminRole(), "没有权限增删改系统字典!");
+            Assert.isTrue(userInfoService.hasSysAdminRole(), "没有权限增删改系统字典!");
         }
     }
 

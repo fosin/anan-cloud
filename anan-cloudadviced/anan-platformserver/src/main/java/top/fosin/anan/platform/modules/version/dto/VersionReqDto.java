@@ -7,7 +7,7 @@ import lombok.EqualsAndHashCode;
 import org.springframework.format.annotation.DateTimeFormat;
 import top.fosin.anan.core.util.DateTimeUtil;
 import top.fosin.anan.data.entity.req.IdLogiSortQuery;
-import top.fosin.anan.data.module.LogicalQueryRule;
+import top.fosin.anan.data.module.LogiQueryRule;
 import top.fosin.anan.data.module.SortRule;
 import top.fosin.anan.data.valid.group.Create;
 import top.fosin.anan.data.valid.group.Update;
@@ -28,7 +28,7 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @ApiModel(value = "版本表请求DTO", description = "版本的请求DTO")
-public class VersionReqDto extends IdLogiSortQuery<LogicalQueryRule, SortRule, Long> {
+public class VersionReqDto extends IdLogiSortQuery<LogiQueryRule, SortRule, Long> {
     private static final long serialVersionUID = -91727267823167686L;
 
     @NotBlank(message = "版本名称" + "{javax.validation.constraints.NotBlank.message}",

@@ -8,7 +8,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import top.fosin.anan.core.util.DateTimeUtil;
 import top.fosin.anan.core.util.RegexUtil;
 import top.fosin.anan.data.entity.req.IdLogiSortOrganizQuery;
-import top.fosin.anan.data.module.LogicalQueryRule;
+import top.fosin.anan.data.module.LogiQueryRule;
 import top.fosin.anan.data.module.SortRule;
 import top.fosin.anan.data.valid.group.Create;
 import top.fosin.anan.data.valid.group.Update;
@@ -26,7 +26,7 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @ApiModel(value = "用户表请求DTO", description = "用户的请求DTO")
-public class UserReqDto extends IdLogiSortOrganizQuery<LogicalQueryRule, SortRule, Long> {
+public class UserReqDto extends IdLogiSortOrganizQuery<LogiQueryRule, SortRule, Long> {
     private static final long serialVersionUID = -24340282458700184L;
 
     @NotBlank(message = "用户工号" + "{javax.validation.constraints.NotBlank.message}",
@@ -40,6 +40,26 @@ public class UserReqDto extends IdLogiSortOrganizQuery<LogicalQueryRule, SortRul
     @ApiModelProperty(value = "用户姓名,创建和更新时必填")
     @Pattern(regexp = RegexUtil.SPECIAL, message = "用户姓名不能包含特殊字符")
     private String username;
+
+    @ApiModelProperty(value = "姓氏", example = "String")
+    @Size(message = "姓氏" + "{javax.validation.constraints.Size.message}", max = 32)
+    private String familyName;
+
+    @ApiModelProperty(value = "中间名", example = "String")
+    @Size(message = "中间名" + "{javax.validation.constraints.Size.message}", max = 64)
+    private String middleName;
+
+    @ApiModelProperty(value = "名字", example = "String")
+    @Size(message = "名字" + "{javax.validation.constraints.Size.message}", max = 32)
+    private String givenName;
+
+    @ApiModelProperty(value = "昵称", example = "String")
+    @Size(message = "昵称" + "{javax.validation.constraints.Size.message}", max = 32)
+    private String nickname;
+
+    @ApiModelProperty(value = "希望被称呼的名字", example = "String")
+    @Size(message = "希望被称呼的名字" + "{javax.validation.constraints.Size.message}", max = 32)
+    private String preferredUsername;
 
     @Past(message = "生日" + "{javax.validation.constraints.Past.message}",
             groups = {Create.class, Update.class})
@@ -74,16 +94,13 @@ public class UserReqDto extends IdLogiSortOrganizQuery<LogicalQueryRule, SortRul
     @ApiModelProperty(value = "头像")
     private String avatar;
 
+    @ApiModelProperty(value = "网站地址", example = "String")
+    private String website;
+
     @ApiModelProperty(value = "过期时间，账户过期后用户被锁定切不能登录系统,创建和更新时必填")
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
     @NotNull(message = "过期时间" + "{javax.validation.constraints.NotNull.message}",
             groups = {Create.class, Update.class})
     private Date expireTime;
-
-    @ApiModelProperty(value = "创建人", example = "1")
-    private Long createBy;
-
-    @ApiModelProperty(value = "修改人", example = "1")
-    private Long updateBy;
 
 }

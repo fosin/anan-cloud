@@ -1,16 +1,20 @@
 package top.fosin.anan.platform.modules.organization.service;
 
+import io.grpc.stub.StreamObserver;
 import lombok.AllArgsConstructor;
+import net.devh.boot.grpc.server.service.GrpcService;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import top.fosin.anan.cloudresource.constant.PlatformRedisConstant;
 import top.fosin.anan.cloudresource.dto.res.OrgRespDto;
 import top.fosin.anan.cloudresource.dto.res.OrgTreeDto;
-import top.fosin.anan.cloudresource.service.AnanUserDetailService;
+import top.fosin.anan.cloudresource.grpc.organiz.*;
+import top.fosin.anan.cloudresource.grpc.util.StringUtil;
+import top.fosin.anan.cloudresource.service.UserInfoService;
 import top.fosin.anan.core.util.BeanUtil;
 import top.fosin.anan.data.service.ICrudBatchService;
 import top.fosin.anan.platform.modules.organization.dao.OrgDao;
@@ -22,17 +26,18 @@ import top.fosin.anan.redis.cache.AnanCacheManger;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author fosin
  * @date 2017/12/29
  */
-@Service
+@GrpcService
 @Lazy
 @AllArgsConstructor
-public class OrgServiceImpl implements OrgService {
+public class OrgServiceImpl extends OrganizServiceGrpc.OrganizServiceImplBase implements OrgService {
     private final OrgDao orgDao;
-    private final AnanUserDetailService ananUserDetailService;
+    private final UserInfoService userInfoService;
     private final AnanCacheManger ananCacheManger;
 
     @Override
@@ -42,8 +47,7 @@ public class OrgServiceImpl implements OrgService {
         Long pid = reqDto.getPid();
         int level = 1;
         if (pid == 0) {
-            ananUserDetailService.clear();
-            Assert.isTrue(ananUserDetailService.hasSysAdminRole(), "只有超级管理员才能创建顶级机构!");
+            Assert.isTrue(userInfoService.hasSysAdminRole(), "只有超级管理员才能创建顶级机构!");
             createEntity.setTopId(0L);
         } else {
             Organization parentEntity = orgDao.findById(pid).orElse(null);
@@ -125,21 +129,77 @@ public class OrgServiceImpl implements OrgService {
 
     @Override
     public List<OrgTreeDto> listAllChild(Long pid) {
-        List<Organization> result = new ArrayList<>();
+        List<Organization> organizations = listAllChildReal(pid);
+        return BeanUtil.copyProperties(organizations, OrgTreeDto.class);
+    }
+
+    private List<Organization> listAllChildReal(Long pid) {
+        List<Organization> organizations = new ArrayList<>();
         if (pid == 0) {
             List<Organization> list = orgDao.findByPidOrderByCodeAsc(pid);
             for (Organization organization : list) {
                 List<Organization> byCodeStartingWith = orgDao.findByTopIdAndCodeStartingWithOrderByCodeAsc(organization.getTopId(), organization.getCode());
-                result.addAll(byCodeStartingWith);
+                organizations.addAll(byCodeStartingWith);
             }
         } else {
             Organization organization = orgDao.findById(pid).orElse(null);
             if (organization != null) {
                 List<Organization> byCodeStartingWith = orgDao.findByTopIdAndCodeStartingWithOrderByCodeAsc(organization.getTopId(), organization.getCode());
-                result.addAll(byCodeStartingWith);
+                organizations.addAll(byCodeStartingWith);
             }
         }
-        return BeanUtil.copyProperties(result, OrgTreeDto.class);
+        return organizations;
+    }
+
+    @Override
+    @Cacheable(value = PlatformRedisConstant.ANAN_ORGANIZATION, key = "#request.getId()")
+    public void findOneById(OrganizIdReq request, StreamObserver<OrganizResp> responseObserver) {
+        long id = request.getId();
+        Organization organization = this.getDao().findById(id).orElseThrow(() -> new IllegalArgumentException("未找到对应数据!"));
+        OrganizResp organizResp = getOrganizResp(organization);
+        responseObserver.onNext(organizResp);
+        responseObserver.onCompleted();
+    }
+
+    @NotNull
+    private OrganizResp getOrganizResp(Organization entity) {
+        return OrganizResp.newBuilder()
+                .setCode(entity.getCode())
+                .setName(entity.getName())
+                .setAddress(StringUtil.getNonNullValue(entity.getAddress()))
+                .setPid(entity.getPid())
+                .setStatus(entity.getStatus())
+                .setFullname(StringUtil.getNonNullValue(entity.getFullname()))
+                .setId(entity.getId())
+                .setLevel(entity.getLevel())
+                .setTelphone(StringUtil.getNonNullValue(entity.getTelphone()))
+                .setTopId(entity.getTopId()).build();
+    }
+
+    @Override
+    public void listByIds(OrganizIdsReq request, StreamObserver<OrganizsResp> responseObserver) {
+        List<Long> ids = request.getIdList();
+        List<Organization> organizations = this.getDao().findAllById(ids);
+        toGrpcResps(responseObserver, organizations);
+    }
+
+    private void toGrpcResps(StreamObserver<OrganizsResp> responseObserver, List<Organization> organizations) {
+        OrganizsResp organizsResp = OrganizsResp.newBuilder().addAllOrganiz(organizations.stream()
+                .map(this::getOrganizResp).collect(Collectors.toList())).build();
+        responseObserver.onNext(organizsResp);
+        responseObserver.onCompleted();
+    }
+
+    @Override
+    public void listChild(OrganizPidReq request, StreamObserver<OrganizsResp> responseObserver) {
+        List<Organization> organizations = orgDao.findByPidOrderByCodeAsc(request.getPid());
+        toGrpcResps(responseObserver, organizations);
+    }
+
+    @Override
+    public void listAllChild(OrganizPidReq request, StreamObserver<OrganizsResp> responseObserver) {
+        List<Organization> organizations = listAllChildReal(request.getPid());
+        toGrpcResps(responseObserver, organizations);
     }
 
     @Override

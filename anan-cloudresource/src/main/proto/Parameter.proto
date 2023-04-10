@@ -1,0 +1,79 @@
+syntax = "proto3";
+
+package top.fosin.anan.cloudresource.grpc.parameter;
+
+option java_multiple_files = true;
+option java_package = "top.fosin.anan.cloudresource.grpc.parameter";
+option java_outer_classname = "ParameterProto";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/wrappers.proto";
+
+service ParameterService {
+  //应用单个变更参数
+  rpc applyChange (ParameterIdReq) returns (google.protobuf.BoolValue) {}
+  //应用指定的变更参数
+  rpc applyChanges (ParameterIdsReq) returns (google.protobuf.BoolValue) {}
+  //应用所有变更得参数
+  rpc applyChangeAll (google.protobuf.Empty) returns (google.protobuf.BoolValue) {}
+  //取消删除的参数
+  rpc cancelDelete (ParameterIdsReq) returns (google.protobuf.Empty) {}
+  //根据3参数获取参数详细信息
+  rpc getParameter (ParameterThreeArgsReq) returns (ParameterResp) {}
+  //根据3参数获取最新的参数详细信息
+  rpc getNearestParameter (ParameterThreeArgsReq) returns (ParameterResp) {}
+  //更新参数
+  rpc processUpdate (ParameterReq) returns (google.protobuf.Empty) {}
+  //获取参数，如果没有就创建
+  rpc getOrCreateParameter (getOrCreateReq) returns (google.protobuf.StringValue) {}
+}
+
+//参数序号请求
+message ParameterIdReq {
+  int64 id = 1;
+}
+//参数序号集合请求
+message ParameterIdsReq {
+  repeated int64 id = 1;
+}
+//参数请求
+message ParameterReq {
+  string name = 1;
+  string value = 2;
+  int32 type = 3;
+  string scope = 4;
+  string defaultValue = 5;
+  string description = 6;
+  int32 status = 7;
+  google.protobuf.Timestamp applyTime = 8;
+}
+//三重要参数请求
+message ParameterThreeArgsReq {
+  int32 type = 1;
+  string scope = 2;
+  string name = 3;
+}
+
+//参数信息请求
+message getOrCreateReq {
+  int32 type = 1;
+  string scope = 2;
+  string name = 3;
+  string defaultValue = 4;
+  string description = 5;
+}
+
+//参数信息响应
+message ParameterResp {
+  string name = 1;
+  string value = 2;
+  int32 type = 3;
+  string scope = 4;
+  string defaultValue = 5;
+  string description = 6;
+  int32 status = 7;
+  google.protobuf.Timestamp applyTime = 8;
+  int64 applyBy = 9;
+  int64 id = 10;
+}
+

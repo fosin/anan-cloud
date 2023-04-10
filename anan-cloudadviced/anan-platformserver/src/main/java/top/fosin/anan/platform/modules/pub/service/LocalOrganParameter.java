@@ -8,13 +8,13 @@ import top.fosin.anan.cloudresource.dto.res.ParameterRespDto;
 import top.fosin.anan.cloudresource.parameter.IParameter;
 import top.fosin.anan.cloudresource.parameter.IParameterStrategy;
 import top.fosin.anan.cloudresource.parameter.OrganStrategy;
-import top.fosin.anan.cloudresource.service.AnanUserDetailService;
+import top.fosin.anan.cloudresource.service.UserInfoService;
 import top.fosin.anan.platform.modules.pub.service.inter.ParameterService;
 
 import java.util.Objects;
 
 /**
- * 数据库参数工具类
+ * 机构参数-本地模式
  *
  * @author fosin
  * @date 2018.8.1
@@ -24,7 +24,7 @@ import java.util.Objects;
 @AllArgsConstructor
 public class LocalOrganParameter implements IParameter {
     private final ParameterService parameterService;
-    private final AnanUserDetailService ananUserDetailService;
+    private final UserInfoService userInfoService;
 
     @Override
     public ParameterRespDto setParameter(String scope, String name, String value, String description) {
@@ -49,12 +49,12 @@ public class LocalOrganParameter implements IParameter {
 
     @Override
     public String getOrCreateParameter(String scope, String name, String defaultValue, String description) {
-        return Objects.requireNonNull(parameterService.getOrCreateParameter(this.getParameterStrategy().getType(),
-                scope, name, defaultValue, description)).getValue();
+        return parameterService.getOrCreateParameter(this.getParameterStrategy().getType(),
+                scope, name, defaultValue, description);
     }
 
     @Override
     public IParameterStrategy getParameterStrategy() {
-        return new OrganStrategy(ananUserDetailService);
+        return new OrganStrategy(userInfoService);
     }
 }

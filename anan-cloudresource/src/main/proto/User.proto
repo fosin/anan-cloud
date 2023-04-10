@@ -1,0 +1,79 @@
+syntax = "proto3";
+
+package top.fosin.anan.cloudresource.grpc.user;
+
+option java_multiple_files = true;
+option java_package = "top.fosin.anan.cloudresource.grpc.user";
+option java_outer_classname = "UserProto";
+import "google/protobuf/timestamp.proto";
+
+service UserService {
+  //通过用户序号查询用户数据
+  rpc findOneById (UserIdReq) returns (UserResp) {}
+  //通过多个用户序号查询用户数据集合
+  rpc listByIds (UserIdsReq) returns (UsersResp) {}
+  //通过用户工号查询用户数据
+  rpc findOneByUsercode (UsercodeReq) returns (UserResp) {}
+  //通过多个用户序号查询用户数据集合
+  rpc listByOrganizId (OrganizReq) returns (UsersResp) {}
+  //通过多个用户序号查询用户数据集合
+  rpc listAllChildByTopId (TopOrganizReq) returns (UsersResp) {}
+}
+
+//机构请求
+message OrganizReq {
+  int64 organizId = 1;
+  int32 status = 2;
+}
+//顶级机构请求
+message TopOrganizReq {
+  int64 topId = 1;
+  int32 status = 2;
+}
+//用户工号请求
+message UsercodeReq {
+  string usercode = 1;
+}
+
+//用户序号请求
+message UserIdReq {
+  int64 id = 1;
+}
+
+//用户序号集合请求
+message UserIdsReq {
+  repeated int64 id = 1;
+}
+
+//用户信息集合响应
+message UsersResp {
+  repeated UserResp user = 1;
+}
+//用户信息响应
+message UserResp {
+  string usercode = 1;
+  string username = 2;
+  optional string familyName = 3;
+  optional string middleName = 4;
+  optional string givenName = 5;
+  optional string nickname = 6;
+  optional string preferredUsername = 7;
+  int32 realNameVerified = 8;
+  int64 topId = 9;
+  google.protobuf.Timestamp birthday = 10;
+  int32 sex = 11;
+  optional string email = 12;
+  int32 emailVerified = 13;
+  optional string phone = 14;
+  int32 phoneVerified = 15;
+  int32 status = 16;
+  optional string avatar = 17;
+  optional string website = 18;
+  google.protobuf.Timestamp expireTime = 19;
+  int64 id = 20;
+  int64 oganizId = 21;
+  int64 createBy = 22;
+  google.protobuf.Timestamp createTime = 23;
+  int64 updateBy = 24;
+  google.protobuf.Timestamp updateTime = 25;
+}

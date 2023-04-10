@@ -1,7 +1,7 @@
 package top.fosin.anan.auth.config;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.oauth2.common.exceptions.OAuth2Exception;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import top.fosin.anan.cloudresource.exception.DefaultExceptionHandler;
@@ -20,8 +20,8 @@ public class AuthExceptionHandler extends DefaultExceptionHandler {
         super(ananDataProperties);
     }
 
-    @ExceptionHandler({OAuth2Exception.class})
-    public Result oAuth2Exception(OAuth2Exception e) {
+    @ExceptionHandler({AuthenticationException.class})
+    public Result authenticationException(AuthenticationException e) {
         String message = getRealCause(e);
         log.info(message);
         if (log.isDebugEnabled()) {

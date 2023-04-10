@@ -30,7 +30,7 @@ public interface PermissionFeignService {
      * @param version     api版本号
      * @return 应用权限列表
      */
-    @GetMapping(PathSuffixConstant.SERVICE_CODE)
+    @GetMapping(PathSuffixConstant.SERVICE_CODE_VARIBALE)
     MultResult<PermissionRespDto> findByServiceCode(@PathVariable(FieldConstant.SERVICE_CODE) String serviceCode, @RequestParam(PathPrefixConstant.API_VERSION_NAME) String version);
 
     /**

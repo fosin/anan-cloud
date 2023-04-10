@@ -9,7 +9,7 @@ import org.springframework.util.Assert;
 import top.fosin.anan.cloudresource.constant.PlatformRedisConstant;
 import top.fosin.anan.cloudresource.dto.res.UserRespDto;
 import top.fosin.anan.cloudresource.dto.res.UserRoleRespDto;
-import top.fosin.anan.cloudresource.service.AnanUserDetailService;
+import top.fosin.anan.cloudresource.service.UserInfoService;
 import top.fosin.anan.core.util.BeanUtil;
 import top.fosin.anan.platform.modules.role.dto.RoleUserReqDto;
 import top.fosin.anan.platform.modules.role.po.Role;
@@ -32,7 +32,7 @@ import java.util.List;
 public class RoleUserServiceImpl implements RoleUserService {
     private final UserRoleDao userRoleDao;
     private final AnanCacheManger ananCacheManger;
-    private final AnanUserDetailService ananUserDetailService;
+    private final UserInfoService userInfoService;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -45,7 +45,7 @@ public class RoleUserServiceImpl implements RoleUserService {
             role.setId(dto.getRoleId());
             userRole.setRole(role);
             if (dto.getOrganizId() == null) {
-                userRole.setOrganizId(ananUserDetailService.getAnanOrganizId());
+                userRole.setOrganizId(userInfoService.getAnanOrganizId());
             } else {
                 userRole.setOrganizId(dto.getOrganizId());
             }

@@ -27,5 +27,4 @@ public interface IParameterStrategy {
      * @return 作用域
      */
     String getScope();
-
 }

@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import top.fosin.anan.core.util.RegexUtil;
 import top.fosin.anan.data.entity.req.IdLogiSortPidQuery;
-import top.fosin.anan.data.module.LogicalQueryRule;
+import top.fosin.anan.data.module.LogiQueryRule;
 import top.fosin.anan.data.module.SortRule;
 import top.fosin.anan.data.valid.group.Create;
 import top.fosin.anan.data.valid.group.Delete;
@@ -24,7 +24,7 @@ import javax.validation.constraints.*;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @ApiModel(value = "机构表创建DTO", description = "机构的创建DTO")
-public class OrgReqDto extends IdLogiSortPidQuery<LogicalQueryRule, SortRule, Long> {
+public class OrgReqDto extends IdLogiSortPidQuery<LogiQueryRule, SortRule, Long> {
     private static final long serialVersionUID = 389815217019211695L;
 
     @Positive(message = "顶级机构序号" + "{javax.validation.constraints.Positive.message}",

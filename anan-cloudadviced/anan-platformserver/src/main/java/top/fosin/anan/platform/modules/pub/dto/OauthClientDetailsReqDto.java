@@ -3,7 +3,7 @@ package top.fosin.anan.platform.modules.pub.dto;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import top.fosin.anan.data.module.LogicalQueryRule;
+import top.fosin.anan.data.module.LogiQueryRule;
 import top.fosin.anan.data.module.SortRule;
 import top.fosin.anan.data.prop.IdProp;
 import top.fosin.anan.data.prop.QuerySortRuleProp;
@@ -27,7 +27,7 @@ import java.util.List;
 @Data
 @ApiModel(value = "OAuth2客户端接入配置请求DTO", description = "OAuth2客户端接入配置的请求DTO")
 public class OauthClientDetailsReqDto implements IdProp<String>,
-        QuerySortRuleProp<LogicalQueryRule, SortRule> {
+        QuerySortRuleProp<LogiQueryRule, SortRule> {
     private static final long serialVersionUID = -19073929038045745L;
 
     @NotBlank(message = "客户端序号" + "{javax.validation.constraints.NotBlank.message}",
@@ -97,7 +97,7 @@ public class OauthClientDetailsReqDto implements IdProp<String>,
     @ApiModelProperty(value = QUERY_RULE_DESCRIPTION)
     @NotNull(message = QUERY_RULE_DESCRIPTION + "{javax.validation.constraints.NotNull.message}",
             groups = {DynamicQuery.class})
-    private LogicalQueryRule queryRule;
+    private LogiQueryRule queryRule;
 
     @ApiModelProperty(value = SORT_RULE_DESCRIPTION)
     @NotEmpty(message = SORT_RULE_DESCRIPTION + "{javax.validation.constraints.NotEmpty.message}",

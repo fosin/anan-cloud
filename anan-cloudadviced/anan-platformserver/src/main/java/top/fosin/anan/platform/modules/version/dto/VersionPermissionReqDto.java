@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import top.fosin.anan.data.entity.req.IdLogiSortQuery;
-import top.fosin.anan.data.module.LogicalQueryRule;
+import top.fosin.anan.data.module.LogiQueryRule;
 import top.fosin.anan.data.module.SortRule;
 import top.fosin.anan.data.prop.ForeignKeyProp;
 import top.fosin.anan.data.valid.group.Create;
@@ -24,7 +24,7 @@ import javax.validation.constraints.Positive;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @ApiModel(value = "版本权限表请求DTO", description = "版本权限的请求DTO")
-public class VersionPermissionReqDto extends IdLogiSortQuery<LogicalQueryRule, SortRule, Long>
+public class VersionPermissionReqDto extends IdLogiSortQuery<LogiQueryRule, SortRule, Long>
         implements ForeignKeyProp<Long> {
     private static final long serialVersionUID = 425131909775170449L;
 

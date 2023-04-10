@@ -79,7 +79,7 @@ public class ParameterController implements ISimpleController<ParameterReqDto, P
         String name = reqDto.getName();
         String defaultValue = reqDto.getDefaultValue();
         String description = reqDto.getDescription();
-        return ResultUtils.success(parameterService.getOrCreateParameter(type, scope, name, defaultValue, description).getValue());
+        return ResultUtils.success(parameterService.getOrCreateParameter(type, scope, name, defaultValue, description));
     }
 
     @ApiOperation(value = "根据参数ID刷新参数缓存信息", notes = "该方法是幂等性的，可以重复调用")
@@ -106,7 +106,7 @@ public class ParameterController implements ISimpleController<ParameterReqDto, P
     @ApiOperation(value = "取消删除参数")
     @ApiImplicitParam(name = "ids", value = "主键编号集合",
             paramType = "body", required = true, dataTypeClass = Collection.class)
-    public void cancelDelete(@NotEmpty @RequestBody Collection<Long> ids) {
+    public void cancelDelete(@NotEmpty @RequestBody List<Long> ids) {
         getService().cancelDelete(ids);
     }
 

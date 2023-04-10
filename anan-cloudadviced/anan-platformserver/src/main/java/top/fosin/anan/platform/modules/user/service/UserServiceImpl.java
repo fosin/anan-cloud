@@ -1,13 +1,16 @@
 package top.fosin.anan.platform.modules.user.service;
 
+import com.google.protobuf.Timestamp;
+import io.grpc.stub.StreamObserver;
 import lombok.AllArgsConstructor;
+import net.devh.boot.grpc.server.service.GrpcService;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
@@ -15,7 +18,9 @@ import top.fosin.anan.cloudresource.constant.PlatformRedisConstant;
 import top.fosin.anan.cloudresource.constant.SystemConstant;
 import top.fosin.anan.cloudresource.dto.req.UserReqDto;
 import top.fosin.anan.cloudresource.dto.res.UserRespDto;
-import top.fosin.anan.cloudresource.service.AnanUserDetailService;
+import top.fosin.anan.cloudresource.grpc.user.*;
+import top.fosin.anan.cloudresource.grpc.util.StringUtil;
+import top.fosin.anan.cloudresource.service.UserInfoService;
 import top.fosin.anan.core.util.BeanUtil;
 import top.fosin.anan.core.util.RegexUtil;
 import top.fosin.anan.data.entity.req.PageQuery;
@@ -39,21 +44,22 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 /**
  * @author fosin
  * @date 2017/12/27
  */
-@Service
+@GrpcService
 @Lazy
 @AllArgsConstructor
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase implements UserService {
     private final UserDao userDao;
     private final UserRoleDao userRoleDao;
     private final PasswordEncoder passwordEncoder;
     private final LocalOrganParameter localOrganParameter;
     private final AnanCacheManger ananCacheManger;
-    private final AnanUserDetailService ananUserDetailService;
+    private final UserInfoService userInfoService;
     private final OrgDao orgDao;
 
     /**
@@ -75,7 +81,7 @@ public class UserServiceImpl implements UserService {
         UserRespDto respDto = BeanUtil.copyProperties(userEntity, UserRespDto.class);
         Long organizId = userEntity.getOrganizId();
         if (organizId > 0) {
-            Organization organization = orgDao.getById(organizId);
+            Organization organization = orgDao.getReferenceById(organizId);
             respDto.setTopId(organization.getTopId());
         }
         return respDto;
@@ -95,7 +101,7 @@ public class UserServiceImpl implements UserService {
         UserRespDto respDto = BeanUtil.copyProperties(userEntity, UserRespDto.class);
         Long organizId = userEntity.getOrganizId();
         if (organizId > 0) {
-            Organization organization = orgDao.getById(organizId);
+            Organization organization = orgDao.getReferenceById(organizId);
             respDto.setTopId(organization.getTopId());
         }
         return respDto;
@@ -133,10 +139,10 @@ public class UserServiceImpl implements UserService {
         Long id = reqDto.getId();
         User createUser = userDao.findById(id).orElseThrow(() -> new IllegalArgumentException("通过ID：" + id + "未能找到对应的数据!"));
         String usercode = createUser.getUsercode().toLowerCase();
-        if (ananUserDetailService.isAdminUser(usercode) && !usercode.equals(reqDto.getUsercode().toLowerCase())) {
+        if (userInfoService.isAdminUser(usercode) && !usercode.equals(reqDto.getUsercode().toLowerCase())) {
             throw new IllegalArgumentException("不能修改管理员" + SystemConstant.ADMIN_USER_CODE + "的帐号名称!");
         }
-        Assert.isTrue(!ananUserDetailService.isSysAdminUser(usercode),
+        Assert.isTrue(!userInfoService.isSysAdminUser(usercode),
                 "不能修改超级管理员帐号信息!");
         BeanUtil.copyProperties(reqDto, createUser, ignoreProperties);
         ananCacheManger.evict(PlatformRedisConstant.ANAN_USER, usercode);
@@ -158,8 +164,8 @@ public class UserServiceImpl implements UserService {
     }
 
     private void deleteByEntity(User entity) {
-        Assert.isTrue(!ananUserDetailService.isSysAdminUser(entity.getUsercode())
-                && !ananUserDetailService.isAdminUser(entity.getUsercode()), "不能删除管理员帐号!");
+        Assert.isTrue(!userInfoService.isSysAdminUser(entity.getUsercode())
+                && !userInfoService.isAdminUser(entity.getUsercode()), "不能删除管理员帐号!");
         List<UserRole> userRoles = userRoleDao.findByUserId(entity.getId());
         Assert.isTrue(userRoles.size() == 0, "该用户下还存在角色信息,不能直接删除用户!");
         ananCacheManger.evict(PlatformRedisConstant.ANAN_USER, entity.getUsercode());
@@ -185,7 +191,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public PageResult<UserRespDto> findPage(PageQuery<UserReqDto> PageQuery) {
-        boolean sysAdminUser = ananUserDetailService.isSysAdminUser();
+        boolean sysAdminUser = userInfoService.isSysAdminUser();
         UserReqDto params = PageQuery.getParams();
 
         if (sysAdminUser) {
@@ -198,7 +204,7 @@ public class UserServiceImpl implements UserService {
             Path<String> phonePath = root.get("phone");
             Path<String> emailPath = root.get("email");
 
-            Long organizId = ananUserDetailService.getAnanOrganizId();
+            Long organizId = userInfoService.getAnanOrganizId();
             Organization organization = orgDao.findById(organizId).orElse(null);
 
             Subquery<Integer> subQuery = query.subquery(Integer.class);
@@ -266,7 +272,7 @@ public class UserServiceImpl implements UserService {
     public String resetPassword(Long id) {
         Assert.notNull(id, "用户ID不能为空!");
 
-        Long loginId = ananUserDetailService.getAnanUserId();
+        Long loginId = userInfoService.getAnanUserId();
         Assert.isTrue(!Objects.equals(loginId, id), "不能重置本人密码,请使用修改密码功能!");
         User user = userDao.findById(id).orElse(null);
         String password = getPassword();
@@ -309,29 +315,39 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserRespDto> listAllChildByTopId(Long topId, Integer status) {
+        List<User> entities = listAllChildByTopIdReal(topId, status);
+        return BeanUtil.copyProperties(entities, UserRespDto.class);
+    }
+
+    private List<User> listAllChildByTopIdReal(Long topId, Integer status) {
         List<User> entities;
-        if (ananUserDetailService.isUserRequest() && ananUserDetailService.hasSysAdminRole()) {
+        if (userInfoService.isUserRequest() && userInfoService.hasSysAdminRole()) {
             entities = userDao.findAll();
         } else {
             if (topId < 1) {
                 Organization organiz =
-                        orgDao.findById(ananUserDetailService.getAnanOrganizId()).orElseThrow(() -> new IllegalArgumentException("根据传入的机构编码没有找到任何数据!"));
+                        orgDao.findById(userInfoService.getAnanOrganizId()).orElseThrow(() -> new IllegalArgumentException("根据传入的机构编码没有找到任何数据!"));
                 topId = organiz.getTopId();
             }
             entities = userDao.findByTopIdAndStatus(topId, status);
-            entities.add(userDao.getById(SystemConstant.ANAN_USER_ID));
+            entities.add(userDao.getReferenceById(SystemConstant.ANAN_USER_ID));
         }
-        return BeanUtil.copyProperties(entities, UserRespDto.class);
+        return entities;
     }
 
     @Override
     public List<UserRespDto> listByOrganizId(Long organizId, Integer status) {
+        List<User> entities = listByOrganizIdReal(organizId, status);
+        return BeanUtil.copyProperties(entities, UserRespDto.class);
+    }
+
+    private List<User> listByOrganizIdReal(Long organizId, Integer status) {
         List<User> entities;
-        if (ananUserDetailService.isUserRequest() && ananUserDetailService.hasSysAdminRole()) {
+        if (userInfoService.isUserRequest() && userInfoService.hasSysAdminRole()) {
             entities = userDao.findAll();
         } else {
             Organization organiz = orgDao.findById(organizId).orElseThrow(() -> new IllegalArgumentException("根据传入的机构编码没有找到任何数据!"));
-            List<Organization> organizs = orgDao.findByTopIdAndCodeStartingWithOrderByCodeAsc(organiz.getTopId(),organiz.getCode());
+            List<Organization> organizs = orgDao.findByTopIdAndCodeStartingWithOrderByCodeAsc(organiz.getTopId(), organiz.getCode());
 
             Specification<User> condition = (root, query, cb) -> {
                 Path<Long> organizIdPath = root.get("organizId");
@@ -351,7 +367,7 @@ public class UserServiceImpl implements UserService {
             };
             entities = userDao.findAll(condition);
         }
-        return BeanUtil.copyProperties(entities, UserRespDto.class);
+        return entities;
     }
 
     /**
@@ -376,6 +392,98 @@ public class UserServiceImpl implements UserService {
             ananCacheManger.evict(PlatformRedisConstant.ANAN_USER_PERMISSION_TREE, id + "");
         });
         return count;
+    }
+
+    @Override
+    public void findOneById(UserIdReq request, StreamObserver<UserResp> responseObserver) {
+        long id = request.getId();
+        User user = this.getDao().findById(id).orElseThrow(() -> new IllegalArgumentException("未找到对应数据!"));
+        toGrpcResp(responseObserver, user);
+    }
+
+    private void toGrpcResp(StreamObserver<UserResp> responseObserver, User user) {
+        Long organizId = user.getOrganizId();
+        Long topId = 0L;
+        if (organizId > 0) {
+            Organization organization = orgDao.getReferenceById(organizId);
+            topId = organization.getTopId();
+        }
+        UserResp userResp = getUserResp(user, topId);
+        responseObserver.onNext(userResp);
+        responseObserver.onCompleted();
+    }
+
+    @Override
+    public void findOneByUsercode(UsercodeReq request, StreamObserver<UserResp> responseObserver) {
+        String usercode = request.getUsercode();
+        User user = this.getDao().findByUsercode(usercode);
+        toGrpcResp(responseObserver, user);
+    }
+
+    @NotNull
+    private static UserResp getUserResp(User user, Long topId) {
+        return UserResp.newBuilder()
+                .setUsercode(user.getUsercode())
+                .setUsername(user.getUsername())
+                .setFamilyName(StringUtil.getNonNullValue(user.getFamilyName()))
+                .setMiddleName(StringUtil.getNonNullValue(user.getMiddleName()))
+                .setGivenName(StringUtil.getNonNullValue(user.getGivenName()))
+                .setNickname(StringUtil.getNonNullValue(user.getNickname()))
+                .setPreferredUsername(StringUtil.getNonNullValue(user.getPreferredUsername()))
+                .setRealNameVerified(user.getRealNameVerified())
+                .setOganizId(user.getOrganizId())
+                .setTopId(topId)
+                .setBirthday(Timestamp.newBuilder().setSeconds(user.getBirthday().getTime() / 1000).build())
+                .setSex(user.getSex())
+                .setEmail(StringUtil.getNonNullValue(user.getEmail()))
+                .setEmailVerified(user.getEmailVerified())
+                .setPhone(StringUtil.getNonNullValue(user.getPhone()))
+                .setPhoneVerified(user.getPhoneVerified())
+                .setStatus(user.getStatus())
+                .setAvatar(StringUtil.getNonNullValue(user.getAvatar()))
+                .setWebsite(StringUtil.getNonNullValue(user.getWebsite()))
+                .setExpireTime(Timestamp.newBuilder().setSeconds(user.getExpireTime().getTime() / 1000).build())
+                .setId(user.getId())
+                .setCreateBy(user.getCreateBy())
+                .setCreateTime(Timestamp.newBuilder().setSeconds(user.getCreateTime().getTime() / 1000).build())
+                .setUpdateBy(user.getUpdateBy())
+                .setUpdateTime(Timestamp.newBuilder().setSeconds(user.getUpdateTime().getTime() / 1000).build())
+                .build();
+    }
+
+    @Override
+    public void listByIds(UserIdsReq request, StreamObserver<UsersResp> responseObserver) {
+        List<Long> ids = request.getIdList();
+        List<User> users = this.getDao().findAllById(ids);
+        toGrpcResps(responseObserver, users);
+    }
+
+    @Override
+    public void listByOrganizId(OrganizReq request, StreamObserver<UsersResp> responseObserver) {
+        List<User> users = listByOrganizIdReal(request.getOrganizId(), request.getStatus());
+        toGrpcResps(responseObserver, users);
+    }
+
+    @Override
+    public void listAllChildByTopId(TopOrganizReq request, StreamObserver<UsersResp> responseObserver) {
+        List<User> users = listAllChildByTopIdReal(request.getTopId(), request.getStatus());
+        toGrpcResps(responseObserver, users);
+    }
+
+    private void toGrpcResps(StreamObserver<UsersResp> responseObserver, List<User> users) {
+        var ref = new Object() {
+            Long topId = 0L;
+        };
+        UsersResp usersResp = UsersResp.newBuilder().addAllUser(users.stream().map(entity -> {
+            Long organizId = entity.getOrganizId();
+            if (ref.topId == 0 && organizId > 0) {
+                Organization organization = orgDao.getReferenceById(organizId);
+                ref.topId = organization.getTopId();
+            }
+            return getUserResp(entity, ref.topId);
+        }).collect(Collectors.toList())).build();
+        responseObserver.onNext(usersResp);
+        responseObserver.onCompleted();
     }
 
     @Override

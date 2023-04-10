@@ -18,7 +18,7 @@ import java.util.List;
  * @since 1.0.0
  */
 @Data
-@ToString
+@ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value = "用户表更新DTO", description = "用户的更新DTO")
 public class UserAuthDto extends UserRespDto {

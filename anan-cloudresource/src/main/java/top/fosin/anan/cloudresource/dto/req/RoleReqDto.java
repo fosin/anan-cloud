@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import top.fosin.anan.core.util.RegexUtil;
 import top.fosin.anan.data.entity.req.IdLogiSortOrganizQuery;
-import top.fosin.anan.data.module.LogicalQueryRule;
+import top.fosin.anan.data.module.LogiQueryRule;
 import top.fosin.anan.data.module.SortRule;
 import top.fosin.anan.data.valid.group.Create;
 import top.fosin.anan.data.valid.group.Update;
@@ -23,7 +23,7 @@ import javax.validation.constraints.*;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @ApiModel(value = "角色表请求DTO", description = "角色的请求DTO")
-public class RoleReqDto extends IdLogiSortOrganizQuery<LogicalQueryRule, SortRule, Long> {
+public class RoleReqDto extends IdLogiSortOrganizQuery<LogiQueryRule, SortRule, Long> {
     private static final long serialVersionUID = 431913654589649616L;
 
     @NotBlank(message = "角色名称" + "{javax.validation.constraints.NotBlank.message}",

@@ -10,6 +10,8 @@ public class PathPrefixConstant {
     public static final String API_VERSION_VALUE = "2018-10-17";
     public static final String DEFAULT_VERSION_PARAM = API_VERSION_NAME + "=" + API_VERSION_VALUE;
 
+    public static final String AUTH = API + "/auth";
+
     public static final String PARAMETER = API + "/parameter";
     public static final String PERMISSION = API + "/permission";
     public static final String ORGANIZATION = API + "/organiz";

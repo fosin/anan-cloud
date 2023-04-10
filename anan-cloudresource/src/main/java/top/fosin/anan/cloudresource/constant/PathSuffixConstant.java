@@ -15,7 +15,7 @@ public class PathSuffixConstant {
 
     public static final String USER_CODE = "/" + FieldConstant.USER_CODE + "/{" + FieldConstant.USER_CODE + "}";
 
-    public static final String SERVICE_CODE = "/" + FieldConstant.SERVICE_CODE + "/{" + FieldConstant.SERVICE_CODE + "}";
-
-    public static final String SERVICE_CODES = "/" + FieldConstant.SERVICE_CODE + "s";
+    public static final String SERVICE_CODE = "/" + FieldConstant.SERVICE_CODE;
+    public static final String SERVICE_CODE_VARIBALE = SERVICE_CODE + "/{" + FieldConstant.SERVICE_CODE + "}";
+    public static final String SERVICE_CODES = SERVICE_CODE + "s";
 }

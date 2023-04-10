@@ -44,6 +44,36 @@ public class User extends IdCreateUpdateOrganizDeletePO<Long> {
   private String username;
 
   @Basic
+  @Column(name = "family_name")
+  @ApiModelProperty(value = "姓氏")
+  private String familyName;
+
+  @Basic
+  @Column(name = "middle_name")
+  @ApiModelProperty(value = "中间名")
+  private String middleName;
+
+  @Basic
+  @Column(name = "given_name")
+  @ApiModelProperty(value = "名字")
+  private String givenName;
+
+  @Basic
+  @Column(name = "nickname")
+  @ApiModelProperty(value = "昵称")
+  private String nickname;
+
+  @Basic
+  @Column(name = "preferred_username")
+  @ApiModelProperty(value = "希望被称呼的名字")
+  private String preferredUsername;
+
+  @Basic
+  @Column(name = "real_name_verified")
+  @ApiModelProperty(value = "实名认证标志")
+  private Integer realNameVerified;
+
+  @Basic
   @ApiModelProperty(value = "传入原始密码，后台会对原始密码进行加密后再存储", required = true)
   @Column(name = "password", nullable = false, length = 96)
   private String password;
@@ -64,9 +94,19 @@ public class User extends IdCreateUpdateOrganizDeletePO<Long> {
   private String email;
 
   @Basic
+  @Column(name = "email_verified")
+  @ApiModelProperty(value = "邮箱认证标志")
+  private Integer emailVerified;
+
+  @Basic
   @ApiModelProperty(value = "手机号码")
   @Column(name = "phone", length = 45)
   private String phone;
+
+  @Basic
+  @Column(name = "phone_verified")
+  @ApiModelProperty(value = "手机验证标志")
+  private Integer phoneVerified;
 
   @Basic
   @ApiModelProperty(value = "使用状态：0=启用，1=禁用，具体取值于字典表anan_dictionary.id=11", required = true)
@@ -77,6 +117,11 @@ public class User extends IdCreateUpdateOrganizDeletePO<Long> {
   @ApiModelProperty(value = "头像")
   @Column(name = "avatar", length = 150)
   private String avatar;
+
+  @Basic
+  @Column(name = "website")
+  @ApiModelProperty(value = "网站地址")
+  private String website;
 
   @Basic
   @ApiModelProperty(value = "过期时间，账户过期后用户被锁定切不能登录系统", required = true)

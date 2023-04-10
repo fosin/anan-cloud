@@ -1,22 +1,30 @@
 package top.fosin.anan.platform.modules.pub.service;
 
 
+import com.google.protobuf.BoolValue;
+import com.google.protobuf.Empty;
+import com.google.protobuf.StringValue;
+import com.google.protobuf.Timestamp;
+import io.grpc.stub.StreamObserver;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.devh.boot.grpc.server.service.GrpcService;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 import top.fosin.anan.cloudresource.constant.PlatformRedisConstant;
 import top.fosin.anan.cloudresource.dto.req.ParameterReqDto;
 import top.fosin.anan.cloudresource.dto.res.ParameterRespDto;
-import top.fosin.anan.cloudresource.parameter.OrganStrategy;
+import top.fosin.anan.cloudresource.grpc.parameter.*;
+import top.fosin.anan.cloudresource.grpc.util.StringUtil;
 import top.fosin.anan.cloudresource.parameter.ParameterStatus;
-import top.fosin.anan.cloudresource.service.AnanUserDetailService;
+import top.fosin.anan.cloudresource.parameter.ParameterType;
+import top.fosin.anan.cloudresource.service.UserInfoService;
 import top.fosin.anan.core.exception.AnanServiceException;
 import top.fosin.anan.core.util.BeanUtil;
 import top.fosin.anan.data.entity.req.PageQuery;
@@ -40,13 +48,13 @@ import java.util.Objects;
  * @author fosin
  * @date 2018-7-29
  */
-@Service
+@GrpcService
 @Lazy
 @Slf4j
 @AllArgsConstructor
-public class ParameterServiceImpl implements ParameterService {
+public class ParameterServiceImpl extends ParameterServiceGrpc.ParameterServiceImplBase implements ParameterService {
     private final ParameterDao parameterDao;
-    private final AnanUserDetailService ananUserDetailService;
+    private final UserInfoService userInfoService;
     private final OrgDao orgDao;
     private final AnanCacheManger ananCacheManger;
 
@@ -56,8 +64,8 @@ public class ParameterServiceImpl implements ParameterService {
 
         String name = params.getName();
         String search = "%" + (name == null ? "" : name) + "%";
-        Long organizId = ananUserDetailService.getAnanOrganizId();
-        boolean sysAdminUser = ananUserDetailService.isSysAdminUser();
+        Long organizId = userInfoService.getAnanOrganizId();
+        boolean sysAdminUser = userInfoService.isSysAdminUser();
         int type = 2;
         String code = "";
         if (!sysAdminUser) {
@@ -86,7 +94,7 @@ public class ParameterServiceImpl implements ParameterService {
         Assert.notNull(id, "ID不能为空!");
         Parameter cEntity = parameterDao.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("通过ID：" + id + "未能找到对应的数据!"));
-        if (!ananUserDetailService.isSysAdminUser()) {
+        if (!userInfoService.isSysAdminUser()) {
             Assert.isTrue(StringUtils.hasText(cEntity.getScope()), "非超级管理员不能修改公共参数!");
         }
         String oldCacheKey = getCacheKey(cEntity);
@@ -115,7 +123,7 @@ public class ParameterServiceImpl implements ParameterService {
     @Transactional(rollbackFor = Exception.class)
     public void deleteById(Long id) {
         parameterDao.findById(id).ifPresent(entity -> {
-            if (!ananUserDetailService.isSysAdminUser()) {
+            if (!userInfoService.isSysAdminUser()) {
                 Assert.isTrue(StringUtils.hasText(entity.getScope()), "非超级管理员不能删除公共参数!");
             }
             entity.setStatus(ParameterStatus.Deleted.getTypeValue());
@@ -133,7 +141,7 @@ public class ParameterServiceImpl implements ParameterService {
     public void deleteByIds(Collection<Long> ids) {
         List<Parameter> entities = parameterDao.findAllById(ids);
         for (Parameter entity : entities) {
-            if (!ananUserDetailService.isSysAdminUser()) {
+            if (!userInfoService.isSysAdminUser()) {
                 Assert.isTrue(StringUtils.hasText(entity.getScope()), "非超级管理员不能删除公共参数!");
             }
             entity.setStatus(ParameterStatus.Deleted.getTypeValue());
@@ -148,10 +156,10 @@ public class ParameterServiceImpl implements ParameterService {
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void cancelDelete(Collection<Long> ids) {
+    public void cancelDelete(List<Long> ids) {
         List<Parameter> entities = parameterDao.findAllById(ids);
         for (Parameter entity : entities) {
-            if (!ananUserDetailService.isSysAdminUser()) {
+            if (!userInfoService.isSysAdminUser()) {
                 Assert.isTrue(StringUtils.hasText(entity.getScope()), "非超级管理员不能取消删除公共参数!");
             }
             entity.setStatus(ParameterStatus.Normal.getTypeValue());
@@ -214,8 +222,7 @@ public class ParameterServiceImpl implements ParameterService {
     private String getNearestScope(int type, String scope) {
         String rc = null;
         //机构参数存在上下级关系，需要逐级向上查找
-        OrganStrategy organStrategy = new OrganStrategy(ananUserDetailService);
-        if (type == organStrategy.getType()) {
+        if (type == ParameterType.Organization.getTypeValue()) {
             Long id = Long.parseLong(scope);
             Organization entity = orgDao.findById(id).orElse(null);
             if (entity != null && entity.getLevel() != 0) {
@@ -229,23 +236,15 @@ public class ParameterServiceImpl implements ParameterService {
     @Override
     @Cacheable(value = PlatformRedisConstant.ANAN_PARAMETER, key = "#root.target.getCacheKey(#type,#scope,#name)")
     @Transactional(rollbackFor = Exception.class)
-    public ParameterRespDto getOrCreateParameter(int type, String scope, String name, String defaultValue, String description) {
-        ParameterRespDto respDto;
+    public String getOrCreateParameter(int type, String scope, String name, String defaultValue, String description) {
+        String rc;
         try {
-            respDto = getNearestParameter(type, scope, name);
+            rc = getNearestParameter(type, scope, name).getValue();
         } catch (IllegalArgumentException e) {
             log.debug("报异常说明没有找到任何相关参数，则需要创建一个无域参数，这样默认所有机构共享这一个参数，如果需要设置机构个性化参数则需要在前端手动创建");
-            ParameterReqDto reqDto = new ParameterReqDto();
-            reqDto.setValue(defaultValue);
-            reqDto.setType(type);
-            reqDto.setScope(scope);
-            reqDto.setName(name);
-            reqDto.setDefaultValue(defaultValue);
-            reqDto.setDescription(description);
-            reqDto.setStatus(0);
-            respDto = create(reqDto);
+            rc = defaultValue;
         }
-        return respDto;
+        return rc;
     }
 
     @Override
@@ -253,14 +252,14 @@ public class ParameterServiceImpl implements ParameterService {
     public Boolean applyChange(Long id) {
         Parameter entity = parameterDao.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("该参数[" + id + "]已经不存在!"));
-        if (!ananUserDetailService.isSysAdminUser()) {
+        if (!userInfoService.isSysAdminUser()) {
             Assert.isTrue(StringUtils.hasText(entity.getScope()), "非超级管理员不能发布公共参数!");
         }
         String cacheKey = getCacheKey(entity);
         boolean success;
         switch (Objects.requireNonNull(ParameterStatus.valueOf(entity.getStatus()))) {
             case Modified:
-                entity.setApplyBy(ananUserDetailService.getAnanUserId());
+                entity.setApplyBy(userInfoService.getAnanUser().getId());
                 entity.setApplyTime(new Date());
                 entity.setStatus(0);
                 success = ananCacheManger.put(PlatformRedisConstant.ANAN_PARAMETER, cacheKey, BeanUtil.copyProperties(entity, ParameterRespDto.class));
@@ -305,6 +304,99 @@ public class ParameterServiceImpl implements ParameterService {
             applyChange(id);
         }
         return true;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void applyChange(ParameterIdReq request, StreamObserver<BoolValue> responseObserver) {
+        Boolean rs = applyChange(request.getId());
+        responseObserver.onNext(BoolValue.of(rs));
+        responseObserver.onCompleted();
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void applyChanges(ParameterIdsReq request, StreamObserver<BoolValue> responseObserver) {
+        Boolean rs = applyChanges(request.getIdList());
+        responseObserver.onNext(BoolValue.of(rs));
+        responseObserver.onCompleted();
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void applyChangeAll(Empty request, StreamObserver<BoolValue> responseObserver) {
+        Boolean rs = applyChangeAll();
+        responseObserver.onNext(BoolValue.of(rs));
+        responseObserver.onCompleted();
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void cancelDelete(ParameterIdsReq request, StreamObserver<Empty> responseObserver) {
+        cancelDelete(request.getIdList());
+        responseObserver.onNext(Empty.getDefaultInstance());
+        responseObserver.onCompleted();
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void getParameter(ParameterThreeArgsReq request, StreamObserver<ParameterResp> responseObserver) {
+        ParameterRespDto parameter = getParameter(request.getType(), request.getScope(), request.getName());
+        toGrpcResp(responseObserver, parameter);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void getNearestParameter(ParameterThreeArgsReq request, StreamObserver<ParameterResp> responseObserver) {
+        ParameterRespDto parameter = getNearestParameter(request.getType(), request.getScope(), request.getName());
+        toGrpcResp(responseObserver, parameter);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void processUpdate(ParameterReq request, StreamObserver<Empty> responseObserver) {
+        ParameterReqDto req = getParameterReqDto(request);
+        processUpdate(req);
+        responseObserver.onNext(Empty.getDefaultInstance());
+        responseObserver.onCompleted();
+    }
+
+    @NotNull
+    private ParameterReqDto getParameterReqDto(ParameterReq request) {
+        ParameterReqDto req = new ParameterReqDto();
+        req.setStatus(request.getStatus());
+        req.setApplyTime(new Date(request.getApplyTime().getSeconds() * 1000));
+        req.setDescription(request.getDescription());
+        req.setValue(request.getValue());
+        req.setDefaultValue(request.getDefaultValue());
+        req.setName(request.getName());
+        req.setType(request.getType());
+        req.setScope(request.getScope());
+        return req;
+    }
+
+    private void toGrpcResp(StreamObserver<ParameterResp> responseObserver, ParameterRespDto parameter) {
+        ParameterResp parameterResp = ParameterResp.newBuilder()
+                .setId(parameter.getId())
+                .setStatus(parameter.getStatus())
+                .setApplyTime(Timestamp.newBuilder().setSeconds(parameter.getApplyTime().getTime() / 1000))
+                .setDescription(StringUtil.getNonNullValue(parameter.getDescription()))
+                .setValue(StringUtil.getNonNullValue(parameter.getValue()))
+                .setDefaultValue(StringUtil.getNonNullValue(parameter.getDefaultValue()))
+                .setName(parameter.getName())
+                .setType(parameter.getType())
+                .setScope(StringUtil.getNonNullValue(parameter.getScope()))
+                .build();
+        responseObserver.onNext(parameterResp);
+        responseObserver.onCompleted();
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void getOrCreateParameter(getOrCreateReq request, StreamObserver<StringValue> responseObserver) {
+        String value = getOrCreateParameter(request.getType(), request.getScope(), request.getName(), request.getDefaultValue(), request.getDescription());
+        responseObserver.onNext(StringValue.of(value));
+        responseObserver.onCompleted();
     }
 
     @Override

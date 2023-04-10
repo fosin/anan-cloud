@@ -1,0 +1,51 @@
+syntax = "proto3";
+
+package top.fosin.anan.cloudresource.grpc.organiz;
+
+option java_multiple_files = true;
+option java_package = "top.fosin.anan.cloudresource.grpc.organiz";
+option java_outer_classname = "OrganizProto";
+
+service OrganizService {
+  //通过机构序号查询机构数据
+  rpc findOneById (OrganizIdReq) returns (OrganizResp) {}
+  //通过多个机构序号查询机构数据集合
+  rpc listByIds (OrganizIdsReq) returns (OrganizsResp) {}
+  //通过上级机构序号查询其直接子机构数据
+  rpc listChild (OrganizPidReq) returns (OrganizsResp) {}
+  //通过上级机构序号查询其所有子机构数据
+  rpc listAllChild (OrganizPidReq) returns (OrganizsResp) {}
+}
+
+//机构请求
+message OrganizPidReq {
+  int64 pid = 1;
+}
+
+//机构序号请求
+message OrganizIdReq {
+  int64 id = 1;
+}
+
+//机构序号集合请求
+message OrganizIdsReq {
+  repeated int64 id = 1;
+}
+
+//机构信息集合响应
+message OrganizsResp {
+  repeated OrganizResp organiz = 1;
+}
+//机构信息响应
+message OrganizResp {
+  int64 topId = 1;
+  string code = 2;
+  string name = 3;
+  string fullname = 4;
+  optional string address = 5;
+  optional string telphone = 6;
+  int32 level = 7;
+  int32 status = 8;
+  int64 id = 9;
+  int64 pid = 10;
+}

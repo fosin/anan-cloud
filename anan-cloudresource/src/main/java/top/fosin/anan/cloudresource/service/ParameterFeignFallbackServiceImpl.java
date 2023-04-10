@@ -28,9 +28,8 @@ public class ParameterFeignFallbackServiceImpl implements ParameterFeignService 
     }
 
     @Override
-    public SingleResult<ParameterRespDto> processUpdate(ParameterReqDto reqDto) {
+    public void processUpdate(ParameterReqDto reqDto) {
         log.error("feign 远程更新通用系统参数失败:{}", reqDto);
-        return null;
     }
 
     @Override
@@ -64,7 +63,7 @@ public class ParameterFeignFallbackServiceImpl implements ParameterFeignService 
     }
 
     @Override
-    public SingleResult<Boolean> applyChangeAll(List<Long> ids) {
+    public SingleResult<Boolean> applyChanges(List<Long> ids) {
         log.error("feign 远程应用所有系统参数失败:{}", ids);
         return null;
     }

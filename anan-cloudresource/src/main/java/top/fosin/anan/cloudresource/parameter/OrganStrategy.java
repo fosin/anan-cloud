@@ -1,6 +1,6 @@
 package top.fosin.anan.cloudresource.parameter;
 
-import top.fosin.anan.cloudresource.service.AnanUserDetailService;
+import top.fosin.anan.cloudresource.service.UserInfoService;
 
 /**
  * 机构参数
@@ -9,10 +9,10 @@ import top.fosin.anan.cloudresource.service.AnanUserDetailService;
  * @date 2019/5/13
  */
 public class OrganStrategy implements IParameterStrategy {
-    private final AnanUserDetailService ananUserDetailService;
+    private final UserInfoService userInfoService;
 
-    public OrganStrategy(AnanUserDetailService ananUserDetailService) {
-        this.ananUserDetailService = ananUserDetailService;
+    public OrganStrategy(UserInfoService userInfoService) {
+        this.userInfoService = userInfoService;
     }
 
     @Override
@@ -27,6 +27,6 @@ public class OrganStrategy implements IParameterStrategy {
 
     @Override
     public String getScope() {
-        return ananUserDetailService.isSysAdminUser() ? null : ananUserDetailService.getAnanOrganizId() + "";
+        return userInfoService.isSysAdminUser() ? null : userInfoService.getAnanOrganizId() + "";
     }
 }
