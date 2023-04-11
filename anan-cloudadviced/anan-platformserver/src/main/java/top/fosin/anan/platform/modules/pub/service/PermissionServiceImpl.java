@@ -168,7 +168,9 @@ public class PermissionServiceImpl extends PermissionServiceGrpc.PermissionServi
         List<Permission> entities = permissionDao.findAllByServiceId(serviceDao.findOneByCode(serviceCode).getId());
         PermissionsResp permissionsResp = PermissionsResp.newBuilder().addAllPermission(entities.stream().map(entity -> {
             PermissionResp.Builder builder = PermissionResp.newBuilder();
-            //BeanUtil复制方式会将空字符串变成null值复制到新对象，这里由于GRPC不允许null值导致报错NullPointerException
+            //BeanUtil复制方式失败原因：TODO
+            // 原因1：会将空字符串变成null值复制到新对象，这里由于GRPC不允许null值导致报错NullPointerException
+            // 原因2：GRPC生成的实体类的属性名会自动附加“_”，而Orika默认不支持不同属性名复制，如要支持需要单独做属性名映射
 //            BeanUtil.copyProperties(entity, builder, BeanUtil.getNullProperties(entity));
 //            builder.setServiceCode(serviceCode);
             builder.setId(entity.getId())

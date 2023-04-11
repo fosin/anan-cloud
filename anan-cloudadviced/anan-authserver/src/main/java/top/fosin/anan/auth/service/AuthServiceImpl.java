@@ -16,7 +16,7 @@ import top.fosin.anan.cloudresource.dto.UserAllPermissionTreeDto;
 import top.fosin.anan.cloudresource.dto.UserAuthDto;
 import top.fosin.anan.cloudresource.dto.res.OrgRespDto;
 import top.fosin.anan.cloudresource.dto.res.UserAllPermissionsRespDto;
-import top.fosin.anan.cloudresource.service.inter.OrgFeignService;
+import top.fosin.anan.cloudresource.service.inter.feign.OrgFeignService;
 import top.fosin.anan.core.util.BeanUtil;
 import top.fosin.anan.core.util.TreeUtil;
 import top.fosin.anan.data.prop.PidProp;

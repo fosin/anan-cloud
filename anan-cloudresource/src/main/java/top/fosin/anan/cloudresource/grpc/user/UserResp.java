@@ -193,7 +193,7 @@ private static final long serialVersionUID = 0L;
           }
           case 168: {
 
-            oganizId_ = input.readInt64();
+            organizId_ = input.readInt64();
             break;
           }
           case 176: {
@@ -884,15 +884,15 @@ private static final long serialVersionUID = 0L;
     return id_;
   }
 
-  public static final int OGANIZID_FIELD_NUMBER = 21;
-  private long oganizId_;
+  public static final int ORGANIZID_FIELD_NUMBER = 21;
+  private long organizId_;
   /**
-   * <code>int64 oganizId = 21;</code>
-   * @return The oganizId.
+   * <code>int64 organizId = 21;</code>
+   * @return The organizId.
    */
   @java.lang.Override
-  public long getOganizId() {
-    return oganizId_;
+  public long getOrganizId() {
+    return organizId_;
   }
 
   public static final int CREATEBY_FIELD_NUMBER = 22;
@@ -1043,8 +1043,8 @@ private static final long serialVersionUID = 0L;
     if (id_ != 0L) {
       output.writeInt64(20, id_);
     }
-    if (oganizId_ != 0L) {
-      output.writeInt64(21, oganizId_);
+    if (organizId_ != 0L) {
+      output.writeInt64(21, organizId_);
     }
     if (createBy_ != 0L) {
       output.writeInt64(22, createBy_);
@@ -1136,9 +1136,9 @@ private static final long serialVersionUID = 0L;
       size += com.google.protobuf.CodedOutputStream
         .computeInt64Size(20, id_);
     }
-    if (oganizId_ != 0L) {
+    if (organizId_ != 0L) {
       size += com.google.protobuf.CodedOutputStream
-        .computeInt64Size(21, oganizId_);
+        .computeInt64Size(21, organizId_);
     }
     if (createBy_ != 0L) {
       size += com.google.protobuf.CodedOutputStream
@@ -1244,8 +1244,8 @@ private static final long serialVersionUID = 0L;
     }
     if (getId()
         != other.getId()) return false;
-    if (getOganizId()
-        != other.getOganizId()) return false;
+    if (getOrganizId()
+        != other.getOrganizId()) return false;
     if (getCreateBy()
         != other.getCreateBy()) return false;
     if (hasCreateTime() != other.hasCreateTime()) return false;
@@ -1335,9 +1335,9 @@ private static final long serialVersionUID = 0L;
     hash = (37 * hash) + ID_FIELD_NUMBER;
     hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
         getId());
-    hash = (37 * hash) + OGANIZID_FIELD_NUMBER;
+    hash = (37 * hash) + ORGANIZID_FIELD_NUMBER;
     hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-        getOganizId());
+        getOrganizId());
     hash = (37 * hash) + CREATEBY_FIELD_NUMBER;
     hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
         getCreateBy());
@@ -1537,7 +1537,7 @@ private static final long serialVersionUID = 0L;
       }
       id_ = 0L;
 
-      oganizId_ = 0L;
+      organizId_ = 0L;
 
       createBy_ = 0L;
 
@@ -1638,7 +1638,7 @@ private static final long serialVersionUID = 0L;
         result.expireTime_ = expireTimeBuilder_.build();
       }
       result.id_ = id_;
-      result.oganizId_ = oganizId_;
+      result.organizId_ = organizId_;
       result.createBy_ = createBy_;
       if (createTimeBuilder_ == null) {
         result.createTime_ = createTime_;
@@ -1780,8 +1780,8 @@ private static final long serialVersionUID = 0L;
       if (other.getId() != 0L) {
         setId(other.getId());
       }
-      if (other.getOganizId() != 0L) {
-        setOganizId(other.getOganizId());
+      if (other.getOrganizId() != 0L) {
+        setOrganizId(other.getOrganizId());
       }
       if (other.getCreateBy() != 0L) {
         setCreateBy(other.getCreateBy());
@@ -3179,33 +3179,33 @@ private static final long serialVersionUID = 0L;
       return this;
     }
 
-    private long oganizId_ ;
+    private long organizId_ ;
     /**
-     * <code>int64 oganizId = 21;</code>
-     * @return The oganizId.
+     * <code>int64 organizId = 21;</code>
+     * @return The organizId.
      */
     @java.lang.Override
-    public long getOganizId() {
-      return oganizId_;
+    public long getOrganizId() {
+      return organizId_;
     }
     /**
-     * <code>int64 oganizId = 21;</code>
-     * @param value The oganizId to set.
+     * <code>int64 organizId = 21;</code>
+     * @param value The organizId to set.
      * @return This builder for chaining.
      */
-    public Builder setOganizId(long value) {
+    public Builder setOrganizId(long value) {
       
-      oganizId_ = value;
+      organizId_ = value;
       onChanged();
       return this;
     }
     /**
-     * <code>int64 oganizId = 21;</code>
+     * <code>int64 organizId = 21;</code>
      * @return This builder for chaining.
      */
-    public Builder clearOganizId() {
+    public Builder clearOrganizId() {
       
-      oganizId_ = 0L;
+      organizId_ = 0L;
       onChanged();
       return this;
     }

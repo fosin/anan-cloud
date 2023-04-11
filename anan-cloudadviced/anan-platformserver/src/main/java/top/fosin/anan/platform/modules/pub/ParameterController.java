@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import top.fosin.anan.cloudresource.constant.PathPrefixConstant;
 import top.fosin.anan.cloudresource.dto.req.ParameterReqDto;
 import top.fosin.anan.cloudresource.dto.res.ParameterRespDto;
-import top.fosin.anan.cloudresource.service.inter.ParameterFeignService;
+import top.fosin.anan.cloudresource.service.inter.feign.ParameterFeignService;
 import top.fosin.anan.data.controller.ISimpleController;
 import top.fosin.anan.data.entity.res.TreeVO;
 import top.fosin.anan.data.result.ResultUtils;

@@ -20,7 +20,7 @@ import springfox.documentation.spring.web.plugins.WebMvcRequestHandlerProvider;
 import springfox.documentation.swagger.web.SwaggerResource;
 import top.fosin.anan.cloudresource.constant.PathPrefixConstant;
 import top.fosin.anan.cloudresource.dto.res.PermissionRespDto;
-import top.fosin.anan.cloudresource.service.inter.PermissionFeignService;
+import top.fosin.anan.cloudresource.service.inter.feign.PermissionFeignService;
 import top.fosin.anan.security.resource.AnanProgramAuthorities;
 import top.fosin.anan.security.resource.AnanSecurityProperties;
 import top.fosin.anan.security.resource.AuthorityPermission;

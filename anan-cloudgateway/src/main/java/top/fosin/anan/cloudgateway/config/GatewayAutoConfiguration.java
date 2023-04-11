@@ -33,8 +33,7 @@ import top.fosin.anan.cloudresource.constant.PathPrefixConstant;
 import top.fosin.anan.cloudresource.constant.PathSuffixConstant;
 import top.fosin.anan.cloudresource.constant.ServiceConstant;
 import top.fosin.anan.cloudresource.dto.res.PermissionRespDto;
-import top.fosin.anan.cloudresource.grpc.permission.PermissionResp;
-import top.fosin.anan.cloudresource.grpc.service.inter.PermissionGrpcService;
+import top.fosin.anan.cloudresource.service.inter.rpc.PermissionRpcService;
 import top.fosin.anan.data.result.MultResult;
 import top.fosin.anan.security.resource.AnanProgramAuthorities;
 import top.fosin.anan.security.resource.AnanSecurityProperties;
@@ -63,14 +62,14 @@ public class GatewayAutoConfiguration {
     private final WebFluxProperties webFluxProperties;
     @Value("${spring.application.name}")
     private final String applicationName = "anan-cloudgateway";
-    private final PermissionGrpcService permissionGrpcService;
+    private final PermissionRpcService permissionRpcService;
 
     public GatewayAutoConfiguration(DiscoveryClient discoveryClient, ServerProperties serverProperties,
-                                    WebFluxProperties webFluxProperties, PermissionGrpcService permissionGrpcService) {
+                                    WebFluxProperties webFluxProperties, PermissionRpcService permissionRpcService) {
         this.discoveryClient = discoveryClient;
         this.serverProperties = serverProperties;
         this.webFluxProperties = webFluxProperties;
-        this.permissionGrpcService = permissionGrpcService;
+        this.permissionRpcService = permissionRpcService;
     }
 
 //    @Bean
@@ -200,16 +199,15 @@ public class GatewayAutoConfiguration {
      * 即使设置了spring.main.allow-bean-definition-overriding=true还是会出现这个问题。
      *
      * @return AnanProgramAuthorities 编程权限
-     * @throws URISyntaxException 异常
      */
     @Bean
     @Primary
-    public AnanProgramAuthorities ananProgramAuthoritiesNew() throws URISyntaxException {
+    public AnanProgramAuthorities ananProgramAuthoritiesNew() {
         List<RouteDefinition> routes = ananGatewayProperties().getRoutes();
         List<String> hosts = routes.stream().map(route -> route.getUri().getHost()).collect(Collectors.toList());
 //        List<PermissionRespDto> permissions = getPermissionsByRest(hosts);
         // 方法4：GRPC
-        List<PermissionResp> permissions = permissionGrpcService.findByServiceCodes(hosts);
+        List<PermissionRespDto> permissions = permissionRpcService.findByServiceCodes(hosts);
 
         List<AnanSecurityProperties.Authority> authorities = new ArrayList<>();
         Objects.requireNonNull(permissions).forEach(p -> {

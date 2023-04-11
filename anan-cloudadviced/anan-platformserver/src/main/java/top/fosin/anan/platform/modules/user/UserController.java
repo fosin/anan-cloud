@@ -54,7 +54,7 @@ public class UserController extends BaseController
             required = true, dataTypeClass = String.class, paramType = "path")
     @ApiOperation("根据用户工号查找用户信息")
     public SingleResult<UserRespDto> findOneByUsercode(@PathVariable(FieldConstant.USER_CODE) String usercode) {
-        return ResultUtils.success(userService.findByUsercode(usercode));
+        return ResultUtils.success(userService.findOneByUsercode(usercode));
     }
 
     @ApiOperation("修改用户帐号密码")

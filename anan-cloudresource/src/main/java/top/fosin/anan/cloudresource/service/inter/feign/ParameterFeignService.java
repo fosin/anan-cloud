@@ -1,4 +1,4 @@
-package top.fosin.anan.cloudresource.service.inter;
+package top.fosin.anan.cloudresource.service.inter.feign;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.HttpStatus;

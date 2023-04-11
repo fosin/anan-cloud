@@ -117,6 +117,10 @@
 
 详细介绍 [点这里readme-docker-compose.md](deploy/docker/readme-docker-compose.md)
 
+#### 1.1.3、GRPC使用说明
+
+详细介绍[点这里Readme-grpc.md](docs/Readme-grpc.md)
+
 ### 1.2、k8s（helm）方式
     
     当需要与K8S进行联调开发时，可以选择这种方式，不过部署比较复杂。

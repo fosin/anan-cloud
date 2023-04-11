@@ -5,20 +5,20 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.ContextLoader;
 import top.fosin.anan.cloudresource.dto.req.ParameterReqDto;
 import top.fosin.anan.cloudresource.dto.res.ParameterRespDto;
-import top.fosin.anan.cloudresource.service.inter.ParameterFeignService;
-import top.fosin.anan.cloudresource.service.inter.PermissionRpcService;
+import top.fosin.anan.cloudresource.service.inter.feign.ParameterFeignService;
+import top.fosin.anan.cloudresource.service.inter.rpc.ParameterRpcService;
 import top.fosin.anan.cloudresource.type.RpcCallStrategy;
 
 import java.util.List;
 
 
-public class PermissionProxyRpcServiceImpl implements PermissionRpcService {
+public class PermissionProxyRpcServiceImpl implements ParameterRpcService {
     private ApplicationContext ac;
 
     @Value("anan.cloud.rpc.strategy")
     private RpcCallStrategy rpcStrategy = RpcCallStrategy.GRPC;
     private ParameterFeignService parameterFeignService;
-    private PermissionRpcService permissionRpcService;
+    private ParameterRpcService parameterRpcService;
 
     private ApplicationContext getApplicationContext() {
         if (ac == null) {
@@ -34,11 +34,11 @@ public class PermissionProxyRpcServiceImpl implements PermissionRpcService {
         return parameterFeignService;
     }
 
-    private PermissionRpcService getPermissionRpcService() {
-        if (permissionRpcService == null) {
-            permissionRpcService = getApplicationContext().getBean(PermissionRpcService.class);
+    private ParameterRpcService getPermissionRpcService() {
+        if (parameterRpcService == null) {
+            parameterRpcService = getApplicationContext().getBean(ParameterRpcService.class);
         }
-        return permissionRpcService;
+        return parameterRpcService;
     }
 
     @Override

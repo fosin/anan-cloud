@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import top.fosin.anan.cloudresource.dto.req.ParameterReqDto;
 import top.fosin.anan.cloudresource.dto.res.ParameterRespDto;
-import top.fosin.anan.cloudresource.service.inter.ParameterFeignService;
+import top.fosin.anan.cloudresource.service.inter.feign.ParameterFeignService;
 import top.fosin.anan.data.result.SingleResult;
 
 import java.util.Collection;

@@ -71,7 +71,7 @@ public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase impleme
     @Override
     @Cacheable(value = PlatformRedisConstant.ANAN_USER, key = "#usercode", unless = "#result == null")
     @Transactional(readOnly = true)
-    public UserRespDto findByUsercode(String usercode) {
+    public UserRespDto findOneByUsercode(String usercode) {
         Assert.notNull(usercode, "用户工号不能为空!");
         User userEntity = userDao.findByUsercode(usercode);
         if (userEntity == null) {
@@ -124,7 +124,7 @@ public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase impleme
 
     @Override
     public UserPassRespDto create(UserReqDto dto) {
-        UserRespDto entityDynamic = this.findByUsercode(dto.getUsercode());
+        UserRespDto entityDynamic = this.findOneByUsercode(dto.getUsercode());
         Assert.isNull(entityDynamic, "用户工号已存在，请核对!");
         User createUser = BeanUtil.copyProperties(dto, User.class);
         String password = encryptBeforeSave(createUser);
@@ -408,7 +408,7 @@ public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase impleme
             Organization organization = orgDao.getReferenceById(organizId);
             topId = organization.getTopId();
         }
-        UserResp userResp = getUserResp(user, topId);
+        UserResp userResp = toGrpcResp(user, topId);
         responseObserver.onNext(userResp);
         responseObserver.onCompleted();
     }
@@ -418,37 +418,6 @@ public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase impleme
         String usercode = request.getUsercode();
         User user = this.getDao().findByUsercode(usercode);
         toGrpcResp(responseObserver, user);
-    }
-
-    @NotNull
-    private static UserResp getUserResp(User user, Long topId) {
-        return UserResp.newBuilder()
-                .setUsercode(user.getUsercode())
-                .setUsername(user.getUsername())
-                .setFamilyName(StringUtil.getNonNullValue(user.getFamilyName()))
-                .setMiddleName(StringUtil.getNonNullValue(user.getMiddleName()))
-                .setGivenName(StringUtil.getNonNullValue(user.getGivenName()))
-                .setNickname(StringUtil.getNonNullValue(user.getNickname()))
-                .setPreferredUsername(StringUtil.getNonNullValue(user.getPreferredUsername()))
-                .setRealNameVerified(user.getRealNameVerified())
-                .setOganizId(user.getOrganizId())
-                .setTopId(topId)
-                .setBirthday(Timestamp.newBuilder().setSeconds(user.getBirthday().getTime() / 1000).build())
-                .setSex(user.getSex())
-                .setEmail(StringUtil.getNonNullValue(user.getEmail()))
-                .setEmailVerified(user.getEmailVerified())
-                .setPhone(StringUtil.getNonNullValue(user.getPhone()))
-                .setPhoneVerified(user.getPhoneVerified())
-                .setStatus(user.getStatus())
-                .setAvatar(StringUtil.getNonNullValue(user.getAvatar()))
-                .setWebsite(StringUtil.getNonNullValue(user.getWebsite()))
-                .setExpireTime(Timestamp.newBuilder().setSeconds(user.getExpireTime().getTime() / 1000).build())
-                .setId(user.getId())
-                .setCreateBy(user.getCreateBy())
-                .setCreateTime(Timestamp.newBuilder().setSeconds(user.getCreateTime().getTime() / 1000).build())
-                .setUpdateBy(user.getUpdateBy())
-                .setUpdateTime(Timestamp.newBuilder().setSeconds(user.getUpdateTime().getTime() / 1000).build())
-                .build();
     }
 
     @Override
@@ -470,17 +439,52 @@ public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase impleme
         toGrpcResps(responseObserver, users);
     }
 
+    @NotNull
+    private UserResp toGrpcResp(User user, Long topId) {
+        return UserResp.newBuilder()
+                .setUsercode(user.getUsercode())
+                .setUsername(user.getUsername())
+                .setFamilyName(StringUtil.getNonNullValue(user.getFamilyName()))
+                .setMiddleName(StringUtil.getNonNullValue(user.getMiddleName()))
+                .setGivenName(StringUtil.getNonNullValue(user.getGivenName()))
+                .setNickname(StringUtil.getNonNullValue(user.getNickname()))
+                .setPreferredUsername(StringUtil.getNonNullValue(user.getPreferredUsername()))
+                .setRealNameVerified(user.getRealNameVerified())
+                .setOrganizId(user.getOrganizId())
+                .setTopId(topId)
+                .setBirthday(Timestamp.newBuilder().setSeconds(user.getBirthday().getTime() / 1000).build())
+                .setSex(user.getSex())
+                .setEmail(StringUtil.getNonNullValue(user.getEmail()))
+                .setEmailVerified(user.getEmailVerified())
+                .setPhone(StringUtil.getNonNullValue(user.getPhone()))
+                .setPhoneVerified(user.getPhoneVerified())
+                .setStatus(user.getStatus())
+                .setAvatar(StringUtil.getNonNullValue(user.getAvatar()))
+                .setWebsite(StringUtil.getNonNullValue(user.getWebsite()))
+                .setExpireTime(Timestamp.newBuilder().setSeconds(user.getExpireTime().getTime() / 1000).build())
+                .setId(user.getId())
+                .setCreateBy(user.getCreateBy())
+                .setCreateTime(Timestamp.newBuilder().setSeconds(user.getCreateTime().getTime() / 1000).build())
+                .setUpdateBy(user.getUpdateBy())
+                .setUpdateTime(Timestamp.newBuilder().setSeconds(user.getUpdateTime().getTime() / 1000).build())
+                .build();
+    }
+
     private void toGrpcResps(StreamObserver<UsersResp> responseObserver, List<User> users) {
-        var ref = new Object() {
-            Long topId = 0L;
-        };
+        List<Long> organizIds = users.stream().map(User::getOrganizId).distinct().collect(Collectors.toList());
+        List<Organization> organizations = orgDao.findAllById(organizIds);
+        List<Long> topIds = organizations.stream().map(Organization::getTopId).distinct().collect(Collectors.toList());
         UsersResp usersResp = UsersResp.newBuilder().addAllUser(users.stream().map(entity -> {
             Long organizId = entity.getOrganizId();
-            if (ref.topId == 0 && organizId > 0) {
-                Organization organization = orgDao.getReferenceById(organizId);
-                ref.topId = organization.getTopId();
+            long topId = topIds.size() == 1 ? topIds.get(0) : 0;
+            if (organizId > 0 && topId == 0) {
+                for (int i = 0; i < organizIds.size(); i++) {
+                    if (organizId.equals(organizIds.get(i))) {
+                        topId = organizations.get(i).getTopId();
+                    }
+                }
             }
-            return getUserResp(entity, ref.topId);
+            return toGrpcResp(entity, topId);
         }).collect(Collectors.toList())).build();
         responseObserver.onNext(usersResp);
         responseObserver.onCompleted();

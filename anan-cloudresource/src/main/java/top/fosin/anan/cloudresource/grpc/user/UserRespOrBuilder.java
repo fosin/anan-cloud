@@ -257,10 +257,10 @@ public interface UserRespOrBuilder extends
   long getId();
 
   /**
-   * <code>int64 oganizId = 21;</code>
-   * @return The oganizId.
+   * <code>int64 organizId = 21;</code>
+   * @return The organizId.
    */
-  long getOganizId();
+  long getOrganizId();
 
   /**
    * <code>int64 createBy = 22;</code>

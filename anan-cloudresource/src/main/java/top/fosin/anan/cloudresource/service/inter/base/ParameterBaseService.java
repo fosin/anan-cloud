@@ -1,4 +1,4 @@
-package top.fosin.anan.cloudresource.service.inter;
+package top.fosin.anan.cloudresource.service.inter.base;
 
 import top.fosin.anan.cloudresource.dto.res.ParameterRespDto;
 

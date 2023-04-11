@@ -4,7 +4,7 @@ package top.fosin.anan.cloudresource.service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import top.fosin.anan.cloudresource.dto.res.OrgRespDto;
-import top.fosin.anan.cloudresource.service.inter.OrgFeignService;
+import top.fosin.anan.cloudresource.service.inter.feign.OrgFeignService;
 import top.fosin.anan.data.result.MultResult;
 import top.fosin.anan.data.result.SingleResult;
 

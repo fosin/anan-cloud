@@ -156,13 +156,13 @@ public class OrgServiceImpl extends OrganizServiceGrpc.OrganizServiceImplBase im
     public void findOneById(OrganizIdReq request, StreamObserver<OrganizResp> responseObserver) {
         long id = request.getId();
         Organization organization = this.getDao().findById(id).orElseThrow(() -> new IllegalArgumentException("未找到对应数据!"));
-        OrganizResp organizResp = getOrganizResp(organization);
+        OrganizResp organizResp = toGrpcResp(organization);
         responseObserver.onNext(organizResp);
         responseObserver.onCompleted();
     }
 
     @NotNull
-    private OrganizResp getOrganizResp(Organization entity) {
+    private OrganizResp toGrpcResp(Organization entity) {
         return OrganizResp.newBuilder()
                 .setCode(entity.getCode())
                 .setName(entity.getName())
@@ -185,7 +185,7 @@ public class OrgServiceImpl extends OrganizServiceGrpc.OrganizServiceImplBase im
 
     private void toGrpcResps(StreamObserver<OrganizsResp> responseObserver, List<Organization> organizations) {
         OrganizsResp organizsResp = OrganizsResp.newBuilder().addAllOrganiz(organizations.stream()
-                .map(this::getOrganizResp).collect(Collectors.toList())).build();
+                .map(this::toGrpcResp).collect(Collectors.toList())).build();
         responseObserver.onNext(organizsResp);
         responseObserver.onCompleted();
     }

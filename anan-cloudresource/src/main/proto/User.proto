@@ -71,7 +71,7 @@ message UserResp {
   optional string website = 18;
   google.protobuf.Timestamp expireTime = 19;
   int64 id = 20;
-  int64 oganizId = 21;
+  int64 organizId = 21;
   int64 createBy = 22;
   google.protobuf.Timestamp createTime = 23;
   int64 updateBy = 24;

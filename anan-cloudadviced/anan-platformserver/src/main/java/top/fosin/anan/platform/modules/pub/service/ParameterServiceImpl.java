@@ -374,14 +374,14 @@ public class ParameterServiceImpl extends ParameterServiceGrpc.ParameterServiceI
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void processUpdate(ParameterReq request, StreamObserver<Empty> responseObserver) {
-        ParameterReqDto req = getParameterReqDto(request);
+        ParameterReqDto req = toParameterReqDto(request);
         processUpdate(req);
         responseObserver.onNext(Empty.getDefaultInstance());
         responseObserver.onCompleted();
     }
 
     @NotNull
-    private ParameterReqDto getParameterReqDto(ParameterReq request) {
+    private ParameterReqDto toParameterReqDto(ParameterReq request) {
         ParameterReqDto req = new ParameterReqDto();
         req.setStatus(request.getStatus());
         req.setApplyTime(new Date(request.getApplyTime().getSeconds() * 1000));

@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 import top.fosin.anan.cloudresource.constant.PathPrefixConstant;
 import top.fosin.anan.cloudresource.dto.res.PermissionRespDto;
-import top.fosin.anan.cloudresource.service.inter.PermissionFeignService;
+import top.fosin.anan.cloudresource.service.inter.feign.PermissionFeignService;
 import top.fosin.anan.data.result.MultResult;
 
 import java.util.List;
