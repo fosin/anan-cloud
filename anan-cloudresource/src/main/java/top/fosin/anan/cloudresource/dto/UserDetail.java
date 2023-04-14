@@ -49,31 +49,8 @@ public class UserDetail extends User {
 
     @Override
     public String toString() {
-        String lineSeparator = System.getProperty("line.separator");
-        StringBuilder sb = new StringBuilder();
-        sb.append(super.toString()).append(":").append(lineSeparator);
-        sb.append("Username: ").append(this.getUsername()).append(";").append(lineSeparator);
-        sb.append("Password: [PROTECTED]; ").append(lineSeparator);
-        sb.append("Enabled: ").append(this.getPassword()).append("; ").append(lineSeparator);
-        sb.append("user: ").append(this.getUser()).append("; ").append(lineSeparator);
-        Collection<GrantedAuthority> authorities = this.getAuthorities();
-        if (!authorities.isEmpty()) {
-            sb.append("Granted Authorities: ");
-
-            boolean first = true;
-            for (GrantedAuthority auth : authorities) {
-                if (!first) {
-                    sb.append(",");
-                }
-                first = false;
-
-                sb.append(auth);
-            }
-            sb.append(lineSeparator);
-        } else {
-            sb.append("Not granted any authorities");
-        }
-
-        return sb.toString();
+        return super.toString() + ":" + ", " +
+                "UserAuthDto=" + this.user + ", " +
+                "Client=" + this.client + ", ";
     }
 }

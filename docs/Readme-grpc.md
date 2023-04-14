@@ -1,7 +1,6 @@
 # GRPC使用说明
 
-
-## 依赖配置
+## 1、依赖配置
 ### 插件配置
     请看(../pom.xml)文件中的protobuf-maven-plugin插件
 ### 依赖配置（举例说明）
@@ -20,7 +19,7 @@
         #是否启动保持连接（默认false），服务端可以开启保持会话
         enableKeepAlive: true
 ```
-## proto文件使用说明
+## 2、proto文件使用说明
 ### protobuf使用说明
     <https://protobuf.dev/programming-guides/proto3/>
     
@@ -33,7 +32,7 @@
     #生成GRPC入口类
     mvn protobuf:complie-custom
 ```
-## 代码调用
+## 3、代码调用
 ### 调用流程图
 ![调用流程图](image/GRPC调用流程图.png)
 ### 支持的服务清单
@@ -67,9 +66,18 @@ public class RemoteParameter implements IParameter {
 }
 
 ```
-
-## 使用资料请看
-
-
-### 2、Java对应框架Grpc-Spring-Boot-Starter使用说明
+### Java对应框架Grpc-Spring-Boot-Starter使用说明
     https://yidongnan.github.io/grpc-spring-boot-starter/zh-CN/
+## 4、测试用例
+```shell
+
+grpcurl --plaintext  localhost:9090  list
+
+grpcurl --plaintext localhost:9090  list top.fosin.anan.cloudresource.grpc.permission.PermissionService
+grpcurl --plaintext  localhost:9090 list top.fosin.anan.cloudresource.grpc.parameter.ParameterService
+grpcurl --plaintext  localhost:9090 list top.fosin.anan.cloudresource.grpc.user.UserService
+
+grpcurl --plaintext -d "{\"serviceCode\": \"anan-platformserver\"}" localhost:9090 top.fosin.anan.cloudresource.grpc.permission.PermissionService/findByServiceCode
+grpcurl --plaintext -d "{\"name\": \"UserDefaultPassword\",\"type\": 1,\"scope\": null}" localhost:9090 top.fosin.anan.cloudresource.grpc.parameter.ParameterService.getNearestParameter
+
+```

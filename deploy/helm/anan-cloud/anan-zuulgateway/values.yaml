@@ -5,7 +5,7 @@ deployment:
       maxUnavailable: 1 #滚动升级时允许的最大Unavailable的pod个数
   minReadySeconds: 60  #滚动升级时60s后认为该pod就绪
   replicaCount: 1
-terminationGracePeriodSeconds: 30 #优雅关闭pod的等待时间，默认30s
+terminationGracePeriodSeconds: 16 #优雅关闭pod的等待时间，默认30s
 initContainers:
   - name: wait-platformserver
     image: busybox
