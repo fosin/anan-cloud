@@ -17,8 +17,7 @@ import org.springframework.cloud.gateway.route.RouteDefinition;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.*;
+import org.springframework.http.ResponseCookie;
 import org.springframework.remoting.RemoteAccessException;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Recover;
@@ -29,12 +28,10 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.session.WebSessionIdResolver;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.swagger.web.SwaggerResource;
-import top.fosin.anan.cloudresource.constant.PathPrefixConstant;
-import top.fosin.anan.cloudresource.constant.PathSuffixConstant;
+import top.fosin.anan.cloudgateway.service.CustomReactiveOAuth2UserService;
 import top.fosin.anan.cloudresource.constant.ServiceConstant;
 import top.fosin.anan.cloudresource.dto.res.PermissionRespDto;
 import top.fosin.anan.cloudresource.service.inter.rpc.PermissionRpcService;
-import top.fosin.anan.data.result.MultResult;
 import top.fosin.anan.security.resource.AnanProgramAuthorities;
 import top.fosin.anan.security.resource.AnanSecurityProperties;
 import top.fosin.anan.security.resource.AuthorityPermission;
@@ -42,7 +39,6 @@ import top.fosin.anan.security.resource.SecurityConstant;
 import top.fosin.anan.swagger.config.AnanSwaggerResourcesProvider;
 import top.fosin.anan.swagger.config.SwaggerProperties;
 
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
@@ -63,19 +59,25 @@ public class GatewayAutoConfiguration {
     @Value("${spring.application.name}")
     private final String applicationName = "anan-cloudgateway";
     private final PermissionRpcService permissionRpcService;
+    private final AnanSecurityProperties ananSecurityProperties;
 
     public GatewayAutoConfiguration(DiscoveryClient discoveryClient, ServerProperties serverProperties,
-                                    WebFluxProperties webFluxProperties, PermissionRpcService permissionRpcService) {
+                                    WebFluxProperties webFluxProperties, PermissionRpcService permissionRpcService, AnanSecurityProperties ananSecurityProperties) {
         this.discoveryClient = discoveryClient;
         this.serverProperties = serverProperties;
         this.webFluxProperties = webFluxProperties;
         this.permissionRpcService = permissionRpcService;
+        this.ananSecurityProperties = ananSecurityProperties;
     }
 
-//    @Bean
+    //    @Bean
 //    public ServerRequestCache serverRequestCache() {
 //        return new CustomWebSessionServerRequestCache();
 //    }
+    @Bean
+    public CustomReactiveOAuth2UserService customReactiveOAuth2UserService() {
+        return new CustomReactiveOAuth2UserService();
+    }
 
     @Bean
     @LoadBalanced
@@ -120,24 +122,27 @@ public class GatewayAutoConfiguration {
             backoff = @Backoff(delayExpression = "${retry.backoff:1000}"))
     public List<PermissionRespDto> getPermissionsByRest(List<String> hosts) throws URISyntaxException {
         List<PermissionRespDto> dtos;
-         //方式1，feign
+        // 方法4：GRPC
+        dtos = permissionRpcService.findByServiceCodes(hosts);
+
+        //方式1，feign
         //List<PermissionRespDto> dtos = permissionFeignService.findByServiceCodes(hosts, PathPrefixConstant.API_VERSION_NAME).getData();
         //List<PermissionRespDto> dtos = findByServiceCodes(hosts,PathPrefixConstant.API_VERSION_NAME).get();
 
         //方式2：restTemplate调用
-        ServiceInstance instance = getServiceRandomInstance();
-        String scheme = instance.getScheme();
-        URI uri = new URI(scheme == null ? "http" : scheme, null, instance.getHost(), instance.getPort(), "/" + PathPrefixConstant.PERMISSION + PathSuffixConstant.SERVICE_CODES, PathPrefixConstant.DEFAULT_VERSION_PARAM, null);
-
-        RequestEntity<List<String>> request = RequestEntity
-                .post(uri)
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(hosts);
-        ResponseEntity<MultResult<PermissionRespDto>> res = restTemplate()
-                .exchange(uri, HttpMethod.POST, request, new ParameterizedTypeReference<>() {
-                });
-
+//        ServiceInstance instance = getServiceRandomInstance();
+//        String scheme = instance.getScheme();
+//        URI uri = new URI(scheme == null ? "http" : scheme, null, instance.getHost(), instance.getPort(), "/" + PathPrefixConstant.PERMISSION + PathSuffixConstant.SERVICE_CODES, PathPrefixConstant.DEFAULT_VERSION_PARAM, null);
+//
+//        RequestEntity<List<String>> request = RequestEntity
+//                .post(uri)
+//                .accept(MediaType.APPLICATION_JSON)
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .body(hosts);
+//        ResponseEntity<MultResult<PermissionRespDto>> res = restTemplate()
+//                .exchange(uri, HttpMethod.POST, request, new ParameterizedTypeReference<>() {
+//                });
+        //使用服务名调用，由于restTemplate的bean的
         //URI uri = new URI("http://" + ServiceConstant.ANAN_PLATFORMSERVER + "/" + PathPrefixConstant.PERMISSION + PathSuffixConstant.SERVICE_CODES + "?" + PathPrefixConstant.DEFAULT_VERSION_PARAM);
         //RequestEntity<List<String>> request = RequestEntity
         //        .post(uri)
@@ -147,7 +152,7 @@ public class GatewayAutoConfiguration {
         //ResponseEntity<MultResult<PermissionRespDto>>  res = restTemplate()
         //        .exchange(uri, HttpMethod.POST, request, new ParameterizedTypeReference<>() {});
 
-        dtos = Objects.requireNonNull(res.getBody()).getData();
+//        dtos = Objects.requireNonNull(res.getBody()).getData();
 
         //方式3：webClient
         //MultResult<PermissionRespDto> multResult = webBuilder().baseUrl("lb://" + ServiceConstant.ANAN_PLATFORMSERVER).build()
@@ -201,14 +206,11 @@ public class GatewayAutoConfiguration {
      * @return AnanProgramAuthorities 编程权限
      */
     @Bean
-    @Primary
-    public AnanProgramAuthorities ananProgramAuthoritiesNew() {
+    public AnanProgramAuthorities ananProgramAuthorities() throws URISyntaxException {
         List<RouteDefinition> routes = ananGatewayProperties().getRoutes();
         List<String> hosts = routes.stream().map(route -> route.getUri().getHost()).collect(Collectors.toList());
-//        List<PermissionRespDto> permissions = getPermissionsByRest(hosts);
-        // 方法4：GRPC
-        List<PermissionRespDto> permissions = permissionRpcService.findByServiceCodes(hosts);
-
+        List<PermissionRespDto> permissions = getPermissionsByRest(hosts);
+        String authorityPrefix = ananSecurityProperties.getOauth2().getResourceServer().getAuthorityPrefix();
         List<AnanSecurityProperties.Authority> authorities = new ArrayList<>();
         Objects.requireNonNull(permissions).forEach(p -> {
             String path = p.getPath();
@@ -219,7 +221,12 @@ public class GatewayAutoConfiguration {
                 AnanSecurityProperties.Authority authority = new AnanSecurityProperties.Authority();
                 authority.setPaths(joinPath);
                 authority.setMethods(method);
-                authority.setPermission(AuthorityPermission.hasAuthority.getName() + SecurityConstant.AUTHORITY_SPLIT + p.getId());
+                String permission = AuthorityPermission.hasAuthority.getName() + SecurityConstant.AUTHORITY_SPLIT;
+                if (StringUtils.hasText(authorityPrefix)) {
+                    permission += authorityPrefix;
+                }
+                permission += p.getId();
+                authority.setPermission(permission);
                 authorities.add(authority);
             }
         });

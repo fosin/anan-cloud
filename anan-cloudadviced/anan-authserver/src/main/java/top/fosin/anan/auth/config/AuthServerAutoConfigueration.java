@@ -38,7 +38,7 @@ import java.util.stream.Collectors;
  * @since 2.1.0
  */
 @Configuration
-public class AnanAuthAutoConfigueration {
+public class AuthServerAutoConfigueration {
 
     /**
      * 解决springboot升到2.6.x之后，使用actuator之后swagger会报错
@@ -109,10 +109,12 @@ public class AnanAuthAutoConfigueration {
     }
 
     @Bean
-    public OAuth2TokenGenerator<?> tokenGenerator(JWKSource<SecurityContext> jwkSource, AuthService authService) {
+    public OAuth2TokenGenerator<?> tokenGenerator(JWKSource<SecurityContext> jwkSource,
+                                                  AuthService authService,
+                                                  AnanSecurityProperties ananSecurityProperties) {
         JwtEncoder jwtEncoder = new NimbusJwtEncoder(jwkSource);
         JwtGenerator jwtGenerator = new JwtGenerator(jwtEncoder);
-        jwtGenerator.setJwtCustomizer(new JwtOAuth2TokenCustomizer(authService));
+        jwtGenerator.setJwtCustomizer(new JwtOAuth2TokenCustomizer(authService, ananSecurityProperties));
         OAuth2AccessTokenGenerator accessTokenGenerator = new OAuth2AccessTokenGenerator();
         OAuth2RefreshTokenGenerator refreshTokenGenerator = new OAuth2RefreshTokenGenerator();
         return new DelegatingOAuth2TokenGenerator(jwtGenerator, accessTokenGenerator, refreshTokenGenerator);

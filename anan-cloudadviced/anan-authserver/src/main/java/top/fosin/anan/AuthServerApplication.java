@@ -3,7 +3,6 @@ package top.fosin.anan;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.cloud.openfeign.EnableFeignClients;
-import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 import top.fosin.anan.core.banner.AnanBanner;
 import top.fosin.anan.redis.annotation.EnableAnanRedis;
 import top.fosin.anan.security.servlet.annotation.EnableAnanWebSecurity;
@@ -17,7 +16,6 @@ import top.fosin.anan.swagger.annotation.EnableAnanSwagger2;
 @EnableAnanSwagger2
 @EnableAnanWebSecurity
 @EnableFeignClients
-@EnableRedisHttpSession(maxInactiveIntervalInSeconds = 60 * 60 * 24)
 public class AuthServerApplication {
     public static void main(String[] args) {
         new SpringApplicationBuilder(AuthServerApplication.class)
