@@ -63,31 +63,29 @@ public class JwtOAuth2TokenCustomizer implements OAuth2TokenCustomizer<JwtEncodi
                         String usercode = authorization.getName();
                         userAuthDto = authService.findByUsercode(usercode);
                     }
-                    if (userAuthDto != null) {
-                        if (scopes.contains(DefaultOidcScopes.PHONE)) {
-                            setClaim(claims, DefaultClaimNames.PHONE, userAuthDto.getPhone());
-                            setClaim(claims, DefaultClaimNames.PHONE_VERIFIED, userAuthDto.getPhoneVerified() + "");
-                        }
-                        if (scopes.contains(DefaultOidcScopes.EMAIL)) {
-                            setClaim(claims, DefaultClaimNames.EMAIL, userAuthDto.getEmail());
-                            setClaim(claims, DefaultClaimNames.EMAIL_VERIFIED, userAuthDto.getEmailVerified() + "");
-                        }
-                        if (scopes.contains(DefaultOidcScopes.PROFILE)) {
-                            setClaim(claims, DefaultClaimNames.ID, userAuthDto.getId() + "");
-                            setClaim(claims, DefaultClaimNames.USER_NAME, userAuthDto.getUsername());
-                            setClaim(claims, DefaultClaimNames.REAL_NAME_VERIFIED, userAuthDto.getRealNameVerified() + "");
-                            setClaim(claims, DefaultClaimNames.SEX, userAuthDto.getSex() + "");
-                            setClaim(claims, DefaultClaimNames.GIVEN_NAME, userAuthDto.getGivenName());
-                            setClaim(claims, DefaultClaimNames.FAMILY_NAME, userAuthDto.getFamilyName());
-                            setClaim(claims, DefaultClaimNames.MIDDLE_NAME, userAuthDto.getMiddleName());
-                            setClaim(claims, DefaultClaimNames.NICKNAME, userAuthDto.getNickname());
-                            setClaim(claims, DefaultClaimNames.PREFERRED_USERNAME, userAuthDto.getPreferredUsername());
-                            setClaim(claims, DefaultClaimNames.WEBSITE, userAuthDto.getWebsite());
-                            setClaim(claims, DefaultClaimNames.AVATAR, userAuthDto.getAvatar());
-                            setClaim(claims, DefaultClaimNames.BIRTHDATE, DateTimeUtil.formatTime(userAuthDto.getBirthday(), DateTimeUtil.DATE_PATTERN));
-                            setClaim(claims, DefaultClaimNames.UPDATE_BY, userAuthDto.getUpdateBy() + "");
-                            setClaim(claims, DefaultClaimNames.UPDATE_TIME, DateTimeUtil.formatTime(userAuthDto.getUpdateTime(), DateTimeUtil.DATETIME_PATTERN));
-                        }
+                    if (scopes.contains(DefaultOidcScopes.PHONE)) {
+                        setClaim(claims, DefaultClaimNames.PHONE, userAuthDto.getPhone());
+                        setClaim(claims, DefaultClaimNames.PHONE_VERIFIED, userAuthDto.getPhoneVerified() + "");
+                    }
+                    if (scopes.contains(DefaultOidcScopes.EMAIL)) {
+                        setClaim(claims, DefaultClaimNames.EMAIL, userAuthDto.getEmail());
+                        setClaim(claims, DefaultClaimNames.EMAIL_VERIFIED, userAuthDto.getEmailVerified() + "");
+                    }
+                    if (scopes.contains(DefaultOidcScopes.PROFILE)) {
+                        setClaim(claims, DefaultClaimNames.ID, userAuthDto.getId() + "");
+                        setClaim(claims, DefaultClaimNames.USER_NAME, userAuthDto.getUsername());
+                        setClaim(claims, DefaultClaimNames.REAL_NAME_VERIFIED, userAuthDto.getRealNameVerified() + "");
+                        setClaim(claims, DefaultClaimNames.SEX, userAuthDto.getSex() + "");
+                        setClaim(claims, DefaultClaimNames.GIVEN_NAME, userAuthDto.getGivenName());
+                        setClaim(claims, DefaultClaimNames.FAMILY_NAME, userAuthDto.getFamilyName());
+                        setClaim(claims, DefaultClaimNames.MIDDLE_NAME, userAuthDto.getMiddleName());
+                        setClaim(claims, DefaultClaimNames.NICKNAME, userAuthDto.getNickname());
+                        setClaim(claims, DefaultClaimNames.PREFERRED_USERNAME, userAuthDto.getPreferredUsername());
+                        setClaim(claims, DefaultClaimNames.WEBSITE, userAuthDto.getWebsite());
+                        setClaim(claims, DefaultClaimNames.AVATAR, userAuthDto.getAvatar());
+                        setClaim(claims, DefaultClaimNames.BIRTHDATE, DateTimeUtil.formatTime(userAuthDto.getBirthday(), DateTimeUtil.DATE_PATTERN));
+                        setClaim(claims, DefaultClaimNames.UPDATE_BY, userAuthDto.getUpdateBy() + "");
+                        setClaim(claims, DefaultClaimNames.UPDATE_TIME, DateTimeUtil.formatTime(userAuthDto.getUpdateTime(), DateTimeUtil.DATETIME_PATTERN));
                     }
                 }
             }

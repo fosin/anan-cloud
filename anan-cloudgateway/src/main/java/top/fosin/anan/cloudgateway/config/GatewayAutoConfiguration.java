@@ -28,6 +28,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.session.WebSessionIdResolver;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.swagger.web.SwaggerResource;
+import top.fosin.anan.cloudgateway.service.CustomOidcReactiveOAuth2UserService;
 import top.fosin.anan.cloudgateway.service.CustomReactiveOAuth2UserService;
 import top.fosin.anan.cloudresource.constant.ServiceConstant;
 import top.fosin.anan.cloudresource.dto.res.PermissionRespDto;
@@ -77,6 +78,10 @@ public class GatewayAutoConfiguration {
     @Bean
     public CustomReactiveOAuth2UserService customReactiveOAuth2UserService() {
         return new CustomReactiveOAuth2UserService();
+    }
+    @Bean
+    public CustomOidcReactiveOAuth2UserService customOidcReactiveOAuth2UserService() {
+        return new CustomOidcReactiveOAuth2UserService();
     }
 
     @Bean

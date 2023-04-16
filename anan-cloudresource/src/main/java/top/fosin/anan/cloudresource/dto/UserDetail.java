@@ -48,9 +48,24 @@ public class UserDetail extends User {
     }
 
     @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof UserDetail) {
+            return this.getUsername().equals(((UserDetail) obj).getUsername());
+        }
+        return false;
+    }
+
+    @Override
     public String toString() {
-        return super.toString() + ":" + ", " +
-                "UserAuthDto=" + this.user + ", " +
-                "Client=" + this.client + ", ";
+        return this.getClass().getName() + " [" +
+                "Username=" + this.getUsername() + ", " +
+                "Password=[PROTECTED], " +
+                "Enabled=" + this.isEnabled() + ", " +
+                "AccountNonExpired=" + this.isAccountNonExpired() + ", " +
+                "credentialsNonExpired=" + this.isCredentialsNonExpired() + ", " +
+                "AccountNonLocked=" + this.isAccountNonLocked() + ", " +
+                "Granted Authorities=" + this.getAuthorities() + ", " +
+                "UserAuthDto=" + this.getUser() + ", " +
+                "Client=" + this.getClient() + "]";
     }
 }
