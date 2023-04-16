@@ -9,7 +9,7 @@ terminationGracePeriodSeconds: 15 #优雅关闭pod的等待时间，默认30s
 initContainers:
   - name: wait-mysql
     image: busybox
-    command: ['sh', '-c', 'until nc mysql-mgr 3306; do echo waiting for mysql; sleep 2; done;']
+    command: ['sh', '-c', 'until nc mysql-cluster 3306; do echo waiting for mysql; sleep 2; done;']
     imagePullPolicy: IfNotPresent
   - name: wait-redis
     image: busybox
@@ -69,16 +69,3 @@ service:
   ports:
     - port: 6150
       name: http
-configmap:
-  - name: "application" #configmap的名称，如果不设置，默认是模版anan.configmap.name定义的名称，只支持一个不设置
-    fromFiles:
-      application.yaml: "conf/application.yaml" #configmap的key名称：文件路径+名称
-  - fromFiles:
-      anan-platformserver.yaml: "conf/anan-platformserver.yaml"
-cluster:
-  serviceAccountName: "default"
-  role:
-    rules:
-      - apiGroups: ["", "extensions", "apps"]
-        resources: ["configmaps", "pods", "services", "endpoints", "secrets"]
-        verbs: ["get", "list", "watch"]

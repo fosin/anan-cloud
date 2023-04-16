@@ -18,13 +18,13 @@
             100.100.1.198 redis
             100.100.1.198 rabbitmq
             100.100.1.198 nacos
-            100.100.1.198 mysql-mgr
+            100.100.1.198 mysql-cluster
             
             100.100.1.198 anan-authserver
             100.100.1.198 anan-platformserver
             100.100.1.198 anan-cloudgateway
             EOF
-       1.2.2、启动mysql主从同步模式和nacos服务发现和配置管理
+       1.2.2、启动mysql和nacos服务发现和配置管理
             docker-compose -f .\docker-compose.yml up -d mysql nacos
             
             1.2.2.1、启动完成后，nacos使用nacos用户连接nacos数据库。
@@ -32,26 +32,24 @@
             #账户：nacos
             #密码：local
 
-            1.2.2.2、anan_authserver、anan-platformserver等使用anan用户连接anan_platform数据库，默认是没有这个用户的
+            1.2.2.2、导入Nacos配置文件(deploy/helm/anan-cloud/anan-config/conf)
+
+            1.2.2.3、anan_authserver、anan-platformserver等使用anan用户连接anan_platform数据库，默认是没有这个用户的
             #手动创建anan用户
             use mysql;
             create user 'anan'@'%' identified by 'local';
             GRANT all ON anan_platform.* TO 'anan'@'%';
 
-            1.2.2.3、nacos中的配置文件中的密码使用jasper加密过，可以通过以下命令来换密码或解密
+            1.2.2.4、nacos中的配置文件中的密码使用jasper加密过，可以通过以下命令来换密码或解密
             ### input是需要加密的密码、password是加密的密钥、algorithm是加密算法
             ### 获取加密的密码
             java -cp E:\Tools\Apache\Maven\repository\org\jasypt\jasypt\1.9.3\jasypt-1.9.3.jar org.jasypt.intf.cli.JasyptPBEStringEncryptionCLI input="local" password=oF7tVrdfjrbQ0NfSsRL3  algorithm=PBEWithMD5AndDES
             
             ### 解密密码
             java -cp E:\Tools\Apache\Maven\repository\org\jasypt\jasypt\1.9.3\jasypt-1.9.3.jar org.jasypt.intf.cli.JasyptPBEStringDecryptionCLI input=svOoGRZ5qlC1bRGGh+7YwA== password=oF7tVrdfjrbQ0NfSsRL3 algorithm=PBEWithMD5AndDES
-       1.2.3、安装Redis(3.x、4.x、5.x都支持)
-            docker-compose -f .\docker-compose.yml up -d redis
-       1.2.4、安装Rabbitmq(只测试过3.x)
-            docker-compose -f .\docker-compose.yml up -d rabbitmq
-       1.2.5、如果对机器性能有信息，以上组件也可以使用一个命令启动
+       1.2.3、部署Redis(3.x及以上都支持)、Rabbitmq(只测试过3.x)、MySQL（推荐8.x）、Nacos（推荐2.1.x及以上）
             docker-compose -f .\docker-compose.yml up -d redis rabbitmq mysql nacos
-       1.2.6、关闭compose
+       1.2.4、关闭compose
             docker-compose -f .\docker-compose.yml down --remove-orphans
 
 ### 1.3、日志安装篇，使用文件docker-compose.yml(elsaticsearch、filebeat、kibana等) -非必须

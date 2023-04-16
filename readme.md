@@ -17,7 +17,7 @@
 
      技术                                   |           简介 
     ------                                 |          ------
-    Anan-Boot                              | anan-boot-starter基础构建框架脚手架，基于SpringBoot2.3
+    anan-boot                              | anan-boot-starter基础构建框架脚手架，基于SpringBoot2.3
         anan-core                          | 公共核心、工具类
         anan-security                      | 快速搭建基于Spring Security、Oauth2的授权服务器、资源服务器认证体系
         anan-jpa                           | 快速构建基于Spring Data Jpa的CRUD、分页、排序、树形数据
@@ -80,6 +80,7 @@
     3.0.x               3.0.x                3.5.x~3.6.x
     3.1.x               3.1.x                3.7.x
     3.2.x               3.2.x                3.8.x
+    4.0.x               3.3.x                3.9.x
 
 ## 服务与端口对照
 

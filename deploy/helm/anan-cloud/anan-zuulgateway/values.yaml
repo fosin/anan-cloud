@@ -50,9 +50,6 @@ containers:
     envFrom:
       - configMapRef:
           name: anan-env
-configmap:
-  - fromFiles:
-      anan-zuulgateway.yaml: "anan-zuulgateway.yaml"
 service:
   type: NodePort
   ports:

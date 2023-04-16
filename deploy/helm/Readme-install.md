@@ -6,12 +6,13 @@
 
 cd deploy\helm
 
-helm dependency update .\mysql-mgr
+helm dependency update .\mysql-cluster
 helm dependency update .\mysql-backup
 helm dependency update .\rabbitmq
 helm dependency update .\redis
 helm dependency update .\redisinsight
 helm dependency update .\nacos
+helm dependency update .\anan-cloud\anan-config
 helm dependency update .\anan-cloud\anan-platformserver
 helm dependency update .\anan-cloud\anan-authserver
 helm dependency update .\anan-cloud\anan-cloudgateway
@@ -43,16 +44,16 @@ helm dependency update .\monitor\dashboard-metrics-scrapper
 
 #1、上传anan部署包到到服务器，并解压到/data/helm/相对目录下
 mkdir -p ${ANAN_WORKDIR}/helm && cd ${ANAN_WORKDIR}/helm
-mkdir -p ${ANAN_WORKDIR}/mysql-mgr${NODE_INDEX}
-mkdir -p ${ANAN_WORKDIR}/logs/mysql-mgr${NODE_INDEX}
+mkdir -p ${ANAN_WORKDIR}/mysql-cluster${NODE_INDEX}
+mkdir -p ${ANAN_WORKDIR}/logs/mysql-cluster${NODE_INDEX}
 
 #mysql容器中的用户名和组名都是mysql，id都是999，但是这样不能生效，还是需要777权限
-#chown 999:999 -R ${ANAN_WORKDIR}/logs/mysql-mgr${NODE_INDEX}
-chmod 777 -R ${ANAN_WORKDIR}/logs/mysql-mgr${NODE_INDEX}
+#chown 999:999 -R ${ANAN_WORKDIR}/logs/mysql-cluster${NODE_INDEX}
+chmod 777 -R ${ANAN_WORKDIR}/logs/mysql-cluster${NODE_INDEX}
 
 #2、创建基础ConfigMap和启动mysql数据库、容器会自动创建对应的数据库，并启用主从同步
 
-helm install mysql-mgr mysql-mgr/
+helm install mysql-cluster mysql-cluster/
 helm install mysql-backup mysql-backup/
 
 #所有的节点都执行安装MGR插件
@@ -249,42 +250,5 @@ grafana-cli admin reset-admin-password admin@1234
 
 #1、部署ingress和SSL证书
 helm install anan-nginx-ingress nginx-ingress/
-
-```
-
-### 6、卸载服务
-
-```shell script
-
-#卸载边缘服务
-helm uninstall grafana
-helm uninstall prometheus
-helm uninstall node-exporter
-helm uninstall blackbox-exporter
-helm uninstall alertmanager
-
-helm uninstall dashboard-metrics-scraper
-helm uninstall dashboard
-
-helm uninstall zipkin
-helm uninstall kibana
-helm uninstall elastichd
-helm uninstall filebeat
-helm uninstall es
-
-#卸载ingress
-helm uninstall anan-nginx-ingress
-
-#卸载anan服务
-helm uninstall anan-cloudgateway
-helm uninstall anan-authserver
-helm uninstall anan-platformserver
-helm uninstall anan-sbaserver
-
-#卸载基础服务
-helm uninstall nacos
-helm uninstall rabbitmq
-helm uninstall redis
-helm uninstall mysql-mgr
 
 ```

@@ -1,9 +1,9 @@
 apiVersion: v2
 description: A Helm chart for Kubernetes
-name: mysql-mgr
+name: anan-config
 version: 0.0.3
-appVersion: "5.7"
+appVersion: 3.2.0-SNAPSHOT
 dependencies:
   - name: anan-templates
     version: 0.0.3
-    repository: file://../templates/anan-templates
+    repository: file://../../templates/anan-templates

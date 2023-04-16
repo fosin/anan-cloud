@@ -1,0 +1,197 @@
+statefulset:
+  updateStrategy:
+    type: RollingUpdate
+  #并行创建pod,默认为按顺序执行OrderedReady
+  podManagementPolicy: Parallel
+  replicaCount: 3
+secret:
+  - type: Opaque
+    fromMap:
+      mysql.root.password: "tcfuturE~20211005"
+      mysql.replication.user: "repl"
+      mysql.replication.password: "tcfuture!124"
+      mysql.platform.dbname: "anan_platform"
+      mysql.platform.user: "anan"
+      mysql.platform.password: "tcFuture!20211005"
+      mysql.exam.dbname: "exam"
+      mysql.exam.user: "anan"
+      mysql.exam.password: "tcFuture!20211005"
+      mysql.nacos.dbname: "nacos"
+      mysql.nacos.user: "nacos"
+      mysql.nacos.password: "tcFuture!20211005" #nacos的数据库密码中不能包含逗号(,)，踩了几次坑了
+      mysql.grafana.dbname: "grafana"
+      mysql.grafana.user: "grafana"
+      mysql.grafana.password: "tcFuture!20220309"
+initContainers:
+  - name: init-mysql
+    image: mysql:8.0
+    imagePullPolicy: IfNotPresent
+    command:
+      - bash
+      - "-c"
+      - |
+        set -ex
+
+        #从config-map中复制配置文件到emptyDir，因为config-map目录为只读
+        cp /etc/mysql/cluster.cnf /etc/mysql/conf.d/cluster.cnf
+
+        #从Pod序号生成server-id, =~ 判断字符串包含关系，BASH_REMATCH变量存储匹配结果
+        [[ `echo $MY_POD_NAME` =~ (.*)-([0-9]+)$ ]] || exit 1
+        export RELEASE_NAME=${BASH_REMATCH[1]}
+        export POD_NUMBER=${BASH_REMATCH[2]}
+
+        echo -e "server_id=$((1 + $POD_NUMBER))" >> /etc/mysql/conf.d/cluster.cnf
+        #告诉插件使用IP地址，端口33061用于接收组中其他成员转入连接
+        echo -e "group_replication_local_address=\"`echo $MY_POD_NAME`.`echo $MY_POD_SERVICE_HEADLESS`.`echo $MY_POD_NAMESPACE`.svc.cluster.local:33061\"" >> /etc/mysql/conf.d/cluster.cnf
+        echo -e "report_host=\"`echo $MY_POD_NAME`.`echo $MY_POD_SERVICE_HEADLESS`.`echo $MY_POD_NAMESPACE`.svc.cluster.local\"" >> /etc/mysql/conf.d/cluster.cnf
+
+        #配置是否自动引导组
+        if [[ $POD_NUMBER == 0 ]]; then
+          echo -e "group_replication_bootstrap_group=ON" >> /etc/mysql/conf.d/cluster.cnf
+        else
+          echo -e "group_replication_bootstrap_group=OFF" >> /etc/mysql/conf.d/cluster.cnf
+        fi
+    volumeMounts:
+      - name: mysql-cluster
+        mountPath: /etc/mysql/
+      - name: temp
+        mountPath: /etc/mysql/conf.d/
+    env:
+      - name: MY_POD_SERVICE_HEADLESS
+        valueFrom:
+          configMapKeyRef:
+            name: mysql-cluster
+            key: mysql.service.headless
+      - name: MY_POD_NAMESPACE
+        valueFrom:
+          fieldRef:
+            fieldPath: metadata.namespace
+      - name: MY_POD_NAME
+        valueFrom:
+          fieldRef:
+            fieldPath: metadata.name
+containers:
+  - name: server
+    image: mysql:8.0
+    imagePullPolicy: Always
+    resources:
+      limits:
+        memory: 1336Mi
+      requests:
+        cpu: 1m
+        memory: 768Mi
+    ports:
+      - name: server
+        containerPort: 3306
+    env:
+      - name: TZ
+        value: Asia/Shanghai
+      - name: MYSQL_ROOT_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: mysql-cluster
+            key: mysql.root.password
+    startupProbe:
+      periodSeconds: 10
+      failureThreshold: 4
+      exec:
+        command:
+          - /bin/sh
+          - "-c"
+          - MYSQL_PWD="${MYSQL_ROOT_PASSWORD}"
+          - mysql -u root -e "SELECT 1"
+    readinessProbe:
+      periodSeconds: 60
+      failureThreshold: 2
+      exec:
+        command:
+          - /bin/sh
+          - "-c"
+          - MYSQL_PWD="${MYSQL_ROOT_PASSWORD}"
+          - mysql -u root -e "SELECT 1"
+    volumeMounts:
+      - name: data
+        mountPath: /var/lib/mysql
+      - name: log
+        mountPath: /var/log/mysql
+      - name: temp
+        mountPath: /etc/mysql/conf.d/
+  - name: router
+    image: mysql/mysql-router:8.0
+    imagePullPolicy: Always
+    resources:
+      limits:
+        memory: 256Mi
+      requests:
+        cpu: 1m
+        memory: 128Mi
+    ports:
+      - name: readwrite
+        containerPort: 6446
+      - name: readonly
+        containerPort: 6447
+    env:
+      - name: TZ
+        value: Asia/Shanghai
+      - name: MYSQL_HOST
+        valueFrom:
+          configMapKeyRef:
+            name: mysql-cluster
+            key:  mysql.service
+      - name: MYSQL_PORT
+        value: "3306"
+      - name: MYSQL_USER
+        valueFrom:
+          secretKeyRef:
+            name: mysql-cluster
+            key: mysql.replication.user
+      - name: MYSQL_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: mysql-cluster
+            key: mysql.replication.password
+      - name: MYSQL_INNODB_CLUSTER_MEMBERS
+        value: "3"
+volumes:
+  - name: temp
+    emptyDir: {}
+  - name: mysql-cluster
+    configMap:
+      name: mysql-cluster
+      items:
+        - key: cluster.cnf
+          path: cluster.cnf
+persistence:
+  - name: data
+    storageClassName: local-storage
+    size: 2G
+    accessMode: ReadWriteOnce
+    mountPath: /var/lib/mysql
+    local:
+      - hostname: exam0
+        path: /data/mysql-cluster
+      - hostname: exam1
+        path: /data/mysql-cluster
+      - hostname: exam2
+        path: /data/mysql-cluster
+  - name: log
+    storageClassName: local-storage
+    size: 500M
+    accessMode: ReadWriteOnce
+    mountPath: /var/log/mysql
+    local:
+      - hostname: exam0
+        path: /data/logs/mysql-cluster
+      - hostname: exam1
+        path: /data/logs/mysql-cluster
+      - hostname: exam2
+        path: /data/logs/mysql-cluster
+service:
+  type: NodePort
+  ports:
+    - port: 6446
+      name: http
+    - port: 6447
+      name: readonly
+    - port: 3306
+      name: server

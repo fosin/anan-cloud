@@ -50,9 +50,6 @@ containers:
     envFrom:
       - configMapRef:
           name: anan-env
-configmap:
-  - fromFiles:
-      anan-sbaserver.yaml: "anan-sbaserver.yaml"
 service:
   type: NodePort
   #labels:

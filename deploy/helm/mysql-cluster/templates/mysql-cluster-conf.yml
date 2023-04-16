@@ -5,11 +5,12 @@ metadata:
   namespace: {{ .Release.Namespace }}
 data:
   #环境配置
-  mysql.mgr.service.headless: {{ include "anan.service.headless.name" . }}
-  mysql.mgr.service: {{ include "anan.service.name" . }}
+  mysql.service.headless: {{ include "anan.service.headless.name" . }}
+  mysql.service: {{ include "anan.service.name" . }}
+  mysql.service.port.readwrite: "6446"
+  mysql.service.port.readonly: "6447"
   anan.tz: {{ include "anan.tz" . | quote }}
-  anan.user: {{ include "anan.user" . | quote }}
-  mgr.cnf: |
+  cluster.cnf: |
     [client]
     default-character-set=utf8mb4
 
@@ -17,8 +18,23 @@ data:
     default-character-set=utf8mb4
 
     [mysqld]
+    sql_mode=STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION
+    default-time_zone='+8:00'
+    skip_ssl
+    authentication_policy=mysql_native_password,,
     #datadir=/var/lib/mysql
     #socket=/var/lib/mysql/mysql.sock
+    #pid-file =/var/run/mysqld/mysqld.pid
+    log_error=/var/log/mysql/error.log
+
+    #是否开启一般查询日志
+    general_log=off
+    general_log_file=/var/log/mysql/general.log
+
+    #是否开启慢查询日志
+    slow_query_log=on
+    slow_query_log_file=/var/log/mysql/slow_query.log
+
     #显示设置timestamp的默认值类型，否则默认为空。
     explicit_defaults_for_timestamp=true
     #SHOW GLOBAL VARIABLES LIKE 'log_timestamps';默认为UTC，修改为SYSTEM
@@ -26,10 +42,10 @@ data:
     #不区分大小写
     lower_case_table_names=1
     #skip-grant-tables
-
+    
     #跳过dns反向解析，避免网络DNS解析服务引发访问MYSQL的错误
     #启用后，在mysql的授权表中就不能使用主机名了，只能使用IP
-    skip-name-resolve
+    skip_name_resolve
 
     #检测的表对象的最大数目
     performance_schema_max_table_instances=400
@@ -44,31 +60,35 @@ data:
     character-set-server=utf8mb4
     collation-server=utf8mb4_unicode_ci
 
-    #错误日志文件路径
-    log_error=/var/log/mysql/error.log
+    #Mysql性能调优
+    tmp_table_size=16M
+    max_heap_table_size=32M
+    innodb_buffer_pool_size=256M
+    innodb_log_file_size=64M
+    innodb_flush_log_at_trx_commit=2
 
-    #是否开启一般查询日志
-    general_log=off
-    general_log_file=/var/log/mysql/general.log
-
-    #是否开启慢查询日志
-    slow_query_log=on
-    slow_query_log_file=/var/log/mysql/slow_query.log
+    #mgr优化参数
+    replica_parallel_type=LOGICAL_CLOCK
+    replica_parallel_workers=4
+    replica_preserve_commit_order=ON
+    group_replication_compression_threshold=1000000
+    binlog_row_image=MINIMAL
+    group_replication_flow_control_mode=DISABLED
 
     #MGR组复制设置
     gtid_mode=ON
     enforce_gtid_consistency=ON
     binlog_checksum=NONE
 
-    log_slave_updates=ON
+    log_replica_updates=ON
     #启用binlog功能，并指定binlog的存储目录
-    log-bin=mysql-bin
+    log_bin=mysql-bin
     #可选Row、Statement、Mixed
     binlog_format=ROW
     #设置一个binlog文件的最大字节，设置最大 100MB
     max_binlog_size=104857600
     #设置binlog文件的有效期（单位：天）
-    expire_logs_days=30
+    binlog_expire_logs_seconds=30
     master_info_repository=TABLE
     relay_log_info_repository=TABLE
     #binlog日志只记录指定库的更新（配置主从复制的时候会用到）
@@ -79,32 +99,50 @@ data:
     # 1 表示每一条事务提交都会立即写磁盘，n 则表示 n 个事务提交才会写磁盘
     sync_binlog=0
 
+    disabled_storage_engines="MyISAM,BLACKHOLE,FEDERATED,ARCHIVE,MEMORY"
+    binlog_transaction_dependency_tracking=WRITESET
+    
+    #自动安装插件
+    #plugin_load_add='group_replication.so'
+    plugin_load_add='mysql_clone.so'
     #server必须为每个事务收集写集合，并使用XXHASH64哈希算法将其编码为散列
     transaction_write_set_extraction=XXHASH64
-    #告知插件加入或创建组命名，UUID
-    loose-group_replication_group_name="a876d35e-9110-11e6-a365-842b2c590777"
+    #告知插件加入或创建组命名UUID
+    group_replication_group_name="a876d35e-9110-11e6-a365-842b2b5909d8"
 
     # 单主模式
-    loose-group_replication_single_primary_mode=true
-    loose-group_replication_enforce_update_everywhere_checks=false
+    group_replication_single_primary_mode=true
+    group_replication_enforce_update_everywhere_checks=false
 
     {{- $replicaCount := int .Values.statefulset.replicaCount }}
     {{- $headlessName := (include "anan.service.headless.name" .) }}
-    {{- $serverPort := (index (index .Values.service.ports 0) "port") }}
 
     #启动组server，种子server，加入组应该连接这些的ip和端口；其他server要加入组得由组成员同意
-    loose-group_replication_group_seeds="
+    group_replication_group_seeds="
     {{- range $i, $e := until $replicaCount -}}
     {{- if eq $i 0 -}}
-    {{- $.Release.Name }}-{{ $i }}.{{ $headlessName }}.{{ $.Release.Namespace }}.svc.cluster.local:33068
+    {{- $.Release.Name }}-{{ $i }}.{{ $headlessName }}.{{ $.Release.Namespace }}.svc.cluster.local:33061
     {{- else -}}
-    {{- "," }}{{ $.Release.Name }}-{{ $i }}.{{ $headlessName }}.{{ $.Release.Namespace }}.svc.cluster.local:33068
+    {{- "," }}{{ $.Release.Name }}-{{ $i }}.{{ $headlessName }}.{{ $.Release.Namespace }}.svc.cluster.local:33061
     {{- end }}
     {{- end }}"
-
-    #配置白名单，默认情况下只允许10.244.x.x连接到复制组，如果是其他IP则需要配置。
-    loose-group-replication-ip-whitelist="10.244.0.0/16"
-    report_port={{ $serverPort }}
+    
+    #配置白名单，默认情况下只允许10.244.x.x连接到复制组，如果是其他IP则需要配置。  
+    group_replication_ip_allowlist="10.244.0.0/16"
+    report_port=3306
 
     #server启动自启组复制,为了避免每次启动自动引导具有相同名称的第二个组,可以设置为OFF。
-    loose-group_replication_start_on_boot=ON
+    group_replication_start_on_boot=ON
+  
+    #在MySQL 5.7里，Xcom cache size最大值1G，且不可动态调整。
+    #从MySQL 8.0开始，可对其动态调整。在 <= MySQL 8.0.20的版本中，最小值1G。在>= MySQL 8.0.21的版本中，最小值128M。
+    group_replication_message_cache_size=128M
+
+    #当确认可疑节点在超过group_replication_member_expel_timeout秒超时阈值后，再将该节点驱逐出MGR。
+    group_replication_member_expel_timeout=30
+
+    #定义了被驱逐节点之后的行为模式，默认是设置为super_read_only = ON，进入只读模式。
+    group_replication_exit_state_action=read_only
+    
+    #驱逐的节点会尝试group_replication_autorejoin_tries次重新加入MGR。
+    group_replication_autorejoin_tries=10

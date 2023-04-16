@@ -9,7 +9,7 @@ terminationGracePeriodSeconds: 30 #优雅关闭pod的等待时间，默认30s
 initContainers:
   - name: wait-mysql
     image: busybox
-    command: ['sh', '-c', 'until nc mysql-mgr 3306; do echo waiting for mysql; sleep 2; done;']
+    command: ['sh', '-c', 'until nc mysql-cluster 3306; do echo waiting for mysql; sleep 2; done;']
     imagePullPolicy: IfNotPresent
   - name: wait-redis
     image: busybox
@@ -58,9 +58,6 @@ containers:
     envFrom:
       - configMapRef:
           name: anan-env
-configmap:
-  - fromFiles:
-      anan-authserver.yaml: "anan-authserver.yaml"
 service:
   type: NodePort
   ports:

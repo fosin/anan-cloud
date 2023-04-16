@@ -1,0 +1,26 @@
+configmap:
+  - name: "application" #configmap的名称，如果不设置，默认是模版anan.configmap.name定义的名称，只支持一个不设置
+    fromFiles:
+      application.yaml: "conf/application.yaml" #configmap的key名称：文件路径+名称
+  - fromFiles:
+      anan-authserver.yaml: "conf/anan-authserver.yaml"
+    name: "anan-authserver" 
+  - fromFiles:
+      anan-cloudgateway.yaml: "conf/anan-cloudgateway.yaml"
+    name: "anan-cloudgateway"
+  - fromFiles:
+      anan-platformserver.yaml: "conf/anan-platformserver.yaml"
+    name: "anan-platformserver" 
+  - fromFiles:
+      anan-sbaserver.yaml: "conf/anan-sbaserver.yaml"
+    name: "anan-sbaserver" 
+  - fromFiles:
+      anan-zuulgateway.yaml: "conf/anan-zuulgateway.yaml"
+    name: "anan-zuulgateway"
+cluster:
+  serviceAccountName: "default"
+  role:
+    rules:
+      - apiGroups: ["", "extensions", "apps"]
+        resources: ["configmaps", "pods", "services", "endpoints", "secrets"]
+        verbs: ["get", "list", "watch"]

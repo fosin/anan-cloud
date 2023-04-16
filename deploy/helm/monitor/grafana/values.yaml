@@ -39,17 +39,17 @@ containers:
       - name: GF_DATABASE_PASSWORD
         valueFrom:
           secretKeyRef:
-            name: mysql-mgr
+            name: mysql-cluster
             key: mysql.grafana.password
       - name: GF_DATABASE_USER
         valueFrom:
           secretKeyRef:
-            name: mysql-mgr
+            name: mysql-cluster
             key: mysql.grafana.user
       - name: GF_DATABASE_DBNAME
         valueFrom:
           secretKeyRef:
-            name: mysql-mgr
+            name: mysql-cluster
             key: mysql.grafana.dbname
       - name: TZ
         value: Asia/Shanghai

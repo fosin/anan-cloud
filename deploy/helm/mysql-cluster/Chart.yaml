@@ -2,8 +2,8 @@ apiVersion: v2
 description: A Helm chart for Kubernetes
 name: mysql-cluster
 version: 0.0.3
-appVersion: 6.8.20
+appVersion: "5.8"
 dependencies:
   - name: anan-templates
     version: 0.0.3
-    repository: file://../../templates/anan-templates
+    repository: file://../templates/anan-templates
