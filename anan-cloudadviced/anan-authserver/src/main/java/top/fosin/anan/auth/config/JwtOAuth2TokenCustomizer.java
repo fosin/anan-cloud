@@ -1,6 +1,5 @@
 package top.fosin.anan.auth.config;
 
-import lombok.AllArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -25,17 +24,21 @@ import java.util.stream.Collectors;
  * @date 2023-2-18
  * @since 3.3.0
  */
-@AllArgsConstructor
+
 public class JwtOAuth2TokenCustomizer implements OAuth2TokenCustomizer<JwtEncodingContext> {
     private final AuthService authService;
-    private final AnanSecurityProperties ananSecurityProperties;
+    private final String authorityClaimName;
+
+    public JwtOAuth2TokenCustomizer(AuthService authService, AnanSecurityProperties ananSecurityProperties) {
+        this.authService = authService;
+        this.authorityClaimName = ananSecurityProperties.getOauth2().getResourceServer().getAuthorityClaimName();
+    }
 
     @Override
     public void customize(JwtEncodingContext context) {
         JwtClaimsSet.Builder claims = context.getClaims();
         Authentication authorization = context.getPrincipal();
         if (authorization != null) {
-            String authorityClaimName = ananSecurityProperties.getOauth2().getResourceServer().getAuthorityClaimName();
             Set<GrantedAuthority> authorities = authorization.getAuthorities().stream()
                     .map(authority -> new SimpleGrantedAuthority(authority.getAuthority()))
                     .collect(Collectors.toSet());

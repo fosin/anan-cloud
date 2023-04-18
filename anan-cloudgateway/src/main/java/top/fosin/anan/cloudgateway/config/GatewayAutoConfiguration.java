@@ -77,11 +77,12 @@ public class GatewayAutoConfiguration {
 //    }
     @Bean
     public CustomReactiveOAuth2UserService customReactiveOAuth2UserService() {
-        return new CustomReactiveOAuth2UserService();
+        return new CustomReactiveOAuth2UserService(ananSecurityProperties);
     }
+
     @Bean
     public CustomOidcReactiveOAuth2UserService customOidcReactiveOAuth2UserService() {
-        return new CustomOidcReactiveOAuth2UserService();
+        return new CustomOidcReactiveOAuth2UserService(ananSecurityProperties);
     }
 
     @Bean
@@ -226,11 +227,8 @@ public class GatewayAutoConfiguration {
                 AnanSecurityProperties.Authority authority = new AnanSecurityProperties.Authority();
                 authority.setPaths(joinPath);
                 authority.setMethods(method);
-                String permission = AuthorityPermission.hasAuthority.getName() + SecurityConstant.AUTHORITY_SPLIT;
-                if (StringUtils.hasText(authorityPrefix)) {
-                    permission += authorityPrefix;
-                }
-                permission += p.getId();
+                String permission = AuthorityPermission.hasAuthority.getName() + SecurityConstant.AUTHORITY_SPLIT
+                        + authorityPrefix + p.getId();
                 authority.setPermission(permission);
                 authorities.add(authority);
             }

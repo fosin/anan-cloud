@@ -40,13 +40,12 @@ import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import reactor.core.publisher.Mono;
-import top.fosin.anan.security.resource.SecurityConstant;
+import top.fosin.anan.security.resource.AnanSecurityProperties;
 
 import java.time.Instant;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * An implementation of an {@link ReactiveOAuth2UserService} that supports OpenID Connect
@@ -64,17 +63,26 @@ public class CustomOidcReactiveOAuth2UserService implements ReactiveOAuth2UserSe
 
     private static final String INVALID_USER_INFO_RESPONSE_ERROR_CODE = "invalid_user_info_response";
 
-    private static final Converter<Map<String, Object>, Map<String, Object>> DEFAULT_CLAIM_TYPE_CONVERTER = new ClaimTypeConverter(
-            createDefaultClaimTypeConverters());
+    private static final Converter<Map<String, Object>, Map<String, Object>> DEFAULT_CLAIM_TYPE_CONVERTER = new ClaimTypeConverter(createDefaultClaimTypeConverters());
 
-    private ReactiveOAuth2UserService<OAuth2UserRequest, OAuth2User> oauth2UserService = new CustomReactiveOAuth2UserService();
+    private ReactiveOAuth2UserService<OAuth2UserRequest, OAuth2User> oauth2UserService;
 
-    private Function<ClientRegistration, Converter<Map<String, Object>, Map<String, Object>>> claimTypeConverterFactory = (
-            clientRegistration) -> DEFAULT_CLAIM_TYPE_CONVERTER;
+    private Function<ClientRegistration, Converter<Map<String, Object>, Map<String, Object>>> claimTypeConverterFactory = (clientRegistration) -> DEFAULT_CLAIM_TYPE_CONVERTER;
+    private final String authorityPrefix;
+    private final String authorityClaimName;
+
+    public CustomOidcReactiveOAuth2UserService(AnanSecurityProperties ananSecurityProperties) {
+        AnanSecurityProperties.Oauth2ResourceServer resourceServer = ananSecurityProperties.getOauth2().getResourceServer();
+        this.authorityPrefix = resourceServer.getAuthorityPrefix();
+        this.authorityClaimName = resourceServer.getAuthorityClaimName();
+        this.oauth2UserService = new CustomReactiveOAuth2UserService(ananSecurityProperties);
+    }
+
 
     /**
      * Returns the default {@link Converter}'s used for type conversion of claim values
      * for an {@link OidcUserInfo}.
+     *
      * @return a {@link Map} of {@link Converter}'s keyed by {@link StandardClaimNames
      * claim name}
      * @since 5.2
@@ -91,8 +99,7 @@ public class CustomOidcReactiveOAuth2UserService implements ReactiveOAuth2UserSe
 
     private static Converter<Object, ?> getConverter(TypeDescriptor targetDescriptor) {
         final TypeDescriptor sourceDescriptor = TypeDescriptor.valueOf(Object.class);
-        return (source) -> ClaimConversionService.getSharedInstance().convert(source, sourceDescriptor,
-                targetDescriptor);
+        return (source) -> ClaimConversionService.getSharedInstance().convert(source, sourceDescriptor, targetDescriptor);
     }
 
     @Override
@@ -107,7 +114,11 @@ public class CustomOidcReactiveOAuth2UserService implements ReactiveOAuth2UserSe
                 .map((authority) -> {
                     OidcUserInfo userInfo = authority.getUserInfo();
                     Map<String,Object> attrs = authority.getAttributes();
-                    Set<GrantedAuthority> authorities = (Set<GrantedAuthority>) attrs.get(SecurityConstant.AUTHORITY_CLAIM_NAME);
+                    List<Map<String,String>> list = (List<Map<String,String>>) attrs.get(authorityClaimName);
+                    Set<GrantedAuthority> authorities = new HashSet<>();
+                    if (list != null) {
+                        authorities = list.stream().map(map -> new SimpleGrantedAuthority(authorityPrefix + map.get("role"))).collect(Collectors.toSet());
+                    }
                     authorities.add(authority);
                     OAuth2AccessToken token = userRequest.getAccessToken();
                     for (String scope : token.getScopes()) {
@@ -142,8 +153,7 @@ public class CustomOidcReactiveOAuth2UserService implements ReactiveOAuth2UserSe
         if (AuthorizationGrantType.AUTHORIZATION_CODE.equals(clientRegistration.getAuthorizationGrantType())) {
             // Return true if there is at least one match between the authorized scope(s)
             // and UserInfo scope(s)
-            return CollectionUtils.containsAny(userRequest.getAccessToken().getScopes(),
-                    userRequest.getClientRegistration().getScopes());
+            return CollectionUtils.containsAny(userRequest.getAccessToken().getScopes(), userRequest.getClientRegistration().getScopes());
         }
         return false;
     }
@@ -169,10 +179,8 @@ public class CustomOidcReactiveOAuth2UserService implements ReactiveOAuth2UserSe
     }
 
     private Map<String, Object> convertClaims(Map<String, Object> claims, ClientRegistration clientRegistration) {
-        Converter<Map<String, Object>, Map<String, Object>> claimTypeConverter = this.claimTypeConverterFactory
-                .apply(clientRegistration);
-        return (claimTypeConverter != null) ? claimTypeConverter.convert(claims)
-                : DEFAULT_CLAIM_TYPE_CONVERTER.convert(claims);
+        Converter<Map<String, Object>, Map<String, Object>> claimTypeConverter = this.claimTypeConverterFactory.apply(clientRegistration);
+        return (claimTypeConverter != null) ? claimTypeConverter.convert(claims) : DEFAULT_CLAIM_TYPE_CONVERTER.convert(claims);
     }
 
     public void setOauth2UserService(ReactiveOAuth2UserService<OAuth2UserRequest, OAuth2User> oauth2UserService) {
@@ -190,8 +198,7 @@ public class CustomOidcReactiveOAuth2UserService implements ReactiveOAuth2UserSe
      *                                  client}
      * @since 5.2
      */
-    public final void setClaimTypeConverterFactory(
-            Function<ClientRegistration, Converter<Map<String, Object>, Map<String, Object>>> claimTypeConverterFactory) {
+    public final void setClaimTypeConverterFactory(Function<ClientRegistration, Converter<Map<String, Object>, Map<String, Object>>> claimTypeConverterFactory) {
         Assert.notNull(claimTypeConverterFactory, "claimTypeConverterFactory cannot be null");
         this.claimTypeConverterFactory = claimTypeConverterFactory;
     }

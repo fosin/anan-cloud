@@ -24,10 +24,13 @@ import org.springframework.web.reactive.function.UnsupportedMediaTypeException;
 import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
-import top.fosin.anan.security.resource.SecurityConstant;
+import top.fosin.anan.security.resource.AnanSecurityProperties;
 
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class CustomReactiveOAuth2UserService implements ReactiveOAuth2UserService<OAuth2UserRequest, OAuth2User> {
 
@@ -42,6 +45,14 @@ public class CustomReactiveOAuth2UserService implements ReactiveOAuth2UserServic
     private static final ParameterizedTypeReference<Map<String, String>> STRING_STRING_MAP = new ParameterizedTypeReference<>() {
     };
     private WebClient webClient = WebClient.create();
+    private final String authorityPrefix;
+    private final String authorityClaimName;
+
+    public CustomReactiveOAuth2UserService(AnanSecurityProperties ananSecurityProperties) {
+        AnanSecurityProperties.Oauth2ResourceServer resourceServer = ananSecurityProperties.getOauth2().getResourceServer();
+        this.authorityPrefix = resourceServer.getAuthorityPrefix();
+        this.authorityClaimName = resourceServer.getAuthorityClaimName();
+    }
 
     @Override
     public Mono<OAuth2User> loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -83,7 +94,11 @@ public class CustomReactiveOAuth2UserService implements ReactiveOAuth2UserServic
                     .bodyToMono(STRING_OBJECT_MAP);
             return userAttributes.map((attrs) -> {
                         GrantedAuthority authority = new OAuth2UserAuthority(attrs);
-                        Set<GrantedAuthority> authorities = (Set<GrantedAuthority>) attrs.get(SecurityConstant.AUTHORITY_CLAIM_NAME);
+                        List<Map<String,String>> list = (List<Map<String,String>>) attrs.get(authorityClaimName);
+                        Set<GrantedAuthority> authorities = new HashSet<>();
+                        if (list != null) {
+                            authorities = list.stream().map(map -> new SimpleGrantedAuthority(authorityPrefix + map.get("role"))).collect(Collectors.toSet());
+                        }
                         authorities.add(authority);
                         OAuth2AccessToken token = userRequest.getAccessToken();
                         for (String scope : token.getScopes()) {
