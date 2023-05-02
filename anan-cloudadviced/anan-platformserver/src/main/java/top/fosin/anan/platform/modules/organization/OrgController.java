@@ -8,9 +8,9 @@ import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 import top.fosin.anan.cloudresource.constant.FieldConstant;
 import top.fosin.anan.cloudresource.constant.PathPrefixConstant;
-import top.fosin.anan.cloudresource.dto.req.RegisterDto;
-import top.fosin.anan.cloudresource.dto.res.OrgRespDto;
-import top.fosin.anan.cloudresource.dto.res.OrgTreeDto;
+import top.fosin.anan.cloudresource.entity.req.RegisterDTO;
+import top.fosin.anan.cloudresource.entity.res.OrganizRespDTO;
+import top.fosin.anan.cloudresource.entity.res.OrganizTreeDTO;
 import top.fosin.anan.data.controller.BaseController;
 import top.fosin.anan.data.controller.ICrudController;
 import top.fosin.anan.data.controller.IRetrieveTreeController;
@@ -34,8 +34,8 @@ import java.util.List;
 @RequestMapping(value = PathPrefixConstant.ORGANIZATION, params = PathPrefixConstant.DEFAULT_VERSION_PARAM)
 @Api(value = PathPrefixConstant.ORGANIZATION, tags = "机构管理")
 public class OrgController extends BaseController
-        implements ICrudController<OrgReqDto, OrgRespDto, Long>,
-        IRetrieveTreeController<OrgReqDto, OrgTreeDto, Long> {
+        implements ICrudController<OrgReqDto, OrganizRespDTO, Long>,
+        IRetrieveTreeController<OrgReqDto, OrganizTreeDTO, Long> {
     private final OrgService orgService;
     private final OrgAuthService orgAuthService;
     private final OrgPermissionService orgPermissionService;
@@ -71,10 +71,10 @@ public class OrgController extends BaseController
 
     @ApiOperation(value = "机构注册", notes = "用户自助注册机构")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "registerDto", required = true, dataTypeClass = RegisterDto.class, value = "注册新机构、新用户", paramType = "body")
+            @ApiImplicitParam(name = "registerDto", required = true, dataTypeClass = RegisterDTO.class, value = "注册新机构、新用户", paramType = "body")
     })
     @PutMapping(value = "/register")
-    public SingleResult<Boolean> register(@RequestBody RegisterDto registerDto) {
+    public SingleResult<Boolean> register(@RequestBody RegisterDTO registerDto) {
         return ResultUtils.success(orgAuthService.register(registerDto));
     }
 

@@ -10,9 +10,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import top.fosin.anan.auth.service.inter.AuthService;
-import top.fosin.anan.cloudresource.dto.UserAuthDto;
-import top.fosin.anan.cloudresource.dto.UserDetail;
-import top.fosin.anan.cloudresource.dto.res.UserAllPermissionsRespDto;
+import top.fosin.anan.cloudresource.entity.res.UserAuthDto;
+import top.fosin.anan.cloudresource.entity.UserDetail;
+import top.fosin.anan.cloudresource.entity.res.UserAllPermissionsRespDTO;
 import top.fosin.anan.security.resource.AnanSecurityProperties;
 
 import java.util.List;
@@ -45,7 +45,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             throw new UsernameNotFoundException("用户:" + username + "不存在!");
         }
 
-        List<UserAllPermissionsRespDto> dtos = authService.findByUserId(userAuthDto.getId());
+        List<UserAllPermissionsRespDTO> dtos = authService.findByUserId(userAuthDto.getId());
         // 只操作状态为启用的权限，获取用户增权限
         Set<GrantedAuthority> grantedAuthorities = dtos.stream().filter(entity -> entity.getStatus() == 0 && entity.getAddMode() == 0)
                 .map(entity -> new SimpleGrantedAuthority(authorityPrefix + entity.getId()))

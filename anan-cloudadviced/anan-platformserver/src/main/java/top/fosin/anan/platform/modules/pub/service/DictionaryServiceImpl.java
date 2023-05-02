@@ -7,8 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import top.fosin.anan.cloudresource.constant.SystemConstant;
-import top.fosin.anan.cloudresource.dto.req.DictionaryReqDto;
-import top.fosin.anan.cloudresource.service.UserInfoService;
+import top.fosin.anan.cloudresource.entity.req.DictionaryReqDTO;
+import top.fosin.anan.cloudresource.service.CurrentUserService;
 import top.fosin.anan.platform.modules.pub.dao.DictionaryDao;
 import top.fosin.anan.platform.modules.pub.dao.DictionaryDetailDao;
 import top.fosin.anan.platform.modules.pub.po.Dictionary;
@@ -29,10 +29,10 @@ import java.util.List;
 public class DictionaryServiceImpl implements DictionaryService {
     private final DictionaryDao dictionaryDao;
     private final DictionaryDetailDao dictionaryDetailDao;
-    private final UserInfoService userInfoService;
+    private final CurrentUserService currentUserService;
 
     @Override
-    public void preCreate(DictionaryReqDto reqDto) {
+    public void preCreate(DictionaryReqDTO reqDto) {
         DictionaryService.super.preCreate(reqDto);
         hasModifiedPrivileges(reqDto.getType());
     }
@@ -40,12 +40,12 @@ public class DictionaryServiceImpl implements DictionaryService {
     private void hasModifiedPrivileges(int type) {
         if (SystemConstant.SYSTEM_DICTIONARY_TYPE.equals(type)) {
             //非超级管理员不能修改系统字典
-            Assert.isTrue(userInfoService.hasSysAdminRole(), "没有权限增删改系统字典!");
+            Assert.isTrue(currentUserService.hasSysAdminRole(), "没有权限增删改系统字典!");
         }
     }
 
     @Override
-    public void preUpdate(DictionaryReqDto reqDto) {
+    public void preUpdate(DictionaryReqDTO reqDto) {
         DictionaryService.super.preUpdate(reqDto);
         hasModifiedPrivileges(reqDto.getType());
     }

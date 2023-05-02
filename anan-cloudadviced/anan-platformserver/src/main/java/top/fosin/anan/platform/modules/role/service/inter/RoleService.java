@@ -1,8 +1,8 @@
 package top.fosin.anan.platform.modules.role.service.inter;
 
 import org.springframework.validation.annotation.Validated;
-import top.fosin.anan.cloudresource.dto.req.RoleReqDto;
-import top.fosin.anan.cloudresource.dto.res.RoleRespDto;
+import top.fosin.anan.cloudresource.entity.req.RoleReqDTO;
+import top.fosin.anan.cloudresource.entity.res.RoleRespDTO;
 import top.fosin.anan.jpa.service.ISimpleJpaService;
 import top.fosin.anan.platform.modules.role.po.Role;
 
@@ -14,11 +14,11 @@ import java.util.List;
  * @date 2017/12/29
  */
 @Validated
-public interface RoleService extends ISimpleJpaService<RoleReqDto, RoleRespDto, Long, Role> {
+public interface RoleService extends ISimpleJpaService<RoleReqDTO, RoleRespDTO, Long, Role> {
 
-    List<RoleRespDto> findOtherUsersByRoleId(@Positive Long userId);
+    List<RoleRespDTO> findOtherUsersByRoleId(@Positive Long userId);
 
-    List<RoleRespDto> findRoleUsersByRoleId(@Positive Long userId);
+    List<RoleRespDTO> findRoleUsersByRoleId(@Positive Long userId);
 
-    List<RoleRespDto> findAllByOrganizId(@Positive Long organizId);
+    List<RoleRespDTO> findAllByOrganizId(@Positive Long organizId);
 }

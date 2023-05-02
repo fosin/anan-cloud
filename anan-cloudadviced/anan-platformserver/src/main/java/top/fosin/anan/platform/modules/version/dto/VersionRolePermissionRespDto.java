@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import top.fosin.anan.cloudresource.dto.PermissionId;
+import top.fosin.anan.cloudresource.entity.PermissionId;
 
 /**
  * 系统版本角色权限表(AnanVersionRolePermission)响应DTO

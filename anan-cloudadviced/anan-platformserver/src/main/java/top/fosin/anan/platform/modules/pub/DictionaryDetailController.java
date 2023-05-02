@@ -4,8 +4,8 @@ import io.swagger.annotations.Api;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import top.fosin.anan.cloudresource.constant.PathPrefixConstant;
-import top.fosin.anan.cloudresource.dto.req.DictionaryDetailReqDto;
-import top.fosin.anan.cloudresource.dto.res.DictionaryDetailRespDto;
+import top.fosin.anan.cloudresource.entity.req.DictionaryDetailReqDTO;
+import top.fosin.anan.cloudresource.entity.res.DictionaryDetailRespDTO;
 import top.fosin.anan.data.controller.ISimpleController;
 import top.fosin.anan.data.controller.batch.IRetrieveBatchController;
 import top.fosin.anan.platform.modules.pub.service.inter.DictionaryDetailService;
@@ -19,8 +19,8 @@ import top.fosin.anan.platform.modules.pub.service.inter.DictionaryDetailService
 @RequestMapping(value = PathPrefixConstant.DICTIONARY_DETAIL, params = PathPrefixConstant.DEFAULT_VERSION_PARAM)
 @Api(value = PathPrefixConstant.DICTIONARY_DETAIL, tags = "通用字典明细管理")
 public class DictionaryDetailController implements
-        ISimpleController<DictionaryDetailReqDto, DictionaryDetailRespDto, Long>,
-        IRetrieveBatchController<DictionaryDetailReqDto, DictionaryDetailRespDto, Long> {
+        ISimpleController<DictionaryDetailReqDTO, DictionaryDetailRespDTO, Long>,
+        IRetrieveBatchController<DictionaryDetailRespDTO, Long> {
     private final DictionaryDetailService dictionaryDetailService;
 
     public DictionaryDetailController(DictionaryDetailService dictionaryDetailService) {

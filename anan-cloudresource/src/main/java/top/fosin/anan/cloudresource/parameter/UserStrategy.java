@@ -1,6 +1,6 @@
 package top.fosin.anan.cloudresource.parameter;
 
-import top.fosin.anan.cloudresource.service.UserInfoService;
+import top.fosin.anan.cloudresource.service.CurrentUserService;
 
 /**
  * 用户参数
@@ -9,10 +9,10 @@ import top.fosin.anan.cloudresource.service.UserInfoService;
  * @date 2019/5/13
  */
 public class UserStrategy implements IParameterStrategy {
-    private final UserInfoService userInfoService;
+    private final CurrentUserService currentUserService;
 
-    public UserStrategy(UserInfoService userInfoService) {
-        this.userInfoService = userInfoService;
+    public UserStrategy(CurrentUserService currentUserService) {
+        this.currentUserService = currentUserService;
     }
 
     @Override
@@ -27,6 +27,6 @@ public class UserStrategy implements IParameterStrategy {
 
     @Override
     public String getScope() {
-        return userInfoService.isSysAdminUser() ? null : userInfoService.getAnanUser().getId() + "";
+        return currentUserService.isSysAdminUser() ? null : currentUserService.getAnanUser().getId() + "";
     }
 }

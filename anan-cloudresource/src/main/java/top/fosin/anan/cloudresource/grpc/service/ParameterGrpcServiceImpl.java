@@ -6,8 +6,8 @@ import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
 import top.fosin.anan.cloudresource.constant.ServiceConstant;
-import top.fosin.anan.cloudresource.dto.req.ParameterReqDto;
-import top.fosin.anan.cloudresource.dto.res.ParameterRespDto;
+import top.fosin.anan.cloudresource.entity.req.ParameterReqDTO;
+import top.fosin.anan.cloudresource.entity.res.ParameterRespDTO;
 import top.fosin.anan.cloudresource.grpc.parameter.*;
 import top.fosin.anan.cloudresource.service.inter.rpc.ParameterRpcService;
 
@@ -21,7 +21,7 @@ public class ParameterGrpcServiceImpl implements ParameterRpcService {
     private ParameterServiceGrpc.ParameterServiceBlockingStub blockingStubService;
 
     @Override
-    public void processUpdate(ParameterReqDto reqDto) {
+    public void processUpdate(ParameterReqDTO reqDto) {
         ParameterReq build = ParameterReq.newBuilder()
                 .setStatus(reqDto.getStatus())
                 .setApplyTime(Timestamp.newBuilder().setSeconds(reqDto.getApplyTime().getTime()))
@@ -73,7 +73,7 @@ public class ParameterGrpcServiceImpl implements ParameterRpcService {
     }
 
     @Override
-    public ParameterRespDto getParameter(Integer type, String scope, String name) {
+    public ParameterRespDTO getParameter(Integer type, String scope, String name) {
         ParameterThreeArgsReq build = ParameterThreeArgsReq.newBuilder()
                 .setName(name).setScope(scope).setType(type).build();
         ParameterResp parameterResp = blockingStubService.getParameter(build);
@@ -81,8 +81,8 @@ public class ParameterGrpcServiceImpl implements ParameterRpcService {
     }
 
     @NotNull
-    private ParameterRespDto getParameterRespDto(ParameterResp parameterResp) {
-        ParameterRespDto respDto = new ParameterRespDto();
+    private ParameterRespDTO getParameterRespDto(ParameterResp parameterResp) {
+        ParameterRespDTO respDto = new ParameterRespDTO();
         respDto.setId(parameterResp.getId());
         respDto.setName(parameterResp.getName());
         respDto.setType(parameterResp.getType());
@@ -96,7 +96,7 @@ public class ParameterGrpcServiceImpl implements ParameterRpcService {
     }
 
     @Override
-    public ParameterRespDto getNearestParameter(int type, String scope, String name) {
+    public ParameterRespDTO getNearestParameter(int type, String scope, String name) {
         ParameterThreeArgsReq build = ParameterThreeArgsReq.newBuilder()
                 .setName(name).setScope(scope).setType(type).build();
         ParameterResp parameterResp = blockingStubService.getNearestParameter(build);

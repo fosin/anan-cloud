@@ -1,7 +1,7 @@
 package top.fosin.anan.cloudresource.service.inter.rpc;
 
 
-import top.fosin.anan.cloudresource.dto.res.OrgRespDto;
+import top.fosin.anan.cloudresource.entity.res.OrganizRespDTO;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -15,12 +15,12 @@ import java.util.List;
  * @since 3.0.0
  */
 public interface OrganizRpcService {
-    OrgRespDto findOneById(@NotNull Long id);
+    OrganizRespDTO findOneById(@NotNull Long id);
 
-    List<OrgRespDto> listByIds(@NotEmpty List<Long> ids);
+    List<OrganizRespDTO> listByIds(@NotEmpty List<Long> ids);
 
-    List<OrgRespDto> listChild(@NotNull Long pid);
+    List<OrganizRespDTO> listChild(@NotNull Long pid);
 
-    List<OrgRespDto> listAllChild(@NotNull Long pid);
+    List<OrganizRespDTO> listAllChild(@NotNull Long pid);
 
 }

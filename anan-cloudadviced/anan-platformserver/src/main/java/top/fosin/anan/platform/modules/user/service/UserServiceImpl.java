@@ -16,13 +16,16 @@ import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 import top.fosin.anan.cloudresource.constant.PlatformRedisConstant;
 import top.fosin.anan.cloudresource.constant.SystemConstant;
-import top.fosin.anan.cloudresource.dto.req.UserReqDto;
-import top.fosin.anan.cloudresource.dto.res.UserRespDto;
+import top.fosin.anan.cloudresource.entity.req.UserCreateDTO;
+import top.fosin.anan.cloudresource.entity.req.UserUpdateDTO;
+import top.fosin.anan.cloudresource.entity.res.UserDTO;
+import top.fosin.anan.cloudresource.entity.res.UserRespDTO;
 import top.fosin.anan.cloudresource.grpc.user.*;
 import top.fosin.anan.cloudresource.grpc.util.StringUtil;
-import top.fosin.anan.cloudresource.service.UserInfoService;
+import top.fosin.anan.cloudresource.service.CurrentUserService;
 import top.fosin.anan.core.util.BeanUtil;
 import top.fosin.anan.core.util.RegexUtil;
+import top.fosin.anan.data.converter.translate.service.Long2StringTranslateService;
 import top.fosin.anan.data.entity.req.PageQuery;
 import top.fosin.anan.data.entity.res.TreeVO;
 import top.fosin.anan.data.result.PageResult;
@@ -32,9 +35,10 @@ import top.fosin.anan.platform.modules.organization.po.Organization;
 import top.fosin.anan.platform.modules.pub.service.LocalOrganParameter;
 import top.fosin.anan.platform.modules.user.dao.UserDao;
 import top.fosin.anan.platform.modules.user.dao.UserRoleDao;
-import top.fosin.anan.platform.modules.user.dto.UserPassRespDto;
+import top.fosin.anan.platform.modules.user.dto.UserPassRespDTO;
 import top.fosin.anan.platform.modules.user.po.User;
 import top.fosin.anan.platform.modules.user.po.UserRole;
+import top.fosin.anan.platform.modules.user.query.UserQuery;
 import top.fosin.anan.platform.modules.user.service.inter.UserService;
 import top.fosin.anan.redis.cache.AnanCacheManger;
 
@@ -53,13 +57,13 @@ import java.util.stream.Collectors;
 @GrpcService
 @Lazy
 @AllArgsConstructor
-public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase implements UserService {
+public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase implements UserService, Long2StringTranslateService {
     private final UserDao userDao;
     private final UserRoleDao userRoleDao;
     private final PasswordEncoder passwordEncoder;
     private final LocalOrganParameter localOrganParameter;
     private final AnanCacheManger ananCacheManger;
-    private final UserInfoService userInfoService;
+    private final CurrentUserService currentUserService;
     private final OrgDao orgDao;
 
     /**
@@ -71,14 +75,14 @@ public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase impleme
     @Override
     @Cacheable(value = PlatformRedisConstant.ANAN_USER, key = "#usercode", unless = "#result == null")
     @Transactional(readOnly = true)
-    public UserRespDto findOneByUsercode(String usercode) {
+    public UserRespDTO findOneByUsercode(String usercode) {
         Assert.notNull(usercode, "用户工号不能为空!");
         User userEntity = userDao.findByUsercode(usercode);
         if (userEntity == null) {
             return null;
         }
 
-        UserRespDto respDto = BeanUtil.copyProperties(userEntity, UserRespDto.class);
+        UserRespDTO respDto = BeanUtil.copyProperties(userEntity, UserRespDTO.class);
         Long organizId = userEntity.getOrganizId();
         if (organizId > 0) {
             Organization organization = orgDao.getReferenceById(organizId);
@@ -94,16 +98,19 @@ public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase impleme
      * @return 用户
      */
     @Override
-    @Cacheable(value = PlatformRedisConstant.ANAN_USER, key = "#id+'-id'", unless = "#result == null")
     @Transactional(readOnly = true)
-    public UserRespDto findOneById(Long id, boolean... findRefs) {
-        User userEntity = userDao.findById(id).orElseThrow(() -> new IllegalArgumentException("未找到对应数据!"));
-        UserRespDto respDto = BeanUtil.copyProperties(userEntity, UserRespDto.class);
-        Long organizId = userEntity.getOrganizId();
+    public UserRespDTO findOneById(Long id, boolean... findRefs) {
+        UserRespDTO respDto = ananCacheManger.get(PlatformRedisConstant.ANAN_USER, id + "-id", UserRespDTO.class);
+        if (respDto == null) {
+            User userEntity = userDao.findById(id).orElseThrow(() -> new IllegalArgumentException("未找到对应数据!"));
+            respDto = BeanUtil.copyProperties(userEntity, UserRespDTO.class);
+        }
+        Long organizId = respDto.getOrganizId();
         if (organizId > 0) {
             Organization organization = orgDao.getReferenceById(organizId);
             respDto.setTopId(organization.getTopId());
         }
+        ananCacheManger.put(PlatformRedisConstant.ANAN_USER, id + "-id", respDto);
         return respDto;
     }
 
@@ -123,26 +130,26 @@ public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase impleme
     }
 
     @Override
-    public UserPassRespDto create(UserReqDto dto) {
-        UserRespDto entityDynamic = this.findOneByUsercode(dto.getUsercode());
-        Assert.isNull(entityDynamic, "用户工号已存在，请核对!");
+    public UserPassRespDTO create(UserCreateDTO dto) {
+        UserRespDTO respDTO = this.findOneByUsercode(dto.getUsercode());
+        Assert.isNull(respDTO, "用户工号已存在，请核对!");
         User createUser = BeanUtil.copyProperties(dto, User.class);
         String password = encryptBeforeSave(createUser);
         createUser = userDao.save(createUser);
-        UserPassRespDto respPassDto = BeanUtil.copyProperties(createUser, UserPassRespDto.class);
+        UserPassRespDTO respPassDto = BeanUtil.copyProperties(createUser, UserPassRespDTO.class);
         respPassDto.setPassword(password);
         return respPassDto;
     }
 
     @Override
-    public void update(UserReqDto reqDto, String[] ignoreProperties) {
+    public void update(UserUpdateDTO reqDto, String[] ignoreProperties) {
         Long id = reqDto.getId();
         User createUser = userDao.findById(id).orElseThrow(() -> new IllegalArgumentException("通过ID：" + id + "未能找到对应的数据!"));
         String usercode = createUser.getUsercode().toLowerCase();
-        if (userInfoService.isAdminUser(usercode) && !usercode.equals(reqDto.getUsercode().toLowerCase())) {
+        if (currentUserService.isAdminUser(usercode) && !usercode.equals(reqDto.getUsercode().toLowerCase())) {
             throw new IllegalArgumentException("不能修改管理员" + SystemConstant.ADMIN_USER_CODE + "的帐号名称!");
         }
-        Assert.isTrue(!userInfoService.isSysAdminUser(usercode),
+        Assert.isTrue(!currentUserService.isSysAdminUser(usercode),
                 "不能修改超级管理员帐号信息!");
         BeanUtil.copyProperties(reqDto, createUser, ignoreProperties);
         ananCacheManger.evict(PlatformRedisConstant.ANAN_USER, usercode);
@@ -164,8 +171,8 @@ public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase impleme
     }
 
     private void deleteByEntity(User entity) {
-        Assert.isTrue(!userInfoService.isSysAdminUser(entity.getUsercode())
-                && !userInfoService.isAdminUser(entity.getUsercode()), "不能删除管理员帐号!");
+        Assert.isTrue(!currentUserService.isSysAdminUser(entity.getUsercode())
+                && !currentUserService.isAdminUser(entity.getUsercode()), "不能删除管理员帐号!");
         List<UserRole> userRoles = userRoleDao.findByUserId(entity.getId());
         Assert.isTrue(userRoles.size() == 0, "该用户下还存在角色信息,不能直接删除用户!");
         ananCacheManger.evict(PlatformRedisConstant.ANAN_USER, entity.getUsercode());
@@ -190,11 +197,9 @@ public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase impleme
     }
 
     @Override
-    public PageResult<UserRespDto> findPage(PageQuery<UserReqDto> PageQuery) {
-        boolean sysAdminUser = userInfoService.isSysAdminUser();
-        UserReqDto params = PageQuery.getParams();
-
-        if (sysAdminUser) {
+    public PageResult<UserDTO> findPage(PageQuery<UserQuery> PageQuery) {
+        UserQuery params = PageQuery.getParams();
+        if (currentUserService.isSysAdminUser()) {
             return UserService.super.findPage(PageQuery);
         }
 
@@ -204,7 +209,7 @@ public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase impleme
             Path<String> phonePath = root.get("phone");
             Path<String> emailPath = root.get("email");
 
-            Long organizId = userInfoService.getAnanOrganizId();
+            Long organizId = currentUserService.getAnanOrganizId();
             Organization organization = orgDao.findById(organizId).orElse(null);
 
             Subquery<Integer> subQuery = query.subquery(Integer.class);
@@ -244,7 +249,7 @@ public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase impleme
         PageRequest pageable = toPage(PageQuery);
         Page<User> page = userDao.findAll(condition, pageable);
         return ResultUtils.success(page.getTotalElements(), page.getTotalPages(),
-                BeanUtil.copyProperties(page.getContent(), UserRespDto.class));
+                BeanUtil.copyProperties(page.getContent(), UserDTO.class));
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -272,7 +277,7 @@ public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase impleme
     public String resetPassword(Long id) {
         Assert.notNull(id, "用户ID不能为空!");
 
-        Long loginId = userInfoService.getAnanUserId();
+        Long loginId = currentUserService.getAnanUserId();
         Assert.isTrue(!Objects.equals(loginId, id), "不能重置本人密码,请使用修改密码功能!");
         User user = userDao.findById(id).orElse(null);
         String password = getPassword();
@@ -302,31 +307,31 @@ public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase impleme
     }
 
     @Override
-    public List<UserRespDto> findOtherUsersByRoleId(Long roleId) {
+    public List<UserRespDTO> findOtherUsersByRoleId(Long roleId) {
         return BeanUtil.copyProperties(
-                userDao.findOtherUsersByRoleId(roleId), UserRespDto.class);
+                userDao.findOtherUsersByRoleId(roleId), UserRespDTO.class);
     }
 
     @Override
-    public List<UserRespDto> findRoleUsersByRoleId(Long roleId) {
+    public List<UserRespDTO> findRoleUsersByRoleId(Long roleId) {
         return BeanUtil.copyProperties(
-                userDao.findRoleUsersByRoleId(roleId), UserRespDto.class);
+                userDao.findRoleUsersByRoleId(roleId), UserRespDTO.class);
     }
 
     @Override
-    public List<UserRespDto> listAllChildByTopId(Long topId, Integer status) {
+    public List<UserRespDTO> listAllChildByTopId(Long topId, Integer status) {
         List<User> entities = listAllChildByTopIdReal(topId, status);
-        return BeanUtil.copyProperties(entities, UserRespDto.class);
+        return BeanUtil.copyProperties(entities, UserRespDTO.class);
     }
 
     private List<User> listAllChildByTopIdReal(Long topId, Integer status) {
         List<User> entities;
-        if (userInfoService.isUserRequest() && userInfoService.hasSysAdminRole()) {
+        if (currentUserService.isUserLogin() && currentUserService.hasSysAdminRole()) {
             entities = userDao.findAll();
         } else {
             if (topId < 1) {
                 Organization organiz =
-                        orgDao.findById(userInfoService.getAnanOrganizId()).orElseThrow(() -> new IllegalArgumentException("根据传入的机构编码没有找到任何数据!"));
+                        orgDao.findById(currentUserService.getAnanOrganizId()).orElseThrow(() -> new IllegalArgumentException("根据传入的机构编码没有找到任何数据!"));
                 topId = organiz.getTopId();
             }
             entities = userDao.findByTopIdAndStatus(topId, status);
@@ -336,14 +341,14 @@ public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase impleme
     }
 
     @Override
-    public List<UserRespDto> listByOrganizId(Long organizId, Integer status) {
+    public List<UserRespDTO> listByOrganizId(Long organizId, Integer status) {
         List<User> entities = listByOrganizIdReal(organizId, status);
-        return BeanUtil.copyProperties(entities, UserRespDto.class);
+        return BeanUtil.copyProperties(entities, UserRespDTO.class);
     }
 
     private List<User> listByOrganizIdReal(Long organizId, Integer status) {
         List<User> entities;
-        if (userInfoService.isUserRequest() && userInfoService.hasSysAdminRole()) {
+        if (currentUserService.isUserLogin() && currentUserService.hasSysAdminRole()) {
             entities = userDao.findAll();
         } else {
             Organization organiz = orgDao.findById(organizId).orElseThrow(() -> new IllegalArgumentException("根据传入的机构编码没有找到任何数据!"));
@@ -382,8 +387,8 @@ public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase impleme
     public long updateOneField(String name, Serializable value, Collection<Long> ids) {
         long count = UserService.super.updateOneField(name, value, ids);
         ids.forEach(id -> {
-            UserRespDto respDto = ananCacheManger.get(PlatformRedisConstant.ANAN_USER, id + "-id",
-                    UserRespDto.class);
+            UserRespDTO respDto = ananCacheManger.get(PlatformRedisConstant.ANAN_USER, id + "-id",
+                    UserRespDTO.class);
             if (respDto != null) {
                 ananCacheManger.evict(PlatformRedisConstant.ANAN_USER, respDto.getUsercode());
             }
@@ -493,5 +498,10 @@ public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase impleme
     @Override
     public UserDao getDao() {
         return userDao;
+    }
+
+    @Override
+    public String translate(String dicId, Long key) {
+        return this.findOneById(key).getUsername();
     }
 }

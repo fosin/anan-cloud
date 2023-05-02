@@ -17,5 +17,7 @@ import java.util.List;
 public interface DictionaryDetailDao extends IJpaRepository<Long, DictionaryDetail> {
     List<DictionaryDetail> findAllByDictionaryId(Long dictionaryId, Sort sort);
 
+    DictionaryDetail findByDictionaryIdAndCode(Long dictionaryId, Long code);
+
     void deleteAllByDictionaryId(Long dictionaryId);
 }

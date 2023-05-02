@@ -1,7 +1,7 @@
 package top.fosin.anan.cloudresource.service.inter.base;
 
 
-import top.fosin.anan.cloudresource.dto.res.UserRespDto;
+import top.fosin.anan.cloudresource.entity.res.UserRespDTO;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -15,9 +15,9 @@ import java.util.List;
  * @since 3.0.0
  */
 public interface UserBaseService {
-    UserRespDto findOneByUsercode(@NotBlank String usercode);
+    UserRespDTO findOneByUsercode(@NotBlank String usercode);
 
-    List<UserRespDto> listByOrganizId(@NotNull Long organizId, @NotNull Integer status);
+    List<UserRespDTO> listByOrganizId(@NotNull Long organizId, @NotNull Integer status);
 
-    List<UserRespDto> listAllChildByTopId(@NotNull Long topId, @NotNull Integer status);
+    List<UserRespDTO> listAllChildByTopId(@NotNull Long topId, @NotNull Integer status);
 }

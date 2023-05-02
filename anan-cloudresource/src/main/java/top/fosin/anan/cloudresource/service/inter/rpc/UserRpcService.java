@@ -1,7 +1,7 @@
 package top.fosin.anan.cloudresource.service.inter.rpc;
 
 
-import top.fosin.anan.cloudresource.dto.res.UserRespDto;
+import top.fosin.anan.cloudresource.entity.res.UserRespDTO;
 import top.fosin.anan.cloudresource.service.inter.base.UserBaseService;
 
 import javax.validation.constraints.NotEmpty;
@@ -16,7 +16,7 @@ import java.util.List;
  * @since 3.0.0
  */
 public interface UserRpcService extends UserBaseService {
-    UserRespDto findOneById(@NotNull Long id);
+    UserRespDTO findOneById(@NotNull Long id);
 
-    List<UserRespDto> listByIds(@NotEmpty List<Long> ids);
+    List<UserRespDTO> listByIds(@NotEmpty List<Long> ids);
 }

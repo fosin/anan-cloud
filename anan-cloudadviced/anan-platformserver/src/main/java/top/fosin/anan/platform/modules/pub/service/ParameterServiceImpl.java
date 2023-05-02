@@ -17,13 +17,13 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 import top.fosin.anan.cloudresource.constant.PlatformRedisConstant;
-import top.fosin.anan.cloudresource.dto.req.ParameterReqDto;
-import top.fosin.anan.cloudresource.dto.res.ParameterRespDto;
+import top.fosin.anan.cloudresource.entity.req.ParameterReqDTO;
+import top.fosin.anan.cloudresource.entity.res.ParameterRespDTO;
 import top.fosin.anan.cloudresource.grpc.parameter.*;
 import top.fosin.anan.cloudresource.grpc.util.StringUtil;
 import top.fosin.anan.cloudresource.parameter.ParameterStatus;
 import top.fosin.anan.cloudresource.parameter.ParameterType;
-import top.fosin.anan.cloudresource.service.UserInfoService;
+import top.fosin.anan.cloudresource.service.CurrentUserService;
 import top.fosin.anan.core.exception.AnanServiceException;
 import top.fosin.anan.core.util.BeanUtil;
 import top.fosin.anan.data.entity.req.PageQuery;
@@ -53,18 +53,18 @@ import java.util.Objects;
 @AllArgsConstructor
 public class ParameterServiceImpl extends ParameterServiceGrpc.ParameterServiceImplBase implements ParameterService {
     private final ParameterDao parameterDao;
-    private final UserInfoService userInfoService;
+    private final CurrentUserService currentUserService;
     private final OrgDao orgDao;
     private final AnanCacheManger ananCacheManger;
 
     @Override
-    public PageResult<ParameterRespDto> findPage(PageQuery<ParameterReqDto> PageQuery) {
-        ParameterReqDto params = PageQuery.getParams();
+    public PageResult<ParameterRespDTO> findPage(PageQuery<ParameterReqDTO> PageQuery) {
+        ParameterReqDTO params = PageQuery.getParams();
 
         String name = params.getName();
         String search = "%" + (name == null ? "" : name) + "%";
-        Long organizId = userInfoService.getAnanOrganizId();
-        boolean sysAdminUser = userInfoService.isSysAdminUser();
+        Long organizId = currentUserService.getAnanOrganizId();
+        boolean sysAdminUser = currentUserService.isSysAdminUser();
         int type = 2;
         String code = "";
         if (!sysAdminUser) {
@@ -78,22 +78,22 @@ public class ParameterServiceImpl extends ParameterServiceGrpc.ParameterServiceI
         PageRequest pageable = toPage(PageQuery);
         Page<Parameter> page = parameterDao.findPage(search, code, type, pageable);
         return ResultUtils.success(page.getTotalElements(), page.getTotalPages(),
-                BeanUtil.copyProperties(page.getContent(), ParameterRespDto.class));
+                BeanUtil.copyProperties(page.getContent(), ParameterRespDTO.class));
     }
 
     @Override
-    public void postCreate(ParameterReqDto reqDto, ParameterRespDto respDto) {
+    public void postCreate(ParameterReqDTO reqDto, ParameterRespDTO respDto) {
         ananCacheManger.put(PlatformRedisConstant.ANAN_PARAMETER, getCacheKey(respDto), respDto);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void update(ParameterReqDto reqDto, String[] ignoreProperties) {
+    public void update(ParameterReqDTO reqDto, String[] ignoreProperties) {
         Long id = reqDto.getId();
         Assert.notNull(id, "ID不能为空!");
         Parameter cEntity = parameterDao.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("通过ID：" + id + "未能找到对应的数据!"));
-        if (!userInfoService.isSysAdminUser()) {
+        if (!currentUserService.isSysAdminUser()) {
             Assert.isTrue(StringUtils.hasText(cEntity.getScope()), "非超级管理员不能修改公共参数!");
         }
         String oldCacheKey = getCacheKey(cEntity);
@@ -105,7 +105,7 @@ public class ParameterServiceImpl extends ParameterServiceGrpc.ParameterServiceI
         //如果修改了type、scope、name则需要删除以前的缓存并设置新缓存
         if (!oldCacheKey.equals(newCacheKey)) {
             //新key设置旧值，需要发布以后才刷新缓存换成本次更新的新值
-            ParameterRespDto respDto = ananCacheManger.get(PlatformRedisConstant.ANAN_PARAMETER, oldCacheKey, ParameterRespDto.class);
+            ParameterRespDTO respDto = ananCacheManger.get(PlatformRedisConstant.ANAN_PARAMETER, oldCacheKey, ParameterRespDTO.class);
             if (respDto != null) {
                 ananCacheManger.put(PlatformRedisConstant.ANAN_PARAMETER, newCacheKey, respDto);
             }
@@ -122,7 +122,7 @@ public class ParameterServiceImpl extends ParameterServiceGrpc.ParameterServiceI
     @Transactional(rollbackFor = Exception.class)
     public void deleteById(Long id) {
         parameterDao.findById(id).ifPresent(entity -> {
-            if (!userInfoService.isSysAdminUser()) {
+            if (!currentUserService.isSysAdminUser()) {
                 Assert.isTrue(StringUtils.hasText(entity.getScope()), "非超级管理员不能删除公共参数!");
             }
             entity.setStatus(ParameterStatus.Deleted.getTypeValue());
@@ -140,7 +140,7 @@ public class ParameterServiceImpl extends ParameterServiceGrpc.ParameterServiceI
     public void deleteByIds(Collection<Long> ids) {
         List<Parameter> entities = parameterDao.findAllById(ids);
         for (Parameter entity : entities) {
-            if (!userInfoService.isSysAdminUser()) {
+            if (!currentUserService.isSysAdminUser()) {
                 Assert.isTrue(StringUtils.hasText(entity.getScope()), "非超级管理员不能删除公共参数!");
             }
             entity.setStatus(ParameterStatus.Deleted.getTypeValue());
@@ -158,7 +158,7 @@ public class ParameterServiceImpl extends ParameterServiceGrpc.ParameterServiceI
     public void cancelDelete(List<Long> ids) {
         List<Parameter> entities = parameterDao.findAllById(ids);
         for (Parameter entity : entities) {
-            if (!userInfoService.isSysAdminUser()) {
+            if (!currentUserService.isSysAdminUser()) {
                 Assert.isTrue(StringUtils.hasText(entity.getScope()), "非超级管理员不能取消删除公共参数!");
             }
             entity.setStatus(ParameterStatus.Normal.getTypeValue());
@@ -170,7 +170,7 @@ public class ParameterServiceImpl extends ParameterServiceGrpc.ParameterServiceI
         return getCacheKey(entity.getType(), entity.getScope(), entity.getName());
     }
 
-    public String getCacheKey(ParameterRespDto dto) {
+    public String getCacheKey(ParameterRespDTO dto) {
         return getCacheKey(dto.getType(), dto.getScope(), dto.getName());
     }
 
@@ -182,16 +182,16 @@ public class ParameterServiceImpl extends ParameterServiceGrpc.ParameterServiceI
     }
 
     @Override
-    public ParameterRespDto getParameter(Integer type, String scope, String name) {
+    public ParameterRespDTO getParameter(Integer type, String scope, String name) {
         String cacheKey = getCacheKey(type, scope, name);
-        ParameterRespDto respDto = ananCacheManger.get(PlatformRedisConstant.ANAN_PARAMETER, cacheKey, ParameterRespDto.class);
+        ParameterRespDTO respDto = ananCacheManger.get(PlatformRedisConstant.ANAN_PARAMETER, cacheKey, ParameterRespDTO.class);
         if (respDto == null) {
             Parameter entity = findByTypeAndScopeAndName(type, scope, name);
             //因为参数会逐级上上级机构查找，为减少没有必要的查询，该代码为解决Spring Cache默认不缓存null值问题
             if (entity == null) {
-                respDto = new ParameterRespDto();
+                respDto = new ParameterRespDTO();
             } else {
-                respDto = BeanUtil.copyProperties(entity, ParameterRespDto.class);
+                respDto = BeanUtil.copyProperties(entity, ParameterRespDTO.class);
                 ananCacheManger.put(PlatformRedisConstant.ANAN_PARAMETER, cacheKey, respDto);
             }
         }
@@ -206,14 +206,14 @@ public class ParameterServiceImpl extends ParameterServiceGrpc.ParameterServiceI
      * @return 参数
      */
     @Override
-    public ParameterRespDto getNearestParameter(int type, String scope, String name) {
+    public ParameterRespDTO getNearestParameter(int type, String scope, String name) {
         String cacheKey = getCacheKey(type, scope, name);
-        ParameterRespDto respDto = ananCacheManger.get(PlatformRedisConstant.ANAN_PARAMETER, cacheKey, ParameterRespDto.class);
+        ParameterRespDTO respDto = ananCacheManger.get(PlatformRedisConstant.ANAN_PARAMETER, cacheKey, ParameterRespDTO.class);
         if (respDto == null) {
             Parameter parameter = findByTypeAndScopeAndName(type, scope, name);
             boolean finded = parameter != null && parameter.getId() != null;
             if (finded) {
-                respDto = BeanUtil.copyProperties(parameter, ParameterRespDto.class);
+                respDto = BeanUtil.copyProperties(parameter, ParameterRespDTO.class);
                 ananCacheManger.put(PlatformRedisConstant.ANAN_PARAMETER, cacheKey, respDto);
             } else {
                 //parameter为空表示没有参数记录，则依次向上找父机构的参数
@@ -253,7 +253,7 @@ public class ParameterServiceImpl extends ParameterServiceGrpc.ParameterServiceI
         try {
             rc = getNearestParameter(type, scope, name).getValue();
         } catch (IllegalArgumentException e) {
-            ParameterReqDto reqDto = new ParameterReqDto();
+            ParameterReqDTO reqDto = new ParameterReqDTO();
             reqDto.setType(type);
             reqDto.setScope(scope);
             reqDto.setName(name);
@@ -261,7 +261,7 @@ public class ParameterServiceImpl extends ParameterServiceGrpc.ParameterServiceI
             reqDto.setValue(defaultValue);
             reqDto.setDescription(description);
             reqDto.setStatus(0);
-            ParameterRespDto respDto = processCreate(reqDto);
+            ParameterRespDTO respDto = processCreate(reqDto);
             rc = respDto.getValue();
             log.debug("报异常说明没有找到任何相关参数，则需要创建一个：" + respDto);
         }
@@ -273,17 +273,17 @@ public class ParameterServiceImpl extends ParameterServiceGrpc.ParameterServiceI
     public Boolean applyChange(Long id) {
         Parameter entity = parameterDao.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("该参数[" + id + "]已经不存在!"));
-        if (!userInfoService.isSysAdminUser()) {
+        if (!currentUserService.isSysAdminUser()) {
             Assert.isTrue(StringUtils.hasText(entity.getScope()), "非超级管理员不能发布公共参数!");
         }
         String cacheKey = getCacheKey(entity);
         boolean success;
         switch (Objects.requireNonNull(ParameterStatus.valueOf(entity.getStatus()))) {
             case Modified:
-                entity.setApplyBy(userInfoService.getAnanUser().getId());
+                entity.setApplyBy(currentUserService.getAnanUser().getId());
                 entity.setApplyTime(new Date());
                 entity.setStatus(0);
-                success = ananCacheManger.put(PlatformRedisConstant.ANAN_PARAMETER, cacheKey, BeanUtil.copyProperties(entity, ParameterRespDto.class));
+                success = ananCacheManger.put(PlatformRedisConstant.ANAN_PARAMETER, cacheKey, BeanUtil.copyProperties(entity, ParameterRespDTO.class));
                 if (success) {
                     parameterDao.save(entity);
                 }
@@ -301,7 +301,7 @@ public class ParameterServiceImpl extends ParameterServiceGrpc.ParameterServiceI
                 }
                 break;
             default:
-                success = ananCacheManger.put(PlatformRedisConstant.ANAN_PARAMETER, cacheKey, BeanUtil.copyProperties(entity, ParameterRespDto.class));
+                success = ananCacheManger.put(PlatformRedisConstant.ANAN_PARAMETER, cacheKey, BeanUtil.copyProperties(entity, ParameterRespDTO.class));
         }
         return success;
     }
@@ -361,28 +361,28 @@ public class ParameterServiceImpl extends ParameterServiceGrpc.ParameterServiceI
 
     @Override
     public void getParameter(ParameterThreeArgsReq request, StreamObserver<ParameterResp> responseObserver) {
-        ParameterRespDto parameter = getParameter(request.getType(), request.getScope(), request.getName());
+        ParameterRespDTO parameter = getParameter(request.getType(), request.getScope(), request.getName());
         toGrpcResp(responseObserver, parameter);
     }
 
     @Override
     public void getNearestParameter(ParameterThreeArgsReq request, StreamObserver<ParameterResp> responseObserver) {
-        ParameterRespDto parameter = getNearestParameter(request.getType(), request.getScope(), request.getName());
+        ParameterRespDTO parameter = getNearestParameter(request.getType(), request.getScope(), request.getName());
         toGrpcResp(responseObserver, parameter);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void processUpdate(ParameterReq request, StreamObserver<Empty> responseObserver) {
-        ParameterReqDto req = toParameterReqDto(request);
+        ParameterReqDTO req = toParameterReqDto(request);
         processUpdate(req);
         responseObserver.onNext(Empty.getDefaultInstance());
         responseObserver.onCompleted();
     }
 
     @NotNull
-    private ParameterReqDto toParameterReqDto(ParameterReq request) {
-        ParameterReqDto req = new ParameterReqDto();
+    private ParameterReqDTO toParameterReqDto(ParameterReq request) {
+        ParameterReqDTO req = new ParameterReqDTO();
         req.setStatus(request.getStatus());
         req.setApplyTime(new Date(request.getApplyTime().getSeconds() * 1000));
         req.setDescription(request.getDescription());
@@ -394,7 +394,7 @@ public class ParameterServiceImpl extends ParameterServiceGrpc.ParameterServiceI
         return req;
     }
 
-    private void toGrpcResp(StreamObserver<ParameterResp> responseObserver, ParameterRespDto parameter) {
+    private void toGrpcResp(StreamObserver<ParameterResp> responseObserver, ParameterRespDTO parameter) {
         ParameterResp parameterResp = ParameterResp.newBuilder()
                 .setId(parameter.getId())
                 .setStatus(parameter.getStatus())

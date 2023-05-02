@@ -4,7 +4,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import top.fosin.anan.cloudresource.service.ReactiveUserInfoService;
+import top.fosin.anan.cloudresource.service.ReactiveCurrentUserService;
 
 import java.net.URISyntaxException;
 
@@ -27,8 +27,8 @@ public class ReactiveResourceAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public ReactiveUserInfoService reactiveUserInfoService() {
-        return new ReactiveUserInfoService();
+    public ReactiveCurrentUserService reactiveUserInfoService() {
+        return new ReactiveCurrentUserService();
     }
 
     /**
@@ -46,8 +46,8 @@ public class ReactiveResourceAutoConfiguration {
 //    @Bean
 //    @Primary
 //    public AnanProgramAuthorities ananProgramAuthoritiesNew() throws URISyntaxException {
-//        //List<PermissionRespDto> dtos = permissionFeignService.findByServiceCodes(hosts).getData();
-//        List<PermissionRespDto> dtos = getPermissionsByRest(hosts);
+//        //List<PermissionRespDTO> dtos = permissionFeignService.findByServiceCodes(hosts).getData();
+//        List<PermissionRespDTO> dtos = getPermissionsByRest(hosts);
 //        List<AnanSecurityProperties.Authority> authorities = new ArrayList<>();
 //        Objects.requireNonNull(dtos).forEach(dto -> {
 //            String path = dto.getPath();
@@ -71,7 +71,7 @@ public class ReactiveResourceAutoConfiguration {
 //        return serviceInstances.get(nextInt);
 //    }
 //
-//    public List<PermissionRespDto> getPermissionsByRest(List<String> hosts) throws URISyntaxException {
+//    public List<PermissionRespDTO> getPermissionsByRest(List<String> hosts) throws URISyntaxException {
 //        ServiceInstance instance = getServiceRandomInstance(this.applicationName);
 //        String scheme = instance.getScheme();
 //        URI uri = new URI(scheme == null ? "http" : scheme, null, instance.getHost(), instance.getPort(), "/" + PathPrefixConstant.PERMISSION + PathSuffixConstant.SERVICE_CODE + "/" + this.applicationName, PathPrefixConstant.DEFAULT_VERSION_PARAM, null);
@@ -80,7 +80,7 @@ public class ReactiveResourceAutoConfiguration {
 //                .accept(MediaType.APPLICATION_JSON)
 //                .contentType(MediaType.APPLICATION_JSON)
 //                .body(hosts);
-//        ResponseEntity<MultResult<PermissionRespDto>> res = restTemplate()
+//        ResponseEntity<MultResult<PermissionRespDTO>> res = restTemplate()
 //                .exchange(uri.toString(), HttpMethod.POST, request, new ParameterizedTypeReference<>() {
 //                });
 //        return Objects.requireNonNull(res.getBody()).orElseThrow();

@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import top.fosin.anan.cloudresource.constant.PathPrefixConstant;
-import top.fosin.anan.cloudresource.dto.res.ServiceRespDto;
+import top.fosin.anan.cloudresource.entity.res.ServiceRespDTO;
 import top.fosin.anan.data.controller.ISimpleController;
 import top.fosin.anan.platform.modules.pub.dto.ServiceReqDto;
 import top.fosin.anan.platform.modules.pub.service.inter.ServiceService;
@@ -21,7 +21,7 @@ import top.fosin.anan.platform.modules.pub.service.inter.ServiceService;
 @RequestMapping(value = PathPrefixConstant.SERVICE, params = PathPrefixConstant.DEFAULT_VERSION_PARAM)
 @Api(value = PathPrefixConstant.SERVICE, tags = "服务管理")
 @AllArgsConstructor
-public class ServiceController implements ISimpleController<ServiceReqDto, ServiceRespDto, Long> {
+public class ServiceController implements ISimpleController<ServiceReqDto, ServiceRespDTO, Long> {
     private final ServiceService serviceService;
 
     @Override

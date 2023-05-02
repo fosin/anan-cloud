@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+package top.fosin.anan.cloudresource.grpc.dicdetail;
+
+option java_multiple_files = true;
+option java_package = "top.fosin.anan.cloudresource.grpc.dicdetail";
+option java_outer_classname = "DicDetailProto";
+import "google/protobuf/timestamp.proto";
+
+service DicDetailService {
+  //通过字典序号查询字典数据
+  rpc findOneByDicIdAndCode (DicDetailReq) returns (DicDetailResp) {}
+  //通过字典序号查询字典明细数据
+  rpc listByDicId (DicIdReq) returns (DicDetailsResp) {}
+}
+
+//字典序号请求
+message DicIdReq {
+  int64 dictionaryId = 1;
+}
+
+//字典序号请求
+message DicDetailReq {
+  int64 dictionaryId = 1;
+  int64 code = 2;
+}
+
+//字典信息集合响应
+message DicDetailsResp {
+  repeated DicDetailResp dicDetail = 1;
+}
+//字典信息响应
+message DicDetailResp {
+  int64 id = 1;
+  int64 dictionaryId = 2;
+  int64 code = 3;
+  string name = 4;
+  int32 sort = 5;
+  int32 status = 6;
+  optional string scode = 7;
+  optional string scope = 8;
+  int32 used = 9;
+  optional string description = 10;
+  int64 createBy = 11;
+  google.protobuf.Timestamp createTime = 12;
+  int64 updateBy = 13;
+  google.protobuf.Timestamp updateTime = 14;
+}

@@ -6,7 +6,7 @@ import top.fosin.anan.cloudresource.constant.FieldConstant;
 import top.fosin.anan.cloudresource.constant.PathPrefixConstant;
 import top.fosin.anan.cloudresource.constant.PathSuffixConstant;
 import top.fosin.anan.cloudresource.constant.ServiceConstant;
-import top.fosin.anan.cloudresource.dto.res.UserRespDto;
+import top.fosin.anan.cloudresource.entity.res.UserRespDTO;
 import top.fosin.anan.cloudresource.service.UserFeignFallbackServiceImpl;
 import top.fosin.anan.data.constant.PathConstant;
 import top.fosin.anan.data.entity.res.TreeVO;
@@ -23,21 +23,21 @@ import java.util.List;
         fallback = UserFeignFallbackServiceImpl.class, contextId = "userFeignService")
 public interface UserFeignService {
     @GetMapping({PathConstant.PATH_ID})
-    SingleResult<UserRespDto> findOneById(@PathVariable(TreeVO.ID_NAME) Long id, @RequestParam(PathPrefixConstant.API_VERSION_NAME) String version);
+    SingleResult<UserRespDTO> findOneById(@PathVariable(TreeVO.ID_NAME) Long id, @RequestParam(PathPrefixConstant.API_VERSION_NAME) String version);
 
     @PostMapping({PathConstant.PATH_IDS})
-    MultResult<UserRespDto> listByIds(@RequestBody List<Long> ids, @RequestParam(PathPrefixConstant.API_VERSION_NAME) String version);
+    MultResult<UserRespDTO> listByIds(@RequestBody List<Long> ids, @RequestParam(PathPrefixConstant.API_VERSION_NAME) String version);
 
     @GetMapping(PathSuffixConstant.USER_CODE)
-    SingleResult<UserRespDto> findOneByUsercode(@PathVariable(FieldConstant.USER_CODE) String usercode, @RequestParam(PathPrefixConstant.API_VERSION_NAME) String version);
+    SingleResult<UserRespDTO> findOneByUsercode(@PathVariable(FieldConstant.USER_CODE) String usercode, @RequestParam(PathPrefixConstant.API_VERSION_NAME) String version);
 
     @GetMapping("/list/organizId/{organizId}/{status}")
-    MultResult<UserRespDto> listByOrganizId(@PathVariable("organizId") Long organizId,
+    MultResult<UserRespDTO> listByOrganizId(@PathVariable("organizId") Long organizId,
                                             @PathVariable("status") Integer status,
                                             @RequestParam(PathPrefixConstant.API_VERSION_NAME) String version);
 
     @GetMapping("/list/topId/{topId}/{status}")
-    MultResult<UserRespDto> listAllChildByTopId(@PathVariable("topId") Long topId,
+    MultResult<UserRespDTO> listAllChildByTopId(@PathVariable("topId") Long topId,
                                                 @PathVariable("status") Integer status,
                                                 @RequestParam(PathPrefixConstant.API_VERSION_NAME) String version);
 }

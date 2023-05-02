@@ -34,13 +34,13 @@ public class DictionaryDetail extends IdCreateUpdateDeletePO<Long> {
 
   @Basic
   @ApiModelProperty(value = "字典明细键，不能重复，字典内明细项唯一代码", required = true)
-  @Column(name = "name", nullable = false)
-  private Long name;
+  @Column(name = "code", nullable = false)
+  private Long code;
 
   @Basic
   @ApiModelProperty(value = "字典明细值表示字面意义")
-  @Column(name = "value", length = 64)
-  private String value;
+  @Column(name = "name", length = 64)
+  private String name;
 
   @Basic
   @ApiModelProperty(value = "取值于字典明细表anan_dictionary.id", required = true)

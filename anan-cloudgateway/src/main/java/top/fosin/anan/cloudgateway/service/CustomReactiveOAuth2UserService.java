@@ -168,7 +168,7 @@ public class CustomReactiveOAuth2UserService implements ReactiveOAuth2UserServic
 
     private static Mono<UserInfoErrorResponse> parse(ClientResponse httpResponse) {
         String wwwAuth = httpResponse.headers().asHttpHeaders().getFirst(HttpHeaders.WWW_AUTHENTICATE);
-        if (!StringUtils.isEmpty(wwwAuth)) {
+        if (StringUtils.hasText(wwwAuth)) {
             // Bearer token error?
             return Mono.fromCallable(() -> UserInfoErrorResponse.parse(wwwAuth));
         }

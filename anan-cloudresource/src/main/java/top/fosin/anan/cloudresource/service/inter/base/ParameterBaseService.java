@@ -1,6 +1,6 @@
 package top.fosin.anan.cloudresource.service.inter.base;
 
-import top.fosin.anan.cloudresource.dto.res.ParameterRespDto;
+import top.fosin.anan.cloudresource.entity.res.ParameterRespDTO;
 
 import java.util.List;
 
@@ -13,9 +13,9 @@ import java.util.List;
 public interface ParameterBaseService {
     void cancelDelete(List<Long> ids);
 
-    ParameterRespDto getParameter(Integer type, String scope, String name);
+    ParameterRespDTO getParameter(Integer type, String scope, String name);
 
-    ParameterRespDto getNearestParameter(int type, String scope, String name);
+    ParameterRespDTO getNearestParameter(int type, String scope, String name);
 
     String getOrCreateParameter(int type, String scope, String name, String defaultValue, String description);
 

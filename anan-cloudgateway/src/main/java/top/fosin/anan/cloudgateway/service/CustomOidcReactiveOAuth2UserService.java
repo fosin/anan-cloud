@@ -38,6 +38,7 @@ import org.springframework.security.oauth2.core.oidc.user.OidcUserAuthority;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 import reactor.core.publisher.Mono;
 import top.fosin.anan.security.resource.AnanSecurityProperties;
@@ -138,7 +139,7 @@ public class CustomOidcReactiveOAuth2UserService implements ReactiveOAuth2UserSe
     private boolean shouldRetrieveUserInfo(OidcUserRequest userRequest) {
         // Auto-disabled if UserInfo Endpoint URI is not provided
         ClientRegistration clientRegistration = userRequest.getClientRegistration();
-        if (StringUtils.isEmpty(clientRegistration.getProviderDetails().getUserInfoEndpoint().getUri())) {
+        if (ObjectUtils.isEmpty(clientRegistration.getProviderDetails().getUserInfoEndpoint().getUri())) {
             return false;
         }
         // The Claims requested by the profile, email, address, and phone scope values

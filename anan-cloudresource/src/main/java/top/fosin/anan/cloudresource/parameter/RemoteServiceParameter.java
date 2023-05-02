@@ -1,6 +1,6 @@
 package top.fosin.anan.cloudresource.parameter;
 
-import top.fosin.anan.cloudresource.service.UserInfoService;
+import top.fosin.anan.cloudresource.service.CurrentUserService;
 
 /**
  * 服务参数远程模式
@@ -9,7 +9,7 @@ import top.fosin.anan.cloudresource.service.UserInfoService;
  * @date 2021/5/2
  */
 public class RemoteServiceParameter extends RemoteParameter {
-    public RemoteServiceParameter(UserInfoService userInfoService) {
-        super(new ServiceStrategy(userInfoService));
+    public RemoteServiceParameter(CurrentUserService currentUserService) {
+        super(new ServiceStrategy(currentUserService));
     }
 }

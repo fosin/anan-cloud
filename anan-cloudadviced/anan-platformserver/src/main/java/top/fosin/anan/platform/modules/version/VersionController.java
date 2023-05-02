@@ -8,7 +8,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import top.fosin.anan.cloudresource.constant.PathPrefixConstant;
-import top.fosin.anan.cloudresource.dto.res.PermissionRespTreeDto;
+import top.fosin.anan.cloudresource.entity.res.PermissionRespTreeDTO;
 import top.fosin.anan.data.controller.ISimpleController;
 import top.fosin.anan.data.entity.res.TreeVO;
 import top.fosin.anan.data.result.MultResult;
@@ -45,7 +45,7 @@ public class VersionController implements ISimpleController<VersionReqDto, Versi
             @ApiImplicitParam(name = "versionId", required = true, dataTypeClass = Long.class, value = "版本ID,取值于Version.id", paramType = "query"),
             @ApiImplicitParam(name = TreeVO.PID_NAME, required = true, dataTypeClass = Long.class, value = "父权限ID,VersionPermission.id", paramType = "path")
     })
-    public MultResult<PermissionRespTreeDto> getListChild(@PathVariable Long pid, @RequestParam Long versionId) {
+    public MultResult<PermissionRespTreeDTO> getListChild(@PathVariable Long pid, @RequestParam Long versionId) {
         return ResultUtils.success(permissionService.findByPidAndVersionId(pid, versionId));
     }
 

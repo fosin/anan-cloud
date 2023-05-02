@@ -3,8 +3,8 @@ package top.fosin.anan.cloudresource.service;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.ContextLoader;
-import top.fosin.anan.cloudresource.dto.req.ParameterReqDto;
-import top.fosin.anan.cloudresource.dto.res.ParameterRespDto;
+import top.fosin.anan.cloudresource.entity.req.ParameterReqDTO;
+import top.fosin.anan.cloudresource.entity.res.ParameterRespDTO;
 import top.fosin.anan.cloudresource.service.inter.feign.ParameterFeignService;
 import top.fosin.anan.cloudresource.service.inter.rpc.ParameterRpcService;
 import top.fosin.anan.cloudresource.type.RpcCallStrategy;
@@ -51,7 +51,7 @@ public class PermissionProxyRpcServiceImpl implements ParameterRpcService {
     }
 
     @Override
-    public ParameterRespDto getParameter(Integer type, String scope, String name) {
+    public ParameterRespDTO getParameter(Integer type, String scope, String name) {
         if (rpcStrategy == RpcCallStrategy.GRPC) {
             return getPermissionRpcService().getParameter(type, scope, name);
         } else {
@@ -60,7 +60,7 @@ public class PermissionProxyRpcServiceImpl implements ParameterRpcService {
     }
 
     @Override
-    public ParameterRespDto getNearestParameter(int type, String scope, String name) {
+    public ParameterRespDTO getNearestParameter(int type, String scope, String name) {
         if (rpcStrategy == RpcCallStrategy.GRPC) {
             return getPermissionRpcService().getNearestParameter(type, scope, name);
         } else {
@@ -73,7 +73,7 @@ public class PermissionProxyRpcServiceImpl implements ParameterRpcService {
         if (rpcStrategy == RpcCallStrategy.GRPC) {
             return getPermissionRpcService().getOrCreateParameter(type, scope, name, defaultValue, description);
         } else {
-            ParameterReqDto reqDto = new ParameterReqDto();
+            ParameterReqDTO reqDto = new ParameterReqDTO();
             reqDto.setType(type);
             reqDto.setScope(scope);
             reqDto.setName(name);
@@ -111,7 +111,7 @@ public class PermissionProxyRpcServiceImpl implements ParameterRpcService {
     }
 
     @Override
-    public void processUpdate(ParameterReqDto reqDto) {
+    public void processUpdate(ParameterReqDTO reqDto) {
         if (rpcStrategy == RpcCallStrategy.GRPC) {
             getPermissionRpcService().processUpdate(reqDto);
         } else {

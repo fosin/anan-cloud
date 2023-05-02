@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import top.fosin.anan.data.entity.res.IdCreateUpdateDto;
+import top.fosin.anan.data.entity.res.IdCreateUpdateVO;
 
 /**
  * 国际化语言字符集响应DTO
@@ -18,7 +18,7 @@ import top.fosin.anan.data.entity.res.IdCreateUpdateDto;
 @ToString
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value = "国际化语言字符集响应DTO", description = "国际化语言字符集响应DTO")
-public class InternationalCharsetRespDto extends IdCreateUpdateDto<Long> {
+public class InternationalCharsetRespDto extends IdCreateUpdateVO<Long> {
     private static final long serialVersionUID = 931996735216252232L;
     @ApiModelProperty(value = "国际化语言序号", example = "Integer")
     private Long internationalId;

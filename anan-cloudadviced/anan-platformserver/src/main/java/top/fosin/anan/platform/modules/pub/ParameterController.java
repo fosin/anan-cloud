@@ -8,8 +8,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import top.fosin.anan.cloudresource.constant.PathPrefixConstant;
-import top.fosin.anan.cloudresource.dto.req.ParameterReqDto;
-import top.fosin.anan.cloudresource.dto.res.ParameterRespDto;
+import top.fosin.anan.cloudresource.entity.req.ParameterReqDTO;
+import top.fosin.anan.cloudresource.entity.res.ParameterRespDTO;
 import top.fosin.anan.cloudresource.service.inter.feign.ParameterFeignService;
 import top.fosin.anan.data.controller.ISimpleController;
 import top.fosin.anan.data.entity.res.TreeVO;
@@ -34,7 +34,7 @@ import java.util.List;
 @RequestMapping(value = PathPrefixConstant.PARAMETER)
 @Api(value = PathPrefixConstant.PARAMETER, tags = "通用参数管理(参数获取、自动创建)")
 @AllArgsConstructor
-public class ParameterController implements ISimpleController<ParameterReqDto, ParameterRespDto, Long> {
+public class ParameterController implements ISimpleController<ParameterReqDTO, ParameterRespDTO, Long> {
     private final ParameterService parameterService;
 
     @ApiOperation(value = "获取指定机构或指定用户的参数整条数据", notes = "type=1则是机构参数(机构参数系统会从当前机构向逐级上级机构查找该参数),type=2则是用户参数,如果缓存和数据库中都没有找到参数，返回null值")
@@ -47,14 +47,14 @@ public class ParameterController implements ISimpleController<ParameterReqDto, P
             @ApiImplicitParam(name = "name", value = "字典名称,取值于Parameter.name",
                     required = true, dataTypeClass = String.class, paramType = "query")
     })
-    public SingleResult<ParameterRespDto> getNearestParameter(@PositiveOrZero @RequestParam("type") Integer type,
+    public SingleResult<ParameterRespDTO> getNearestParameter(@PositiveOrZero @RequestParam("type") Integer type,
                                                               @RequestParam("scope") String scope,
                                                               @NotBlank @RequestParam("name") String name) {
         return ResultUtils.success(parameterService.getNearestParameter(type, scope, name));
     }
 
     @ApiOperation(value = "获取指定机构或指定用户的参数整条数据", notes = "type=1则是机构参数,只找当前机构,type=2则是用户参数,如果缓存和数据库中都没有找到参数，返回null值")
-    @GetMapping(value = ParameterFeignService.PATH_DTO)
+    @GetMapping(value = ParameterFeignService.PATH_3ARGS)
     @ApiImplicitParams({
             @ApiImplicitParam(name = "type", value = "字典类型,取值于Parameter.type",
                     required = true, dataTypeClass = Integer.class, paramType = "query"),
@@ -63,7 +63,7 @@ public class ParameterController implements ISimpleController<ParameterReqDto, P
             @ApiImplicitParam(name = "name", value = "字典名称,取值于Parameter.name",
                     required = true, dataTypeClass = String.class, paramType = "query")
     })
-    public SingleResult<ParameterRespDto> getParameter(@PositiveOrZero @RequestParam("type") Integer type,
+    public SingleResult<ParameterRespDTO> getParameter(@PositiveOrZero @RequestParam("type") Integer type,
                                                        @RequestParam("scope") String scope,
                                                        @NotBlank @RequestParam("name") String name) {
         return ResultUtils.success(parameterService.getParameter(type, scope, name));
@@ -72,8 +72,8 @@ public class ParameterController implements ISimpleController<ParameterReqDto, P
     @ApiOperation(value = "获取或创建指定机构或指定用户参数值", notes = "type=1则是机构参数(机构参数系统会从当前机构向逐级上级机构查找该参数),type=2则是用户参数，如果缓存和数据库中都没有找到参数，则自动创建一个无域参数")
     @RequestMapping(value = ParameterFeignService.PATH_VALUE, method = {RequestMethod.POST, RequestMethod.GET})
     @ApiImplicitParam(name = TreeVO.ID_NAME, value = "参数ID,取值于Parameter.id",
-            required = true, dataTypeClass = ParameterReqDto.class, paramType = "body")
-    public SingleResult<String> getOrCreateParameter(@Validated({SingleQuery.class}) @RequestBody ParameterReqDto reqDto) {
+            required = true, dataTypeClass = ParameterReqDTO.class, paramType = "body")
+    public SingleResult<String> getOrCreateParameter(@Validated({SingleQuery.class}) @RequestBody ParameterReqDTO reqDto) {
         int type = reqDto.getType();
         String scope = reqDto.getScope();
         String name = reqDto.getName();

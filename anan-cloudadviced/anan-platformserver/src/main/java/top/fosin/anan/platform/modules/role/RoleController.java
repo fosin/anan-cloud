@@ -9,10 +9,10 @@ import org.springframework.web.bind.annotation.*;
 import top.fosin.anan.cloudresource.constant.FieldConstant;
 import top.fosin.anan.cloudresource.constant.PathPrefixConstant;
 import top.fosin.anan.cloudresource.constant.PathSuffixConstant;
-import top.fosin.anan.cloudresource.dto.req.RoleReqDto;
-import top.fosin.anan.cloudresource.dto.res.RolePermissionRespDto;
-import top.fosin.anan.cloudresource.dto.res.RoleRespDto;
-import top.fosin.anan.cloudresource.dto.res.UserRespDto;
+import top.fosin.anan.cloudresource.entity.req.RoleReqDTO;
+import top.fosin.anan.cloudresource.entity.res.RolePermissionRespDTO;
+import top.fosin.anan.cloudresource.entity.res.RoleRespDTO;
+import top.fosin.anan.cloudresource.entity.res.UserRespDTO;
 import top.fosin.anan.core.exception.AnanControllerException;
 import top.fosin.anan.data.controller.ISimpleController;
 import top.fosin.anan.data.result.MultResult;
@@ -36,7 +36,7 @@ import java.util.List;
 @RequestMapping(value = PathPrefixConstant.ROLE, params = PathPrefixConstant.DEFAULT_VERSION_PARAM)
 @Api(value = PathPrefixConstant.ROLE, tags = "角色管理")
 @AllArgsConstructor
-public class RoleController implements ISimpleController<RoleReqDto, RoleRespDto, Long> {
+public class RoleController implements ISimpleController<RoleReqDTO, RoleRespDTO, Long> {
 
     private final RoleService roleService;
     private final UserService userService;
@@ -47,7 +47,7 @@ public class RoleController implements ISimpleController<RoleReqDto, RoleRespDto
     @ApiImplicitParam(name = FieldConstant.ROLE_ID, value = "角色ID,取值于Role.id",
             required = true, dataTypeClass = Long.class, paramType = "path")
     @GetMapping(value = "/permissions" + PathSuffixConstant.ROLE_ID)
-    public MultResult<RolePermissionRespDto> permissions(@PathVariable(FieldConstant.ROLE_ID) Long roleId) {
+    public MultResult<RolePermissionRespDTO> permissions(@PathVariable(FieldConstant.ROLE_ID) Long roleId) {
         return ResultUtils.success(rolePermissionService.listByForeingKey(roleId));
     }
 
@@ -59,7 +59,7 @@ public class RoleController implements ISimpleController<RoleReqDto, RoleRespDto
                     required = true, dataTypeClass = Long.class, paramType = "path")
     })
     @PutMapping(value = "/permissions" + PathSuffixConstant.ROLE_ID)
-    public MultResult<RolePermissionRespDto> permissions(
+    public MultResult<RolePermissionRespDTO> permissions(
             @RequestBody List<RolePermissionReqDto> reqDtos,
             @PathVariable(FieldConstant.ROLE_ID) Long roleId) {
         return ResultUtils.success(rolePermissionService.processInBatch(roleId, reqDtos, false));
@@ -69,7 +69,7 @@ public class RoleController implements ISimpleController<RoleReqDto, RoleRespDto
     @ApiImplicitParam(name = FieldConstant.ROLE_ID, value = "角色ID,取值于Role.id",
             required = true, dataTypeClass = Long.class, paramType = "path")
     @GetMapping(value = "/users" + PathSuffixConstant.ROLE_ID)
-    public MultResult<UserRespDto> getRoleUsers(@PathVariable(FieldConstant.ROLE_ID) Long roleId) {
+    public MultResult<UserRespDTO> getRoleUsers(@PathVariable(FieldConstant.ROLE_ID) Long roleId) {
         return ResultUtils.success(userService.findRoleUsersByRoleId(roleId));
     }
 
@@ -91,7 +91,7 @@ public class RoleController implements ISimpleController<RoleReqDto, RoleRespDto
     @ApiImplicitParam(name = FieldConstant.ROLE_ID, value = "角色ID,取值于Role.id",
             required = true, dataTypeClass = Long.class, paramType = "path")
     @GetMapping(value = "/otherUsers" + PathSuffixConstant.ROLE_ID)
-    public MultResult<UserRespDto> getOtherUsers(@PathVariable(FieldConstant.ROLE_ID) Long roleId) throws AnanControllerException {
+    public MultResult<UserRespDTO> getOtherUsers(@PathVariable(FieldConstant.ROLE_ID) Long roleId) throws AnanControllerException {
         return ResultUtils.success(userService.findOtherUsersByRoleId(roleId));
     }
 
@@ -99,7 +99,7 @@ public class RoleController implements ISimpleController<RoleReqDto, RoleRespDto
     @ApiOperation("根据机构ID查询该机构及子机构的所有角色")
     @ApiImplicitParam(name = FieldConstant.ORGANIZ_ID, value = "机构序号",
             required = true, dataTypeClass = Long.class, paramType = "path")
-    public MultResult<RoleRespDto> findAllByOrganizId(@PathVariable(FieldConstant.ORGANIZ_ID) Long organizId) {
+    public MultResult<RoleRespDTO> findAllByOrganizId(@PathVariable(FieldConstant.ORGANIZ_ID) Long organizId) {
         return ResultUtils.success(roleService.findAllByOrganizId(organizId));
     }
 

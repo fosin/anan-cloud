@@ -1,6 +1,6 @@
 package top.fosin.anan.platform.modules.organization.service.inter;
 
-import top.fosin.anan.cloudresource.dto.req.RegisterDto;
+import top.fosin.anan.cloudresource.entity.req.RegisterDTO;
 import top.fosin.anan.jpa.service.ISimpleJpaService;
 import top.fosin.anan.platform.modules.organization.dto.OrgAuthReqDto;
 import top.fosin.anan.platform.modules.organization.dto.OrgAuthRespDto;
@@ -20,5 +20,5 @@ public interface OrgAuthService extends
 
     List<OrgAuthRespDto> findAllByOrganizId(Long organizId);
 
-    Boolean register(RegisterDto registerDto);
+    Boolean register(RegisterDTO registerDto);
 }

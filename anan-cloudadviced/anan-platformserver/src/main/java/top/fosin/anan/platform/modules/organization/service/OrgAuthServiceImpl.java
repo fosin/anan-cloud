@@ -4,11 +4,11 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import top.fosin.anan.cloudresource.dto.req.RegisterDto;
-import top.fosin.anan.cloudresource.dto.req.UserRegisterDto;
-import top.fosin.anan.cloudresource.dto.req.UserReqDto;
-import top.fosin.anan.cloudresource.dto.res.OrgRespDto;
-import top.fosin.anan.cloudresource.dto.res.UserRespDto;
+import top.fosin.anan.cloudresource.entity.req.RegisterDTO;
+import top.fosin.anan.cloudresource.entity.req.UserCreateDTO;
+import top.fosin.anan.cloudresource.entity.req.UserRegisterDTO;
+import top.fosin.anan.cloudresource.entity.res.OrganizRespDTO;
+import top.fosin.anan.cloudresource.entity.res.UserRespDTO;
 import top.fosin.anan.core.util.BeanUtil;
 import top.fosin.anan.core.util.DateTimeUtil;
 import top.fosin.anan.platform.modules.organization.dao.OrgAuthDao;
@@ -76,7 +76,7 @@ public class OrgAuthServiceImpl implements OrgAuthService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Boolean register(RegisterDto registerDto) {
+    public Boolean register(RegisterDTO registerDto) {
         Date now = new Date();
 
         //创建机构
@@ -85,15 +85,15 @@ public class OrgAuthServiceImpl implements OrgAuthService {
         organization.setPid(0L);
         organization.setTopId(0L);
         organization.setStatus(0);
-        OrgRespDto organizationEntity = orgService.create(organization);
+        OrganizRespDTO organizationEntity = orgService.create(organization);
         OrgReqDto updateDto = new OrgReqDto();
         BeanUtil.copyProperties(organizationEntity, updateDto);
         updateDto.setTopId(organizationEntity.getId());
         orgService.processUpdate(updateDto);
 
         //创建用户
-        UserRegisterDto registerDTO = registerDto.getUser();
-        UserReqDto createDTO = new UserReqDto();
+        UserRegisterDTO registerDTO = registerDto.getUser();
+        UserCreateDTO createDTO = new UserCreateDTO();
         BeanUtil.copyProperties(registerDTO, createDTO);
         createDTO.setOrganizId(updateDto.getId());
 
@@ -103,8 +103,7 @@ public class OrgAuthServiceImpl implements OrgAuthService {
             e.printStackTrace();
         }
 //        Assert.isTrue(createDTO.getPassword().equals(createDTO.getConfirmPassword()), "密码和确认密码必须一致!");
-        UserRespDto user = userService.create(createDTO);
-
+        UserRespDTO user = userService.create(createDTO);
 
         Long versionId = registerDto.getVersionId();
         VersionRespDto respDto = versionService.findOneById(versionId);

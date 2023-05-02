@@ -31,7 +31,7 @@ import springfox.documentation.swagger.web.SwaggerResource;
 import top.fosin.anan.cloudgateway.service.CustomOidcReactiveOAuth2UserService;
 import top.fosin.anan.cloudgateway.service.CustomReactiveOAuth2UserService;
 import top.fosin.anan.cloudresource.constant.ServiceConstant;
-import top.fosin.anan.cloudresource.dto.res.PermissionRespDto;
+import top.fosin.anan.cloudresource.entity.res.PermissionRespDTO;
 import top.fosin.anan.cloudresource.service.inter.rpc.PermissionRpcService;
 import top.fosin.anan.security.resource.AnanProgramAuthorities;
 import top.fosin.anan.security.resource.AnanSecurityProperties;
@@ -105,8 +105,8 @@ public class GatewayAutoConfiguration {
     //private PermissionFeignService permissionFeignService;
     //
     //@Async // 重点：这里必须在异步线程中执行，执行结果返回Future
-    //public Future<List<PermissionRespDto>> findByServiceCodes(List<String> hosts,String apiVersion) {
-    //    List<PermissionRespDto> dtos = permissionFeignService.findByServiceCodes(hosts, apiVersion).getData();
+    //public Future<List<PermissionRespDTO>> findByServiceCodes(List<String> hosts,String apiVersion) {
+    //    List<PermissionRespDTO> dtos = permissionFeignService.findByServiceCodes(hosts, apiVersion).getData();
     //    return new AsyncResult<>(dtos);
     //}
 
@@ -126,14 +126,14 @@ public class GatewayAutoConfiguration {
 
     @Retryable(value = {RemoteAccessException.class}, maxAttemptsExpression = "${retry.maxAttempts:5}",
             backoff = @Backoff(delayExpression = "${retry.backoff:1000}"))
-    public List<PermissionRespDto> getPermissionsByRest(List<String> hosts) throws URISyntaxException {
-        List<PermissionRespDto> dtos;
+    public List<PermissionRespDTO> getPermissionsByRest(List<String> hosts) throws URISyntaxException {
+        List<PermissionRespDTO> dtos;
         // 方法4：GRPC
         dtos = permissionRpcService.findByServiceCodes(hosts);
 
         //方式1，feign
-        //List<PermissionRespDto> dtos = permissionFeignService.findByServiceCodes(hosts, PathPrefixConstant.API_VERSION_NAME).getData();
-        //List<PermissionRespDto> dtos = findByServiceCodes(hosts,PathPrefixConstant.API_VERSION_NAME).get();
+        //List<PermissionRespDTO> dtos = permissionFeignService.findByServiceCodes(hosts, PathPrefixConstant.API_VERSION_NAME).getData();
+        //List<PermissionRespDTO> dtos = findByServiceCodes(hosts,PathPrefixConstant.API_VERSION_NAME).get();
 
         //方式2：restTemplate调用
 //        ServiceInstance instance = getServiceRandomInstance();
@@ -145,7 +145,7 @@ public class GatewayAutoConfiguration {
 //                .accept(MediaType.APPLICATION_JSON)
 //                .contentType(MediaType.APPLICATION_JSON)
 //                .body(hosts);
-//        ResponseEntity<MultResult<PermissionRespDto>> res = restTemplate()
+//        ResponseEntity<MultResult<PermissionRespDTO>> res = restTemplate()
 //                .exchange(uri, HttpMethod.POST, request, new ParameterizedTypeReference<>() {
 //                });
         //使用服务名调用，由于restTemplate的bean的
@@ -155,20 +155,20 @@ public class GatewayAutoConfiguration {
         //        .accept(MediaType.APPLICATION_JSON)
         //        .contentType(MediaType.APPLICATION_JSON)
         //        .body(hosts);
-        //ResponseEntity<MultResult<PermissionRespDto>>  res = restTemplate()
+        //ResponseEntity<MultResult<PermissionRespDTO>>  res = restTemplate()
         //        .exchange(uri, HttpMethod.POST, request, new ParameterizedTypeReference<>() {});
 
 //        dtos = Objects.requireNonNull(res.getBody()).getData();
 
         //方式3：webClient
-        //MultResult<PermissionRespDto> multResult = webBuilder().baseUrl("lb://" + ServiceConstant.ANAN_PLATFORMSERVER).build()
+        //MultResult<PermissionRespDTO> multResult = webBuilder().baseUrl("lb://" + ServiceConstant.ANAN_PLATFORMSERVER).build()
         //        .post()
         //        .uri(uriBuilder -> uriBuilder.path("/" + PathPrefixConstant.PERMISSION + PathSuffixConstant.SERVICE_CODES)
         //                .queryParam(PathPrefixConstant.API_VERSION_NAME, PathPrefixConstant.API_VERSION_VALUE).build())
         //         .contentType(MediaType.APPLICATION_JSON)
         //         .accept(MediaType.APPLICATION_JSON)
         //        .bodyValue(hosts)
-        //        .exchangeToMono(clientResponse -> clientResponse.bodyToMono(new ParameterizedTypeReference<MultResult<PermissionRespDto>>() {}))
+        //        .exchangeToMono(clientResponse -> clientResponse.bodyToMono(new ParameterizedTypeReference<MultResult<PermissionRespDTO>>() {}))
         //        .doOnError(WebClientResponseException.class, err -> {
         //            log.info("ERROR status:{},msg:{}",err.getRawStatusCode(),err.getResponseBodyAsString());
         //            throw new RuntimeException(err.getMessage());
@@ -178,25 +178,25 @@ public class GatewayAutoConfiguration {
         //ServiceInstance instance = getServiceRandomInstance();
         //String scheme = instance.getScheme();
         //URI uri = new URI(scheme == null ? "http" : scheme, null, instance.getHost(), instance.getPort(), "/" + PathPrefixConstant.PERMISSION + PathSuffixConstant.SERVICE_CODES, PathPrefixConstant.DEFAULT_VERSION_PARAM, null);
-        //MultResult<PermissionRespDto> multResult = webBuilder()
+        //MultResult<PermissionRespDTO> multResult = webBuilder()
         //        .build().post()
         //        .uri(uri)
         //        .contentType(MediaType.APPLICATION_JSON)
         //        .accept(MediaType.APPLICATION_JSON)
         //        .bodyValue(hosts)
         //        .retrieve()
-        //        .bodyToMono(new ParameterizedTypeReference<MultResult<PermissionRespDto>>() {})
+        //        .bodyToMono(new ParameterizedTypeReference<MultResult<PermissionRespDTO>>() {})
         //        .doOnError(throwable -> log.error(throwable.getMessage()))
         //        .block();
 
-        //List<PermissionRespDto> dtos = multResult.getData();
+        //List<PermissionRespDTO> dtos = multResult.getData();
 
         return dtos;
 
     }
 
     @Recover
-    public List<PermissionRespDto> getPermissionsByRestRecover(RemoteAccessException exception, List<String> hosts) {
+    public List<PermissionRespDTO> getPermissionsByRestRecover(RemoteAccessException exception, List<String> hosts) {
         throw exception;
     }
 
@@ -215,7 +215,7 @@ public class GatewayAutoConfiguration {
     public AnanProgramAuthorities ananProgramAuthorities() throws URISyntaxException {
         List<RouteDefinition> routes = ananGatewayProperties().getRoutes();
         List<String> hosts = routes.stream().map(route -> route.getUri().getHost()).collect(Collectors.toList());
-        List<PermissionRespDto> permissions = getPermissionsByRest(hosts);
+        List<PermissionRespDTO> permissions = getPermissionsByRest(hosts);
         String authorityPrefix = ananSecurityProperties.getOauth2().getResourceServer().getAuthorityPrefix();
         List<AnanSecurityProperties.Authority> authorities = new ArrayList<>();
         Objects.requireNonNull(permissions).forEach(p -> {

@@ -9,8 +9,8 @@ import org.springframework.security.oauth2.server.authorization.OAuth2TokenType;
 import org.springframework.security.oauth2.server.authorization.token.JwtEncodingContext;
 import org.springframework.security.oauth2.server.authorization.token.OAuth2TokenCustomizer;
 import top.fosin.anan.auth.service.inter.AuthService;
-import top.fosin.anan.cloudresource.dto.UserAuthDto;
-import top.fosin.anan.cloudresource.dto.UserDetail;
+import top.fosin.anan.cloudresource.entity.res.UserAuthDto;
+import top.fosin.anan.cloudresource.entity.UserDetail;
 import top.fosin.anan.core.util.DateTimeUtil;
 import top.fosin.anan.security.resource.AnanSecurityProperties;
 

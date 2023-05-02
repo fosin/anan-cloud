@@ -1,7 +1,7 @@
 package top.fosin.anan.cloudresource.parameter;
 
-import top.fosin.anan.cloudresource.dto.req.ParameterReqDto;
-import top.fosin.anan.cloudresource.dto.res.ParameterRespDto;
+import top.fosin.anan.cloudresource.entity.req.ParameterReqDTO;
+import top.fosin.anan.cloudresource.entity.res.ParameterRespDTO;
 import top.fosin.anan.cloudresource.service.PermissionProxyRpcServiceImpl;
 import top.fosin.anan.cloudresource.service.inter.rpc.ParameterRpcService;
 import top.fosin.anan.core.util.BeanUtil;
@@ -26,15 +26,15 @@ public class RemoteParameter implements IParameter {
     }
 
     @Override
-    public synchronized ParameterRespDto setParameter(String scope, String name, String value, String description) {
+    public synchronized ParameterRespDTO setParameter(String scope, String name, String value, String description) {
         int type = this.getParameterStrategy().getType();
-        ParameterRespDto parameter = parameterRpcService.getParameter(type, scope, name);
+        ParameterRespDTO parameter = parameterRpcService.getParameter(type, scope, name);
         parameter.setValue(value);
         parameter.setType(type);
         parameter.setScope(scope);
         parameter.setName(name);
         parameter.setDescription(description);
-        parameterRpcService.processUpdate(BeanUtil.copyProperties(parameter, ParameterReqDto.class));
+        parameterRpcService.processUpdate(BeanUtil.copyProperties(parameter, ParameterReqDTO.class));
         return parameter;
     }
 

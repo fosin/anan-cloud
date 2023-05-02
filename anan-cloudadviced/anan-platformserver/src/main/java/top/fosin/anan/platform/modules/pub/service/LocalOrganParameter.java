@@ -3,12 +3,12 @@ package top.fosin.anan.platform.modules.pub.service;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
-import top.fosin.anan.cloudresource.dto.req.ParameterReqDto;
-import top.fosin.anan.cloudresource.dto.res.ParameterRespDto;
+import top.fosin.anan.cloudresource.entity.req.ParameterReqDTO;
+import top.fosin.anan.cloudresource.entity.res.ParameterRespDTO;
 import top.fosin.anan.cloudresource.parameter.IParameter;
 import top.fosin.anan.cloudresource.parameter.IParameterStrategy;
 import top.fosin.anan.cloudresource.parameter.OrganStrategy;
-import top.fosin.anan.cloudresource.service.UserInfoService;
+import top.fosin.anan.cloudresource.service.CurrentUserService;
 import top.fosin.anan.platform.modules.pub.service.inter.ParameterService;
 
 import java.util.Objects;
@@ -24,11 +24,11 @@ import java.util.Objects;
 @AllArgsConstructor
 public class LocalOrganParameter implements IParameter {
     private final ParameterService parameterService;
-    private final UserInfoService userInfoService;
+    private final CurrentUserService currentUserService;
 
     @Override
-    public ParameterRespDto setParameter(String scope, String name, String value, String description) {
-        ParameterReqDto createDto = new ParameterReqDto();
+    public ParameterRespDTO setParameter(String scope, String name, String value, String description) {
+        ParameterReqDTO createDto = new ParameterReqDTO();
         createDto.setValue(value);
         createDto.setType(this.getParameterStrategy().getType());
         createDto.setScope(scope);
@@ -55,6 +55,6 @@ public class LocalOrganParameter implements IParameter {
 
     @Override
     public IParameterStrategy getParameterStrategy() {
-        return new OrganStrategy(userInfoService);
+        return new OrganStrategy(currentUserService);
     }
 }

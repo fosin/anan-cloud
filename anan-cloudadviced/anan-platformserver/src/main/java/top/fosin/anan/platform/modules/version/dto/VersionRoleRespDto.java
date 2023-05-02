@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import top.fosin.anan.data.entity.res.IdCreateUpdateDto;
+import top.fosin.anan.data.entity.res.IdCreateUpdateVO;
 
 /**
  * 系统版本角色表(AnanVersionRole)响应DTO
@@ -18,7 +18,7 @@ import top.fosin.anan.data.entity.res.IdCreateUpdateDto;
 @ToString
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value = "版本角色表响应DTO", description = "版本角色的响应DTO")
-public class VersionRoleRespDto extends IdCreateUpdateDto<Long> {
+public class VersionRoleRespDto extends IdCreateUpdateVO<Long> {
     private static final long serialVersionUID = -39744614020133302L;
     @ApiModelProperty(value = "版本序号", example = "Long")
     private Long versionId;

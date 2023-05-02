@@ -13,9 +13,9 @@ import top.fosin.anan.auth.verifycode.VerifyCode;
 import top.fosin.anan.cloudresource.constant.FieldConstant;
 import top.fosin.anan.cloudresource.constant.PathPrefixConstant;
 import top.fosin.anan.cloudresource.constant.PathSuffixConstant;
-import top.fosin.anan.cloudresource.dto.UserAllPermissionTreeDto;
-import top.fosin.anan.cloudresource.dto.UserDetail;
-import top.fosin.anan.cloudresource.service.UserInfoService;
+import top.fosin.anan.cloudresource.entity.UserAllPermissionTreeVO;
+import top.fosin.anan.cloudresource.entity.UserDetail;
+import top.fosin.anan.cloudresource.service.CurrentUserService;
 import top.fosin.anan.data.result.ResultUtils;
 import top.fosin.anan.data.result.SingleResult;
 
@@ -34,13 +34,13 @@ import java.security.Principal;
 @AllArgsConstructor
 @Api(value = PathPrefixConstant.API, tags = "获取认证相关信息")
 public class AuthController {
-    private UserInfoService userInfoService;
+    private CurrentUserService currentUserService;
     private final AuthService authService;
 
     @GetMapping(value = "/userdetail")
     @ApiOperation(value = "根据令牌获取当前认证用户信息", notes = "根据当前认证用户,获取认证本体信息")
     public SingleResult<UserDetail> principal(Principal principal) {
-        return ResultUtils.success(userInfoService.getUserDetail());
+        return ResultUtils.success(currentUserService.getUserDetail());
     }
 
     @GetMapping("/vercode")
@@ -58,7 +58,7 @@ public class AuthController {
     @ApiOperation(value = "查询用户权限树", notes = "查询用户权限树")
     @ApiImplicitParam(name = FieldConstant.USER_ID, value = "用户的唯一序号",
             required = true, dataTypeClass = Long.class, paramType = "path")
-    public SingleResult<UserAllPermissionTreeDto> findTreeByUserId(@PathVariable(FieldConstant.USER_ID) Long userId) {
+    public SingleResult<UserAllPermissionTreeVO> findTreeByUserId(@PathVariable(FieldConstant.USER_ID) Long userId) {
         return ResultUtils.success(authService.treeByUserId(userId));
     }
 

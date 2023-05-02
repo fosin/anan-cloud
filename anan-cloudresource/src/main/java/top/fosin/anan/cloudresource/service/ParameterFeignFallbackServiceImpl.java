@@ -3,8 +3,8 @@ package top.fosin.anan.cloudresource.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import top.fosin.anan.cloudresource.dto.req.ParameterReqDto;
-import top.fosin.anan.cloudresource.dto.res.ParameterRespDto;
+import top.fosin.anan.cloudresource.entity.req.ParameterReqDTO;
+import top.fosin.anan.cloudresource.entity.res.ParameterRespDTO;
 import top.fosin.anan.cloudresource.service.inter.feign.ParameterFeignService;
 import top.fosin.anan.data.result.SingleResult;
 
@@ -22,30 +22,30 @@ import java.util.List;
 public class ParameterFeignFallbackServiceImpl implements ParameterFeignService {
 
     @Override
-    public SingleResult<ParameterRespDto> processCreate(ParameterReqDto reqDto) {
+    public SingleResult<ParameterRespDTO> processCreate(ParameterReqDTO reqDto) {
         log.error("feign 远程创建通用系统参数失败:{}", reqDto);
         return null;
     }
 
     @Override
-    public void processUpdate(ParameterReqDto reqDto) {
+    public void processUpdate(ParameterReqDTO reqDto) {
         log.error("feign 远程更新通用系统参数失败:{}", reqDto);
     }
 
     @Override
-    public SingleResult<ParameterRespDto> getParameter(Integer type, String scope, String name) {
+    public SingleResult<ParameterRespDTO> getParameter(Integer type, String scope, String name) {
         log.error("feign 远程查询通用系统参数失败:{}{}{}", type, scope, name);
         return null;
     }
 
     @Override
-    public SingleResult<ParameterRespDto> getNearestParameter(Integer type, String scope, String name) {
+    public SingleResult<ParameterRespDTO> getNearestParameter(Integer type, String scope, String name) {
         log.error("feign 远程查询通用系统参数失败:{}{}{}", type, scope, name);
         return null;
     }
 
     @Override
-    public SingleResult<String> getOrCreateParameter(ParameterReqDto reqDto) {
+    public SingleResult<String> getOrCreateParameter(ParameterReqDTO reqDto) {
         log.error("feign 远程查询通用系统参数失败:{}", reqDto);
         return null;
     }

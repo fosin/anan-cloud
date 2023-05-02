@@ -1,7 +1,7 @@
 package top.fosin.anan.platform.modules.pub.service.inter;
 
-import top.fosin.anan.cloudresource.dto.req.DictionaryReqDto;
-import top.fosin.anan.cloudresource.dto.res.DictionaryRespDto;
+import top.fosin.anan.cloudresource.entity.req.DictionaryReqDTO;
+import top.fosin.anan.cloudresource.entity.res.DictionaryRespDTO;
 import top.fosin.anan.jpa.service.ISimpleJpaService;
 import top.fosin.anan.platform.modules.pub.po.Dictionary;
 
@@ -10,5 +10,5 @@ import top.fosin.anan.platform.modules.pub.po.Dictionary;
  * @date 2017/12/29
  *
  */
-public interface DictionaryService extends ISimpleJpaService<DictionaryReqDto, DictionaryRespDto, Long,Dictionary> {
+public interface DictionaryService extends ISimpleJpaService<DictionaryReqDTO, DictionaryRespDTO, Long,Dictionary> {
 }

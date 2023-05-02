@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import top.fosin.anan.cloudresource.constant.PlatformRedisConstant;
-import top.fosin.anan.cloudresource.dto.res.RolePermissionRespDto;
+import top.fosin.anan.cloudresource.entity.res.RolePermissionRespDTO;
 import top.fosin.anan.platform.modules.role.dao.RolePermissionDao;
 import top.fosin.anan.platform.modules.role.dto.RolePermissionReqDto;
 import top.fosin.anan.platform.modules.role.service.inter.RolePermissionService;
@@ -32,7 +32,7 @@ public class RolePermissionServiceImpl implements RolePermissionService {
                     @CacheEvict(value = PlatformRedisConstant.ANAN_USER_PERMISSION_TREE, allEntries = true)
             })
     @Transactional(rollbackFor = Exception.class)
-    public List<RolePermissionRespDto> processInBatch(Long roleId, Collection<RolePermissionReqDto> dtos, boolean... processAction) {
+    public List<RolePermissionRespDTO> processInBatch(Long roleId, Collection<RolePermissionReqDto> dtos, boolean... processAction) {
         return RolePermissionService.super.processInBatch(roleId, dtos, processAction);
     }
 

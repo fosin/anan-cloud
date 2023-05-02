@@ -12,23 +12,27 @@ import org.springframework.web.bind.annotation.*;
 import top.fosin.anan.cloudresource.constant.FieldConstant;
 import top.fosin.anan.cloudresource.constant.PathPrefixConstant;
 import top.fosin.anan.cloudresource.constant.PathSuffixConstant;
-import top.fosin.anan.cloudresource.dto.req.UserReqDto;
-import top.fosin.anan.cloudresource.dto.res.RoleRespDto;
-import top.fosin.anan.cloudresource.dto.res.UserRespDto;
-import top.fosin.anan.cloudresource.dto.res.UserRoleRespDto;
+import top.fosin.anan.cloudresource.entity.req.UserCreateDTO;
+import top.fosin.anan.cloudresource.entity.req.UserUpdateDTO;
+import top.fosin.anan.cloudresource.entity.res.RoleRespDTO;
+import top.fosin.anan.cloudresource.entity.res.UserRespDTO;
+import top.fosin.anan.cloudresource.entity.res.UserRoleRespDTO;
 import top.fosin.anan.core.util.crypt.AesUtil;
 import top.fosin.anan.data.constant.PathConstant;
-import top.fosin.anan.data.controller.BaseController;
-import top.fosin.anan.data.controller.ISimpleController;
+import top.fosin.anan.data.controller.*;
 import top.fosin.anan.data.prop.IdProp;
 import top.fosin.anan.data.result.MultResult;
 import top.fosin.anan.data.result.ResultUtils;
 import top.fosin.anan.data.result.SingleResult;
 import top.fosin.anan.platform.modules.role.service.inter.RoleService;
 import top.fosin.anan.platform.modules.user.dto.*;
+import top.fosin.anan.platform.modules.user.query.UserQuery;
 import top.fosin.anan.platform.modules.user.service.inter.UserPermissionService;
 import top.fosin.anan.platform.modules.user.service.inter.UserRoleService;
 import top.fosin.anan.platform.modules.user.service.inter.UserService;
+import top.fosin.anan.platform.modules.user.vo.UserListVO;
+import top.fosin.anan.platform.modules.user.vo.UserPageVO;
+import top.fosin.anan.platform.modules.user.vo.UserVO;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -43,7 +47,13 @@ import java.util.List;
 @Api(value = PathPrefixConstant.USER, tags = "用户管理")
 @AllArgsConstructor
 public class UserController extends BaseController
-        implements ISimpleController<UserReqDto, UserRespDto, Long> {
+        implements ICreateController<UserCreateDTO, Long>,
+        IUpdateController<UserUpdateDTO, Long>,
+        IDeleteController<Long>,
+        IListByEntityController<UserQuery, UserListVO, Long>,
+        IFindOneByIdController<UserVO, Long>,
+        IListByIdsController<UserListVO, Long>,
+        IPageController<UserQuery, UserPageVO> {
     private final UserService userService;
     private final UserRoleService userRoleService;
     private final RoleService roleService;
@@ -53,7 +63,7 @@ public class UserController extends BaseController
     @ApiImplicitParam(name = FieldConstant.USER_CODE, value = "用户工号,取值于User.usercode",
             required = true, dataTypeClass = String.class, paramType = "path")
     @ApiOperation("根据用户工号查找用户信息")
-    public SingleResult<UserRespDto> findOneByUsercode(@PathVariable(FieldConstant.USER_CODE) String usercode) {
+    public SingleResult<UserRespDTO> findOneByUsercode(@PathVariable(FieldConstant.USER_CODE) String usercode) {
         return ResultUtils.success(userService.findOneByUsercode(usercode));
     }
 
@@ -138,7 +148,7 @@ public class UserController extends BaseController
     @ApiImplicitParam(name = FieldConstant.USER_ID, value = "用户ID,取值于User.id",
             required = true, dataTypeClass = Long.class, paramType = "path")
     @GetMapping(value = "/roles" + PathSuffixConstant.USER_ID)
-    public MultResult<RoleRespDto> getUserRoles(@PathVariable(FieldConstant.USER_ID) Long userId) {
+    public MultResult<RoleRespDTO> getUserRoles(@PathVariable(FieldConstant.USER_ID) Long userId) {
         return ResultUtils.success(roleService.findRoleUsersByRoleId(userId));
     }
 
@@ -150,7 +160,7 @@ public class UserController extends BaseController
                     required = true, dataTypeClass = Long.class, paramType = "path")
     })
     @PutMapping(value = "/roles" + PathSuffixConstant.USER_ID)
-    public MultResult<UserRoleRespDto> putUserRoles
+    public MultResult<UserRoleRespDTO> putUserRoles
             (@RequestBody List<UserRoleReqDto> entities,
              @PathVariable(FieldConstant.USER_ID) Long userId) {
         return ResultUtils.success(userRoleService.processInBatch(userId, entities));
@@ -160,7 +170,7 @@ public class UserController extends BaseController
     @ApiImplicitParam(name = FieldConstant.USER_ID, value = "用户ID,对应Role.id",
             required = true, dataTypeClass = Integer.class, paramType = "path")
     @GetMapping(value = "/otherRoles" + PathSuffixConstant.USER_ID)
-    public MultResult<RoleRespDto> getOtherRoles(@PathVariable(FieldConstant.USER_ID) Long userId) {
+    public MultResult<RoleRespDTO> getOtherRoles(@PathVariable(FieldConstant.USER_ID) Long userId) {
         return ResultUtils.success(roleService.findOtherUsersByRoleId(userId));
     }
 
@@ -168,7 +178,7 @@ public class UserController extends BaseController
     @ApiOperation("根据机构ID查询该机构及子机构的所有用户")
     @ApiImplicitParam(name = FieldConstant.ORGANIZ_ID, value = "机构序号",
             required = true, dataTypeClass = Long.class, paramType = "path")
-    public MultResult<UserRespDto> listByOrganizId(@PathVariable(FieldConstant.ORGANIZ_ID) Long organizId,
+    public MultResult<UserRespDTO> listByOrganizId(@PathVariable(FieldConstant.ORGANIZ_ID) Long organizId,
                                                    @PathVariable("status") Integer status) {
         return ResultUtils.success(userService.listByOrganizId(organizId, status));
     }
@@ -177,7 +187,7 @@ public class UserController extends BaseController
     @ApiOperation("根据顶级机构ID查询其下所有用户")
     @ApiImplicitParam(name = "topId", value = "顶级机构ID，传0表示默认查询当前用户的顶级机构序号",
             required = true, dataTypeClass = Long.class, paramType = "path")
-    public MultResult<UserRespDto> listAllChildByTopId(@PathVariable("topId") Long topId,
+    public MultResult<UserRespDTO> listAllChildByTopId(@PathVariable("topId") Long topId,
                                                        @PathVariable("status") Integer status) {
         return ResultUtils.success(userService.listAllChildByTopId(topId, status));
     }

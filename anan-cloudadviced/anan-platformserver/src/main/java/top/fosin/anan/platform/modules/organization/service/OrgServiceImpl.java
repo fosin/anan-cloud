@@ -10,11 +10,11 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import top.fosin.anan.cloudresource.constant.PlatformRedisConstant;
-import top.fosin.anan.cloudresource.dto.res.OrgRespDto;
-import top.fosin.anan.cloudresource.dto.res.OrgTreeDto;
+import top.fosin.anan.cloudresource.entity.res.OrganizRespDTO;
+import top.fosin.anan.cloudresource.entity.res.OrganizTreeDTO;
 import top.fosin.anan.cloudresource.grpc.organiz.*;
 import top.fosin.anan.cloudresource.grpc.util.StringUtil;
-import top.fosin.anan.cloudresource.service.UserInfoService;
+import top.fosin.anan.cloudresource.service.CurrentUserService;
 import top.fosin.anan.core.util.BeanUtil;
 import top.fosin.anan.data.service.ICrudBatchService;
 import top.fosin.anan.platform.modules.organization.dao.OrgDao;
@@ -37,17 +37,17 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class OrgServiceImpl extends OrganizServiceGrpc.OrganizServiceImplBase implements OrgService {
     private final OrgDao orgDao;
-    private final UserInfoService userInfoService;
+    private final CurrentUserService currentUserService;
     private final AnanCacheManger ananCacheManger;
 
     @Override
-    public OrgRespDto create(OrgReqDto reqDto) {
+    public OrganizRespDTO create(OrgReqDto reqDto) {
         Organization createEntity = new Organization();
         BeanUtil.copyProperties(reqDto, createEntity);
         Long pid = reqDto.getPid();
         int level = 1;
         if (pid == 0) {
-            Assert.isTrue(userInfoService.hasSysAdminRole(), "只有超级管理员才能创建顶级机构!");
+            Assert.isTrue(currentUserService.hasSysAdminRole(), "只有超级管理员才能创建顶级机构!");
             createEntity.setTopId(0L);
         } else {
             Organization parentEntity = orgDao.findById(pid).orElse(null);
@@ -60,9 +60,9 @@ public class OrgServiceImpl extends OrganizServiceGrpc.OrganizServiceImplBase im
             result.setTopId(result.getId());
             result = orgDao.save(result);
         }
-        OrgRespDto orgRespDto = BeanUtil.copyProperties(result, OrgRespDto.class);
-        ananCacheManger.put(PlatformRedisConstant.ANAN_ORGANIZATION, orgRespDto.getId() + "", orgRespDto);
-        return orgRespDto;
+        OrganizRespDTO organizRespDTO = BeanUtil.copyProperties(result, OrganizRespDTO.class);
+        ananCacheManger.put(PlatformRedisConstant.ANAN_ORGANIZATION, organizRespDTO.getId() + "", organizRespDTO);
+        return organizRespDTO;
     }
 
     @Override
@@ -83,7 +83,7 @@ public class OrgServiceImpl extends OrganizServiceGrpc.OrganizServiceImplBase im
 
     @Override
     @Cacheable(value = PlatformRedisConstant.ANAN_ORGANIZATION, key = "#id")
-    public OrgRespDto findOneById(Long id, boolean... findRefs) {
+    public OrganizRespDTO findOneById(Long id, boolean... findRefs) {
         return OrgService.super.findOneById(id, findRefs);
     }
 
@@ -91,7 +91,7 @@ public class OrgServiceImpl extends OrganizServiceGrpc.OrganizServiceImplBase im
     @Transactional(rollbackFor = Exception.class)
     @CacheEvict(value = PlatformRedisConstant.ANAN_ORGANIZATION, key = "#id")
     public void deleteById(Long id) {
-        List<OrgTreeDto> dtos = this.listChild(id);
+        List<OrganizTreeDTO> dtos = this.listChild(id);
         Assert.isTrue(dtos == null || dtos.size() == 0, "该节点还存在子节点不能直接删除!");
         //先删除关联表数据
         List<ICrudBatchService<?, ?, Long>> batchServices = getRefBatchServices();
@@ -112,7 +112,7 @@ public class OrgServiceImpl extends OrganizServiceGrpc.OrganizServiceImplBase im
         List<Organization> entities = orgDao.findAllById(ids);
         for (Organization entity : entities) {
             Long id = entity.getId();
-            List<OrgTreeDto> dtos = this.listChild(id);
+            List<OrganizTreeDTO> dtos = this.listChild(id);
             Assert.isTrue(dtos == null || dtos.size() == 0, "该节点还存在子节点不能直接删除!");
             orgDao.delete(entity);
         }
@@ -122,15 +122,15 @@ public class OrgServiceImpl extends OrganizServiceGrpc.OrganizServiceImplBase im
     }
 
     @Override
-    public List<OrgTreeDto> listChild(Long pid) {
+    public List<OrganizTreeDTO> listChild(Long pid) {
         return BeanUtil.copyProperties(orgDao.findByPidOrderByCodeAsc(pid),
-                OrgTreeDto.class);
+                OrganizTreeDTO.class);
     }
 
     @Override
-    public List<OrgTreeDto> listAllChild(Long pid) {
+    public List<OrganizTreeDTO> listAllChild(Long pid) {
         List<Organization> organizations = listAllChildReal(pid);
-        return BeanUtil.copyProperties(organizations, OrgTreeDto.class);
+        return BeanUtil.copyProperties(organizations, OrganizTreeDTO.class);
     }
 
     private List<Organization> listAllChildReal(Long pid) {

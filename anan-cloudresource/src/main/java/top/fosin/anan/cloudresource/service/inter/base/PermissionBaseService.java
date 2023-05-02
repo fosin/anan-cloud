@@ -1,6 +1,6 @@
 package top.fosin.anan.cloudresource.service.inter.base;
 
-import top.fosin.anan.cloudresource.dto.res.PermissionRespDto;
+import top.fosin.anan.cloudresource.entity.res.PermissionRespDTO;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
@@ -12,6 +12,6 @@ import java.util.List;
  * @since 3.0.0
  */
 public interface PermissionBaseService {
-    List<PermissionRespDto> findByServiceCode(@NotBlank String serviceCode);
-    List<PermissionRespDto> findByServiceCodes(@NotEmpty List<String> serviceCodes);
+    List<PermissionRespDTO> findByServiceCode(@NotBlank String serviceCode);
+    List<PermissionRespDTO> findByServiceCodes(@NotEmpty List<String> serviceCodes);
 }

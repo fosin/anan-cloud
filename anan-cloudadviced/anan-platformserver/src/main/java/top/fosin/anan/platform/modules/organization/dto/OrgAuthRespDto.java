@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import top.fosin.anan.data.entity.IdOrganiz;
+import top.fosin.anan.data.entity.IdOrganizId;
 
 /**
  * 系统机构授权表(AnanOrganizationAuth)响应DTO
@@ -18,7 +18,7 @@ import top.fosin.anan.data.entity.IdOrganiz;
 @ToString
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value = "机构授权表响应DTO", description = "机构授权的响应DTO")
-public class OrgAuthRespDto extends IdOrganiz<Long> {
+public class OrgAuthRespDto extends IdOrganizId<Long> {
     private static final long serialVersionUID = -14631872198139889L;
 
     @ApiModelProperty(value = "版本序号", example = "Long")

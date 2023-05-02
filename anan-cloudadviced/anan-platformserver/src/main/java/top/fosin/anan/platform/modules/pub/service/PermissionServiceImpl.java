@@ -9,9 +9,9 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import top.fosin.anan.cloudresource.constant.PlatformRedisConstant;
-import top.fosin.anan.cloudresource.dto.req.PermissionReqDto;
-import top.fosin.anan.cloudresource.dto.res.PermissionRespDto;
-import top.fosin.anan.cloudresource.dto.res.PermissionRespTreeDto;
+import top.fosin.anan.cloudresource.entity.req.PermissionReqDTO;
+import top.fosin.anan.cloudresource.entity.res.PermissionRespDTO;
+import top.fosin.anan.cloudresource.entity.res.PermissionRespTreeDTO;
 import top.fosin.anan.cloudresource.grpc.permission.*;
 import top.fosin.anan.cloudresource.grpc.util.StringUtil;
 import top.fosin.anan.core.util.BeanUtil;
@@ -50,7 +50,7 @@ public class PermissionServiceImpl extends PermissionServiceGrpc.PermissionServi
     private final ServiceDao serviceDao;
 
     @Override
-    public PermissionRespDto create(PermissionReqDto dto) {
+    public PermissionRespDTO create(PermissionReqDTO dto) {
         Permission createEntity = BeanUtil.copyProperties(dto, Permission.class);
         Long pid = dto.getPid();
 
@@ -60,7 +60,7 @@ public class PermissionServiceImpl extends PermissionServiceGrpc.PermissionServi
             level = parentEntity.getLevel() + 1;
         }
         createEntity.setLevel(level);
-        return BeanUtil.copyProperties(permissionDao.save(createEntity), PermissionRespDto.class);
+        return BeanUtil.copyProperties(permissionDao.save(createEntity), PermissionRespDTO.class);
     }
 
     @Override
@@ -69,7 +69,7 @@ public class PermissionServiceImpl extends PermissionServiceGrpc.PermissionServi
                     @CacheEvict(value = PlatformRedisConstant.ANAN_USER_ALL_PERMISSIONS, allEntries = true),
                     @CacheEvict(value = PlatformRedisConstant.ANAN_USER_PERMISSION_TREE, allEntries = true)
             })
-    public void update(PermissionReqDto dto, String[] ignoreProperties) {
+    public void update(PermissionReqDTO dto, String[] ignoreProperties) {
         Long id = dto.getId();
         Assert.notNull(id, "传入了空ID!");
 
@@ -97,12 +97,12 @@ public class PermissionServiceImpl extends PermissionServiceGrpc.PermissionServi
         permissionDao.saveAll(saveEntities);
     }
 
-    protected List<Permission> getUpdateCascadeChild(PermissionReqDto originEntity, Permission updateEntity) {
+    protected List<Permission> getUpdateCascadeChild(PermissionReqDTO originEntity, Permission updateEntity) {
         Long id = updateEntity.getId();
         Collection<Permission> allByPid = permissionDao.findByPid(id);
         List<Permission> saves = new ArrayList<>();
         allByPid.forEach(entity -> {
-            PermissionReqDto entity2 = BeanUtil.copyProperties(entity, PermissionReqDto.class);
+            PermissionReqDTO entity2 = BeanUtil.copyProperties(entity, PermissionReqDTO.class);
             entity.setServiceId(originEntity.getServiceId());
             entity.setCode(entity.getCode().replace(updateEntity.getCode(), originEntity.getCode()));
             saves.add(entity);
@@ -157,9 +157,9 @@ public class PermissionServiceImpl extends PermissionServiceGrpc.PermissionServi
     }
 
     @Override
-    public List<PermissionRespTreeDto> findByPidAndVersionId(Long pid, Long versionId) {
+    public List<PermissionRespTreeDTO> findByPidAndVersionId(Long pid, Long versionId) {
         List<Permission> entities = permissionDao.findAllByPidAndVersionId(pid, versionId);
-        return BeanUtil.copyProperties(entities, PermissionRespTreeDto.class);
+        return BeanUtil.copyProperties(entities, PermissionRespTreeDTO.class);
     }
 
     @Override
@@ -224,25 +224,25 @@ public class PermissionServiceImpl extends PermissionServiceGrpc.PermissionServi
     }
 
     @Override
-    public List<PermissionRespDto> findByServiceCode(String serviceCode) {
+    public List<PermissionRespDTO> findByServiceCode(String serviceCode) {
         List<Permission> entities = permissionDao.findAllByServiceId(serviceDao.findOneByCode(serviceCode).getId());
-        return BeanUtil.copyProperties(entities, PermissionRespDto.class);
+        return BeanUtil.copyProperties(entities, PermissionRespDTO.class);
     }
 
     @Override
-    public List<PermissionRespDto> findByServiceCodes(List<String> serviceCodes) {
+    public List<PermissionRespDTO> findByServiceCodes(List<String> serviceCodes) {
         List<Service> services = serviceDao.findByCodeIn(serviceCodes);
         List<Permission> permissionEntities =
                 permissionDao.findByServiceIdIn(services.stream().map(Service::getId).collect(Collectors.toList()));
-        List<PermissionRespDto> permissionRespDtos = BeanUtil.copyProperties(permissionEntities, PermissionRespDto.class);
-        for (PermissionRespDto permissionRespDto : permissionRespDtos) {
+        List<PermissionRespDTO> permissionRespDTOS = BeanUtil.copyProperties(permissionEntities, PermissionRespDTO.class);
+        for (PermissionRespDTO permissionRespDTO : permissionRespDTOS) {
             for (Service serviceEntity : services) {
-                if (serviceEntity.getId().equals(permissionRespDto.getServiceId())) {
-                    permissionRespDto.setServiceCode(serviceEntity.getCode());
+                if (serviceEntity.getId().equals(permissionRespDTO.getServiceId())) {
+                    permissionRespDTO.setServiceCode(serviceEntity.getCode());
                 }
             }
         }
-        return permissionRespDtos;
+        return permissionRespDTOS;
     }
 
     @Override
