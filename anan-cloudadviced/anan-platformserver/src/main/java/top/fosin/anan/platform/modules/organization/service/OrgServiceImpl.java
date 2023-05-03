@@ -2,6 +2,7 @@ package top.fosin.anan.platform.modules.organization.service;
 
 import io.grpc.stub.StreamObserver;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import net.devh.boot.grpc.server.service.GrpcService;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.cache.annotation.CacheEvict;
@@ -16,6 +17,7 @@ import top.fosin.anan.cloudresource.grpc.organiz.*;
 import top.fosin.anan.cloudresource.grpc.util.StringUtil;
 import top.fosin.anan.cloudresource.service.CurrentUserService;
 import top.fosin.anan.core.util.BeanUtil;
+import top.fosin.anan.data.converter.translate.service.Object2StringTranslateService;
 import top.fosin.anan.data.service.ICrudBatchService;
 import top.fosin.anan.platform.modules.organization.dao.OrgDao;
 import top.fosin.anan.platform.modules.organization.dto.OrgReqDto;
@@ -35,7 +37,8 @@ import java.util.stream.Collectors;
 @GrpcService
 @Lazy
 @AllArgsConstructor
-public class OrgServiceImpl extends OrganizServiceGrpc.OrganizServiceImplBase implements OrgService {
+@Slf4j
+public class OrgServiceImpl extends OrganizServiceGrpc.OrganizServiceImplBase implements OrgService, Object2StringTranslateService {
     private final OrgDao orgDao;
     private final CurrentUserService currentUserService;
     private final AnanCacheManger ananCacheManger;
@@ -82,9 +85,13 @@ public class OrgServiceImpl extends OrganizServiceGrpc.OrganizServiceImplBase im
     }
 
     @Override
-    @Cacheable(value = PlatformRedisConstant.ANAN_ORGANIZATION, key = "#id")
     public OrganizRespDTO findOneById(Long id, boolean... findRefs) {
-        return OrgService.super.findOneById(id, findRefs);
+        OrganizRespDTO respDTO = ananCacheManger.get(PlatformRedisConstant.ANAN_ORGANIZATION, id + "", OrganizRespDTO.class);
+        if (respDTO == null) {
+            respDTO = OrgService.super.findOneById(id, findRefs);
+            ananCacheManger.put(PlatformRedisConstant.ANAN_ORGANIZATION, id + "", respDTO);
+        }
+        return respDTO;
     }
 
     @Override
@@ -205,5 +212,29 @@ public class OrgServiceImpl extends OrganizServiceGrpc.OrganizServiceImplBase im
     @Override
     public OrgDao getDao() {
         return orgDao;
+    }
+
+    @Override
+    public String translate(String dicId, Object key) {
+        long id = 0;
+        if (key instanceof Long) {
+            id = (Long) key;
+        } else if (key instanceof String) {
+            id = Long.parseLong((String) key);
+        } else {
+            log.warn("翻译数据失败，不被支持的转换值类型：" + key);
+        }
+        String value = String.valueOf(key);
+        if (id > 0) {
+            OrganizRespDTO respDTO = this.findOneById(id);
+            if (respDTO == null) {
+                log.warn("翻译数据失败，根据值类型：" + key + "未能找到对应数据!");
+            } else {
+                value = respDTO.getFullname();
+            }
+        } else {
+            log.warn("翻译数据失败，值类型必须大于0：" + key);
+        }
+        return value;
     }
 }

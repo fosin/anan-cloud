@@ -19,4 +19,6 @@ public interface UserRpcService extends UserBaseService {
     UserRespDTO findOneById(@NotNull Long id);
 
     List<UserRespDTO> listByIds(@NotEmpty List<Long> ids);
+
+
 }

@@ -18,7 +18,7 @@ import top.fosin.anan.cloudresource.grpc.dicdetail.*;
 import top.fosin.anan.cloudresource.service.CurrentUserService;
 import top.fosin.anan.core.exception.AnanServiceException;
 import top.fosin.anan.core.util.BeanUtil;
-import top.fosin.anan.data.converter.translate.service.Long2StringTranslateService;
+import top.fosin.anan.data.converter.translate.service.Object2StringTranslateService;
 import top.fosin.anan.platform.modules.pub.dao.DictionaryDao;
 import top.fosin.anan.platform.modules.pub.dao.DictionaryDetailDao;
 import top.fosin.anan.platform.modules.pub.po.Dictionary;
@@ -40,17 +40,41 @@ import java.util.stream.Collectors;
 @Service
 @Lazy
 @AllArgsConstructor
-public class DictionaryDetailServiceImpl extends DicDetailServiceGrpc.DicDetailServiceImplBase implements DictionaryDetailService, Long2StringTranslateService {
+public class DictionaryDetailServiceImpl extends DicDetailServiceGrpc.DicDetailServiceImplBase
+        implements DictionaryDetailService, Object2StringTranslateService {
     private final DictionaryDetailDao dictionaryDetailDao;
     private final CurrentUserService currentUserService;
     private final DictionaryDao dictionaryDao;
     private final AnanCacheManger ananCacheManger;
 
     @Override
-    public String translate(String dicId, Long key) {
-        DictionaryDetailRespDTO vo = this.listByForeingKey(Long.valueOf(dicId)).stream().filter(detailVO -> Objects.equals(detailVO.getCode(), key)).findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("未找到对应的数据"));
-        return vo.getName();
+    public String translate(String dicId, Object key) {
+        Long id;
+        if (key instanceof Long) {
+            id = (Long) key;
+        } else if (key instanceof Integer) {
+            id = Long.valueOf((Integer) key);
+        } else if (key instanceof String) {
+            id = Long.valueOf((String) key);
+        } else if (key instanceof Byte) {
+            id = Long.valueOf((Byte) key);
+        } else {
+            id = -9999L;
+            log.warn("翻译数据失败，不被支持的转换值类型：" + key + " 字典序号：" + dicId);
+        }
+        String value = String.valueOf(key);
+        if (id != -9999L) {
+            DictionaryDetailRespDTO respDTO = this.listByForeingKey(Long.valueOf(dicId)).stream()
+                    .filter(detailVO -> Objects.equals(detailVO.getCode(), id)).findFirst().orElse(null);
+            if (respDTO == null) {
+                log.warn("翻译数据失败，根据值类型：" + key + " 字典序号：" + dicId + "未能找到对应数据!");
+            } else {
+                value = respDTO.getName();
+            }
+        } else {
+            log.warn("翻译数据失败，值类型无效：" + key + " 字典序号：" + dicId);
+        }
+        return value;
     }
 
     @Override

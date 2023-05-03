@@ -2,6 +2,7 @@ package top.fosin.anan.cloudresource.service.inter.base;
 
 
 import top.fosin.anan.cloudresource.entity.res.UserRespDTO;
+import top.fosin.anan.data.converter.translate.service.Object2StringTranslateService;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -14,7 +15,7 @@ import java.util.List;
  * @date 2023/4/8
  * @since 3.0.0
  */
-public interface UserBaseService {
+public interface UserBaseService extends Object2StringTranslateService {
     UserRespDTO findOneByUsercode(@NotBlank String usercode);
 
     List<UserRespDTO> listByOrganizId(@NotNull Long organizId, @NotNull Integer status);

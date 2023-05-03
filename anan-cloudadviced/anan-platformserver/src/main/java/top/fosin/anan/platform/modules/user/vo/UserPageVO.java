@@ -13,6 +13,8 @@ import top.fosin.anan.data.converter.masking.PhoneMasking;
 import top.fosin.anan.data.converter.masking.UsernameMasking;
 import top.fosin.anan.data.converter.translate.Translate2String;
 import top.fosin.anan.data.entity.Id;
+import top.fosin.anan.platform.modules.organization.service.OrgServiceImpl;
+import top.fosin.anan.platform.modules.pub.service.DictionaryDetailServiceImpl;
 import top.fosin.anan.platform.modules.user.service.UserServiceImpl;
 
 import java.util.Date;
@@ -33,6 +35,7 @@ public class UserPageVO extends Id<Long> {
     private Long organizId;
 
     @ApiModelProperty(value = "机构名称")
+    @Translate2String(service = OrgServiceImpl.class, dicId = "")
     private String organizName;
 
     @ApiModelProperty(value = "用户工号")
@@ -68,6 +71,7 @@ public class UserPageVO extends Id<Long> {
     private Date birthday;
 
     @ApiModelProperty(value = "使用状态：具体取值于字典表anan_dictionary.code=15")
+    @Translate2String(service = DictionaryDetailServiceImpl.class, dicId = "15")
     private Integer sex;
 
     @ApiModelProperty(value = "电子邮箱")
@@ -85,6 +89,7 @@ public class UserPageVO extends Id<Long> {
     private Integer phoneVerified;
 
     @ApiModelProperty(value = "使用状态：0=启用，1=禁用，具体取值于字典表anan_dictionary.code=11")
+    @Translate2String(service = DictionaryDetailServiceImpl.class, dicId = "11")
     private Integer status;
 
     @ApiModelProperty(value = "头像")

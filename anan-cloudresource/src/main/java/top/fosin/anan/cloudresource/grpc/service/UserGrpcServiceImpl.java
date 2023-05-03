@@ -1,13 +1,13 @@
 package top.fosin.anan.cloudresource.grpc.service;
 
+import lombok.extern.slf4j.Slf4j;
 import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
 import top.fosin.anan.cloudresource.constant.ServiceConstant;
 import top.fosin.anan.cloudresource.entity.res.UserRespDTO;
-import top.fosin.anan.cloudresource.service.inter.rpc.UserRpcService;
 import top.fosin.anan.cloudresource.grpc.user.*;
-import top.fosin.anan.data.converter.translate.service.Long2StringTranslateService;
+import top.fosin.anan.cloudresource.service.inter.rpc.UserRpcService;
 
 import java.util.Date;
 import java.util.List;
@@ -15,7 +15,8 @@ import java.util.stream.Collectors;
 
 
 @Component
-public class UserGrpcServiceImpl implements UserRpcService, Long2StringTranslateService {
+@Slf4j
+public class UserGrpcServiceImpl implements UserRpcService {
     @GrpcClient(ServiceConstant.ANAN_PLATFORMSERVER)
     private UserServiceGrpc.UserServiceBlockingStub blockingStubService;
 
@@ -86,7 +87,26 @@ public class UserGrpcServiceImpl implements UserRpcService, Long2StringTranslate
     }
 
     @Override
-    public String translate(String dicId, Long key) {
-        return this.findOneById(key).getUsername();
+    public String translate(String dicId, Object key) {
+        long id = 0;
+        if (key instanceof Long) {
+            id = (Long) key;
+        } else if (key instanceof String) {
+            id = Long.parseLong((String) key);
+        } else {
+            log.warn("翻译数据失败，不被支持的转换值类型：" + key);
+        }
+        String value = String.valueOf(key);
+        if (id > 0) {
+            UserRespDTO respDTO = this.findOneById(id);
+            if (respDTO == null) {
+                log.warn("翻译数据失败，根据值类型：" + key + "未能找到对应数据!");
+            } else {
+                value = respDTO.getUsername();
+            }
+        } else {
+            log.warn("翻译数据失败，值类型必须大于0：" + key);
+        }
+        return value;
     }
 }

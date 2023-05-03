@@ -1,5 +1,6 @@
 package top.fosin.anan.cloudresource.grpc.service;
 
+import lombok.extern.slf4j.Slf4j;
 import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
@@ -7,15 +8,17 @@ import top.fosin.anan.cloudresource.constant.ServiceConstant;
 import top.fosin.anan.cloudresource.entity.res.DictionaryDetailRespDTO;
 import top.fosin.anan.cloudresource.grpc.dicdetail.*;
 import top.fosin.anan.cloudresource.service.inter.rpc.DicDetailRpcService;
-import top.fosin.anan.data.converter.translate.service.Long2StringTranslateService;
+import top.fosin.anan.data.converter.translate.service.Object2StringTranslateService;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 
 @Component
-public class DicDetailGrpcServiceImpl implements DicDetailRpcService, Long2StringTranslateService {
+@Slf4j
+public class DicDetailGrpcServiceImpl implements DicDetailRpcService, Object2StringTranslateService {
     @GrpcClient(ServiceConstant.ANAN_PLATFORMSERVER)
     private DicDetailServiceGrpc.DicDetailServiceBlockingStub blockingStubService;
 
@@ -40,9 +43,33 @@ public class DicDetailGrpcServiceImpl implements DicDetailRpcService, Long2Strin
     }
 
     @Override
-    public String translate(String dicId, Long key) {
-        DictionaryDetailRespDTO dicDetailResp = this.findOneByDicIdAndCode(Long.valueOf(dicId), key);
-        return dicDetailResp.getName();
+    public String translate(String dicId, Object key) {
+        Long id;
+        if (key instanceof Long) {
+            id = (Long) key;
+        } else if (key instanceof Integer) {
+            id = Long.valueOf((Integer) key);
+        } else if (key instanceof String) {
+            id = Long.valueOf((String) key);
+        } else if (key instanceof Byte) {
+            id = Long.valueOf((Byte) key);
+        } else {
+            id = -9999L;
+            log.warn("翻译数据失败，不被支持的转换值类型：" + key + " 字典序号：" + dicId);
+        }
+        String value = String.valueOf(key);
+        if (id != -9999L) {
+            DictionaryDetailRespDTO respDTO = this.listByDicId(Long.valueOf(dicId)).stream()
+                    .filter(detailVO -> Objects.equals(detailVO.getCode(), id)).findFirst().orElse(null);
+            if (respDTO == null) {
+                log.warn("翻译数据失败，根据值类型：" + key + " 字典序号：" + dicId + "未能找到对应数据!");
+            } else {
+                value = respDTO.getName();
+            }
+        } else {
+            log.warn("翻译数据失败，值类型必须大于0：" + key + " 字典序号：" + dicId);
+        }
+        return value;
     }
 
     @Override

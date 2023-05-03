@@ -3,6 +3,7 @@ package top.fosin.anan.platform.modules.user.service;
 import com.google.protobuf.Timestamp;
 import io.grpc.stub.StreamObserver;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import net.devh.boot.grpc.server.service.GrpcService;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.cache.annotation.Cacheable;
@@ -18,14 +19,12 @@ import top.fosin.anan.cloudresource.constant.PlatformRedisConstant;
 import top.fosin.anan.cloudresource.constant.SystemConstant;
 import top.fosin.anan.cloudresource.entity.req.UserCreateDTO;
 import top.fosin.anan.cloudresource.entity.req.UserUpdateDTO;
-import top.fosin.anan.cloudresource.entity.res.UserDTO;
 import top.fosin.anan.cloudresource.entity.res.UserRespDTO;
 import top.fosin.anan.cloudresource.grpc.user.*;
 import top.fosin.anan.cloudresource.grpc.util.StringUtil;
 import top.fosin.anan.cloudresource.service.CurrentUserService;
 import top.fosin.anan.core.util.BeanUtil;
 import top.fosin.anan.core.util.RegexUtil;
-import top.fosin.anan.data.converter.translate.service.Long2StringTranslateService;
 import top.fosin.anan.data.entity.req.PageQuery;
 import top.fosin.anan.data.entity.res.TreeVO;
 import top.fosin.anan.data.result.PageResult;
@@ -40,6 +39,7 @@ import top.fosin.anan.platform.modules.user.po.User;
 import top.fosin.anan.platform.modules.user.po.UserRole;
 import top.fosin.anan.platform.modules.user.query.UserQuery;
 import top.fosin.anan.platform.modules.user.service.inter.UserService;
+import top.fosin.anan.platform.modules.user.vo.UserPageVO;
 import top.fosin.anan.redis.cache.AnanCacheManger;
 
 import javax.persistence.criteria.*;
@@ -57,7 +57,8 @@ import java.util.stream.Collectors;
 @GrpcService
 @Lazy
 @AllArgsConstructor
-public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase implements UserService, Long2StringTranslateService {
+@Slf4j
+public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase implements UserService {
     private final UserDao userDao;
     private final UserRoleDao userRoleDao;
     private final PasswordEncoder passwordEncoder;
@@ -196,8 +197,18 @@ public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase impleme
         }
     }
 
+//    @Override
+//    public PageResult<UserPageVO> findPage(PageQuery<UserQuery> PageQuery) {
+//        PageResult<UserPageVO> page = UserService.super.findPage(PageQuery);
+//        List<UserPageVO> userPageVOS = BeanUtil.copyProperties(page.getData(), UserPageVO.class);
+//        userPageVOS.forEach(user -> user.setOrganizName(user.getOrganizId() + ""));
+//
+//        return ResultUtils.success(page.getTotal(), page.getPageTotals(),
+//                userPageVOS);
+//    }
+
     @Override
-    public PageResult<UserDTO> findPage(PageQuery<UserQuery> PageQuery) {
+    public PageResult<UserPageVO> findPage(PageQuery<UserQuery> PageQuery) {
         UserQuery params = PageQuery.getParams();
         if (currentUserService.isSysAdminUser()) {
             return UserService.super.findPage(PageQuery);
@@ -248,8 +259,11 @@ public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase impleme
         //分页查找
         PageRequest pageable = toPage(PageQuery);
         Page<User> page = userDao.findAll(condition, pageable);
+        List<UserPageVO> userPageVOS = BeanUtil.copyProperties(page.getContent(), UserPageVO.class);
+        userPageVOS.forEach(user -> user.setOrganizName(user.getOrganizId() + ""));
+
         return ResultUtils.success(page.getTotalElements(), page.getTotalPages(),
-                BeanUtil.copyProperties(page.getContent(), UserDTO.class));
+                userPageVOS);
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -501,7 +515,26 @@ public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase impleme
     }
 
     @Override
-    public String translate(String dicId, Long key) {
-        return this.findOneById(key).getUsername();
+    public String translate(String dicId, Object key) {
+        long id = 0;
+        if (key instanceof Long) {
+            id = (Long) key;
+        } else if (key instanceof String) {
+            id = Long.parseLong((String) key);
+        } else {
+            log.warn("翻译数据失败，不被支持的转换值类型：" + key);
+        }
+        String value = String.valueOf(key);
+        if (id > 0) {
+            UserRespDTO respDTO = this.findOneById(id);
+            if (respDTO == null) {
+                log.warn("翻译数据失败，根据值类型：" + key + "未能找到对应数据!");
+            } else {
+                value = respDTO.getUsername();
+            }
+        } else {
+            log.warn("翻译数据失败，值类型必须大于0：" + key);
+        }
+        return value;
     }
 }
