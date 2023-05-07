@@ -119,17 +119,24 @@ public class DictionaryDetailServiceImpl extends DicDetailServiceGrpc.DicDetailS
 
 
     @Override
-    public void preCreate(DictionaryDetailReqDTO reqDto) {
-        DictionaryDetailService.super.preCreate(reqDto);
-        hasModifiedPrivileges(reqDto.getDictionaryId());
-        ananCacheManger.evict(PlatformRedisConstant.ANAN_DICTIONARY_DETAIL, reqDto.getDictionaryId() + "");
+    public void preCreate(DictionaryDetailReqDTO reqDTO) {
+        DictionaryDetailService.super.preCreate(reqDTO);
+        hasModifiedPrivileges(reqDTO.getDictionaryId());
+        ananCacheManger.evict(PlatformRedisConstant.ANAN_DICTIONARY_DETAIL, reqDTO.getDictionaryId() + "");
     }
 
     @Override
-    public void preUpdate(DictionaryDetailReqDTO reqDto) {
-        DictionaryDetailService.super.preUpdate(reqDto);
-        hasModifiedPrivileges(reqDto.getDictionaryId());
-        ananCacheManger.evict(PlatformRedisConstant.ANAN_DICTIONARY_DETAIL, reqDto.getDictionaryId() + "");
+    public void preUpdate(DictionaryDetailReqDTO reqDTO) {
+        DictionaryDetailService.super.preUpdate(reqDTO);
+        hasModifiedPrivileges(reqDTO.getDictionaryId());
+        ananCacheManger.evict(PlatformRedisConstant.ANAN_DICTIONARY_DETAIL, reqDTO.getDictionaryId() + "");
+    }
+
+    @Override
+    public void postUpdate(DictionaryDetailReqDTO reqDTO) {
+        DictionaryDetailService.super.postUpdate(reqDTO);
+        ananCacheManger.evict(PlatformRedisConstant.ANAN_DICTIONARY_DETAIL, reqDTO.getDictionaryId() + "");
+        this.putTranslateCache(String.valueOf(reqDTO.getDictionaryId()), reqDTO.getCode(), reqDTO.getName());
     }
 
     private void hasModifiedPrivileges(Long dictionaryId) {

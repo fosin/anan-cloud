@@ -38,7 +38,8 @@ import java.util.stream.Collectors;
 @Lazy
 @AllArgsConstructor
 @Slf4j
-public class OrgServiceImpl extends OrganizServiceGrpc.OrganizServiceImplBase implements OrgService, Object2StringTranslateService {
+public class OrgServiceImpl extends OrganizServiceGrpc.OrganizServiceImplBase
+        implements OrgService, Object2StringTranslateService {
     private final OrgDao orgDao;
     private final CurrentUserService currentUserService;
     private final AnanCacheManger ananCacheManger;
@@ -73,6 +74,7 @@ public class OrgServiceImpl extends OrganizServiceGrpc.OrganizServiceImplBase im
         Long id = updateDto.getId();
         Assert.notNull(id, "无效的字典代码code");
         Organization updateEntity = orgDao.findById(id).orElseThrow(() -> new IllegalArgumentException("根据传入的机构序号" + id + "在数据库中未能找到对于数据!"));
+        boolean changedName = !updateDto.getName().equals(updateEntity.getName());
         BeanUtil.copyProperties(updateDto, updateEntity, ignoreProperties);
 
         //如果修改了上级机构，则需要同步修改层级level
@@ -82,6 +84,7 @@ public class OrgServiceImpl extends OrganizServiceGrpc.OrganizServiceImplBase im
         }
         orgDao.save(updateEntity);
         ananCacheManger.evict(PlatformRedisConstant.ANAN_ORGANIZATION, updateDto.getId() + "");
+        if (changedName) this.putTranslateCache("", updateDto.getId(), updateDto.getName());
     }
 
     @Override

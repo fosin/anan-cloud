@@ -105,13 +105,13 @@ public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase impleme
         if (respDto == null) {
             User userEntity = userDao.findById(id).orElseThrow(() -> new IllegalArgumentException("未找到对应数据!"));
             respDto = BeanUtil.copyProperties(userEntity, UserRespDTO.class);
+            Long organizId = respDto.getOrganizId();
+            if (organizId > 0) {
+                Organization organization = orgDao.getReferenceById(organizId);
+                respDto.setTopId(organization.getTopId());
+            }
+            ananCacheManger.put(PlatformRedisConstant.ANAN_USER, id + "-id", respDto);
         }
-        Long organizId = respDto.getOrganizId();
-        if (organizId > 0) {
-            Organization organization = orgDao.getReferenceById(organizId);
-            respDto.setTopId(organization.getTopId());
-        }
-        ananCacheManger.put(PlatformRedisConstant.ANAN_USER, id + "-id", respDto);
         return respDto;
     }
 
@@ -147,6 +147,7 @@ public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase impleme
         Long id = reqDto.getId();
         User createUser = userDao.findById(id).orElseThrow(() -> new IllegalArgumentException("通过ID：" + id + "未能找到对应的数据!"));
         String usercode = createUser.getUsercode().toLowerCase();
+        boolean changedName = !reqDto.getUsername().equals(createUser.getUsername());
         if (currentUserService.isAdminUser(usercode) && !usercode.equals(reqDto.getUsercode().toLowerCase())) {
             throw new IllegalArgumentException("不能修改管理员" + SystemConstant.ADMIN_USER_CODE + "的帐号名称!");
         }
@@ -158,6 +159,8 @@ public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase impleme
         ananCacheManger.evict(PlatformRedisConstant.ANAN_USER_ALL_PERMISSIONS, id + "");
         ananCacheManger.evict(PlatformRedisConstant.ANAN_USER_PERMISSION_TREE, id + "");
         userDao.save(createUser);
+        this.removeTranslateCache("", reqDto.getId());
+        if (changedName) this.putTranslateCache("", reqDto.getId(), reqDto.getUsername());
     }
 
     @Override
