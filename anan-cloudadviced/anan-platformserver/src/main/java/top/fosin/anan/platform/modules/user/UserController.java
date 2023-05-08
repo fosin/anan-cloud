@@ -20,8 +20,10 @@ import top.fosin.anan.cloudresource.entity.res.UserRoleRespDTO;
 import top.fosin.anan.core.util.crypt.AesUtil;
 import top.fosin.anan.data.constant.PathConstant;
 import top.fosin.anan.data.controller.*;
+import top.fosin.anan.data.entity.req.PageQuery;
 import top.fosin.anan.data.prop.IdProp;
 import top.fosin.anan.data.result.MultResult;
+import top.fosin.anan.data.result.PageResult;
 import top.fosin.anan.data.result.ResultUtils;
 import top.fosin.anan.data.result.SingleResult;
 import top.fosin.anan.platform.modules.role.service.inter.RoleService;
@@ -50,10 +52,7 @@ public class UserController extends BaseController
         implements ICreateController<UserCreateDTO, Long>,
         IUpdateController<UserUpdateDTO, Long>,
         IDeleteController<Long>,
-        IListByEntityController<UserQuery, UserListVO, Long>,
-        IFindOneByIdController<UserVO, Long>,
-        IListByIdsController<UserListVO, Long>,
-        IPageController<UserQuery, UserPageVO> {
+        IRetrieveController<UserQuery, UserVO, UserListVO, UserPageVO, Long> {
     private final UserService userService;
     private final UserRoleService userRoleService;
     private final RoleService roleService;
@@ -65,6 +64,16 @@ public class UserController extends BaseController
     @ApiOperation("根据用户工号查找用户信息")
     public SingleResult<UserRespDTO> findOneByUsercode(@PathVariable(FieldConstant.USER_CODE) String usercode) {
         return ResultUtils.success(userService.findOneByUsercode(usercode));
+    }
+
+    @Override
+    @PostMapping(value = PathConstant.PATH_PAGE)
+    @ApiOperation(value = "根据分页条件查询分页数据")
+    @ApiImplicitParam(name = "pageQuery", value = "分页条件实体类", paramType = "body", required = true, dataTypeClass = PageQuery.class)
+    public PageResult<UserPageVO> findPage(PageQuery<UserQuery> pageQuery) {
+        PageResult<UserPageVO> page = IRetrieveController.super.findPage(pageQuery);
+        page.getData().forEach(user -> user.setOrganizName(user.getOrganizId() + ""));
+        return page;
     }
 
     @ApiOperation("修改用户帐号密码")

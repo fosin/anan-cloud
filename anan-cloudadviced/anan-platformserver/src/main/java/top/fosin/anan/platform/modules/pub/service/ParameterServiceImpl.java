@@ -58,8 +58,8 @@ public class ParameterServiceImpl extends ParameterServiceGrpc.ParameterServiceI
     private final AnanCacheManger ananCacheManger;
 
     @Override
-    public PageResult<ParameterRespDTO> findPage(PageQuery<ParameterReqDTO> PageQuery) {
-        ParameterReqDTO params = PageQuery.getParams();
+    public PageResult<ParameterRespDTO> findPage(PageQuery<?> PageQuery) {
+        ParameterReqDTO params = (ParameterReqDTO) PageQuery.getParams();
 
         String name = params.getName();
         String search = "%" + (name == null ? "" : name) + "%";

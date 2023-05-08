@@ -19,6 +19,7 @@ buildNumber.properties
 *.class
 
 # Log file
+logs/
 *.log
 
 # BlueJ files
@@ -45,7 +46,7 @@ hs_err_pid*
 ### Eclipse template
 
 .metadata
-bin/
+.metadata/bin/
 tmp/
 *.tmp
 *.bak

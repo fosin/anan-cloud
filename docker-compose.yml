@@ -433,7 +433,7 @@ services:
   redisinsight:
     network_mode: host
     container_name: redisinsight
-    image: redislabs/redisinsight:1.13.1
+    image: redislabs/redisinsight:1.14.0
     environment:
       - TZ=Asia/Shanghai
       - RIPROXYPATH=/redisinsight

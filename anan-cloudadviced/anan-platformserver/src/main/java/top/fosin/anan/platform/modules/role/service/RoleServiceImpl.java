@@ -125,9 +125,9 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public PageResult<RoleRespDTO> findPage(PageQuery<RoleReqDTO> PageQuery) {
+    public PageResult<RoleRespDTO> findPage(PageQuery<?> PageQuery) {
         Assert.notNull(PageQuery, "传入的分页信息不能为空!");
-        RoleReqDTO params = PageQuery.getParams();
+        RoleReqDTO params = (RoleReqDTO) PageQuery.getParams();
 
         Specification<Role> condition;
         if (currentUserService.hasSysAdminRole()) {
