@@ -4,9 +4,16 @@ import io.swagger.annotations.Api;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import top.fosin.anan.cloudresource.constant.PathPrefixConstant;
-import top.fosin.anan.data.controller.ISimpleController;
-import top.fosin.anan.platform.modules.pay.dto.PayInvoiceReqDto;
-import top.fosin.anan.platform.modules.pay.dto.PayInvoiceRespDto;
+import top.fosin.anan.data.controller.ICreateController;
+import top.fosin.anan.data.controller.IDeleteController;
+import top.fosin.anan.data.controller.IRetrieveController;
+import top.fosin.anan.data.controller.IUpdateController;
+import top.fosin.anan.platform.modules.pay.dto.PayInvoiceCreateDTO;
+import top.fosin.anan.platform.modules.pay.dto.PayInvoiceUpdateDTO;
+import top.fosin.anan.platform.modules.pay.vo.PayInvoiceListVO;
+import top.fosin.anan.platform.modules.pay.vo.PayInvoicePageVO;
+import top.fosin.anan.platform.modules.pay.vo.PayInvoiceVO;
+import top.fosin.anan.platform.modules.pay.query.PayInvoiceQuery;
 import top.fosin.anan.platform.modules.pay.service.inter.PayInvoiceService;
 
 /**
@@ -18,18 +25,19 @@ import top.fosin.anan.platform.modules.pay.service.inter.PayInvoiceService;
 @RestController
 @RequestMapping(value = PathPrefixConstant.PAY_INVOICE, params = PathPrefixConstant.DEFAULT_VERSION_PARAM)
 @Api(value = PathPrefixConstant.PAY_INVOICE, tags = "支付发票管理")
-public class PayInvoiceController implements ISimpleController<PayInvoiceReqDto, PayInvoiceRespDto, Long> {
-    /**
-     * 服务对象
-     */
-    private final PayInvoiceService ananSysPayInvoiceService;
+public class PayInvoiceController implements ICreateController<PayInvoiceCreateDTO, Long>,
+        IUpdateController<PayInvoiceUpdateDTO, Long>,
+        IDeleteController<Long>,
+        IRetrieveController<PayInvoiceQuery, PayInvoiceVO, PayInvoiceListVO, PayInvoicePageVO, Long> {
 
-    public PayInvoiceController(PayInvoiceService ananSysPayInvoiceService) {
-        this.ananSysPayInvoiceService = ananSysPayInvoiceService;
+    private final PayInvoiceService payInvoiceService;
+
+    public PayInvoiceController(PayInvoiceService payInvoiceService) {
+        this.payInvoiceService = payInvoiceService;
     }
 
     @Override
     public PayInvoiceService getService() {
-        return ananSysPayInvoiceService;
+        return payInvoiceService;
     }
 }

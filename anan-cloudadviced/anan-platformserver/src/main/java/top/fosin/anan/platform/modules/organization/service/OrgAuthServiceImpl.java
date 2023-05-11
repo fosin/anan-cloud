@@ -17,8 +17,8 @@ import top.fosin.anan.platform.modules.organization.dto.OrgAuthRespDto;
 import top.fosin.anan.platform.modules.organization.dto.OrgReqDto;
 import top.fosin.anan.platform.modules.organization.service.inter.OrgAuthService;
 import top.fosin.anan.platform.modules.organization.service.inter.OrgService;
-import top.fosin.anan.platform.modules.pay.dto.PayOrderReqDto;
-import top.fosin.anan.platform.modules.pay.dto.PayOrderRespDto;
+import top.fosin.anan.platform.modules.pay.dto.PayOrderCreateDTO;
+import top.fosin.anan.platform.modules.pay.dto.PayOrderDTO;
 import top.fosin.anan.platform.modules.pay.service.inter.PayOrderService;
 import top.fosin.anan.platform.modules.user.service.inter.UserService;
 import top.fosin.anan.platform.modules.version.dto.VersionRespDto;
@@ -109,24 +109,24 @@ public class OrgAuthServiceImpl implements OrgAuthService {
         VersionRespDto respDto = versionService.findOneById(versionId);
 
         //创建订单
-        PayOrderReqDto orderEntity = new PayOrderReqDto();
-        orderEntity.setMoney(respDto.getPrice());
-        orderEntity.setOrderTime(now);
-        orderEntity.setVersionId(versionId);
-        orderEntity.setOrganizId(organizationEntity.getId());
-        orderEntity.setUserId(user.getId());
+        PayOrderCreateDTO payOrderCreateDTO = new PayOrderCreateDTO();
+        payOrderCreateDTO.setMoney(respDto.getPrice());
+        payOrderCreateDTO.setOrderTime(now);
+        payOrderCreateDTO.setVersionId(versionId);
+        payOrderCreateDTO.setOrganizId(organizationEntity.getId());
+        payOrderCreateDTO.setUserId(user.getId());
         if (respDto.getPrice() == 0) {
-            orderEntity.setStatus(1);
-            orderEntity.setPayTime(now);
+            payOrderCreateDTO.setStatus(1);
+            payOrderCreateDTO.setPayTime(now);
         } else {
-            orderEntity.setStatus(0);
+            payOrderCreateDTO.setStatus(0);
         }
-        PayOrderRespDto payOrderRespDto = payOrderService.create(orderEntity);
+        PayOrderDTO payOrderDTO = payOrderService.create(payOrderCreateDTO);
 
         //创建机构认证信息
         OrgAuthReqDto auth = new OrgAuthReqDto();
         auth.setVersionId(versionId);
-        auth.setOrderId(payOrderRespDto.getId());
+        auth.setOrderId(payOrderDTO.getId());
         auth.setMaxOrganizs(respDto.getMaxOrganizs());
         auth.setMaxUsers(respDto.getMaxUsers());
         auth.setOrganizId(organizationEntity.getId());

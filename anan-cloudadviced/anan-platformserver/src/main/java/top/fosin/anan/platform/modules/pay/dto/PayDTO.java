@@ -22,7 +22,7 @@ import java.util.Date;
 @ToString
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value = "支付表响应DTO", description = "支付的响应DTO")
-public class PayRespDto extends Id<Long> {
+public class PayDTO extends Id<Long> {
     private static final long serialVersionUID = 822309690652216835L;
     @ApiModelProperty(value = "付款机构", example = "Long")
     private Long organizId;

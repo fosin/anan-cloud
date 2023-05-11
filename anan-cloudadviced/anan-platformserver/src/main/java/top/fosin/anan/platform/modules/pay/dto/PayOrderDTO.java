@@ -1,5 +1,6 @@
 package top.fosin.anan.platform.modules.pay.dto;
 
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -12,18 +13,18 @@ import top.fosin.anan.data.entity.Id;
 import java.util.Date;
 
 /**
- * 支付订单表(AnanPayOrder)响应DTO
+ * 系统支付订单表(anan_pay_order)DTO
  *
  * @author fosin
- * @date 2021-05-16 14:32:15
- * @since 2.6.0
+ * @date 2023-05-11 22:57:03
  */
 @Data
-@ToString
+@ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-@ApiModel(value = "支付订单表响应DTO", description = "支付订单的响应DTO")
-public class PayOrderRespDto extends Id<Long> {
-    private static final long serialVersionUID = 246548313263160346L;
+@ApiModel(value = "系统支付订单表DTO", description = "系统支付订单表(anan_pay_order)DTO")
+public class PayOrderDTO extends Id<Long> {
+    private static final long serialVersionUID = 430986997104560125L;
+
     @ApiModelProperty(value = "订单机构", example = "Long")
     private Long organizId;
 

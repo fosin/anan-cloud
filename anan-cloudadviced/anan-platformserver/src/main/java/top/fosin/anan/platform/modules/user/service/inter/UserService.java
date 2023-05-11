@@ -20,8 +20,9 @@ import java.util.List;
  * @date 2017/12/27
  */
 @Validated
-public interface UserService extends IRetrieveJpaService<UserRespDTO, Long, User>,
+public interface UserService extends
         ICreateJpaService<UserCreateDTO, UserRespDTO, Long, User>,
+        IRetrieveJpaService<UserRespDTO, Long, User>,
         IUpdateJpaService<UserUpdateDTO, Long, User>,
         IDeleteJpaService<Long, User>,
         UserBaseService {

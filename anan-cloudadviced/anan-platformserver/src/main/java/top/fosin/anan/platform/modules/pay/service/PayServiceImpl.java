@@ -14,10 +14,10 @@ import top.fosin.anan.platform.modules.pay.service.inter.PayService;
 @Service
 @Lazy
 public class PayServiceImpl implements PayService {
-    private final PayDao ananSysPayDao;
+    private final PayDao payDao;
 
-    public PayServiceImpl(PayDao ananSysPayDao) {
-        this.ananSysPayDao = ananSysPayDao;
+    public PayServiceImpl(PayDao payDao) {
+        this.payDao = payDao;
     }
 
     /**
@@ -25,6 +25,6 @@ public class PayServiceImpl implements PayService {
      */
     @Override
     public PayDao getDao() {
-        return ananSysPayDao;
+        return payDao;
     }
 }

@@ -4,10 +4,17 @@ import io.swagger.annotations.Api;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import top.fosin.anan.cloudresource.constant.PathPrefixConstant;
-import top.fosin.anan.data.controller.ISimpleController;
-import top.fosin.anan.platform.modules.pay.dto.PayDetailReqDto;
-import top.fosin.anan.platform.modules.pay.dto.PayDetailRespDto;
+import top.fosin.anan.data.controller.ICreateController;
+import top.fosin.anan.data.controller.IDeleteController;
+import top.fosin.anan.data.controller.IRetrieveController;
+import top.fosin.anan.data.controller.IUpdateController;
+import top.fosin.anan.platform.modules.pay.dto.PayDetailCreateDTO;
+import top.fosin.anan.platform.modules.pay.dto.PayDetailUpdateDTO;
+import top.fosin.anan.platform.modules.pay.query.PayDetailQuery;
 import top.fosin.anan.platform.modules.pay.service.inter.PayDetailService;
+import top.fosin.anan.platform.modules.pay.vo.PayDetailListVO;
+import top.fosin.anan.platform.modules.pay.vo.PayDetailPageVO;
+import top.fosin.anan.platform.modules.pay.vo.PayDetailVO;
 
 /**
  * 支付明细表(table:anan_pay_detail)表控制层
@@ -18,10 +25,11 @@ import top.fosin.anan.platform.modules.pay.service.inter.PayDetailService;
 @RestController
 @RequestMapping(value = PathPrefixConstant.PAY_DETAIL, params = PathPrefixConstant.DEFAULT_VERSION_PARAM)
 @Api(value = PathPrefixConstant.PAY_DETAIL, tags = "支付明细表管理")
-public class PayDetailController implements ISimpleController<PayDetailReqDto, PayDetailRespDto, Long> {
-    /**
-     * 服务对象
-     */
+public class PayDetailController implements ICreateController<PayDetailCreateDTO, Long>,
+        IUpdateController<PayDetailUpdateDTO, Long>,
+        IDeleteController<Long>,
+        IRetrieveController<PayDetailQuery, PayDetailVO, PayDetailListVO, PayDetailPageVO, Long> {
+
     private final PayDetailService payDetailService;
 
     public PayDetailController(PayDetailService payDetailService) {

@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import top.fosin.anan.cloudresource.constant.PlatformRedisConstant;
 import top.fosin.anan.cloudresource.constant.SystemConstant;
-import top.fosin.anan.cloudresource.entity.req.DictionaryDetailReqDTO;
 import top.fosin.anan.cloudresource.entity.res.DictionaryDetailRespDTO;
 import top.fosin.anan.cloudresource.grpc.dicdetail.*;
 import top.fosin.anan.cloudresource.grpc.service.DicDetailGrpcServiceImpl;
@@ -23,6 +22,8 @@ import top.fosin.anan.core.util.BeanUtil;
 import top.fosin.anan.data.converter.translate.StringTranslateCacheUtil;
 import top.fosin.anan.platform.modules.dictionary.dao.DictionaryDao;
 import top.fosin.anan.platform.modules.dictionary.dao.DictionaryDetailDao;
+import top.fosin.anan.platform.modules.dictionary.dto.DictionaryDetailCreateDTO;
+import top.fosin.anan.platform.modules.dictionary.dto.DictionaryDetailUpdateDTO;
 import top.fosin.anan.platform.modules.dictionary.po.Dictionary;
 import top.fosin.anan.platform.modules.dictionary.service.inter.DictionaryDetailService;
 import top.fosin.anan.redis.cache.AnanCacheManger;
@@ -90,21 +91,21 @@ public class DictionaryDetailServiceImpl extends DicDetailServiceGrpc.DicDetailS
 
 
     @Override
-    public void preCreate(DictionaryDetailReqDTO reqDTO) {
+    public void preCreate(DictionaryDetailCreateDTO reqDTO) {
         DictionaryDetailService.super.preCreate(reqDTO);
         hasModifiedPrivileges(reqDTO.getDictionaryId());
         ananCacheManger.evict(PlatformRedisConstant.ANAN_DICTIONARY_DETAIL, reqDTO.getDictionaryId() + "");
     }
 
     @Override
-    public void preUpdate(DictionaryDetailReqDTO reqDTO) {
+    public void preUpdate(DictionaryDetailUpdateDTO reqDTO) {
         DictionaryDetailService.super.preUpdate(reqDTO);
         hasModifiedPrivileges(reqDTO.getDictionaryId());
         ananCacheManger.evict(PlatformRedisConstant.ANAN_DICTIONARY_DETAIL, reqDTO.getDictionaryId() + "");
     }
 
     @Override
-    public void postUpdate(DictionaryDetailReqDTO reqDTO) {
+    public void postUpdate(DictionaryDetailUpdateDTO reqDTO) {
         DictionaryDetailService.super.postUpdate(reqDTO);
         ananCacheManger.evict(PlatformRedisConstant.ANAN_DICTIONARY_DETAIL, reqDTO.getDictionaryId() + "");
         StringTranslateCacheUtil.put(DicDetailGrpcServiceImpl.class, String.valueOf(reqDTO.getDictionaryId()), reqDTO.getCode(), reqDTO.getName());

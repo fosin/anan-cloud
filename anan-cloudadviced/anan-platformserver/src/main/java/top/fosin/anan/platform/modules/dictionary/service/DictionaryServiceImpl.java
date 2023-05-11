@@ -7,10 +7,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import top.fosin.anan.cloudresource.constant.SystemConstant;
-import top.fosin.anan.cloudresource.entity.req.DictionaryReqDTO;
 import top.fosin.anan.cloudresource.service.CurrentUserService;
 import top.fosin.anan.platform.modules.dictionary.dao.DictionaryDao;
 import top.fosin.anan.platform.modules.dictionary.dao.DictionaryDetailDao;
+import top.fosin.anan.platform.modules.dictionary.dto.DictionaryCreateDTO;
+import top.fosin.anan.platform.modules.dictionary.dto.DictionaryUpdateDTO;
 import top.fosin.anan.platform.modules.dictionary.po.Dictionary;
 import top.fosin.anan.platform.modules.dictionary.service.inter.DictionaryService;
 
@@ -32,7 +33,7 @@ public class DictionaryServiceImpl implements DictionaryService {
     private final CurrentUserService currentUserService;
 
     @Override
-    public void preCreate(DictionaryReqDTO reqDto) {
+    public void preCreate(DictionaryCreateDTO reqDto) {
         DictionaryService.super.preCreate(reqDto);
         hasModifiedPrivileges(reqDto.getType());
     }
@@ -45,7 +46,7 @@ public class DictionaryServiceImpl implements DictionaryService {
     }
 
     @Override
-    public void preUpdate(DictionaryReqDTO reqDto) {
+    public void preUpdate(DictionaryUpdateDTO reqDto) {
         DictionaryService.super.preUpdate(reqDto);
         hasModifiedPrivileges(reqDto.getType());
     }

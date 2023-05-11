@@ -1,15 +1,23 @@
 package top.fosin.anan.platform.modules.pay.service.inter;
 
-import top.fosin.anan.jpa.service.ISimpleJpaService;
-import top.fosin.anan.platform.modules.pay.dto.PayDetailReqDto;
-import top.fosin.anan.platform.modules.pay.dto.PayDetailRespDto;
+import top.fosin.anan.jpa.service.ICreateJpaService;
+import top.fosin.anan.jpa.service.IDeleteJpaService;
+import top.fosin.anan.jpa.service.IRetrieveJpaService;
+import top.fosin.anan.jpa.service.IUpdateJpaService;
+import top.fosin.anan.platform.modules.pay.dto.PayDetailCreateDTO;
+import top.fosin.anan.platform.modules.pay.dto.PayDetailDTO;
+import top.fosin.anan.platform.modules.pay.dto.PayDetailUpdateDTO;
 import top.fosin.anan.platform.modules.pay.po.PayDetail;
 
 /**
- * 支付明细支付明细表服务接口
+ * 系统支付明细表(anan_pay_detail)服务类
  *
  * @author fosin
- * @date 2018-11-18 17:26:40
+ * @date 2023-05-11 22:57:01
  */
-public interface PayDetailService extends ISimpleJpaService<PayDetailReqDto, PayDetailRespDto, Long,PayDetail> {
+public interface PayDetailService extends
+        ICreateJpaService<PayDetailCreateDTO, PayDetailDTO, Long, PayDetail>,
+        IRetrieveJpaService<PayDetailDTO, Long, PayDetail>,
+        IUpdateJpaService<PayDetailUpdateDTO, Long, PayDetail>,
+        IDeleteJpaService<Long, PayDetail> {
 }

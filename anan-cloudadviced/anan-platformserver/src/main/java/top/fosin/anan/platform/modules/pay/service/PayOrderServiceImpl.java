@@ -14,10 +14,10 @@ import top.fosin.anan.platform.modules.pay.service.inter.PayOrderService;
 @Service
 @Lazy
 public class PayOrderServiceImpl implements PayOrderService {
-    private final PayOrderDao ananSysPayOrderDao;
+    private final PayOrderDao payOrderDao;
 
-    public PayOrderServiceImpl(PayOrderDao ananSysPayOrderDao) {
-        this.ananSysPayOrderDao = ananSysPayOrderDao;
+    public PayOrderServiceImpl(PayOrderDao payOrderDao) {
+        this.payOrderDao = payOrderDao;
     }
 
     /**
@@ -25,6 +25,6 @@ public class PayOrderServiceImpl implements PayOrderService {
      */
     @Override
     public PayOrderDao getDao() {
-        return ananSysPayOrderDao;
+        return payOrderDao;
     }
 }
