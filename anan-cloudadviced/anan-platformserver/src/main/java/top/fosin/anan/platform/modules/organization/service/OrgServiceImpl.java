@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import net.devh.boot.grpc.server.service.GrpcService;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -14,11 +13,13 @@ import top.fosin.anan.cloudresource.constant.PlatformRedisConstant;
 import top.fosin.anan.cloudresource.entity.res.OrganizRespDTO;
 import top.fosin.anan.cloudresource.entity.res.OrganizTreeDTO;
 import top.fosin.anan.cloudresource.grpc.organiz.*;
+import top.fosin.anan.cloudresource.grpc.service.OrganizGrpcServiceImpl;
 import top.fosin.anan.cloudresource.grpc.util.StringUtil;
 import top.fosin.anan.cloudresource.service.CurrentUserService;
 import top.fosin.anan.core.util.BeanUtil;
-import top.fosin.anan.data.converter.translate.service.Object2StringTranslateService;
+import top.fosin.anan.data.converter.translate.StringTranslateCacheUtil;
 import top.fosin.anan.data.service.ICrudBatchService;
+import top.fosin.anan.jpa.repository.IJpaRepository;
 import top.fosin.anan.platform.modules.organization.dao.OrgDao;
 import top.fosin.anan.platform.modules.organization.dto.OrgReqDto;
 import top.fosin.anan.platform.modules.organization.po.Organization;
@@ -38,8 +39,7 @@ import java.util.stream.Collectors;
 @Lazy
 @AllArgsConstructor
 @Slf4j
-public class OrgServiceImpl extends OrganizServiceGrpc.OrganizServiceImplBase
-        implements OrgService, Object2StringTranslateService {
+public class OrgServiceImpl extends OrganizServiceGrpc.OrganizServiceImplBase implements OrgService {
     private final OrgDao orgDao;
     private final CurrentUserService currentUserService;
     private final AnanCacheManger ananCacheManger;
@@ -84,7 +84,8 @@ public class OrgServiceImpl extends OrganizServiceGrpc.OrganizServiceImplBase
         }
         orgDao.save(updateEntity);
         ananCacheManger.evict(PlatformRedisConstant.ANAN_ORGANIZATION, updateDto.getId() + "");
-        if (changedName) this.putTranslateCache("", updateDto.getId(), updateDto.getName());
+        if (changedName)
+            StringTranslateCacheUtil.put(OrganizGrpcServiceImpl.class, "", updateDto.getId(), updateDto.getName());
     }
 
     @Override
@@ -162,12 +163,40 @@ public class OrgServiceImpl extends OrganizServiceGrpc.OrganizServiceImplBase
     }
 
     @Override
-    @Cacheable(value = PlatformRedisConstant.ANAN_ORGANIZATION, key = "#request.getId()")
     public void findOneById(OrganizIdReq request, StreamObserver<OrganizResp> responseObserver) {
         long id = request.getId();
-        Organization organization = this.getDao().findById(id).orElseThrow(() -> new IllegalArgumentException("未找到对应数据!"));
-        OrganizResp organizResp = toGrpcResp(organization);
+        OrganizRespDTO respDTO = this.findOneById(id);
+        OrganizResp organizResp = toGrpcResp(respDTO);
         responseObserver.onNext(organizResp);
+        responseObserver.onCompleted();
+    }
+
+    @NotNull
+    private OrganizResp toGrpcResp(OrganizRespDTO dto) {
+        return OrganizResp.newBuilder()
+                .setCode(dto.getCode())
+                .setName(dto.getName())
+                .setAddress(StringUtil.getNonNullValue(dto.getAddress()))
+                .setPid(dto.getPid())
+                .setStatus(dto.getStatus())
+                .setFullname(dto.getFullname())
+                .setId(dto.getId())
+                .setLevel(dto.getLevel())
+                .setTelphone(StringUtil.getNonNullValue(dto.getTelphone()))
+                .setTopId(dto.getTopId()).build();
+    }
+
+    @Override
+    public void listByIds(OrganizIdsReq request, StreamObserver<OrganizsResp> responseObserver) {
+        List<Long> ids = request.getIdList();
+        List<Organization> organizations = this.getDao().findAllById(ids);
+        toGrpcResps(responseObserver, organizations);
+    }
+
+    private void toGrpcResps(StreamObserver<OrganizsResp> responseObserver, List<Organization> organizations) {
+        OrganizsResp organizsResp = OrganizsResp.newBuilder().addAllOrganiz(organizations.stream()
+                .map(this::toGrpcResp).collect(Collectors.toList())).build();
+        responseObserver.onNext(organizsResp);
         responseObserver.onCompleted();
     }
 
@@ -187,20 +216,6 @@ public class OrgServiceImpl extends OrganizServiceGrpc.OrganizServiceImplBase
     }
 
     @Override
-    public void listByIds(OrganizIdsReq request, StreamObserver<OrganizsResp> responseObserver) {
-        List<Long> ids = request.getIdList();
-        List<Organization> organizations = this.getDao().findAllById(ids);
-        toGrpcResps(responseObserver, organizations);
-    }
-
-    private void toGrpcResps(StreamObserver<OrganizsResp> responseObserver, List<Organization> organizations) {
-        OrganizsResp organizsResp = OrganizsResp.newBuilder().addAllOrganiz(organizations.stream()
-                .map(this::toGrpcResp).collect(Collectors.toList())).build();
-        responseObserver.onNext(organizsResp);
-        responseObserver.onCompleted();
-    }
-
-    @Override
     public void listChild(OrganizPidReq request, StreamObserver<OrganizsResp> responseObserver) {
         List<Organization> organizations = orgDao.findByPidOrderByCodeAsc(request.getPid());
         toGrpcResps(responseObserver, organizations);
@@ -213,31 +228,7 @@ public class OrgServiceImpl extends OrganizServiceGrpc.OrganizServiceImplBase
     }
 
     @Override
-    public OrgDao getDao() {
+    public IJpaRepository<Long, Organization> getDao() {
         return orgDao;
-    }
-
-    @Override
-    public String translate(String dicId, Object key) {
-        long id = 0;
-        if (key instanceof Long) {
-            id = (Long) key;
-        } else if (key instanceof String) {
-            id = Long.parseLong((String) key);
-        } else {
-            log.warn("翻译数据失败，不被支持的转换值类型：" + key);
-        }
-        String value = String.valueOf(key);
-        if (id > 0) {
-            OrganizRespDTO respDTO = this.findOneById(id);
-            if (respDTO == null) {
-                log.warn("翻译数据失败，根据值类型：" + key + "未能找到对应数据!");
-            } else {
-                value = respDTO.getFullname();
-            }
-        } else {
-            log.warn("翻译数据失败，值类型必须大于0：" + key);
-        }
-        return value;
     }
 }

@@ -22,14 +22,14 @@ public class PayController implements ISimpleController<PayReqDto, PayRespDto, L
     /**
      * 服务对象
      */
-    private final PayService ananSysPayService;
+    private final PayService payService;
 
-    public PayController(PayService ananSysPayService) {
-        this.ananSysPayService = ananSysPayService;
+    public PayController(PayService payService) {
+        this.payService = payService;
     }
 
     @Override
     public PayService getService() {
-        return ananSysPayService;
+        return payService;
     }
 }

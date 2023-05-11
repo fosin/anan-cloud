@@ -4,6 +4,8 @@ import lombok.extern.slf4j.Slf4j;
 import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 import top.fosin.anan.cloudresource.constant.ServiceConstant;
 import top.fosin.anan.cloudresource.entity.res.DictionaryDetailRespDTO;
 import top.fosin.anan.cloudresource.grpc.dicdetail.*;
@@ -57,9 +59,10 @@ public class DicDetailGrpcServiceImpl implements DicDetailRpcService, Object2Str
             id = -9999L;
             log.warn("翻译数据失败，不被支持的转换值类型：" + key + " 字典序号：" + dicId);
         }
+        Assert.isTrue(StringUtils.hasText(dicId) && Long.parseLong(dicId) > 0, "dicId必须大于0!");
         String value = String.valueOf(key);
         if (id != -9999L) {
-            DictionaryDetailRespDTO respDTO = this.listByDicId(Long.valueOf(dicId)).stream()
+            DictionaryDetailRespDTO respDTO = this.listByDicId(Long.parseLong(dicId)).stream()
                     .filter(detailVO -> Objects.equals(detailVO.getCode(), id)).findFirst().orElse(null);
             if (respDTO == null) {
                 log.warn("翻译数据失败，根据值类型：" + key + " 字典序号：" + dicId + "未能找到对应数据!");

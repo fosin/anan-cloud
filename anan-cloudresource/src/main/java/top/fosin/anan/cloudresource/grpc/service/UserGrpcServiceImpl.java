@@ -8,6 +8,7 @@ import top.fosin.anan.cloudresource.constant.ServiceConstant;
 import top.fosin.anan.cloudresource.entity.res.UserRespDTO;
 import top.fosin.anan.cloudresource.grpc.user.*;
 import top.fosin.anan.cloudresource.service.inter.rpc.UserRpcService;
+import top.fosin.anan.data.converter.translate.service.Object2StringTranslateService;
 
 import java.util.Date;
 import java.util.List;
@@ -16,7 +17,7 @@ import java.util.stream.Collectors;
 
 @Component
 @Slf4j
-public class UserGrpcServiceImpl implements UserRpcService {
+public class UserGrpcServiceImpl implements UserRpcService, Object2StringTranslateService {
     @GrpcClient(ServiceConstant.ANAN_PLATFORMSERVER)
     private UserServiceGrpc.UserServiceBlockingStub blockingStubService;
 

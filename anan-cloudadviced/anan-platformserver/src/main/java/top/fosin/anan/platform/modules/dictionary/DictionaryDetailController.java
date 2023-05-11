@@ -1,4 +1,4 @@
-package top.fosin.anan.platform.modules.pub;
+package top.fosin.anan.platform.modules.dictionary;
 
 import io.swagger.annotations.Api;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -8,7 +8,7 @@ import top.fosin.anan.cloudresource.entity.req.DictionaryDetailReqDTO;
 import top.fosin.anan.cloudresource.entity.res.DictionaryDetailRespDTO;
 import top.fosin.anan.data.controller.ISimpleController;
 import top.fosin.anan.data.controller.batch.IRetrieveBatchController;
-import top.fosin.anan.platform.modules.pub.service.inter.DictionaryDetailService;
+import top.fosin.anan.platform.modules.dictionary.service.inter.DictionaryDetailService;
 
 /**
  * 字典明细控制器

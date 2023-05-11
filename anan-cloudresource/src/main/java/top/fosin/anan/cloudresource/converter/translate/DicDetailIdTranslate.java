@@ -13,6 +13,7 @@ import static java.lang.annotation.ElementType.FIELD;
 
 /**
  * 字典明旭序号翻译为名称
+ *
  * @author fosin
  * @date 2023/4/28
  * @since 4.0.0
@@ -21,13 +22,9 @@ import static java.lang.annotation.ElementType.FIELD;
 @Target(value = {FIELD})
 @Translate2String(service = DicDetailGrpcServiceImpl.class, dicId = "")
 public @interface DicDetailIdTranslate {
-    @AliasFor(
-            annotation = Translate2String.class
-    )
-    Class<? extends StringTranslateService<?>> service();
+    @AliasFor(annotation = Translate2String.class)
+    Class<? extends StringTranslateService<?>> service() default DicDetailGrpcServiceImpl.class;
 
-    @AliasFor(
-            annotation = Translate2String.class
-    )
+    @AliasFor(annotation = Translate2String.class)
     String dicId();
 }

@@ -1,4 +1,4 @@
-package top.fosin.anan.platform.modules.pub.po;
+package top.fosin.anan.platform.modules.dictionary.po;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

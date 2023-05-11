@@ -1,13 +1,13 @@
-package top.fosin.anan.platform.modules.pub.service;
+package top.fosin.anan.platform.modules.dictionary.service;
 
 import com.google.protobuf.Timestamp;
 import io.grpc.stub.StreamObserver;
 import lombok.AllArgsConstructor;
+import net.devh.boot.grpc.server.service.GrpcService;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Sort;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import top.fosin.anan.cloudresource.constant.PlatformRedisConstant;
@@ -15,20 +15,21 @@ import top.fosin.anan.cloudresource.constant.SystemConstant;
 import top.fosin.anan.cloudresource.entity.req.DictionaryDetailReqDTO;
 import top.fosin.anan.cloudresource.entity.res.DictionaryDetailRespDTO;
 import top.fosin.anan.cloudresource.grpc.dicdetail.*;
+import top.fosin.anan.cloudresource.grpc.service.DicDetailGrpcServiceImpl;
+import top.fosin.anan.cloudresource.grpc.util.StringUtil;
 import top.fosin.anan.cloudresource.service.CurrentUserService;
 import top.fosin.anan.core.exception.AnanServiceException;
 import top.fosin.anan.core.util.BeanUtil;
-import top.fosin.anan.data.converter.translate.service.Object2StringTranslateService;
-import top.fosin.anan.platform.modules.pub.dao.DictionaryDao;
-import top.fosin.anan.platform.modules.pub.dao.DictionaryDetailDao;
-import top.fosin.anan.platform.modules.pub.po.Dictionary;
-import top.fosin.anan.platform.modules.pub.service.inter.DictionaryDetailService;
+import top.fosin.anan.data.converter.translate.StringTranslateCacheUtil;
+import top.fosin.anan.platform.modules.dictionary.dao.DictionaryDao;
+import top.fosin.anan.platform.modules.dictionary.dao.DictionaryDetailDao;
+import top.fosin.anan.platform.modules.dictionary.po.Dictionary;
+import top.fosin.anan.platform.modules.dictionary.service.inter.DictionaryDetailService;
 import top.fosin.anan.redis.cache.AnanCacheManger;
 
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -37,45 +38,15 @@ import java.util.stream.Collectors;
  * @author fosin
  * @date 2018-7-29
  */
-@Service
+@GrpcService
 @Lazy
 @AllArgsConstructor
 public class DictionaryDetailServiceImpl extends DicDetailServiceGrpc.DicDetailServiceImplBase
-        implements DictionaryDetailService, Object2StringTranslateService {
+        implements DictionaryDetailService {
     private final DictionaryDetailDao dictionaryDetailDao;
     private final CurrentUserService currentUserService;
     private final DictionaryDao dictionaryDao;
     private final AnanCacheManger ananCacheManger;
-
-    @Override
-    public String translate(String dicId, Object key) {
-        Long id;
-        if (key instanceof Long) {
-            id = (Long) key;
-        } else if (key instanceof Integer) {
-            id = Long.valueOf((Integer) key);
-        } else if (key instanceof String) {
-            id = Long.valueOf((String) key);
-        } else if (key instanceof Byte) {
-            id = Long.valueOf((Byte) key);
-        } else {
-            id = -9999L;
-            log.warn("翻译数据失败，不被支持的转换值类型：" + key + " 字典序号：" + dicId);
-        }
-        String value = String.valueOf(key);
-        if (id != -9999L) {
-            DictionaryDetailRespDTO respDTO = this.listByForeingKey(Long.valueOf(dicId)).stream()
-                    .filter(detailVO -> Objects.equals(detailVO.getCode(), id)).findFirst().orElse(null);
-            if (respDTO == null) {
-                log.warn("翻译数据失败，根据值类型：" + key + " 字典序号：" + dicId + "未能找到对应数据!");
-            } else {
-                value = respDTO.getName();
-            }
-        } else {
-            log.warn("翻译数据失败，值类型无效：" + key + " 字典序号：" + dicId);
-        }
-        return value;
-    }
 
     @Override
     public void findOneByDicIdAndCode(DicDetailReq request, StreamObserver<DicDetailResp> responseObserver) {
@@ -106,10 +77,10 @@ public class DictionaryDetailServiceImpl extends DicDetailServiceGrpc.DicDetailS
                 .setName(vo.getName())
                 .setSort(vo.getSort())
                 .setStatus(vo.getStatus())
-                .setScode(vo.getScode())
-                .setScope(vo.getScope())
+                .setScode(StringUtil.getNonNullValue(vo.getScode()))
+                .setScope(StringUtil.getNonNullValue(vo.getScope()))
                 .setUsed(vo.getUsed())
-                .setDescription(vo.getDescription())
+                .setDescription(StringUtil.getNonNullValue(vo.getDescription()))
                 .setCreateBy(vo.getCreateBy())
                 .setCreateTime(Timestamp.newBuilder().setSeconds(vo.getCreateTime().getTime() / 1000).build())
                 .setUpdateBy(vo.getUpdateBy())
@@ -136,7 +107,7 @@ public class DictionaryDetailServiceImpl extends DicDetailServiceGrpc.DicDetailS
     public void postUpdate(DictionaryDetailReqDTO reqDTO) {
         DictionaryDetailService.super.postUpdate(reqDTO);
         ananCacheManger.evict(PlatformRedisConstant.ANAN_DICTIONARY_DETAIL, reqDTO.getDictionaryId() + "");
-        this.putTranslateCache(String.valueOf(reqDTO.getDictionaryId()), reqDTO.getCode(), reqDTO.getName());
+        StringTranslateCacheUtil.put(DicDetailGrpcServiceImpl.class, String.valueOf(reqDTO.getDictionaryId()), reqDTO.getCode(), reqDTO.getName());
     }
 
     private void hasModifiedPrivileges(Long dictionaryId) {

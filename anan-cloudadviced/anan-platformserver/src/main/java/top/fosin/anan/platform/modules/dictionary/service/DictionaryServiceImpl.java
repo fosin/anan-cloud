@@ -1,4 +1,4 @@
-package top.fosin.anan.platform.modules.pub.service;
+package top.fosin.anan.platform.modules.dictionary.service;
 
 
 import lombok.AllArgsConstructor;
@@ -9,10 +9,10 @@ import org.springframework.util.Assert;
 import top.fosin.anan.cloudresource.constant.SystemConstant;
 import top.fosin.anan.cloudresource.entity.req.DictionaryReqDTO;
 import top.fosin.anan.cloudresource.service.CurrentUserService;
-import top.fosin.anan.platform.modules.pub.dao.DictionaryDao;
-import top.fosin.anan.platform.modules.pub.dao.DictionaryDetailDao;
-import top.fosin.anan.platform.modules.pub.po.Dictionary;
-import top.fosin.anan.platform.modules.pub.service.inter.DictionaryService;
+import top.fosin.anan.platform.modules.dictionary.dao.DictionaryDao;
+import top.fosin.anan.platform.modules.dictionary.dao.DictionaryDetailDao;
+import top.fosin.anan.platform.modules.dictionary.po.Dictionary;
+import top.fosin.anan.platform.modules.dictionary.service.inter.DictionaryService;
 
 import java.util.Collection;
 import java.util.List;

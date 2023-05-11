@@ -1,10 +1,10 @@
-package top.fosin.anan.platform.modules.pub.service.inter;
+package top.fosin.anan.platform.modules.dictionary.service.inter;
 
 import top.fosin.anan.cloudresource.entity.req.DictionaryDetailReqDTO;
 import top.fosin.anan.cloudresource.entity.res.DictionaryDetailRespDTO;
 import top.fosin.anan.jpa.service.ICrudBatchJpaService;
 import top.fosin.anan.jpa.service.ISimpleJpaService;
-import top.fosin.anan.platform.modules.pub.po.DictionaryDetail;
+import top.fosin.anan.platform.modules.dictionary.po.DictionaryDetail;
 
 /**
  * @author fosin

@@ -8,8 +8,6 @@ import net.devh.boot.grpc.server.service.GrpcService;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,15 +18,13 @@ import top.fosin.anan.cloudresource.constant.SystemConstant;
 import top.fosin.anan.cloudresource.entity.req.UserCreateDTO;
 import top.fosin.anan.cloudresource.entity.req.UserUpdateDTO;
 import top.fosin.anan.cloudresource.entity.res.UserRespDTO;
+import top.fosin.anan.cloudresource.grpc.service.UserGrpcServiceImpl;
 import top.fosin.anan.cloudresource.grpc.user.*;
 import top.fosin.anan.cloudresource.grpc.util.StringUtil;
 import top.fosin.anan.cloudresource.service.CurrentUserService;
 import top.fosin.anan.core.util.BeanUtil;
 import top.fosin.anan.core.util.RegexUtil;
-import top.fosin.anan.data.entity.req.PageQuery;
-import top.fosin.anan.data.entity.res.TreeVO;
-import top.fosin.anan.data.result.PageResult;
-import top.fosin.anan.data.result.ResultUtils;
+import top.fosin.anan.data.converter.translate.StringTranslateCacheUtil;
 import top.fosin.anan.platform.modules.organization.dao.OrgDao;
 import top.fosin.anan.platform.modules.organization.po.Organization;
 import top.fosin.anan.platform.modules.pub.service.LocalOrganParameter;
@@ -37,11 +33,12 @@ import top.fosin.anan.platform.modules.user.dao.UserRoleDao;
 import top.fosin.anan.platform.modules.user.dto.UserPassRespDTO;
 import top.fosin.anan.platform.modules.user.po.User;
 import top.fosin.anan.platform.modules.user.po.UserRole;
-import top.fosin.anan.platform.modules.user.query.UserQuery;
 import top.fosin.anan.platform.modules.user.service.inter.UserService;
 import top.fosin.anan.redis.cache.AnanCacheManger;
 
-import javax.persistence.criteria.*;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.Path;
+import javax.persistence.criteria.Predicate;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
@@ -157,8 +154,7 @@ public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase impleme
         ananCacheManger.evict(PlatformRedisConstant.ANAN_USER_ALL_PERMISSIONS, id + "");
         ananCacheManger.evict(PlatformRedisConstant.ANAN_USER_PERMISSION_TREE, id + "");
         userDao.save(createUser);
-        this.removeTranslateCache("", reqDto.getId());
-        if (changedName) this.putTranslateCache("", reqDto.getId(), reqDto.getUsername());
+        if (changedName) StringTranslateCacheUtil.put(UserGrpcServiceImpl.class, "", reqDto.getId(), reqDto.getUsername());
     }
 
     @Override
@@ -199,70 +195,60 @@ public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase impleme
     }
 
 //    @Override
-//    public PageResult<UserPageVO> findPage(PageQuery<?> PageQuery) {
-//        PageResult<UserPageVO> page = UserService.super.findPage(PageQuery);
-//        List<UserPageVO> userPageVOS = BeanUtil.copyProperties(page.getData(), UserPageVO.class);
-//        userPageVOS.forEach(user -> user.setOrganizName(user.getOrganizId() + ""));
+//    public PageResult<UserRespDTO> findPage(PageQuery<?> PageQuery) {
+//        UserQuery params = (UserQuery) PageQuery.getParams();
+//        if (currentUserService.isSysAdminUser()) {
+//            return UserService.super.findPage(PageQuery);
+//        }
 //
-//        return ResultUtils.success(page.getTotal(), page.getPageTotals(),
-//                userPageVOS);
+//        Specification<User> condition = (root, query, cb) -> {
+//            Path<String> usercodePath = root.get("usercode");
+//            Path<String> usernamePath = root.get("username");
+//            Path<String> phonePath = root.get("phone");
+//            Path<String> emailPath = root.get("email");
+//
+//            Long organizId = currentUserService.getAnanOrganizId();
+//            Organization organization = orgDao.findById(organizId).orElse(null);
+//
+//            Subquery<Integer> subQuery = query.subquery(Integer.class);
+//            //从哪张表查询
+//            Root<Organization> celluseRoot = subQuery.from(Organization.class);
+//            //查询出什么
+//            subQuery.select(celluseRoot.get(TreeVO.ID_NAME));
+//            //条件是什么
+//            Predicate p = cb.like(celluseRoot.get("code"), Objects.requireNonNull(organization, "通过organizId：" + organizId + "未能找到对应的数据!").getCode() + "%");
+//            subQuery.where(p);
+//
+//            Predicate defaultPredicate = cb.and(cb.notEqual(usercodePath, SystemConstant.ANAN_USER_CODE),
+//                    cb.in(root.get("organizId")).value(subQuery));
+//
+//            if (cn.hutool.core.bean.BeanUtil.isEmpty(params)) {
+//                return defaultPredicate;
+//            } else {
+//                String username = params.getUsername();
+//                String usercode = params.getUsercode();
+//                String phone = params.getPhone();
+//                String email = params.getEmail();
+//                if (!StringUtils.hasText(username)
+//                        && !StringUtils.hasText(usercode)
+//                        && !StringUtils.hasText(phone)
+//                        && !StringUtils.hasText(email)
+//                ) {
+//                    return defaultPredicate;
+//                }
+//                Predicate predicate = cb.or(cb.like(usernamePath, "%" + username + "%"),
+//                        cb.like(usercodePath, "%" + usercode + "%"),
+//                        cb.like(phonePath, "%" + phone + "%"),
+//                        cb.like(emailPath, "%" + email + "%"));
+//                return cb.and(defaultPredicate, predicate);
+//            }
+//        };
+//        //分页查找
+//        PageRequest pageable = toPage(PageQuery);
+//        Page<User> page = userDao.findAll(condition, pageable);
+//        return ResultUtils.success(page.getTotalElements(), page.getTotalPages(),
+//                BeanUtil.copyProperties(page.getContent(), UserRespDTO.class));
 //    }
-
-    @Override
-    public PageResult<UserRespDTO> findPage(PageQuery<?> PageQuery) {
-        UserQuery params = (UserQuery) PageQuery.getParams();
-        if (currentUserService.isSysAdminUser()) {
-            return UserService.super.findPage(PageQuery);
-        }
-
-        Specification<User> condition = (root, query, cb) -> {
-            Path<String> usercodePath = root.get("usercode");
-            Path<String> usernamePath = root.get("username");
-            Path<String> phonePath = root.get("phone");
-            Path<String> emailPath = root.get("email");
-
-            Long organizId = currentUserService.getAnanOrganizId();
-            Organization organization = orgDao.findById(organizId).orElse(null);
-
-            Subquery<Integer> subQuery = query.subquery(Integer.class);
-            //从哪张表查询
-            Root<Organization> celluseRoot = subQuery.from(Organization.class);
-            //查询出什么
-            subQuery.select(celluseRoot.get(TreeVO.ID_NAME));
-            //条件是什么
-            Predicate p = cb.like(celluseRoot.get("code"), Objects.requireNonNull(organization, "通过organizId：" + organizId + "未能找到对应的数据!").getCode() + "%");
-            subQuery.where(p);
-
-            Predicate defaultPredicate = cb.and(cb.notEqual(usercodePath, SystemConstant.ANAN_USER_CODE),
-                    cb.in(root.get("organizId")).value(subQuery));
-
-            if (cn.hutool.core.bean.BeanUtil.isEmpty(params)) {
-                return defaultPredicate;
-            } else {
-                String username = params.getUsername();
-                String usercode = params.getUsercode();
-                String phone = params.getPhone();
-                String email = params.getEmail();
-                if (!StringUtils.hasText(username)
-                        && !StringUtils.hasText(usercode)
-                        && !StringUtils.hasText(phone)
-                        && !StringUtils.hasText(email)
-                ) {
-                    return defaultPredicate;
-                }
-                Predicate predicate = cb.or(cb.like(usernamePath, "%" + username + "%"),
-                        cb.like(usercodePath, "%" + usercode + "%"),
-                        cb.like(phonePath, "%" + phone + "%"),
-                        cb.like(emailPath, "%" + email + "%"));
-                return cb.and(defaultPredicate, predicate);
-            }
-        };
-        //分页查找
-        PageRequest pageable = toPage(PageQuery);
-        Page<User> page = userDao.findAll(condition, pageable);
-        return ResultUtils.success(page.getTotalElements(), page.getTotalPages(),
-                BeanUtil.copyProperties(page.getContent(), UserRespDTO.class));
-    }
 
     @Transactional(rollbackFor = Exception.class)
     @Override
@@ -422,7 +408,7 @@ public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase impleme
         Long organizId = user.getOrganizId();
         Long topId = 0L;
         if (organizId > 0) {
-            Organization organization = orgDao.getReferenceById(organizId);
+            Organization organization = orgDao.findById(organizId).orElseThrow(() -> new IllegalArgumentException("未找到对应数据！"));
             topId = organization.getTopId();
         }
         UserResp userResp = toGrpcResp(user, topId);
@@ -510,29 +496,5 @@ public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase impleme
     @Override
     public UserDao getDao() {
         return userDao;
-    }
-
-    @Override
-    public String translate(String dicId, Object key) {
-        long id = 0;
-        if (key instanceof Long) {
-            id = (Long) key;
-        } else if (key instanceof String) {
-            id = Long.parseLong((String) key);
-        } else {
-            log.warn("翻译数据失败，不被支持的转换值类型：" + key);
-        }
-        String value = String.valueOf(key);
-        if (id > 0) {
-            UserRespDTO respDTO = this.findOneById(id);
-            if (respDTO == null) {
-                log.warn("翻译数据失败，根据值类型：" + key + "未能找到对应数据!");
-            } else {
-                value = respDTO.getUsername();
-            }
-        } else {
-            log.warn("翻译数据失败，值类型必须大于0：" + key);
-        }
-        return value;
     }
 }

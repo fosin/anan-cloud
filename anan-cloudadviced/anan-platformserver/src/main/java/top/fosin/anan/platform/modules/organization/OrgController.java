@@ -34,7 +34,7 @@ import java.util.List;
 @RequestMapping(value = PathPrefixConstant.ORGANIZATION, params = PathPrefixConstant.DEFAULT_VERSION_PARAM)
 @Api(value = PathPrefixConstant.ORGANIZATION, tags = "机构管理")
 public class OrgController extends BaseController
-        implements ICrudController<OrgReqDto, OrganizRespDTO, Long>,
+        implements ICrudController<OrgReqDto, OrgReqDto, OrganizRespDTO, OrganizRespDTO, OrganizRespDTO, Long>,
         IRetrieveTreeController<OrgReqDto, OrganizTreeDTO, Long> {
     private final OrgService orgService;
     private final OrgAuthService orgAuthService;
@@ -66,7 +66,7 @@ public class OrgController extends BaseController
     public MultResult<OrgPermissionRespDto> permissions(
             @RequestBody List<OrgPermissionReqDto> dtos,
             @PathVariable(FieldConstant.ORGANIZ_ID) Long organizId) {
-        return ResultUtils.success(orgPermissionService.processInBatch(organizId, dtos,false));
+        return ResultUtils.success(orgPermissionService.processInBatch(organizId, dtos, false));
     }
 
     @ApiOperation(value = "机构注册", notes = "用户自助注册机构")

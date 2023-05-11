@@ -22,8 +22,6 @@ import static java.lang.annotation.ElementType.FIELD;
 @Target(value = {FIELD})
 @Translate2String(service = OrganizGrpcServiceImpl.class, dicId = "")
 public @interface OrganizIdTranslate {
-    @AliasFor(
-            annotation = Translate2String.class
-    )
-    Class<? extends StringTranslateService<?>> service();
+    @AliasFor(annotation = Translate2String.class)
+    Class<? extends StringTranslateService<?>> service() default OrganizGrpcServiceImpl.class;
 }
