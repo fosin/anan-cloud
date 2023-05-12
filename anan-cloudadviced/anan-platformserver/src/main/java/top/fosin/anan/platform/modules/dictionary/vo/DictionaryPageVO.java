@@ -18,7 +18,7 @@ import java.util.Date;
  * 系统通用字典表(anan_dictionary)集合VO
  *
  * @author fosin
- * @date 2023-05-11 18:11:48
+ * @date 2023-05-11
  */
 @Data
 @ToString(callSuper = true)

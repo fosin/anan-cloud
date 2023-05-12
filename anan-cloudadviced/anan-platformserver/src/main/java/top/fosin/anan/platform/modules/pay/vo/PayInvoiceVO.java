@@ -20,7 +20,7 @@ import top.fosin.anan.data.entity.Id;
  * 系统支付发票表(anan_pay_invoice)单体VO
  *
  * @author fosin
- * @date 2023-05-11 22:57:03
+ * @date 2023-05-11
  */
 @Data
 @ToString(callSuper = true)

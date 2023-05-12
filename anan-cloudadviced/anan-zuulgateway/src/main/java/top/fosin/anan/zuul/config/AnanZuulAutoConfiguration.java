@@ -19,7 +19,7 @@ import springfox.documentation.spring.web.plugins.WebFluxRequestHandlerProvider;
 import springfox.documentation.spring.web.plugins.WebMvcRequestHandlerProvider;
 import springfox.documentation.swagger.web.SwaggerResource;
 import top.fosin.anan.cloudresource.constant.PathPrefixConstant;
-import top.fosin.anan.cloudresource.entity.res.PermissionRespDTO;
+import top.fosin.anan.cloudresource.entity.res.PermissionDTO;
 import top.fosin.anan.cloudresource.service.inter.feign.PermissionFeignService;
 import top.fosin.anan.security.resource.AnanProgramAuthorities;
 import top.fosin.anan.security.resource.AnanSecurityProperties;
@@ -84,7 +84,7 @@ public class AnanZuulAutoConfiguration {
                                                          PermissionFeignService permissionFeignService) {
         List<Route> routes = routeLocator.getRoutes();
         List<String> locations = routes.stream().map(Route::getLocation).collect(Collectors.toList());
-        Collection<PermissionRespDTO> dtos = permissionFeignService.findByServiceCodes(locations, PathPrefixConstant.API_VERSION_NAME).orElseThrow();
+        Collection<PermissionDTO> dtos = permissionFeignService.findByServiceCodes(locations, PathPrefixConstant.API_VERSION_NAME).orElseThrow();
         List<AnanSecurityProperties.Authority> authorities = new ArrayList<>();
         Objects.requireNonNull(dtos).forEach(dto -> {
             String entityPath = dto.getPath();

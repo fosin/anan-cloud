@@ -27,7 +27,7 @@ import top.fosin.anan.core.util.RegexUtil;
 import top.fosin.anan.data.converter.translate.StringTranslateCacheUtil;
 import top.fosin.anan.platform.modules.organization.dao.OrgDao;
 import top.fosin.anan.platform.modules.organization.po.Organization;
-import top.fosin.anan.platform.modules.pub.service.LocalOrganParameter;
+import top.fosin.anan.platform.modules.parameter.service.LocalOrganParameter;
 import top.fosin.anan.platform.modules.user.dao.UserDao;
 import top.fosin.anan.platform.modules.user.dao.UserRoleDao;
 import top.fosin.anan.platform.modules.user.dto.UserPassRespDTO;

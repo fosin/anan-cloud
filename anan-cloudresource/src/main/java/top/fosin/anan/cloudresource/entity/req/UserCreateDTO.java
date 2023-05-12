@@ -21,7 +21,7 @@ import java.util.Date;
  * 系统用户表(anan_user)创建DTO
  *
  * @author fosin
- * @date 2023-05-02 19:03:35
+ * @date 2023-05-02
  */
 @Data
 @EqualsAndHashCode(callSuper = true)

@@ -46,8 +46,8 @@ public class ReactiveResourceAutoConfiguration {
 //    @Bean
 //    @Primary
 //    public AnanProgramAuthorities ananProgramAuthoritiesNew() throws URISyntaxException {
-//        //List<PermissionRespDTO> dtos = permissionFeignService.findByServiceCodes(hosts).getData();
-//        List<PermissionRespDTO> dtos = getPermissionsByRest(hosts);
+//        //List<PermissionDTO> dtos = permissionFeignService.findByServiceCodes(hosts).getData();
+//        List<PermissionDTO> dtos = getPermissionsByRest(hosts);
 //        List<AnanSecurityProperties.Authority> authorities = new ArrayList<>();
 //        Objects.requireNonNull(dtos).forEach(dto -> {
 //            String path = dto.getPath();
@@ -71,7 +71,7 @@ public class ReactiveResourceAutoConfiguration {
 //        return serviceInstances.get(nextInt);
 //    }
 //
-//    public List<PermissionRespDTO> getPermissionsByRest(List<String> hosts) throws URISyntaxException {
+//    public List<PermissionDTO> getPermissionsByRest(List<String> hosts) throws URISyntaxException {
 //        ServiceInstance instance = getServiceRandomInstance(this.applicationName);
 //        String scheme = instance.getScheme();
 //        URI uri = new URI(scheme == null ? "http" : scheme, null, instance.getHost(), instance.getPort(), "/" + PathPrefixConstant.PERMISSION + PathSuffixConstant.SERVICE_CODE + "/" + this.applicationName, PathPrefixConstant.DEFAULT_VERSION_PARAM, null);
@@ -80,7 +80,7 @@ public class ReactiveResourceAutoConfiguration {
 //                .accept(MediaType.APPLICATION_JSON)
 //                .contentType(MediaType.APPLICATION_JSON)
 //                .body(hosts);
-//        ResponseEntity<MultResult<PermissionRespDTO>> res = restTemplate()
+//        ResponseEntity<MultResult<PermissionDTO>> res = restTemplate()
 //                .exchange(uri.toString(), HttpMethod.POST, request, new ParameterizedTypeReference<>() {
 //                });
 //        return Objects.requireNonNull(res.getBody()).orElseThrow();

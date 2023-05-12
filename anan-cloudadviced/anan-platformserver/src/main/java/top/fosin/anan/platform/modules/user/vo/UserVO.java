@@ -19,7 +19,7 @@ import java.util.Date;
  * 系统用户表(anan_user)单体VO
  *
  * @author fosin
- * @date 2023-05-02 17:47:46
+ * @date 2023-05-02
  */
 @Data
 @ToString(callSuper = true)

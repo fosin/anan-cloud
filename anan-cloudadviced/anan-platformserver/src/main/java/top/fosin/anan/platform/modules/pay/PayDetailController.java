@@ -24,7 +24,7 @@ import top.fosin.anan.platform.modules.pay.vo.PayDetailVO;
  */
 @RestController
 @RequestMapping(value = PathPrefixConstant.PAY_DETAIL, params = PathPrefixConstant.DEFAULT_VERSION_PARAM)
-@Api(value = PathPrefixConstant.PAY_DETAIL, tags = "支付明细表管理")
+@Api(value = PathPrefixConstant.PAY_DETAIL, tags = "支付明细管理")
 public class PayDetailController implements ICreateController<PayDetailCreateDTO, Long>,
         IUpdateController<PayDetailUpdateDTO, Long>,
         IDeleteController<Long>,

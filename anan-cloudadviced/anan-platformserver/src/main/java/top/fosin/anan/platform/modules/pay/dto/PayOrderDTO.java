@@ -16,7 +16,7 @@ import java.util.Date;
  * 系统支付订单表(anan_pay_order)DTO
  *
  * @author fosin
- * @date 2023-05-11 22:57:03
+ * @date 2023-05-11
  */
 @Data
 @ToString(callSuper = true)

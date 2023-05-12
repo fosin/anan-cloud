@@ -3,7 +3,7 @@ package top.fosin.anan.cloudresource.grpc.service;
 import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.springframework.stereotype.Component;
 import top.fosin.anan.cloudresource.constant.ServiceConstant;
-import top.fosin.anan.cloudresource.entity.res.PermissionRespDTO;
+import top.fosin.anan.cloudresource.entity.res.PermissionDTO;
 import top.fosin.anan.cloudresource.grpc.permission.PermissionResp;
 import top.fosin.anan.cloudresource.grpc.permission.PermissionServiceGrpc;
 import top.fosin.anan.cloudresource.grpc.permission.ServiceCodeReq;
@@ -26,21 +26,21 @@ public class PermissionGrpcServiceImpl implements PermissionRpcService {
     private PermissionServiceGrpc.PermissionServiceBlockingStub blockingStubService;
 
     @Override
-    public List<PermissionRespDTO> findByServiceCode(String serviceCode) {
+    public List<PermissionDTO> findByServiceCode(String serviceCode) {
         ServiceCodeReq build = ServiceCodeReq.newBuilder().setServiceCode(serviceCode).build();
         List<PermissionResp> permissionResps = blockingStubService.findByServiceCode(build).getPermissionList();
         return permissionResps.stream().map(this::toRespDto).collect(Collectors.toList());
     }
 
     @Override
-    public List<PermissionRespDTO> findByServiceCodes(List<String> serviceCodes) {
+    public List<PermissionDTO> findByServiceCodes(List<String> serviceCodes) {
         ServiceCodesReq build = ServiceCodesReq.newBuilder().addAllServiceCodes(serviceCodes).build();
         List<PermissionResp> permissionResps = blockingStubService.findByServiceCodes(build).getPermissionList();
         return permissionResps.stream().map(this::toRespDto).collect(Collectors.toList());
     }
 
-    private PermissionRespDTO toRespDto(PermissionResp resp) {
-        PermissionRespDTO dto = new PermissionRespDTO();
+    private PermissionDTO toRespDto(PermissionResp resp) {
+        PermissionDTO dto = new PermissionDTO();
         dto.setId(resp.getId());
         dto.setPid(resp.getPid());
         dto.setCode(resp.getCode());

@@ -18,7 +18,7 @@ import java.util.Date;
  * 系统支付表(anan_pay)更新DTO
  *
  * @author fosin
- * @date 2023-05-11 22:49:44
+ * @date 2023-05-11
  */
 @Data
 @EqualsAndHashCode(callSuper = true)

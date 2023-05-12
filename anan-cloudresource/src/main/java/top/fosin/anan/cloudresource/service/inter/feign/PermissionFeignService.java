@@ -7,7 +7,7 @@ import top.fosin.anan.cloudresource.constant.FieldConstant;
 import top.fosin.anan.cloudresource.constant.PathPrefixConstant;
 import top.fosin.anan.cloudresource.constant.PathSuffixConstant;
 import top.fosin.anan.cloudresource.constant.ServiceConstant;
-import top.fosin.anan.cloudresource.entity.res.PermissionRespDTO;
+import top.fosin.anan.cloudresource.entity.res.PermissionDTO;
 import top.fosin.anan.cloudresource.service.PermissionFeignFallbackServiceImpl;
 import top.fosin.anan.data.result.MultResult;
 
@@ -31,7 +31,7 @@ public interface PermissionFeignService {
      * @return 应用权限列表
      */
     @GetMapping(PathSuffixConstant.SERVICE_CODE_VARIBALE)
-    MultResult<PermissionRespDTO> findByServiceCode(@PathVariable(FieldConstant.SERVICE_CODE) String serviceCode, @RequestParam(PathPrefixConstant.API_VERSION_NAME) String version);
+    MultResult<PermissionDTO> findByServiceCode(@PathVariable(FieldConstant.SERVICE_CODE) String serviceCode, @RequestParam(PathPrefixConstant.API_VERSION_NAME) String version);
 
     /**
      * 远程查询应用权限
@@ -41,5 +41,5 @@ public interface PermissionFeignService {
      * @return 应用权限列表
      */
     @PostMapping(value = PathSuffixConstant.SERVICE_CODES, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    MultResult<PermissionRespDTO> findByServiceCodes(@RequestBody List<String> serviceCodes, @RequestParam(PathPrefixConstant.API_VERSION_NAME) String version);
+    MultResult<PermissionDTO> findByServiceCodes(@RequestBody List<String> serviceCodes, @RequestParam(PathPrefixConstant.API_VERSION_NAME) String version);
 }

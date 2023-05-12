@@ -13,7 +13,7 @@ import top.fosin.anan.data.module.SortRule;
  * 系统通用字典表(anan_dictionary)通用查询DTO
  *
  * @author fosin
- * @date 2023-05-11 18:11:48
+ * @date 2023-05-11
  */
 @Data
 @ToString(callSuper = true)

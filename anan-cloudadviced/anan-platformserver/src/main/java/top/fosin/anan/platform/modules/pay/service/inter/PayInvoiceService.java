@@ -13,7 +13,7 @@ import top.fosin.anan.platform.modules.pay.po.PayInvoice;
  * 系统支付发票表(anan_pay_invoice)服务类
  *
  * @author fosin
- * @date 2023-05-11 22:57:02
+ * @date 2023-05-11
  */
 public interface PayInvoiceService extends
         ICreateJpaService<PayInvoiceCreateDTO, PayInvoiceDTO, Long, PayInvoice>,

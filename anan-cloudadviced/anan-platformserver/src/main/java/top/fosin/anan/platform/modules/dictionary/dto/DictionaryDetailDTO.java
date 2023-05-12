@@ -16,7 +16,7 @@ import top.fosin.anan.data.entity.Id;
  * 系统通用字典明细表(anan_dictionary_detail)DTO
  *
  * @author fosin
- * @date 2023-05-11 18:11:48
+ * @date 2023-05-11
  */
 @Data
 @ToString(callSuper = true)

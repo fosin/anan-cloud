@@ -16,7 +16,7 @@ import java.util.Date;
  * 系统用户表(anan_user)DTO
  *
  * @author fosin
- * @date 2023-05-02 21:31:48
+ * @date 2023-05-02
  */
 @Data
 @ToString(callSuper = true)

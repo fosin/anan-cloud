@@ -1,6 +1,6 @@
 package top.fosin.anan.platform.modules.version.service.inter;
 
-import top.fosin.anan.platform.modules.pub.service.inter.AnanPermissionService;
+import top.fosin.anan.platform.modules.permission.service.inter.PermissionBaseService;
 import top.fosin.anan.platform.modules.version.dto.VersionRolePermissionReqDto;
 import top.fosin.anan.platform.modules.version.dto.VersionRolePermissionRespDto;
 import top.fosin.anan.platform.modules.version.po.VersionRolePermission;
@@ -11,5 +11,5 @@ import top.fosin.anan.platform.modules.version.po.VersionRolePermission;
  * @author fosin
  * @date 2018-11-18 17:26:40
  */
-public interface VersionRolePermissionService extends AnanPermissionService<VersionRolePermissionReqDto, VersionRolePermissionRespDto, Long, VersionRolePermission> {
+public interface VersionRolePermissionService extends PermissionBaseService<VersionRolePermissionReqDto, VersionRolePermissionRespDto, Long, VersionRolePermission> {
 }

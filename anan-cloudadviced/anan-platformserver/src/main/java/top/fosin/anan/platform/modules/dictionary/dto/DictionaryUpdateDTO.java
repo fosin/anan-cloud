@@ -17,7 +17,7 @@ import javax.validation.constraints.Positive;
  * 系统通用字典表(anan_dictionary)更新DTO
  *
  * @author fosin
- * @date 2023-05-11 18:11:48
+ * @date 2023-05-11
  */
 @Data
 @EqualsAndHashCode(callSuper = true)

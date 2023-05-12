@@ -1,7 +1,7 @@
 package top.fosin.anan.platform.util;
 
 import top.fosin.anan.jpa.repository.IJpaRepository;
-import top.fosin.anan.platform.modules.pub.po.PermissionId;
+import top.fosin.anan.platform.modules.permission.po.PermissionId;
 
 import java.io.Serializable;
 import java.util.Collection;

@@ -13,7 +13,7 @@ import top.fosin.anan.platform.modules.pay.po.PayOrder;
  * 系统支付订单表(anan_pay_order)服务类
  *
  * @author fosin
- * @date 2023-05-11 22:57:03
+ * @date 2023-05-11
  */
 public interface PayOrderService extends
         ICreateJpaService<PayOrderCreateDTO, PayOrderDTO, Long, PayOrder>,

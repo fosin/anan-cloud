@@ -18,10 +18,10 @@ import org.springframework.web.bind.annotation.RestController;
  * 系统支付表(anan_pay)控制类
  *
  * @author fosin
- * @date 2023-05-11 22:49:44
+ * @date 2023-05-11
  */
 @RestController
-@Api(value = PathPrefixConstant.PAY, tags = "系统支付表(anan_pay)控制层API")
+@Api(value = PathPrefixConstant.PAY, tags = "支付管理")
 @RequestMapping(value = PathPrefixConstant.PAY, params = PathPrefixConstant.DEFAULT_VERSION_PARAM)
 public class PayController implements ICreateController<PayCreateDTO, Long>,
         IUpdateController<PayUpdateDTO, Long>,

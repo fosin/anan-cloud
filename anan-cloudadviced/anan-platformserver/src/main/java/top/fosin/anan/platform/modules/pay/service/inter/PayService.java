@@ -13,7 +13,7 @@ import top.fosin.anan.platform.modules.pay.po.Pay;
  * 系统支付表(anan_pay)服务类
  *
  * @author fosin
- * @date 2023-05-11 22:49:44
+ * @date 2023-05-11
  */
 public interface PayService extends 
         ICreateJpaService<PayCreateDTO, PayDTO, Long, Pay>,

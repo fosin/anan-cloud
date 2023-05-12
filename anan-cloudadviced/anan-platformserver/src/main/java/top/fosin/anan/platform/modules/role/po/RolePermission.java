@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.DynamicUpdate;
-import top.fosin.anan.platform.modules.pub.po.PermissionId;
+import top.fosin.anan.platform.modules.permission.po.PermissionId;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;

@@ -15,7 +15,7 @@ import java.util.Date;
  * 系统支付表(anan_pay)集合VO
  *
  * @author fosin
- * @date 2023-05-11 22:55:10
+ * @date 2023-05-11
  */
 @Data
 @ToString(callSuper = true)
