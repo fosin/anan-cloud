@@ -8,6 +8,8 @@ import net.devh.boot.grpc.server.service.GrpcService;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +27,10 @@ import top.fosin.anan.cloudresource.service.CurrentUserService;
 import top.fosin.anan.core.util.BeanUtil;
 import top.fosin.anan.core.util.RegexUtil;
 import top.fosin.anan.data.converter.translate.StringTranslateCacheUtil;
+import top.fosin.anan.data.entity.req.PageQuery;
+import top.fosin.anan.data.entity.res.TreeVO;
+import top.fosin.anan.data.result.PageResult;
+import top.fosin.anan.data.result.ResultUtils;
 import top.fosin.anan.platform.modules.organization.dao.OrgDao;
 import top.fosin.anan.platform.modules.organization.po.Organization;
 import top.fosin.anan.platform.modules.parameter.service.LocalOrganParameter;
@@ -33,12 +39,11 @@ import top.fosin.anan.platform.modules.user.dao.UserRoleDao;
 import top.fosin.anan.platform.modules.user.dto.UserPassRespDTO;
 import top.fosin.anan.platform.modules.user.po.User;
 import top.fosin.anan.platform.modules.user.po.UserRole;
+import top.fosin.anan.platform.modules.user.query.UserQuery;
 import top.fosin.anan.platform.modules.user.service.inter.UserService;
 import top.fosin.anan.redis.cache.AnanCacheManger;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.Path;
-import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.*;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
@@ -194,61 +199,61 @@ public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase impleme
         }
     }
 
-//    @Override
-//    public PageResult<UserRespDTO> findPage(PageQuery<?> PageQuery) {
-//        UserQuery params = (UserQuery) PageQuery.getParams();
-//        if (currentUserService.isSysAdminUser()) {
-//            return UserService.super.findPage(PageQuery);
-//        }
-//
-//        Specification<User> condition = (root, query, cb) -> {
-//            Path<String> usercodePath = root.get("usercode");
-//            Path<String> usernamePath = root.get("username");
-//            Path<String> phonePath = root.get("phone");
-//            Path<String> emailPath = root.get("email");
-//
-//            Long organizId = currentUserService.getAnanOrganizId();
-//            Organization organization = orgDao.findById(organizId).orElse(null);
-//
-//            Subquery<Integer> subQuery = query.subquery(Integer.class);
-//            //从哪张表查询
-//            Root<Organization> celluseRoot = subQuery.from(Organization.class);
-//            //查询出什么
-//            subQuery.select(celluseRoot.get(TreeVO.ID_NAME));
-//            //条件是什么
-//            Predicate p = cb.like(celluseRoot.get("code"), Objects.requireNonNull(organization, "通过organizId：" + organizId + "未能找到对应的数据!").getCode() + "%");
-//            subQuery.where(p);
-//
-//            Predicate defaultPredicate = cb.and(cb.notEqual(usercodePath, SystemConstant.ANAN_USER_CODE),
-//                    cb.in(root.get("organizId")).value(subQuery));
-//
-//            if (cn.hutool.core.bean.BeanUtil.isEmpty(params)) {
-//                return defaultPredicate;
-//            } else {
-//                String username = params.getUsername();
-//                String usercode = params.getUsercode();
-//                String phone = params.getPhone();
-//                String email = params.getEmail();
-//                if (!StringUtils.hasText(username)
-//                        && !StringUtils.hasText(usercode)
-//                        && !StringUtils.hasText(phone)
-//                        && !StringUtils.hasText(email)
-//                ) {
-//                    return defaultPredicate;
-//                }
-//                Predicate predicate = cb.or(cb.like(usernamePath, "%" + username + "%"),
-//                        cb.like(usercodePath, "%" + usercode + "%"),
-//                        cb.like(phonePath, "%" + phone + "%"),
-//                        cb.like(emailPath, "%" + email + "%"));
-//                return cb.and(defaultPredicate, predicate);
-//            }
-//        };
-//        //分页查找
-//        PageRequest pageable = toPage(PageQuery);
-//        Page<User> page = userDao.findAll(condition, pageable);
-//        return ResultUtils.success(page.getTotalElements(), page.getTotalPages(),
-//                BeanUtil.copyProperties(page.getContent(), UserRespDTO.class));
-//    }
+    @Override
+    public PageResult<UserRespDTO> findPage(PageQuery<?> PageQuery) {
+        UserQuery params = (UserQuery) PageQuery.getParams();
+        if (currentUserService.isSysAdminUser()) {
+            return UserService.super.findPage(PageQuery);
+        }
+
+        Specification<User> condition = (root, query, cb) -> {
+            Path<String> usercodePath = root.get("usercode");
+            Path<String> usernamePath = root.get("username");
+            Path<String> phonePath = root.get("phone");
+            Path<String> emailPath = root.get("email");
+
+            Long organizId = currentUserService.getOrganizId().orElseThrow(() -> new IllegalArgumentException("未找到当前用户的机构序号！"));
+            Organization organization = orgDao.findById(organizId).orElse(null);
+
+            Subquery<Integer> subQuery = query.subquery(Integer.class);
+            //从哪张表查询
+            Root<Organization> celluseRoot = subQuery.from(Organization.class);
+            //查询出什么
+            subQuery.select(celluseRoot.get(TreeVO.ID_NAME));
+            //条件是什么
+            Predicate p = cb.like(celluseRoot.get("code"), Objects.requireNonNull(organization, "通过organizId：" + organizId + "未能找到对应的数据!").getCode() + "%");
+            subQuery.where(p);
+
+            Predicate defaultPredicate = cb.and(cb.notEqual(usercodePath, SystemConstant.ANAN_USER_CODE),
+                    cb.in(root.get("organizId")).value(subQuery));
+
+            if (cn.hutool.core.bean.BeanUtil.isEmpty(params)) {
+                return defaultPredicate;
+            } else {
+                String username = params.getUsername();
+                String usercode = params.getUsercode();
+                String phone = params.getPhone();
+                String email = params.getEmail();
+                if (!StringUtils.hasText(username)
+                        && !StringUtils.hasText(usercode)
+                        && !StringUtils.hasText(phone)
+                        && !StringUtils.hasText(email)
+                ) {
+                    return defaultPredicate;
+                }
+                Predicate predicate = cb.or(cb.like(usernamePath, "%" + username + "%"),
+                        cb.like(usercodePath, "%" + usercode + "%"),
+                        cb.like(phonePath, "%" + phone + "%"),
+                        cb.like(emailPath, "%" + email + "%"));
+                return cb.and(defaultPredicate, predicate);
+            }
+        };
+        //分页查找
+        PageRequest pageable = toPage(PageQuery);
+        Page<User> page = userDao.findAll(condition, pageable);
+        return ResultUtils.success(page.getTotalElements(), page.getTotalPages(),
+                BeanUtil.copyProperties(page.getContent(), UserRespDTO.class));
+    }
 
     @Transactional(rollbackFor = Exception.class)
     @Override
@@ -275,7 +280,7 @@ public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase impleme
     public String resetPassword(Long id) {
         Assert.notNull(id, "用户ID不能为空!");
 
-        Long loginId = currentUserService.getAnanUserId();
+        Long loginId = currentUserService.getUserId().orElse(null);
         Assert.isTrue(!Objects.equals(loginId, id), "不能重置本人密码,请使用修改密码功能!");
         User user = userDao.findById(id).orElse(null);
         String password = getPassword();
@@ -305,13 +310,13 @@ public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase impleme
     }
 
     @Override
-    public List<UserRespDTO> findOtherUsersByRoleId(Long roleId) {
+    public List<UserRespDTO> listOtherUsersByRoleId(Long roleId) {
         return BeanUtil.copyProperties(
                 userDao.findOtherUsersByRoleId(roleId), UserRespDTO.class);
     }
 
     @Override
-    public List<UserRespDTO> findRoleUsersByRoleId(Long roleId) {
+    public List<UserRespDTO> listRoleUsersByRoleId(Long roleId) {
         return BeanUtil.copyProperties(
                 userDao.findRoleUsersByRoleId(roleId), UserRespDTO.class);
     }
@@ -328,9 +333,7 @@ public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase impleme
             entities = userDao.findAll();
         } else {
             if (topId < 1) {
-                Organization organiz =
-                        orgDao.findById(currentUserService.getAnanOrganizId()).orElseThrow(() -> new IllegalArgumentException("根据传入的机构编码没有找到任何数据!"));
-                topId = organiz.getTopId();
+                topId = currentUserService.getTopId().orElseThrow(() -> new IllegalArgumentException("未找到当前用户的机构序号！"));
             }
             entities = userDao.findByTopIdAndStatus(topId, status);
             entities.add(userDao.getReferenceById(SystemConstant.ANAN_USER_ID));

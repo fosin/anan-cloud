@@ -46,53 +46,8 @@ public class CurrentUserService
      * @return UserDetail
      */
 
-    public UserAuthDto getAnanUser() {
+    public UserAuthDto getUser() {
         return this.getUserDetail().getUser();
-    }
-
-    /**
-     * 得到当前登录用户的ID
-     *
-     * @return Long 前登录用户的ID
-     */
-    public Long getAnanUserId() {
-        return this.getAnanUser().getId();
-    }
-
-    /**
-     * 得到当前登录用户名
-     *
-     * @return Long 前登录用户名
-     */
-    public String getAnanUserName() {
-        return this.getAnanUser().getUsername();
-    }
-
-    /**
-     * 得到当前登录用户的机构ID
-     *
-     * @return Long 前登录用户的机构ID
-     */
-    public Long getAnanOrganizId() {
-        return this.getAnanUser().getOrganizId();
-    }
-
-    /**
-     * 得到当前登录用户的顶级机构ID
-     *
-     * @return Long 顶级机构ID
-     */
-    public Long getAnanTopId() {
-        return this.getAnanUser().getTopId();
-    }
-
-    /**
-     * 得到当前登录用户工号
-     *
-     * @return Long 前登录用户工号
-     */
-    public String getAnanUserCode() {
-        return this.getAnanUser().getUsercode();
     }
 
     /**
@@ -100,7 +55,7 @@ public class CurrentUserService
      *
      * @return Client
      */
-    public Client getAnanClient() {
+    public Client getClient() {
         return this.getUserDetail().getClient();
     }
 
@@ -110,7 +65,7 @@ public class CurrentUserService
      * @return boolean true：是 false：否
      */
     public boolean isSysAdminUser() {
-        return isSysAdminUser(this.getAnanUser().getUsercode());
+        return isSysAdminUser(this.getUser().getUsercode());
     }
 
     /**
@@ -146,7 +101,7 @@ public class CurrentUserService
      * @return boolean true：是 false：否
      */
     public boolean hasAdminRole() {
-        List<RoleReqDTO> userRoles = this.getAnanUser().getUserRoles();
+        List<RoleReqDTO> userRoles = this.getUser().getUserRoles();
         return userRoles.stream().anyMatch(userRole -> SystemConstant.ADMIN_ROLE_NAME.equals(userRole.getValue()));
     }
 
@@ -156,28 +111,28 @@ public class CurrentUserService
      * @return boolean true：是 false：否
      */
     public boolean hasSysAdminRole() {
-        List<RoleReqDTO> userRoles = this.getAnanUser().getUserRoles();
+        List<RoleReqDTO> userRoles = this.getUser().getUserRoles();
         return userRoles.stream().anyMatch(userRole -> SystemConstant.ANAN_ROLE_NAME.equals(userRole.getValue()));
     }
 
     @Override
     @NonNull
     public Optional<Long> getCurrentAuditor() {
-        return Optional.of(this.getAnanUserId());
+        return Optional.of(this.getUser().getId());
     }
 
     @Override
     public Optional<Long> getOrganizId() {
-        return Optional.of(this.getAnanOrganizId());
+        return Optional.of(this.getUser().getOrganizId());
     }
 
     @Override
     public Optional<Long> getTopId() {
-        return Optional.of(this.getAnanTopId());
+        return Optional.of(this.getUser().getTopId());
     }
 
     @Override
     public Optional<Long> getUserId() {
-        return Optional.of(this.getAnanUserId());
+        return Optional.of(this.getUser().getId());
     }
 }

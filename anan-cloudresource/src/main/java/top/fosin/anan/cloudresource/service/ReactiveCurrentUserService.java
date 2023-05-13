@@ -49,53 +49,8 @@ public class ReactiveCurrentUserService implements ReactiveAuditorAware<Long>, U
      * @return Mono<UserDetail>
      */
 
-    public Mono<UserAuthDto> getAnanUser() {
+    public Mono<UserAuthDto> getUser() {
         return this.getUserDetail().map(UserDetail::getUser);
-    }
-
-    /**
-     * 得到当前登录用户的ID
-     *
-     * @return Long 前登录用户的ID
-     */
-    public Mono<Long> getAnanUserId() {
-        return this.getAnanUser().map(UserAuthDto::getId);
-    }
-
-    /**
-     * 得到当前登录用户名
-     *
-     * @return Long 前登录用户名
-     */
-    public Mono<String> getAnanUserName() {
-        return this.getAnanUser().map(UserAuthDto::getUsername);
-    }
-
-    /**
-     * 得到当前登录用户的机构ID
-     *
-     * @return Long 前登录用户的机构ID
-     */
-    public Mono<Long> getAnanOrganizId() {
-        return this.getAnanUser().map(UserAuthDto::getOrganizId);
-    }
-
-    /**
-     * 得到当前登录用户的顶级机构ID
-     *
-     * @return Long 顶级机构ID
-     */
-    public Mono<Long> getAnanTopId() {
-        return this.getAnanUser().map(UserAuthDto::getTopId);
-    }
-
-    /**
-     * 得到当前登录用户工号
-     *
-     * @return Long 前登录用户工号
-     */
-    public Mono<String> getAnanUserCode() {
-        return this.getAnanUser().map(UserAuthDto::getUsercode);
     }
 
     /**
@@ -103,7 +58,7 @@ public class ReactiveCurrentUserService implements ReactiveAuditorAware<Long>, U
      *
      * @return Client
      */
-    public Mono<Client> getAnanClient() {
+    public Mono<Client> getClient() {
         return this.getUserDetail().map(UserDetail::getClient);
     }
 
@@ -113,7 +68,7 @@ public class ReactiveCurrentUserService implements ReactiveAuditorAware<Long>, U
      * @return boolean true：是 false：否
      */
     public Mono<Boolean> isSysAdminUser() {
-        return this.getAnanUser().map(dto -> isSysAdminUser(dto.getUsercode()));
+        return this.getUser().map(dto -> isSysAdminUser(dto.getUsercode()));
     }
 
     /**
@@ -149,7 +104,7 @@ public class ReactiveCurrentUserService implements ReactiveAuditorAware<Long>, U
      * @return boolean true：是 false：否
      */
     public Mono<Boolean> hasAdminRole() {
-        return this.getAnanUser()
+        return this.getUser()
                 .map(UserAuthDto::getUserRoles)
                 .flatMapMany(Flux::fromIterable)
                 .any(userRole -> SystemConstant.ADMIN_ROLE_NAME.equals(userRole.getValue()));
@@ -161,7 +116,7 @@ public class ReactiveCurrentUserService implements ReactiveAuditorAware<Long>, U
      * @return boolean true：是 false：否
      */
     public Mono<Boolean> hasSysAdminRole() {
-        return this.getAnanUser()
+        return this.getUser()
                 .map(UserAuthDto::getUserRoles)
                 .flatMapMany(Flux::fromIterable)
                 .any(userRole -> SystemConstant.ANAN_ROLE_NAME.equals(userRole.getValue()));
@@ -170,21 +125,21 @@ public class ReactiveCurrentUserService implements ReactiveAuditorAware<Long>, U
     @Override
     @NonNull
     public Mono<Long> getCurrentAuditor() {
-        return this.getAnanUserId();
+        return this.getUser().map(UserAuthDto::getId);
     }
 
     @Override
     public Mono<Long> getOrganizId() {
-        return this.getAnanOrganizId();
+        return this.getUser().map(UserAuthDto::getOrganizId);
     }
 
     @Override
     public Mono<Long> getTopId() {
-        return this.getAnanTopId();
+        return this.getUser().map(UserAuthDto::getTopId);
     }
 
     @Override
     public Mono<Long> getUserId() {
-        return this.getAnanUserId();
+        return this.getUser().map(UserAuthDto::getId);
     }
 }

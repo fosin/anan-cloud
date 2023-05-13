@@ -63,7 +63,7 @@ public class ParameterServiceImpl extends ParameterServiceGrpc.ParameterServiceI
 
         String name = params.getName();
         String search = "%" + (name == null ? "" : name) + "%";
-        Long organizId = currentUserService.getAnanOrganizId();
+        Long organizId = currentUserService.getOrganizId().orElseThrow(() -> new IllegalArgumentException("未找到当前用户的机构序号！"));
         boolean sysAdminUser = currentUserService.isSysAdminUser();
         int type = 2;
         String code = "";
@@ -280,7 +280,7 @@ public class ParameterServiceImpl extends ParameterServiceGrpc.ParameterServiceI
         boolean success;
         switch (Objects.requireNonNull(ParameterStatus.valueOf(entity.getStatus()))) {
             case Modified:
-                entity.setApplyBy(currentUserService.getAnanUser().getId());
+                entity.setApplyBy(currentUserService.getUser().getId());
                 entity.setApplyTime(new Date());
                 entity.setStatus(0);
                 success = ananCacheManger.put(PlatformRedisConstant.ANAN_PARAMETER, cacheKey, BeanUtil.copyProperties(entity, ParameterRespDTO.class));

@@ -45,7 +45,7 @@ public class RoleUserServiceImpl implements RoleUserService {
             role.setId(dto.getRoleId());
             userRole.setRole(role);
             if (dto.getOrganizId() == null) {
-                userRole.setOrganizId(currentUserService.getAnanOrganizId());
+                userRole.setOrganizId(currentUserService.getOrganizId().orElseThrow(() -> new IllegalArgumentException("未找到当前用户的机构序号！")));
             } else {
                 userRole.setOrganizId(dto.getOrganizId());
             }

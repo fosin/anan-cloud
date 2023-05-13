@@ -16,9 +16,9 @@ import java.util.List;
 @Validated
 public interface RoleService extends ISimpleJpaService<RoleReqDTO, RoleRespDTO, Long, Role> {
 
-    List<RoleRespDTO> findOtherUsersByRoleId(@Positive Long userId);
+    List<RoleRespDTO> listOtherUsersByRoleId(@Positive Long userId);
 
-    List<RoleRespDTO> findRoleUsersByRoleId(@Positive Long userId);
+    List<RoleRespDTO> listRoleUsersByRoleId(@Positive Long userId);
 
-    List<RoleRespDTO> findAllByOrganizId(@Positive Long organizId);
+    List<RoleRespDTO> listByOrganizId(@Positive Long organizId);
 }

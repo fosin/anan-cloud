@@ -158,7 +158,7 @@ public class UserController extends BaseController
             required = true, dataTypeClass = Long.class, paramType = "path")
     @GetMapping(value = "/roles" + PathSuffixConstant.USER_ID)
     public MultResult<RoleRespDTO> getUserRoles(@PathVariable(FieldConstant.USER_ID) Long userId) {
-        return ResultUtils.success(roleService.findRoleUsersByRoleId(userId));
+        return ResultUtils.success(roleService.listRoleUsersByRoleId(userId));
     }
 
     @ApiOperation("更新用户拥有的角色")
@@ -180,7 +180,7 @@ public class UserController extends BaseController
             required = true, dataTypeClass = Integer.class, paramType = "path")
     @GetMapping(value = "/otherRoles" + PathSuffixConstant.USER_ID)
     public MultResult<RoleRespDTO> getOtherRoles(@PathVariable(FieldConstant.USER_ID) Long userId) {
-        return ResultUtils.success(roleService.findOtherUsersByRoleId(userId));
+        return ResultUtils.success(roleService.listOtherUsersByRoleId(userId));
     }
 
     @GetMapping({"/list/organizId/{organizId}/{status}"})
@@ -194,9 +194,9 @@ public class UserController extends BaseController
 
     @GetMapping({"/list/topId/{topId}/{status}"})
     @ApiOperation("根据顶级机构ID查询其下所有用户")
-    @ApiImplicitParam(name = "topId", value = "顶级机构ID，传0表示默认查询当前用户的顶级机构序号",
+    @ApiImplicitParam(name = FieldConstant.TOP_ID, value = "顶级机构ID，传0表示默认查询当前用户的顶级机构序号",
             required = true, dataTypeClass = Long.class, paramType = "path")
-    public MultResult<UserRespDTO> listAllChildByTopId(@PathVariable("topId") Long topId,
+    public MultResult<UserRespDTO> listAllChildByTopId(@PathVariable(FieldConstant.TOP_ID) Long topId,
                                                        @PathVariable("status") Integer status) {
         return ResultUtils.success(userService.listAllChildByTopId(topId, status));
     }

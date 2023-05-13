@@ -115,12 +115,12 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public List<RoleRespDTO> findOtherUsersByRoleId(Long userId) {
+    public List<RoleRespDTO> listOtherUsersByRoleId(Long userId) {
         return BeanUtil.copyProperties(roleDao.findOtherRolesByUserId(userId), RoleRespDTO.class);
     }
 
     @Override
-    public List<RoleRespDTO> findRoleUsersByRoleId(Long userId) {
+    public List<RoleRespDTO> listRoleUsersByRoleId(Long userId) {
         return BeanUtil.copyProperties(roleDao.findUserRolesByUserId(userId), RoleRespDTO.class);
     }
 
@@ -138,7 +138,7 @@ public class RoleServiceImpl implements RoleService {
             Assert.notNull(params, "传入的分页信息不能为空!");
             Long organizId = params.getOrganizId();
             if (organizId == null || organizId < 1) {
-                organizId = currentUserService.getAnanOrganizId();
+                organizId = currentUserService.getOrganizId().orElseThrow(() -> new IllegalArgumentException("未找到当前用户的机构序号！"));
             }
             String name = params.getName();
             String value = params.getValue();
@@ -171,7 +171,7 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public List<RoleRespDTO> findAllByOrganizId(Long organizId) {
+    public List<RoleRespDTO> listByOrganizId(Long organizId) {
         Assert.notNull(organizId, "机构ID不能为空!");
         List<Role> entities;
         if (currentUserService.hasSysAdminRole()) {

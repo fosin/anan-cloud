@@ -31,7 +31,7 @@ public interface UserService extends
 
     String resetPassword(@Positive Long id);
 
-    List<UserRespDTO> findOtherUsersByRoleId(@Positive Long roleId);
+    List<UserRespDTO> listOtherUsersByRoleId(@Positive Long roleId);
 
-    List<UserRespDTO> findRoleUsersByRoleId(@Positive Long roleId);
+    List<UserRespDTO> listRoleUsersByRoleId(@Positive Long roleId);
 }

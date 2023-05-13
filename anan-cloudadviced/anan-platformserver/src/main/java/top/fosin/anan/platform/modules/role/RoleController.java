@@ -70,7 +70,7 @@ public class RoleController implements ISimpleController<RoleReqDTO, RoleRespDTO
             required = true, dataTypeClass = Long.class, paramType = "path")
     @GetMapping(value = "/users" + PathSuffixConstant.ROLE_ID)
     public MultResult<UserRespDTO> getRoleUsers(@PathVariable(FieldConstant.ROLE_ID) Long roleId) {
-        return ResultUtils.success(userService.findRoleUsersByRoleId(roleId));
+        return ResultUtils.success(userService.listRoleUsersByRoleId(roleId));
     }
 
     @ApiOperation(value = "根据角色ID更新角色拥有的用户", notes = "更新角色拥有的用户，此操作将先删除原用户集合，再新增新用户集合")
@@ -91,16 +91,16 @@ public class RoleController implements ISimpleController<RoleReqDTO, RoleRespDTO
     @ApiImplicitParam(name = FieldConstant.ROLE_ID, value = "角色ID,取值于Role.id",
             required = true, dataTypeClass = Long.class, paramType = "path")
     @GetMapping(value = "/otherUsers" + PathSuffixConstant.ROLE_ID)
-    public MultResult<UserRespDTO> getOtherUsers(@PathVariable(FieldConstant.ROLE_ID) Long roleId) throws AnanControllerException {
-        return ResultUtils.success(userService.findOtherUsersByRoleId(roleId));
+    public MultResult<UserRespDTO> listOtherUsersByRoleId(@PathVariable(FieldConstant.ROLE_ID) Long roleId) throws AnanControllerException {
+        return ResultUtils.success(userService.listOtherUsersByRoleId(roleId));
     }
 
     @GetMapping({"/list/organizId/{organizId}"})
     @ApiOperation("根据机构ID查询该机构及子机构的所有角色")
     @ApiImplicitParam(name = FieldConstant.ORGANIZ_ID, value = "机构序号",
             required = true, dataTypeClass = Long.class, paramType = "path")
-    public MultResult<RoleRespDTO> findAllByOrganizId(@PathVariable(FieldConstant.ORGANIZ_ID) Long organizId) {
-        return ResultUtils.success(roleService.findAllByOrganizId(organizId));
+    public MultResult<RoleRespDTO> listByOrganizId(@PathVariable(FieldConstant.ORGANIZ_ID) Long organizId) {
+        return ResultUtils.success(roleService.listByOrganizId(organizId));
     }
 
     @Override
