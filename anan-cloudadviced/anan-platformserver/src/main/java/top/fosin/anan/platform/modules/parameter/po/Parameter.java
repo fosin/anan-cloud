@@ -62,7 +62,7 @@ public class Parameter extends IdCreateUpdatePO<Long> {
     private String description;
 
     @Basic
-    @ApiModelProperty(value = "生效时间，该值由后台维护，更改数据时前端不需要关心")
+    @ApiModelProperty(value = "发布时间，该值由后台维护，更改数据时前端不需要关心")
     @Column(name = "apply_time")
     private Date applyTime;
 

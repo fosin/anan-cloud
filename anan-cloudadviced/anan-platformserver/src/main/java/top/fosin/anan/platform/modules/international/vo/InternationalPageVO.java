@@ -51,11 +51,11 @@ public class InternationalPageVO extends Id<Long> {
     private Date createTime;
 
     @Translate2String(service = UserGrpcServiceImpl.class, dicId = "")
-    @ApiModelProperty(value = "更新人")
+    @ApiModelProperty(value = "修改人")
     private Long updateBy;
 
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
-    @ApiModelProperty(value = "更新时间")
+    @ApiModelProperty(value = "修改时间")
     private Date updateTime;
 
 }

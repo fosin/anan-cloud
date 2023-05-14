@@ -177,12 +177,12 @@ public interface DefaultClaimNames {
     String ZONEINFO = "zoneinfo";
 
     /**
-     * 更新时间
+     * 修改时间
      */
     String UPDATE_TIME = "update_time";
 
     /**
-     * 更新人
+     * 修改人
      */
     String UPDATE_BY = "update_by";
 }

@@ -275,7 +275,7 @@ CREATE TABLE `anan_parameter` (
   `create_by` int(11) unsigned NOT NULL COMMENT '创建人',
   `update_time` datetime NOT NULL COMMENT '修改日期',
   `update_by` int(11) unsigned NOT NULL COMMENT '修改人',
-  `apply_time` datetime DEFAULT NULL COMMENT '生效日期',
+  `apply_time` datetime DEFAULT NULL COMMENT '发布时间',
   `apply_by` int(11) unsigned DEFAULT NULL COMMENT '创建人',
   `status` tinyint(3) unsigned NOT NULL COMMENT '参数状态：0=正常状态、1=修改状态、2=删除状态',
   `delete_by` int(11) unsigned DEFAULT NULL COMMENT '删除人',

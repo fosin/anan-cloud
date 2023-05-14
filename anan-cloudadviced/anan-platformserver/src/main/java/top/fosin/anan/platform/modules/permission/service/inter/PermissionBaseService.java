@@ -15,8 +15,8 @@ import java.util.List;
  * @author fosin
  * @date 2018-11-18 17:26:40
  */
-public interface PermissionBaseService<ReqDto extends ForeignKeyProp<ID> & IdProp<ID>, RespDto extends IdProp<ID>, ID extends Serializable, Entity>
-        extends ICrudBatchJpaService<ReqDto, RespDto, ID, Entity> {
+public interface PermissionBaseService<ReqDto extends ForeignKeyProp<ID> & IdProp<ID>, RespDto extends IdProp<ID>, ID extends Serializable, PO>
+        extends ICrudBatchJpaService<ReqDto, RespDto, ID, PO> {
     @Override
     default List<RespDto> createInBatch(Collection<ReqDto> reqDtos) {
         throw new UnsupportedOperationException("不支持批量创建操作！");

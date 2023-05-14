@@ -16,8 +16,8 @@ import top.fosin.anan.platform.modules.role.po.Role;
 import top.fosin.anan.platform.modules.role.po.RolePermission;
 import top.fosin.anan.platform.modules.version.dao.VersionRoleDao;
 import top.fosin.anan.platform.modules.version.dao.VersionRolePermissionDao;
-import top.fosin.anan.platform.modules.version.dto.VersionRolePermissionReqDto;
-import top.fosin.anan.platform.modules.version.dto.VersionRolePermissionRespDto;
+import top.fosin.anan.platform.modules.version.dto.VersionRolePermissionUpdateDTO;
+import top.fosin.anan.platform.modules.version.dto.VersionRolePermissionDTO;
 import top.fosin.anan.platform.modules.version.po.VersionRolePermission;
 import top.fosin.anan.platform.modules.version.service.inter.VersionRolePermissionService;
 import top.fosin.anan.platform.util.PermissionUtil;
@@ -46,7 +46,7 @@ public class VersionRolePermissionServiceImpl implements VersionRolePermissionSe
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public List<VersionRolePermissionRespDto> processInBatch(Long roleId, Collection<VersionRolePermissionReqDto> reqDtos, boolean... processAction) {
+    public List<VersionRolePermissionDTO> processInBatch(Long roleId, Collection<VersionRolePermissionUpdateDTO> reqDtos, boolean... processAction) {
         Assert.isTrue(reqDtos.stream().allMatch(entity -> entity.getRoleId().equals(roleId)), "需要更新的数据集中有与版本ID不匹配的数据!");
         versionRoleRepo.findById(roleId).ifPresent(versionRoleEntity -> {
             Long versionId = versionRoleEntity.getVersionId();
@@ -85,7 +85,7 @@ public class VersionRolePermissionServiceImpl implements VersionRolePermissionSe
             PermissionUtil.saveNewPermission(beforeVersionRolePermissions, afterVersionRolePermissions, versionRolePermissionRepo);
         });
 
-        return BeanUtil.copyProperties(reqDtos, VersionRolePermissionRespDto.class);
+        return BeanUtil.copyProperties(reqDtos, VersionRolePermissionDTO.class);
     }
 
     /**

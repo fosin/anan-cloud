@@ -5,8 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import top.fosin.anan.cloudresource.entity.req.RoleReqDTO;
-import top.fosin.anan.cloudresource.entity.res.UserRespDTO;
+import top.fosin.anan.cloudresource.entity.req.RoleUpdateDTO;
 
 import java.util.List;
 
@@ -25,7 +24,7 @@ public class UserAuthDto extends UserRespDTO {
     private static final long serialVersionUID = -38545495043403316L;
 
     @ApiModelProperty(value = "用户拥有的角色")
-    private List<RoleReqDTO> userRoles;
+    private List<RoleUpdateDTO> userRoles;
 
     @ApiModelProperty(value = "用户密码", example = "123456")
     private String password;

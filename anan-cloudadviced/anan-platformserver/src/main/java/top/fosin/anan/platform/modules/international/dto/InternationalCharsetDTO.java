@@ -41,11 +41,11 @@ public class InternationalCharsetDTO extends Id<Long> implements ForeignKeyProp<
     @ApiModelProperty(value = "创建时间")
     private Date createTime;
 
-    @ApiModelProperty(value = "更新人")
+    @ApiModelProperty(value = "修改人")
     private Long updateBy;
 
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
-    @ApiModelProperty(value = "更新时间")
+    @ApiModelProperty(value = "修改时间")
     private Date updateTime;
 
     @ApiModelProperty(value = "状态：0=启用，1=禁用", required = true, example = "Integer")

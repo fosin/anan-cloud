@@ -1,24 +1,32 @@
 package top.fosin.anan.platform.modules.role.service.inter;
 
-import org.springframework.validation.annotation.Validated;
-import top.fosin.anan.cloudresource.entity.req.RoleReqDTO;
-import top.fosin.anan.cloudresource.entity.res.RoleRespDTO;
-import top.fosin.anan.jpa.service.ISimpleJpaService;
+import top.fosin.anan.jpa.service.ICreateJpaService;
+import top.fosin.anan.jpa.service.IDeleteJpaService;
+import top.fosin.anan.jpa.service.IRetrieveJpaService;
+import top.fosin.anan.jpa.service.IUpdateJpaService;
+import top.fosin.anan.platform.modules.role.dto.RoleCreateDTO;
+import top.fosin.anan.platform.modules.role.dto.RoleDTO;
+import top.fosin.anan.cloudresource.entity.req.RoleUpdateDTO;
 import top.fosin.anan.platform.modules.role.po.Role;
 
 import javax.validation.constraints.Positive;
 import java.util.List;
 
 /**
+ * 系统角色表(anan_role)服务类
+ *
  * @author fosin
- * @date 2017/12/29
+ * @date 2023-05-14
  */
-@Validated
-public interface RoleService extends ISimpleJpaService<RoleReqDTO, RoleRespDTO, Long, Role> {
+public interface RoleService extends 
+        ICreateJpaService<RoleCreateDTO, RoleDTO, Long, Role>,
+        IRetrieveJpaService<RoleDTO, Long, Role>,
+        IUpdateJpaService<RoleUpdateDTO, Long, Role>,
+        IDeleteJpaService<Long, Role> {
+        List<RoleDTO> listOtherUsersByRoleId(@Positive Long userId);
 
-    List<RoleRespDTO> listOtherUsersByRoleId(@Positive Long userId);
+        List<RoleDTO> listRoleUsersByRoleId(@Positive Long userId);
 
-    List<RoleRespDTO> listRoleUsersByRoleId(@Positive Long userId);
-
-    List<RoleRespDTO> listByOrganizId(@Positive Long organizId);
+        List<RoleDTO> listByOrganizId(@Positive Long organizId);
 }
+

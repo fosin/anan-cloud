@@ -20,8 +20,8 @@ import top.fosin.anan.platform.modules.user.po.UserPermission;
 import top.fosin.anan.platform.modules.version.dao.VersionPermissionDao;
 import top.fosin.anan.platform.modules.version.dao.VersionRoleDao;
 import top.fosin.anan.platform.modules.version.dao.VersionRolePermissionDao;
-import top.fosin.anan.platform.modules.version.dto.VersionPermissionReqDto;
-import top.fosin.anan.platform.modules.version.dto.VersionPermissionRespDto;
+import top.fosin.anan.platform.modules.version.dto.VersionPermissionUpdateDTO;
+import top.fosin.anan.platform.modules.version.dto.VersionPermissionDTO;
 import top.fosin.anan.platform.modules.version.po.VersionPermission;
 import top.fosin.anan.platform.modules.version.po.VersionRole;
 import top.fosin.anan.platform.modules.version.po.VersionRolePermission;
@@ -55,7 +55,7 @@ public class VersionPermissionServiceImpl implements VersionPermissionService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public List<VersionPermissionRespDto> processInBatch(Long versionId, Collection<VersionPermissionReqDto> entities, boolean... processAction) {
+    public List<VersionPermissionDTO> processInBatch(Long versionId, Collection<VersionPermissionUpdateDTO> entities, boolean... processAction) {
         Assert.isTrue(entities.stream().allMatch(entity -> entity.getVersionId().equals(versionId)), "需要更新的数据集中有与版本ID不匹配的数据!");
 
         Collection<VersionPermission> afterVersionPermissions = BeanUtil.copyProperties(entities, VersionPermission.class);
@@ -116,7 +116,7 @@ public class VersionPermissionServiceImpl implements VersionPermissionService {
         PermissionUtil.deletePermission(beforeVersionPermissions, afterVersionPermissions, versionPermissionRepo);
         PermissionUtil.saveNewPermission(beforeVersionPermissions, afterVersionPermissions, versionPermissionRepo);
 
-        return BeanUtil.copyProperties(afterVersionPermissions, VersionPermissionRespDto.class);
+        return BeanUtil.copyProperties(afterVersionPermissions, VersionPermissionDTO.class);
     }
 
     /**

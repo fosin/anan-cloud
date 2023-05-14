@@ -33,5 +33,4 @@ public interface UserService extends
 
     List<UserRespDTO> listOtherUsersByRoleId(@Positive Long roleId);
 
-    List<UserRespDTO> listRoleUsersByRoleId(@Positive Long roleId);
 }

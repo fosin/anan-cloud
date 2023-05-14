@@ -10,7 +10,6 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import top.fosin.anan.cloudresource.constant.PlatformRedisConstant;
-import top.fosin.anan.cloudresource.entity.res.OrganizRespDTO;
 import top.fosin.anan.cloudresource.entity.res.OrganizTreeDTO;
 import top.fosin.anan.cloudresource.grpc.organiz.*;
 import top.fosin.anan.cloudresource.grpc.service.OrganizGrpcServiceImpl;
@@ -21,7 +20,9 @@ import top.fosin.anan.data.converter.translate.StringTranslateCacheUtil;
 import top.fosin.anan.data.service.ICrudBatchService;
 import top.fosin.anan.jpa.repository.IJpaRepository;
 import top.fosin.anan.platform.modules.organization.dao.OrgDao;
-import top.fosin.anan.platform.modules.organization.dto.OrgReqDto;
+import top.fosin.anan.platform.modules.organization.dto.OrganizationCreateDTO;
+import top.fosin.anan.platform.modules.organization.dto.OrganizationDTO;
+import top.fosin.anan.platform.modules.organization.dto.OrganizationUpdateDTO;
 import top.fosin.anan.platform.modules.organization.po.Organization;
 import top.fosin.anan.platform.modules.organization.service.inter.OrgService;
 import top.fosin.anan.redis.cache.AnanCacheManger;
@@ -45,7 +46,7 @@ public class OrgServiceImpl extends OrganizServiceGrpc.OrganizServiceImplBase im
     private final AnanCacheManger ananCacheManger;
 
     @Override
-    public OrganizRespDTO create(OrgReqDto reqDto) {
+    public OrganizationDTO create(OrganizationCreateDTO reqDto) {
         Organization createEntity = new Organization();
         BeanUtil.copyProperties(reqDto, createEntity);
         Long pid = reqDto.getPid();
@@ -64,13 +65,13 @@ public class OrgServiceImpl extends OrganizServiceGrpc.OrganizServiceImplBase im
             result.setTopId(result.getId());
             result = orgDao.save(result);
         }
-        OrganizRespDTO organizRespDTO = BeanUtil.copyProperties(result, OrganizRespDTO.class);
+        OrganizationDTO organizRespDTO = BeanUtil.copyProperties(result, OrganizationDTO.class);
         ananCacheManger.put(PlatformRedisConstant.ANAN_ORGANIZATION, organizRespDTO.getId() + "", organizRespDTO);
         return organizRespDTO;
     }
 
     @Override
-    public void update(OrgReqDto updateDto, String[] ignoreProperties) {
+    public void update(OrganizationUpdateDTO updateDto, String[] ignoreProperties) {
         Long id = updateDto.getId();
         Assert.notNull(id, "无效的字典代码code");
         Organization updateEntity = orgDao.findById(id).orElseThrow(() -> new IllegalArgumentException("根据传入的机构序号" + id + "在数据库中未能找到对于数据!"));
@@ -89,8 +90,8 @@ public class OrgServiceImpl extends OrganizServiceGrpc.OrganizServiceImplBase im
     }
 
     @Override
-    public OrganizRespDTO findOneById(Long id, boolean... findRefs) {
-        OrganizRespDTO respDTO = ananCacheManger.get(PlatformRedisConstant.ANAN_ORGANIZATION, id + "", OrganizRespDTO.class);
+    public OrganizationDTO findOneById(Long id, boolean... findRefs) {
+        OrganizationDTO respDTO = ananCacheManger.get(PlatformRedisConstant.ANAN_ORGANIZATION, id + "", OrganizationDTO.class);
         if (respDTO == null) {
             respDTO = OrgService.super.findOneById(id, findRefs);
             ananCacheManger.put(PlatformRedisConstant.ANAN_ORGANIZATION, id + "", respDTO);
@@ -165,14 +166,14 @@ public class OrgServiceImpl extends OrganizServiceGrpc.OrganizServiceImplBase im
     @Override
     public void findOneById(OrganizIdReq request, StreamObserver<OrganizResp> responseObserver) {
         long id = request.getId();
-        OrganizRespDTO respDTO = this.findOneById(id);
+        OrganizationDTO respDTO = this.findOneById(id);
         OrganizResp organizResp = toGrpcResp(respDTO);
         responseObserver.onNext(organizResp);
         responseObserver.onCompleted();
     }
 
     @NotNull
-    private OrganizResp toGrpcResp(OrganizRespDTO dto) {
+    private OrganizResp toGrpcResp(OrganizationDTO dto) {
         return OrganizResp.newBuilder()
                 .setCode(dto.getCode())
                 .setName(dto.getName())

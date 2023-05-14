@@ -17,8 +17,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 import top.fosin.anan.cloudresource.constant.PlatformRedisConstant;
-import top.fosin.anan.cloudresource.entity.req.ParameterReqDTO;
-import top.fosin.anan.cloudresource.entity.res.ParameterRespDTO;
+import top.fosin.anan.cloudresource.entity.req.ParameterCreateDTO;
+import top.fosin.anan.cloudresource.entity.res.ParameterDTO;
+import top.fosin.anan.cloudresource.entity.req.ParameterUpdateDTO;
 import top.fosin.anan.cloudresource.grpc.parameter.*;
 import top.fosin.anan.cloudresource.grpc.util.StringUtil;
 import top.fosin.anan.cloudresource.parameter.ParameterStatus;
@@ -33,6 +34,7 @@ import top.fosin.anan.platform.modules.organization.dao.OrgDao;
 import top.fosin.anan.platform.modules.organization.po.Organization;
 import top.fosin.anan.platform.modules.parameter.dao.ParameterDao;
 import top.fosin.anan.platform.modules.parameter.po.Parameter;
+import top.fosin.anan.platform.modules.parameter.query.ParameterQuery;
 import top.fosin.anan.platform.modules.parameter.service.inter.ParameterService;
 import top.fosin.anan.redis.cache.AnanCacheManger;
 
@@ -58,8 +60,8 @@ public class ParameterServiceImpl extends ParameterServiceGrpc.ParameterServiceI
     private final AnanCacheManger ananCacheManger;
 
     @Override
-    public PageResult<ParameterRespDTO> findPage(PageQuery<?> PageQuery) {
-        ParameterReqDTO params = (ParameterReqDTO) PageQuery.getParams();
+    public PageResult<ParameterDTO> findPage(PageQuery<?> PageQuery) {
+        ParameterQuery params = (ParameterQuery) PageQuery.getParams();
 
         String name = params.getName();
         String search = "%" + (name == null ? "" : name) + "%";
@@ -78,17 +80,17 @@ public class ParameterServiceImpl extends ParameterServiceGrpc.ParameterServiceI
         PageRequest pageable = toPage(PageQuery);
         Page<Parameter> page = parameterDao.findPage(search, code, type, pageable);
         return ResultUtils.success(page.getTotalElements(), page.getTotalPages(),
-                BeanUtil.copyProperties(page.getContent(), ParameterRespDTO.class));
+                BeanUtil.copyProperties(page.getContent(), ParameterDTO.class));
     }
 
     @Override
-    public void postCreate(ParameterReqDTO reqDto, ParameterRespDTO respDto) {
+    public void postCreate(ParameterCreateDTO reqDto, ParameterDTO respDto) {
         ananCacheManger.put(PlatformRedisConstant.ANAN_PARAMETER, getCacheKey(respDto), respDto);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void update(ParameterReqDTO reqDto, String[] ignoreProperties) {
+    public void update(ParameterUpdateDTO reqDto, String[] ignoreProperties) {
         Long id = reqDto.getId();
         Assert.notNull(id, "ID不能为空!");
         Parameter cEntity = parameterDao.findById(id)
@@ -105,7 +107,7 @@ public class ParameterServiceImpl extends ParameterServiceGrpc.ParameterServiceI
         //如果修改了type、scope、name则需要删除以前的缓存并设置新缓存
         if (!oldCacheKey.equals(newCacheKey)) {
             //新key设置旧值，需要发布以后才刷新缓存换成本次更新的新值
-            ParameterRespDTO respDto = ananCacheManger.get(PlatformRedisConstant.ANAN_PARAMETER, oldCacheKey, ParameterRespDTO.class);
+            ParameterDTO respDto = ananCacheManger.get(PlatformRedisConstant.ANAN_PARAMETER, oldCacheKey, ParameterDTO.class);
             if (respDto != null) {
                 ananCacheManger.put(PlatformRedisConstant.ANAN_PARAMETER, newCacheKey, respDto);
             }
@@ -170,7 +172,7 @@ public class ParameterServiceImpl extends ParameterServiceGrpc.ParameterServiceI
         return getCacheKey(entity.getType(), entity.getScope(), entity.getName());
     }
 
-    public String getCacheKey(ParameterRespDTO dto) {
+    public String getCacheKey(ParameterDTO dto) {
         return getCacheKey(dto.getType(), dto.getScope(), dto.getName());
     }
 
@@ -182,16 +184,16 @@ public class ParameterServiceImpl extends ParameterServiceGrpc.ParameterServiceI
     }
 
     @Override
-    public ParameterRespDTO getParameter(Integer type, String scope, String name) {
+    public ParameterDTO getParameter(Integer type, String scope, String name) {
         String cacheKey = getCacheKey(type, scope, name);
-        ParameterRespDTO respDto = ananCacheManger.get(PlatformRedisConstant.ANAN_PARAMETER, cacheKey, ParameterRespDTO.class);
+        ParameterDTO respDto = ananCacheManger.get(PlatformRedisConstant.ANAN_PARAMETER, cacheKey, ParameterDTO.class);
         if (respDto == null) {
             Parameter entity = findByTypeAndScopeAndName(type, scope, name);
             //因为参数会逐级上上级机构查找，为减少没有必要的查询，该代码为解决Spring Cache默认不缓存null值问题
             if (entity == null) {
-                respDto = new ParameterRespDTO();
+                respDto = new ParameterDTO();
             } else {
-                respDto = BeanUtil.copyProperties(entity, ParameterRespDTO.class);
+                respDto = BeanUtil.copyProperties(entity, ParameterDTO.class);
                 ananCacheManger.put(PlatformRedisConstant.ANAN_PARAMETER, cacheKey, respDto);
             }
         }
@@ -206,14 +208,14 @@ public class ParameterServiceImpl extends ParameterServiceGrpc.ParameterServiceI
      * @return 参数
      */
     @Override
-    public ParameterRespDTO getNearestParameter(int type, String scope, String name) {
+    public ParameterDTO getNearestParameter(int type, String scope, String name) {
         String cacheKey = getCacheKey(type, scope, name);
-        ParameterRespDTO respDto = ananCacheManger.get(PlatformRedisConstant.ANAN_PARAMETER, cacheKey, ParameterRespDTO.class);
+        ParameterDTO respDto = ananCacheManger.get(PlatformRedisConstant.ANAN_PARAMETER, cacheKey, ParameterDTO.class);
         if (respDto == null) {
             Parameter parameter = findByTypeAndScopeAndName(type, scope, name);
             boolean finded = parameter != null && parameter.getId() != null;
             if (finded) {
-                respDto = BeanUtil.copyProperties(parameter, ParameterRespDTO.class);
+                respDto = BeanUtil.copyProperties(parameter, ParameterDTO.class);
                 ananCacheManger.put(PlatformRedisConstant.ANAN_PARAMETER, cacheKey, respDto);
             } else {
                 //parameter为空表示没有参数记录，则依次向上找父机构的参数
@@ -253,7 +255,7 @@ public class ParameterServiceImpl extends ParameterServiceGrpc.ParameterServiceI
         try {
             rc = getNearestParameter(type, scope, name).getValue();
         } catch (IllegalArgumentException e) {
-            ParameterReqDTO reqDto = new ParameterReqDTO();
+            ParameterCreateDTO reqDto = new ParameterCreateDTO();
             reqDto.setType(type);
             reqDto.setScope(scope);
             reqDto.setName(name);
@@ -261,7 +263,7 @@ public class ParameterServiceImpl extends ParameterServiceGrpc.ParameterServiceI
             reqDto.setValue(defaultValue);
             reqDto.setDescription(description);
             reqDto.setStatus(0);
-            ParameterRespDTO respDto = processCreate(reqDto);
+            ParameterDTO respDto = processCreate(reqDto);
             rc = respDto.getValue();
             log.debug("报异常说明没有找到任何相关参数，则需要创建一个：" + respDto);
         }
@@ -283,7 +285,7 @@ public class ParameterServiceImpl extends ParameterServiceGrpc.ParameterServiceI
                 entity.setApplyBy(currentUserService.getUser().getId());
                 entity.setApplyTime(new Date());
                 entity.setStatus(0);
-                success = ananCacheManger.put(PlatformRedisConstant.ANAN_PARAMETER, cacheKey, BeanUtil.copyProperties(entity, ParameterRespDTO.class));
+                success = ananCacheManger.put(PlatformRedisConstant.ANAN_PARAMETER, cacheKey, BeanUtil.copyProperties(entity, ParameterDTO.class));
                 if (success) {
                     parameterDao.save(entity);
                 }
@@ -301,7 +303,7 @@ public class ParameterServiceImpl extends ParameterServiceGrpc.ParameterServiceI
                 }
                 break;
             default:
-                success = ananCacheManger.put(PlatformRedisConstant.ANAN_PARAMETER, cacheKey, BeanUtil.copyProperties(entity, ParameterRespDTO.class));
+                success = ananCacheManger.put(PlatformRedisConstant.ANAN_PARAMETER, cacheKey, BeanUtil.copyProperties(entity, ParameterDTO.class));
         }
         return success;
     }
@@ -361,30 +363,29 @@ public class ParameterServiceImpl extends ParameterServiceGrpc.ParameterServiceI
 
     @Override
     public void getParameter(ParameterThreeArgsReq request, StreamObserver<ParameterResp> responseObserver) {
-        ParameterRespDTO parameter = getParameter(request.getType(), request.getScope(), request.getName());
+        ParameterDTO parameter = getParameter(request.getType(), request.getScope(), request.getName());
         toGrpcResp(responseObserver, parameter);
     }
 
     @Override
     public void getNearestParameter(ParameterThreeArgsReq request, StreamObserver<ParameterResp> responseObserver) {
-        ParameterRespDTO parameter = getNearestParameter(request.getType(), request.getScope(), request.getName());
+        ParameterDTO parameter = getNearestParameter(request.getType(), request.getScope(), request.getName());
         toGrpcResp(responseObserver, parameter);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void processUpdate(ParameterReq request, StreamObserver<Empty> responseObserver) {
-        ParameterReqDTO req = toParameterReqDto(request);
+        ParameterUpdateDTO req = toParameterReqDto(request);
         processUpdate(req);
         responseObserver.onNext(Empty.getDefaultInstance());
         responseObserver.onCompleted();
     }
 
     @NotNull
-    private ParameterReqDTO toParameterReqDto(ParameterReq request) {
-        ParameterReqDTO req = new ParameterReqDTO();
+    private ParameterUpdateDTO toParameterReqDto(ParameterReq request) {
+        ParameterUpdateDTO req = new ParameterUpdateDTO();
         req.setStatus(request.getStatus());
-        req.setApplyTime(new Date(request.getApplyTime().getSeconds() * 1000));
         req.setDescription(request.getDescription());
         req.setValue(request.getValue());
         req.setDefaultValue(request.getDefaultValue());
@@ -394,7 +395,7 @@ public class ParameterServiceImpl extends ParameterServiceGrpc.ParameterServiceI
         return req;
     }
 
-    private void toGrpcResp(StreamObserver<ParameterResp> responseObserver, ParameterRespDTO parameter) {
+    private void toGrpcResp(StreamObserver<ParameterResp> responseObserver, ParameterDTO parameter) {
         ParameterResp parameterResp = ParameterResp.newBuilder()
                 .setId(parameter.getId())
                 .setStatus(parameter.getStatus())

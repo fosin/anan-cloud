@@ -316,12 +316,6 @@ public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase impleme
     }
 
     @Override
-    public List<UserRespDTO> listRoleUsersByRoleId(Long roleId) {
-        return BeanUtil.copyProperties(
-                userDao.findRoleUsersByRoleId(roleId), UserRespDTO.class);
-    }
-
-    @Override
     public List<UserRespDTO> listAllChildByTopId(Long topId, Integer status) {
         List<User> entities = listAllChildByTopIdReal(topId, status);
         return BeanUtil.copyProperties(entities, UserRespDTO.class);

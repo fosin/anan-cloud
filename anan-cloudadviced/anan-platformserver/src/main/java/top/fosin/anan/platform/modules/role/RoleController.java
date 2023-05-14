@@ -2,104 +2,54 @@ package top.fosin.anan.platform.modules.role;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import top.fosin.anan.cloudresource.constant.FieldConstant;
 import top.fosin.anan.cloudresource.constant.PathPrefixConstant;
-import top.fosin.anan.cloudresource.constant.PathSuffixConstant;
-import top.fosin.anan.cloudresource.entity.req.RoleReqDTO;
-import top.fosin.anan.cloudresource.entity.res.RolePermissionRespDTO;
-import top.fosin.anan.cloudresource.entity.res.RoleRespDTO;
-import top.fosin.anan.cloudresource.entity.res.UserRespDTO;
-import top.fosin.anan.core.exception.AnanControllerException;
-import top.fosin.anan.data.controller.ISimpleController;
+import top.fosin.anan.cloudresource.entity.req.RoleUpdateDTO;
+import top.fosin.anan.data.controller.ICreateController;
+import top.fosin.anan.data.controller.IDeleteController;
+import top.fosin.anan.data.controller.IRetrieveController;
+import top.fosin.anan.data.controller.IUpdateController;
 import top.fosin.anan.data.result.MultResult;
 import top.fosin.anan.data.result.ResultUtils;
-import top.fosin.anan.data.result.SingleResult;
-import top.fosin.anan.platform.modules.role.dto.RolePermissionReqDto;
-import top.fosin.anan.platform.modules.role.dto.RoleUserReqDto;
-import top.fosin.anan.platform.modules.role.service.inter.RolePermissionService;
+import top.fosin.anan.platform.modules.role.dto.RoleCreateDTO;
+import top.fosin.anan.platform.modules.role.dto.RoleDTO;
+import top.fosin.anan.platform.modules.role.query.RoleQuery;
 import top.fosin.anan.platform.modules.role.service.inter.RoleService;
-import top.fosin.anan.platform.modules.role.service.inter.RoleUserService;
-import top.fosin.anan.platform.modules.user.service.inter.UserService;
+import top.fosin.anan.platform.modules.role.vo.RoleListVO;
+import top.fosin.anan.platform.modules.role.vo.RolePageVO;
+import top.fosin.anan.platform.modules.role.vo.RoleVO;
 
-import java.util.List;
 
 /**
- * 角色控制器
+ * 系统角色表(anan_role)控制类
  *
  * @author fosin
+ * @date 2023-05-14
  */
 @RestController
 @RequestMapping(value = PathPrefixConstant.ROLE, params = PathPrefixConstant.DEFAULT_VERSION_PARAM)
 @Api(value = PathPrefixConstant.ROLE, tags = "角色管理")
-@AllArgsConstructor
-public class RoleController implements ISimpleController<RoleReqDTO, RoleRespDTO, Long> {
-
+public class RoleController
+        implements ICreateController<RoleCreateDTO, Long>,
+        IRetrieveController<RoleQuery, RoleVO, RoleListVO, RolePageVO, Long>,
+        IUpdateController<RoleUpdateDTO, Long>,
+        IDeleteController<Long> {
     private final RoleService roleService;
-    private final UserService userService;
-    private final RolePermissionService rolePermissionService;
-    private final RoleUserService roleUserService;
 
-    @ApiOperation("根据角色ID获取角色权限")
-    @ApiImplicitParam(name = FieldConstant.ROLE_ID, value = "角色ID,取值于Role.id",
-            required = true, dataTypeClass = Long.class, paramType = "path")
-    @GetMapping(value = "/permissions" + PathSuffixConstant.ROLE_ID)
-    public MultResult<RolePermissionRespDTO> permissions(@PathVariable(FieldConstant.ROLE_ID) Long roleId) {
-        return ResultUtils.success(rolePermissionService.listByForeingKey(roleId));
-    }
-
-    @ApiOperation(value = "根据角色ID更新角色权限", notes = "根据角色ID更新角色权限，此操作将先删除原权限，再新增新权限")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "reqDtos", value = "角色权限集合(List<RolePermission>)",
-                    required = true, dataTypeClass = List.class, paramType = "body"),
-            @ApiImplicitParam(name = FieldConstant.ROLE_ID, value = "角色ID,取值于Role.id",
-                    required = true, dataTypeClass = Long.class, paramType = "path")
-    })
-    @PutMapping(value = "/permissions" + PathSuffixConstant.ROLE_ID)
-    public MultResult<RolePermissionRespDTO> permissions(
-            @RequestBody List<RolePermissionReqDto> reqDtos,
-            @PathVariable(FieldConstant.ROLE_ID) Long roleId) {
-        return ResultUtils.success(rolePermissionService.processInBatch(roleId, reqDtos, false));
-    }
-
-    @ApiOperation("根据角色序号查找该角色所有用户信息")
-    @ApiImplicitParam(name = FieldConstant.ROLE_ID, value = "角色ID,取值于Role.id",
-            required = true, dataTypeClass = Long.class, paramType = "path")
-    @GetMapping(value = "/users" + PathSuffixConstant.ROLE_ID)
-    public MultResult<UserRespDTO> getRoleUsers(@PathVariable(FieldConstant.ROLE_ID) Long roleId) {
-        return ResultUtils.success(userService.listRoleUsersByRoleId(roleId));
-    }
-
-    @ApiOperation(value = "根据角色ID更新角色拥有的用户", notes = "更新角色拥有的用户，此操作将先删除原用户集合，再新增新用户集合")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "reqDtos", value = "角色用户集合(List<RoleUserReqDto>)",
-                    required = true, dataTypeClass = List.class, paramType = "body"),
-            @ApiImplicitParam(name = FieldConstant.ROLE_ID, value = "角色ID,取值于Role.id",
-                    required = true, dataTypeClass = Long.class, paramType = "path"),
-    })
-    @PutMapping(value = "/users" + PathSuffixConstant.ROLE_ID)
-    public SingleResult<Boolean> putRoleUsers(@RequestBody List<RoleUserReqDto> reqDtos,
-                                              @PathVariable(FieldConstant.ROLE_ID) Long roleId) {
-        roleUserService.processInBatch(roleId, reqDtos);
-        return ResultUtils.success(true);
-    }
-
-    @ApiOperation("根据用户序号查找用户目前不拥有的所有角色信息")
-    @ApiImplicitParam(name = FieldConstant.ROLE_ID, value = "角色ID,取值于Role.id",
-            required = true, dataTypeClass = Long.class, paramType = "path")
-    @GetMapping(value = "/otherUsers" + PathSuffixConstant.ROLE_ID)
-    public MultResult<UserRespDTO> listOtherUsersByRoleId(@PathVariable(FieldConstant.ROLE_ID) Long roleId) throws AnanControllerException {
-        return ResultUtils.success(userService.listOtherUsersByRoleId(roleId));
+    public RoleController(RoleService roleService) {
+        this.roleService = roleService;
     }
 
     @GetMapping({"/list/organizId/{organizId}"})
     @ApiOperation("根据机构ID查询该机构及子机构的所有角色")
     @ApiImplicitParam(name = FieldConstant.ORGANIZ_ID, value = "机构序号",
             required = true, dataTypeClass = Long.class, paramType = "path")
-    public MultResult<RoleRespDTO> listByOrganizId(@PathVariable(FieldConstant.ORGANIZ_ID) Long organizId) {
+    public MultResult<RoleDTO> listByOrganizId(@PathVariable(FieldConstant.ORGANIZ_ID) Long organizId) {
         return ResultUtils.success(roleService.listByOrganizId(organizId));
     }
 

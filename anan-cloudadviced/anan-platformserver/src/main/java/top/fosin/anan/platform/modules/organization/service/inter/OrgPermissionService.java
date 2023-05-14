@@ -1,8 +1,8 @@
 package top.fosin.anan.platform.modules.organization.service.inter;
 
 import top.fosin.anan.jpa.service.ICrudBatchJpaService;
-import top.fosin.anan.platform.modules.organization.dto.OrgPermissionReqDto;
-import top.fosin.anan.platform.modules.organization.dto.OrgPermissionRespDto;
+import top.fosin.anan.platform.modules.organization.dto.OrganizationPermissionDTO;
+import top.fosin.anan.platform.modules.organization.dto.OrganizationPermissionUpdateDTO;
 import top.fosin.anan.platform.modules.organization.po.OrganizationPermission;
 
 /**
@@ -12,5 +12,5 @@ import top.fosin.anan.platform.modules.organization.po.OrganizationPermission;
  * @date 2018-11-18 17:26:40
  */
 public interface OrgPermissionService extends
-        ICrudBatchJpaService<OrgPermissionReqDto, OrgPermissionRespDto, Long, OrganizationPermission> {
+        ICrudBatchJpaService<OrganizationPermissionUpdateDTO, OrganizationPermissionDTO, Long, OrganizationPermission> {
 }

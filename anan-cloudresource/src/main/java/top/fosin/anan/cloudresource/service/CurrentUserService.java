@@ -7,9 +7,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.Assert;
 import top.fosin.anan.cloudresource.constant.SystemConstant;
 import top.fosin.anan.cloudresource.entity.Client;
-import top.fosin.anan.cloudresource.entity.res.UserAuthDto;
 import top.fosin.anan.cloudresource.entity.UserDetail;
-import top.fosin.anan.cloudresource.entity.req.RoleReqDTO;
+import top.fosin.anan.cloudresource.entity.req.RoleUpdateDTO;
+import top.fosin.anan.cloudresource.entity.res.UserAuthDto;
 import top.fosin.anan.data.aware.OrganizAware;
 import top.fosin.anan.data.aware.UserAware;
 
@@ -101,7 +101,7 @@ public class CurrentUserService
      * @return boolean true：是 false：否
      */
     public boolean hasAdminRole() {
-        List<RoleReqDTO> userRoles = this.getUser().getUserRoles();
+        List<RoleUpdateDTO> userRoles = this.getUser().getUserRoles();
         return userRoles.stream().anyMatch(userRole -> SystemConstant.ADMIN_ROLE_NAME.equals(userRole.getValue()));
     }
 
@@ -111,7 +111,7 @@ public class CurrentUserService
      * @return boolean true：是 false：否
      */
     public boolean hasSysAdminRole() {
-        List<RoleReqDTO> userRoles = this.getUser().getUserRoles();
+        List<RoleUpdateDTO> userRoles = this.getUser().getUserRoles();
         return userRoles.stream().anyMatch(userRole -> SystemConstant.ANAN_ROLE_NAME.equals(userRole.getValue()));
     }
 

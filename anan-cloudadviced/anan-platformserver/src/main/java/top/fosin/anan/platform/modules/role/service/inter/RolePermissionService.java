@@ -1,15 +1,17 @@
 package top.fosin.anan.platform.modules.role.service.inter;
 
-
-import top.fosin.anan.cloudresource.entity.res.RolePermissionRespDTO;
 import top.fosin.anan.jpa.service.ICrudBatchJpaService;
-import top.fosin.anan.platform.modules.role.dto.RolePermissionReqDto;
+import top.fosin.anan.platform.modules.role.dto.RolePermissionDTO;
+import top.fosin.anan.platform.modules.role.dto.RolePermissionUpdateDTO;
 import top.fosin.anan.platform.modules.role.po.RolePermission;
 
 /**
+ * 系统角色权限表(anan_role_permission)服务类
+ *
  * @author fosin
- * @date 2017/12/29
+ * @date 2023-05-14
  */
 public interface RolePermissionService extends
-        ICrudBatchJpaService<RolePermissionReqDto, RolePermissionRespDTO, Long, RolePermission> {
+        ICrudBatchJpaService<RolePermissionUpdateDTO, RolePermissionDTO, Long, RolePermission> {
 }
+

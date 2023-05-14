@@ -5,8 +5,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import top.fosin.anan.cloudresource.constant.PathPrefixConstant;
 import top.fosin.anan.cloudresource.constant.ServiceConstant;
-import top.fosin.anan.cloudresource.entity.req.ParameterReqDTO;
-import top.fosin.anan.cloudresource.entity.res.ParameterRespDTO;
+import top.fosin.anan.cloudresource.entity.req.ParameterCreateDTO;
+import top.fosin.anan.cloudresource.entity.res.ParameterDTO;
+import top.fosin.anan.cloudresource.entity.req.ParameterUpdateDTO;
 import top.fosin.anan.cloudresource.service.ParameterFeignFallbackServiceImpl;
 import top.fosin.anan.data.constant.PathConstant;
 import top.fosin.anan.data.entity.res.TreeVO;
@@ -32,23 +33,23 @@ public interface ParameterFeignService {
 
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    SingleResult<ParameterRespDTO> processCreate(@RequestBody ParameterReqDTO reqDto);
+    SingleResult<ParameterDTO> processCreate(@RequestBody ParameterCreateDTO reqDto);
 
     @PutMapping()
-    void processUpdate(@RequestBody ParameterReqDTO reqDto);
+    void processUpdate(@RequestBody ParameterUpdateDTO reqDto);
 
     @GetMapping(value = PATH_3ARGS)
-    SingleResult<ParameterRespDTO> getParameter(@RequestParam("type") Integer type,
+    SingleResult<ParameterDTO> getParameter(@RequestParam("type") Integer type,
                                                 @RequestParam("scope") String scope,
                                                 @RequestParam("name") String name);
 
     @GetMapping(value = PATH_NEAREST)
-    SingleResult<ParameterRespDTO> getNearestParameter(@RequestParam("type") Integer type,
+    SingleResult<ParameterDTO> getNearestParameter(@RequestParam("type") Integer type,
                                                        @RequestParam("scope") String scope,
                                                        @RequestParam("name") String name);
 
     @PostMapping(value = PATH_VALUE)
-    SingleResult<String> getOrCreateParameter(@RequestBody ParameterReqDTO reqDto);
+    SingleResult<String> getOrCreateParameter(@RequestBody ParameterUpdateDTO reqDto);
 
     @GetMapping(value = PATH_APPLY_ID)
     SingleResult<Boolean> applyChange(@PathVariable(TreeVO.ID_NAME) Long id);

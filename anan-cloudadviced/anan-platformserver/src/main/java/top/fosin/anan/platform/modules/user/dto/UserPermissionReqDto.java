@@ -8,8 +8,6 @@ import top.fosin.anan.data.entity.req.IdLogiSortOrganizIdQuery;
 import top.fosin.anan.data.module.LogiQueryRule;
 import top.fosin.anan.data.module.SortRule;
 import top.fosin.anan.data.prop.ForeignKeyProp;
-import top.fosin.anan.data.valid.group.Create;
-import top.fosin.anan.data.valid.group.Update;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
@@ -29,24 +27,18 @@ public class UserPermissionReqDto extends IdLogiSortOrganizIdQuery<LogiQueryRule
         implements ForeignKeyProp<Long> {
     private static final long serialVersionUID = 989390435758584592L;
 
-    @NotNull(message = "用户序号" + "{javax.validation.constraints.NotNull.message}",
-            groups = {Create.class, Update.class})
-    @Positive(message = "用户序号" + "{javax.validation.constraints.Positive.message}",
-            groups = {Create.class, Update.class})
+    @NotNull(message = "用户序号" + "{javax.validation.constraints.NotNull.message}")
+    @Positive(message = "用户序号" + "{javax.validation.constraints.Positive.message}")
     @ApiModelProperty(value = "用户序号")
     private Long userId;
 
-    @NotNull(message = "权限序号" + "{javax.validation.constraints.NotNull.message}",
-            groups = {Create.class, Update.class})
-    @Positive(message = "权限序号" + "{javax.validation.constraints.Positive.message}",
-            groups = {Create.class, Update.class})
+    @NotNull(message = "权限序号" + "{javax.validation.constraints.NotNull.message}")
+    @Positive(message = "权限序号" + "{javax.validation.constraints.Positive.message}")
     @ApiModelProperty(value = "权限序号")
     private Long permissionId;
 
-    @NotNull(message = "补充方式" + "{javax.validation.constraints.NotNull.message}",
-            groups = {Create.class, Update.class})
-    @PositiveOrZero(message = "补充方式" + "{javax.validation.constraints.Positive.message}",
-            groups = {Create.class, Update.class})
+    @NotNull(message = "补充方式" + "{javax.validation.constraints.NotNull.message}")
+    @PositiveOrZero(message = "补充方式" + "{javax.validation.constraints.Positive.message}")
     @ApiModelProperty(value = "补充方式：0=增加权限、1=删除权限")
     private Integer addMode;
 

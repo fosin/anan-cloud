@@ -5,15 +5,13 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import top.fosin.anan.cloudresource.constant.PlatformRedisConstant;
-import top.fosin.anan.cloudresource.entity.res.RolePermissionRespDTO;
 import top.fosin.anan.platform.modules.role.dao.RolePermissionDao;
-import top.fosin.anan.platform.modules.role.dto.RolePermissionReqDto;
+import top.fosin.anan.platform.modules.role.dto.RolePermissionDTO;
+import top.fosin.anan.platform.modules.role.dto.RolePermissionUpdateDTO;
 import top.fosin.anan.platform.modules.role.service.inter.RolePermissionService;
 
 import java.util.Collection;
-import java.util.List;
 
 /**
  * @author fosin
@@ -31,9 +29,8 @@ public class RolePermissionServiceImpl implements RolePermissionService {
                     @CacheEvict(value = PlatformRedisConstant.ANAN_USER_ALL_PERMISSIONS, allEntries = true),
                     @CacheEvict(value = PlatformRedisConstant.ANAN_USER_PERMISSION_TREE, allEntries = true)
             })
-    @Transactional(rollbackFor = Exception.class)
-    public List<RolePermissionRespDTO> processInBatch(Long roleId, Collection<RolePermissionReqDto> dtos, boolean... processAction) {
-        return RolePermissionService.super.processInBatch(roleId, dtos, processAction);
+    public void postProcessInBatch(Long roleId, Collection<RolePermissionUpdateDTO> updateDTOS, Collection<RolePermissionDTO> permissionDTOS, boolean... processAction) {
+        RolePermissionService.super.postProcessInBatch(roleId, updateDTOS, permissionDTOS, processAction);
     }
 
     @Override

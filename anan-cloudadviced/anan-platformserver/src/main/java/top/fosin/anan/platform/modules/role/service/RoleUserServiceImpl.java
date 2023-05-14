@@ -8,10 +8,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import top.fosin.anan.cloudresource.constant.PlatformRedisConstant;
 import top.fosin.anan.cloudresource.entity.res.UserRespDTO;
-import top.fosin.anan.cloudresource.entity.res.UserRoleRespDTO;
 import top.fosin.anan.cloudresource.service.CurrentUserService;
 import top.fosin.anan.core.util.BeanUtil;
-import top.fosin.anan.platform.modules.role.dto.RoleUserReqDto;
+import top.fosin.anan.platform.modules.role.dto.RoleUserUpdateDTO;
+import top.fosin.anan.platform.modules.role.dto.UserRoleRespDTO;
 import top.fosin.anan.platform.modules.role.po.Role;
 import top.fosin.anan.platform.modules.role.service.inter.RoleUserService;
 import top.fosin.anan.platform.modules.user.dao.UserRoleDao;
@@ -36,9 +36,9 @@ public class RoleUserServiceImpl implements RoleUserService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public List<UserRoleRespDTO> createInBatch(Collection<RoleUserReqDto> dtos) {
+    public List<UserRoleRespDTO> createInBatch(Collection<RoleUserUpdateDTO> dtos) {
         List<UserRole> saveEntities = new ArrayList<>();
-        for (RoleUserReqDto dto : dtos) {
+        for (RoleUserUpdateDTO dto : dtos) {
             UserRole userRole = new UserRole();
             userRole.setUserId(dto.getUserId());
             Role role = new Role();
@@ -58,7 +58,7 @@ public class RoleUserServiceImpl implements RoleUserService {
     @Transactional(rollbackFor = Exception.class)
     public void deleteInBatch(Long roleId) {
         Assert.notNull(roleId, "roleId：" + roleId + "属性值无效!");
-        RoleUserReqDto reqDto = new RoleUserReqDto();
+        RoleUserUpdateDTO reqDto = new RoleUserUpdateDTO();
         reqDto.setFkValue(roleId);
         List<UserRole> userRoles = posByEntity(reqDto);
         //如果是用户角色，则只需要删除一个用户的缓存

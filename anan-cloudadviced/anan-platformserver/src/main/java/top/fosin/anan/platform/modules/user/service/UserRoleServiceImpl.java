@@ -6,12 +6,12 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import top.fosin.anan.cloudresource.constant.PlatformRedisConstant;
 import top.fosin.anan.cloudresource.entity.res.UserRespDTO;
-import top.fosin.anan.cloudresource.entity.res.UserRoleRespDTO;
 import top.fosin.anan.cloudresource.service.CurrentUserService;
 import top.fosin.anan.core.util.BeanUtil;
 import top.fosin.anan.platform.modules.role.po.Role;
 import top.fosin.anan.platform.modules.user.dao.UserRoleDao;
-import top.fosin.anan.platform.modules.user.dto.UserRoleReqDto;
+import top.fosin.anan.platform.modules.user.dto.UserRoleDTO;
+import top.fosin.anan.platform.modules.user.dto.UserRoleUpdateDTO;
 import top.fosin.anan.platform.modules.user.po.UserRole;
 import top.fosin.anan.platform.modules.user.service.inter.UserRoleService;
 import top.fosin.anan.redis.cache.AnanCacheManger;
@@ -33,9 +33,9 @@ public class UserRoleServiceImpl implements UserRoleService {
     private final CurrentUserService currentUserService;
 
     @Override
-    public List<UserRoleRespDTO> createInBatch(Collection<UserRoleReqDto> dtos) {
+    public List<UserRoleDTO> createInBatch(Collection<UserRoleUpdateDTO> dtos) {
         List<UserRole> saveEntities = new ArrayList<>();
-        for (UserRoleReqDto dto : dtos) {
+        for (UserRoleUpdateDTO dto : dtos) {
             UserRole userRole = new UserRole();
             userRole.setUserId(dto.getUserId());
             Role role = new Role();
@@ -48,7 +48,7 @@ public class UserRoleServiceImpl implements UserRoleService {
             }
             saveEntities.add(userRole);
         }
-        return BeanUtil.copyProperties(getDao().saveAll(saveEntities), UserRoleRespDTO.class);
+        return BeanUtil.copyProperties(getDao().saveAll(saveEntities), UserRoleDTO.class);
     }
 
     @Override

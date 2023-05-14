@@ -13,8 +13,10 @@ public class PathPrefixConstant {
     public static final String AUTH = API + "/auth";
 
     public static final String PARAMETER = API + "/parameter";
-    public static final String PERMISSION = API + "/permission";
+    public static final String PERMISSION_ONLY = "/permission";
+    public static final String PERMISSION = API + PERMISSION_ONLY;
     public static final String ORGANIZATION = API + "/organiz";
+    public static final String ORGANIZATION_PERMISSION = ORGANIZATION + PERMISSION_ONLY;
     public static final String PAY = API + "/pay";
     public static final String PAY_INVOICE = PAY + "/invoice";
     public static final String PAY_DETAIL = PAY + "/detail";
@@ -22,19 +24,24 @@ public class PathPrefixConstant {
 
     public static final String USER = API + "/user";
     public static final String USER_ROLE = USER + "/role";
-    public static final String USER_PERMISSION = USER + "/permission";
+    public static final String USER_PERMISSION = USER + PERMISSION_ONLY;
     public static final String ROLE = API + "/role";
     public static final String ROLE_USER = ROLE + "/user";
-    public static final String ROLE_PERMISSION = ROLE + "/permission";
+    public static final String ROLE_PERMISSION = ROLE + PERMISSION_ONLY;
     public static final String DICTIONARY = API + "/dictionary";
     public static final String DICTIONARY_DETAIL = API + "/dictionarydetail";
 
     public static final String OAUTH_CLIENT = API + "/oauthclient";
+    public static final String OAUTH2_CLIENT = API + "/oauth2client";
     public static final String APPLICATION = API + "/application";
     public static final String SERVICE = API + "/service";
 
     public static final String VERSION = API + "/version";
+
+    public static final String VERSION_PERMISSION = VERSION + PERMISSION_ONLY;
+
     public static final String VERSION_ROLE = VERSION + "/role";
+    public static final String VERSION_ROLE_PERMISSION = VERSION_ROLE + PERMISSION_ONLY;
 
     public static final String INTERNATIONAL = API + "/international";
     public static final String INTERNATIONAL_CHARSET = INTERNATIONAL + "/charset";

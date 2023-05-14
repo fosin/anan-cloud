@@ -6,7 +6,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import top.fosin.anan.cloudresource.constant.SystemConstant;
 import top.fosin.anan.platform.modules.version.dao.VersionRoleDao;
-import top.fosin.anan.platform.modules.version.dto.VersionRoleReqDto;
+import top.fosin.anan.platform.modules.version.dto.VersionRoleCreateDTO;
+import top.fosin.anan.platform.modules.version.dto.VersionRoleUpdateDTO;
 import top.fosin.anan.platform.modules.version.service.inter.VersionRoleService;
 
 /**
@@ -29,22 +30,22 @@ public class VersionRoleServiceImpl implements VersionRoleService {
     /**
      * 通过实体类创建新数据
      *
-     * @param entity 系统版本角色表 实体对象
+     * @param createDTO 系统版本角色表 实体对象
      */
     @Override
-    public void preCreate(VersionRoleReqDto entity) {
-        VersionRoleService.super.preCreate(entity);
-        Assert.isTrue(!entity.getValue().equals(SystemConstant.ANAN_USER_CODE), "角色标识不能为:" + SystemConstant.ANAN_USER_CODE);
+    public void preCreate(VersionRoleCreateDTO createDTO) {
+        VersionRoleService.super.preCreate(createDTO);
+        Assert.isTrue(!createDTO.getValue().equals(SystemConstant.ANAN_USER_CODE), "角色标识不能为:" + SystemConstant.ANAN_USER_CODE);
     }
 
     /**
      * 修改数据
      *
-     * @param reqDto 系统版本角色表 实体对象
+     * @param updateReq 系统版本角色表 实体对象
      */
     @Override
-    public void preUpdate(VersionRoleReqDto reqDto) {
-        VersionRoleService.super.preUpdate(reqDto);
-        Assert.isTrue(!reqDto.getValue().equals(SystemConstant.ANAN_USER_CODE), "角色标识不能为:" + SystemConstant.ANAN_USER_CODE);
+    public void preUpdate(VersionRoleUpdateDTO updateReq) {
+        VersionRoleService.super.preUpdate(updateReq);
+        Assert.isTrue(!updateReq.getValue().equals(SystemConstant.ANAN_USER_CODE), "角色标识不能为:" + SystemConstant.ANAN_USER_CODE);
     }
 }

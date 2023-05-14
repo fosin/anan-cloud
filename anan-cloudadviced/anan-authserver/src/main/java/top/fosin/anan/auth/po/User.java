@@ -6,8 +6,8 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.DynamicUpdate;
+import top.fosin.anan.cloudresource.entity.req.RoleUpdateDTO;
 import top.fosin.anan.cloudresource.entity.res.UserAuthDto;
-import top.fosin.anan.cloudresource.entity.req.RoleReqDTO;
 import top.fosin.anan.core.util.BeanUtil;
 import top.fosin.anan.jpa.po.IdCreateUpdateOrganizPO;
 
@@ -37,13 +37,13 @@ public class User extends IdCreateUpdateOrganizPO<Long> {
         BeanUtil.copyProperties(this, userDto);
         userDto.setId(this.getId());
         List<UserRole> userRoles = this.getUserRoles();
-        List<RoleReqDTO> userRoles2 = new ArrayList<>();
+        List<RoleUpdateDTO> userRoles2 = new ArrayList<>();
         if (userRoles != null) {
             userRoles.toString();
             if (userRoles.size() > 0) {
                 userRoles.forEach(userRole -> {
                     Role role = userRole.getRole();
-                    RoleReqDTO role2 = BeanUtil.copyProperties(role, RoleReqDTO.class);
+                    RoleUpdateDTO role2 = BeanUtil.copyProperties(role, RoleUpdateDTO.class);
                     role2.setId(role.getId());
                     userRoles2.add(role2);
                 });

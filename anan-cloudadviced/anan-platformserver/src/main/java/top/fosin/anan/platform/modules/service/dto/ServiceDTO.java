@@ -36,11 +36,11 @@ public class ServiceDTO extends Id<Long> {
     @ApiModelProperty(value = "创建时间", required = true, example = "Date")
     private Date createTime;
 
-    @ApiModelProperty(value = "更新人", required = true, example = "Long")
+    @ApiModelProperty(value = "修改人", required = true, example = "Long")
     private Long updateBy;
 
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
-    @ApiModelProperty(value = "更新时间", required = true, example = "Date")
+    @ApiModelProperty(value = "修改时间", required = true, example = "Date")
     private Date updateTime;
 
     @ApiModelProperty(value = "状态码：0：禁用 1：启用", required = true, example = "Integer")

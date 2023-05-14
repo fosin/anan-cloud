@@ -11,8 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 import top.fosin.anan.cloudresource.constant.SystemConstant;
-import top.fosin.anan.cloudresource.entity.req.RoleReqDTO;
-import top.fosin.anan.cloudresource.entity.res.RoleRespDTO;
 import top.fosin.anan.cloudresource.service.CurrentUserService;
 import top.fosin.anan.core.util.BeanUtil;
 import top.fosin.anan.data.entity.req.PageQuery;
@@ -21,7 +19,11 @@ import top.fosin.anan.data.result.ResultUtils;
 import top.fosin.anan.platform.modules.organization.dao.OrgDao;
 import top.fosin.anan.platform.modules.organization.po.Organization;
 import top.fosin.anan.platform.modules.role.dao.RoleDao;
+import top.fosin.anan.platform.modules.role.dto.RoleCreateDTO;
+import top.fosin.anan.platform.modules.role.dto.RoleDTO;
+import top.fosin.anan.cloudresource.entity.req.RoleUpdateDTO;
 import top.fosin.anan.platform.modules.role.po.Role;
+import top.fosin.anan.platform.modules.role.query.RoleQuery;
 import top.fosin.anan.platform.modules.role.service.inter.RoleService;
 import top.fosin.anan.platform.modules.user.dao.UserRoleDao;
 import top.fosin.anan.platform.modules.user.po.UserRole;
@@ -47,7 +49,7 @@ public class RoleServiceImpl implements RoleService {
     private final CurrentUserService currentUserService;
 
     @Override
-    public RoleRespDTO create(RoleReqDTO dto) {
+    public RoleDTO create(RoleCreateDTO dto) {
         String value = dto.getValue();
         if (SystemConstant.ADMIN_ROLE_NAME.equalsIgnoreCase(value) &&
                 !SystemConstant.ADMIN_ROLE_NAME.equalsIgnoreCase(value)) {
@@ -59,11 +61,11 @@ public class RoleServiceImpl implements RoleService {
         Assert.isNull(entityDynamic, "该角色已存在，请核对!");
         Role saveEntity = BeanUtil.copyProperties(dto, Role.class);
         Role save = roleDao.save(saveEntity);
-        return BeanUtil.copyProperties(save, RoleRespDTO.class);
+        return BeanUtil.copyProperties(save, RoleDTO.class);
     }
 
     @Override
-    public void update(RoleReqDTO reqDto, String[] ignoreProperties) {
+    public void update(RoleUpdateDTO reqDto, String[] ignoreProperties) {
         Assert.notNull(reqDto, "传入了空对象!");
         Long id = reqDto.getId();
         Assert.notNull(id, "传入了空ID!");
@@ -115,19 +117,19 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public List<RoleRespDTO> listOtherUsersByRoleId(Long userId) {
-        return BeanUtil.copyProperties(roleDao.findOtherRolesByUserId(userId), RoleRespDTO.class);
+    public List<RoleDTO> listOtherUsersByRoleId(Long userId) {
+        return BeanUtil.copyProperties(roleDao.findOtherRolesByUserId(userId), RoleDTO.class);
     }
 
     @Override
-    public List<RoleRespDTO> listRoleUsersByRoleId(Long userId) {
-        return BeanUtil.copyProperties(roleDao.findUserRolesByUserId(userId), RoleRespDTO.class);
+    public List<RoleDTO> listRoleUsersByRoleId(Long userId) {
+        return BeanUtil.copyProperties(roleDao.findUserRolesByUserId(userId), RoleDTO.class);
     }
 
     @Override
-    public PageResult<RoleRespDTO> findPage(PageQuery<?> PageQuery) {
+    public PageResult<RoleDTO> findPage(PageQuery<?> PageQuery) {
         Assert.notNull(PageQuery, "传入的分页信息不能为空!");
-        RoleReqDTO params = (RoleReqDTO) PageQuery.getParams();
+        RoleQuery params = (RoleQuery) PageQuery.getParams();
 
         Specification<Role> condition;
         if (currentUserService.hasSysAdminRole()) {
@@ -167,11 +169,11 @@ public class RoleServiceImpl implements RoleService {
         Page<Role> page = roleDao.findAll(condition, pageable);
 
         return ResultUtils.success(page.getTotalElements(), page.getTotalPages(),
-                BeanUtil.copyProperties(page.getContent(), RoleRespDTO.class));
+                BeanUtil.copyProperties(page.getContent(), RoleDTO.class));
     }
 
     @Override
-    public List<RoleRespDTO> listByOrganizId(Long organizId) {
+    public List<RoleDTO> listByOrganizId(Long organizId) {
         Assert.notNull(organizId, "机构ID不能为空!");
         List<Role> entities;
         if (currentUserService.hasSysAdminRole()) {
@@ -194,7 +196,7 @@ public class RoleServiceImpl implements RoleService {
             };
             entities = roleDao.findAll(condition);
         }
-        return BeanUtil.copyProperties(entities, RoleRespDTO.class);
+        return BeanUtil.copyProperties(entities, RoleDTO.class);
     }
 
     @Override

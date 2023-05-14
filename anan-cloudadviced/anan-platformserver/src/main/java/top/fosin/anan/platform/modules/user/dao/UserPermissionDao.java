@@ -14,17 +14,8 @@ import java.util.List;
 @Repository
 @Lazy
 public interface UserPermissionDao extends IJpaRepository<Long, UserPermission> {
-    List<UserPermission> findByUserIdAndOrganizId(Long userId, Long organizId);
-
-    List<UserPermission> findByUserIdAndOrganizIdAndAddMode(Long userId, Long organizId, int addMode);
 
     List<UserPermission> findByOrganizId(Long organizId);
-
-    List<UserPermission> findByUserId(Long userId);
-
-    void deleteByUserId(Long userId);
-
-    void deleteByOrganizId(Long organizId);
 
     long countByPermissionId(Long permissionId);
 }
