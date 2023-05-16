@@ -122,17 +122,17 @@ public class CurrentUserService
     }
 
     @Override
-    public Optional<Long> getOrganizId() {
-        return Optional.of(this.getUser().getOrganizId());
+    public Long getOrganizId() {
+        return this.getUser().getOrganizId();
     }
 
     @Override
-    public Optional<Long> getTopId() {
-        return Optional.of(this.getUser().getTopId());
+    public Long getTopId() {
+        return this.getUser().getTopId();
     }
 
     @Override
-    public Optional<Long> getUserId() {
-        return Optional.of(this.getUser().getId());
+    public Long getUserId() {
+        return this.getUser().getId();
     }
 }

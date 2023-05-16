@@ -27,6 +27,6 @@ public class ServiceStrategy implements IParameterStrategy {
 
     @Override
     public String getScope() {
-        return currentUserService.isSysAdminUser() ? null : currentUserService.getOrganizId().orElseThrow(() -> new IllegalArgumentException("未找到当前用户的机构序号！")) + "";
+        return currentUserService.isSysAdminUser() ? null : currentUserService.getOrganizId() + "";
     }
 }

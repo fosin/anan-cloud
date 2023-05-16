@@ -140,7 +140,7 @@ public class RoleServiceImpl implements RoleService {
             Assert.notNull(params, "传入的分页信息不能为空!");
             Long organizId = params.getOrganizId();
             if (organizId == null || organizId < 1) {
-                organizId = currentUserService.getOrganizId().orElseThrow(() -> new IllegalArgumentException("未找到当前用户的机构序号！"));
+                organizId = currentUserService.getOrganizId();
             }
             String name = params.getName();
             String value = params.getValue();

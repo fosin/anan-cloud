@@ -87,7 +87,7 @@ public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase impleme
         UserRespDTO respDto = BeanUtil.copyProperties(userEntity, UserRespDTO.class);
         Long organizId = userEntity.getOrganizId();
         if (organizId > 0) {
-            Organization organization = orgDao.getReferenceById(organizId);
+            Organization organization = orgDao.findById(organizId).orElseThrow(() -> new IllegalArgumentException("未找到对应机构数据：" + organizId));
             respDto.setTopId(organization.getTopId());
         }
         return respDto;
@@ -104,11 +104,11 @@ public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase impleme
     public UserRespDTO findOneById(Long id, boolean... findRefs) {
         UserRespDTO respDto = ananCacheManger.get(PlatformRedisConstant.ANAN_USER, id + "-id", UserRespDTO.class);
         if (respDto == null) {
-            User userEntity = userDao.findById(id).orElseThrow(() -> new IllegalArgumentException("未找到对应数据!"));
+            User userEntity = userDao.findById(id).orElseThrow(() -> new IllegalArgumentException("未找到对应用户数据：" + id));
             respDto = BeanUtil.copyProperties(userEntity, UserRespDTO.class);
             Long organizId = respDto.getOrganizId();
             if (organizId > 0) {
-                Organization organization = orgDao.getReferenceById(organizId);
+                Organization organization = orgDao.findById(organizId).orElseThrow(() -> new IllegalArgumentException("未找到对应机构数据：" + organizId));
                 respDto.setTopId(organization.getTopId());
             }
             ananCacheManger.put(PlatformRedisConstant.ANAN_USER, id + "-id", respDto);
@@ -119,12 +119,12 @@ public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase impleme
     private String encryptBeforeSave(User entity) {
         String password = entity.getPassword();
         //如果密码为空则随机生成4位以下密码
-        if (!StringUtils.hasText(password)) {
-            password = getPassword();
-        } else {
+        if (StringUtils.hasText(password)) {
             int length = localOrganParameter.getOrCreateParameter("UserInitPasswordLength", 6,
                     "用户初始密码长度");
             Assert.isTrue(password.length() >= length, "用户初始密码最少" + length + "位!");
+        } else {
+            password = getPassword();
         }
         entity.setPassword(passwordEncoder.encode(password));
         return password;
@@ -159,7 +159,8 @@ public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase impleme
         ananCacheManger.evict(PlatformRedisConstant.ANAN_USER_ALL_PERMISSIONS, id + "");
         ananCacheManger.evict(PlatformRedisConstant.ANAN_USER_PERMISSION_TREE, id + "");
         userDao.save(createUser);
-        if (changedName) StringTranslateCacheUtil.put(UserGrpcServiceImpl.class, "", reqDto.getId(), reqDto.getUsername());
+        if (changedName)
+            StringTranslateCacheUtil.put(UserGrpcServiceImpl.class, "", reqDto.getId(), reqDto.getUsername());
     }
 
     @Override
@@ -212,7 +213,7 @@ public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase impleme
             Path<String> phonePath = root.get("phone");
             Path<String> emailPath = root.get("email");
 
-            Long organizId = currentUserService.getOrganizId().orElseThrow(() -> new IllegalArgumentException("未找到当前用户的机构序号！"));
+            Long organizId = currentUserService.getOrganizId();
             Organization organization = orgDao.findById(organizId).orElse(null);
 
             Subquery<Integer> subQuery = query.subquery(Integer.class);
@@ -278,13 +279,9 @@ public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase impleme
     @Transactional(rollbackFor = Exception.class)
     @Override
     public String resetPassword(Long id) {
-        Assert.notNull(id, "用户ID不能为空!");
-
-        Long loginId = currentUserService.getUserId().orElse(null);
-        Assert.isTrue(!Objects.equals(loginId, id), "不能重置本人密码,请使用修改密码功能!");
-        User user = userDao.findById(id).orElse(null);
+        User user = userDao.findById(id).orElseThrow(() -> new IllegalArgumentException("通过ID：" + id + "未找到对应的用户信息!"));
         String password = getPassword();
-        Objects.requireNonNull(user, "通过ID：" + id + "未找到对应的用户信息!").setPassword(password);
+        user.setPassword(password);
         encryptBeforeSave(user);
         ananCacheManger.evict(PlatformRedisConstant.ANAN_USER, user.getUsercode());
         ananCacheManger.evict(PlatformRedisConstant.ANAN_USER, id + "-id");
@@ -300,7 +297,7 @@ public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase impleme
             password = localOrganParameter.getOrCreateParameter("UserDefaultPassword", "123456", "用户的默认密码");
         } else {
             int i = localOrganParameter.getOrCreateParameter("UserInitPasswordLength", 6, "用户初始密码长度");
-            int random = 9999;
+            int random = 666888;
             if (i > 0) {
                 random = (int) (Math.pow(10, i)) - 1;
             }
@@ -327,10 +324,10 @@ public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase impleme
             entities = userDao.findAll();
         } else {
             if (topId < 1) {
-                topId = currentUserService.getTopId().orElseThrow(() -> new IllegalArgumentException("未找到当前用户的机构序号！"));
+                topId = currentUserService.getTopId();
             }
             entities = userDao.findByTopIdAndStatus(topId, status);
-            entities.add(userDao.getReferenceById(SystemConstant.ANAN_USER_ID));
+            entities.add(userDao.findById(SystemConstant.ANAN_USER_ID).orElseThrow(() -> new IllegalArgumentException("未找到用户序号：" + SystemConstant.ANAN_USER_ID + "的用户信息！")));
         }
         return entities;
     }
