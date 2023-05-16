@@ -25,7 +25,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfoHandlerMapping;
 import springfox.documentation.spring.web.plugins.WebFluxRequestHandlerProvider;
 import springfox.documentation.spring.web.plugins.WebMvcRequestHandlerProvider;
-import top.fosin.anan.auth.service.inter.AuthService;
+import top.fosin.anan.auth.modules.auth.service.inter.AuthService;
 import top.fosin.anan.security.resource.AnanSecurityProperties;
 
 import java.lang.reflect.Field;
