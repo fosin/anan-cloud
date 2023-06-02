@@ -1,13 +1,9 @@
 package top.fosin.anan.platform.modules.role.vo;
 
-                                                                                                                                                                                            
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import java.io.Serializable;
 import lombok.Data;
-import org.springframework.format.annotation.DateTimeFormat;
-import top.fosin.anan.core.util.DateTimeUtil;
-import java.util.Date;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import top.fosin.anan.data.entity.Id;
@@ -37,9 +33,9 @@ public class RoleListVO extends Id<Long> {
     private String tips;
 
     @ApiModelProperty(value = "使用状态：0=启用，1=禁用，具体取值于字典表anan_dictionary.code=11")
-    private Integer status;
+    private Byte status;
 
     @ApiModelProperty(value = "内置标志：是否是系统内置角色，内置角色不能被用户删除和修改，0=不是 1=是")
-    private Integer builtIn;
+    private Byte builtIn;
 
 }

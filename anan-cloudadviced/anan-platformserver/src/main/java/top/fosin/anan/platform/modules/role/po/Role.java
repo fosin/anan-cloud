@@ -46,11 +46,11 @@ public class Role extends IdCreateUpdateOrganizPO<Long> {
     @Basic
     @ApiModelProperty(value = "使用状态：0=启用，1=禁用，具体取值于字典表anan_dictionary.id=11", required = true)
     @Column(name = "status", nullable = false)
-    private Integer status;
+    private Byte status;
 
     @Basic
     @ApiModelProperty(value = "内置标志：是否是系统内置角色，内置角色不能被用户删除和修改，0=不是 1=是", required = true)
     @Column(name = "built_in", nullable = false)
-    private Integer builtIn = 0;
+    private Byte builtIn = 0;
 
 }

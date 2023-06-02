@@ -7,11 +7,11 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import top.fosin.anan.data.entity.Id;
 import top.fosin.anan.data.prop.ForeignKeyProp;
+import top.fosin.anan.data.valid.group.Update;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
-
 /**
  * 用于增减用户的单项权限，通常实在角色的基础上增减单项权限(anan_user_permission)更新DTO
  *
@@ -25,22 +25,22 @@ import javax.validation.constraints.PositiveOrZero;
 public class UserPermissionUpdateDTO extends Id<Long> implements ForeignKeyProp<Long> {
     private static final long serialVersionUID = -77740212969406976L;
     
-    @NotNull(message = "机构ID" + "{javax.validation.constraints.NotNull.message}")
+    @NotNull(message = "机构ID" + "{javax.validation.constraints.NotNull.message}", groups = Update.class)
     @ApiModelProperty(value = "机构ID", required = true, example = "Long")
     private Long organizId;
 
-    @NotNull(message = "用户序号" + "{javax.validation.constraints.NotNull.message}")
-    @Positive(message = "用户序号" + "{javax.validation.constraints.Positive.message}")
+    @NotNull(message = "用户序号" + "{javax.validation.constraints.NotNull.message}", groups = Update.class)
+    @Positive(message = "用户序号" + "{javax.validation.constraints.Positive.message}", groups = Update.class)
     @ApiModelProperty(value = "用户序号")
     private Long userId;
 
-    @NotNull(message = "权限序号" + "{javax.validation.constraints.NotNull.message}")
-    @Positive(message = "权限序号" + "{javax.validation.constraints.Positive.message}")
+    @NotNull(message = "权限序号" + "{javax.validation.constraints.NotNull.message}", groups = Update.class)
+    @Positive(message = "权限序号" + "{javax.validation.constraints.Positive.message}", groups = Update.class)
     @ApiModelProperty(value = "权限序号")
     private Long permissionId;
 
-    @NotNull(message = "补充方式" + "{javax.validation.constraints.NotNull.message}")
-    @PositiveOrZero(message = "补充方式" + "{javax.validation.constraints.Positive.message}")
+    @NotNull(message = "补充方式" + "{javax.validation.constraints.NotNull.message}", groups = Update.class)
+    @PositiveOrZero(message = "补充方式" + "{javax.validation.constraints.Positive.message}", groups = Update.class)
     @ApiModelProperty(value = "补充方式：0=增加权限、1=删除权限")
     private Integer addMode;
 

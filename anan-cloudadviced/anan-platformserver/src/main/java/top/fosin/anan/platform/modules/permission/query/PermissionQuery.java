@@ -47,7 +47,7 @@ public class PermissionQuery extends LogiSortQuery<LogiQueryRule,SortRule,Long> 
 
     @ApiModelProperty(value = "权限类型：具体取值于字典表anan_dictionary.code=13，除1、3、6之外的类型都是叶子节点")
     @NotNull(message = "权限类型" + "{javax.validation.constraints.NotNull.message}")
-    private Integer type;
+    private Byte type;
 
     @ApiModelProperty(value = "菜单层级")
     @NotNull(message = "菜单层级" + "{javax.validation.constraints.NotNull.message}")
@@ -59,7 +59,7 @@ public class PermissionQuery extends LogiSortQuery<LogiQueryRule,SortRule,Long> 
 
     @ApiModelProperty(value = "使用状态：0=启用，1=禁用，具体取值于字典表anan_dictionary.code=11")
     @NotNull(message = "使用状态" + "{javax.validation.constraints.NotNull.message}")
-    private Integer status;
+    private Byte status;
 
     @ApiModelProperty(value = "所属服务：等同于anan_service.id")
     @NotNull(message = "所属服务" + "{javax.validation.constraints.NotNull.message}")

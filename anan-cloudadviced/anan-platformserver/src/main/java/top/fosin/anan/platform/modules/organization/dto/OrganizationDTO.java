@@ -45,7 +45,7 @@ public class OrganizationDTO extends IdPid<Long> {
     private String telphone;
 
     @ApiModelProperty(value = "使用状态：0=启用，1=禁用，具体取值于字典表anan_dictionary.code=11", required = true, example = "Integer")
-    private Integer status;
+    private Byte status;
 
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
     @ApiModelProperty(value = "创建日期", required = true, example = "Date")

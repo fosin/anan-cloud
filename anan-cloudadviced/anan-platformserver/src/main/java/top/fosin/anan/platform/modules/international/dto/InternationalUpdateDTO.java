@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import top.fosin.anan.data.entity.Id;
+import top.fosin.anan.data.valid.group.Update;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -24,24 +25,24 @@ import javax.validation.constraints.PositiveOrZero;
 public class InternationalUpdateDTO extends Id<Long> {
     private static final long serialVersionUID = -44625865080513112L;
 
-    @NotBlank(message = "标识" + "{javax.validation.constraints.NotBlank.message}")
+    @NotBlank(message = "标识" + "{javax.validation.constraints.NotBlank.message}", groups = Update.class)
     @ApiModelProperty(value = "标识", example = "String")
     private String code;
 
-    @NotBlank(message = "名称" + "{javax.validation.constraints.NotBlank.message}")
+    @NotBlank(message = "名称" + "{javax.validation.constraints.NotBlank.message}", groups = Update.class)
     @ApiModelProperty(value = "名称", example = "String")
     private String name;
 
     @ApiModelProperty(value = "图标", example = "String")
     private String icon;
 
-    @NotNull(message = "状态" + "{javax.validation.constraints.NotNull.message}")
-    @PositiveOrZero(message = "状态" + "{javax.validation.constraints.Positive.message}")
+    @NotNull(message = "状态" + "{javax.validation.constraints.NotNull.message}", groups = Update.class)
+    @PositiveOrZero(message = "状态" + "{javax.validation.constraints.Positive.message}", groups = Update.class)
     @ApiModelProperty(value = "状态：0=启用，1=禁用", example = "0")
-    private Integer status;
+    private Byte status;
 
-    @NotNull(message = "默认标志" + "{javax.validation.constraints.NotNull.message}")
-    @PositiveOrZero(message = "默认标志" + "{javax.validation.constraints.Positive.message}")
+    @NotNull(message = "默认标志" + "{javax.validation.constraints.NotNull.message}", groups = Update.class)
+    @PositiveOrZero(message = "默认标志" + "{javax.validation.constraints.Positive.message}", groups = Update.class)
     @ApiModelProperty(value = "默认标志", example = "0")
     private Integer defaultFlag;
 

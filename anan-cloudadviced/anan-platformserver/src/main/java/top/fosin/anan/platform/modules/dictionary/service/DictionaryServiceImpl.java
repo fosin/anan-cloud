@@ -38,7 +38,7 @@ public class DictionaryServiceImpl implements DictionaryService {
         hasModifiedPrivileges(reqDto.getType());
     }
 
-    private void hasModifiedPrivileges(int type) {
+    private void hasModifiedPrivileges(byte type) {
         if (SystemConstant.SYSTEM_DICTIONARY_TYPE.equals(type)) {
             //非超级管理员不能修改系统字典
             Assert.isTrue(currentUserService.hasSysAdminRole(), "没有权限增删改系统字典!");

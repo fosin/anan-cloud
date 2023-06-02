@@ -84,7 +84,7 @@ public class InternationalCharsetServiceImpl implements InternationalCharsetServ
     @Override
     public long updateOneField(String name, Serializable value, Collection<Long> ids) {
         long count = InternationalCharsetService.super.updateOneField(name, value, ids);
-        ids.forEach(id -> this.ananCacheManger.evict(PlatformRedisConstant.ANAN_INTERNATIONAL_CHARSET_ALL, id + ""));
+        ids.forEach(id -> this.ananCacheManger.evict(PlatformRedisConstant.ANAN_INTERNATIONAL_CHARSET_ALL, String.valueOf(id)));
         return count;
     }
 }

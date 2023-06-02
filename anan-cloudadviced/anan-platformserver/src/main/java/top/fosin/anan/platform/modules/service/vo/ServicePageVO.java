@@ -48,6 +48,6 @@ public class ServicePageVO extends Id<Long> {
     private Date updateTime;
 
     @ApiModelProperty(value = "状态码：0：禁用 1：启用")
-    private Integer status;
+    private Byte status;
 
 }

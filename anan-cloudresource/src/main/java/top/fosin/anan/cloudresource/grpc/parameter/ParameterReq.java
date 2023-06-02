@@ -92,24 +92,6 @@ private static final long serialVersionUID = 0L;
             description_ = s;
             break;
           }
-          case 56: {
-
-            status_ = input.readInt32();
-            break;
-          }
-          case 66: {
-            com.google.protobuf.Timestamp.Builder subBuilder = null;
-            if (applyTime_ != null) {
-              subBuilder = applyTime_.toBuilder();
-            }
-            applyTime_ = input.readMessage(com.google.protobuf.Timestamp.parser(), extensionRegistry);
-            if (subBuilder != null) {
-              subBuilder.mergeFrom(applyTime_);
-              applyTime_ = subBuilder.buildPartial();
-            }
-
-            break;
-          }
           default: {
             if (!parseUnknownField(
                 input, unknownFields, extensionRegistry, tag)) {
@@ -343,43 +325,6 @@ private static final long serialVersionUID = 0L;
     }
   }
 
-  public static final int STATUS_FIELD_NUMBER = 7;
-  private int status_;
-  /**
-   * <code>int32 status = 7;</code>
-   * @return The status.
-   */
-  @java.lang.Override
-  public int getStatus() {
-    return status_;
-  }
-
-  public static final int APPLYTIME_FIELD_NUMBER = 8;
-  private com.google.protobuf.Timestamp applyTime_;
-  /**
-   * <code>.google.protobuf.Timestamp applyTime = 8;</code>
-   * @return Whether the applyTime field is set.
-   */
-  @java.lang.Override
-  public boolean hasApplyTime() {
-    return applyTime_ != null;
-  }
-  /**
-   * <code>.google.protobuf.Timestamp applyTime = 8;</code>
-   * @return The applyTime.
-   */
-  @java.lang.Override
-  public com.google.protobuf.Timestamp getApplyTime() {
-    return applyTime_ == null ? com.google.protobuf.Timestamp.getDefaultInstance() : applyTime_;
-  }
-  /**
-   * <code>.google.protobuf.Timestamp applyTime = 8;</code>
-   */
-  @java.lang.Override
-  public com.google.protobuf.TimestampOrBuilder getApplyTimeOrBuilder() {
-    return getApplyTime();
-  }
-
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -412,12 +357,6 @@ private static final long serialVersionUID = 0L;
     if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(description_)) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 6, description_);
     }
-    if (status_ != 0) {
-      output.writeInt32(7, status_);
-    }
-    if (applyTime_ != null) {
-      output.writeMessage(8, getApplyTime());
-    }
     unknownFields.writeTo(output);
   }
 
@@ -446,14 +385,6 @@ private static final long serialVersionUID = 0L;
     if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(description_)) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(6, description_);
     }
-    if (status_ != 0) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeInt32Size(7, status_);
-    }
-    if (applyTime_ != null) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(8, getApplyTime());
-    }
     size += unknownFields.getSerializedSize();
     memoizedSize = size;
     return size;
@@ -481,13 +412,6 @@ private static final long serialVersionUID = 0L;
         .equals(other.getDefaultValue())) return false;
     if (!getDescription()
         .equals(other.getDescription())) return false;
-    if (getStatus()
-        != other.getStatus()) return false;
-    if (hasApplyTime() != other.hasApplyTime()) return false;
-    if (hasApplyTime()) {
-      if (!getApplyTime()
-          .equals(other.getApplyTime())) return false;
-    }
     if (!unknownFields.equals(other.unknownFields)) return false;
     return true;
   }
@@ -511,12 +435,6 @@ private static final long serialVersionUID = 0L;
     hash = (53 * hash) + getDefaultValue().hashCode();
     hash = (37 * hash) + DESCRIPTION_FIELD_NUMBER;
     hash = (53 * hash) + getDescription().hashCode();
-    hash = (37 * hash) + STATUS_FIELD_NUMBER;
-    hash = (53 * hash) + getStatus();
-    if (hasApplyTime()) {
-      hash = (37 * hash) + APPLYTIME_FIELD_NUMBER;
-      hash = (53 * hash) + getApplyTime().hashCode();
-    }
     hash = (29 * hash) + unknownFields.hashCode();
     memoizedHashCode = hash;
     return hash;
@@ -666,14 +584,6 @@ private static final long serialVersionUID = 0L;
 
       description_ = "";
 
-      status_ = 0;
-
-      if (applyTimeBuilder_ == null) {
-        applyTime_ = null;
-      } else {
-        applyTime_ = null;
-        applyTimeBuilder_ = null;
-      }
       return this;
     }
 
@@ -706,12 +616,6 @@ private static final long serialVersionUID = 0L;
       result.scope_ = scope_;
       result.defaultValue_ = defaultValue_;
       result.description_ = description_;
-      result.status_ = status_;
-      if (applyTimeBuilder_ == null) {
-        result.applyTime_ = applyTime_;
-      } else {
-        result.applyTime_ = applyTimeBuilder_.build();
-      }
       onBuilt();
       return result;
     }
@@ -782,12 +686,6 @@ private static final long serialVersionUID = 0L;
       if (!other.getDescription().isEmpty()) {
         description_ = other.description_;
         onChanged();
-      }
-      if (other.getStatus() != 0) {
-        setStatus(other.getStatus());
-      }
-      if (other.hasApplyTime()) {
-        mergeApplyTime(other.getApplyTime());
       }
       this.mergeUnknownFields(other.unknownFields);
       onChanged();
@@ -1227,156 +1125,6 @@ private static final long serialVersionUID = 0L;
       description_ = value;
       onChanged();
       return this;
-    }
-
-    private int status_ ;
-    /**
-     * <code>int32 status = 7;</code>
-     * @return The status.
-     */
-    @java.lang.Override
-    public int getStatus() {
-      return status_;
-    }
-    /**
-     * <code>int32 status = 7;</code>
-     * @param value The status to set.
-     * @return This builder for chaining.
-     */
-    public Builder setStatus(int value) {
-      
-      status_ = value;
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>int32 status = 7;</code>
-     * @return This builder for chaining.
-     */
-    public Builder clearStatus() {
-      
-      status_ = 0;
-      onChanged();
-      return this;
-    }
-
-    private com.google.protobuf.Timestamp applyTime_;
-    private com.google.protobuf.SingleFieldBuilderV3<
-        com.google.protobuf.Timestamp, com.google.protobuf.Timestamp.Builder, com.google.protobuf.TimestampOrBuilder> applyTimeBuilder_;
-    /**
-     * <code>.google.protobuf.Timestamp applyTime = 8;</code>
-     * @return Whether the applyTime field is set.
-     */
-    public boolean hasApplyTime() {
-      return applyTimeBuilder_ != null || applyTime_ != null;
-    }
-    /**
-     * <code>.google.protobuf.Timestamp applyTime = 8;</code>
-     * @return The applyTime.
-     */
-    public com.google.protobuf.Timestamp getApplyTime() {
-      if (applyTimeBuilder_ == null) {
-        return applyTime_ == null ? com.google.protobuf.Timestamp.getDefaultInstance() : applyTime_;
-      } else {
-        return applyTimeBuilder_.getMessage();
-      }
-    }
-    /**
-     * <code>.google.protobuf.Timestamp applyTime = 8;</code>
-     */
-    public Builder setApplyTime(com.google.protobuf.Timestamp value) {
-      if (applyTimeBuilder_ == null) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        applyTime_ = value;
-        onChanged();
-      } else {
-        applyTimeBuilder_.setMessage(value);
-      }
-
-      return this;
-    }
-    /**
-     * <code>.google.protobuf.Timestamp applyTime = 8;</code>
-     */
-    public Builder setApplyTime(
-        com.google.protobuf.Timestamp.Builder builderForValue) {
-      if (applyTimeBuilder_ == null) {
-        applyTime_ = builderForValue.build();
-        onChanged();
-      } else {
-        applyTimeBuilder_.setMessage(builderForValue.build());
-      }
-
-      return this;
-    }
-    /**
-     * <code>.google.protobuf.Timestamp applyTime = 8;</code>
-     */
-    public Builder mergeApplyTime(com.google.protobuf.Timestamp value) {
-      if (applyTimeBuilder_ == null) {
-        if (applyTime_ != null) {
-          applyTime_ =
-            com.google.protobuf.Timestamp.newBuilder(applyTime_).mergeFrom(value).buildPartial();
-        } else {
-          applyTime_ = value;
-        }
-        onChanged();
-      } else {
-        applyTimeBuilder_.mergeFrom(value);
-      }
-
-      return this;
-    }
-    /**
-     * <code>.google.protobuf.Timestamp applyTime = 8;</code>
-     */
-    public Builder clearApplyTime() {
-      if (applyTimeBuilder_ == null) {
-        applyTime_ = null;
-        onChanged();
-      } else {
-        applyTime_ = null;
-        applyTimeBuilder_ = null;
-      }
-
-      return this;
-    }
-    /**
-     * <code>.google.protobuf.Timestamp applyTime = 8;</code>
-     */
-    public com.google.protobuf.Timestamp.Builder getApplyTimeBuilder() {
-      
-      onChanged();
-      return getApplyTimeFieldBuilder().getBuilder();
-    }
-    /**
-     * <code>.google.protobuf.Timestamp applyTime = 8;</code>
-     */
-    public com.google.protobuf.TimestampOrBuilder getApplyTimeOrBuilder() {
-      if (applyTimeBuilder_ != null) {
-        return applyTimeBuilder_.getMessageOrBuilder();
-      } else {
-        return applyTime_ == null ?
-            com.google.protobuf.Timestamp.getDefaultInstance() : applyTime_;
-      }
-    }
-    /**
-     * <code>.google.protobuf.Timestamp applyTime = 8;</code>
-     */
-    private com.google.protobuf.SingleFieldBuilderV3<
-        com.google.protobuf.Timestamp, com.google.protobuf.Timestamp.Builder, com.google.protobuf.TimestampOrBuilder> 
-        getApplyTimeFieldBuilder() {
-      if (applyTimeBuilder_ == null) {
-        applyTimeBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-            com.google.protobuf.Timestamp, com.google.protobuf.Timestamp.Builder, com.google.protobuf.TimestampOrBuilder>(
-                getApplyTime(),
-                getParentForChildren(),
-                isClean());
-        applyTime_ = null;
-      }
-      return applyTimeBuilder_;
     }
     @java.lang.Override
     public final Builder setUnknownFields(

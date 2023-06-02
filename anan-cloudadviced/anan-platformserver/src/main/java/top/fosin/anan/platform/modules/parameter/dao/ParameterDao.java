@@ -17,9 +17,9 @@ import java.util.List;
 @Repository
 @Lazy
 public interface ParameterDao extends IJpaRepository<Long, Parameter> {
-    Parameter findByTypeAndScopeAndName(Integer type, String scope, String name);
+    Parameter findByTypeAndScopeAndName(byte type, String scope, String name);
 
-    List<Parameter> findByStatusNot(Integer status);
+    List<Parameter> findByStatusNot(byte status);
 
     @Query(value = "select * from anan_parameter where" +
             " ((((type = 1 and scope in (select id from anan_organization where code like ?2))" +
@@ -32,5 +32,5 @@ public interface ParameterDao extends IJpaRepository<Long, Parameter> {
                     " or type = 3 or scope is null or scope = '') and ?3 = 1) or (?3 = 2))" +
                     " and (name like ?1 or value like ?1 or description like ?1 or default_value like ?1)",
             nativeQuery = true)
-    Page<Parameter> findPage(String search, String code, Integer type, Pageable pageable);
+    Page<Parameter> findPage(String search, String code, byte type, Pageable pageable);
 }

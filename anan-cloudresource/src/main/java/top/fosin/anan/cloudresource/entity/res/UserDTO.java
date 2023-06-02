@@ -1,6 +1,5 @@
 package top.fosin.anan.cloudresource.entity.res;
 
-
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -13,17 +12,22 @@ import top.fosin.anan.data.entity.Id;
 import java.util.Date;
 
 /**
- * 系统用户表(anan_user)DTO
+ * 系统用户表(AnanUser)响应DTO
  *
  * @author fosin
- * @date 2023-05-02
+ * @date 2021-05-16 14:32:15
+ * @since 2.6.0
  */
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-@ApiModel(value = "系统用户表DTO", description = "系统用户表(anan_user)DTO")
+@ApiModel(value = "用户表响应DTO", description = "用户的响应DTO")
 public class UserDTO extends Id<Long> {
-    private static final long serialVersionUID = 681471479833960629L;
+    private static final long serialVersionUID = -37913233914512798L;
+
+    @ApiModelProperty(value = "顶级机构序号", example = "1")
+    private Long topId;
+
     @ApiModelProperty(value = "机构ID", required = true, example = "Long")
     private Long organizId;
 
@@ -52,7 +56,7 @@ public class UserDTO extends Id<Long> {
     private String website;
 
     @ApiModelProperty(value = "实名认证标志", required = true, example = "Integer")
-    private Integer realNameVerified;
+    private Byte realNameVerified;
 
     @ApiModelProperty(value = "传入原始密码，后台会对原始密码进行加密后再存储", required = true, example = "String")
     private String password;
@@ -62,22 +66,22 @@ public class UserDTO extends Id<Long> {
     private Date birthday;
 
     @ApiModelProperty(value = "使用状态：具体取值于字典表anan_dictionary.code=15", required = true, example = "Integer")
-    private Integer sex;
+    private Byte sex;
 
     @ApiModelProperty(value = "电子邮箱", example = "String")
     private String email;
 
     @ApiModelProperty(value = "邮箱认证标志", required = true, example = "Integer")
-    private Integer emailVerified;
+    private Byte emailVerified;
 
     @ApiModelProperty(value = "手机号码", example = "String")
     private String phone;
 
     @ApiModelProperty(value = "手机验证标志", required = true, example = "Integer")
-    private Integer phoneVerified;
+    private Byte phoneVerified;
 
     @ApiModelProperty(value = "使用状态：0=启用，1=禁用，具体取值于字典表anan_dictionary.code=11", required = true, example = "Integer")
-    private Integer status;
+    private Byte status;
 
     @ApiModelProperty(value = "头像", example = "String")
     private String avatar;
@@ -99,5 +103,4 @@ public class UserDTO extends Id<Long> {
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
     @ApiModelProperty(value = "过期时间，账户过期后用户被锁定切不能登录系统", required = true, example = "Date")
     private Date expireTime;
-
 }

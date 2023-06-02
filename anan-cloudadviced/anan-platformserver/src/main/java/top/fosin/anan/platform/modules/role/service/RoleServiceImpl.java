@@ -16,12 +16,13 @@ import top.fosin.anan.core.util.BeanUtil;
 import top.fosin.anan.data.entity.req.PageQuery;
 import top.fosin.anan.data.result.PageResult;
 import top.fosin.anan.data.result.ResultUtils;
-import top.fosin.anan.platform.modules.organization.dao.OrgDao;
+import top.fosin.anan.platform.modules.organization.dto.OrganizationDTO;
 import top.fosin.anan.platform.modules.organization.po.Organization;
+import top.fosin.anan.platform.modules.organization.service.inter.OrgService;
 import top.fosin.anan.platform.modules.role.dao.RoleDao;
 import top.fosin.anan.platform.modules.role.dto.RoleCreateDTO;
 import top.fosin.anan.platform.modules.role.dto.RoleDTO;
-import top.fosin.anan.cloudresource.entity.req.RoleUpdateDTO;
+import top.fosin.anan.platform.modules.role.dto.RoleUpdateDTO;
 import top.fosin.anan.platform.modules.role.po.Role;
 import top.fosin.anan.platform.modules.role.query.RoleQuery;
 import top.fosin.anan.platform.modules.role.service.inter.RoleService;
@@ -45,8 +46,8 @@ import java.util.Objects;
 public class RoleServiceImpl implements RoleService {
     private final RoleDao roleDao;
     private final UserRoleDao userRoleDao;
-    private final OrgDao orgDao;
     private final CurrentUserService currentUserService;
+    private final OrgService orgService;
 
     @Override
     public RoleDTO create(RoleCreateDTO dto) {
@@ -145,8 +146,8 @@ public class RoleServiceImpl implements RoleService {
             String name = params.getName();
             String value = params.getValue();
             Assert.notNull(organizId, "机构ID不能为空!");
-            Organization organiz = orgDao.findById(organizId).orElseThrow(() -> new IllegalArgumentException("根据传入的机构编码没有找到任何数据!"));
-            List<Organization> organizs = orgDao.findByTopIdAndCodeStartingWithOrderByCodeAsc(organiz.getTopId(),organiz.getCode());
+            OrganizationDTO organiz = orgService.findOneById(organizId);
+            List<Organization> organizs = orgService.findByTopIdAndCodeStartingWithOrderByCodeAsc(organiz.getTopId(), organiz.getCode());
 
             condition = (root, query, cb) -> {
                 Path<Long> organizIdPath = root.get("organizId");
@@ -179,10 +180,10 @@ public class RoleServiceImpl implements RoleService {
         if (currentUserService.hasSysAdminRole()) {
             entities = roleDao.findAll();
         } else {
-            Organization organiz = orgDao.findById(organizId).orElse(null);
+            OrganizationDTO organiz = orgService.findOneById(organizId);
             Assert.notNull(organiz, "根据传入的机构编码没有找到任何数据!");
-            Organization topOrganiz = orgDao.findById(organiz.getTopId()).orElse(null);
-            List<Organization> organizs = orgDao.findByTopIdAndCodeStartingWithOrderByCodeAsc(organiz.getTopId(), Objects.requireNonNull(topOrganiz).getCode());
+            OrganizationDTO topOrganiz = orgService.findOneById(organiz.getTopId());
+            List<Organization> organizs = orgService.findByTopIdAndCodeStartingWithOrderByCodeAsc(organiz.getTopId(), Objects.requireNonNull(topOrganiz).getCode());
 
             Specification<Role> condition = (root, query, cb) -> {
                 Path<Long> organizIdPath = root.get("organizId");

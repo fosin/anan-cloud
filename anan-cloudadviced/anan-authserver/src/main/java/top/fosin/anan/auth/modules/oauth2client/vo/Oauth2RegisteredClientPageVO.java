@@ -7,12 +7,14 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
+import top.fosin.anan.auth.modules.oauth2client.dto.ClientSettingsDTO;
+import top.fosin.anan.auth.modules.oauth2client.dto.TokenSettingsDTO;
 import top.fosin.anan.core.util.DateTimeUtil;
 import top.fosin.anan.data.entity.Id;
 
 import java.util.Date;
 
-        /**
+/**
  * OAUTH2认证客户端注册表(oauth2_registered_client)集合VO
  *
  * @author fosin
@@ -54,9 +56,9 @@ public class Oauth2RegisteredClientPageVO extends Id<String> {
     private String scopes;
 
     @ApiModelProperty(value = "客户端设置")
-    private String clientSettings;
+    private ClientSettingsDTO clientSettings;
 
     @ApiModelProperty(value = "令牌设置")
-    private String tokenSettings;
+    private TokenSettingsDTO tokenSettings;
 
 }

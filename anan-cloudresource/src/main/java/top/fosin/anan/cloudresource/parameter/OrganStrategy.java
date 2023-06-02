@@ -16,7 +16,7 @@ public class OrganStrategy implements IParameterStrategy {
     }
 
     @Override
-    public int getType() {
+    public byte getType() {
         return ParameterType.Organization.getTypeValue();
     }
 
@@ -27,6 +27,6 @@ public class OrganStrategy implements IParameterStrategy {
 
     @Override
     public String getScope() {
-        return currentUserService.isSysAdminUser() ? null : currentUserService.getOrganizId() + "";
+        return currentUserService.hasSysAdminRole() ? null : String.valueOf(currentUserService.getOrganizId());
     }
 }

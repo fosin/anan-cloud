@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.DynamicUpdate;
+import top.fosin.anan.cloudresource.parameter.ParameterStatus;
 import top.fosin.anan.jpa.po.IdCreateUpdatePO;
 
 import javax.persistence.Basic;
@@ -44,7 +45,7 @@ public class Parameter extends IdCreateUpdatePO<Long> {
     @Basic
     @ApiModelProperty(value = "参数分类：具体取值于字典表anan_dictionary.id=10", required = true)
     @Column(name = "type", nullable = false)
-    private Integer type;
+    private Byte type;
 
     @Basic
     @ApiModelProperty(value = "参数作用域")
@@ -74,6 +75,6 @@ public class Parameter extends IdCreateUpdatePO<Long> {
     @Basic
     @ApiModelProperty(value = "参数状态：0=正常状态、1=修改状态、2=删除状态", required = true)
     @Column(name = "status", nullable = false)
-    private Integer status = 0;
+    private Byte status = ParameterStatus.Normal.getTypeValue();
 
 }

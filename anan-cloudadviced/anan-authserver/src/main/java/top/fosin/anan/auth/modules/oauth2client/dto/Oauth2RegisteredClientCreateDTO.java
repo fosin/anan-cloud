@@ -6,13 +6,17 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.oauth2.core.AuthorizationGrantType;
+import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
 import top.fosin.anan.core.util.DateTimeUtil;
-import top.fosin.anan.data.entity.req.LogiSortQuery;
-import top.fosin.anan.data.module.LogiQueryRule;
-import top.fosin.anan.data.module.SortRule;
+import top.fosin.anan.data.valid.group.Create;
+import top.fosin.anan.data.valid.group.Update;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
+import java.util.Set;
 
 /**
  * OAUTH2认证客户端注册表(oauth2_registered_client)创建DTO
@@ -21,13 +25,13 @@ import java.util.Date;
  * @date 2023-05-13
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = false)
 @ToString(callSuper = true)
 @ApiModel(value = "OAUTH2认证客户端注册表创建DTO", description = "OAUTH2认证客户端注册表(oauth2_registered_client)创建DTO")
-public class Oauth2RegisteredClientCreateDTO extends LogiSortQuery<LogiQueryRule, SortRule, String> {
+public class Oauth2RegisteredClientCreateDTO {
     private static final long serialVersionUID = 372060057450849410L;
 
-    @NotBlank(message = "客户端序号" + "{javax.validation.constraints.NotBlank.message}")
+    @NotBlank(message = "客户端序号" + "{javax.validation.constraints.NotBlank.message}", groups = Create.class)
     @ApiModelProperty(value = "客户端序号", required = true, example = "String")
     private String clientId;
 
@@ -42,31 +46,32 @@ public class Oauth2RegisteredClientCreateDTO extends LogiSortQuery<LogiQueryRule
     @ApiModelProperty(value = "过期时间", example = "Date")
     private Date clientSecretExpiresAt;
 
-    @NotBlank(message = "客户端名称" + "{javax.validation.constraints.NotBlank.message}")
+    @NotBlank(message = "客户端名称" + "{javax.validation.constraints.NotBlank.message}", groups = Create.class)
     @ApiModelProperty(value = "客户端名称", required = true, example = "String")
     private String clientName;
 
-    @NotBlank(message = "认证方法" + "{javax.validation.constraints.NotBlank.message}")
+    @NotEmpty(message = "认证方法" + "{javax.validation.constraints.NotEmpty.message}", groups = Update.class)
     @ApiModelProperty(value = "认证方法", required = true, example = "String")
-    private String clientAuthenticationMethods;
+    private Set<ClientAuthenticationMethod> clientAuthenticationMethods;
 
-    @NotBlank(message = "认证类型" + "{javax.validation.constraints.NotBlank.message}")
+    @NotEmpty(message = "认证类型" + "{javax.validation.constraints.NotEmpty.message}", groups = Update.class)
     @ApiModelProperty(value = "认证类型", required = true, example = "String")
-    private String authorizationGrantTypes;
+    private Set<AuthorizationGrantType> authorizationGrantTypes;
 
     @ApiModelProperty(value = "跳转地址", example = "String")
-    private String redirectUris;
+    @NotEmpty(message = "跳转地址" + "{javax.validation.constraints.NotEmpty.message}", groups = Update.class)
+    private Set<String> redirectUris;
 
-    @NotBlank(message = "作用域" + "{javax.validation.constraints.NotBlank.message}")
+    @NotEmpty(message = "作用域" + "{javax.validation.constraints.NotEmpty.message}", groups = Update.class)
     @ApiModelProperty(value = "作用域", required = true, example = "String")
-    private String scopes;
+    private Set<String> scopes;
 
-    @NotBlank(message = "客户端设置" + "{javax.validation.constraints.NotBlank.message}")
+    @NotNull(message = "客户端设置" + "{javax.validation.constraints.NotNull.message}", groups = Update.class)
     @ApiModelProperty(value = "客户端设置", required = true, example = "String")
-    private ClientSettings clientSettings;
+    private ClientSettingsDTO clientSettings;
 
-    @NotBlank(message = "令牌设置" + "{javax.validation.constraints.NotBlank.message}")
+    @NotNull(message = "令牌设置" + "{javax.validation.constraints.NotNull.message}", groups = Update.class)
     @ApiModelProperty(value = "令牌设置", required = true, example = "String")
-    private TokenSettings tokenSettings;
+    private TokenSettingsDTO tokenSettings;
 
 }

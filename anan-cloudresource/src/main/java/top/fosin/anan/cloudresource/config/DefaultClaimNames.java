@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package top.fosin.anan.auth.config;
+package top.fosin.anan.cloudresource.config;
 
 /**
  * The names of the &quot;Standard Claims&quot; defined by the OpenID Connect Core 1.0
@@ -39,6 +39,16 @@ public interface DefaultClaimNames {
      * 用户唯一内部ID
      */
     String ID = "id";
+
+    /**
+     * 机构ID
+     */
+    String ORGANIZ_ID = "organizId";
+
+    /**
+     * 顶级机构ID
+     */
+    String TOP_ID = "topId";
 
     /**
      * 唯一标识，一般为用户账号
@@ -176,13 +186,4 @@ public interface DefaultClaimNames {
      */
     String ZONEINFO = "zoneinfo";
 
-    /**
-     * 修改时间
-     */
-    String UPDATE_TIME = "update_time";
-
-    /**
-     * 修改人
-     */
-    String UPDATE_BY = "update_by";
 }

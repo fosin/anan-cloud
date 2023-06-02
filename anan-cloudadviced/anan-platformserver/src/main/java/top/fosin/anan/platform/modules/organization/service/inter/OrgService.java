@@ -9,6 +9,8 @@ import top.fosin.anan.platform.modules.organization.dto.OrganizationUpdateDTO;
 import top.fosin.anan.platform.modules.organization.po.Organization;
 import top.fosin.anan.platform.modules.organization.query.OrganizationQuery;
 
+import java.util.List;
+
 /**
  * @author fosin
  * @date 2017/12/29
@@ -20,5 +22,6 @@ public interface OrgService extends
         IDeleteJpaService<Long, Organization>,
         IRetrieveTreeJpaService<OrganizationQuery, OrganizTreeDTO, Long, Organization> {
 
+    List<Organization> findByTopIdAndCodeStartingWithOrderByCodeAsc(Long topId, String code);
 }
 

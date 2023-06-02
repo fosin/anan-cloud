@@ -37,7 +37,7 @@ public class InternationalCharsetPageVO extends Id<Long> {
 
     @ApiModelProperty(value = "状态：0=启用，1=禁用")
     @Translate2String(service = DicDetailGrpcServiceImpl.class, dicId = "11")
-    private Integer status;
+    private Byte status;
 
     @Translate2String(service = UserGrpcServiceImpl.class, dicId = "")
     @ApiModelProperty(value = "创建人")

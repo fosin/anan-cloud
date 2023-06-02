@@ -7,6 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import top.fosin.anan.data.entity.Id;
 import top.fosin.anan.data.prop.ForeignKeyProp;
+import top.fosin.anan.data.valid.group.Update;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
@@ -24,13 +25,13 @@ import javax.validation.constraints.PositiveOrZero;
 public class OrganizationPermissionUpdateDTO extends Id<Long> implements ForeignKeyProp<Long> {
     private static final long serialVersionUID = 564103234116768299L;
 
-    @NotNull(message = "机构序号" + "{javax.validation.constraints.NotNull.message}")
-    @PositiveOrZero(message = "机构序号" + "{javax.validation.constraints.Positive.message}")
+    @NotNull(message = "机构序号" + "{javax.validation.constraints.NotNull.message}", groups = Update.class)
+    @PositiveOrZero(message = "机构序号" + "{javax.validation.constraints.Positive.message}", groups = Update.class)
     @ApiModelProperty(value = "机构序号", required = true)
     private Long organizId;
 
-    @NotNull(message = "权限序号" + "{javax.validation.constraints.NotNull.message}")
-    @PositiveOrZero(message = "权限序号" + "{javax.validation.constraints.Positive.message}")
+    @NotNull(message = "权限序号" + "{javax.validation.constraints.NotNull.message}", groups = Update.class)
+    @PositiveOrZero(message = "权限序号" + "{javax.validation.constraints.Positive.message}", groups = Update.class)
     @ApiModelProperty(value = "权限序号", required = true)
     private Long permissionId;
 

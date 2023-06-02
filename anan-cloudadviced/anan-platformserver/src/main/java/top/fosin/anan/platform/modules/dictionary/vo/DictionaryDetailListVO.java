@@ -1,28 +1,25 @@
 package top.fosin.anan.platform.modules.dictionary.vo;
 
-                                                                                                                                                                                                                                                            
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import java.io.Serializable;
 import lombok.Data;
-import org.springframework.format.annotation.DateTimeFormat;
-import top.fosin.anan.core.util.DateTimeUtil;
-import java.util.Date;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import top.fosin.anan.data.entity.Id;
-/**
+
+        /**
  * 系统通用字典明细表(anan_dictionary_detail)集合VO
  *
  * @author fosin
- * @date 2023-05-11
+ * @date 2023-05-21
  */
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value = "系统通用字典明细表集合VO", description = "系统通用字典明细表(anan_dictionary_detail)集合VO")
 public class DictionaryDetailListVO extends Id<Long> {
-    private static final long serialVersionUID = 204041085295336773L;
+    private static final long serialVersionUID = -47148115192138233L;
     @ApiModelProperty(value = "取值于字典表anan_dictionary.id")
     private Long dictionaryId;
 
@@ -33,10 +30,10 @@ public class DictionaryDetailListVO extends Id<Long> {
     private String name;
 
     @ApiModelProperty(value = "顺序，用于显示数据时的顺序，数值越小越靠前")
-    private Object sort;
+    private Short sort;
 
     @ApiModelProperty(value = "使用状态：0=启用，1=禁用，具体取值于字典表anan_dictionary.code=11")
-    private Integer status;
+    private Byte status;
 
     @ApiModelProperty(value = "标准代码，该字段通常用于对接标准字典")
     private String scode;
@@ -45,7 +42,7 @@ public class DictionaryDetailListVO extends Id<Long> {
     private String scope;
 
     @ApiModelProperty(value = "使用标志：0=未使用，1=已使用，已使用的字典就不能再修改name属性")
-    private Integer used;
+    private Byte used;
 
     @ApiModelProperty(value = "详细说明")
     private String description;

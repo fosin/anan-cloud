@@ -10,10 +10,9 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import top.fosin.anan.cloudresource.constant.FieldConstant;
 import top.fosin.anan.cloudresource.constant.PathPrefixConstant;
-import top.fosin.anan.cloudresource.constant.PathSuffixConstant;
 import top.fosin.anan.cloudresource.entity.req.UserCreateDTO;
 import top.fosin.anan.cloudresource.entity.req.UserUpdateDTO;
-import top.fosin.anan.cloudresource.entity.res.UserRespDTO;
+import top.fosin.anan.cloudresource.entity.res.UserDTO;
 import top.fosin.anan.core.util.crypt.AesUtil;
 import top.fosin.anan.data.constant.PathConstant;
 import top.fosin.anan.data.controller.*;
@@ -48,14 +47,6 @@ public class UserController extends BaseController
         IDeleteController<Long>,
         IRetrieveController<UserQuery, UserVO, UserListVO, UserPageVO, Long> {
     private final UserService userService;
-
-    @GetMapping(PathSuffixConstant.USER_CODE)
-    @ApiImplicitParam(name = FieldConstant.USER_CODE, value = "用户工号,取值于User.usercode",
-            required = true, dataTypeClass = String.class, paramType = "path")
-    @ApiOperation("根据用户工号查找用户信息")
-    public SingleResult<UserRespDTO> findOneByUsercode(@PathVariable(FieldConstant.USER_CODE) String usercode) {
-        return ResultUtils.success(userService.findOneByUsercode(usercode));
-    }
 
     @Override
     @PostMapping(value = PathConstant.PATH_PAGE)
@@ -123,8 +114,8 @@ public class UserController extends BaseController
     @ApiOperation("根据机构ID查询该机构及子机构的所有用户")
     @ApiImplicitParam(name = FieldConstant.ORGANIZ_ID, value = "机构序号",
             required = true, dataTypeClass = Long.class, paramType = "path")
-    public MultResult<UserRespDTO> listByOrganizId(@PathVariable(FieldConstant.ORGANIZ_ID) Long organizId,
-                                                   @PathVariable("status") Integer status) {
+    public MultResult<UserDTO> listByOrganizId(@PathVariable(FieldConstant.ORGANIZ_ID) Long organizId,
+                                               @PathVariable("status") Byte status) {
         return ResultUtils.success(userService.listByOrganizId(organizId, status));
     }
 
@@ -132,8 +123,8 @@ public class UserController extends BaseController
     @ApiOperation("根据顶级机构ID查询其下所有用户")
     @ApiImplicitParam(name = FieldConstant.TOP_ID, value = "顶级机构ID，传0表示默认查询当前用户的顶级机构序号",
             required = true, dataTypeClass = Long.class, paramType = "path")
-    public MultResult<UserRespDTO> listAllChildByTopId(@PathVariable(FieldConstant.TOP_ID) Long topId,
-                                                       @PathVariable("status") Integer status) {
+    public MultResult<UserDTO> listAllChildByTopId(@PathVariable(FieldConstant.TOP_ID) Long topId,
+                                                   @PathVariable("status") Byte status) {
         return ResultUtils.success(userService.listAllChildByTopId(topId, status));
     }
 

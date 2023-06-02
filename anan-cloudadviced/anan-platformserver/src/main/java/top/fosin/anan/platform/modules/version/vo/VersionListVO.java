@@ -27,7 +27,7 @@ public class VersionListVO extends Id<Long> {
     private String name;
 
     @ApiModelProperty(value = "版本类型：0=收费版 1=免费版 2=开发版")
-    private Integer type;
+    private Byte type;
 
     @ApiModelProperty(value = "版本价格")
     private Double price;
@@ -59,7 +59,7 @@ public class VersionListVO extends Id<Long> {
     private Integer tryoutDays;
 
     @ApiModelProperty(value = "启用状态：0=启用，1=禁用")
-    private Integer status;
+    private Byte status;
 
     @ApiModelProperty(value = "版本描述")
     private String description;

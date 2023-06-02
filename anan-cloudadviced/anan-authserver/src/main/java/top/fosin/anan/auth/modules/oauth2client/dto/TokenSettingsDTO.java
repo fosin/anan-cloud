@@ -17,11 +17,12 @@ import java.time.Duration;
 @EqualsAndHashCode
 @ToString(callSuper = true)
 @ApiModel(value = "OAUTH2令牌设置", description = "OAUTH2令牌设置")
-public class TokenSettings {
+public class TokenSettingsDTO {
 
     @NotNull(message = "令牌格式" + "{javax.validation.constraints.NotNull.message}")
     @Positive(message = "令牌格式" + "{javax.validation.constraints.Positive.message}")
     @ApiModelProperty(value = "令牌格式", required = true, example = "reference")
+    //使用透明方式，默认是 OAuth2TokenFormat SELF_CONTAINED
     private OAuth2TokenFormat accessTokenFormat = OAuth2TokenFormat.REFERENCE;
 
     @NotNull(message = "授权令牌有效期" + "{javax.validation.constraints.NotNull.message}")
@@ -45,6 +46,6 @@ public class TokenSettings {
 
     @NotNull(message = "ID令牌加密算法" + "{javax.validation.constraints.NotNull.message}")
     @ApiModelProperty(value = "ID令牌加密算法", required = true, example = "Integer")
-    private SignatureAlgorithm idTokenSignatureAlgorithm = SignatureAlgorithm.RS256;
+    private SignatureAlgorithm idTokenSignatureAlgorithm;
 
 }

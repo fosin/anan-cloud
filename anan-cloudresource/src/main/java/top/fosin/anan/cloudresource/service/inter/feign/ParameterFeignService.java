@@ -39,12 +39,12 @@ public interface ParameterFeignService {
     void processUpdate(@RequestBody ParameterUpdateDTO reqDto);
 
     @GetMapping(value = PATH_3ARGS)
-    SingleResult<ParameterDTO> getParameter(@RequestParam("type") Integer type,
+    SingleResult<ParameterDTO> getParameter(@RequestParam("type") Byte type,
                                                 @RequestParam("scope") String scope,
                                                 @RequestParam("name") String name);
 
     @GetMapping(value = PATH_NEAREST)
-    SingleResult<ParameterDTO> getNearestParameter(@RequestParam("type") Integer type,
+    SingleResult<ParameterDTO> getNearestParameter(@RequestParam("type") Byte type,
                                                        @RequestParam("scope") String scope,
                                                        @RequestParam("name") String name);
 

@@ -6,14 +6,17 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.oauth2.core.AuthorizationGrantType;
+import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
 import top.fosin.anan.core.util.DateTimeUtil;
 import top.fosin.anan.data.entity.req.LogiSortQuery;
 import top.fosin.anan.data.module.LogiQueryRule;
 import top.fosin.anan.data.module.SortRule;
 
 import java.util.Date;
+import java.util.Set;
 
-        /**
+/**
  * OAUTH2认证客户端注册表(oauth2_registered_client)通用查询DTO
  *
  * @author fosin
@@ -44,16 +47,16 @@ public class Oauth2RegisteredClientQuery extends LogiSortQuery<LogiQueryRule,Sor
     private String clientName;
 
     @ApiModelProperty(value = "认证方法", example = "String")
-    private String clientAuthenticationMethods;
+    private Set<ClientAuthenticationMethod> clientAuthenticationMethods;
 
     @ApiModelProperty(value = "认证类型", example = "String")
-    private String authorizationGrantTypes;
+    private Set<AuthorizationGrantType> authorizationGrantTypes;
 
     @ApiModelProperty(value = "跳转地址", example = "String")
-    private String redirectUris;
+    private Set<String> redirectUris;
 
     @ApiModelProperty(value = "作用域", example = "String")
-    private String scopes;
+    private Set<String> scopes;
 
     @ApiModelProperty(value = "客户端设置", example = "String")
     private String clientSettings;

@@ -34,13 +34,13 @@ public class ParameterFeignFallbackServiceImpl implements ParameterFeignService 
     }
 
     @Override
-    public SingleResult<ParameterDTO> getParameter(Integer type, String scope, String name) {
+    public SingleResult<ParameterDTO> getParameter(Byte type, String scope, String name) {
         log.error("feign 远程查询通用系统参数失败:{}{}{}", type, scope, name);
         return null;
     }
 
     @Override
-    public SingleResult<ParameterDTO> getNearestParameter(Integer type, String scope, String name) {
+    public SingleResult<ParameterDTO> getNearestParameter(Byte type, String scope, String name) {
         log.error("feign 远程查询通用系统参数失败:{}{}{}", type, scope, name);
         return null;
     }

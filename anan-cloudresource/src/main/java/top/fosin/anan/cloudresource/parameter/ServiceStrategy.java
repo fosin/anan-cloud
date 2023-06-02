@@ -16,7 +16,7 @@ public class ServiceStrategy implements IParameterStrategy {
     }
 
     @Override
-    public int getType() {
+    public byte getType() {
         return ParameterType.Service.getTypeValue();
     }
 
@@ -27,6 +27,6 @@ public class ServiceStrategy implements IParameterStrategy {
 
     @Override
     public String getScope() {
-        return currentUserService.isSysAdminUser() ? null : currentUserService.getOrganizId() + "";
+        return currentUserService.hasSysAdminRole() ? null : String.valueOf(currentUserService.getOrganizId());
     }
 }

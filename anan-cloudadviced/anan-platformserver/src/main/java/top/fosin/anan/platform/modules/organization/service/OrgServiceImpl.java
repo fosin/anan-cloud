@@ -60,6 +60,10 @@ public class OrgServiceImpl extends OrganizServiceGrpc.OrganizServiceImplBase im
             level = parentEntity.getLevel() + 1;
         }
         createEntity.setLevel(level);
+
+        if (createEntity.getStatus() == null) {
+            createEntity.setStatus((byte) 0);
+        }
         Organization result = orgDao.save(createEntity);
         if (pid == 0) {
             result.setTopId(result.getId());
@@ -83,18 +87,21 @@ public class OrgServiceImpl extends OrganizServiceGrpc.OrganizServiceImplBase im
         if (!updateEntity.getPid().equals(pid)) {
             orgDao.findById(pid).ifPresent(sentity -> updateEntity.setLevel(sentity.getLevel() + 1));
         }
+        if (updateEntity.getStatus() == null) {
+            updateEntity.setStatus((byte) 0);
+        }
         orgDao.save(updateEntity);
         ananCacheManger.evict(PlatformRedisConstant.ANAN_ORGANIZATION, updateDto.getId() + "");
         if (changedName)
-            StringTranslateCacheUtil.put(OrganizGrpcServiceImpl.class, "", updateDto.getId(), updateDto.getName());
+            StringTranslateCacheUtil.put(OrganizGrpcServiceImpl.class, updateDto.getId(), updateDto.getName());
     }
 
     @Override
     public OrganizationDTO findOneById(Long id, boolean... findRefs) {
-        OrganizationDTO respDTO = ananCacheManger.get(PlatformRedisConstant.ANAN_ORGANIZATION, id + "", OrganizationDTO.class);
+        OrganizationDTO respDTO = ananCacheManger.get(PlatformRedisConstant.ANAN_ORGANIZATION, String.valueOf(id), OrganizationDTO.class);
         if (respDTO == null) {
             respDTO = OrgService.super.findOneById(id, findRefs);
-            ananCacheManger.put(PlatformRedisConstant.ANAN_ORGANIZATION, id + "", respDTO);
+            ananCacheManger.put(PlatformRedisConstant.ANAN_ORGANIZATION, String.valueOf(id), respDTO);
         }
         return respDTO;
     }
@@ -231,5 +238,10 @@ public class OrgServiceImpl extends OrganizServiceGrpc.OrganizServiceImplBase im
     @Override
     public IJpaRepository<Long, Organization> getDao() {
         return orgDao;
+    }
+
+    @Override
+    public List<Organization> findByTopIdAndCodeStartingWithOrderByCodeAsc(Long topId, String code) {
+        return orgDao.findByTopIdAndCodeStartingWithOrderByCodeAsc(topId, code);
     }
 }

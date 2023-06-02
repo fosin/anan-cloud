@@ -94,10 +94,10 @@ public class CustomReactiveOAuth2UserService implements ReactiveOAuth2UserServic
                     .bodyToMono(STRING_OBJECT_MAP);
             return userAttributes.map((attrs) -> {
                         GrantedAuthority authority = new OAuth2UserAuthority(attrs);
-                        List<Map<String,String>> list = (List<Map<String,String>>) attrs.get(authorityClaimName);
+                        List<String> list = (List<String>) attrs.get(authorityClaimName);
                         Set<GrantedAuthority> authorities = new HashSet<>();
                         if (list != null) {
-                            authorities = list.stream().map(map -> new SimpleGrantedAuthority(authorityPrefix + map.get("role"))).collect(Collectors.toSet());
+                            authorities = list.stream().map(s -> new SimpleGrantedAuthority(authorityPrefix + s)).collect(Collectors.toSet());
                         }
                         authorities.add(authority);
                         OAuth2AccessToken token = userRequest.getAccessToken();

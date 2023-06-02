@@ -33,7 +33,7 @@ public class InternationalQuery extends LogiSortQuery<LogiQueryRule,SortRule,Int
     private String icon;
 
     @ApiModelProperty(value = "状态：0=启用，1=禁用", example = "Integer")
-    private Integer status;
+    private Byte status;
 
     @ApiModelProperty(value = "默认标志", example = "Integer")
     private Integer defaultFlag;

@@ -54,29 +54,29 @@ private String preferredUsername;
 private String website;
 
 @ApiModelProperty(value = "实名认证标志", example = "Integer")
-private Integer realNameVerified;
+private Byte realNameVerified;
 
 @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
 @ApiModelProperty(value = "生日", example = "Date")
 private Date birthday;
 
 @ApiModelProperty(value = "使用状态：具体取值于字典表anan_dictionary.code=15", example = "Integer")
-private Integer sex;
+private Byte sex;
 
 @ApiModelProperty(value = "电子邮箱", example = "String")
 private String email;
 
 @ApiModelProperty(value = "邮箱认证标志", example = "Integer")
-private Integer emailVerified;
+private Byte emailVerified;
 
 @ApiModelProperty(value = "手机号码", example = "String")
 private String phone;
 
 @ApiModelProperty(value = "手机验证标志", example = "Integer")
-private Integer phoneVerified;
+private Byte phoneVerified;
 
 @ApiModelProperty(value = "使用状态：0=启用，1=禁用，具体取值于字典表anan_dictionary.code=11", example = "Integer")
-private Integer status;
+private Byte status;
 
 @ApiModelProperty(value = "头像", example = "String")
 private String avatar;

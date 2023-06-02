@@ -3,7 +3,7 @@ package top.fosin.anan.platform.modules.user.service.inter;
 import org.springframework.validation.annotation.Validated;
 import top.fosin.anan.cloudresource.entity.req.UserCreateDTO;
 import top.fosin.anan.cloudresource.entity.req.UserUpdateDTO;
-import top.fosin.anan.cloudresource.entity.res.UserRespDTO;
+import top.fosin.anan.cloudresource.entity.res.UserDTO;
 import top.fosin.anan.cloudresource.service.inter.base.UserBaseService;
 import top.fosin.anan.jpa.service.ICreateJpaService;
 import top.fosin.anan.jpa.service.IDeleteJpaService;
@@ -21,8 +21,8 @@ import java.util.List;
  */
 @Validated
 public interface UserService extends
-        ICreateJpaService<UserCreateDTO, UserRespDTO, Long, User>,
-        IRetrieveJpaService<UserRespDTO, Long, User>,
+        ICreateJpaService<UserCreateDTO, UserDTO, Long, User>,
+        IRetrieveJpaService<UserDTO, Long, User>,
         IUpdateJpaService<UserUpdateDTO, Long, User>,
         IDeleteJpaService<Long, User>,
         UserBaseService {
@@ -31,6 +31,6 @@ public interface UserService extends
 
     String resetPassword(@Positive Long id);
 
-    List<UserRespDTO> listOtherUsersByRoleId(@Positive Long roleId);
+    List<UserDTO> listOtherUsersByRoleId(@Positive Long roleId);
 
 }

@@ -38,7 +38,7 @@ public class VersionRolePageVO extends Id<Long> {
     private String tips;
 
     @ApiModelProperty(value = "使用状态：0=启用，1=禁用，具体取值于字典表anan_dictionary.code=11")
-    private Integer status;
+    private Byte status;
 
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
     @ApiModelProperty(value = "创建时间")

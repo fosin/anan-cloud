@@ -37,8 +37,8 @@ services:
       - JVM_XMS=512M
       - JVM_XMX=512M
       - JVM_XMN=170M
-      - JVM_MS=160M
-      - JVM_MMS=160M
+      - JVM_MS=180M
+      - JVM_MMS=180M
     volumes:
       - /data/logs/nacos0/:/home/nacos/logs
       - /data/nacos0/:/home/nacos/data
@@ -100,7 +100,7 @@ services:
     hostname: anan-authserver
     restart: always
     environment:
-      - JAVA_TOOL_OPTIONS=-Xmx200M -XX:MaxMetaspaceSize=160M -XX:MetaspaceSize=160M -XX:+DisableExplicitGC -XX:ErrorFile=/logs/hs_err_pid%p.log
+      - JAVA_TOOL_OPTIONS=-Xmx200M -XX:MaxMetaspaceSize=180M -XX:MetaspaceSize=180M -XX:+DisableExplicitGC -XX:ErrorFile=/logs/hs_err_pid%p.log
       - spring.cloud.kubernetes.enabled=false
       - spring.cloud.nacos.config.enabled=true
       - spring.cloud.nacos.discovery.enabled=true
@@ -122,7 +122,7 @@ services:
     hostname: anan-cloudgateway
     restart: always
     environment:
-      - JAVA_TOOL_OPTIONS=-Xmx200M -XX:MaxMetaspaceSize=160M -XX:MetaspaceSize=160M -XX:+DisableExplicitGC -XX:ErrorFile=/logs/hs_err_pid%p.log
+      - JAVA_TOOL_OPTIONS=-Xmx200M -XX:MaxMetaspaceSize=180M -XX:MetaspaceSize=180M -XX:+DisableExplicitGC -XX:ErrorFile=/logs/hs_err_pid%p.log
       - spring.cloud.kubernetes.enabled=false
       - spring.cloud.nacos.config.enabled=true
       - spring.cloud.nacos.discovery.enabled=true
@@ -137,7 +137,7 @@ services:
     hostname: anan-platformserver
     restart: always
     privileged: true
-    entrypoint: java -XX:NativeMemoryTracking=summary -Xmx200M -XX:MaxMetaspaceSize=160M -XX:MetaspaceSize=160M -XX:+DisableExplicitGC -XX:ErrorFile=/logs/hs_err_pid%p.log -Dloader.path=/anan/dependency -Djava.security.egd=file:/dev/./urandom -jar /anan/app.jar
+    entrypoint: java -XX:NativeMemoryTracking=summary -Xmx200M -XX:MaxMetaspaceSize=180M -XX:MetaspaceSize=180M -XX:+DisableExplicitGC -XX:ErrorFile=/logs/hs_err_pid%p.log -Dloader.path=/anan/dependency -Djava.security.egd=file:/dev/./urandom -jar /anan/app.jar
     environment:
       - spring.cloud.kubernetes.enabled=false
       - spring.cloud.nacos.config.enabled=true
@@ -158,7 +158,7 @@ services:
     hostname: anan-sbaserver
     restart: always
     environment:
-      - JAVA_TOOL_OPTIONS=-Xmx200M -XX:MaxMetaspaceSize=160M -XX:MetaspaceSize=160M -XX:+DisableExplicitGC -XX:ErrorFile=/logs/hs_err_pid%p.log
+      - JAVA_TOOL_OPTIONS=-Xmx200M -XX:MaxMetaspaceSize=180M -XX:MetaspaceSize=180M -XX:+DisableExplicitGC -XX:ErrorFile=/logs/hs_err_pid%p.log
       - spring.cloud.kubernetes.enabled=false
       - spring.cloud.nacos.config.enabled=true
       - spring.cloud.nacos.discovery.enabled=true
@@ -174,7 +174,7 @@ services:
     hostname: anan-eurekaserver
     restart: always
     environment:
-      - JAVA_TOOL_OPTIONS=-Xmx200M -XX:MaxMetaspaceSize=160M -XX:MetaspaceSize=160M -XX:+DisableExplicitGC -XX:ErrorFile=/logs/hs_err_pid%p.log
+      - JAVA_TOOL_OPTIONS=-Xmx200M -XX:MaxMetaspaceSize=180M -XX:MetaspaceSize=180M -XX:+DisableExplicitGC -XX:ErrorFile=/logs/hs_err_pid%p.log
       - spring.cloud.kubernetes.enabled=false
       - spring.cloud.nacos.config.enabled=true
       - spring.cloud.nacos.discovery.enabled=true
@@ -186,7 +186,7 @@ services:
     hostname: anan-configserver
     restart: always
     environment:
-      - JAVA_TOOL_OPTIONS=-Xmx200M -XX:MaxMetaspaceSize=160M -XX:MetaspaceSize=160M -XX:+DisableExplicitGC -XX:ErrorFile=/logs/hs_err_pid%p.log
+      - JAVA_TOOL_OPTIONS=-Xmx200M -XX:MaxMetaspaceSize=180M -XX:MetaspaceSize=180M -XX:+DisableExplicitGC -XX:ErrorFile=/logs/hs_err_pid%p.log
       - spring.cloud.config.server.native.search-locations=file:/anan-conf
       - spring.cloud.kubernetes.enabled=false
       - spring.cloud.nacos.config.enabled=true

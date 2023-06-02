@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package top.fosin.anan.auth.config;
+package top.fosin.anan.cloudresource.config;
 
 import org.springframework.security.oauth2.core.OAuth2AccessToken;
 import org.springframework.security.oauth2.core.oidc.StandardClaimNames;

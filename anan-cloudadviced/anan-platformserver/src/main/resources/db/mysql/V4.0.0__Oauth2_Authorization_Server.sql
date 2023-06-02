@@ -4,13 +4,104 @@ IMPORTANT:
     as PostgreSQL does not support the 'blob' data type.
 */
 
+/*完善字段说明、数据类型为tinyint等*/
+alter table anan_dictionary_detail
+    change name code int unsigned not null comment '字典明细键，不能重复，字典内明细项唯一代码';
+
+alter table anan_dictionary_detail
+    change value name varchar(64) null comment '字典明细字面说明';
+
+alter table anan_dictionary_detail
+    modify dictionary_id int unsigned not null comment '取值于字典表anan_dictionary.id' after id;
+
+alter table anan_dictionary_detail
+    modify status tinyint not null comment '使用状态：0=启用，1=禁用，具体取值于字典表anan_dictionary.code=11';
+
+alter table anan_dictionary_detail
+    drop key idx_anan_dictionarydetail_dictionaryid_name;
+
+alter table anan_dictionary_detail
+    add constraint idx_anan_dictionarydetail_dictionaryid_code
+        unique (dictionary_id, code);
+
+alter table anan_service
+    modify update_by int unsigned not null comment '更新人';
+
+alter table anan_service
+    modify create_by int unsigned not null comment '创建人';
+
+alter table anan_international
+    modify update_by int unsigned not null comment '更新人';
+
+alter table anan_international
+    modify update_time datetime not null comment '更新时间';
+
+alter table anan_international
+    modify create_by int unsigned not null comment '创建人';
+
+alter table anan_international
+    modify create_time datetime not null comment '创建时间';
+
+alter table anan_international_charset
+    modify update_by int unsigned not null comment '更新人';
+
+alter table anan_international_charset
+    modify update_time datetime not null comment '更新时间';
+
+alter table anan_international_charset
+    modify create_by int unsigned not null comment '创建人';
+
+alter table anan_international_charset
+    modify create_time datetime not null comment '创建时间';
+
+alter table anan_international_charset
+    modify status tinyint(1) default 0 not null comment '状态：0=启用，1=禁用' after charset;
+
+alter table anan_user
+    modify sex tinyint not null comment '使用状态：具体取值于字典表anan_dictionary.code=15';
+
+alter table anan_user
+    modify status tinyint not null comment '使用状态：0=启用，1=禁用，具体取值于字典表anan_dictionary.code=11';
+alter table anan_role
+    modify status tinyint not null comment '使用状态：0=启用，1=禁用，具体取值于字典表anan_dictionary.code=11';
+
+alter table anan_permission
+    modify type tinyint not null comment '权限类型：0=按钮、1=组件菜单，对应ur是前端组件、2=链接菜单，对应url是http(s)链接地址、3=目录菜单、4=系统模块，具体取值于字典表anan_dictionary.code=13，当权限类型是1、3、4：目录菜单时表示该节点不是一个叶子节点';
+
+alter table anan_permission
+    modify level tinyint not null comment '菜单层级';
+
+alter table anan_permission
+    modify sort smallint null comment '排序，用于显示数据时的顺序，数值越小越靠前';
+
+alter table anan_permission
+    modify status tinyint not null comment '使用状态：0=启用，1=禁用，具体取值于字典表anan_dictionary.code=11';
+
+alter table anan_parameter
+    modify type tinyint not null comment '参数分类：具体取值于字典表anan_dictionary.code=10';
+
+alter table anan_parameter
+    modify status tinyint not null comment '参数状态：0=正常状态、1=修改状态、2=删除状态';
+
+alter table anan_organization
+    modify level smallint not null comment '深度';
+
+alter table anan_organization
+    modify status tinyint not null comment '使用状态：0=启用，1=禁用，具体取值于字典表anan_dictionary.code=11';
+
+alter table anan_version_role
+    modify status tinyint not null comment '使用状态：0=启用，1=禁用，具体取值于字典表anan_dictionary.code=11';
+
+alter table anan_user_permission
+    modify add_mode tinyint not null comment '补充方式：0=增加权限、1=删除权限';
+
 /*完善用户信息*/
 alter table anan_user
-    add real_name_verified tinyint unsigned default 0 not null comment '实名认证标志' after username;
+    add real_name_verified tinyint default 0 not null comment '实名认证标志' after username;
 alter table anan_user
-    add email_verified tinyint unsigned default 0 not null comment '邮箱认证标志' after email;
+    add email_verified tinyint default 0 not null comment '邮箱认证标志' after email;
 alter table anan_user
-    add phone_verified tinyint unsigned default 0 not null comment '手机验证标志' after phone;
+    add phone_verified tinyint default 0 not null comment '手机验证标志' after phone;
 alter table anan_user
     add family_name varchar(32) default null comment '姓氏' after username;
 alter table anan_user
@@ -28,10 +119,10 @@ CREATE TABLE anan_user_address
 (
     id             int unsigned       NOT NULL COMMENT '主键序号',
     user_id        int unsigned       NOT NULL COMMENT '用户序号',
-    type           tinyint unsigned   NOT NULL COMMENT '地址类型',
+    type           tinyint            NOT NULL COMMENT '地址类型',
     address        varchar(128)       NOT NULL comment '完整详细地址',
-    country        smallint unsigned  NOT NULL comment '国家',
-    region         smallint unsigned  NOT NULL comment '省份',
+    country        smallint           NOT NULL comment '国家',
+    region         smallint           NOT NULL comment '省份',
     locality       mediumint unsigned NOT NULL comment '城市',
     locale         int unsigned       NOT NULL comment '区域',
     street_address int unsigned       NOT NULL comment '街道地址',
@@ -50,7 +141,7 @@ CREATE TABLE anan_user_certificate
 (
     id          int unsigned     NOT NULL COMMENT '主键序号',
     user_id     int unsigned     NOT NULL COMMENT '用户序号',
-    type        tinyint unsigned NOT NULL COMMENT '证件类型',
+    type        tinyint          NOT NULL COMMENT '证件类型',
     id_number   varchar(64)      NOT NULL COMMENT '证件号码',
     create_time datetime         NOT NULL COMMENT '创建日期',
     update_time datetime         NOT NULL COMMENT '修改日期',
@@ -62,7 +153,7 @@ CREATE TABLE anan_user_thirdparty
 (
     id            int unsigned     NOT NULL COMMENT '主键序号',
     user_id       int unsigned     NOT NULL COMMENT '用户序号',
-    type          tinyint unsigned NOT NULL COMMENT '认证类型',
+    type          tinyint          NOT NULL COMMENT '认证类型',
     third_account varchar(64)      NOT NULL COMMENT '第三方账号',
     create_time   datetime         NOT NULL COMMENT '创建日期',
     PRIMARY KEY (id)
@@ -130,27 +221,15 @@ CREATE TABLE oauth2_authorization_consent
 
 alter table oauth_approvals
     modify lastModifiedAt TIMESTAMP default current_timestamp() not null comment '修改时间';
+
 alter table oauth_approvals
     add primary key (userId, clientId);
+
 alter table oauth_code
     add primary key (code);
+
 alter table oauth_refresh_token
     add primary key (token_id);
-
-alter table anan_dictionary_detail
-    change name code int unsigned not null comment '字典明细键，不能重复，字典内明细项唯一代码';
-alter table anan_dictionary_detail
-    change value name varchar(64) null comment '字典明细字面说明';
-
-alter table anan_dictionary_detail
-    modify dictionary_id int unsigned not null comment '取值于字典表anan_dictionary.id' after id;
-
-alter table anan_dictionary_detail
-    drop key idx_anan_dictionarydetail_dictionaryid_name;
-
-alter table anan_dictionary_detail
-    add constraint idx_anan_dictionarydetail_dictionaryid_code
-        unique (dictionary_id, code);
 
 INSERT INTO oauth2_registered_client (id, client_id, client_id_issued_at, client_secret,
                                       client_secret_expires_at, client_name,
@@ -159,7 +238,7 @@ INSERT INTO oauth2_registered_client (id, client_id, client_id_issued_at, client
 VALUES ('b36960d3-0e9f-4442-a6f7-0243c0b6a407', 'webApp', '2023-02-09 10:10:18',
         '{bcrypt}$2a$10$xKfDcbOc1Ibh0VRWRIsQ4O3Vk9JxbF/30Wdz.e2hBNAAQKR5UziIK', null, 'webApp', 'client_secret_basic',
         'refresh_token,client_credentials,password,authorization_code,implicit',
-        'https://exam.assc.pro:11011/login/oauth2/code/anan,http://127.0.0.1:6140/auth/swagger-ui/index.html',
+        'https://exam.assc.pro:11011/auth/swagger-ui/index.html,https://exam.assc.pro:11011/login/oauth2/code/anan,http://127.0.0.1:6140/auth/swagger-ui/index.html,http://100.100.1.198:6140/auth/swagger-ui/index.html,https://exam.assc.pro:11011/gateway/swagger-ui/index.html',
         'address,phone,openid,profile,email,idno',
         '{"@class":"java.util.Collections$UnmodifiableMap","settings.client.require-proof-key":false,"settings.client.require-authorization-consent":true}',
         '{"@class":"java.util.Collections$UnmodifiableMap","settings.token.reuse-refresh-tokens":true,"settings.token.id-token-signature-algorithm":["org.springframework.security.oauth2.jose.jws.SignatureAlgorithm","RS256"],"settings.token.access-token-time-to-live":["java.time.Duration",86400.000000000],"settings.token.access-token-format":{"@class":"org.springframework.security.oauth2.server.authorization.settings.OAuth2TokenFormat","value":"self-contained"},"settings.token.refresh-token-time-to-live":["java.time.Duration",259200.000000000],"settings.token.authorization-code-time-to-live":["java.time.Duration",300.000000000]}');

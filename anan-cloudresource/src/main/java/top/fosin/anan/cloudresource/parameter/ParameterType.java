@@ -11,25 +11,25 @@ public enum ParameterType {
     /**
      * 机构参数
      */
-    Organization(1),
+    Organization((byte) 1),
 
     /**
      * 用户参数
      */
-    User(2),
+    User((byte) 2),
 
     /**
      * 服务参数
      */
-    Service(3);
+    Service((byte) 3);
 
-    private final int type;
+    private final byte type;
 
-    ParameterType(int type) {
+    ParameterType(byte type) {
         this.type = type;
     }
 
-    public int getTypeValue() {
+    public byte getTypeValue() {
         return type;
     }
 

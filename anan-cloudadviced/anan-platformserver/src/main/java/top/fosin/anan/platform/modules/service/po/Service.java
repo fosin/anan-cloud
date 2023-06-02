@@ -41,6 +41,6 @@ public class Service extends IdCreateUpdatePO<Long> {
   @Basic
   @Column(name = "status")
   @ApiModelProperty(value = "状态码：0：禁用 1：启用")
-  private Integer status;
+  private Byte status;
 
 }

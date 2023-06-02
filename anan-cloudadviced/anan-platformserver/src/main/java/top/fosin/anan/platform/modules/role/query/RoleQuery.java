@@ -44,9 +44,9 @@ public class RoleQuery extends LogiSortQuery<LogiQueryRule, SortRule, Long> {
     private String tips;
 
     @ApiModelProperty(value = "使用状态：0=启用，1=禁用，具体取值于字典表anan_dictionary.code=11", example = "Integer")
-    private Integer status;
+    private Byte status;
 
     @ApiModelProperty(value = "内置标志：是否是系统内置角色，内置角色不能被用户删除和修改，0=不是 1=是", example = "Integer")
-    private Integer builtIn;
+    private Byte builtIn;
 
 }

@@ -2,21 +2,12 @@ package top.fosin.anan.platform.modules.organization.query;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import org.hibernate.annotations.DynamicUpdate;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import java.io.Serializable;
 import lombok.Data;
-import lombok.ToString;
 import lombok.EqualsAndHashCode;
-import org.springframework.format.annotation.DateTimeFormat;
-import top.fosin.anan.core.util.DateTimeUtil;
+import lombok.ToString;
 import top.fosin.anan.data.entity.req.LogiSortQuery;
-import top.fosin.anan.data.module.SortRule;
 import top.fosin.anan.data.module.LogiQueryRule;
-import java.util.Date;
+import top.fosin.anan.data.module.SortRule;
 
         /**
  * 系统机构表(anan_organization)通用查询DTO
@@ -56,6 +47,6 @@ public class OrganizationQuery extends LogiSortQuery<LogiQueryRule,SortRule,Long
     private String telphone;
 
     @ApiModelProperty(value = "使用状态：0=启用，1=禁用，具体取值于字典表anan_dictionary.code=11", example = "Integer")
-    private Integer status;
+    private Byte status;
 
 }

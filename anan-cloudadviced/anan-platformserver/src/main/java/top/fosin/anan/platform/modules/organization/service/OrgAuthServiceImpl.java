@@ -7,7 +7,6 @@ import org.springframework.transaction.annotation.Transactional;
 import top.fosin.anan.cloudresource.entity.req.RegisterDTO;
 import top.fosin.anan.cloudresource.entity.req.UserCreateDTO;
 import top.fosin.anan.cloudresource.entity.req.UserRegisterDTO;
-import top.fosin.anan.cloudresource.entity.res.UserRespDTO;
 import top.fosin.anan.core.util.BeanUtil;
 import top.fosin.anan.core.util.DateTimeUtil;
 import top.fosin.anan.platform.modules.organization.dao.OrgAuthDao;
@@ -17,7 +16,6 @@ import top.fosin.anan.platform.modules.organization.service.inter.OrgService;
 import top.fosin.anan.platform.modules.pay.dto.PayOrderCreateDTO;
 import top.fosin.anan.platform.modules.pay.dto.PayOrderDTO;
 import top.fosin.anan.platform.modules.pay.service.inter.PayOrderService;
-import top.fosin.anan.platform.modules.user.service.inter.UserService;
 import top.fosin.anan.platform.modules.version.dto.VersionDTO;
 import top.fosin.anan.platform.modules.version.service.inter.VersionService;
 
@@ -35,16 +33,14 @@ import java.util.List;
 @Service
 @Lazy
 public class OrgAuthServiceImpl implements OrgAuthService {
-    private final OrgAuthDao ananSysOrgAuthDao;
-    private final UserService userService;
+    private final OrgAuthDao orgAuthDao;
     private final PayOrderService payOrderService;
     private final VersionService versionService;
     private final OrgService orgService;
     private final PasswordEncoder passwordEncoder;
 
-    public OrgAuthServiceImpl(OrgAuthDao ananSysOrgAuthDao, UserService userService, PayOrderService payOrderService, VersionService versionService, OrgService orgService, PasswordEncoder passwordEncoder) {
-        this.ananSysOrgAuthDao = ananSysOrgAuthDao;
-        this.userService = userService;
+    public OrgAuthServiceImpl(OrgAuthDao orgAuthDao, PayOrderService payOrderService, VersionService versionService, OrgService orgService, PasswordEncoder passwordEncoder) {
+        this.orgAuthDao = orgAuthDao;
         this.payOrderService = payOrderService;
         this.versionService = versionService;
         this.orgService = orgService;
@@ -56,7 +52,7 @@ public class OrgAuthServiceImpl implements OrgAuthService {
      */
     @Override
     public OrgAuthDao getDao() {
-        return ananSysOrgAuthDao;
+        return orgAuthDao;
     }
 
     @Override
@@ -81,11 +77,11 @@ public class OrgAuthServiceImpl implements OrgAuthService {
         BeanUtil.copyProperties(registerDto.getOrganization(), organization);
         organization.setPid(0L);
         organization.setTopId(0L);
-        organization.setStatus(0);
-        OrganizationDTO organizationEntity = orgService.create(organization);
+        organization.setStatus((byte) 0);
+        OrganizationDTO organizationDTO = orgService.create(organization);
         OrganizationUpdateDTO updateDto = new OrganizationUpdateDTO();
-        BeanUtil.copyProperties(organizationEntity, updateDto);
-        updateDto.setTopId(organizationEntity.getId());
+        BeanUtil.copyProperties(organizationDTO, updateDto);
+        updateDto.setTopId(organizationDTO.getId());
         orgService.processUpdate(updateDto);
 
         //创建用户
@@ -100,7 +96,7 @@ public class OrgAuthServiceImpl implements OrgAuthService {
             e.printStackTrace();
         }
 //        Assert.isTrue(createDTO.getPassword().equals(createDTO.getConfirmPassword()), "密码和确认密码必须一致!");
-        UserRespDTO user = userService.create(createDTO);
+//        UserDTO user = userService.create(createDTO);
 
         Long versionId = registerDto.getVersionId();
         VersionDTO respDto = versionService.findOneById(versionId);
@@ -110,13 +106,13 @@ public class OrgAuthServiceImpl implements OrgAuthService {
         payOrderCreateDTO.setMoney(respDto.getPrice());
         payOrderCreateDTO.setOrderTime(now);
         payOrderCreateDTO.setVersionId(versionId);
-        payOrderCreateDTO.setOrganizId(organizationEntity.getId());
-        payOrderCreateDTO.setUserId(user.getId());
+        payOrderCreateDTO.setOrganizId(organizationDTO.getId());
+//        payOrderCreateDTO.setUserId(user.getId());
         if (respDto.getPrice() == 0) {
-            payOrderCreateDTO.setStatus(1);
+            payOrderCreateDTO.setStatus((byte) 1);
             payOrderCreateDTO.setPayTime(now);
         } else {
-            payOrderCreateDTO.setStatus(0);
+            payOrderCreateDTO.setStatus((byte) 0);
         }
         PayOrderDTO payOrderDTO = payOrderService.create(payOrderCreateDTO);
 
@@ -126,7 +122,7 @@ public class OrgAuthServiceImpl implements OrgAuthService {
         auth.setOrderId(payOrderDTO.getId());
         auth.setMaxOrganizs(respDto.getMaxOrganizs());
         auth.setMaxUsers(respDto.getMaxUsers());
-        auth.setOrganizId(organizationEntity.getId());
+        auth.setOrganizId(organizationDTO.getId());
         auth.setProtectDays(respDto.getProtectDays());
         auth.setTryout(respDto.getTryout());
         auth.setTryoutDays(respDto.getTryoutDays());

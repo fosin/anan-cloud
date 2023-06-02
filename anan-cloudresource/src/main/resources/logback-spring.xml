@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-    <include resource="org/springframework/boot/logging/logback/defaults.xml" />
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
     <!-- 日志存放路径 -->
     <property name="LOG_PATH" value="${LOG_PATH:-logs}"/>
-    <!--日志文件名称：这里spring.application.name表示工程名称-->
+    <!--spring.application.name表示工程名称-->
     <springProperty scope="context" name="appName" source="spring.application.name"/>
+    <!--日志文件名称：写死名称也是可以得-->
     <property name="LOG_FILE" value="${LOG_FILE:-${appName}}"/>
-    <!-- 彩色日志格式 从nacos等配置中心空降存在日志配置延时，考虑到日志格式不能经常修改，总格式在配置文件中写死，其中单元还是可以从环境变量获取-->
-    <property name="CONSOLE_LOG_PATTERN" value="%clr(${LOG_DATEFORMAT_PATTERN:-%d{yyyy-MM-dd HH:mm:ss.SSS}}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) [%thread] %clr(%-40.40logger{39}[%method,%line]){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
-    <property name="FILE_LOG_PATTERN" value="${LOG_DATEFORMAT_PATTERN:-%d{yyyy-MM-dd HH:mm:ss.SSS}} ${LOG_LEVEL_PATTERN:-%5p} [%thread] %-40.40logger{39}[%method,%line] : %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
+    <!-- 彩色日志格式 -->
+    <property name="CONSOLE_LOG_PATTERN"
+              value="%clr(${LOG_DATEFORMAT_PATTERN:-%d{yyyy-MM-dd HH:mm:ss.SSS}}){faint} %clr(%-5p) %clr([%X{requestId:-},%X{traceId:-},%X{spanId:-}]){magenta} [%thread] %clr(%-40.40logger{39}[%method,%line]){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
+    <property name="FILE_LOG_PATTERN"
+              value="${LOG_DATEFORMAT_PATTERN:-%d{yyyy-MM-dd HH:mm:ss.SSS}} %-5p [%X{requestId:-},%X{traceId:-},%X{spanId:-}] [%thread] %-40.40logger{39}[%method,%line] : %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
 
     <!-- 控制台输出 -->
     <appender name="console" class="ch.qos.logback.core.ConsoleAppender">

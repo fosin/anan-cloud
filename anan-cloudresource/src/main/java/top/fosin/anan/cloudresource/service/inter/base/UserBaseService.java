@@ -1,7 +1,8 @@
 package top.fosin.anan.cloudresource.service.inter.base;
 
 
-import top.fosin.anan.cloudresource.entity.res.UserRespDTO;
+import org.springframework.validation.annotation.Validated;
+import top.fosin.anan.cloudresource.entity.res.UserDTO;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -14,10 +15,11 @@ import java.util.List;
  * @date 2023/4/8
  * @since 3.0.0
  */
+@Validated
 public interface UserBaseService {
-    UserRespDTO findOneByUsercode(@NotBlank String usercode);
+    UserDTO findOneByUsercode(@NotBlank String usercode);
 
-    List<UserRespDTO> listByOrganizId(@NotNull Long organizId, @NotNull Integer status);
+    List<UserDTO> listByOrganizId(@NotNull Long organizId, @NotNull Byte status);
 
-    List<UserRespDTO> listAllChildByTopId(@NotNull Long topId, @NotNull Integer status);
+    List<UserDTO> listAllChildByTopId(@NotNull Long topId, @NotNull Byte status);
 }

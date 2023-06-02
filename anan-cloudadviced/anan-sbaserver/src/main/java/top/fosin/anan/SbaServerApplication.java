@@ -1,6 +1,7 @@
 package top.fosin.anan;
 
 import de.codecentric.boot.admin.server.config.EnableAdminServer;
+import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -15,9 +16,11 @@ import top.fosin.anan.core.banner.AnanBanner;
 @EnableScheduling
 public class SbaServerApplication {
     public static void main(String[] args) {
-        new SpringApplicationBuilder(SbaServerApplication.class)
-                .banner(new AnanBanner("Anan SBA Server"))
-                .logStartupInfo(true)
-                .run(args);
+        String banner = "Anan SBA Gateway";
+        SpringApplication application = new SpringApplicationBuilder(SbaServerApplication.class)
+                .banner(new AnanBanner(banner))
+                .logStartupInfo(true).build();
+        application.setAllowBeanDefinitionOverriding(true);
+        application.run(args);
     }
 }

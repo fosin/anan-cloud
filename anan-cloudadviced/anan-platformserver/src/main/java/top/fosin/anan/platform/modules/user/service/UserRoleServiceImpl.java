@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import top.fosin.anan.cloudresource.constant.PlatformRedisConstant;
-import top.fosin.anan.cloudresource.entity.res.UserRespDTO;
+import top.fosin.anan.cloudresource.entity.res.UserDTO;
 import top.fosin.anan.cloudresource.service.CurrentUserService;
 import top.fosin.anan.core.util.BeanUtil;
 import top.fosin.anan.platform.modules.role.po.Role;
@@ -59,14 +59,14 @@ public class UserRoleServiceImpl implements UserRoleService {
     }
 
     private void clearUserCache(Long userId) {
-        UserRespDTO respDto = ananCacheManger.get(PlatformRedisConstant.ANAN_USER, userId + "-id",
-                UserRespDTO.class);
+        String s = String.valueOf(userId);
+        UserDTO respDto = ananCacheManger.get(PlatformRedisConstant.ANAN_USER, s, UserDTO.class);
         if (respDto != null) {
             ananCacheManger.evict(PlatformRedisConstant.ANAN_USER, respDto.getUsercode());
         }
-        ananCacheManger.evict(PlatformRedisConstant.ANAN_USER, userId + "-id");
-        ananCacheManger.evict(PlatformRedisConstant.ANAN_USER_ALL_PERMISSIONS, userId + "");
-        ananCacheManger.evict(PlatformRedisConstant.ANAN_USER_PERMISSION_TREE, userId + "");
+        ananCacheManger.evict(PlatformRedisConstant.ANAN_USER, s);
+        ananCacheManger.evict(PlatformRedisConstant.ANAN_USER_ALL_PERMISSIONS, s);
+        ananCacheManger.evict(PlatformRedisConstant.ANAN_USER_PERMISSION_TREE, s);
     }
 
     @Override

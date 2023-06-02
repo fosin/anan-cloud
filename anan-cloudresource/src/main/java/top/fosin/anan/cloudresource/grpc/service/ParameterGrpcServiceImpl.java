@@ -3,7 +3,9 @@ package top.fosin.anan.cloudresource.grpc.service;
 import com.google.protobuf.StringValue;
 import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
+import top.fosin.anan.cloudresource.constant.PlatformRedisConstant;
 import top.fosin.anan.cloudresource.constant.ServiceConstant;
 import top.fosin.anan.cloudresource.entity.res.ParameterDTO;
 import top.fosin.anan.cloudresource.entity.req.ParameterUpdateDTO;
@@ -22,19 +24,19 @@ public class ParameterGrpcServiceImpl implements ParameterRpcService {
     @Override
     public void processUpdate(ParameterUpdateDTO reqDto) {
         ParameterReq build = ParameterReq.newBuilder()
-                .setStatus(reqDto.getStatus())
-                .setDescription(reqDto.getDescription())
-                .setValue(reqDto.getValue())
-                .setDefaultValue(reqDto.getDefaultValue())
                 .setName(reqDto.getName())
+                .setValue(reqDto.getValue())
                 .setType(reqDto.getType())
                 .setScope(reqDto.getScope())
+                .setDefaultValue(reqDto.getDefaultValue())
+                .setDescription(reqDto.getDescription())
                 .build();
         blockingStubService.processUpdate(build);
     }
 
     @Override
-    public String getOrCreateParameter(int type, String scope, String name, String defaultValue, String description) {
+    @Cacheable(value = PlatformRedisConstant.ANAN_PARAMETER, key = "#root.target.getCacheKey(#type,#scope,#name)")
+    public String getOrCreateParameter(Byte type, String scope, String name, String defaultValue, String description) {
         getOrCreateReq build = getOrCreateReq.newBuilder()
                 .setDescription(description)
                 .setDefaultValue(defaultValue)
@@ -71,7 +73,8 @@ public class ParameterGrpcServiceImpl implements ParameterRpcService {
     }
 
     @Override
-    public ParameterDTO getParameter(Integer type, String scope, String name) {
+    @Cacheable(value = PlatformRedisConstant.ANAN_PARAMETER, key = "#root.target.getCacheKey(#type,#scope,#name)")
+    public ParameterDTO getParameter(Byte type, String scope, String name) {
         ParameterThreeArgsReq build = ParameterThreeArgsReq.newBuilder()
                 .setName(name).setScope(scope).setType(type).build();
         ParameterResp parameterResp = blockingStubService.getParameter(build);
@@ -83,18 +86,19 @@ public class ParameterGrpcServiceImpl implements ParameterRpcService {
         ParameterDTO respDto = new ParameterDTO();
         respDto.setId(parameterResp.getId());
         respDto.setName(parameterResp.getName());
-        respDto.setType(parameterResp.getType());
+        respDto.setType((byte) parameterResp.getType());
         respDto.setScope(parameterResp.getScope());
         respDto.setValue(parameterResp.getValue());
         respDto.setDefaultValue(parameterResp.getDefaultValue());
         respDto.setDefaultValue(parameterResp.getDefaultValue());
-        respDto.setStatus(parameterResp.getStatus());
+        respDto.setStatus((byte) parameterResp.getStatus());
         respDto.setApplyTime(new Date(parameterResp.getApplyTime().getSeconds() * 1000));
         return respDto;
     }
 
     @Override
-    public ParameterDTO getNearestParameter(int type, String scope, String name) {
+    @Cacheable(value = PlatformRedisConstant.ANAN_PARAMETER, key = "#root.target.getCacheKey(#type,#scope,#name)")
+    public ParameterDTO getNearestParameter(Byte type, String scope, String name) {
         ParameterThreeArgsReq build = ParameterThreeArgsReq.newBuilder()
                 .setName(name).setScope(scope).setType(type).build();
         ParameterResp parameterResp = blockingStubService.getNearestParameter(build);

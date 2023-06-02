@@ -41,7 +41,7 @@ public class UserRegisterDTO implements Serializable {
 
     @NotNull(message = "使用状态" + "{javax.validation.constraints.NotNull.message}")
     @ApiModelProperty(value = "使用状态：具体取值于字典表anan_dictionary.id=15", required = true)
-    private Integer sex;
+    private Byte sex;
 
     @Email(message = "电子邮箱格式无效")
     @ApiModelProperty(value = "电子邮箱")
@@ -53,7 +53,7 @@ public class UserRegisterDTO implements Serializable {
 
     @NotNull(message = "使用状态" + "{javax.validation.constraints.NotNull.message}")
     @ApiModelProperty(value = "使用状态：0=启用，1=禁用，具体取值于字典表anan_dictionary.id=11", required = true)
-    private Integer status;
+    private Byte status;
 
     @ApiModelProperty(value = "头像")
     private String avatar;

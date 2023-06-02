@@ -45,7 +45,7 @@ public class PayOrderVO extends Id<Long> {
     private Date orderTime;
 
     @ApiModelProperty(value = "订单状态：0=新建，1=支付，2=取消，3=作废")
-    private Integer status;
+    private Byte status;
 
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
     @ApiModelProperty(value = "支付日期")

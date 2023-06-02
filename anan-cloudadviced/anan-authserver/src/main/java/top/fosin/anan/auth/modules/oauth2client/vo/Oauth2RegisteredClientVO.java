@@ -7,12 +7,17 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.oauth2.core.AuthorizationGrantType;
+import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
+import top.fosin.anan.auth.modules.oauth2client.dto.ClientSettingsDTO;
+import top.fosin.anan.auth.modules.oauth2client.dto.TokenSettingsDTO;
 import top.fosin.anan.core.util.DateTimeUtil;
 import top.fosin.anan.data.entity.Id;
 
 import java.util.Date;
+import java.util.Set;
 
-        /**
+/**
  * OAUTH2认证客户端注册表(oauth2_registered_client)单体VO
  *
  * @author fosin
@@ -42,21 +47,21 @@ public class Oauth2RegisteredClientVO extends Id<String> {
     private String clientName;
 
     @ApiModelProperty(value = "认证方法")
-    private String clientAuthenticationMethods;
+    private Set<ClientAuthenticationMethod> clientAuthenticationMethods;
 
     @ApiModelProperty(value = "认证类型")
-    private String authorizationGrantTypes;
+    private Set<AuthorizationGrantType> authorizationGrantTypes;
 
     @ApiModelProperty(value = "跳转地址")
-    private String redirectUris;
+    private Set<String> redirectUris;
 
     @ApiModelProperty(value = "作用域")
-    private String scopes;
+    private Set<String> scopes;
 
     @ApiModelProperty(value = "客户端设置")
-    private String clientSettings;
+    private ClientSettingsDTO clientSettings;
 
     @ApiModelProperty(value = "令牌设置")
-    private String tokenSettings;
+    private TokenSettingsDTO tokenSettings;
 
 }

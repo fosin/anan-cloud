@@ -15,6 +15,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.util.StringUtils;
 import top.fosin.anan.cloudresource.service.CurrentUserService;
+import top.fosin.anan.security.resource.AnanSecurityProperties;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -60,7 +61,7 @@ public class ServletResourceAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public CurrentUserService userInfoService() {
-        return new CurrentUserService();
+    public CurrentUserService currentUserService(AnanSecurityProperties ananSecurityProperties) {
+        return new CurrentUserService(ananSecurityProperties);
     }
 }

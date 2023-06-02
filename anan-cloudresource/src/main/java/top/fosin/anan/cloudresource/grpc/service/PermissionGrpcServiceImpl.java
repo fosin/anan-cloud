@@ -47,10 +47,10 @@ public class PermissionGrpcServiceImpl implements PermissionRpcService {
         dto.setName(resp.getName());
         dto.setUrl(resp.getUrl());
         dto.setRoutePath(resp.getRoutePath());
-        dto.setType(resp.getType());
+        dto.setType((byte) resp.getType());
         dto.setLevel(resp.getLevel());
         dto.setSort(resp.getSort());
-        dto.setStatus(resp.getStatus());
+        dto.setStatus((byte) resp.getStatus());
         dto.setServiceId(resp.getServiceId());
         dto.setServiceCode(resp.getServiceCode());
         dto.setPath(resp.getPath());

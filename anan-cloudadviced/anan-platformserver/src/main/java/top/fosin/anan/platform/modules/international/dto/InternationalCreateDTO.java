@@ -5,9 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import top.fosin.anan.data.entity.req.LogiSortQuery;
-import top.fosin.anan.data.module.LogiQueryRule;
-import top.fosin.anan.data.module.SortRule;
+import top.fosin.anan.data.valid.group.Create;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -20,30 +18,30 @@ import javax.validation.constraints.PositiveOrZero;
  * @date 2023-05-12
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @ToString(callSuper = true)
 @ApiModel(value = "国际化语言集创建DTO", description = "国际化语言集(anan_international)创建DTO")
-public class InternationalCreateDTO extends LogiSortQuery<LogiQueryRule, SortRule, Long> {
+public class InternationalCreateDTO {
     private static final long serialVersionUID = 111078957729112772L;
 
-    @NotBlank(message = "标识" + "{javax.validation.constraints.NotBlank.message}")
+    @NotBlank(message = "标识" + "{javax.validation.constraints.NotBlank.message}", groups = Create.class)
     @ApiModelProperty(value = "标识", example = "String")
     private String code;
 
-    @NotBlank(message = "名称" + "{javax.validation.constraints.NotBlank.message}")
+    @NotBlank(message = "名称" + "{javax.validation.constraints.NotBlank.message}", groups = Create.class)
     @ApiModelProperty(value = "名称", example = "String")
     private String name;
 
     @ApiModelProperty(value = "图标", example = "String")
     private String icon;
 
-    @NotNull(message = "状态" + "{javax.validation.constraints.NotNull.message}")
-    @PositiveOrZero(message = "状态" + "{javax.validation.constraints.Positive.message}")
+    @NotNull(message = "状态" + "{javax.validation.constraints.NotNull.message}", groups = Create.class)
+    @PositiveOrZero(message = "状态" + "{javax.validation.constraints.Positive.message}", groups = Create.class)
     @ApiModelProperty(value = "状态：0=启用，1=禁用", example = "0")
-    private Integer status;
+    private Byte status;
 
-    @NotNull(message = "默认标志" + "{javax.validation.constraints.NotNull.message}")
-    @PositiveOrZero(message = "默认标志" + "{javax.validation.constraints.Positive.message}")
+    @NotNull(message = "默认标志" + "{javax.validation.constraints.NotNull.message}", groups = Create.class)
+    @PositiveOrZero(message = "默认标志" + "{javax.validation.constraints.Positive.message}", groups = Create.class)
     @ApiModelProperty(value = "默认标志", example = "0")
     private Integer defaultFlag;
 

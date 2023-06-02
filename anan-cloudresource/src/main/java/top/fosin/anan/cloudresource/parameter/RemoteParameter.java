@@ -27,7 +27,7 @@ public class RemoteParameter implements IParameter {
 
     @Override
     public synchronized ParameterDTO setParameter(String scope, String name, String value, String description) {
-        int type = this.getParameterStrategy().getType();
+        byte type = this.getParameterStrategy().getType();
         ParameterDTO parameter = parameterRpcService.getParameter(type, scope, name);
         parameter.setValue(value);
         parameter.setType(type);

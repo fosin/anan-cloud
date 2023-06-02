@@ -93,7 +93,7 @@ public class User extends IdCreateUpdateOrganizDeletePO<Long> {
      */
     @Basic
     @Column(name = "real_name_verified", nullable = false)
-    private Integer realNameVerified;
+    private Byte realNameVerified;
 
     /**
      * 传入原始密码，后台会对原始密码进行加密后再存储
@@ -115,7 +115,7 @@ public class User extends IdCreateUpdateOrganizDeletePO<Long> {
      */
     @Basic
     @Column(name = "sex", nullable = false)
-    private Integer sex;
+    private Byte sex;
 
     /**
      * 电子邮箱
@@ -129,7 +129,7 @@ public class User extends IdCreateUpdateOrganizDeletePO<Long> {
      */
     @Basic
     @Column(name = "email_verified", nullable = false)
-    private Integer emailVerified;
+    private Byte emailVerified;
 
     /**
      * 手机号码
@@ -143,14 +143,14 @@ public class User extends IdCreateUpdateOrganizDeletePO<Long> {
      */
     @Basic
     @Column(name = "phone_verified", nullable = false)
-    private Integer phoneVerified;
+    private Byte phoneVerified;
 
     /**
      * 使用状态：0=启用，1=禁用，具体取值于字典表anan_dictionary.code=11
      */
     @Basic
     @Column(name = "status", nullable = false)
-    private Integer status;
+    private Byte status;
 
     /**
      * 头像

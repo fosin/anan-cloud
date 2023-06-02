@@ -57,7 +57,7 @@ public class PayOrder extends IdPO<Long> {
     @Basic
     @ApiModelProperty(value = "订单状态：0=新建，1=支付，2=取消，3=作废", required = true)
     @Column(name = "status", nullable = false)
-    private Integer status;
+    private Byte status;
 
     @Basic
     @ApiModelProperty(value = "支付时间")

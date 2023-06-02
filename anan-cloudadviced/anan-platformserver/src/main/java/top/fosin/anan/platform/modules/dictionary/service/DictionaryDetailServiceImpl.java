@@ -25,6 +25,7 @@ import top.fosin.anan.platform.modules.dictionary.dao.DictionaryDetailDao;
 import top.fosin.anan.platform.modules.dictionary.dto.DictionaryDetailCreateDTO;
 import top.fosin.anan.platform.modules.dictionary.dto.DictionaryDetailUpdateDTO;
 import top.fosin.anan.platform.modules.dictionary.po.Dictionary;
+import top.fosin.anan.platform.modules.dictionary.po.DictionaryDetail;
 import top.fosin.anan.platform.modules.dictionary.service.inter.DictionaryDetailService;
 import top.fosin.anan.redis.cache.AnanCacheManger;
 
@@ -53,9 +54,9 @@ public class DictionaryDetailServiceImpl extends DicDetailServiceGrpc.DicDetailS
     public void findOneByDicIdAndCode(DicDetailReq request, StreamObserver<DicDetailResp> responseObserver) {
         long id = request.getDictionaryId();
         long code = request.getCode();
-        DictionaryDetailRespDTO vo = this.listByForeingKey(id).stream().filter(detailVO -> detailVO.getCode() == code).findFirst()
+        DictionaryDetailRespDTO dto = this.listByForeingKey(id).stream().filter(detailVO -> detailVO.getCode() == code).findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("未找到对应的数据"));
-        DicDetailResp dicDetailResp = toGrpcResp(vo);
+        DicDetailResp dicDetailResp = toGrpcResp(dto);
         responseObserver.onNext(dicDetailResp);
         responseObserver.onCompleted();
     }
@@ -70,22 +71,22 @@ public class DictionaryDetailServiceImpl extends DicDetailServiceGrpc.DicDetailS
     }
 
     @NotNull
-    private DicDetailResp toGrpcResp(DictionaryDetailRespDTO vo) {
+    private DicDetailResp toGrpcResp(DictionaryDetailRespDTO dto) {
         return DicDetailResp.newBuilder()
-                .setId(vo.getId())
-                .setDictionaryId(vo.getDictionaryId())
-                .setCode(vo.getCode())
-                .setName(vo.getName())
-                .setSort(vo.getSort())
-                .setStatus(vo.getStatus())
-                .setScode(StringUtil.getNonNullValue(vo.getScode()))
-                .setScope(StringUtil.getNonNullValue(vo.getScope()))
-                .setUsed(vo.getUsed())
-                .setDescription(StringUtil.getNonNullValue(vo.getDescription()))
-                .setCreateBy(vo.getCreateBy())
-                .setCreateTime(Timestamp.newBuilder().setSeconds(vo.getCreateTime().getTime() / 1000).build())
-                .setUpdateBy(vo.getUpdateBy())
-                .setUpdateTime(Timestamp.newBuilder().setSeconds(vo.getUpdateTime().getTime() / 1000).build())
+                .setId(dto.getId())
+                .setDictionaryId(dto.getDictionaryId())
+                .setCode(dto.getCode())
+                .setName(dto.getName())
+                .setSort(dto.getSort())
+                .setStatus(dto.getStatus())
+                .setScode(StringUtil.getNonNullValue(dto.getScode()))
+                .setScope(StringUtil.getNonNullValue(dto.getScope()))
+                .setUsed(dto.getUsed())
+                .setDescription(StringUtil.getNonNullValue(dto.getDescription()))
+                .setCreateBy(dto.getCreateBy())
+                .setCreateTime(Timestamp.newBuilder().setSeconds(dto.getCreateTime().getTime() / 1000).build())
+                .setUpdateBy(dto.getUpdateBy())
+                .setUpdateTime(Timestamp.newBuilder().setSeconds(dto.getUpdateTime().getTime() / 1000).build())
                 .build();
     }
 
@@ -151,7 +152,8 @@ public class DictionaryDetailServiceImpl extends DicDetailServiceGrpc.DicDetailS
         List<DictionaryDetailRespDTO> list = ananCacheManger.get(PlatformRedisConstant.ANAN_DICTIONARY_DETAIL, dictionaryId + "", List.class);
         if (list == null) {
             Sort sort = Sort.by(Sort.Direction.fromString("ASC"), "sort");
-            list = BeanUtil.copyProperties(dictionaryDetailDao.findAllByDictionaryId(dictionaryId, sort), DictionaryDetailRespDTO.class);
+            List<DictionaryDetail> dictionaryDetails = dictionaryDetailDao.findAllByDictionaryId(dictionaryId, sort);
+            list = BeanUtil.copyProperties(dictionaryDetails, DictionaryDetailRespDTO.class);
             ananCacheManger.put(PlatformRedisConstant.ANAN_DICTIONARY_DETAIL, dictionaryId + "", list);
         }
         return list;
@@ -168,7 +170,7 @@ public class DictionaryDetailServiceImpl extends DicDetailServiceGrpc.DicDetailS
     @Override
     public long updateOneField(String name, Serializable value, Collection<Long> ids) {
         long count = DictionaryDetailService.super.updateOneField(name, value, ids);
-        ids.forEach(id -> ananCacheManger.evict(PlatformRedisConstant.ANAN_DICTIONARY_DETAIL, id + ""));
+        ids.forEach(id -> ananCacheManger.evict(PlatformRedisConstant.ANAN_DICTIONARY_DETAIL, String.valueOf(id)));
         return count;
     }
 

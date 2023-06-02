@@ -66,7 +66,7 @@ public final class UserProto {
       "\010usercode\030\001 \001(\t\"\027\n\tUserIdReq\022\n\n\002id\030\001 \001(\003" +
       "\"\030\n\nUserIdsReq\022\n\n\002id\030\001 \003(\003\"K\n\tUsersResp\022" +
       ">\n\004user\030\001 \003(\01320.top.fosin.anan.cloudreso" +
-      "urce.grpc.user.UserResp\"\361\005\n\010UserResp\022\020\n\010" +
+      "urce.grpc.user.UserResp\"\203\006\n\010UserResp\022\020\n\010" +
       "usercode\030\001 \001(\t\022\020\n\010username\030\002 \001(\t\022\027\n\nfami" +
       "lyName\030\003 \001(\tH\000\210\001\001\022\027\n\nmiddleName\030\004 \001(\tH\001\210" +
       "\001\001\022\026\n\tgivenName\030\005 \001(\tH\002\210\001\001\022\025\n\010nickname\030\006" +
@@ -82,27 +82,28 @@ public final class UserProto {
       "\025 \001(\003\022\020\n\010createBy\030\026 \001(\003\022.\n\ncreateTime\030\027 " +
       "\001(\0132\032.google.protobuf.Timestamp\022\020\n\010updat" +
       "eBy\030\030 \001(\003\022.\n\nupdateTime\030\031 \001(\0132\032.google.p" +
-      "rotobuf.TimestampB\r\n\013_familyNameB\r\n\013_mid" +
-      "dleNameB\014\n\n_givenNameB\013\n\t_nicknameB\024\n\022_p" +
-      "referredUsernameB\010\n\006_emailB\010\n\006_phoneB\t\n\007" +
-      "_avatarB\n\n\010_website2\367\004\n\013UserService\022t\n\013f" +
-      "indOneById\0221.top.fosin.anan.cloudresourc" +
-      "e.grpc.user.UserIdReq\0320.top.fosin.anan.c" +
-      "loudresource.grpc.user.UserResp\"\000\022t\n\tlis" +
-      "tByIds\0222.top.fosin.anan.cloudresource.gr" +
-      "pc.user.UserIdsReq\0321.top.fosin.anan.clou" +
-      "dresource.grpc.user.UsersResp\"\000\022|\n\021findO" +
-      "neByUsercode\0223.top.fosin.anan.cloudresou" +
-      "rce.grpc.user.UsercodeReq\0320.top.fosin.an" +
-      "an.cloudresource.grpc.user.UserResp\"\000\022z\n" +
-      "\017listByOrganizId\0222.top.fosin.anan.cloudr" +
-      "esource.grpc.user.OrganizReq\0321.top.fosin" +
-      ".anan.cloudresource.grpc.user.UsersResp\"" +
-      "\000\022\201\001\n\023listAllChildByTopId\0225.top.fosin.an" +
-      "an.cloudresource.grpc.user.TopOrganizReq" +
-      "\0321.top.fosin.anan.cloudresource.grpc.use" +
-      "r.UsersResp\"\000B5\n&top.fosin.anan.cloudres" +
-      "ource.grpc.userB\tUserProtoP\001b\006proto3"
+      "rotobuf.Timestamp\022\020\n\010password\030\032 \001(\tB\r\n\013_" +
+      "familyNameB\r\n\013_middleNameB\014\n\n_givenNameB" +
+      "\013\n\t_nicknameB\024\n\022_preferredUsernameB\010\n\006_e" +
+      "mailB\010\n\006_phoneB\t\n\007_avatarB\n\n\010_website2\367\004" +
+      "\n\013UserService\022t\n\013findOneById\0221.top.fosin" +
+      ".anan.cloudresource.grpc.user.UserIdReq\032" +
+      "0.top.fosin.anan.cloudresource.grpc.user" +
+      ".UserResp\"\000\022t\n\tlistByIds\0222.top.fosin.ana" +
+      "n.cloudresource.grpc.user.UserIdsReq\0321.t" +
+      "op.fosin.anan.cloudresource.grpc.user.Us" +
+      "ersResp\"\000\022|\n\021findOneByUsercode\0223.top.fos" +
+      "in.anan.cloudresource.grpc.user.Usercode" +
+      "Req\0320.top.fosin.anan.cloudresource.grpc." +
+      "user.UserResp\"\000\022z\n\017listByOrganizId\0222.top" +
+      ".fosin.anan.cloudresource.grpc.user.Orga" +
+      "nizReq\0321.top.fosin.anan.cloudresource.gr" +
+      "pc.user.UsersResp\"\000\022\201\001\n\023listAllChildByTo" +
+      "pId\0225.top.fosin.anan.cloudresource.grpc." +
+      "user.TopOrganizReq\0321.top.fosin.anan.clou" +
+      "dresource.grpc.user.UsersResp\"\000B5\n&top.f" +
+      "osin.anan.cloudresource.grpc.userB\tUserP" +
+      "rotoP\001b\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -150,7 +151,7 @@ public final class UserProto {
     internal_static_top_fosin_anan_cloudresource_grpc_user_UserResp_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_top_fosin_anan_cloudresource_grpc_user_UserResp_descriptor,
-        new java.lang.String[] { "Usercode", "Username", "FamilyName", "MiddleName", "GivenName", "Nickname", "PreferredUsername", "RealNameVerified", "TopId", "Birthday", "Sex", "Email", "EmailVerified", "Phone", "PhoneVerified", "Status", "Avatar", "Website", "ExpireTime", "Id", "OrganizId", "CreateBy", "CreateTime", "UpdateBy", "UpdateTime", "FamilyName", "MiddleName", "GivenName", "Nickname", "PreferredUsername", "Email", "Phone", "Avatar", "Website", });
+        new java.lang.String[] { "Usercode", "Username", "FamilyName", "MiddleName", "GivenName", "Nickname", "PreferredUsername", "RealNameVerified", "TopId", "Birthday", "Sex", "Email", "EmailVerified", "Phone", "PhoneVerified", "Status", "Avatar", "Website", "ExpireTime", "Id", "OrganizId", "CreateBy", "CreateTime", "UpdateBy", "UpdateTime", "Password", "FamilyName", "MiddleName", "GivenName", "Nickname", "PreferredUsername", "Email", "Phone", "Avatar", "Website", });
     com.google.protobuf.TimestampProto.getDescriptor();
   }
 

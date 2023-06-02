@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import top.fosin.anan.cloudresource.constant.FieldConstant;
 import top.fosin.anan.cloudresource.constant.PathPrefixConstant;
 import top.fosin.anan.cloudresource.constant.PathSuffixConstant;
-import top.fosin.anan.cloudresource.entity.res.UserRespDTO;
+import top.fosin.anan.cloudresource.entity.res.UserDTO;
 import top.fosin.anan.core.exception.AnanControllerException;
 import top.fosin.anan.data.result.MultResult;
 import top.fosin.anan.data.result.ResultUtils;
@@ -46,7 +46,7 @@ public class RoleUserController implements
     @ApiImplicitParam(name = FieldConstant.ROLE_ID, value = "角色ID,取值于Role.id",
             required = true, dataTypeClass = Long.class, paramType = "path")
     @GetMapping(value = "/other" + PathSuffixConstant.ROLE_ID)
-    public MultResult<UserRespDTO> listOtherUsersByRoleId(@PathVariable(FieldConstant.ROLE_ID) Long roleId) throws AnanControllerException {
+    public MultResult<UserDTO> listOtherUsersByRoleId(@PathVariable(FieldConstant.ROLE_ID) Long roleId) throws AnanControllerException {
         return ResultUtils.success(userService.listOtherUsersByRoleId(roleId));
     }
 

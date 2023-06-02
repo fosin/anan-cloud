@@ -49,7 +49,7 @@ public class InternationalCharsetDTO extends Id<Long> implements ForeignKeyProp<
     private Date updateTime;
 
     @ApiModelProperty(value = "状态：0=启用，1=禁用", required = true, example = "Integer")
-    private Integer status;
+    private Byte status;
 
     @Override
     public Long getFkValue() {

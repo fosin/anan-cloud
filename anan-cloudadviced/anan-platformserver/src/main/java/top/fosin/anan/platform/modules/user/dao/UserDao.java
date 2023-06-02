@@ -24,6 +24,6 @@ public interface UserDao extends IJpaRepository<Long, User> {
     List<User> findRoleUsersByRoleId(Long roleId);
 
     @Query(value = "select * from anan_user where organiz_id in (select id from anan_organization where top_id =?1) and (status=?2 or ?2=-1) and deleted=0 and status=0", nativeQuery = true)
-    List<User> findByTopIdAndStatus(Long topId, Integer status);
+    List<User> findByTopIdAndStatus(Long topId, Byte status);
 }
 

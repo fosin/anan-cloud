@@ -2,20 +2,15 @@ package top.fosin.anan.platform.modules.parameter.query;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import org.hibernate.annotations.DynamicUpdate;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import java.io.Serializable;
 import lombok.Data;
-import lombok.ToString;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
 import top.fosin.anan.core.util.DateTimeUtil;
 import top.fosin.anan.data.entity.req.LogiSortQuery;
-import top.fosin.anan.data.module.SortRule;
 import top.fosin.anan.data.module.LogiQueryRule;
+import top.fosin.anan.data.module.SortRule;
+
 import java.util.Date;
 
         /**
@@ -38,7 +33,7 @@ public class ParameterQuery extends LogiSortQuery<LogiQueryRule, SortRule, Long>
     private String value;
 
     @ApiModelProperty(value = "参数分类：具体取值于字典表anan_dictionary.code=10", example = "Integer")
-    private Integer type;
+    private Byte type;
 
     @ApiModelProperty(value = "参数作用域", example = "String")
     private String scope;
@@ -57,6 +52,6 @@ public class ParameterQuery extends LogiSortQuery<LogiQueryRule, SortRule, Long>
     private Long applyBy;
 
     @ApiModelProperty(value = "参数状态：0=正常状态、1=修改状态、2=删除状态", example = "Integer")
-    private Integer status;
+    private Byte status;
 
 }

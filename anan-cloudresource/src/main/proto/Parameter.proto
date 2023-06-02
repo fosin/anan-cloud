@@ -44,8 +44,6 @@ message ParameterReq {
   string scope = 4;
   string defaultValue = 5;
   string description = 6;
-  int32 status = 7;
-  google.protobuf.Timestamp applyTime = 8;
 }
 //三重要参数请求
 message ParameterThreeArgsReq {

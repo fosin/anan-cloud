@@ -29,6 +29,6 @@ public class InternationalCharsetVO extends Id<Long> {
     private String charset;
 
     @ApiModelProperty(value = "状态：0=启用，1=禁用")
-    private Integer status;
+    private Byte status;
 
 }

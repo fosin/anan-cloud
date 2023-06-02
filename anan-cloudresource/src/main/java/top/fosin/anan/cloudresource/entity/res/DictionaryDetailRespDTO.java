@@ -30,10 +30,10 @@ public class DictionaryDetailRespDTO extends IdCreateUpdateVO<Long> {
     private Long dictionaryId;
 
     @ApiModelProperty(value = "顺序，用于显示数据时的顺序，数值越小越靠前", example = "1")
-    private Integer sort;
+    private Short sort;
 
     @ApiModelProperty(value = "使用状态：0=启用，1=禁用，具体取值于字典表anan_dictionary.code=11", example = "0")
-    private Integer status;
+    private Byte status;
 
     @ApiModelProperty(value = "标准代码，该字段通常用于对接标准字典", example = "String")
     private String scode;
@@ -42,7 +42,7 @@ public class DictionaryDetailRespDTO extends IdCreateUpdateVO<Long> {
     private String scope;
 
     @ApiModelProperty(value = "使用标志：0=未使用，1=已使用，已使用的字典就不能再修改name属性", example = "0")
-    private Integer used;
+    private Byte used;
 
     @ApiModelProperty(value = "详细说明", example = "String")
     private String description;

@@ -1,17 +1,16 @@
 package top.fosin.anan.platform.modules.version.dto;
 
-                                                                                                                                                                                    
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import java.io.Serializable;
 import lombok.Data;
-import org.springframework.format.annotation.DateTimeFormat;
-import top.fosin.anan.core.util.DateTimeUtil;
-import java.util.Date;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.springframework.format.annotation.DateTimeFormat;
+import top.fosin.anan.core.util.DateTimeUtil;
 import top.fosin.anan.data.entity.Id;
+
+import java.util.Date;
 /**
  * 系统版本角色表(anan_version_role)DTO
  *
@@ -37,7 +36,7 @@ public class VersionRoleDTO extends Id<Long> {
     private String tips;
 
     @ApiModelProperty(value = "使用状态：0=启用，1=禁用，具体取值于字典表anan_dictionary.code=11", required = true, example = "Integer")
-    private Integer status;
+    private Byte status;
 
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
     @ApiModelProperty(value = "创建时间", required = true, example = "Date")

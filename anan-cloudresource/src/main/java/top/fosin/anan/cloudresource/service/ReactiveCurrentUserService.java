@@ -2,19 +2,24 @@ package top.fosin.anan.cloudresource.service;
 
 import org.springframework.data.domain.ReactiveAuditorAware;
 import org.springframework.lang.NonNull;
+import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.ReactiveSecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.util.Assert;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import top.fosin.anan.cloudresource.config.DefaultClaimNames;
 import top.fosin.anan.cloudresource.constant.SystemConstant;
-import top.fosin.anan.cloudresource.entity.Client;
-import top.fosin.anan.cloudresource.entity.res.UserAuthDto;
-import top.fosin.anan.cloudresource.entity.UserDetail;
+import top.fosin.anan.cloudresource.entity.SecurityUser;
 import top.fosin.anan.data.aware.reactive.OrganizAware;
 import top.fosin.anan.data.aware.reactive.UserAware;
+import top.fosin.anan.security.resource.AnanSecurityProperties;
 
+import java.util.Collection;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * @author fosin
@@ -23,43 +28,28 @@ import java.util.Objects;
  */
 public class ReactiveCurrentUserService implements ReactiveAuditorAware<Long>, UserAware<Long>, OrganizAware<Long> {
 
+    private final String authorityClaimName;
+
+    public ReactiveCurrentUserService(AnanSecurityProperties ananSecurityProperties) {
+        AnanSecurityProperties.Oauth2ResourceServer resourceServer = ananSecurityProperties.getOauth2().getResourceServer();
+        this.authorityClaimName = resourceServer.getAuthorityClaimName();
+    }
 
     /**
      * 当前请求是否是用户请求（携带token的请求）
      *
      * @return boolean
      */
-    public Mono<Boolean> isUserLogin() {
+    public Mono<Boolean> hasAuthentication() {
         return ReactiveSecurityContextHolder.getContext().map(Objects::nonNull);
     }
 
-    public Mono<UserDetail> getUserDetail() {
+    public Mono<Object> getPrincipal() {
         return ReactiveSecurityContextHolder.getContext().map(securityContext -> {
             Authentication authentication = securityContext.getAuthentication();
             Assert.notNull(authentication, "未找到当前用户的认证登录态!");
-            Object principal = authentication.getPrincipal();
-            Assert.isTrue(principal instanceof UserDetail, "认证信息有误，不是UserDetail对象，请检查！");
-            return (UserDetail) principal;
+            return authentication.getPrincipal();
         });
-    }
-
-    /**
-     * 得到当前登录用户的上下文信息
-     *
-     * @return Mono<UserDetail>
-     */
-
-    public Mono<UserAuthDto> getUser() {
-        return this.getUserDetail().map(UserDetail::getUser);
-    }
-
-    /**
-     * 得到当前登录用户登录的客户端信息
-     *
-     * @return Client
-     */
-    public Mono<Client> getClient() {
-        return this.getUserDetail().map(UserDetail::getClient);
     }
 
     /**
@@ -68,7 +58,17 @@ public class ReactiveCurrentUserService implements ReactiveAuditorAware<Long>, U
      * @return boolean true：是 false：否
      */
     public Mono<Boolean> isSysAdminUser() {
-        return this.getUser().map(dto -> isSysAdminUser(dto.getUsercode()));
+        return getPrincipal().map(principal -> {
+            String usercode;
+            if (principal instanceof SecurityUser) {
+                usercode = ((SecurityUser) principal).getUser().getUsercode();
+            } else if (principal instanceof Jwt) {
+                usercode = ((Jwt) principal).getClaim(DefaultClaimNames.SUB);
+            } else {
+                throw new AuthenticationServiceException("认证信息有误，未找到认证用户对象，请检查！");
+            }
+            return this.isSysAdminUser(usercode);
+        });
     }
 
     /**
@@ -85,17 +85,22 @@ public class ReactiveCurrentUserService implements ReactiveAuditorAware<Long>, U
      *
      * @return boolean true：是 false：否
      */
-    public Mono<Boolean> isAdminUser() {
-        return hasAdminRole();
+    public boolean isAdminUser(String usercode) {
+        throw new UnsupportedOperationException("目前不支持！");
     }
 
-    /**
-     * 当前操作者是否是管理员用户
-     *
-     * @return boolean true：是 false：否
-     */
-    public boolean isAdminUser(String usercode) {
-        return SystemConstant.ADMIN_USER_CODE.equals(usercode);
+    public Flux<String> getAuthorities() {
+        return getPrincipal().map(principal -> {
+            Collection<String> authorities;
+            if (principal instanceof SecurityUser) {
+                authorities = ((SecurityUser) principal).getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
+            } else if (principal instanceof Jwt) {
+                authorities = ((Jwt) principal).getClaim(authorityClaimName);
+            } else {
+                throw new AuthenticationServiceException("认证信息有误，未找到认证用户对象，请检查！");
+            }
+            return authorities;
+        }).flatMapMany(Flux::fromIterable);
     }
 
     /**
@@ -104,10 +109,7 @@ public class ReactiveCurrentUserService implements ReactiveAuditorAware<Long>, U
      * @return boolean true：是 false：否
      */
     public Mono<Boolean> hasAdminRole() {
-        return this.getUser()
-                .map(UserAuthDto::getUserRoles)
-                .flatMapMany(Flux::fromIterable)
-                .any(userRole -> SystemConstant.ADMIN_ROLE_NAME.equals(userRole.getValue()));
+        return getAuthorities().any(a -> a.equals(SystemConstant.ADMIN_ROLE_NAME));
     }
 
     /**
@@ -116,30 +118,57 @@ public class ReactiveCurrentUserService implements ReactiveAuditorAware<Long>, U
      * @return boolean true：是 false：否
      */
     public Mono<Boolean> hasSysAdminRole() {
-        return this.getUser()
-                .map(UserAuthDto::getUserRoles)
-                .flatMapMany(Flux::fromIterable)
-                .any(userRole -> SystemConstant.ANAN_ROLE_NAME.equals(userRole.getValue()));
+        return getAuthorities().any(a -> a.equals(SystemConstant.ANAN_ROLE_NAME));
     }
 
     @Override
     @NonNull
     public Mono<Long> getCurrentAuditor() {
-        return this.getUser().map(UserAuthDto::getId);
+        return this.getUserId();
     }
 
     @Override
     public Mono<Long> getOrganizId() {
-        return this.getUser().map(UserAuthDto::getOrganizId);
+        return getPrincipal().map(principal -> {
+            Long organizId;
+            if (principal instanceof SecurityUser) {
+                organizId = ((SecurityUser) principal).getUser().getOrganizId();
+            } else if (principal instanceof Jwt) {
+                organizId = ((Jwt) principal).getClaim(DefaultClaimNames.ORGANIZ_ID);
+            } else {
+                throw new AuthenticationServiceException("认证信息有误，未找到认证用户对象，请检查！");
+            }
+            return organizId;
+        });
     }
 
     @Override
     public Mono<Long> getTopId() {
-        return this.getUser().map(UserAuthDto::getTopId);
+        return getPrincipal().map(principal -> {
+            Long topId;
+            if (principal instanceof SecurityUser) {
+                topId = ((SecurityUser) principal).getUser().getTopId();
+            } else if (principal instanceof Jwt) {
+                topId = ((Jwt) principal).getClaim(DefaultClaimNames.TOP_ID);
+            } else {
+                throw new AuthenticationServiceException("认证信息有误，未找到认证用户对象，请检查！");
+            }
+            return topId;
+        });
     }
 
     @Override
     public Mono<Long> getUserId() {
-        return this.getUser().map(UserAuthDto::getId);
+        return getPrincipal().map(principal -> {
+            Long id;
+            if (principal instanceof SecurityUser) {
+                id = ((SecurityUser) principal).getUser().getId();
+            } else if (principal instanceof Jwt) {
+                id = ((Jwt) principal).getClaim(DefaultClaimNames.ID);
+            } else {
+                throw new AuthenticationServiceException("认证信息有误，未找到认证用户对象，请检查！");
+            }
+            return id;
+        });
     }
 }

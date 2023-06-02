@@ -1,16 +1,16 @@
 package top.fosin.anan.platform.modules.version.vo;
 
-                                                                                                                                                                                                                                                                                                            
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import java.io.Serializable;
 import lombok.Data;
-import org.springframework.format.annotation.DateTimeFormat;
-import top.fosin.anan.core.util.DateTimeUtil;
-import java.util.Date;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.springframework.format.annotation.DateTimeFormat;
+import top.fosin.anan.core.util.DateTimeUtil;
 import top.fosin.anan.data.entity.Id;
+
+import java.util.Date;
 /**
  * 系统版本表(anan_version)单体VO
  *
@@ -27,7 +27,7 @@ public class VersionVO extends Id<Long> {
     private String name;
 
     @ApiModelProperty(value = "版本类型：0=收费版 1=免费版 2=开发版")
-    private Integer type;
+    private Byte type;
 
     @ApiModelProperty(value = "版本价格")
     private Double price;
@@ -59,7 +59,7 @@ public class VersionVO extends Id<Long> {
     private Integer tryoutDays;
 
     @ApiModelProperty(value = "启用状态：0=启用，1=禁用")
-    private Integer status;
+    private Byte status;
 
     @ApiModelProperty(value = "版本描述")
     private String description;

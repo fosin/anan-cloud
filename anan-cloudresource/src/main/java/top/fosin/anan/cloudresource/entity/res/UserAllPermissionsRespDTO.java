@@ -32,7 +32,7 @@ public class UserAllPermissionsRespDTO extends IdPid<Long> {
     private String url;
 
     @ApiModelProperty(value = "权限类型：0=按钮、1=组件菜单，对应ur是前端组件l、2=链接菜单，对应url是http(s)链接地址、3=目录菜单，对应是目录菜单，具体取值于字典表anan_dictionary.code=13，当权限类型是1：组件菜单 3：目录菜单时表示该节点不是一个叶子节点", required = true)
-    private Integer type;
+    private Byte type;
 
     @ApiModelProperty(value = "菜单层级", required = true)
     private Integer level;
@@ -41,7 +41,7 @@ public class UserAllPermissionsRespDTO extends IdPid<Long> {
     private Integer sort;
 
     @ApiModelProperty(value = "使用状态：0=启用，1=禁用，具体取值于字典表anan_dictionary.code=11", required = true)
-    private Integer status;
+    private Byte status;
 
     @ApiModelProperty(value = "所属服务：等同于anan_service.id", required = true)
     private Long serviceId;

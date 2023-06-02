@@ -8,12 +8,12 @@ import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
 import top.fosin.anan.core.util.DateTimeUtil;
 import top.fosin.anan.data.entity.Id;
+import top.fosin.anan.data.valid.group.Update;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 import java.util.Date;
-        
 /**
  * 系统支付表(anan_pay)更新DTO
  *
@@ -27,44 +27,44 @@ import java.util.Date;
 public class PayUpdateDTO extends Id<Long> {
     private static final long serialVersionUID = -13032701902499980L;
 
-    @NotNull(message = "付款机构" + "{javax.validation.constraints.NotNull.message}")
-    @Positive(message = "付款机构" + "{javax.validation.constraints.Positive.message}")
+    @NotNull(message = "付款机构" + "{javax.validation.constraints.NotNull.message}", groups = Update.class)
+    @Positive(message = "付款机构" + "{javax.validation.constraints.Positive.message}", groups = Update.class)
     @ApiModelProperty(value = "付款机构", required = true)
     private Long organizId;
 
-    @NotNull(message = "付款用户" + "{javax.validation.constraints.NotNull.message}")
-    @Positive(message = "付款用户" + "{javax.validation.constraints.Positive.message}")
+    @NotNull(message = "付款用户" + "{javax.validation.constraints.NotNull.message}", groups = Update.class)
+    @Positive(message = "付款用户" + "{javax.validation.constraints.Positive.message}", groups = Update.class)
     @ApiModelProperty(value = "付款用户", required = true)
     private Long userId;
 
-    @NotNull(message = "订单序号" + "{javax.validation.constraints.NotNull.message}")
-    @Positive(message = "订单序号" + "{javax.validation.constraints.Positive.message}")
+    @NotNull(message = "订单序号" + "{javax.validation.constraints.NotNull.message}", groups = Update.class)
+    @Positive(message = "订单序号" + "{javax.validation.constraints.Positive.message}", groups = Update.class)
     @ApiModelProperty(value = "订单序号", required = true)
     private Long orderId;
 
-    @NotNull(message = "发票序号" + "{javax.validation.constraints.NotNull.message}")
-    @Positive(message = "发票序号" + "{javax.validation.constraints.Positive.message}")
+    @NotNull(message = "发票序号" + "{javax.validation.constraints.NotNull.message}", groups = Update.class)
+    @Positive(message = "发票序号" + "{javax.validation.constraints.Positive.message}", groups = Update.class)
     @ApiModelProperty(value = "发票序号", required = true)
     private Long invoiceId;
 
-    @NotNull(message = "交易类型" + "{javax.validation.constraints.NotNull.message}")
-    @PositiveOrZero(message = "交易类型" + "{javax.validation.constraints.Positive.message}")
+    @NotNull(message = "交易类型" + "{javax.validation.constraints.NotNull.message}", groups = Update.class)
+    @PositiveOrZero(message = "交易类型" + "{javax.validation.constraints.Positive.message}", groups = Update.class)
     @ApiModelProperty(value = "交易类型：0=正交易 1：负交易", required = true)
     private Integer payType;
 
-    @NotNull(message = "应收金额" + "{javax.validation.constraints.NotNull.message}")
+    @NotNull(message = "应收金额" + "{javax.validation.constraints.NotNull.message}", groups = Update.class)
     @ApiModelProperty(value = "应收金额", required = true)
     private Double totalMoney;
 
-    @NotNull(message = "支付金额" + "{javax.validation.constraints.NotNull.message}")
+    @NotNull(message = "支付金额" + "{javax.validation.constraints.NotNull.message}", groups = Update.class)
     @ApiModelProperty(value = "支付金额", required = true)
     private Double payMoney;
 
-    @NotNull(message = "优惠金额" + "{javax.validation.constraints.NotNull.message}")
+    @NotNull(message = "优惠金额" + "{javax.validation.constraints.NotNull.message}", groups = Update.class)
     @ApiModelProperty(value = "优惠金额", required = true)
     private Double discountMonery;
 
-    @NotNull(message = "待收金额" + "{javax.validation.constraints.NotNull.message}")
+    @NotNull(message = "待收金额" + "{javax.validation.constraints.NotNull.message}", groups = Update.class)
     @ApiModelProperty(value = "待收金额", required = true)
     private Double uncollectMoney;
 
@@ -72,8 +72,8 @@ public class PayUpdateDTO extends Id<Long> {
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
     private Date payTime;
 
-    @NotNull(message = "付款标志" + "{javax.validation.constraints.NotNull.message}")
-    @PositiveOrZero(message = "付款标志" + "{javax.validation.constraints.Positive.message}")
+    @NotNull(message = "付款标志" + "{javax.validation.constraints.NotNull.message}", groups = Update.class)
+    @PositiveOrZero(message = "付款标志" + "{javax.validation.constraints.Positive.message}", groups = Update.class)
     @ApiModelProperty(value = "付款标志：0=未付款，1=分期，2=付全款", required = true)
     private Integer payFlag;
 

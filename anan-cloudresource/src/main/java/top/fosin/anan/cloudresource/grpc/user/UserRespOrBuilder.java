@@ -303,4 +303,16 @@ public interface UserRespOrBuilder extends
    * <code>.google.protobuf.Timestamp updateTime = 25;</code>
    */
   com.google.protobuf.TimestampOrBuilder getUpdateTimeOrBuilder();
+
+  /**
+   * <code>string password = 26;</code>
+   * @return The password.
+   */
+  java.lang.String getPassword();
+  /**
+   * <code>string password = 26;</code>
+   * @return The bytes for password.
+   */
+  com.google.protobuf.ByteString
+      getPasswordBytes();
 }

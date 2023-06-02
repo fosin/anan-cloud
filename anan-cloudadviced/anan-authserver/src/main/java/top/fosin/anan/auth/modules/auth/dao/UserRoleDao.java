@@ -2,8 +2,10 @@ package top.fosin.anan.auth.modules.auth.dao;
 
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
-import top.fosin.anan.auth.modules.auth.po.User;
+import top.fosin.anan.auth.modules.auth.po.UserRole;
 import top.fosin.anan.jpa.repository.IJpaRepository;
+
+import java.util.List;
 
 /**
  * @author fosin
@@ -11,7 +13,6 @@ import top.fosin.anan.jpa.repository.IJpaRepository;
  */
 @Repository
 @Lazy
-public interface UserDao extends IJpaRepository<Long, User> {
-    User findByUsercode(String usercode);
+public interface UserRoleDao extends IJpaRepository<Long, UserRole> {
+    List<UserRole> findByUserId(Long userId);
 }
-

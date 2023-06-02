@@ -7,9 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
 import top.fosin.anan.core.util.DateTimeUtil;
-import top.fosin.anan.data.entity.req.LogiSortQuery;
-import top.fosin.anan.data.module.LogiQueryRule;
-import top.fosin.anan.data.module.SortRule;
+import top.fosin.anan.data.valid.group.Create;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
@@ -23,50 +21,50 @@ import java.util.Date;
  * @date 2023-05-11
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @ToString(callSuper = true)
 @ApiModel(value = "系统支付表创建DTO", description = "系统支付表(anan_pay)创建DTO")
-public class PayCreateDTO extends LogiSortQuery<LogiQueryRule, SortRule, Long> {
+public class PayCreateDTO {
     private static final long serialVersionUID = -39624962622940835L;
     
-    @NotNull(message = "付款机构" + "{javax.validation.constraints.NotNull.message}")
-    @Positive(message = "付款机构" + "{javax.validation.constraints.Positive.message}")
+    @NotNull(message = "付款机构" + "{javax.validation.constraints.NotNull.message}", groups = Create.class)
+    @Positive(message = "付款机构" + "{javax.validation.constraints.Positive.message}", groups = Create.class)
     @ApiModelProperty(value = "付款机构", required = true)
     private Long organizId;
 
-    @NotNull(message = "付款用户" + "{javax.validation.constraints.NotNull.message}")
-    @Positive(message = "付款用户" + "{javax.validation.constraints.Positive.message}")
+    @NotNull(message = "付款用户" + "{javax.validation.constraints.NotNull.message}", groups = Create.class)
+    @Positive(message = "付款用户" + "{javax.validation.constraints.Positive.message}", groups = Create.class)
     @ApiModelProperty(value = "付款用户", required = true)
     private Long userId;
 
-    @NotNull(message = "订单序号" + "{javax.validation.constraints.NotNull.message}")
-    @Positive(message = "订单序号" + "{javax.validation.constraints.Positive.message}")
+    @NotNull(message = "订单序号" + "{javax.validation.constraints.NotNull.message}", groups = Create.class)
+    @Positive(message = "订单序号" + "{javax.validation.constraints.Positive.message}", groups = Create.class)
     @ApiModelProperty(value = "订单序号", required = true)
     private Long orderId;
 
-    @NotNull(message = "发票序号" + "{javax.validation.constraints.NotNull.message}")
-    @Positive(message = "发票序号" + "{javax.validation.constraints.Positive.message}")
+    @NotNull(message = "发票序号" + "{javax.validation.constraints.NotNull.message}", groups = Create.class)
+    @Positive(message = "发票序号" + "{javax.validation.constraints.Positive.message}", groups = Create.class)
     @ApiModelProperty(value = "发票序号", required = true)
     private Long invoiceId;
 
-    @NotNull(message = "交易类型" + "{javax.validation.constraints.NotNull.message}")
-    @PositiveOrZero(message = "交易类型" + "{javax.validation.constraints.Positive.message}")
+    @NotNull(message = "交易类型" + "{javax.validation.constraints.NotNull.message}", groups = Create.class)
+    @PositiveOrZero(message = "交易类型" + "{javax.validation.constraints.Positive.message}", groups = Create.class)
     @ApiModelProperty(value = "交易类型：0=正交易 1：负交易", required = true)
     private Integer payType;
 
-    @NotNull(message = "应收金额" + "{javax.validation.constraints.NotNull.message}")
+    @NotNull(message = "应收金额" + "{javax.validation.constraints.NotNull.message}", groups = Create.class)
     @ApiModelProperty(value = "应收金额", required = true)
     private Double totalMoney;
 
-    @NotNull(message = "支付金额" + "{javax.validation.constraints.NotNull.message}")
+    @NotNull(message = "支付金额" + "{javax.validation.constraints.NotNull.message}", groups = Create.class)
     @ApiModelProperty(value = "支付金额", required = true)
     private Double payMoney;
 
-    @NotNull(message = "优惠金额" + "{javax.validation.constraints.NotNull.message}")
+    @NotNull(message = "优惠金额" + "{javax.validation.constraints.NotNull.message}", groups = Create.class)
     @ApiModelProperty(value = "优惠金额", required = true)
     private Double discountMonery;
 
-    @NotNull(message = "待收金额" + "{javax.validation.constraints.NotNull.message}")
+    @NotNull(message = "待收金额" + "{javax.validation.constraints.NotNull.message}", groups = Create.class)
     @ApiModelProperty(value = "待收金额", required = true)
     private Double uncollectMoney;
 
@@ -74,8 +72,8 @@ public class PayCreateDTO extends LogiSortQuery<LogiQueryRule, SortRule, Long> {
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
     private Date payTime;
 
-    @NotNull(message = "付款标志" + "{javax.validation.constraints.NotNull.message}")
-    @PositiveOrZero(message = "付款标志" + "{javax.validation.constraints.Positive.message}")
+    @NotNull(message = "付款标志" + "{javax.validation.constraints.NotNull.message}", groups = Create.class)
+    @PositiveOrZero(message = "付款标志" + "{javax.validation.constraints.Positive.message}", groups = Create.class)
     @ApiModelProperty(value = "付款标志：0=未付款，1=分期，2=付全款", required = true)
     private Integer payFlag;
 

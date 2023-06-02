@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import top.fosin.anan.cloudresource.constant.PlatformRedisConstant;
-import top.fosin.anan.cloudresource.entity.res.UserRespDTO;
+import top.fosin.anan.cloudresource.entity.res.UserDTO;
 import top.fosin.anan.cloudresource.service.CurrentUserService;
 import top.fosin.anan.core.util.BeanUtil;
 import top.fosin.anan.platform.modules.role.dto.RoleUserUpdateDTO;
@@ -69,12 +69,12 @@ public class RoleUserServiceImpl implements RoleUserService {
     }
 
     private void clearUserCache(Long userId) {
-        UserRespDTO respDto = ananCacheManger.get(PlatformRedisConstant.ANAN_USER, userId + "-id",
-                UserRespDTO.class);
+        UserDTO respDto = ananCacheManger.get(PlatformRedisConstant.ANAN_USER, String.valueOf(userId),
+                UserDTO.class);
         if (respDto != null) {
             ananCacheManger.evict(PlatformRedisConstant.ANAN_USER, respDto.getUsercode());
         }
-        ananCacheManger.evict(PlatformRedisConstant.ANAN_USER, userId + "-id");
+        ananCacheManger.evict(PlatformRedisConstant.ANAN_USER, String.valueOf(userId));
         ananCacheManger.evict(PlatformRedisConstant.ANAN_USER_ALL_PERMISSIONS, userId + "");
         ananCacheManger.evict(PlatformRedisConstant.ANAN_USER_PERMISSION_TREE, userId + "");
     }

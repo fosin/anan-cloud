@@ -28,13 +28,13 @@ public class VersionPermissionUpdateDTO extends IdLogiSortQuery<LogiQueryRule, S
         implements ForeignKeyProp<Long> {
     private static final long serialVersionUID = 425131909775170449L;
 
-    @NotNull(message = "版本序号" + "{javax.validation.constraints.NotNull.message}")
+    @NotNull(message = "版本序号" + "{javax.validation.constraints.NotNull.message}", groups = Update.class)
     @Positive(message = "版本序号" + "{javax.validation.constraints.Positive.message}",
             groups = {Create.class, Update.class})
     @ApiModelProperty(value = "版本序号", required = true)
     private Long versionId;
 
-    @NotNull(message = "权限序号" + "{javax.validation.constraints.NotNull.message}")
+    @NotNull(message = "权限序号" + "{javax.validation.constraints.NotNull.message}", groups = Update.class)
     @Positive(message = "权限序号" + "{javax.validation.constraints.Positive.message}",
             groups = {Create.class, Update.class})
     @ApiModelProperty(value = "权限序号", required = true)

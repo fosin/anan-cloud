@@ -3,7 +3,9 @@ package top.fosin.anan.cloudresource.grpc.service;
 import lombok.extern.slf4j.Slf4j;
 import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
+import top.fosin.anan.cloudresource.constant.PlatformRedisConstant;
 import top.fosin.anan.cloudresource.constant.ServiceConstant;
 import top.fosin.anan.cloudresource.entity.res.OrganizRespDTO;
 import top.fosin.anan.cloudresource.grpc.organiz.*;
@@ -21,6 +23,7 @@ public class OrganizGrpcServiceImpl implements OrganizRpcService, Object2StringT
     private OrganizServiceGrpc.OrganizServiceBlockingStub blockingStubService;
 
     @Override
+    @Cacheable(value = PlatformRedisConstant.ANAN_ORGANIZATION,key = "#id")
     public OrganizRespDTO findOneById(Long id) {
         OrganizIdReq build = OrganizIdReq.newBuilder().setId(id).build();
         OrganizResp organizResp = blockingStubService.findOneById(build);
@@ -55,7 +58,7 @@ public class OrganizGrpcServiceImpl implements OrganizRpcService, Object2StringT
         dto.setName(organizResp.getName());
         dto.setAddress(organizResp.getAddress());
         dto.setPid(organizResp.getPid());
-        dto.setStatus(organizResp.getStatus());
+        dto.setStatus((byte) organizResp.getStatus());
         dto.setFullname(organizResp.getFullname());
         dto.setId(organizResp.getId());
         dto.setLevel(organizResp.getLevel());

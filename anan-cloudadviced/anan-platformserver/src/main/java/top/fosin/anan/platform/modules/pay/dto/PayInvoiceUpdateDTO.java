@@ -8,12 +8,12 @@ import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
 import top.fosin.anan.core.util.DateTimeUtil;
 import top.fosin.anan.data.entity.Id;
+import top.fosin.anan.data.valid.group.Update;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import java.util.Date;
-
 /**
  * 系统支付发票表(anan_pay_invoice)更新DTO
  *
@@ -27,12 +27,12 @@ import java.util.Date;
 public class PayInvoiceUpdateDTO extends Id<Long> {
     private static final long serialVersionUID = -51160534162545457L;
 
-    @NotNull(message = "支付序号" + "{javax.validation.constraints.NotNull.message}")
-    @Positive(message = "使用状态" + "{javax.validation.constraints.Positive.message}")
+    @NotNull(message = "支付序号" + "{javax.validation.constraints.NotNull.message}", groups = Update.class)
+    @Positive(message = "使用状态" + "{javax.validation.constraints.Positive.message}", groups = Update.class)
     @ApiModelProperty(value = "支付序号", required = true)
     private Long payId;
 
-    @NotBlank(message = "发票号码" + "{javax.validation.constraints.NotBlank.message}")
+    @NotBlank(message = "发票号码" + "{javax.validation.constraints.NotBlank.message}", groups = Update.class)
     @ApiModelProperty(value = "发票号码", required = true)
     private String invoceNo;
 

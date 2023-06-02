@@ -51,29 +51,29 @@ public class UserListVO extends Id<Long> {
     private String website;
 
     @ApiModelProperty(value = "实名认证标志")
-    private Integer realNameVerified;
+    private Byte realNameVerified;
 
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
     @ApiModelProperty(value = "生日")
     private Date birthday;
 
     @ApiModelProperty(value = "使用状态：具体取值于字典表anan_dictionary.code=15")
-    private Integer sex;
+    private Byte sex;
 
     @ApiModelProperty(value = "电子邮箱")
     private String email;
 
     @ApiModelProperty(value = "邮箱认证标志")
-    private Integer emailVerified;
+    private Byte emailVerified;
 
     @ApiModelProperty(value = "手机号码")
     private String phone;
 
     @ApiModelProperty(value = "手机验证标志")
-    private Integer phoneVerified;
+    private Byte phoneVerified;
 
     @ApiModelProperty(value = "使用状态：0=启用，1=禁用，具体取值于字典表anan_dictionary.code=11")
-    private Integer status;
+    private Byte status;
 
     @ApiModelProperty(value = "头像")
     private String avatar;

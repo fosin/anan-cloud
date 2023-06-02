@@ -11,29 +11,29 @@ public enum ParameterStatus {
     /**
      * 正常状态
      */
-    Normal(0),
+    Normal((byte) 0),
 
     /**
      * 修改状态
      */
-    Modified(1),
+    Modified((byte) 1),
 
     /**
      * 删除状态
      */
-    Deleted(2);
+    Deleted((byte) 2);
 
-    private final int type;
+    private final byte type;
 
-    ParameterStatus(int type) {
+    ParameterStatus(byte type) {
         this.type = type;
     }
 
-    public int getTypeValue() {
+    public byte getTypeValue() {
         return type;
     }
 
-    public static ParameterStatus valueOf(int type) {    //手写的从int到enum的转换函数
+    public static ParameterStatus valueOf(byte type) {    //手写的从byte到enum的转换函数
         switch (type) {
             case 0:
                 return Normal;

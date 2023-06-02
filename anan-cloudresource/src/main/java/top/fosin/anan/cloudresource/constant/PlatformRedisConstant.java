@@ -16,6 +16,8 @@ public class PlatformRedisConstant {
             ANAN_TABLE + DELIMITER + ServiceConstant.ANAN_PLATFORMSERVER;
 
     public static final String ANAN_USER = ANAN_TABLE + DELIMITER + TableNameConstant.ANAN_USER;
+
+    public static final String ANAN_USER_USERCODE = ANAN_USER + DELIMITER + "usercode";
     public static final String ANAN_USER_ROLE = ANAN_TABLE + DELIMITER + TableNameConstant.ANAN_USER_ROLE;
     public static final String ANAN_USER_PERMISSION = ANAN_TABLE + DELIMITER + TableNameConstant.ANAN_USER_PERMISSION;
     public static final String ANAN_USER_ALL_PERMISSIONS = ANAN_TABLE + DELIMITER + TableNameConstant.ANAN_USER_ALL_PERMISSIONS;

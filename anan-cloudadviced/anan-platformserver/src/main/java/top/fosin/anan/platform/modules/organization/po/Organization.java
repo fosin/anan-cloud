@@ -70,6 +70,6 @@ public class Organization extends IdCreateUpdatePidDeletePO<Long> {
     @Basic
     @ApiModelProperty(value = "使用状态：0=启用，1=禁用，具体取值于字典表anan_dictionary.id=11", required = true)
     @Column(name = "status", nullable = false)
-    private Integer status;
+    private Byte status;
 
 }

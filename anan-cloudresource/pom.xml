@@ -23,6 +23,10 @@
             <artifactId>anan-data</artifactId>
         </dependency>
         <dependency>
+            <groupId>top.fosin.anan</groupId>
+            <artifactId>anan-security</artifactId>
+        </dependency>
+        <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
         </dependency>

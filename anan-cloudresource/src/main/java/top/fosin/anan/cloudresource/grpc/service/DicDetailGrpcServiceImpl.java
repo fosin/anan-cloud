@@ -31,11 +31,11 @@ public class DicDetailGrpcServiceImpl implements DicDetailRpcService, Object2Str
         dto.setDictionaryId(dicDetailResp.getDictionaryId());
         dto.setCode(dicDetailResp.getCode());
         dto.setName(dicDetailResp.getName());
-        dto.setSort(dicDetailResp.getSort());
-        dto.setStatus(dicDetailResp.getStatus());
+        dto.setSort((short) dicDetailResp.getSort());
+        dto.setStatus((byte) dicDetailResp.getStatus());
         dto.setScode(dicDetailResp.getScode());
         dto.setScope(dicDetailResp.getScope());
-        dto.setUsed(dicDetailResp.getUsed());
+        dto.setUsed((byte) dicDetailResp.getUsed());
         dto.setDescription(dicDetailResp.getDescription());
         dto.setCreateBy(dicDetailResp.getCreateBy());
         dto.setCreateTime(new Date(dicDetailResp.getCreateTime().getSeconds() * 1000));

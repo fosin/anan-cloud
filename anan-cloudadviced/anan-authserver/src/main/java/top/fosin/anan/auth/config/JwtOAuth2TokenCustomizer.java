@@ -2,15 +2,17 @@ package top.fosin.anan.auth.config;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.core.oidc.endpoint.OidcParameterNames;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.server.authorization.OAuth2TokenType;
 import org.springframework.security.oauth2.server.authorization.token.JwtEncodingContext;
 import org.springframework.security.oauth2.server.authorization.token.OAuth2TokenCustomizer;
-import top.fosin.anan.auth.modules.auth.service.inter.AuthService;
-import top.fosin.anan.cloudresource.entity.res.UserAuthDto;
-import top.fosin.anan.cloudresource.entity.UserDetail;
+import top.fosin.anan.cloudresource.config.DefaultClaimNames;
+import top.fosin.anan.cloudresource.config.DefaultOidcScopes;
+import top.fosin.anan.cloudresource.entity.SecurityUser;
+import top.fosin.anan.cloudresource.entity.res.UserAuthDTO;
+import top.fosin.anan.cloudresource.service.inter.rpc.UserRpcService;
+import top.fosin.anan.core.util.BeanUtil;
 import top.fosin.anan.core.util.DateTimeUtil;
 import top.fosin.anan.security.resource.AnanSecurityProperties;
 
@@ -26,11 +28,11 @@ import java.util.stream.Collectors;
  */
 
 public class JwtOAuth2TokenCustomizer implements OAuth2TokenCustomizer<JwtEncodingContext> {
-    private final AuthService authService;
+    private final UserRpcService userRpcService;
     private final String authorityClaimName;
 
-    public JwtOAuth2TokenCustomizer(AuthService authService, AnanSecurityProperties ananSecurityProperties) {
-        this.authService = authService;
+    public JwtOAuth2TokenCustomizer(UserRpcService userRpcService, AnanSecurityProperties ananSecurityProperties) {
+        this.userRpcService = userRpcService;
         this.authorityClaimName = ananSecurityProperties.getOauth2().getResourceServer().getAuthorityClaimName();
     }
 
@@ -39,12 +41,22 @@ public class JwtOAuth2TokenCustomizer implements OAuth2TokenCustomizer<JwtEncodi
         JwtClaimsSet.Builder claims = context.getClaims();
         Authentication authorization = context.getPrincipal();
         if (authorization != null) {
-            Set<GrantedAuthority> authorities = authorization.getAuthorities().stream()
-                    .map(authority -> new SimpleGrantedAuthority(authority.getAuthority()))
-                    .collect(Collectors.toSet());
-            setClaim(claims, authorityClaimName, authorities);
+            UserAuthDTO userAuthDto;
+            if (authorization.getPrincipal() instanceof SecurityUser) {
+                SecurityUser securityUser = (SecurityUser) authorization.getPrincipal();
+                userAuthDto = securityUser.getUser();
+            } else {
+                String usercode = authorization.getName();
+                userAuthDto = BeanUtil.copyProperties(userRpcService.findOneByUsercode(usercode), UserAuthDTO.class);
+            }
             if (context.getTokenType().equals(OAuth2TokenType.ACCESS_TOKEN)) {
-                // Customize headers/claims for access_token
+                setClaim(claims, DefaultClaimNames.ID, userAuthDto.getId());
+                setClaim(claims, DefaultClaimNames.ORGANIZ_ID, userAuthDto.getOrganizId());
+                setClaim(claims, DefaultClaimNames.TOP_ID, userAuthDto.getTopId());
+                setClaim(claims, DefaultClaimNames.USER_NAME, userAuthDto.getUsername());
+                Set<String> authorities = authorization.getAuthorities().stream().map(GrantedAuthority::getAuthority)
+                        .collect(Collectors.toSet());
+                setClaim(claims, authorityClaimName, authorities);
             } else if (context.getTokenType().getValue().equals(OidcParameterNames.ID_TOKEN)) {
                 // Customize headers/claims for id_token
                 Set<String> scopes = context.getAuthorizedScopes();
@@ -56,40 +68,25 @@ public class JwtOAuth2TokenCustomizer implements OAuth2TokenCustomizer<JwtEncodi
                 if (scopes.contains(DefaultOidcScopes.ID_NO)) {
                     //setClaim(claims, DefaultClaimNames.ID_NO, "522223199001010520");
                     //setClaim(claims, DefaultClaimNames.ID_NO_TYPE, "身份证号");
+                    setClaim(claims, DefaultClaimNames.REAL_NAME_VERIFIED, userAuthDto.getRealNameVerified());
                 }
-                if (scopes.stream().anyMatch(s -> s.equals(DefaultOidcScopes.PHONE) || s.equals(DefaultOidcScopes.EMAIL) || s.equals(DefaultOidcScopes.PROFILE))) {
-                    UserAuthDto userAuthDto;
-                    if (authorization.getPrincipal() instanceof UserDetail) {
-                        UserDetail userDetail = (UserDetail) authorization.getPrincipal();
-                        userAuthDto = userDetail.getUser();
-                    } else {
-                        String usercode = authorization.getName();
-                        userAuthDto = authService.findByUsercode(usercode);
-                    }
-                    if (scopes.contains(DefaultOidcScopes.PHONE)) {
-                        setClaim(claims, DefaultClaimNames.PHONE, userAuthDto.getPhone());
-                        setClaim(claims, DefaultClaimNames.PHONE_VERIFIED, userAuthDto.getPhoneVerified() + "");
-                    }
-                    if (scopes.contains(DefaultOidcScopes.EMAIL)) {
-                        setClaim(claims, DefaultClaimNames.EMAIL, userAuthDto.getEmail());
-                        setClaim(claims, DefaultClaimNames.EMAIL_VERIFIED, userAuthDto.getEmailVerified() + "");
-                    }
-                    if (scopes.contains(DefaultOidcScopes.PROFILE)) {
-                        setClaim(claims, DefaultClaimNames.ID, userAuthDto.getId() + "");
-                        setClaim(claims, DefaultClaimNames.USER_NAME, userAuthDto.getUsername());
-                        setClaim(claims, DefaultClaimNames.REAL_NAME_VERIFIED, userAuthDto.getRealNameVerified() + "");
-                        setClaim(claims, DefaultClaimNames.SEX, userAuthDto.getSex() + "");
-                        setClaim(claims, DefaultClaimNames.GIVEN_NAME, userAuthDto.getGivenName());
-                        setClaim(claims, DefaultClaimNames.FAMILY_NAME, userAuthDto.getFamilyName());
-                        setClaim(claims, DefaultClaimNames.MIDDLE_NAME, userAuthDto.getMiddleName());
-                        setClaim(claims, DefaultClaimNames.NICKNAME, userAuthDto.getNickname());
-                        setClaim(claims, DefaultClaimNames.PREFERRED_USERNAME, userAuthDto.getPreferredUsername());
-                        setClaim(claims, DefaultClaimNames.WEBSITE, userAuthDto.getWebsite());
-                        setClaim(claims, DefaultClaimNames.AVATAR, userAuthDto.getAvatar());
-                        setClaim(claims, DefaultClaimNames.BIRTHDATE, DateTimeUtil.formatTime(userAuthDto.getBirthday(), DateTimeUtil.DATE_PATTERN));
-                        setClaim(claims, DefaultClaimNames.UPDATE_BY, userAuthDto.getUpdateBy() + "");
-                        setClaim(claims, DefaultClaimNames.UPDATE_TIME, DateTimeUtil.formatTime(userAuthDto.getUpdateTime(), DateTimeUtil.DATETIME_PATTERN));
-                    }
+                if (scopes.contains(DefaultOidcScopes.PHONE)) {
+                    setClaim(claims, DefaultClaimNames.PHONE, userAuthDto.getPhone());
+                    setClaim(claims, DefaultClaimNames.PHONE_VERIFIED, userAuthDto.getPhoneVerified());
+                }
+                if (scopes.contains(DefaultOidcScopes.EMAIL)) {
+                    setClaim(claims, DefaultClaimNames.EMAIL, userAuthDto.getEmail());
+                    setClaim(claims, DefaultClaimNames.EMAIL_VERIFIED, userAuthDto.getEmailVerified());
+                }
+                if (scopes.contains(DefaultOidcScopes.PROFILE)) {
+                    setClaim(claims, DefaultClaimNames.ID, userAuthDto.getId());
+                    setClaim(claims, DefaultClaimNames.ORGANIZ_ID, userAuthDto.getOrganizId());
+                    setClaim(claims, DefaultClaimNames.TOP_ID, userAuthDto.getTopId());
+                    setClaim(claims, DefaultClaimNames.USER_NAME, userAuthDto.getUsername());
+                    setClaim(claims, DefaultClaimNames.SEX, userAuthDto.getSex());
+                    setClaim(claims, DefaultClaimNames.AVATAR, userAuthDto.getAvatar());
+                    setClaim(claims, DefaultClaimNames.WEBSITE, userAuthDto.getWebsite());
+                    setClaim(claims, DefaultClaimNames.BIRTHDATE, DateTimeUtil.formatTime(userAuthDto.getBirthday(), DateTimeUtil.DATE_PATTERN));
                 }
             }
         }

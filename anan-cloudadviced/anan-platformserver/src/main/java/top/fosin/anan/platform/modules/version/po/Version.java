@@ -1,19 +1,17 @@
 package top.fosin.anan.platform.modules.version.po;
 
-import java.util.Date;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import org.hibernate.annotations.DynamicUpdate;
+import top.fosin.anan.jpa.po.IdCreateUpdatePO;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.DynamicUpdate;
-
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import top.fosin.anan.jpa.po.IdCreateUpdatePO;
+import java.util.Date;
 
 /**
  * 系统版本表(AnanVersion)实体类
@@ -39,7 +37,7 @@ public class Version extends IdCreateUpdatePO<Long> {
     @Basic
     @ApiModelProperty(value = "版本类型：0=收费版 1=免费版 2=开发版", required = true)
     @Column(name = "type", nullable = false)
-    private Integer type;
+    private Byte type;
 
     @Basic
     @ApiModelProperty(value = "版本价格", required = true)
@@ -89,7 +87,7 @@ public class Version extends IdCreateUpdatePO<Long> {
     @Basic
     @ApiModelProperty(value = "启用状态：0=启用，1=禁用", required = true)
     @Column(name = "status", nullable = false)
-    private Integer status;
+    private Byte status;
 
     @Basic
     @ApiModelProperty(value = "版本描述")

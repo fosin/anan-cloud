@@ -1,5 +1,6 @@
 package top.fosin.anan;
 
+import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.retry.annotation.EnableRetry;
@@ -19,9 +20,11 @@ import top.fosin.anan.swagger.annotation.EnableAnanSwagger2;
 @EnableRetry
 public class CloudGatewayApplication {
     public static void main(String[] args) {
-        new SpringApplicationBuilder(CloudGatewayApplication.class)
-                .banner(new AnanBanner("Anan Cloud Gateway"))
-                .logStartupInfo(true)
-                .run(args);
+        String banner = "Anan Cloud Gateway";
+        SpringApplication application = new SpringApplicationBuilder(CloudGatewayApplication.class)
+                .banner(new AnanBanner(banner))
+                .logStartupInfo(true).build();
+        application.setAllowBeanDefinitionOverriding(true);
+        application.run(args);
     }
 }

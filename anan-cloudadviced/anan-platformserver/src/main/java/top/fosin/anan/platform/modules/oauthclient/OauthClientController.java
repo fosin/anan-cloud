@@ -11,6 +11,8 @@ import top.fosin.anan.platform.modules.oauthclient.service.inter.OauthClientServ
 
 /**
  * 授权客户端控制器
+ * 升级到2.7.x之后该类废弃了，改用了authserver中的Oauth2RegisteredClientController.class类
+ * 下一个版本将移除
  *
  * @author fosin
  */

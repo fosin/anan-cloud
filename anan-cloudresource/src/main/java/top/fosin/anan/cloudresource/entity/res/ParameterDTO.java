@@ -30,7 +30,7 @@ public class ParameterDTO extends Id<Long> {
     private String value;
 
     @ApiModelProperty(value = "参数分类：具体取值于字典表anan_dictionary.code=10", required = true, example = "Integer")
-    private Integer type;
+    private Byte type;
 
     @ApiModelProperty(value = "参数作用域", example = "String")
     private String scope;
@@ -63,6 +63,6 @@ public class ParameterDTO extends Id<Long> {
     private Long applyBy;
 
     @ApiModelProperty(value = "参数状态：0=正常状态、1=修改状态、2=删除状态", required = true, example = "Integer")
-    private Integer status;
+    private Byte status;
 
 }

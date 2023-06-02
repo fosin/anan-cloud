@@ -24,7 +24,7 @@ public class DictionaryRespDTO extends IdCreateUpdateVO<Long> {
     private String name;
 
     @ApiModelProperty(value = "字典类别，区别字典的大分类，取值于表anan_dictionary.code = 1数据", example = "Integer")
-    private Integer type;
+    private Byte type;
 
     @ApiModelProperty(value = "字典作用域，以字典类别为前提，在字典类别基础上再次细化分类字典", example = "String")
     private String scope;

@@ -42,6 +42,6 @@ public class OrganizRespDTO extends IdPid<Long> {
     private String telphone;
 
     @ApiModelProperty(value = "使用状态：0=启用，1=禁用，具体取值于字典表anan_dictionary.code=11", example = "Integer")
-    private Integer status;
+    private Byte status;
 
 }

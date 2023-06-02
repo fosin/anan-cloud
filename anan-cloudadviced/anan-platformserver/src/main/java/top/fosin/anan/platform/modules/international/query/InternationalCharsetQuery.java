@@ -33,6 +33,6 @@ public class InternationalCharsetQuery extends LogiSortQuery<LogiQueryRule,SortR
     private String charset;
 
     @ApiModelProperty(value = "状态：0=启用，1=禁用", example = "Integer")
-    private Integer status;
+    private Byte status;
 
 }

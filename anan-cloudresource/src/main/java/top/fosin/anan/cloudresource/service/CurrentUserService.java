@@ -2,19 +2,22 @@ package top.fosin.anan.cloudresource.service;
 
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.lang.NonNull;
+import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.util.Assert;
+import top.fosin.anan.cloudresource.config.DefaultClaimNames;
 import top.fosin.anan.cloudresource.constant.SystemConstant;
-import top.fosin.anan.cloudresource.entity.Client;
-import top.fosin.anan.cloudresource.entity.UserDetail;
-import top.fosin.anan.cloudresource.entity.req.RoleUpdateDTO;
-import top.fosin.anan.cloudresource.entity.res.UserAuthDto;
+import top.fosin.anan.cloudresource.entity.SecurityUser;
 import top.fosin.anan.data.aware.OrganizAware;
 import top.fosin.anan.data.aware.UserAware;
+import top.fosin.anan.security.resource.AnanSecurityProperties;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * @author fosin
@@ -23,40 +26,20 @@ import java.util.Optional;
 public class CurrentUserService
         implements AuditorAware<Long>, UserAware<Long>, OrganizAware<Long> {
 
+    private final String authorityClaimName;
+
+    public CurrentUserService(AnanSecurityProperties ananSecurityProperties) {
+        AnanSecurityProperties.Oauth2ResourceServer resourceServer = ananSecurityProperties.getOauth2().getResourceServer();
+        this.authorityClaimName = resourceServer.getAuthorityClaimName();
+    }
+
     /**
      * 当前用户是否有登录态
      *
      * @return true：是，false：否
      */
-    public boolean isUserLogin() {
+    public boolean hasAuthentication() {
         return SecurityContextHolder.getContext().getAuthentication() != null;
-    }
-
-    public UserDetail getUserDetail() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Assert.notNull(authentication, "未找到当前用户的认证登录态!");
-        Object principal = authentication.getPrincipal();
-        Assert.isTrue(principal instanceof UserDetail, "认证信息有误，不是UserDetail对象，请检查！");
-        return (UserDetail) principal;
-    }
-
-    /**
-     * 得到当前登录用户的上下文信息
-     *
-     * @return UserDetail
-     */
-
-    public UserAuthDto getUser() {
-        return this.getUserDetail().getUser();
-    }
-
-    /**
-     * 得到当前登录用户登录的客户端信息
-     *
-     * @return Client
-     */
-    public Client getClient() {
-        return this.getUserDetail().getClient();
     }
 
     /**
@@ -65,7 +48,16 @@ public class CurrentUserService
      * @return boolean true：是 false：否
      */
     public boolean isSysAdminUser() {
-        return isSysAdminUser(this.getUser().getUsercode());
+        Object principal = getPrincipal();
+        String usercode;
+        if (principal instanceof SecurityUser) {
+            usercode = ((SecurityUser) principal).getUser().getUsercode();
+        } else if (principal instanceof Jwt) {
+            usercode = ((Jwt) principal).getClaim(DefaultClaimNames.SUB);
+        } else {
+            throw new AuthenticationServiceException("认证信息有误，未找到认证用户对象，请检查！");
+        }
+        return isSysAdminUser(usercode);
     }
 
     /**
@@ -82,17 +74,27 @@ public class CurrentUserService
      *
      * @return boolean true：是 false：否
      */
-    public boolean isAdminUser() {
-        return hasAdminRole();
+    public boolean isAdminUser(String usercode) {
+        throw new UnsupportedOperationException("目前不支持！");
     }
 
-    /**
-     * 当前操作者是否是管理员用户
-     *
-     * @return boolean true：是 false：否
-     */
-    public boolean isAdminUser(String usercode) {
-        return SystemConstant.ADMIN_USER_CODE.equals(usercode);
+    public Collection<String> getAuthorities() {
+        Object principal = getPrincipal();
+        Collection<String> authorities;
+        if (principal instanceof SecurityUser) {
+            authorities = ((SecurityUser) principal).getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
+        } else if (principal instanceof Jwt) {
+            authorities = ((Jwt) principal).getClaim(authorityClaimName);
+        } else {
+            throw new AuthenticationServiceException("认证信息有误，未找到认证用户对象，请检查！");
+        }
+        return authorities;
+    }
+
+    private Object getPrincipal() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Assert.notNull(authentication, "未找到当前用户的认证登录态!");
+        return authentication.getPrincipal();
     }
 
     /**
@@ -101,8 +103,7 @@ public class CurrentUserService
      * @return boolean true：是 false：否
      */
     public boolean hasAdminRole() {
-        List<RoleUpdateDTO> userRoles = this.getUser().getUserRoles();
-        return userRoles.stream().anyMatch(userRole -> SystemConstant.ADMIN_ROLE_NAME.equals(userRole.getValue()));
+        return this.getAuthorities().stream().anyMatch(authority -> authority.equals(SystemConstant.ADMIN_ROLE_NAME));
     }
 
     /**
@@ -111,28 +112,54 @@ public class CurrentUserService
      * @return boolean true：是 false：否
      */
     public boolean hasSysAdminRole() {
-        List<RoleUpdateDTO> userRoles = this.getUser().getUserRoles();
-        return userRoles.stream().anyMatch(userRole -> SystemConstant.ANAN_ROLE_NAME.equals(userRole.getValue()));
+        return this.getAuthorities().stream().anyMatch(authority -> authority.equals(SystemConstant.ANAN_ROLE_NAME));
     }
 
     @Override
     @NonNull
     public Optional<Long> getCurrentAuditor() {
-        return Optional.of(this.getUser().getId());
+        return Optional.of(getUserId());
     }
 
     @Override
     public Long getOrganizId() {
-        return this.getUser().getOrganizId();
+        Object principal = getPrincipal();
+        Long organizId;
+        if (principal instanceof SecurityUser) {
+            organizId = ((SecurityUser) principal).getUser().getOrganizId();
+        } else if (principal instanceof Jwt) {
+            organizId = ((Jwt) principal).getClaim(DefaultClaimNames.ORGANIZ_ID);
+        } else {
+            throw new AuthenticationServiceException("认证信息有误，未找到认证用户对象，请检查！");
+        }
+        return organizId;
     }
 
     @Override
     public Long getTopId() {
-        return this.getUser().getTopId();
+        Object principal = getPrincipal();
+        Long topId;
+        if (principal instanceof SecurityUser) {
+            topId = ((SecurityUser) principal).getUser().getTopId();
+        } else if (principal instanceof Jwt) {
+            topId = ((Jwt) principal).getClaim(DefaultClaimNames.TOP_ID);
+        } else {
+            throw new AuthenticationServiceException("认证信息有误，未找到认证用户对象，请检查！");
+        }
+        return topId;
     }
 
     @Override
     public Long getUserId() {
-        return this.getUser().getId();
+        Object principal = getPrincipal();
+        Long id;
+        if (principal instanceof SecurityUser) {
+            id = ((SecurityUser) principal).getUser().getId();
+        } else if (principal instanceof Jwt) {
+            id = ((Jwt) principal).getClaim(DefaultClaimNames.ID);
+        } else {
+            throw new AuthenticationServiceException("认证信息有误，未找到认证用户对象，请检查！");
+        }
+        return id;
     }
 }

@@ -32,7 +32,7 @@ public class PermissionVO extends IdPid<Long> {
     private String routePath;
 
     @ApiModelProperty(value = "权限类型：0=按钮、1=组件菜单，对应ur是前端组件、2=链接菜单，对应url是http(s)链接地址、3=目录菜单、4=系统模块，具体取值于字典表anan_dictionary.code=13，当权限类型是1、3、4：目录菜单时表示该节点不是一个叶子节点")
-    private Integer type;
+    private Byte type;
 
     @ApiModelProperty(value = "菜单层级")
     private Integer level;
@@ -41,7 +41,7 @@ public class PermissionVO extends IdPid<Long> {
     private Integer sort;
 
     @ApiModelProperty(value = "使用状态：0=启用，1=禁用，具体取值于字典表anan_dictionary.code=11")
-    private Integer status;
+    private Byte status;
 
     @ApiModelProperty(value = "所属服务,等同于表anan_service.id")
     private Long serviceId;

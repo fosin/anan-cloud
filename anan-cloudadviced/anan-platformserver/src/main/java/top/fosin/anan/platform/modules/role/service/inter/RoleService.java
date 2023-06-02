@@ -6,7 +6,7 @@ import top.fosin.anan.jpa.service.IRetrieveJpaService;
 import top.fosin.anan.jpa.service.IUpdateJpaService;
 import top.fosin.anan.platform.modules.role.dto.RoleCreateDTO;
 import top.fosin.anan.platform.modules.role.dto.RoleDTO;
-import top.fosin.anan.cloudresource.entity.req.RoleUpdateDTO;
+import top.fosin.anan.platform.modules.role.dto.RoleUpdateDTO;
 import top.fosin.anan.platform.modules.role.po.Role;
 
 import javax.validation.constraints.Positive;

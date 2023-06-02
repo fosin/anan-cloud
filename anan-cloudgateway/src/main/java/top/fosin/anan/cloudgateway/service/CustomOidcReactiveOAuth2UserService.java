@@ -115,10 +115,10 @@ public class CustomOidcReactiveOAuth2UserService implements ReactiveOAuth2UserSe
                 .map((authority) -> {
                     OidcUserInfo userInfo = authority.getUserInfo();
                     Map<String,Object> attrs = authority.getAttributes();
-                    List<Map<String,String>> list = (List<Map<String,String>>) attrs.get(authorityClaimName);
+                    List<String> list = (List<String>) attrs.get(authorityClaimName);
                     Set<GrantedAuthority> authorities = new HashSet<>();
                     if (list != null) {
-                        authorities = list.stream().map(map -> new SimpleGrantedAuthority(authorityPrefix + map.get("role"))).collect(Collectors.toSet());
+                        authorities = list.stream().map(s -> new SimpleGrantedAuthority(authorityPrefix + s)).collect(Collectors.toSet());
                     }
                     authorities.add(authority);
                     OAuth2AccessToken token = userRequest.getAccessToken();

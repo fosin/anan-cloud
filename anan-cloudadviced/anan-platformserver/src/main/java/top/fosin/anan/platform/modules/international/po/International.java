@@ -53,7 +53,7 @@ public class International extends IdCreateUpdatePO<Long> {
      */
     @Basic
     @Column(name = "status", nullable = false)
-    private Integer status;
+    private Byte status;
 
     /**
      * 默认标志

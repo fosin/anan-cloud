@@ -16,7 +16,7 @@ public class UserStrategy implements IParameterStrategy {
     }
 
     @Override
-    public int getType() {
+    public byte getType() {
         return ParameterType.User.getTypeValue();
     }
 
@@ -27,6 +27,6 @@ public class UserStrategy implements IParameterStrategy {
 
     @Override
     public String getScope() {
-        return currentUserService.isSysAdminUser() ? null : currentUserService.getUser().getId() + "";
+        return currentUserService.hasSysAdminRole() ? null : String.valueOf(currentUserService.getUserId());
     }
 }

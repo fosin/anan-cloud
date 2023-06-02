@@ -1,4 +1,4 @@
-package top.fosin.anan.auth.modules.auth.controller;
+package top.fosin.anan.auth.modules.auth;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -14,8 +14,6 @@ import top.fosin.anan.cloudresource.constant.FieldConstant;
 import top.fosin.anan.cloudresource.constant.PathPrefixConstant;
 import top.fosin.anan.cloudresource.constant.PathSuffixConstant;
 import top.fosin.anan.cloudresource.entity.UserAllPermissionTreeVO;
-import top.fosin.anan.cloudresource.entity.UserDetail;
-import top.fosin.anan.cloudresource.service.CurrentUserService;
 import top.fosin.anan.data.result.ResultUtils;
 import top.fosin.anan.data.result.SingleResult;
 
@@ -24,7 +22,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.security.Principal;
 
 /**
  * @author fosin
@@ -34,14 +31,7 @@ import java.security.Principal;
 @AllArgsConstructor
 @Api(value = PathPrefixConstant.API, tags = "获取认证相关信息")
 public class AuthController {
-    private CurrentUserService currentUserService;
     private final AuthService authService;
-
-    @GetMapping(value = "/userdetail")
-    @ApiOperation(value = "根据令牌获取当前认证用户信息", notes = "根据当前认证用户,获取认证本体信息")
-    public SingleResult<UserDetail> principal(Principal principal) {
-        return ResultUtils.success(currentUserService.getUserDetail());
-    }
 
     @GetMapping("/vercode")
     @ApiOperation(value = "获取验证码", tags = "获取验证码")

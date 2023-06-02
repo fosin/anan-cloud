@@ -61,7 +61,7 @@ public class ParameterController implements
                     required = true, dataTypeClass = String.class, paramType = "query")
     })
     public SingleResult<ParameterDTO> getNearestParameter(
-            @PositiveOrZero @RequestParam("type") Integer type,
+            @RequestParam("type") @PositiveOrZero Byte type,
             @RequestParam("scope") String scope,
             @NotBlank @RequestParam("name") String name) {
         return ResultUtils.success(parameterService.getNearestParameter(type, scope, name));
@@ -78,7 +78,7 @@ public class ParameterController implements
                     required = true, dataTypeClass = String.class, paramType = "query")
     })
     public SingleResult<ParameterDTO> getParameter(
-            @PositiveOrZero @RequestParam("type") Integer type,
+            @RequestParam("type") @PositiveOrZero Byte type,
             @RequestParam("scope") String scope,
             @NotBlank @RequestParam("name") String name) {
         return ResultUtils.success(parameterService.getParameter(type, scope, name));
@@ -90,7 +90,7 @@ public class ParameterController implements
             required = true, dataTypeClass = ParameterUpdateDTO.class, paramType = "body")
     public SingleResult<String> getOrCreateParameter(
             @Validated({SingleQuery.class}) @RequestBody ParameterUpdateDTO reqDto) {
-        int type = reqDto.getType();
+        byte type = reqDto.getType();
         String scope = reqDto.getScope();
         String name = reqDto.getName();
         String defaultValue = reqDto.getDefaultValue();

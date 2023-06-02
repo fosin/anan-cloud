@@ -1,5 +1,6 @@
 package top.fosin.anan;
 
+import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
@@ -24,9 +25,11 @@ import top.fosin.anan.swagger.annotation.EnableAnanSwagger2;
 @EnableFeignClients
 public class ZuulGatewayApplication {
     public static void main(String[] args) {
-        new SpringApplicationBuilder(ZuulGatewayApplication.class)
-                .banner(new AnanBanner("Anan Zuul Gateway"))
-                .logStartupInfo(true)
-                .run(args);
+        String banner = "Anan Zuul Gateway";
+        SpringApplication application = new SpringApplicationBuilder(ZuulGatewayApplication.class)
+                .banner(new AnanBanner(banner))
+                .logStartupInfo(true).build();
+        application.setAllowBeanDefinitionOverriding(true);
+        application.run(args);
     }
 }

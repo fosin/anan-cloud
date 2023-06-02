@@ -28,84 +28,84 @@ import java.util.Date;
 @Entity
 @DynamicUpdate
 @Table(name = "oauth2_registered_client")
-public class Oauth2RegisteredClient extends IdPO<Long> {
+public class Oauth2RegisteredClient extends IdPO<String> {
     private static final long serialVersionUID = -28612467912748541L;
 
     /**
-    * 客户端序号
-    */
+     * 客户端序号
+     */
     @Basic
     @Column(name = "client_id", nullable = false)
     private String clientId;
 
     /**
-    * 发布日期
-    */
+     * 发布日期
+     */
     @Basic
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
     @Column(name = "client_id_issued_at", nullable = false)
     private Date clientIdIssuedAt;
 
     /**
-    * 客户端密钥
-    */
+     * 客户端密钥
+     */
     @Basic
     @Column(name = "client_secret")
     private String clientSecret;
 
     /**
-    * 过期时间
-    */
+     * 过期时间
+     */
     @Basic
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
     @Column(name = "client_secret_expires_at")
     private Date clientSecretExpiresAt;
 
     /**
-    * 客户端名称
-    */
+     * 客户端名称
+     */
     @Basic
     @Column(name = "client_name", nullable = false)
     private String clientName;
 
     /**
-    * 认证方法
-    */
+     * 认证方法
+     */
     @Basic
     @Column(name = "client_authentication_methods", nullable = false)
     private String clientAuthenticationMethods;
 
     /**
-    * 认证类型
-    */
+     * 认证类型
+     */
     @Basic
     @Column(name = "authorization_grant_types", nullable = false)
     private String authorizationGrantTypes;
 
     /**
-    * 跳转地址
-    */
+     * 跳转地址
+     */
     @Basic
     @Column(name = "redirect_uris")
     private String redirectUris;
 
     /**
-    * 作用域
-    */
+     * 作用域
+     */
     @Basic
     @Column(name = "scopes", nullable = false)
     private String scopes;
 
     /**
-    * 客户端设置
-    */
+     * 客户端设置
+     */
     @Basic
     @Column(name = "client_settings", nullable = false)
     private ClientSettings clientSettings;
 
     /**
-    * 令牌设置
-    */
+     * 令牌设置
+     */
     @Basic
     @Column(name = "token_settings", nullable = false)
     private TokenSettings tokenSettings;

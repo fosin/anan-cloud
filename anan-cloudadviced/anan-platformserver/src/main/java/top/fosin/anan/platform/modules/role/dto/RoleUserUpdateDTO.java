@@ -8,10 +8,10 @@ import top.fosin.anan.data.entity.req.IdLogiSortOrganizIdQuery;
 import top.fosin.anan.data.module.LogiQueryRule;
 import top.fosin.anan.data.module.SortRule;
 import top.fosin.anan.data.prop.ForeignKeyProp;
+import top.fosin.anan.data.valid.group.Update;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
-
 /**
  * 系统角色用户表(AnanUserRole)请求DTO
  *
@@ -25,13 +25,13 @@ import javax.validation.constraints.Positive;
 public class RoleUserUpdateDTO extends IdLogiSortOrganizIdQuery<LogiQueryRule, SortRule, Long> implements ForeignKeyProp<Long> {
     private static final long serialVersionUID = 818450290607468187L;
 
-    @NotNull(message = "用户序号" + "{javax.validation.constraints.NotNull.message}")
-    @Positive(message = "用户序号" + "{javax.validation.constraints.Positive.message}")
+    @NotNull(message = "用户序号" + "{javax.validation.constraints.NotNull.message}", groups = Update.class)
+    @Positive(message = "用户序号" + "{javax.validation.constraints.Positive.message}", groups = Update.class)
     @ApiModelProperty(value = "用户ID,创建和更新时必填")
     private Long userId;
 
-    @NotNull(message = "角色序号" + "{javax.validation.constraints.NotNull.message}")
-    @Positive(message = "角色序号" + "{javax.validation.constraints.Positive.message}")
+    @NotNull(message = "角色序号" + "{javax.validation.constraints.NotNull.message}", groups = Update.class)
+    @Positive(message = "角色序号" + "{javax.validation.constraints.Positive.message}", groups = Update.class)
     @ApiModelProperty(value = "角色ID,创建和更新时必填")
     private Long roleId;
     

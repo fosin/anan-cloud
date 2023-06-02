@@ -1,5 +1,6 @@
 package top.fosin.anan.cloudresource.service.inter.base;
 
+import org.springframework.util.StringUtils;
 import top.fosin.anan.cloudresource.entity.res.ParameterDTO;
 
 import java.util.List;
@@ -13,15 +14,27 @@ import java.util.List;
 public interface ParameterBaseService {
     void cancelDelete(List<Long> ids);
 
-    ParameterDTO getParameter(Integer type, String scope, String name);
+    ParameterDTO getParameter(Byte type, String scope, String name);
 
-    ParameterDTO getNearestParameter(int type, String scope, String name);
+    ParameterDTO getNearestParameter(Byte type, String scope, String name);
 
-    String getOrCreateParameter(int type, String scope, String name, String defaultValue, String description);
+    String getOrCreateParameter(Byte type, String scope, String name, String defaultValue, String description);
 
     Boolean applyChange(Long id);
 
     Boolean applyChangeAll();
 
     Boolean applyChanges(List<Long> ids);
+
+    default String getCacheKey(Byte type, String scope, String name) {
+        if (!StringUtils.hasText(scope)) {
+            scope = "";
+        }
+        return type + "-" + scope + "-" + name;
+    }
+
+    default String getCacheKey(ParameterDTO dto) {
+        return getCacheKey(dto.getType(), dto.getScope(), dto.getName());
+    }
+
 }

@@ -15,7 +15,7 @@ import javax.validation.constraints.NotNull;
 @EqualsAndHashCode
 @ToString(callSuper = true)
 @ApiModel(value = "OAUTH2客户端设置", description = "OAUTH2客户端设置")
-public class ClientSettings {
+public class ClientSettingsDTO {
 
     @NotNull(message = "需要用户权限确认" + "{javax.validation.constraints.NotNull.message}")
     @ApiModelProperty(value = "需要用户权限确认", required = true, example = "true")
@@ -27,10 +27,10 @@ public class ClientSettings {
     private Boolean requireProofKey;
 
     @NotBlank(message = "jwk地址" + "{javax.validation.constraints.NotBlank.message}")
-    @ApiModelProperty(value = "jwk地址", required = true, example = "true")
+    @ApiModelProperty(value = "jwk地址", required = true, example = "http://127.0.0.1/jwks")
     private String jwkSetUrl;
 
     @NotNull(message = "ID令牌加密算法" + "{javax.validation.constraints.NotNull.message}")
-    @ApiModelProperty(value = "ID令牌加密算法", required = true, example = "Integer")
+    @ApiModelProperty(value = "ID令牌加密算法", required = true, example = "")
     private JwsAlgorithm tokenEndpointAuthenticationSigningAlgorithm;
 }

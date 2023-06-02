@@ -47,7 +47,7 @@ public class InternationalDTO extends Id<Long> {
     private Date updateTime;
 
     @ApiModelProperty(value = "状态：0=启用，1=禁用", required = true, example = "Integer")
-    private Integer status;
+    private Byte status;
 
     @ApiModelProperty(value = "默认标志", required = true, example = "Integer")
     private Integer defaultFlag;

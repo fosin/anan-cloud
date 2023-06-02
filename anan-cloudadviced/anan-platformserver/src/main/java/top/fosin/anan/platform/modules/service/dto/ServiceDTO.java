@@ -44,6 +44,6 @@ public class ServiceDTO extends Id<Long> {
     private Date updateTime;
 
     @ApiModelProperty(value = "状态码：0：禁用 1：启用", required = true, example = "Integer")
-    private Integer status;
+    private Byte status;
 
 }

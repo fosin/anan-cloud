@@ -51,7 +51,7 @@ public class PermissionProxyRpcServiceImpl implements ParameterRpcService {
     }
 
     @Override
-    public ParameterDTO getParameter(Integer type, String scope, String name) {
+    public ParameterDTO getParameter(Byte type, String scope, String name) {
         if (rpcStrategy == RpcCallStrategy.GRPC) {
             return getPermissionRpcService().getParameter(type, scope, name);
         } else {
@@ -60,7 +60,7 @@ public class PermissionProxyRpcServiceImpl implements ParameterRpcService {
     }
 
     @Override
-    public ParameterDTO getNearestParameter(int type, String scope, String name) {
+    public ParameterDTO getNearestParameter(Byte type, String scope, String name) {
         if (rpcStrategy == RpcCallStrategy.GRPC) {
             return getPermissionRpcService().getNearestParameter(type, scope, name);
         } else {
@@ -69,7 +69,7 @@ public class PermissionProxyRpcServiceImpl implements ParameterRpcService {
     }
 
     @Override
-    public String getOrCreateParameter(int type, String scope, String name, String defaultValue, String description) {
+    public String getOrCreateParameter(Byte type, String scope, String name, String defaultValue, String description) {
         if (rpcStrategy == RpcCallStrategy.GRPC) {
             return getPermissionRpcService().getOrCreateParameter(type, scope, name, defaultValue, description);
         } else {

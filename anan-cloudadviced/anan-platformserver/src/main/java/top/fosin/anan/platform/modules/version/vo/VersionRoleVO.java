@@ -1,13 +1,9 @@
 package top.fosin.anan.platform.modules.version.vo;
 
-                                                                                                                                                                            
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import java.io.Serializable;
 import lombok.Data;
-import org.springframework.format.annotation.DateTimeFormat;
-import top.fosin.anan.core.util.DateTimeUtil;
-import java.util.Date;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import top.fosin.anan.data.entity.Id;
@@ -36,6 +32,6 @@ public class VersionRoleVO extends Id<Long> {
     private String tips;
 
     @ApiModelProperty(value = "使用状态：0=启用，1=禁用，具体取值于字典表anan_dictionary.code=11")
-    private Integer status;
+    private Byte status;
 
 }

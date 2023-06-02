@@ -37,7 +37,7 @@ public class InternationalPageVO extends Id<Long> {
 
     @ApiModelProperty(value = "状态：0=启用，1=禁用")
     @Translate2String(service = DicDetailGrpcServiceImpl.class, dicId = "11")
-    private Integer status;
+    private Byte status;
 
     @ApiModelProperty(value = "默认标志")
     private Integer defaultFlag;

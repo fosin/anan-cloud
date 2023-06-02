@@ -72,25 +72,4 @@ public interface ParameterReqOrBuilder extends
    */
   com.google.protobuf.ByteString
       getDescriptionBytes();
-
-  /**
-   * <code>int32 status = 7;</code>
-   * @return The status.
-   */
-  int getStatus();
-
-  /**
-   * <code>.google.protobuf.Timestamp applyTime = 8;</code>
-   * @return Whether the applyTime field is set.
-   */
-  boolean hasApplyTime();
-  /**
-   * <code>.google.protobuf.Timestamp applyTime = 8;</code>
-   * @return The applyTime.
-   */
-  com.google.protobuf.Timestamp getApplyTime();
-  /**
-   * <code>.google.protobuf.Timestamp applyTime = 8;</code>
-   */
-  com.google.protobuf.TimestampOrBuilder getApplyTimeOrBuilder();
 }

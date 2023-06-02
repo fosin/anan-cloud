@@ -76,4 +76,5 @@ message UserResp {
   google.protobuf.Timestamp createTime = 23;
   int64 updateBy = 24;
   google.protobuf.Timestamp updateTime = 25;
+  string password = 26;
 }

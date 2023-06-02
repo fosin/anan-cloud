@@ -12,7 +12,7 @@ public interface IParameterStrategy {
      *
      * @return 参数类型
      */
-    int getType();
+    byte getType();
 
     /**
      * 获取参数类型解释

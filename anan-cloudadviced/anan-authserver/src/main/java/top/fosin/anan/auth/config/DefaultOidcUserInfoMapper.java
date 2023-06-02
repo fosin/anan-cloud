@@ -5,6 +5,8 @@ import org.springframework.security.oauth2.core.oidc.OidcIdToken;
 import org.springframework.security.oauth2.core.oidc.OidcUserInfo;
 import org.springframework.security.oauth2.server.authorization.OAuth2Authorization;
 import org.springframework.security.oauth2.server.authorization.oidc.authentication.OidcUserInfoAuthenticationContext;
+import top.fosin.anan.cloudresource.config.DefaultClaimNames;
+import top.fosin.anan.cloudresource.config.DefaultOidcScopes;
 
 import java.util.*;
 import java.util.function.Function;
@@ -38,24 +40,19 @@ public class DefaultOidcUserInfoMapper implements Function<OidcUserInfoAuthentic
     );
     private final List<String> ID_NO_CLAIMS = Arrays.asList(
             DefaultClaimNames.ID_NO,
-            DefaultClaimNames.ID_NO_TYPE
+            DefaultClaimNames.ID_NO_TYPE,
+            DefaultClaimNames.REAL_NAME_VERIFIED
     );
     private final List<String> PROFILE_CLAIMS = Arrays.asList(
             DefaultClaimNames.ID,
+            DefaultClaimNames.ORGANIZ_ID,
+            DefaultClaimNames.TOP_ID,
             DefaultClaimNames.SUB,
             DefaultClaimNames.USER_NAME,
-            DefaultClaimNames.REAL_NAME_VERIFIED,
-            DefaultClaimNames.FAMILY_NAME,
-            DefaultClaimNames.GIVEN_NAME,
-            DefaultClaimNames.MIDDLE_NAME,
-            DefaultClaimNames.NICKNAME,
-            DefaultClaimNames.PREFERRED_USERNAME,
             DefaultClaimNames.AVATAR,
             DefaultClaimNames.WEBSITE,
             DefaultClaimNames.SEX,
-            DefaultClaimNames.BIRTHDATE,
-            DefaultClaimNames.UPDATE_TIME,
-            DefaultClaimNames.UPDATE_BY
+            DefaultClaimNames.BIRTHDATE
     );
 
     @Override
