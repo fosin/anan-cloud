@@ -95,12 +95,12 @@ services:
   anan-authserver:
     network_mode: host
     image: registry.cn-hongkong.aliyuncs.com/fosin/anan-authserver:4.0.0-SNAPSHOT
-#    entrypoint: 'sh /anan/wait-for.sh nacos:8848 -t 3600 -- /anan/entrypoint.sh'
+    entrypoint: 'sh /anan/cmd/wait-for.sh anan-platformserver:6150 -t 3600 -- /anan/cmd/entrypoint.sh'
     container_name: anan-authserver
     hostname: anan-authserver
     restart: always
     environment:
-      - JAVA_TOOL_OPTIONS=-Xmx200M -XX:MaxMetaspaceSize=180M -XX:MetaspaceSize=180M -XX:+DisableExplicitGC -XX:ErrorFile=/logs/hs_err_pid%p.log
+      - JAVA_OPTS=-XX:+UseG1GC -XX:MaxGCPauseMillis=200 -Xmx250M -XX:MaxMetaspaceSize=180M -XX:MetaspaceSize=128M
       - spring.cloud.kubernetes.enabled=false
       - spring.cloud.nacos.config.enabled=true
       - spring.cloud.nacos.discovery.enabled=true
@@ -108,6 +108,8 @@ services:
       #      - 6140:6140
       #    volumes:
       #- /data/logs/anan:/logs
+    volumes:
+      - /data/logs/anan-authserver:/anan/logs
     depends_on:
       - rabbitmq
       - redis
@@ -117,15 +119,17 @@ services:
   anan-cloudgateway:
     network_mode: host
     image: registry.cn-hongkong.aliyuncs.com/fosin/anan-cloudgateway:4.0.0-SNAPSHOT
-    entrypoint: 'sh /anan/wait-for.sh anan-platformserver:6150 -t 3600 -- /anan/entrypoint.sh'
+#    entrypoint: 'sh /anan/cmd/wait-for.sh anan-authserver:6140 -t 3600 -- /anan/cmd/entrypoint.sh'
     container_name: anan-cloudgateway
     hostname: anan-cloudgateway
     restart: always
     environment:
-      - JAVA_TOOL_OPTIONS=-Xmx200M -XX:MaxMetaspaceSize=180M -XX:MetaspaceSize=180M -XX:+DisableExplicitGC -XX:ErrorFile=/logs/hs_err_pid%p.log
+      - JAVA_OPTS=-XX:+UseG1GC -XX:MaxGCPauseMillis=200 -Xmx250M -XX:MaxMetaspaceSize=180M -XX:MetaspaceSize=128M
       - spring.cloud.kubernetes.enabled=false
       - spring.cloud.nacos.config.enabled=true
       - spring.cloud.nacos.discovery.enabled=true
+    volumes:
+      - /data/logs/anan-cloudgateway:/anan/logs
     depends_on:
       - rabbitmq
       - nacos
@@ -137,13 +141,13 @@ services:
     hostname: anan-platformserver
     restart: always
     privileged: true
-    entrypoint: java -XX:NativeMemoryTracking=summary -Xmx200M -XX:MaxMetaspaceSize=180M -XX:MetaspaceSize=180M -XX:+DisableExplicitGC -XX:ErrorFile=/logs/hs_err_pid%p.log -Dloader.path=/anan/dependency -Djava.security.egd=file:/dev/./urandom -jar /anan/app.jar
     environment:
+      - JAVA_OPTS=-XX:+UseG1GC -XX:MaxGCPauseMillis=200 -Xmx250M -XX:MaxMetaspaceSize=180M -XX:MetaspaceSize=128M
       - spring.cloud.kubernetes.enabled=false
       - spring.cloud.nacos.config.enabled=true
       - spring.cloud.nacos.discovery.enabled=true
-      #    volumes:
-      #- /data/logs/anan:/logs
+    volumes:
+      - /data/logs/anan-platformserver:/anan/logs
     depends_on:
       - rabbitmq
       - redis
@@ -153,15 +157,16 @@ services:
   anan-sbaserver:
     network_mode: host
     image: registry.cn-hongkong.aliyuncs.com/fosin/anan-sbaserver:4.0.0-SNAPSHOT
-    entrypoint: 'sh /anan/wait-for.sh anan-cloudgateway:6190 -t 3600 -- /anan/entrypoint.sh'
     container_name: anan-sbaserver
     hostname: anan-sbaserver
     restart: always
     environment:
-      - JAVA_TOOL_OPTIONS=-Xmx200M -XX:MaxMetaspaceSize=180M -XX:MetaspaceSize=180M -XX:+DisableExplicitGC -XX:ErrorFile=/logs/hs_err_pid%p.log
+      - JAVA_OPTS=-XX:+UseG1GC -XX:MaxGCPauseMillis=200 -Xmx250M -XX:MaxMetaspaceSize=180M -XX:MetaspaceSize=128M
       - spring.cloud.kubernetes.enabled=false
       - spring.cloud.nacos.config.enabled=true
       - spring.cloud.nacos.discovery.enabled=true
+    volumes:
+      - /data/logs/anan-sbaserver:/anan/logs
     depends_on:
       - rabbitmq
       - redis
@@ -174,19 +179,21 @@ services:
     hostname: anan-eurekaserver
     restart: always
     environment:
-      - JAVA_TOOL_OPTIONS=-Xmx200M -XX:MaxMetaspaceSize=180M -XX:MetaspaceSize=180M -XX:+DisableExplicitGC -XX:ErrorFile=/logs/hs_err_pid%p.log
+      - JAVA_OPTS=-XX:+UseG1GC -XX:MaxGCPauseMillis=200 -Xmx250M -XX:MaxMetaspaceSize=180M -XX:MetaspaceSize=128M
       - spring.cloud.kubernetes.enabled=false
       - spring.cloud.nacos.config.enabled=true
       - spring.cloud.nacos.discovery.enabled=true
+    volumes:
+      - /data/logs/anan-eurekaserver:/anan/logs
   anan-configserver:
     network_mode: host
     image: registry.cn-hongkong.aliyuncs.com/fosin/anan-configserver:4.0.0-SNAPSHOT
-    entrypoint: 'sh /anan/wait-for.sh anan-eurekaserver:6100 -t 3600 -- /anan/entrypoint.sh'
+    entrypoint: 'sh /anan/cmd/wait-for.sh anan-eurekaserver:6100 -t 3600 -- /anan/cmd/entrypoint.sh'
     container_name: anan-configserver
     hostname: anan-configserver
     restart: always
     environment:
-      - JAVA_TOOL_OPTIONS=-Xmx200M -XX:MaxMetaspaceSize=180M -XX:MetaspaceSize=180M -XX:+DisableExplicitGC -XX:ErrorFile=/logs/hs_err_pid%p.log
+      - JAVA_OPTS=-XX:+UseG1GC -XX:MaxGCPauseMillis=200 -Xmx250M -XX:MaxMetaspaceSize=180M -XX:MetaspaceSize=128M
       - spring.cloud.config.server.native.search-locations=file:/anan-conf
       - spring.cloud.kubernetes.enabled=false
       - spring.cloud.nacos.config.enabled=true
@@ -194,6 +201,8 @@ services:
       #    volumes:
       #- /data/logs/anan:/logs
       - /data/anan-conf:/anan-conf
+    volumes:
+      - /data/logs/anan-configserver:/anan/logs
     depends_on:
       - anan-eurekaserver
       - rabbitmq
