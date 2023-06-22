@@ -9,8 +9,8 @@ data:
   spring.profiles.active: {{ $profilesActive }}
   spring.security.user.name: {{ include "anan.user" . | quote }}
   spring.security.user.password: {{ include "anan.password" . | quote }}
-  JAVA_TOOL_OPTIONS: "-XX:+UseG1GC -Xms200M -Xmx240M -XX:MaxMetaspaceSize=160M -XX:MetaspaceSize=160M -XX:+DisableExplicitGC -XX:ErrorFile=/logs/hs_err_pid%p.log"
-  #JAVA_TOOL_OPTIONS: "-XX:+UseG1GC -XX:MaxGCPauseMillis=200 -XX:MaxRAMPercentage=70 -XX:InitialRAMPercentage=50 -XX:MaxMetaspaceSize=160M -XX:MetaspaceSize=160M -XX:+DisableExplicitGC -XX:ErrorFile=/logs/hs_err_pid%p.log"
+  JAVA_OPTS: "-XX:+UseContainerSupport -XX:MaxRAMPercentage=60 -XX:InitialRAMPercentage=30 -XX:MinRAMPercentage=30 -XX:MetaspaceSize=128m -XX:MaxMetaspaceSize=200m"
+  #JAVA_OPTS_LOGS: "-Xlog:gc*:file=$LOGS_DIR/gclog.log:time,level,tags:filecount=5,filesize=10M -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=${HEAP_DUMP_PATH} -XX:ErrorFile=$LOGS_DIR/hs_err_pid%p.log"
   #encrypt.key-store.location: "classpath:/anan.jks"
   #encrypt.key-store.password: "123456"
   #encrypt.key-store.alias: "anan"

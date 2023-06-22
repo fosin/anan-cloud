@@ -100,14 +100,9 @@ services:
     hostname: anan-authserver
     restart: always
     environment:
-      - JAVA_OPTS=-XX:+UseG1GC -XX:MaxGCPauseMillis=200 -Xmx250M -XX:MaxMetaspaceSize=180M -XX:MetaspaceSize=128M
       - spring.cloud.kubernetes.enabled=false
       - spring.cloud.nacos.config.enabled=true
       - spring.cloud.nacos.discovery.enabled=true
-      #    ports:
-      #      - 6140:6140
-      #    volumes:
-      #- /data/logs/anan:/logs
     volumes:
       - /data/logs/anan-authserver:/anan/logs
     depends_on:
@@ -115,7 +110,12 @@ services:
       - redis
       - mysql
       - nacos
-
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+        reservations:
+          memory: 512M
   anan-cloudgateway:
     network_mode: host
     image: registry.cn-hongkong.aliyuncs.com/fosin/anan-cloudgateway:4.0.0-SNAPSHOT
@@ -124,7 +124,6 @@ services:
     hostname: anan-cloudgateway
     restart: always
     environment:
-      - JAVA_OPTS=-XX:+UseG1GC -XX:MaxGCPauseMillis=200 -Xmx250M -XX:MaxMetaspaceSize=180M -XX:MetaspaceSize=128M
       - spring.cloud.kubernetes.enabled=false
       - spring.cloud.nacos.config.enabled=true
       - spring.cloud.nacos.discovery.enabled=true
@@ -133,7 +132,12 @@ services:
     depends_on:
       - rabbitmq
       - nacos
-
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+        reservations:
+          memory: 512M
   anan-platformserver:
     network_mode: host
     image: registry.cn-hongkong.aliyuncs.com/fosin/anan-platformserver:4.0.0-SNAPSHOT
@@ -142,7 +146,7 @@ services:
     restart: always
     privileged: true
     environment:
-      - JAVA_OPTS=-XX:+UseG1GC -XX:MaxGCPauseMillis=200 -Xmx250M -XX:MaxMetaspaceSize=180M -XX:MetaspaceSize=128M
+#      - JAVA_OPTS=-XX:+UseContainerSupport -XX:MaxRAMPercentage=50 -XX:InitialRAMPercentage=30 -XX:MinRAMPercentage=30 -XX:MetaspaceSize=128m -XX:MaxMetaspaceSize=200m
       - spring.cloud.kubernetes.enabled=false
       - spring.cloud.nacos.config.enabled=true
       - spring.cloud.nacos.discovery.enabled=true
@@ -153,7 +157,12 @@ services:
       - redis
       - mysql
       - nacos
-
+    deploy:
+      resources:
+        limits:
+          memory: 600M
+        reservations:
+          memory: 550M
   anan-sbaserver:
     network_mode: host
     image: registry.cn-hongkong.aliyuncs.com/fosin/anan-sbaserver:4.0.0-SNAPSHOT
@@ -161,7 +170,6 @@ services:
     hostname: anan-sbaserver
     restart: always
     environment:
-      - JAVA_OPTS=-XX:+UseG1GC -XX:MaxGCPauseMillis=200 -Xmx250M -XX:MaxMetaspaceSize=180M -XX:MetaspaceSize=128M
       - spring.cloud.kubernetes.enabled=false
       - spring.cloud.nacos.config.enabled=true
       - spring.cloud.nacos.discovery.enabled=true
@@ -171,7 +179,12 @@ services:
       - rabbitmq
       - redis
       - nacos
-
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+        reservations:
+          memory: 512M
   anan-eurekaserver:
     network_mode: host
     image: registry.cn-hongkong.aliyuncs.com/fosin/anan-eurekaserver:4.0.0-SNAPSHOT
@@ -179,12 +192,17 @@ services:
     hostname: anan-eurekaserver
     restart: always
     environment:
-      - JAVA_OPTS=-XX:+UseG1GC -XX:MaxGCPauseMillis=200 -Xmx250M -XX:MaxMetaspaceSize=180M -XX:MetaspaceSize=128M
       - spring.cloud.kubernetes.enabled=false
       - spring.cloud.nacos.config.enabled=true
       - spring.cloud.nacos.discovery.enabled=true
     volumes:
       - /data/logs/anan-eurekaserver:/anan/logs
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+        reservations:
+          memory: 512M
   anan-configserver:
     network_mode: host
     image: registry.cn-hongkong.aliyuncs.com/fosin/anan-configserver:4.0.0-SNAPSHOT
@@ -193,20 +211,22 @@ services:
     hostname: anan-configserver
     restart: always
     environment:
-      - JAVA_OPTS=-XX:+UseG1GC -XX:MaxGCPauseMillis=200 -Xmx250M -XX:MaxMetaspaceSize=180M -XX:MetaspaceSize=128M
       - spring.cloud.config.server.native.search-locations=file:/anan-conf
       - spring.cloud.kubernetes.enabled=false
       - spring.cloud.nacos.config.enabled=true
       - spring.cloud.nacos.discovery.enabled=true
-      #    volumes:
-      #- /data/logs/anan:/logs
-      - /data/anan-conf:/anan-conf
     volumes:
+      - /data/anan-conf:/anan/conf
       - /data/logs/anan-configserver:/anan/logs
     depends_on:
       - anan-eurekaserver
       - rabbitmq
-
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+        reservations:
+          memory: 512M
   filebeat:
     network_mode: host
     image: elastic/filebeat:6.8.6

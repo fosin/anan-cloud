@@ -14,10 +14,8 @@ COPY target/*.jar ${JAR_NAME}
 # 1、下载相关工具，可以按需添加
 # ex：RUN yum -y install telnet
 
-# 2、在镜像运行生产环境定义JVM内存参数JAVA_OPTS，否则默认内存512m（生产必设）
-# ex：export JAVA_OPTS="-Xms2g -Xmx2g -XX:MetaspaceSize=180m -XX:MaxMetaspaceSize=256m"
-# ex：export JAVA_OPTS_LOGS="-Xlog:gc*:file=$LOGS_DIR/gclog.log:time,level,tags:filecount=5,filesize=10M -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=${HEAP_DUMP_DIR} -XX:ErrorFile=$LOGS_DIR/hs_err_pid%p.log"
+# 2、在镜像运行生产环境定义JVM内存参数JAVA_OPTS，默认是堆内存最大值=容器内存的60%，生产环境可以根据实际情况调整
+# ex：export JAVA_OPTS="-XX:+UseContainerSupport -XX:MaxRAMPercentage=50 -XX:InitialRAMPercentage=30 -XX:MinRAMPercentage=30 -XX:MetaspaceSize=128m -XX:MaxMetaspaceSize=200m"
+# ex：export JAVA_OPTS_LOGS="-Xlog:gc*:file=$LOGS_DIR/gclog.log:time,level,tags:filecount=5,filesize=10M -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=${HEAP_DUMP_PATH} -XX:ErrorFile=$LOGS_DIR/hs_err_pid%p.log"
 
-# 3、自定义工作目录，修改环境变量WORK_DIR（可选）
-
-# 4、自定义JAR名称，修改环境变量JAR_NAME（可选）
+# 3、需要将容器日志目录持久化到外部，挂载容器目录为：/anan/logs
