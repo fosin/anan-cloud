@@ -128,7 +128,7 @@ public class CurrentUserService
         if (principal instanceof SecurityUser) {
             organizId = ((SecurityUser) principal).getUser().getOrganizId();
         } else if (principal instanceof Jwt) {
-            organizId = ((Jwt) principal).getClaim(DefaultClaimNames.ORGANIZ_ID);
+            organizId = Long.parseLong(((Jwt) principal).getClaim(DefaultClaimNames.ORGANIZ_ID));
         } else {
             throw new AuthenticationServiceException("认证信息有误，未找到认证用户对象，请检查！");
         }
@@ -142,7 +142,7 @@ public class CurrentUserService
         if (principal instanceof SecurityUser) {
             topId = ((SecurityUser) principal).getUser().getTopId();
         } else if (principal instanceof Jwt) {
-            topId = ((Jwt) principal).getClaim(DefaultClaimNames.TOP_ID);
+            topId = Long.parseLong(((Jwt) principal).getClaim(DefaultClaimNames.TOP_ID));
         } else {
             throw new AuthenticationServiceException("认证信息有误，未找到认证用户对象，请检查！");
         }
@@ -156,7 +156,7 @@ public class CurrentUserService
         if (principal instanceof SecurityUser) {
             id = ((SecurityUser) principal).getUser().getId();
         } else if (principal instanceof Jwt) {
-            id = ((Jwt) principal).getClaim(DefaultClaimNames.ID);
+            id = Long.parseLong(((Jwt) principal).getClaim(DefaultClaimNames.ID));
         } else {
             throw new AuthenticationServiceException("认证信息有误，未找到认证用户对象，请检查！");
         }

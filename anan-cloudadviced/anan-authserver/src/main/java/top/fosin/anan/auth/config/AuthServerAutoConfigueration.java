@@ -1,9 +1,5 @@
 package top.fosin.anan.auth.config;
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.jsontype.impl.LaissezFaireSubTypeValidator;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
 import org.springframework.beans.BeansException;
@@ -17,15 +13,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.jackson2.CoreJackson2Module;
-import org.springframework.security.oauth2.client.jackson2.OAuth2ClientJackson2Module;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.oauth2.server.authorization.token.*;
 import org.springframework.security.web.authentication.RememberMeServices;
-import org.springframework.security.web.jackson2.WebJackson2Module;
-import org.springframework.security.web.jackson2.WebServletJackson2Module;
-import org.springframework.security.web.server.jackson2.WebServerJackson2Module;
 import org.springframework.session.FindByIndexNameSessionRepository;
 import org.springframework.session.security.SpringSessionBackedSessionRegistry;
 import org.springframework.session.security.web.authentication.SpringSessionRememberMeServices;
@@ -34,7 +25,6 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfoHandlerMapping;
 import springfox.documentation.spring.web.plugins.WebFluxRequestHandlerProvider;
 import springfox.documentation.spring.web.plugins.WebMvcRequestHandlerProvider;
-import top.fosin.anan.auth.config.jackson.CustomJackson2Module;
 import top.fosin.anan.cloudresource.service.inter.rpc.UserRpcService;
 import top.fosin.anan.security.resource.AnanSecurityProperties;
 
@@ -158,20 +148,20 @@ public class AuthServerAutoConfigueration {
     //    return new HttpSessionRequestCache();
     //}
 
-    @Bean
-    public ObjectMapper objectMapper() {
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.activateDefaultTyping(
-                LaissezFaireSubTypeValidator.instance,
-                ObjectMapper.DefaultTyping.NON_FINAL,
-                JsonTypeInfo.As.PROPERTY);
-        mapper.registerModule(new CoreJackson2Module());
-        mapper.registerModule(new WebJackson2Module());
-        mapper.registerModule(new WebServerJackson2Module());
-        mapper.registerModule(new WebServletJackson2Module());
-        mapper.registerModule(new OAuth2ClientJackson2Module());
-        mapper.registerModule(new JavaTimeModule());
-        mapper.registerModule(new CustomJackson2Module());
-        return mapper;
-    }
+//    @Bean
+//    public ObjectMapper objectMapper() {
+//        ObjectMapper mapper = new ObjectMapper();
+//        mapper.activateDefaultTyping(
+//                LaissezFaireSubTypeValidator.instance,
+//                ObjectMapper.DefaultTyping.NON_FINAL,
+//                JsonTypeInfo.As.PROPERTY);
+//        mapper.registerModule(new CoreJackson2Module());
+//        mapper.registerModule(new WebJackson2Module());
+//        mapper.registerModule(new WebServerJackson2Module());
+//        mapper.registerModule(new WebServletJackson2Module());
+//        mapper.registerModule(new OAuth2ClientJackson2Module());
+//        mapper.registerModule(new JavaTimeModule());
+//        mapper.registerModule(new CustomJackson2Module());
+//        return mapper;
+//    }
 }

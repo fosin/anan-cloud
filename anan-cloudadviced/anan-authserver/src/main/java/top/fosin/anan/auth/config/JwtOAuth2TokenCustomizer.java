@@ -50,9 +50,9 @@ public class JwtOAuth2TokenCustomizer implements OAuth2TokenCustomizer<JwtEncodi
                 userAuthDto = BeanUtil.copyProperties(userRpcService.findOneByUsercode(usercode), UserAuthDTO.class);
             }
             if (context.getTokenType().equals(OAuth2TokenType.ACCESS_TOKEN)) {
-                setClaim(claims, DefaultClaimNames.ID, userAuthDto.getId());
-                setClaim(claims, DefaultClaimNames.ORGANIZ_ID, userAuthDto.getOrganizId());
-                setClaim(claims, DefaultClaimNames.TOP_ID, userAuthDto.getTopId());
+                setClaim(claims, DefaultClaimNames.ID, String.valueOf(userAuthDto.getId()));
+                setClaim(claims, DefaultClaimNames.ORGANIZ_ID, String.valueOf(userAuthDto.getOrganizId()));
+                setClaim(claims, DefaultClaimNames.TOP_ID, String.valueOf(userAuthDto.getTopId()));
                 setClaim(claims, DefaultClaimNames.USER_NAME, userAuthDto.getUsername());
                 Set<String> authorities = authorization.getAuthorities().stream().map(GrantedAuthority::getAuthority)
                         .collect(Collectors.toSet());
@@ -68,22 +68,22 @@ public class JwtOAuth2TokenCustomizer implements OAuth2TokenCustomizer<JwtEncodi
                 if (scopes.contains(DefaultOidcScopes.ID_NO)) {
                     //setClaim(claims, DefaultClaimNames.ID_NO, "522223199001010520");
                     //setClaim(claims, DefaultClaimNames.ID_NO_TYPE, "身份证号");
-                    setClaim(claims, DefaultClaimNames.REAL_NAME_VERIFIED, userAuthDto.getRealNameVerified());
+                    setClaim(claims, DefaultClaimNames.REAL_NAME_VERIFIED, String.valueOf(userAuthDto.getRealNameVerified()));
                 }
                 if (scopes.contains(DefaultOidcScopes.PHONE)) {
                     setClaim(claims, DefaultClaimNames.PHONE, userAuthDto.getPhone());
-                    setClaim(claims, DefaultClaimNames.PHONE_VERIFIED, userAuthDto.getPhoneVerified());
+                    setClaim(claims, DefaultClaimNames.PHONE_VERIFIED, String.valueOf(userAuthDto.getPhoneVerified()));
                 }
                 if (scopes.contains(DefaultOidcScopes.EMAIL)) {
                     setClaim(claims, DefaultClaimNames.EMAIL, userAuthDto.getEmail());
-                    setClaim(claims, DefaultClaimNames.EMAIL_VERIFIED, userAuthDto.getEmailVerified());
+                    setClaim(claims, DefaultClaimNames.EMAIL_VERIFIED, String.valueOf(userAuthDto.getEmailVerified()));
                 }
                 if (scopes.contains(DefaultOidcScopes.PROFILE)) {
-                    setClaim(claims, DefaultClaimNames.ID, userAuthDto.getId());
-                    setClaim(claims, DefaultClaimNames.ORGANIZ_ID, userAuthDto.getOrganizId());
-                    setClaim(claims, DefaultClaimNames.TOP_ID, userAuthDto.getTopId());
+                    setClaim(claims, DefaultClaimNames.ID, String.valueOf(userAuthDto.getId()));
+                    setClaim(claims, DefaultClaimNames.ORGANIZ_ID, String.valueOf(userAuthDto.getOrganizId()));
+                    setClaim(claims, DefaultClaimNames.TOP_ID, String.valueOf(userAuthDto.getTopId()));
                     setClaim(claims, DefaultClaimNames.USER_NAME, userAuthDto.getUsername());
-                    setClaim(claims, DefaultClaimNames.SEX, userAuthDto.getSex());
+                    setClaim(claims, DefaultClaimNames.SEX, String.valueOf(userAuthDto.getSex()));
                     setClaim(claims, DefaultClaimNames.AVATAR, userAuthDto.getAvatar());
                     setClaim(claims, DefaultClaimNames.WEBSITE, userAuthDto.getWebsite());
                     setClaim(claims, DefaultClaimNames.BIRTHDATE, DateTimeUtil.formatTime(userAuthDto.getBirthday(), DateTimeUtil.DATE_PATTERN));
