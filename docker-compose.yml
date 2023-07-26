@@ -95,7 +95,7 @@ services:
   anan-authserver:
     network_mode: host
     image: registry.cn-hongkong.aliyuncs.com/fosin/anan-authserver:4.0.0-SNAPSHOT
-    entrypoint: 'sh /anan/cmd/wait-for.sh anan-platformserver:6150 -t 3600 -- /anan/cmd/entrypoint.sh'
+#    entrypoint: 'sh /anan/cmd/wait-for.sh anan-platformserver:6150 -t 3600 -- /anan/cmd/entrypoint.sh'
     container_name: anan-authserver
     hostname: anan-authserver
     restart: always
@@ -113,7 +113,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 512M
+          memory: 580M
         reservations:
           memory: 512M
   anan-cloudgateway:
@@ -146,7 +146,6 @@ services:
     restart: always
     privileged: true
     environment:
-#      - JAVA_OPTS=-XX:+UseContainerSupport -XX:MaxRAMPercentage=50 -XX:InitialRAMPercentage=30 -XX:MinRAMPercentage=30 -XX:MetaspaceSize=128m -XX:MaxMetaspaceSize=200m
       - spring.cloud.kubernetes.enabled=false
       - spring.cloud.nacos.config.enabled=true
       - spring.cloud.nacos.discovery.enabled=true

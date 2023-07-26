@@ -9,7 +9,7 @@ EXPOSE ${SERVER_PORT}
 
 # 固定写法请勿随意修改，变量和路径来自底座镜像的设计
 COPY target/dependency ${DEPENDENCY_DIR}
-COPY target/*.jar ${JAR_NAME}
+COPY target/*.jar ${APP_NAME}
 
 # 1、下载相关工具，可以按需添加
 # ex：RUN yum -y install telnet
