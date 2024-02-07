@@ -2,7 +2,6 @@ package top.fosin.anan.cloudresource.grpc.service;
 
 import lombok.extern.slf4j.Slf4j;
 import net.devh.boot.grpc.client.inject.GrpcClient;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 import top.fosin.anan.cloudresource.constant.PlatformRedisConstant;
@@ -51,7 +50,6 @@ public class OrganizGrpcServiceImpl implements OrganizRpcService, Object2StringT
         return organizResps.stream().map(this::toRespDto).collect(Collectors.toList());
     }
 
-    @NotNull
     private OrganizRespDTO toRespDto(OrganizResp organizResp) {
         OrganizRespDTO dto = new OrganizRespDTO();
         dto.setCode(organizResp.getCode());

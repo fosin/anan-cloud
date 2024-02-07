@@ -1,8 +1,9 @@
 package top.fosin.anan.platform.modules.international.dto;
 
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -20,36 +21,36 @@ import java.util.Date;
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-@ApiModel(value = "国际化语言集DTO", description = "国际化语言集(anan_international)DTO")
+@Schema(description = "国际化语言集(anan_international)DTO")
 public class InternationalDTO extends Id<Long> {
     private static final long serialVersionUID = 918286250864754848L;
-    @ApiModelProperty(value = "标识", required = true, example = "String")
+    @Schema(description = "标识", example = "String")
     private String code;
 
-    @ApiModelProperty(value = "名称", required = true, example = "String")
+    @Schema(description = "名称", example = "String")
     private String name;
 
-    @ApiModelProperty(value = "图标", example = "String")
+    @Schema(description = "图标", example = "String")
     private String icon;
 
-    @ApiModelProperty(value = "${column.comment}", required = true, example = "Integer")
+    @Schema(description = "${column.comment}", example = "Integer")
     private Long createBy;
 
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
-    @ApiModelProperty(value = "${column.comment}", required = true, example = "Date")
+    @Schema(description = "${column.comment}", example = "Date")
     private Date createTime;
 
-    @ApiModelProperty(value = "${column.comment}", required = true, example = "Integer")
+    @Schema(description = "${column.comment}", example = "Integer")
     private Long updateBy;
 
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
-    @ApiModelProperty(value = "${column.comment}", required = true, example = "Date")
+    @Schema(description = "${column.comment}", example = "Date")
     private Date updateTime;
 
-    @ApiModelProperty(value = "状态：0=启用，1=禁用", required = true, example = "Integer")
+    @Schema(description = "状态：0=启用，1=禁用", example = "Integer")
     private Byte status;
 
-    @ApiModelProperty(value = "默认标志", required = true, example = "Integer")
+    @Schema(description = "默认标志", example = "Integer")
     private Integer defaultFlag;
 
 }

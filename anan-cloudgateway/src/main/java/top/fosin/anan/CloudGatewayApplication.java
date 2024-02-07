@@ -6,7 +6,6 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.retry.annotation.EnableRetry;
 import top.fosin.anan.core.banner.AnanBanner;
 import top.fosin.anan.security.reactive.annotation.EnableAnanWebFluxSecurity;
-import top.fosin.anan.swagger.annotation.EnableAnanSwagger2;
 
 /**
  * Spring Cloud Gateway
@@ -15,7 +14,7 @@ import top.fosin.anan.swagger.annotation.EnableAnanSwagger2;
  * @date 2019/5/5
  */
 @SpringBootApplication
-@EnableAnanSwagger2
+//@EnableAnanSwagger2
 @EnableAnanWebFluxSecurity
 @EnableRetry
 public class CloudGatewayApplication {

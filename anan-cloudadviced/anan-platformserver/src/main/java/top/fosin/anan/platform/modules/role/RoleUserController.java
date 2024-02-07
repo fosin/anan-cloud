@@ -1,8 +1,9 @@
 package top.fosin.anan.platform.modules.role;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,7 +31,7 @@ import top.fosin.anan.platform.modules.user.service.inter.UserService;
  */
 @RestController
 @RequestMapping(value = PathPrefixConstant.ROLE_USER, params = PathPrefixConstant.DEFAULT_VERSION_PARAM)
-@Api(value = PathPrefixConstant.ROLE_USER, tags = "角色用户管理")
+@Tag(name = "角色用户管理", description = PathPrefixConstant.ROLE_USER)
 public class RoleUserController implements
         IUpdateBatchController<RoleUserUpdateDTO, Long>,
         IRetrieveBatchController<UserRoleRespDTO, Long> {
@@ -42,9 +43,8 @@ public class RoleUserController implements
         this.roleUserService = roleUserService;
     }
 
-    @ApiOperation("根据用户序号查找用户目前不拥有的所有角色信息")
-    @ApiImplicitParam(name = FieldConstant.ROLE_ID, value = "角色ID,取值于Role.id",
-            required = true, dataTypeClass = Long.class, paramType = "path")
+    @Operation(summary = "根据用户序号查找用户目前不拥有的所有角色信息", description = "根据用户序号查找用户目前不拥有的所有角色信息")
+    @Parameter(name = FieldConstant.ROLE_ID, description = "角色ID,取值于Role.id", in = ParameterIn.DEFAULT, required = true)
     @GetMapping(value = "/other" + PathSuffixConstant.ROLE_ID)
     public MultResult<UserDTO> listOtherUsersByRoleId(@PathVariable(FieldConstant.ROLE_ID) Long roleId) throws AnanControllerException {
         return ResultUtils.success(userService.listOtherUsersByRoleId(roleId));

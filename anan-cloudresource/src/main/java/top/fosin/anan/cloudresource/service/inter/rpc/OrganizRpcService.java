@@ -3,8 +3,8 @@ package top.fosin.anan.cloudresource.service.inter.rpc;
 
 import top.fosin.anan.cloudresource.entity.res.OrganizRespDTO;
 
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import java.util.List;
 
 /**

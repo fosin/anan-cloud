@@ -1,6 +1,6 @@
 package top.fosin.anan.platform.modules.service;
 
-import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import top.fosin.anan.cloudresource.constant.PathPrefixConstant;
@@ -25,7 +25,7 @@ import top.fosin.anan.platform.modules.service.vo.ServiceVO;
  */
 @RestController
 @RequestMapping(value = PathPrefixConstant.SERVICE, params = PathPrefixConstant.DEFAULT_VERSION_PARAM)
-@Api(value = PathPrefixConstant.SERVICE, tags = "服务管理")
+@Tag(name = "服务管理", description = PathPrefixConstant.SERVICE)
 public class ServiceController implements ICreateController<ServiceCreateDTO, Long>,
         IRetrieveController<ServiceQuery, ServiceVO, ServiceListVO, ServicePageVO, Long>,
         IUpdateController<ServiceUpdateDTO, Long>,

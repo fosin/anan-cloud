@@ -1,8 +1,9 @@
 package top.fosin.anan.platform.modules.version.vo;
 
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -16,22 +17,22 @@ import top.fosin.anan.data.entity.Id;
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-@ApiModel(value = "系统版本角色表集合VO", description = "系统版本角色表(anan_version_role)集合VO")
+@Schema(description = "系统版本角色表(anan_version_role)集合VO")
 public class VersionRoleListVO extends Id<Long> {
     private static final long serialVersionUID = 523904514612772426L;
-    @ApiModelProperty(value = "版本ID")
+    @Schema(description = "版本ID")
     private Long versionId;
 
-    @ApiModelProperty(value = "角色名称")
+    @Schema(description = "角色名称")
     private String name;
 
-    @ApiModelProperty(value = "角色标识")
+    @Schema(description = "角色标识")
     private String value;
 
-    @ApiModelProperty(value = "角色说明")
+    @Schema(description = "角色说明")
     private String tips;
 
-    @ApiModelProperty(value = "使用状态：0=启用，1=禁用，具体取值于字典表anan_dictionary.code=11")
+    @Schema(description = "使用状态：0=启用，1=禁用，具体取值于字典表anan_dictionary.code=11")
     private Byte status;
 
 }

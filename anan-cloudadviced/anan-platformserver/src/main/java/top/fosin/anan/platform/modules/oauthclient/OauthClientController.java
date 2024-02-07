@@ -1,6 +1,6 @@
 package top.fosin.anan.platform.modules.oauthclient;
 
-import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.RequestMapping;
 import top.fosin.anan.cloudresource.constant.PathPrefixConstant;
 import top.fosin.anan.data.controller.ISimpleController;
@@ -19,7 +19,7 @@ import top.fosin.anan.platform.modules.oauthclient.service.inter.OauthClientServ
 //@RestController
 @Deprecated
 @RequestMapping(value = PathPrefixConstant.OAUTH_CLIENT, params = PathPrefixConstant.DEFAULT_VERSION_PARAM)
-@Api(value = PathPrefixConstant.OAUTH_CLIENT, tags = "OAuth2.0客户端授权管理")
+@Tag(name = "OAuth2.0客户端授权管理", description = PathPrefixConstant.OAUTH_CLIENT)
 public class OauthClientController implements ISimpleController<OauthClientDetailsReqDto, OauthClientDetailsRespDto, String> {
     private final OauthClientService oauthClientService;
 

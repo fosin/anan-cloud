@@ -1,8 +1,9 @@
 package top.fosin.anan.platform.modules.pay.dto;
 
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -17,16 +18,16 @@ import top.fosin.anan.data.entity.Id;
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-@ApiModel(value = "系统支付明细表DTO", description = "系统支付明细表(anan_pay_detail)DTO")
+@Schema(description = "系统支付明细表(anan_pay_detail)DTO")
 public class PayDetailDTO extends Id<Long> {
     private static final long serialVersionUID = 855421642336412494L;
-    @ApiModelProperty(value = "支付ID", required = true, example = "Long")
+    @Schema(description = "支付ID", example = "Long")
     private Long payId;
 
-    @ApiModelProperty(value = "付款方式", required = true, example = "Integer")
+    @Schema(description = "付款方式", example = "Integer")
     private Integer payway;
 
-    @ApiModelProperty(value = "付款金额", required = true, example = "Double")
+    @Schema(description = "付款金额", example = "Double")
     private Double money;
 
 }

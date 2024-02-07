@@ -1,8 +1,9 @@
 package top.fosin.anan.auth.modules.oauth2client.vo;
 
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -26,42 +27,42 @@ import java.util.Set;
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-@ApiModel(value = "OAUTH2认证客户端注册表集合VO", description = "OAUTH2认证客户端注册表(oauth2_registered_client)集合VO")
+@Schema(description = "OAUTH2认证客户端注册表(oauth2_registered_client)集合VO")
 public class Oauth2RegisteredClientListVO extends Id<String> {
     private static final long serialVersionUID = 874528862421403146L;
-    @ApiModelProperty(value = "客户端序号")
+    @Schema(description = "客户端序号")
     private String clientId;
 
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
-    @ApiModelProperty(value = "发布日期")
+    @Schema(description = "发布日期")
     private Date clientIdIssuedAt;
 
-    @ApiModelProperty(value = "客户端密钥")
+    @Schema(description = "客户端密钥")
     private String clientSecret;
 
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
-    @ApiModelProperty(value = "过期时间")
+    @Schema(description = "过期时间")
     private Date clientSecretExpiresAt;
 
-    @ApiModelProperty(value = "客户端名称")
+    @Schema(description = "客户端名称")
     private String clientName;
 
-    @ApiModelProperty(value = "认证方法")
+    @Schema(description = "认证方法")
     private Set<ClientAuthenticationMethod> clientAuthenticationMethods;
 
-    @ApiModelProperty(value = "认证类型")
+    @Schema(description = "认证类型")
     private Set<AuthorizationGrantType> authorizationGrantTypes;
 
-    @ApiModelProperty(value = "跳转地址")
+    @Schema(description = "跳转地址")
     private Set<String> redirectUris;
 
-    @ApiModelProperty(value = "作用域")
+    @Schema(description = "作用域")
     private Set<String> scopes;
 
-    @ApiModelProperty(value = "客户端设置")
+    @Schema(description = "客户端设置")
     private ClientSettingsDTO clientSettings;
 
-    @ApiModelProperty(value = "令牌设置")
+    @Schema(description = "令牌设置")
     private TokenSettingsDTO tokenSettings;
 
 }

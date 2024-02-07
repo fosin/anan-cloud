@@ -1,8 +1,9 @@
 package top.fosin.anan.platform.modules.version.vo;
 
                                                                                             
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import java.io.Serializable;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -20,13 +21,13 @@ import top.fosin.anan.data.entity.Id;
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-@ApiModel(value = "系统版本权限表单体VO", description = "系统版本权限表(anan_version_permission)单体VO")
+@Schema(description = "系统版本权限表(anan_version_permission)单体VO")
 public class VersionPermissionVO extends Id<Long> {
     private static final long serialVersionUID = -11097882846689491L;
-    @ApiModelProperty(value = "版本ID")
+    @Schema(description = "版本ID")
     private Long versionId;
 
-    @ApiModelProperty(value = "权限ID")
+    @Schema(description = "权限ID")
     private Long permissionId;
 
 }

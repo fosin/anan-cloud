@@ -7,14 +7,13 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 import top.fosin.anan.core.banner.AnanBanner;
 import top.fosin.anan.redis.annotation.EnableAnanRedis;
 import top.fosin.anan.security.servlet.annotation.EnableAnanWebSecurity;
-import top.fosin.anan.swagger.annotation.EnableAnanSwagger2;
 
 /**
  * @author fosin
  */
 @SpringBootApplication
 @EnableAnanRedis
-@EnableAnanSwagger2
+//@EnableAnanSwagger2
 @EnableAnanWebSecurity
 @EnableFeignClients
 public class AuthServerApplication {

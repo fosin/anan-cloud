@@ -1,6 +1,6 @@
 package top.fosin.anan.platform.modules.international;
 
-import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import top.fosin.anan.cloudresource.constant.PathPrefixConstant;
@@ -21,7 +21,7 @@ import top.fosin.anan.platform.modules.international.vo.InternationalVO;
  */
 @RestController
 @RequestMapping(value = PathPrefixConstant.INTERNATIONAL, params = PathPrefixConstant.DEFAULT_VERSION_PARAM)
-@Api(value = PathPrefixConstant.INTERNATIONAL, tags = "国际化语言管理")
+@Tag(name = "国际化语言管理", description = PathPrefixConstant.INTERNATIONAL)
 public class InternationalController implements ICreateController<InternationalCreateDTO, Long>,
         IRetrieveController<InternationalQuery, InternationalVO, InternationalListVO, InternationalPageVO, Long>,
         IUpdateController<InternationalUpdateDTO, Long>,

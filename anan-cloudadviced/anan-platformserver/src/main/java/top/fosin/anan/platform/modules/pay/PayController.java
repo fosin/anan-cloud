@@ -9,7 +9,7 @@ import top.fosin.anan.platform.modules.pay.vo.PayVO;
 import top.fosin.anan.platform.modules.pay.vo.PayListVO;
 import top.fosin.anan.platform.modules.pay.vo.PayPageVO;
 import top.fosin.anan.data.controller.*;
-import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @date 2023-05-11
  */
 @RestController
-@Api(value = PathPrefixConstant.PAY, tags = "支付管理")
+@Tag(name = "支付管理", description = PathPrefixConstant.PAY)
 @RequestMapping(value = PathPrefixConstant.PAY, params = PathPrefixConstant.DEFAULT_VERSION_PARAM)
 public class PayController implements ICreateController<PayCreateDTO, Long>,
         IUpdateController<PayUpdateDTO, Long>,

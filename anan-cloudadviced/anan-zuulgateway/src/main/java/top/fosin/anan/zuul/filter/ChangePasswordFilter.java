@@ -24,7 +24,7 @@ import org.springframework.util.StringUtils;
 import top.fosin.anan.core.util.crypt.AesUtil;
 import top.fosin.anan.data.entity.res.TreeVO;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;

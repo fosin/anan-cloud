@@ -1,8 +1,9 @@
 package top.fosin.anan.platform.modules.role;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,7 +34,7 @@ import top.fosin.anan.platform.modules.role.vo.RoleVO;
  */
 @RestController
 @RequestMapping(value = PathPrefixConstant.ROLE, params = PathPrefixConstant.DEFAULT_VERSION_PARAM)
-@Api(value = PathPrefixConstant.ROLE, tags = "角色管理")
+@Tag(name = "角色管理", description = PathPrefixConstant.ROLE)
 public class RoleController
         implements ICreateController<RoleCreateDTO, Long>,
         IRetrieveController<RoleQuery, RoleVO, RoleListVO, RolePageVO, Long>,
@@ -46,9 +47,8 @@ public class RoleController
     }
 
     @GetMapping({"/list/organizId/{organizId}"})
-    @ApiOperation("根据机构ID查询该机构及子机构的所有角色")
-    @ApiImplicitParam(name = FieldConstant.ORGANIZ_ID, value = "机构序号",
-            required = true, dataTypeClass = Long.class, paramType = "path")
+    @Operation(summary = "根据机构ID查询该机构及子机构的所有角色", description = "根据机构ID查询该机构及子机构的所有角色")
+    @Parameter(name = FieldConstant.ORGANIZ_ID, description = "机构序号", in = ParameterIn.DEFAULT, required = true)
     public MultResult<RoleDTO> listByOrganizId(@PathVariable(FieldConstant.ORGANIZ_ID) Long organizId) {
         return ResultUtils.success(roleService.listByOrganizId(organizId));
     }

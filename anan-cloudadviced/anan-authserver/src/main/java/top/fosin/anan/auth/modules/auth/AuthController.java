@@ -1,8 +1,9 @@
 package top.fosin.anan.auth.modules.auth;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,9 +18,10 @@ import top.fosin.anan.cloudresource.entity.UserAllPermissionTreeVO;
 import top.fosin.anan.data.result.ResultUtils;
 import top.fosin.anan.data.result.SingleResult;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
@@ -29,12 +31,12 @@ import java.io.IOException;
 @RestController
 @RequestMapping(PathPrefixConstant.API)
 @AllArgsConstructor
-@Api(value = PathPrefixConstant.API, tags = "获取认证相关信息")
+@Tag(name = "获取认证相关信息", description = PathPrefixConstant.API)
 public class AuthController {
     private final AuthService authService;
 
     @GetMapping("/vercode")
-    @ApiOperation(value = "获取验证码", tags = "获取验证码")
+    @Operation(summary = "获取验证码", tags = "获取验证码", description = "获取验证码")
     public void code(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         VerifyCode vc = new VerifyCode();
         BufferedImage image = vc.getImage();
@@ -45,9 +47,8 @@ public class AuthController {
     }
 
     @GetMapping(value = "/user/tree" + PathSuffixConstant.USER_ID)
-    @ApiOperation(value = "查询用户权限树", notes = "查询用户权限树")
-    @ApiImplicitParam(name = FieldConstant.USER_ID, value = "用户的唯一序号",
-            required = true, dataTypeClass = Long.class, paramType = "path")
+    @Operation(summary = "查询用户权限树", description = "查询用户权限树")
+    @Parameter(name = FieldConstant.USER_ID, description = "用户的唯一序号", in = ParameterIn.DEFAULT, required = true)
     public SingleResult<UserAllPermissionTreeVO> findTreeByUserId(@PathVariable(FieldConstant.USER_ID) Long userId) {
         return ResultUtils.success(authService.treeByUserId(userId));
     }

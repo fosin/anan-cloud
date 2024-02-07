@@ -1,14 +1,15 @@
 package top.fosin.anan.platform.modules.pay.dto;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import top.fosin.anan.data.valid.group.Create;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.PositiveOrZero;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
 
 /**
  * 系统支付明细表(anan_pay_detail)创建DTO
@@ -19,22 +20,22 @@ import javax.validation.constraints.PositiveOrZero;
 @Data
 @EqualsAndHashCode
 @ToString(callSuper = true)
-@ApiModel(value = "系统支付明细表创建DTO", description = "系统支付明细表(anan_pay_detail)创建DTO")
+@Schema(description = "系统支付明细表(anan_pay_detail)创建DTO")
 public class PayDetailCreateDTO {
     private static final long serialVersionUID = -99469164739314029L;
 
-    @NotNull(message = "支付序号" + "{javax.validation.constraints.NotNull.message}", groups = Create.class)
-    @PositiveOrZero(message = "使用状态" + "{javax.validation.constraints.Positive.message}", groups = Create.class)
-    @ApiModelProperty(value = "支付序号", required = true)
+    @NotNull(message = "支付序号" + "{jakarta.validation.constraints.NotNull.message}", groups = Create.class)
+    @PositiveOrZero(message = "使用状态" + "{jakarta.validation.constraints.Positive.message}", groups = Create.class)
+    @Schema(description = "支付序号")
     private Long payId;
 
-    @NotNull(message = "付款方式" + "{javax.validation.constraints.NotNull.message}", groups = Create.class)
-    @PositiveOrZero(message = "使用状态" + "{javax.validation.constraints.Positive.message}", groups = Create.class)
-    @ApiModelProperty(value = "付款方式", required = true)
+    @NotNull(message = "付款方式" + "{jakarta.validation.constraints.NotNull.message}", groups = Create.class)
+    @PositiveOrZero(message = "使用状态" + "{jakarta.validation.constraints.Positive.message}", groups = Create.class)
+    @Schema(description = "付款方式")
     private Integer payway;
 
-    @NotNull(message = "付款金额" + "{javax.validation.constraints.NotNull.message}", groups = Create.class)
-    @ApiModelProperty(value = "付款金额", required = true)
+    @NotNull(message = "付款金额" + "{jakarta.validation.constraints.NotNull.message}", groups = Create.class)
+    @Schema(description = "付款金额")
     private Double money;
 
 }

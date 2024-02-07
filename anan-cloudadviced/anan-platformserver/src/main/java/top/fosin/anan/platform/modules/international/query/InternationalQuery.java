@@ -1,7 +1,8 @@
 package top.fosin.anan.platform.modules.international.query;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import lombok.Data;
 import lombok.ToString;
 import lombok.EqualsAndHashCode;
@@ -19,23 +20,23 @@ import top.fosin.anan.data.module.LogiQueryRule;
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-@ApiModel(value = "国际化语言集通用查询DTO", description = "国际化语言集(anan_international)通用查询DTO")
+@Schema(description = "国际化语言集(anan_international)通用查询DTO")
 public class InternationalQuery extends LogiSortQuery<LogiQueryRule,SortRule,Integer> {
     private static final long serialVersionUID = -28236847738632954L;
     
-    @ApiModelProperty(value = "标识", example = "String")
+    @Schema(description = "标识", example = "String")
     private String code;
 
-    @ApiModelProperty(value = "名称", example = "String")
+    @Schema(description = "名称", example = "String")
     private String name;
 
-    @ApiModelProperty(value = "图标", example = "String")
+    @Schema(description = "图标", example = "String")
     private String icon;
 
-    @ApiModelProperty(value = "状态：0=启用，1=禁用", example = "Integer")
+    @Schema(description = "状态：0=启用，1=禁用", example = "Integer")
     private Byte status;
 
-    @ApiModelProperty(value = "默认标志", example = "Integer")
+    @Schema(description = "默认标志", example = "Integer")
     private Integer defaultFlag;
 
 }

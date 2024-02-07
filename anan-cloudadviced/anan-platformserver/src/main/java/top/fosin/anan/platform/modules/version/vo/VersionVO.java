@@ -1,8 +1,9 @@
 package top.fosin.anan.platform.modules.version.vo;
 
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -20,48 +21,48 @@ import java.util.Date;
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-@ApiModel(value = "系统版本表单体VO", description = "系统版本表(anan_version)单体VO")
+@Schema(description = "系统版本表(anan_version)单体VO")
 public class VersionVO extends Id<Long> {
     private static final long serialVersionUID = 348227108096797162L;
-    @ApiModelProperty(value = "版本名称")
+    @Schema(description = "版本名称")
     private String name;
 
-    @ApiModelProperty(value = "版本类型：0=收费版 1=免费版 2=开发版")
+    @Schema(description = "版本类型：0=收费版 1=免费版 2=开发版")
     private Byte type;
 
-    @ApiModelProperty(value = "版本价格")
+    @Schema(description = "版本价格")
     private Double price;
 
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
-    @ApiModelProperty(value = "活动开始日期")
+    @Schema(description = "活动开始日期")
     private Date beginTime;
 
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
-    @ApiModelProperty(value = "活动结束日期")
+    @Schema(description = "活动结束日期")
     private Date endTime;
 
-    @ApiModelProperty(value = "有效期：一般按天计算")
+    @Schema(description = "有效期：一般按天计算")
     private Integer validity;
 
-    @ApiModelProperty(value = "到期后保护期")
+    @Schema(description = "到期后保护期")
     private Integer protectDays;
 
-    @ApiModelProperty(value = "最大机构数：0=无限制 n=限制数")
+    @Schema(description = "最大机构数：0=无限制 n=限制数")
     private Integer maxOrganizs;
 
-    @ApiModelProperty(value = "最大机构数：0=无限制 n=限制数")
+    @Schema(description = "最大机构数：0=无限制 n=限制数")
     private Integer maxUsers;
 
-    @ApiModelProperty(value = "是否试用：0=不试用 1=试用")
+    @Schema(description = "是否试用：0=不试用 1=试用")
     private Integer tryout;
 
-    @ApiModelProperty(value = "试用天数")
+    @Schema(description = "试用天数")
     private Integer tryoutDays;
 
-    @ApiModelProperty(value = "启用状态：0=启用，1=禁用")
+    @Schema(description = "启用状态：0=启用，1=禁用")
     private Byte status;
 
-    @ApiModelProperty(value = "版本描述")
+    @Schema(description = "版本描述")
     private String description;
 
 }

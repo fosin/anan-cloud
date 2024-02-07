@@ -1,7 +1,8 @@
 package top.fosin.anan.platform.modules.user.dto;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -9,9 +10,9 @@ import top.fosin.anan.data.entity.Id;
 import top.fosin.anan.data.prop.ForeignKeyProp;
 import top.fosin.anan.data.valid.group.Update;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
-import javax.validation.constraints.PositiveOrZero;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 /**
  * 用于增减用户的单项权限，通常实在角色的基础上增减单项权限(anan_user_permission)更新DTO
  *
@@ -21,27 +22,27 @@ import javax.validation.constraints.PositiveOrZero;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-@ApiModel(value = "用于增减用户的单项权限，通常实在角色的基础上增减单项权限更新DTO", description = "用于增减用户的单项权限，通常实在角色的基础上增减单项权限(anan_user_permission)更新DTO")
+@Schema(description = "用于增减用户的单项权限，通常实在角色的基础上增减单项权限(anan_user_permission)更新DTO")
 public class UserPermissionUpdateDTO extends Id<Long> implements ForeignKeyProp<Long> {
     private static final long serialVersionUID = -77740212969406976L;
     
-    @NotNull(message = "机构ID" + "{javax.validation.constraints.NotNull.message}", groups = Update.class)
-    @ApiModelProperty(value = "机构ID", required = true, example = "Long")
+    @NotNull(message = "机构ID" + "{jakarta.validation.constraints.NotNull.message}", groups = Update.class)
+    @Schema(description = "机构ID", example = "Long")
     private Long organizId;
 
-    @NotNull(message = "用户序号" + "{javax.validation.constraints.NotNull.message}", groups = Update.class)
-    @Positive(message = "用户序号" + "{javax.validation.constraints.Positive.message}", groups = Update.class)
-    @ApiModelProperty(value = "用户序号")
+    @NotNull(message = "用户序号" + "{jakarta.validation.constraints.NotNull.message}", groups = Update.class)
+    @Positive(message = "用户序号" + "{jakarta.validation.constraints.Positive.message}", groups = Update.class)
+    @Schema(description = "用户序号")
     private Long userId;
 
-    @NotNull(message = "权限序号" + "{javax.validation.constraints.NotNull.message}", groups = Update.class)
-    @Positive(message = "权限序号" + "{javax.validation.constraints.Positive.message}", groups = Update.class)
-    @ApiModelProperty(value = "权限序号")
+    @NotNull(message = "权限序号" + "{jakarta.validation.constraints.NotNull.message}", groups = Update.class)
+    @Positive(message = "权限序号" + "{jakarta.validation.constraints.Positive.message}", groups = Update.class)
+    @Schema(description = "权限序号")
     private Long permissionId;
 
-    @NotNull(message = "补充方式" + "{javax.validation.constraints.NotNull.message}", groups = Update.class)
-    @PositiveOrZero(message = "补充方式" + "{javax.validation.constraints.Positive.message}", groups = Update.class)
-    @ApiModelProperty(value = "补充方式：0=增加权限、1=删除权限")
+    @NotNull(message = "补充方式" + "{jakarta.validation.constraints.NotNull.message}", groups = Update.class)
+    @PositiveOrZero(message = "补充方式" + "{jakarta.validation.constraints.Positive.message}", groups = Update.class)
+    @Schema(description = "补充方式：0=增加权限、1=删除权限")
     private Integer addMode;
 
     @Override

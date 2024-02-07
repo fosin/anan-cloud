@@ -1,7 +1,8 @@
 package top.fosin.anan.platform.modules.dictionary.po;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.DynamicUpdate;
@@ -9,10 +10,10 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 import top.fosin.anan.jpa.po.IdCreateUpdateDeletePO;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import jakarta.persistence.Basic;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 
 /**
  * 系统通用字典明细表(AnanDictionaryDetail)实体类
@@ -28,52 +29,52 @@ import javax.persistence.Table;
 @SQLDelete(sql = "update anan_dictionary_detail set deleted = 1 where id = ?")
 @Where(clause = "deleted=0")
 @Table(name = "anan_dictionary_detail")
-@ApiModel(value = "通用字典明细表实体类", description = "通用字典明细的实体类")
+@Schema(description = "通用字典明细的实体类")
 public class DictionaryDetail extends IdCreateUpdateDeletePO<Long> {
   private static final long serialVersionUID = -5294666385626195733L;
 
   @Basic
-  @ApiModelProperty(value = "字典明细键，不能重复，字典内明细项唯一代码", required = true)
+  @Schema(description = "字典明细键，不能重复，字典内明细项唯一代码")
   @Column(name = "code", nullable = false)
   private Long code;
 
   @Basic
-  @ApiModelProperty(value = "字典明细值表示字面意义")
+  @Schema(description = "字典明细值表示字面意义")
   @Column(name = "name", length = 64)
   private String name;
 
   @Basic
-  @ApiModelProperty(value = "取值于字典明细表anan_dictionary.id", required = true)
+  @Schema(description = "取值于字典明细表anan_dictionary.id")
   @Column(name = "dictionary_id", nullable = false)
   private Long dictionaryId;
 
   @Basic
-  @ApiModelProperty(value = "顺序，用于显示数据时的顺序，数值越小越靠前", required = true)
+  @Schema(description = "顺序，用于显示数据时的顺序，数值越小越靠前")
   @Column(name = "sort", nullable = false)
   private Short sort;
 
   @Basic
-  @ApiModelProperty(value = "使用状态：0=启用，1=禁用，具体取值于字典表anan_dictionary.id=11", required = true)
+  @Schema(description = "使用状态：0=启用，1=禁用，具体取值于字典表anan_dictionary.id=11")
   @Column(name = "status", nullable = false)
   private Byte status;
 
   @Basic
-  @ApiModelProperty(value = "标准代码，该字段通常用于对接标准字典")
+  @Schema(description = "标准代码，该字段通常用于对接标准字典")
   @Column(name = "scode", length = 64)
   private String scode;
 
   @Basic
-  @ApiModelProperty(value = "作用域，用于字典明细项的作用域")
+  @Schema(description = "作用域，用于字典明细项的作用域")
   @Column(name = "scope", length = 12)
   private String scope;
 
   @Basic
-  @ApiModelProperty(value = "使用标志：0=未使用，1=已使用，已使用的字典就不能再修改name属性", required = true)
+  @Schema(description = "使用标志：0=未使用，1=已使用，已使用的字典就不能再修改name属性")
   @Column(name = "used", nullable = false)
   private Byte used = 0;
 
   @Basic
-  @ApiModelProperty(value = "字典说明")
+  @Schema(description = "字典说明")
   @Column(name = "description", length = 120)
   private String description;
 }

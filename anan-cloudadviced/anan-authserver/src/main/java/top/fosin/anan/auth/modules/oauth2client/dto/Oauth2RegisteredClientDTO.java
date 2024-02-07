@@ -1,8 +1,9 @@
 package top.fosin.anan.auth.modules.oauth2client.dto;
 
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -26,42 +27,42 @@ import java.util.Set;
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-@ApiModel(value = "OAUTH2认证客户端注册表DTO", description = "OAUTH2认证客户端注册表(oauth2_registered_client)DTO")
+@Schema(description = "OAUTH2认证客户端注册表(oauth2_registered_client)DTO")
 public class Oauth2RegisteredClientDTO extends Id<String> {
     private static final long serialVersionUID = 879671592005817991L;
-    @ApiModelProperty(value = "客户端序号", required = true, example = "String")
+    @Schema(description = "客户端序号", example = "String")
     private String clientId;
 
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
-    @ApiModelProperty(value = "发布日期", required = true, example = "Date")
+    @Schema(description = "发布日期", example = "Date")
     private Date clientIdIssuedAt;
 
-    @ApiModelProperty(value = "客户端密钥", example = "String")
+    @Schema(description = "客户端密钥", example = "String")
     private String clientSecret;
 
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
-    @ApiModelProperty(value = "过期时间", example = "Date")
+    @Schema(description = "过期时间", example = "Date")
     private Date clientSecretExpiresAt;
 
-    @ApiModelProperty(value = "客户端名称", required = true, example = "String")
+    @Schema(description = "客户端名称", example = "String")
     private String clientName;
 
-    @ApiModelProperty(value = "认证方法", required = true, example = "String")
+    @Schema(description = "认证方法", example = "String")
     private Set<ClientAuthenticationMethod> clientAuthenticationMethods;
 
-    @ApiModelProperty(value = "认证类型", required = true, example = "String")
+    @Schema(description = "认证类型", example = "String")
     private Set<AuthorizationGrantType> authorizationGrantTypes;
 
-    @ApiModelProperty(value = "跳转地址", example = "String")
+    @Schema(description = "跳转地址", example = "String")
     private Set<String> redirectUris;
 
-    @ApiModelProperty(value = "作用域", required = true, example = "String")
+    @Schema(description = "作用域", example = "String")
     private Set<String> scopes;
 
-    @ApiModelProperty(value = "客户端设置", required = true)
+    @Schema(description = "客户端设置")
     private ClientSettings clientSettings;
 
-    @ApiModelProperty(value = "令牌设置", required = true)
+    @Schema(description = "令牌设置")
     private TokenSettings tokenSettings;
 
 }

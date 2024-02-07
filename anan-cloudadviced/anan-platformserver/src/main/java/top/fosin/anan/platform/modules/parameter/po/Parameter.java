@@ -1,17 +1,18 @@
 package top.fosin.anan.platform.modules.parameter.po;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.DynamicUpdate;
 import top.fosin.anan.cloudresource.parameter.ParameterStatus;
 import top.fosin.anan.jpa.po.IdCreateUpdatePO;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import jakarta.persistence.Basic;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import java.util.Date;
 
 ;
@@ -28,52 +29,52 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = true)
 @DynamicUpdate
 @Table(name = "anan_parameter")
-@ApiModel(value = "用于存放各种分类分组的个性化参数实体类", description = "通用参数的实体类")
+@Schema(description = "通用参数的实体类")
 public class Parameter extends IdCreateUpdatePO<Long> {
     private static final long serialVersionUID = 301081721804164443L;
 
     @Basic
-    @ApiModelProperty(value = "参数键", required = true)
+    @Schema(description = "参数键")
     @Column(name = "name", nullable = false, length = 64)
     private String name;
 
     @Basic
-    @ApiModelProperty(value = "参数值")
+    @Schema(description = "参数值")
     @Column(name = "value", length = 256)
     private String value;
 
     @Basic
-    @ApiModelProperty(value = "参数分类：具体取值于字典表anan_dictionary.id=10", required = true)
+    @Schema(description = "参数分类：具体取值于字典表anan_dictionary.id=10")
     @Column(name = "type", nullable = false)
     private Byte type;
 
     @Basic
-    @ApiModelProperty(value = "参数作用域")
+    @Schema(description = "参数作用域")
     @Column(name = "scope", length = 64)
     private String scope;
 
     @Basic
-    @ApiModelProperty(value = "默认值")
+    @Schema(description = "默认值")
     @Column(name = "default_value", length = 256)
     private String defaultValue;
 
     @Basic
-    @ApiModelProperty(value = "参数描述")
+    @Schema(description = "参数描述")
     @Column(name = "description", length = 256)
     private String description;
 
     @Basic
-    @ApiModelProperty(value = "发布时间，该值由后台维护，更改数据时前端不需要关心")
+    @Schema(description = "发布时间，该值由后台维护，更改数据时前端不需要关心")
     @Column(name = "apply_time")
     private Date applyTime;
 
     @Basic
-    @ApiModelProperty(value = "该值由后台维护，更改数据时前端不需要关心，取值于anan_user.id")
+    @Schema(description = "该值由后台维护，更改数据时前端不需要关心，取值于anan_user.id")
     @Column(name = "apply_by")
     private Long applyBy;
 
     @Basic
-    @ApiModelProperty(value = "参数状态：0=正常状态、1=修改状态、2=删除状态", required = true)
+    @Schema(description = "参数状态：0=正常状态、1=修改状态、2=删除状态")
     @Column(name = "status", nullable = false)
     private Byte status = ParameterStatus.Normal.getTypeValue();
 

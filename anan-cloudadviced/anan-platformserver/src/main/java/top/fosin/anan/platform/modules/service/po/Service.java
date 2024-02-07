@@ -1,16 +1,17 @@
 package top.fosin.anan.platform.modules.service.po;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.DynamicUpdate;
 import top.fosin.anan.jpa.po.IdCreateUpdatePO;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import jakarta.persistence.Basic;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 
 /**
  * 系统服务表(AnanService)实体类
@@ -24,23 +25,23 @@ import javax.persistence.Table;
 @Entity
 @DynamicUpdate
 @Table(name = "anan_service")
-@ApiModel(value = "服务的实体类", description = "服务的实体类")
+@Schema(description = "服务的实体类")
 public class Service extends IdCreateUpdatePO<Long> {
   private static final long serialVersionUID = -94381323292251990L;
 
   @Basic
   @Column(name = "code")
-  @ApiModelProperty(value = "服务标识")
+  @Schema(description = "服务标识")
   private String code;
 
   @Basic
   @Column(name = "name")
-  @ApiModelProperty(value = "服务名称")
+  @Schema(description = "服务名称")
   private String name;
 
   @Basic
   @Column(name = "status")
-  @ApiModelProperty(value = "状态码：0：禁用 1：启用")
+  @Schema(description = "状态码：0：禁用 1：启用")
   private Byte status;
 
 }

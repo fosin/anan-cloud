@@ -2,7 +2,6 @@ package top.fosin.anan.cloudresource.grpc.service;
 
 import lombok.extern.slf4j.Slf4j;
 import net.devh.boot.grpc.client.inject.GrpcClient;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 import top.fosin.anan.cloudresource.constant.PlatformRedisConstant;
@@ -60,7 +59,6 @@ public class UserGrpcServiceImpl implements UserRpcService, Object2StringTransla
         return userResps.stream().map(this::toRespDto).collect(Collectors.toList());
     }
 
-    @NotNull
     private UserDTO toRespDto(UserResp user) {
         UserDTO dto = new UserDTO();
         dto.setUsercode(user.getUsercode());

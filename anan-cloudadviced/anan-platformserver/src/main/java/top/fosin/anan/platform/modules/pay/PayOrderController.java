@@ -1,6 +1,6 @@
 package top.fosin.anan.platform.modules.pay;
 
-import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import top.fosin.anan.cloudresource.constant.PathPrefixConstant;
@@ -24,7 +24,7 @@ import top.fosin.anan.platform.modules.pay.service.inter.PayOrderService;
  */
 @RestController
 @RequestMapping(value = PathPrefixConstant.PAY_ORDER, params = PathPrefixConstant.DEFAULT_VERSION_PARAM)
-@Api(value = PathPrefixConstant.PAY_ORDER, tags = "支付订单管理")
+@Tag(name = "支付订单管理", description = PathPrefixConstant.PAY_ORDER)
 public class PayOrderController implements ICreateController<PayOrderCreateDTO, Long>,
         IUpdateController<PayOrderUpdateDTO, Long>,
         IDeleteController<Long>,

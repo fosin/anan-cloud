@@ -1,8 +1,9 @@
 package top.fosin.anan.cloudresource.service.inter.feign;
 
 
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 import top.fosin.anan.cloudresource.constant.PathPrefixConstant;
@@ -25,29 +26,29 @@ import java.util.List;
         fallback = OrgFeignFallbackServiceImpl.class, contextId = "orgFeignService")
 public interface OrgFeignService {
     @GetMapping({PathConstant.PATH_ID})
-    @ApiOperation("根据主键序号远程查询一条数据")
+    @Operation(summary = "根据主键序号远程查询一条数据", description = "根据主键序号远程查询一条数据")
     SingleResult<OrganizRespDTO> findOneById(@PathVariable(IdProp.ID_NAME) Long id, @RequestParam(PathPrefixConstant.API_VERSION_NAME) String version);
 
     @PostMapping({PathConstant.PATH_IDS})
-    @ApiOperation("根据用户序号集合远程查询多条数据")
+    @Operation(summary = "根据用户序号集合远程查询多条数据", description = "根据用户序号集合远程查询多条数据")
     MultResult<OrganizRespDTO> listByIds(@RequestBody List<Long> ids, @RequestParam(PathPrefixConstant.API_VERSION_NAME) String version);
 
     @GetMapping(PathConstant.PATH_LIST_CHILD_PID)
-    @ApiOperation("根据父序号pid远程其直接子节点的数据集合")
-    @ApiImplicitParam(name = PidProp.PID_NAME, value = "根据父序号pid远程其直接子节点的数据集合",
-            paramType = "path", required = true, dataTypeClass = Long.class)
+    @Operation(summary = "根据父序号pid远程其直接子节点的数据集合", description = "根据父序号pid远程其直接子节点的数据集合")
+    @Parameter(name = PidProp.PID_NAME, description = "根据父序号pid远程其直接子节点的数据集合",
+            in = ParameterIn.PATH, required = true)
     MultResult<OrganizRespDTO> listChild(@PathVariable(PidProp.PID_NAME) Long pid, @RequestParam(PathPrefixConstant.API_VERSION_NAME) String version);
 
     @GetMapping(PathConstant.PATH_LIST_ALL_CHILD_PID)
-    @ApiOperation("根据父序号pid远程其所有孩子数据集合")
-    @ApiImplicitParam(name = PidProp.PID_NAME, value = "根据父序号pid远程其所有孩子数据集合",
-            paramType = "path", required = true, dataTypeClass = Long.class)
+    @Operation(summary = "根据父序号pid远程其所有孩子数据集合", description = "根据父序号pid远程其所有孩子数据集合")
+    @Parameter(name = PidProp.PID_NAME, description = "根据父序号pid远程其所有孩子数据集合",
+            in = ParameterIn.PATH, required = true)
     MultResult<OrganizRespDTO> listAllChild(@PathVariable(PidProp.PID_NAME) Long pid, @RequestParam(PathPrefixConstant.API_VERSION_NAME) String version);
 
     @GetMapping(PathConstant.PATH_TREE_ALL_CHILD_PID)
-    @ApiOperation("根据父序号pid远程其所有孩子数据，并构建树型对象")
-    @ApiImplicitParam(name = PidProp.PID_NAME, value = "根据父序号pid远程其所有孩子数据，并构建树型对象",
-            paramType = "path", required = true, dataTypeClass = Long.class)
+    @Operation(summary = "根据父序号pid远程其所有孩子数据，并构建树型对象", description = "根据父序号pid远程其所有孩子数据，并构建树型对象")
+    @Parameter(name = PidProp.PID_NAME, description = "根据父序号pid远程其所有孩子数据，并构建树型对象",
+            in = ParameterIn.PATH, required = true)
     MultResult<OrganizRespDTO> treeAllChild(@PathVariable(PidProp.PID_NAME) Long pid, @RequestParam(PathPrefixConstant.API_VERSION_NAME) String version);
 
 }

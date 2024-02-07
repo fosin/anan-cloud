@@ -2,13 +2,12 @@ package top.fosin.anan.cloudresource.grpc.service;
 
 import com.google.protobuf.StringValue;
 import net.devh.boot.grpc.client.inject.GrpcClient;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 import top.fosin.anan.cloudresource.constant.PlatformRedisConstant;
 import top.fosin.anan.cloudresource.constant.ServiceConstant;
-import top.fosin.anan.cloudresource.entity.res.ParameterDTO;
 import top.fosin.anan.cloudresource.entity.req.ParameterUpdateDTO;
+import top.fosin.anan.cloudresource.entity.res.ParameterDTO;
 import top.fosin.anan.cloudresource.grpc.parameter.*;
 import top.fosin.anan.cloudresource.service.inter.rpc.ParameterRpcService;
 
@@ -81,7 +80,6 @@ public class ParameterGrpcServiceImpl implements ParameterRpcService {
         return getParameterRespDto(parameterResp);
     }
 
-    @NotNull
     private ParameterDTO getParameterRespDto(ParameterResp parameterResp) {
         ParameterDTO respDto = new ParameterDTO();
         respDto.setId(parameterResp.getId());

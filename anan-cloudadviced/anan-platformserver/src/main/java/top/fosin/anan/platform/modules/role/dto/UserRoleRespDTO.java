@@ -1,7 +1,8 @@
 package top.fosin.anan.platform.modules.role.dto;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -17,14 +18,14 @@ import top.fosin.anan.data.entity.IdOrganizId;
 @Data
 @ToString
 @EqualsAndHashCode(callSuper = true)
-@ApiModel(value = "用户角色表响应DTO", description = "用户角色的响应DTO")
+@Schema(description = "用户角色的响应DTO")
 public class UserRoleRespDTO extends IdOrganizId<Long> {
     private static final long serialVersionUID = -30073122110919311L;
 
-    @ApiModelProperty(value = "用户序号", example = "Long")
+    @Schema(description = "用户序号", example = "Long")
     private Long userId;
 
-    @ApiModelProperty(value = "角色序号", example = "Long")
+    @Schema(description = "角色序号", example = "Long")
     private Long roleId;
 
 }

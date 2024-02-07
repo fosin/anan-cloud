@@ -23,8 +23,8 @@ import org.springframework.security.web.savedrequest.FastHttpDateFormat;
 import org.springframework.security.web.savedrequest.RequestCacheAwareFilter;
 import org.springframework.security.web.savedrequest.SavedRequest;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletRequestWrapper;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequestWrapper;
 import java.text.SimpleDateFormat;
 import java.util.*;
 

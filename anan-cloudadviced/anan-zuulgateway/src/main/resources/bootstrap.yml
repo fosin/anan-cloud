@@ -3,11 +3,8 @@ spring:
     active: @profileActive@
   application:
     name: @project.artifactId@
-  #  main:
-  #    cloud-platform: kubernetes
   cloud:
     kubernetes:
-      enabled: @spring.cloud.kubernetes.enabled@
       config:
         enabled:  @spring.cloud.kubernetes.config.enabled@
         namespace: @spring.cloud.kubernetes.namespace@
@@ -15,7 +12,7 @@ spring:
           - name: @spring.cloud.kubernetes.sharedConfigMap@ #指定 ConfigMap 名称
           - name: ${spring.application.name} #指定 ConfigMap 名称
       secrets:
-        enabled:  @spring.cloud.kubernetes.secrets.enabled@
+        enabled: @spring.cloud.kubernetes.secrets.enabled@
         namespace: @spring.cloud.kubernetes.namespace@    #指定 Namespace 名称
         sources:
           - name: @spring.cloud.kubernetes.sharedSecret@ #指定 ConfigMap 名称
@@ -62,6 +59,8 @@ encrypt:
     salt: deadbeaf
 jasypt:
   encryptor:
+    algorithm: @jasypt.encryptor.algorithm@
+    iv-generator-classname: @jasypt.encryptor.iv-generator-classname@
     password: @jasypt.encryptor.password@
 info: #定义各种额外的详情给服务端显示
   description: "@project.description@"

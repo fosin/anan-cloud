@@ -9,7 +9,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import top.fosin.anan.cloudresource.entity.res.UserAuthDTO;
 import top.fosin.anan.core.util.ClientUtil;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;

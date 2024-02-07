@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import top.fosin.anan.core.banner.AnanBanner;
 import top.fosin.anan.redis.annotation.EnableAnanRedis;
 import top.fosin.anan.security.servlet.annotation.EnableAnanWebSecurity;
-import top.fosin.anan.swagger.annotation.EnableAnanSwagger2;
 
 /**
  * @author fosin
@@ -17,7 +16,7 @@ import top.fosin.anan.swagger.annotation.EnableAnanSwagger2;
 @SpringBootApplication
 @EnableAnanRedis
 @EnableAnanWebSecurity
-@EnableAnanSwagger2
+//@EnableAnanSwagger2
 @EnableJpaAuditing
 @EnableFeignClients
 @EnableTransactionManagement

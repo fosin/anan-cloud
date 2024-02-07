@@ -1,7 +1,8 @@
 package top.fosin.anan.cloudresource.entity.res;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import top.fosin.anan.data.prop.TreeProp;
@@ -17,15 +18,15 @@ import java.util.List;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-@ApiModel(value = "机构表树形响应DTO", description = "机构表树形响应DTO")
+@Schema(description = "机构表树形响应DTO")
 public class OrganizTreeDTO extends OrganizRespDTO
         implements TreeProp<OrganizTreeDTO, Long> {
     private static final long serialVersionUID = 389815217019211695L;
 
-    @ApiModelProperty(value = "子节点，虚拟字段，增删改时不需要关心", required = true)
+    @Schema(description = "子节点，虚拟字段，增删改时不需要关心")
     private List<OrganizTreeDTO> children;
 
-    @ApiModelProperty(value = "是否叶子节点，虚拟字段，增删改时不需要关心", required = true)
+    @Schema(description = "是否叶子节点，虚拟字段，增删改时不需要关心")
     private Boolean leaf;
 
 }

@@ -1,6 +1,6 @@
 package top.fosin.anan.platform.modules.international;
 
-import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import top.fosin.anan.cloudresource.constant.PathPrefixConstant;
@@ -25,7 +25,7 @@ import top.fosin.anan.platform.modules.international.vo.InternationalCharsetVO;
  */
 @RestController
 @RequestMapping(value = PathPrefixConstant.INTERNATIONAL_CHARSET, params = PathPrefixConstant.DEFAULT_VERSION_PARAM)
-@Api(value = PathPrefixConstant.INTERNATIONAL_CHARSET, tags = "国际化语言字符集管理")
+@Tag(name = "国际化语言字符集管理", description = PathPrefixConstant.INTERNATIONAL_CHARSET)
 public class InternationalCharsetController implements ICreateController<InternationalCharsetCreateDTO, Long>,
         IRetrieveController<InternationalCharsetQuery, InternationalCharsetVO, InternationalCharsetListVO, InternationalCharsetPageVO, Long>,
         IUpdateController<InternationalCharsetUpdateDTO, Long>,

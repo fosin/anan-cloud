@@ -1,8 +1,9 @@
 package top.fosin.anan.platform.modules.international.dto;
 
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -22,33 +23,33 @@ import java.util.Date;
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-@ApiModel(value = "国际化语言字符集DTO", description = "国际化语言字符集(anan_international_charset)DTO")
+@Schema(description = "国际化语言字符集(anan_international_charset)DTO")
 public class InternationalCharsetDTO extends Id<Long> implements ForeignKeyProp<Long> {
     private static final long serialVersionUID = 357997136447228021L;
-    @ApiModelProperty(value = "国际化语言ID", required = true, example = "Integer")
+    @Schema(description = "国际化语言ID", example = "Integer")
     private Long internationalId;
 
-    @ApiModelProperty(value = "服务ID", required = true, example = "Integer")
+    @Schema(description = "服务ID", example = "Integer")
     private Long serviceId;
 
-    @ApiModelProperty(value = "自定义字符集", example = "String")
+    @Schema(description = "自定义字符集", example = "String")
     private String charset;
 
-    @ApiModelProperty(value = "创建人")
+    @Schema(description = "创建人")
     private Long createBy;
 
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
-    @ApiModelProperty(value = "创建时间")
+    @Schema(description = "创建时间")
     private Date createTime;
 
-    @ApiModelProperty(value = "修改人")
+    @Schema(description = "修改人")
     private Long updateBy;
 
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
-    @ApiModelProperty(value = "修改时间")
+    @Schema(description = "修改时间")
     private Date updateTime;
 
-    @ApiModelProperty(value = "状态：0=启用，1=禁用", required = true, example = "Integer")
+    @Schema(description = "状态：0=启用，1=禁用", example = "Integer")
     private Byte status;
 
     @Override

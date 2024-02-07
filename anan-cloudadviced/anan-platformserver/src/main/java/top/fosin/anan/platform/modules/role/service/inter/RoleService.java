@@ -9,7 +9,7 @@ import top.fosin.anan.platform.modules.role.dto.RoleDTO;
 import top.fosin.anan.platform.modules.role.dto.RoleUpdateDTO;
 import top.fosin.anan.platform.modules.role.po.Role;
 
-import javax.validation.constraints.Positive;
+import jakarta.validation.constraints.Positive;
 import java.util.List;
 
 /**

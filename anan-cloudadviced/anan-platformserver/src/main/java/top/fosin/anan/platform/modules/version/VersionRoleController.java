@@ -1,6 +1,6 @@
 package top.fosin.anan.platform.modules.version;
 
-import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import top.fosin.anan.cloudresource.constant.PathPrefixConstant;
@@ -25,7 +25,7 @@ import top.fosin.anan.platform.modules.version.vo.VersionRoleVO;
  */
 @RestController
 @RequestMapping(value = PathPrefixConstant.VERSION_ROLE, params = PathPrefixConstant.DEFAULT_VERSION_PARAM)
-@Api(value = PathPrefixConstant.VERSION_ROLE, tags = "版本角色管理")
+@Tag(name = "版本角色管理", description = PathPrefixConstant.VERSION_ROLE)
 public class VersionRoleController
     implements ICreateController<VersionRoleCreateDTO, Long>,
         IRetrieveController<VersionRoleQuery, VersionRoleVO, VersionRoleListVO, VersionRolePageVO, Long>,

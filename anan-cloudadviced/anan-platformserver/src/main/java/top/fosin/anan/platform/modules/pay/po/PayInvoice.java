@@ -1,16 +1,17 @@
 package top.fosin.anan.platform.modules.pay.po;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.DynamicUpdate;
 import top.fosin.anan.jpa.po.IdPO;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import jakarta.persistence.Basic;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import java.util.Date;
 
 /**
@@ -25,27 +26,27 @@ import java.util.Date;
 @Entity
 @DynamicUpdate
 @Table(name = "anan_pay_invoice")
-@ApiModel(value = "支付发票表实体类", description = "支付发票的实体类")
+@Schema(description = "支付发票的实体类")
 public class PayInvoice extends IdPO<Long> {
     private static final long serialVersionUID = 120666820121378212L;
 
     @Basic
-    @ApiModelProperty(value = "支付序号", required = true)
+    @Schema(description = "支付序号")
     @Column(name = "pay_id", nullable = false)
     private Long payId;
 
     @Basic
-    @ApiModelProperty(value = "发票号码", required = true)
+    @Schema(description = "发票号码")
     @Column(name = "invoce_no", nullable = false, length = 40)
     private String invoceNo;
 
     @Basic
-    @ApiModelProperty(value = "出票时间", required = true)
+    @Schema(description = "出票时间")
     @Column(name = "invoce_time", nullable = false)
     private Date invoceTime;
 
     @Basic
-    @ApiModelProperty(value = "操作人", required = true)
+    @Schema(description = "操作人")
     @Column(name = "create_by", nullable = false)
     private Long createBy;
 

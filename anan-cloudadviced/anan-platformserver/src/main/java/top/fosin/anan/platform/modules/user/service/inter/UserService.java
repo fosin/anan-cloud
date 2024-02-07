@@ -11,8 +11,8 @@ import top.fosin.anan.jpa.service.IRetrieveJpaService;
 import top.fosin.anan.jpa.service.IUpdateJpaService;
 import top.fosin.anan.platform.modules.user.po.User;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Positive;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
 import java.util.List;
 
 /**

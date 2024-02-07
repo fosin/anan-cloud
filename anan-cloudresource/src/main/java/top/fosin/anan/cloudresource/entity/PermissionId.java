@@ -1,7 +1,8 @@
 package top.fosin.anan.cloudresource.entity;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import top.fosin.anan.data.entity.Id;
@@ -17,11 +18,11 @@ import java.io.Serializable;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-@ApiModel(value = "权限DTO", description = "权限DTO")
+@Schema(description = "权限DTO")
 public class PermissionId<ID extends Serializable> extends Id<ID> {
     private static final long serialVersionUID = -16743805718001139L;
 
-    @ApiModelProperty(value = "权限序号", example = "Long")
+    @Schema(description = "权限序号", example = "Long")
     private Long permissionId;
 
 }

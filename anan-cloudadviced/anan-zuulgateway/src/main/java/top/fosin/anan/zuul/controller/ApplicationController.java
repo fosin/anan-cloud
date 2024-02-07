@@ -1,9 +1,10 @@
 package top.fosin.anan.zuul.controller;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
@@ -27,7 +28,7 @@ import java.util.Random;
  */
 @RestController
 @RequestMapping("v1/application")
-@Api(value = "v1/application", tags = "应用集群相关信息获取")
+@Tag(name = "应用集群相关信息获取", description = "v1/application")
 public class ApplicationController {
     private final DiscoveryClient discoveryClient;
 
@@ -41,7 +42,7 @@ public class ApplicationController {
 //    @Autowired
 //    private IRule iRule;
 
-    @ApiOperation(value = "获取服务名称列表", notes = "获取当前注册到Eureka注册中心的所有节点服务名称")
+    @Operation(summary = "获取服务名称列表", notes = "获取当前注册到Eureka注册中心的所有节点服务名称", description = "获取服务名称列表", notes = "获取当前注册到Eureka注册中心的所有节点服务名称")
     @GetMapping(value = "/serviceNames")
     public MultResult<String> getServiceNames() {
         Assert.notNull(discoveryClient, "discoveryClient不能为空!");
@@ -49,14 +50,14 @@ public class ApplicationController {
         return ResultUtils.success(services);
     }
 
-    @ApiOperation(value = "根据服务名称获取对应实例管理web地址", notes = "获取当前注册到Eureka注册中心的实例地址")
-    @ApiImplicitParams({
+    @Operation(summary = "根据服务名称获取对应实例管理web地址", notes = "获取当前注册到Eureka注册中心的实例地址", description = "根据服务名称获取对应实例管理web地址", notes = "获取当前注册到Eureka注册中心的实例地址")
+    @Parameters({
             @ApiImplicitParam(name = "serviceId",
                     value = "注册Eureka注册中心的服务名称，一般等于spring.application.name",
-                    required = true, dataTypeClass = String.class, paramType = "query"),
+                    required = true),
             @ApiImplicitParam(name = "path",
                     value = "当前服务节点管理端点的url",
-                    required = false, dataTypeClass = String.class, paramType = "query")
+                    required = false)
     })
     @GetMapping(value = "/ui/url")
     public SingleResult<PageURI> uiUrl(@RequestParam String serviceId, @RequestParam(value = "path", required = false) String path) {

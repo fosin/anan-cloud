@@ -1,6 +1,6 @@
 package top.fosin.anan.platform.modules.pay;
 
-import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import top.fosin.anan.cloudresource.constant.PathPrefixConstant;
@@ -24,7 +24,7 @@ import top.fosin.anan.platform.modules.pay.vo.PayDetailVO;
  */
 @RestController
 @RequestMapping(value = PathPrefixConstant.PAY_DETAIL, params = PathPrefixConstant.DEFAULT_VERSION_PARAM)
-@Api(value = PathPrefixConstant.PAY_DETAIL, tags = "支付明细管理")
+@Tag(name = "支付明细管理", description = PathPrefixConstant.PAY_DETAIL)
 public class PayDetailController implements ICreateController<PayDetailCreateDTO, Long>,
         IUpdateController<PayDetailUpdateDTO, Long>,
         IDeleteController<Long>,

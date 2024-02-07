@@ -24,13 +24,13 @@ public class RealErrorGatewayFilter implements GatewayFilter, Ordered {
         //只处理修改密码请求
         if (uri.contains("/user/changePassword")) {
 //            try {
-//                request.setAttribute("javax.servlet.error.status_code", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+//                request.setAttribute("jakarta.servlet.error.status_code", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 //
 //                log.warn("Error during filtering", throwable);
-//                request.setAttribute("javax.servlet.error.exception", throwable);
+//                request.setAttribute("jakarta.servlet.error.exception", throwable);
 //
 //                if (StringUtils.hasText(throwable.getMessage())) {
-//                    request.setAttribute("javax.servlet.error.message", throwable.getMessage());
+//                    request.setAttribute("jakarta.servlet.error.message", throwable.getMessage());
 //                }
 //
 //                RequestDispatcher dispatcher = request.getRequestDispatcher(

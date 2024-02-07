@@ -1,7 +1,8 @@
 package top.fosin.anan.platform.modules.oauthclient.dto;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import lombok.Data;
 import top.fosin.anan.data.prop.IdProp;
 
@@ -13,40 +14,40 @@ import top.fosin.anan.data.prop.IdProp;
  * @since 2.6.0
  */
 @Data
-@ApiModel(value = "OAuth2客户端接入配置响应DTO", description = "OAuth2客户端接入配置的响应DTO")
+@Schema(description = "OAuth2客户端接入配置的响应DTO")
 public class OauthClientDetailsRespDto implements IdProp<String> {
     private static final long serialVersionUID = 692552529395562413L;
-    @ApiModelProperty(value = "客户端序号", example = "String")
+    @Schema(description = "客户端序号", example = "String")
     private String clientId;
 
-    @ApiModelProperty(value = "权限资源ID清单", example = "String")
+    @Schema(description = "权限资源ID清单", example = "String")
     private String resourceIds;
 
-    @ApiModelProperty(value = "客户端密钥", example = "String")
+    @Schema(description = "客户端密钥", example = "String")
     private String clientSecret;
 
-    @ApiModelProperty(value = "权限作用域", example = "String")
+    @Schema(description = "权限作用域", example = "String")
     private String scope;
 
-    @ApiModelProperty(value = "授权类型清单", example = "String")
+    @Schema(description = "授权类型清单", example = "String")
     private String authorizedGrantTypes;
 
-    @ApiModelProperty(value = "跳转地址", example = "String")
+    @Schema(description = "跳转地址", example = "String")
     private String webServerRedirectUri;
 
-    @ApiModelProperty(value = "授权ID清单", example = "String")
+    @Schema(description = "授权ID清单", example = "String")
     private String authorities;
 
-    @ApiModelProperty(value = "访问Token有效期", example = "Integer")
+    @Schema(description = "访问Token有效期", example = "Integer")
     private Integer accessTokenValidity;
 
-    @ApiModelProperty(value = "刷新Token有效期", example = "Integer")
+    @Schema(description = "刷新Token有效期", example = "Integer")
     private Integer refreshTokenValidity;
 
-    @ApiModelProperty(value = "附加信息", example = "String")
+    @Schema(description = "附加信息", example = "String")
     private String additionalInformation;
 
-    @ApiModelProperty(value = "自动授权", example = "String")
+    @Schema(description = "自动授权", example = "String")
     private String autoapprove;
 
     /**

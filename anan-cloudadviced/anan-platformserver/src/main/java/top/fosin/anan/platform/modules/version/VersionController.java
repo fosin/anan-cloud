@@ -1,9 +1,10 @@
 package top.fosin.anan.platform.modules.version;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.web.bind.annotation.*;
 import top.fosin.anan.cloudresource.constant.PathPrefixConstant;
 import top.fosin.anan.cloudresource.entity.res.PermissionTreeDTO;
@@ -32,7 +33,7 @@ import top.fosin.anan.platform.modules.version.vo.VersionVO;
  */
 @RestController
 @RequestMapping(value = PathPrefixConstant.VERSION, params = PathPrefixConstant.DEFAULT_VERSION_PARAM)
-@Api(value = PathPrefixConstant.VERSION, tags = "版本管理")
+@Tag(name = "版本管理", description = PathPrefixConstant.VERSION)
 public class VersionController
     implements ICreateController<VersionCreateDTO, Long>,
         IRetrieveController<VersionQuery, VersionVO, VersionListVO, VersionPageVO, Long>,
@@ -46,11 +47,11 @@ public class VersionController
         this.permissionService = permissionService;
     }
 
-    @ApiOperation(value = "根据父权限ID获取其孩子数据列表")
+    @Operation(summary = "根据父权限ID获取其孩子数据列表", description = "根据父权限ID获取其孩子数据列表")
     @GetMapping(value = "/listChild/{pid}")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "versionId", required = true, dataTypeClass = Long.class, value = "版本ID,取值于Version.id", paramType = "query"),
-            @ApiImplicitParam(name = TreeVO.PID_NAME, required = true, dataTypeClass = Long.class, value = "父权限ID,VersionPermission.id", paramType = "path")
+    @Parameters({
+            @Parameter(name = "versionId", required = true),
+            @Parameter(name = TreeVO.PID_NAME, required = true)
     })
     public MultResult<PermissionTreeDTO> getListChild(@PathVariable Long pid, @RequestParam Long versionId) {
         return ResultUtils.success(permissionService.findByPidAndVersionId(pid, versionId));

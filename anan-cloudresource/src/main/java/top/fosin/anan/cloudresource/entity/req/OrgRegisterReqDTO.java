@@ -1,12 +1,12 @@
 package top.fosin.anan.cloudresource.entity.req;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 import top.fosin.anan.core.util.RegexUtil;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 
 /**
@@ -14,28 +14,28 @@ import java.io.Serializable;
  * @date 2018.12.5
  */
 @Data
-@ApiModel(value = "创建机构")
+@Schema(description = "创建机构")
 public class OrgRegisterReqDTO implements Serializable {
 
     private static final long serialVersionUID = -2691405300807660308L;
-    @NotBlank(message = "机构编码" + "{javax.validation.constraints.NotBlank.message}")
+    @NotBlank(message = "机构编码" + "{jakarta.validation.constraints.NotBlank.message}")
     @Pattern(regexp = "[\\w]{1,64}", message = "机构编码只能大小写字母、数字、下杠(_)组合而成,长度不超过64位")
-    @ApiModelProperty(value = "机构编码，自定义机构编码，下级机构必须以上级机构编码为前缀", notes = "机构编码，自定义机构编码，下级机构必须以上级机构编码为前缀")
+    @Schema(description = "机构编码，自定义机构编码，下级机构必须以上级机构编码为前缀")
     private String code;
 
-    @NotBlank(message = "机构名称" + "{javax.validation.constraints.NotBlank.message}")
-    @ApiModelProperty(value = "机构名称", notes = "机构名称")
+    @NotBlank(message = "机构名称" + "{jakarta.validation.constraints.NotBlank.message}")
+    @Schema(description = "机构名称")
     @Pattern(regexp = RegexUtil.SPECIAL, message = "机构名称不能包含特殊字符")
     private String name;
 
-    @ApiModelProperty(value = "机构全名", notes = "机构全名")
+    @Schema(description = "机构全名")
     @Pattern(regexp = RegexUtil.SPECIAL, message = "机构全名不能包含特殊字符")
     private String fullname;
 
-    @ApiModelProperty(value = "机构地址", notes = "机构地址")
+    @Schema(description = "机构地址")
     private String address;
 
-    @ApiModelProperty(value = "机构电话", notes = "机构电话")
+    @Schema(description = "机构电话")
     private String telphone;
 
 }

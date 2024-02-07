@@ -1,7 +1,8 @@
 package top.fosin.anan.platform.modules.role.dto;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -9,8 +10,8 @@ import top.fosin.anan.data.entity.Id;
 import top.fosin.anan.data.prop.ForeignKeyProp;
 import top.fosin.anan.data.valid.group.Update;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 /**
  * 系统角色权限表(anan_role_permission)更新DTO
  *
@@ -20,18 +21,18 @@ import javax.validation.constraints.Positive;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-@ApiModel(value = "系统角色权限表更新DTO", description = "系统角色权限表(anan_role_permission)更新DTO")
+@Schema(description = "系统角色权限表(anan_role_permission)更新DTO")
 public class RolePermissionUpdateDTO extends Id<Long> implements ForeignKeyProp<Long> {
     private static final long serialVersionUID = 175264508207739660L;
 
-    @NotNull(message = "角色序号" + "{javax.validation.constraints.NotNull.message}", groups = Update.class)
-    @Positive(message = "角色序号" + "{javax.validation.constraints.Positive.message}", groups = Update.class)
-    @ApiModelProperty(value = "角色序号", required = true)
+    @NotNull(message = "角色序号" + "{jakarta.validation.constraints.NotNull.message}", groups = Update.class)
+    @Positive(message = "角色序号" + "{jakarta.validation.constraints.Positive.message}", groups = Update.class)
+    @Schema(description = "角色序号")
     private Long roleId;
 
-    @NotNull(message = "权限序号" + "{javax.validation.constraints.NotNull.message}", groups = Update.class)
-    @Positive(message = "权限序号" + "{javax.validation.constraints.Positive.message}", groups = Update.class)
-    @ApiModelProperty(value = "权限序号", required = true)
+    @NotNull(message = "权限序号" + "{jakarta.validation.constraints.NotNull.message}", groups = Update.class)
+    @Positive(message = "权限序号" + "{jakarta.validation.constraints.Positive.message}", groups = Update.class)
+    @Schema(description = "权限序号")
     private Long permissionId;
 
     @Override

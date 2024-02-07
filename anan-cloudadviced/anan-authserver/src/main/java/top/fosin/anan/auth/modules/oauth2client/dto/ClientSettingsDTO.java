@@ -1,36 +1,35 @@
 package top.fosin.anan.auth.modules.oauth2client.dto;
 
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.springframework.security.oauth2.jose.jws.JwsAlgorithm;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 
 @Data
 @EqualsAndHashCode
 @ToString(callSuper = true)
-@ApiModel(value = "OAUTH2客户端设置", description = "OAUTH2客户端设置")
+@Schema(description = "OAUTH2客户端设置")
 public class ClientSettingsDTO {
 
-    @NotNull(message = "需要用户权限确认" + "{javax.validation.constraints.NotNull.message}")
-    @ApiModelProperty(value = "需要用户权限确认", required = true, example = "true")
+    @NotNull(message = "需要用户权限确认" + "{jakarta.validation.constraints.NotNull.message}")
+    @Schema(description = "需要用户权限确认", example = "true")
     private Boolean requireAuthorizationConsent;
 
 
-    @NotNull(message = "需要ProofKey" + "{javax.validation.constraints.NotNull.message}")
-    @ApiModelProperty(value = "需要ProofKey", required = true, example = "true")
+    @NotNull(message = "需要ProofKey" + "{jakarta.validation.constraints.NotNull.message}")
+    @Schema(description = "需要ProofKey", example = "true")
     private Boolean requireProofKey;
 
-    @NotBlank(message = "jwk地址" + "{javax.validation.constraints.NotBlank.message}")
-    @ApiModelProperty(value = "jwk地址", required = true, example = "http://127.0.0.1/jwks")
+    @NotBlank(message = "jwk地址" + "{jakarta.validation.constraints.NotBlank.message}")
+    @Schema(description = "jwk地址", example = "http://127.0.0.1/jwks")
     private String jwkSetUrl;
 
-    @NotNull(message = "ID令牌加密算法" + "{javax.validation.constraints.NotNull.message}")
-    @ApiModelProperty(value = "ID令牌加密算法", required = true, example = "")
+    @NotNull(message = "ID令牌加密算法" + "{jakarta.validation.constraints.NotNull.message}")
+    @Schema(description = "ID令牌加密算法", example = "")
     private JwsAlgorithm tokenEndpointAuthenticationSigningAlgorithm;
 }

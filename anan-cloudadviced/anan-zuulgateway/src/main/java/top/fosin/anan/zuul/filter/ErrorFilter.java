@@ -8,9 +8,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.util.StringUtils;
 
-import javax.servlet.RequestDispatcher;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 /**
  * @author fosin
@@ -35,14 +35,14 @@ public class ErrorFilter extends SendErrorFilter {
             Throwable throwable = getRealCause(ctx.getThrowable());
             log.error("", throwable);
             HttpServletRequest request = ctx.getRequest();
-//            request.setAttribute("javax.servlet.error.status_code", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            request.setAttribute("javax.servlet.error.status_code", ctx.getResponseStatusCode());
+//            request.setAttribute("jakarta.servlet.error.status_code", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            request.setAttribute("jakarta.servlet.error.status_code", ctx.getResponseStatusCode());
 
 //            log.warn("Error during filtering", throwable);
-            request.setAttribute("javax.servlet.error.exception", throwable);
+            request.setAttribute("jakarta.servlet.error.exception", throwable);
 
             if (StringUtils.hasText(throwable.getMessage())) {
-                request.setAttribute("javax.servlet.error.message", throwable.getMessage());
+                request.setAttribute("jakarta.servlet.error.message", throwable.getMessage());
             }
 
             RequestDispatcher dispatcher = request.getRequestDispatcher(

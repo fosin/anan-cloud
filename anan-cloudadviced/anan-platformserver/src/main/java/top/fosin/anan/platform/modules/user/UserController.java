@@ -1,8 +1,9 @@
 package top.fosin.anan.platform.modules.user;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.AllArgsConstructor;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
@@ -30,7 +31,7 @@ import top.fosin.anan.platform.modules.user.vo.UserListVO;
 import top.fosin.anan.platform.modules.user.vo.UserPageVO;
 import top.fosin.anan.platform.modules.user.vo.UserVO;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 
 /**
  * 用户控制器
@@ -39,7 +40,7 @@ import javax.validation.constraints.NotNull;
  */
 @RestController
 @RequestMapping(value = PathPrefixConstant.USER, params = PathPrefixConstant.DEFAULT_VERSION_PARAM)
-@Api(value = PathPrefixConstant.USER, tags = "用户管理")
+@Tag(name = "用户管理", description = PathPrefixConstant.USER)
 @AllArgsConstructor
 public class UserController extends BaseController
         implements ICreateController<UserCreateDTO, Long>,
@@ -50,18 +51,17 @@ public class UserController extends BaseController
 
     @Override
     @PostMapping(value = PathConstant.PATH_PAGE)
-    @ApiOperation(value = "根据分页条件查询分页数据")
-    @ApiImplicitParam(name = "pageQuery", value = "分页条件实体类", paramType = "body", required = true, dataTypeClass = PageQuery.class)
+    @Operation(summary = "根据分页条件查询分页数据", description = "根据分页条件查询分页数据")
+    @Parameter(name = "pageQuery", description = "分页条件实体类", in = ParameterIn.DEFAULT, required = true)
     public PageResult<UserPageVO> findPage(PageQuery<UserQuery> pageQuery) {
         PageResult<UserPageVO> page = IRetrieveController.super.findPage(pageQuery);
         page.getData().forEach(user -> user.setOrganizName(user.getOrganizId() + ""));
         return page;
     }
 
-    @ApiOperation("修改用户帐号密码")
+    @Operation(summary = "修改用户帐号密码", description = "修改用户帐号密码")
     @PostMapping("/changePassword")
-    @ApiImplicitParam(name = "passReq", value = "修改密码请求参数",
-            required = true, dataTypeClass = UserChangePassAesReq.class, paramType = "body")
+    @Parameter(name = "passReq", description = "修改密码请求参数", in = ParameterIn.DEFAULT, required = true)
     public SingleResult<String> changePassword(@NotNull @Validated @RequestBody UserChangePassAesReq passReq) {
         String password = passReq.getA();
         String confirmpassword1 = passReq.getB();
@@ -92,37 +92,33 @@ public class UserController extends BaseController
         return ResultUtils.success("Success");
     }
 
-    @ApiOperation("修改用户帐号密码")
+    @Operation(summary = "修改用户帐号密码", description = "修改用户帐号密码")
     @PostMapping("/changePassword/real")
-    @ApiImplicitParam(name = "passReq", value = "修改密码请求参数",
-            required = true, dataTypeClass = UserChangePassReq.class, paramType = "body")
+    @Parameter(name = "passReq", description = "修改密码请求参数", in = ParameterIn.DEFAULT, required = true)
     public SingleResult<String> changePassword2(@NotNull @Validated @RequestBody UserChangePassReq passReq) {
         userService.changePassword(passReq.getId(), passReq.getPassword(), passReq.getConfirmPassword1(), passReq.getConfirmPassword2());
         return ResultUtils.success("Success");
     }
 
 
-    @ApiOperation(value = "根据用户ID重置用户密码", notes = "重置后的密码或是固定密码或是随机密码，具体由机构参数UserDefaultPasswordStrategy决定")
-    @ApiImplicitParam(name = IdProp.ID_NAME, value = "用户ID,取值于User.id",
-            required = true, dataTypeClass = Long.class, paramType = "path")
+    @Operation(summary = "根据用户ID重置用户密码", description = "重置后的密码或是固定密码或是随机密码，具体由机构参数UserDefaultPasswordStrategy决定")
+    @Parameter(name = IdProp.ID_NAME, description = "用户ID,取值于User.id", in = ParameterIn.DEFAULT, required = true)
     @GetMapping("/resetPassword" + PathConstant.PATH_ID)
     public SingleResult<String> resetPassword(@PathVariable(IdProp.ID_NAME) Long id) {
         return ResultUtils.success(userService.resetPassword(id));
     }
 
     @GetMapping({"/list/organizId/{organizId}/{status}"})
-    @ApiOperation("根据机构ID查询该机构及子机构的所有用户")
-    @ApiImplicitParam(name = FieldConstant.ORGANIZ_ID, value = "机构序号",
-            required = true, dataTypeClass = Long.class, paramType = "path")
+    @Operation(summary = "根据机构ID查询该机构及子机构的所有用户", description = "根据机构ID查询该机构及子机构的所有用户")
+    @Parameter(name = FieldConstant.ORGANIZ_ID, description = "机构序号", in = ParameterIn.DEFAULT, required = true)
     public MultResult<UserDTO> listByOrganizId(@PathVariable(FieldConstant.ORGANIZ_ID) Long organizId,
                                                @PathVariable("status") Byte status) {
         return ResultUtils.success(userService.listByOrganizId(organizId, status));
     }
 
     @GetMapping({"/list/topId/{topId}/{status}"})
-    @ApiOperation("根据顶级机构ID查询其下所有用户")
-    @ApiImplicitParam(name = FieldConstant.TOP_ID, value = "顶级机构ID，传0表示默认查询当前用户的顶级机构序号",
-            required = true, dataTypeClass = Long.class, paramType = "path")
+    @Operation(summary = "根据顶级机构ID查询其下所有用户", description = "根据顶级机构ID查询其下所有用户")
+    @Parameter(name = FieldConstant.TOP_ID, description = "顶级机构ID，传0表示默认查询当前用户的顶级机构序号", in = ParameterIn.DEFAULT, required = true)
     public MultResult<UserDTO> listAllChildByTopId(@PathVariable(FieldConstant.TOP_ID) Long topId,
                                                    @PathVariable("status") Byte status) {
         return ResultUtils.success(userService.listAllChildByTopId(topId, status));

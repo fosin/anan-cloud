@@ -94,7 +94,7 @@ services:
 
   anan-authserver:
     network_mode: host
-    image: registry.cn-hongkong.aliyuncs.com/fosin/anan-authserver:4.0.0-SNAPSHOT
+    image: registry.cn-hongkong.aliyuncs.com/fosin/anan-authserver:5.0.0-SNAPSHOT
 #    entrypoint: 'sh /anan/cmd/wait-for.sh anan-platformserver:6150 -t 3600 -- /anan/cmd/entrypoint.sh'
     container_name: anan-authserver
     hostname: anan-authserver
@@ -118,7 +118,7 @@ services:
           memory: 512M
   anan-cloudgateway:
     network_mode: host
-    image: registry.cn-hongkong.aliyuncs.com/fosin/anan-cloudgateway:4.0.0-SNAPSHOT
+    image: registry.cn-hongkong.aliyuncs.com/fosin/anan-cloudgateway:5.0.0-SNAPSHOT
 #    entrypoint: 'sh /anan/cmd/wait-for.sh anan-authserver:6140 -t 3600 -- /anan/cmd/entrypoint.sh'
     container_name: anan-cloudgateway
     hostname: anan-cloudgateway
@@ -140,7 +140,7 @@ services:
           memory: 512M
   anan-platformserver:
     network_mode: host
-    image: registry.cn-hongkong.aliyuncs.com/fosin/anan-platformserver:4.0.0-SNAPSHOT
+    image: registry.cn-hongkong.aliyuncs.com/fosin/anan-platformserver:5.0.0-SNAPSHOT
     container_name: anan-platformserver
     hostname: anan-platformserver
     restart: always
@@ -164,7 +164,7 @@ services:
           memory: 550M
   anan-sbaserver:
     network_mode: host
-    image: registry.cn-hongkong.aliyuncs.com/fosin/anan-sbaserver:4.0.0-SNAPSHOT
+    image: registry.cn-hongkong.aliyuncs.com/fosin/anan-sbaserver:5.0.0-SNAPSHOT
     container_name: anan-sbaserver
     hostname: anan-sbaserver
     restart: always
@@ -186,7 +186,7 @@ services:
           memory: 512M
   anan-eurekaserver:
     network_mode: host
-    image: registry.cn-hongkong.aliyuncs.com/fosin/anan-eurekaserver:4.0.0-SNAPSHOT
+    image: registry.cn-hongkong.aliyuncs.com/fosin/anan-eurekaserver:5.0.0-SNAPSHOT
     container_name: anan-eurekaserver
     hostname: anan-eurekaserver
     restart: always
@@ -204,7 +204,7 @@ services:
           memory: 512M
   anan-configserver:
     network_mode: host
-    image: registry.cn-hongkong.aliyuncs.com/fosin/anan-configserver:4.0.0-SNAPSHOT
+    image: registry.cn-hongkong.aliyuncs.com/fosin/anan-configserver:5.0.0-SNAPSHOT
     entrypoint: 'sh /anan/cmd/wait-for.sh anan-eurekaserver:6100 -t 3600 -- /anan/cmd/entrypoint.sh'
     container_name: anan-configserver
     hostname: anan-configserver
@@ -387,8 +387,8 @@ services:
     container_name: alertmanager
     hostname: alertmanager
     restart: always
-    ports:
-      - 9093:9093
+#    ports:
+#      - 9093:9093
     environment:
       - SLACK_URL=${SLACK_URL:-https://hooks.slack.com/services/TOKEN}
       - SLACK_CHANNEL=${SLACK_CHANNEL:-devops-alerts}
@@ -468,3 +468,16 @@ services:
       - RILOGLEVEL="WARNING"
     volumes:
       - /data/redisinsight/:/db
+
+  jenkins:
+#    network_mode: host
+    container_name: jenkins
+    image: jenkinsci/blueocean
+    environment:
+      - TZ=Asia/Shanghai
+    volumes:
+      - /data/jenkins:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - "8008:8080"
+      - "50000:50000"

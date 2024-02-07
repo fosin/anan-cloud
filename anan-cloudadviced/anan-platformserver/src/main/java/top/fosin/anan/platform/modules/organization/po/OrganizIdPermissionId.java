@@ -1,14 +1,15 @@
 package top.fosin.anan.platform.modules.organization.po;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import top.fosin.anan.platform.modules.permission.po.PermissionId;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.MappedSuperclass;
+import jakarta.persistence.Basic;
+import jakarta.persistence.Column;
+import jakarta.persistence.MappedSuperclass;
 import java.io.Serializable;
 
 /**
@@ -27,7 +28,7 @@ public class OrganizIdPermissionId<ID extends Serializable> extends PermissionId
 
     @Column(name = "organiz_id", nullable = false)
     @Basic
-    @ApiModelProperty(value = "机构序号")
+    @Schema(description = "机构序号")
     private ID organizId;
 
 }

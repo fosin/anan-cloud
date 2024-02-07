@@ -2,7 +2,6 @@ package top.fosin.anan.cloudresource.grpc.service;
 
 import lombok.extern.slf4j.Slf4j;
 import net.devh.boot.grpc.client.inject.GrpcClient;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
@@ -24,7 +23,6 @@ public class DicDetailGrpcServiceImpl implements DicDetailRpcService, Object2Str
     @GrpcClient(ServiceConstant.ANAN_PLATFORMSERVER)
     private DicDetailServiceGrpc.DicDetailServiceBlockingStub blockingStubService;
 
-    @NotNull
     private DictionaryDetailRespDTO toRespDto(DicDetailResp dicDetailResp) {
         DictionaryDetailRespDTO dto = new DictionaryDetailRespDTO();
         dto.setId(dicDetailResp.getId());

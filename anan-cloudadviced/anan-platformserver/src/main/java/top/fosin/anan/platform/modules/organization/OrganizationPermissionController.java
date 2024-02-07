@@ -1,6 +1,6 @@
 package top.fosin.anan.platform.modules.organization;
 
-import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import top.fosin.anan.cloudresource.constant.PathPrefixConstant;
@@ -19,7 +19,7 @@ import top.fosin.anan.platform.modules.organization.vo.OrganizationPermissionVO;
  */
 @RestController
 @RequestMapping(value = PathPrefixConstant.ORGANIZATION_PERMISSION, params = PathPrefixConstant.DEFAULT_VERSION_PARAM)
-@Api(value = PathPrefixConstant.ORGANIZATION_PERMISSION, tags = "机构权限管理")
+@Tag(name = "机构权限管理", description = PathPrefixConstant.ORGANIZATION_PERMISSION)
 public class OrganizationPermissionController implements
         IUpdateBatchController<OrganizationPermissionUpdateDTO, Long>,
         IRetrieveBatchController<OrganizationPermissionVO, Long> {

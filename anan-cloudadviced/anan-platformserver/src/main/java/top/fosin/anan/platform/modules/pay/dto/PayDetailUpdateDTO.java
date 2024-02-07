@@ -1,7 +1,8 @@
 package top.fosin.anan.platform.modules.pay.dto;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -9,9 +10,9 @@ import org.springframework.format.annotation.DateTimeFormat;
 import top.fosin.anan.core.util.DateTimeUtil;
 import top.fosin.anan.data.entity.Id;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.PositiveOrZero;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
 import java.util.Date;
 import top.fosin.anan.data.valid.group.Update;
 /**
@@ -23,22 +24,22 @@ import top.fosin.anan.data.valid.group.Update;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-@ApiModel(value = "系统支付明细表更新DTO", description = "系统支付明细表(anan_pay_detail)更新DTO")
+@Schema(description = "系统支付明细表(anan_pay_detail)更新DTO")
 public class PayDetailUpdateDTO extends Id<Long> {
     private static final long serialVersionUID = 697831036987222834L;
 
-    @NotNull(message = "支付序号" + "{javax.validation.constraints.NotNull.message}", groups = Update.class)
-    @PositiveOrZero(message = "使用状态" + "{javax.validation.constraints.Positive.message}", groups = Update.class)
-    @ApiModelProperty(value = "支付序号", required = true)
+    @NotNull(message = "支付序号" + "{jakarta.validation.constraints.NotNull.message}", groups = Update.class)
+    @PositiveOrZero(message = "使用状态" + "{jakarta.validation.constraints.Positive.message}", groups = Update.class)
+    @Schema(description = "支付序号")
     private Long payId;
 
-    @NotNull(message = "付款方式" + "{javax.validation.constraints.NotNull.message}", groups = Update.class)
-    @PositiveOrZero(message = "使用状态" + "{javax.validation.constraints.Positive.message}", groups = Update.class)
-    @ApiModelProperty(value = "付款方式", required = true)
+    @NotNull(message = "付款方式" + "{jakarta.validation.constraints.NotNull.message}", groups = Update.class)
+    @PositiveOrZero(message = "使用状态" + "{jakarta.validation.constraints.Positive.message}", groups = Update.class)
+    @Schema(description = "付款方式")
     private Integer payway;
 
-    @NotNull(message = "付款金额" + "{javax.validation.constraints.NotNull.message}", groups = Update.class)
-    @ApiModelProperty(value = "付款金额", required = true)
+    @NotNull(message = "付款金额" + "{jakarta.validation.constraints.NotNull.message}", groups = Update.class)
+    @Schema(description = "付款金额")
     private Double money;
 
 }

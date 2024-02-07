@@ -1,8 +1,9 @@
 package top.fosin.anan.platform.modules.organization.vo;
 
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -16,13 +17,13 @@ import top.fosin.anan.data.entity.Id;
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-@ApiModel(value = "系统机构权限表集合VO", description = "系统机构权限表(anan_organization_permission)集合VO")
+@Schema(description = "系统机构权限表(anan_organization_permission)集合VO")
 public class OrganizationPermissionListVO extends Id<Long> {
     private static final long serialVersionUID = 595146785708366567L;
-    @ApiModelProperty(value = "机构ID")
+    @Schema(description = "机构ID")
     private Long organizId;
 
-    @ApiModelProperty(value = "权限ID")
+    @Schema(description = "权限ID")
     private Long permissionId;
 
 }

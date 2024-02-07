@@ -1,7 +1,8 @@
 package top.fosin.anan.platform.modules.role.dto;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import top.fosin.anan.data.entity.req.IdLogiSortOrganizIdQuery;
@@ -10,8 +11,8 @@ import top.fosin.anan.data.module.SortRule;
 import top.fosin.anan.data.prop.ForeignKeyProp;
 import top.fosin.anan.data.valid.group.Update;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 /**
  * 系统角色用户表(AnanUserRole)请求DTO
  *
@@ -21,18 +22,18 @@ import javax.validation.constraints.Positive;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-@ApiModel(value = "角色用户表请求DTO", description = "角色用户的请求DTO")
+@Schema(description = "角色用户的请求DTO")
 public class RoleUserUpdateDTO extends IdLogiSortOrganizIdQuery<LogiQueryRule, SortRule, Long> implements ForeignKeyProp<Long> {
     private static final long serialVersionUID = 818450290607468187L;
 
-    @NotNull(message = "用户序号" + "{javax.validation.constraints.NotNull.message}", groups = Update.class)
-    @Positive(message = "用户序号" + "{javax.validation.constraints.Positive.message}", groups = Update.class)
-    @ApiModelProperty(value = "用户ID,创建和更新时必填")
+    @NotNull(message = "用户序号" + "{jakarta.validation.constraints.NotNull.message}", groups = Update.class)
+    @Positive(message = "用户序号" + "{jakarta.validation.constraints.Positive.message}", groups = Update.class)
+    @Schema(description = "用户ID,创建和更新时必填")
     private Long userId;
 
-    @NotNull(message = "角色序号" + "{javax.validation.constraints.NotNull.message}", groups = Update.class)
-    @Positive(message = "角色序号" + "{javax.validation.constraints.Positive.message}", groups = Update.class)
-    @ApiModelProperty(value = "角色ID,创建和更新时必填")
+    @NotNull(message = "角色序号" + "{jakarta.validation.constraints.NotNull.message}", groups = Update.class)
+    @Positive(message = "角色序号" + "{jakarta.validation.constraints.Positive.message}", groups = Update.class)
+    @Schema(description = "角色ID,创建和更新时必填")
     private Long roleId;
     
     @Override

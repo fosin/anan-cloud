@@ -1,8 +1,9 @@
 package top.fosin.anan.platform.modules.permission;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.web.bind.annotation.*;
 import top.fosin.anan.cloudresource.constant.FieldConstant;
 import top.fosin.anan.cloudresource.constant.PathPrefixConstant;
@@ -25,7 +26,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping(value = PathPrefixConstant.PERMISSION, params = PathPrefixConstant.DEFAULT_VERSION_PARAM)
-@Api(value = PathPrefixConstant.PERMISSION, tags = "权限管理")
+@Tag(name = "权限管理", description = PathPrefixConstant.PERMISSION)
 public class PermissionController implements ICreateController<PermissionCreateDTO, Long>,
         IFindOneByIdController<PermissionVO, Long>,
         IUpdateController<PermissionUpdateDTO, Long>,
@@ -33,22 +34,21 @@ public class PermissionController implements ICreateController<PermissionCreateD
         IRetrieveTreeController<PermissionQuery, PermissionTreeDTO, Long> {
 
     private final PermissionService permissionService;
+
     public PermissionController(PermissionService permissionService) {
         this.permissionService = permissionService;
     }
 
     @GetMapping(PathSuffixConstant.SERVICE_CODE_VARIBALE)
-    @ApiImplicitParam(name = FieldConstant.SERVICE_CODE, value = "服务标识，等同于anan_service.code",
-            required = true, dataTypeClass = String.class, paramType = "path")
-    @ApiOperation(value = "查询服务对应权限", notes = "根据服务标识(anan_service.code)查询其权限列表")
+    @Parameter(name = FieldConstant.SERVICE_CODE, description = "服务标识，等同于anan_service.code", in = ParameterIn.DEFAULT, required = true)
+    @Operation(summary = "查询服务对应权限", description = "根据服务标识(anan_service.code)查询其权限列表")
     public MultResult<PermissionDTO> findByServiceCode(@PathVariable(FieldConstant.SERVICE_CODE) String serviceCode) {
         return ResultUtils.success(permissionService.findByServiceCode(serviceCode));
     }
 
     @PostMapping(PathSuffixConstant.SERVICE_CODES)
-    @ApiOperation(value = "查询多个服务对应权限", notes = "根据服务标识(anan_service.code)查询其权限列表")
-    @ApiImplicitParam(name = "serviceCodes", value = "服务标识，等同于anan_service.code",
-            required = true, dataTypeClass = List.class, paramType = "body")
+    @Operation(summary = "查询多个服务对应权限", description = "根据服务标识(anan_service.code)查询其权限列表")
+    @Parameter(name = "serviceCodes", description = "服务标识，等同于anan_service.code", in = ParameterIn.DEFAULT, required = true)
     public MultResult<PermissionDTO> findByServiceCodes(@RequestBody List<String> serviceCodes) {
         return ResultUtils.success(permissionService.findByServiceCodes(serviceCodes));
     }

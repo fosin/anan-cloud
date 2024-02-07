@@ -1,7 +1,8 @@
 package top.fosin.anan.platform.modules.role.vo;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -9,7 +10,7 @@ import top.fosin.anan.cloudresource.grpc.service.UserGrpcServiceImpl;
 import top.fosin.anan.data.converter.translate.Translate2String;
 import top.fosin.anan.data.entity.Id;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 
 /**
  * 系统用户角色表(AnanUserRole)响应DTO
@@ -21,22 +22,22 @@ import javax.validation.constraints.NotNull;
 @Data
 @ToString
 @EqualsAndHashCode(callSuper = true)
-@ApiModel(value = "用户角色表响应DTO", description = "用户角色的响应DTO")
+@Schema(description = "用户角色的响应DTO")
 public class RoleUserVO extends Id<Long> {
     private static final long serialVersionUID = -30073122110919311L;
 
-    @ApiModelProperty(value = "机构ID", required = true, example = "Long")
-    @NotNull(message = "机构ID" + "{javax.validation.constraints.NotNull.message}")
+    @Schema(description = "机构ID", example = "Long")
+    @NotNull(message = "机构ID" + "{jakarta.validation.constraints.NotNull.message}")
     private Long organizId;
 
-    @ApiModelProperty(value = "用户序号", example = "Long")
+    @Schema(description = "用户序号", example = "Long")
     private Long userId;
 
-    @ApiModelProperty(value = "用户姓名", example = "String")
+    @Schema(description = "用户姓名", example = "String")
     @Translate2String(service = UserGrpcServiceImpl.class, dicId = "")
     private String username;
 
-    @ApiModelProperty(value = "角色序号", example = "Long")
+    @Schema(description = "角色序号", example = "Long")
     private Long roleId;
 
 }

@@ -1,8 +1,9 @@
 package top.fosin.anan.platform.modules.pay.vo;
 
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+
 
 import java.io.Serializable;
 
@@ -25,38 +26,38 @@ import top.fosin.anan.data.entity.Id;
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-@ApiModel(value = "系统支付订单表单体VO", description = "系统支付订单表(anan_pay_order)单体VO")
+@Schema(description = "系统支付订单表(anan_pay_order)单体VO")
 public class PayOrderVO extends Id<Long> {
     private static final long serialVersionUID = -93791012114212324L;
-    @ApiModelProperty(value = "订单机构")
+    @Schema(description = "订单机构")
     private Long organizId;
 
-    @ApiModelProperty(value = "订单用户")
+    @Schema(description = "订单用户")
     private Long userId;
 
-    @ApiModelProperty(value = "版本ID")
+    @Schema(description = "版本ID")
     private Long versionId;
 
-    @ApiModelProperty(value = "版本金额")
+    @Schema(description = "版本金额")
     private Double money;
 
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
-    @ApiModelProperty(value = "订单日期")
+    @Schema(description = "订单日期")
     private Date orderTime;
 
-    @ApiModelProperty(value = "订单状态：0=新建，1=支付，2=取消，3=作废")
+    @Schema(description = "订单状态：0=新建，1=支付，2=取消，3=作废")
     private Byte status;
 
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
-    @ApiModelProperty(value = "支付日期")
+    @Schema(description = "支付日期")
     private Date payTime;
 
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
-    @ApiModelProperty(value = "取消日期")
+    @Schema(description = "取消日期")
     private Date cancleTime;
 
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
-    @ApiModelProperty(value = "作废日期")
+    @Schema(description = "作废日期")
     private Date invalidTime;
 
 }

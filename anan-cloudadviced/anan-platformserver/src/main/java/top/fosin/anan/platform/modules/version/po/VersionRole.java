@@ -1,16 +1,17 @@
 package top.fosin.anan.platform.modules.version.po;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.DynamicUpdate;
 import top.fosin.anan.jpa.po.IdCreateUpdatePO;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import jakarta.persistence.Basic;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 
 /**
  * 系统版本角色表(AnanVersionRole)实体类
@@ -24,32 +25,32 @@ import javax.persistence.Table;
 @EqualsAndHashCode(callSuper = true)
 @DynamicUpdate
 @Table(name = "anan_version_role")
-@ApiModel(value = "版本角色表实体类", description = "版本角色的实体类")
+@Schema(description = "版本角色的实体类")
 public class VersionRole extends IdCreateUpdatePO<Long> {
   private static final long serialVersionUID = 49090001033551923L;
 
   @Basic
-  @ApiModelProperty(value = "版本序号", required = true)
+  @Schema(description = "版本序号")
   @Column(name = "version_id", nullable = false)
   private Long versionId;
 
   @Basic
-  @ApiModelProperty(value = "角色名称", required = true)
+  @Schema(description = "角色名称")
   @Column(name = "name", nullable = false, length = 64)
   private String name;
 
   @Basic
-  @ApiModelProperty(value = "角色标识", required = true)
+  @Schema(description = "角色标识")
   @Column(name = "value", nullable = false, length = 64)
   private String value;
 
   @Basic
-  @ApiModelProperty(value = "角色说明")
+  @Schema(description = "角色说明")
   @Column(name = "tips", length = 255)
   private String tips;
 
   @Basic
-  @ApiModelProperty(value = "使用状态：0=启用，1=禁用，具体取值于字典表anan_dictionary.id=11", required = true)
+  @Schema(description = "使用状态：0=启用，1=禁用，具体取值于字典表anan_dictionary.id=11")
   @Column(name = "status", nullable = false)
   private Byte status;
 

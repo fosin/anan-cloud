@@ -42,7 +42,7 @@ import top.fosin.anan.platform.modules.user.query.UserQuery;
 import top.fosin.anan.platform.modules.user.service.inter.UserService;
 import top.fosin.anan.redis.cache.AnanCacheManger;
 
-import javax.persistence.criteria.*;
+import jakarta.persistence.criteria.*;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;

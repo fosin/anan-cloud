@@ -1,6 +1,6 @@
 package top.fosin.anan.platform.modules.dictionary;
 
-import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import top.fosin.anan.cloudresource.constant.PathPrefixConstant;
@@ -23,7 +23,7 @@ import top.fosin.anan.platform.modules.dictionary.vo.DictionaryVO;
  */
 @RestController
 @RequestMapping(value = PathPrefixConstant.DICTIONARY, params = PathPrefixConstant.DEFAULT_VERSION_PARAM)
-@Api(value = PathPrefixConstant.DICTIONARY, tags = "通用字典管理")
+@Tag(name = "通用字典管理", description = PathPrefixConstant.DICTIONARY)
 public class DictionaryController
         implements ICreateController<DictionaryCreateDTO, Long>,
         IUpdateController<DictionaryUpdateDTO, Long>,

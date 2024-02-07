@@ -1,13 +1,14 @@
 package top.fosin.anan.platform.modules.pay.query;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import org.hibernate.annotations.DynamicUpdate;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import java.io.Serializable;
 
 import lombok.Data;
@@ -30,17 +31,17 @@ import java.util.Date;
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-@ApiModel(value = "系统支付明细表通用查询DTO", description = "系统支付明细表(anan_pay_detail)通用查询DTO")
+@Schema(description = "系统支付明细表(anan_pay_detail)通用查询DTO")
 public class PayDetailQuery extends LogiSortQuery<LogiQueryRule, SortRule, Long> {
     private static final long serialVersionUID = 750228515695366443L;
 
-    @ApiModelProperty(value = "支付ID", example = "Long")
+    @Schema(description = "支付ID", example = "Long")
     private Long payId;
 
-    @ApiModelProperty(value = "付款方式", example = "Integer")
+    @Schema(description = "付款方式", example = "Integer")
     private Integer payway;
 
-    @ApiModelProperty(value = "付款金额", example = "Double")
+    @Schema(description = "付款金额", example = "Double")
     private Double money;
 
 }

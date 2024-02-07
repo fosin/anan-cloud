@@ -1,8 +1,9 @@
 package top.fosin.anan.platform.modules.international.vo;
 
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -23,39 +24,39 @@ import java.util.Date;
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-@ApiModel(value = "国际化语言集集合VO", description = "国际化语言集(anan_international)集合VO")
+@Schema(description = "国际化语言集(anan_international)集合VO")
 public class InternationalPageVO extends Id<Long> {
     private static final long serialVersionUID = 871388669133635610L;
-    @ApiModelProperty(value = "标识")
+    @Schema(description = "标识")
     private String code;
 
-    @ApiModelProperty(value = "名称")
+    @Schema(description = "名称")
     private String name;
 
-    @ApiModelProperty(value = "图标")
+    @Schema(description = "图标")
     private String icon;
 
-    @ApiModelProperty(value = "状态：0=启用，1=禁用")
+    @Schema(description = "状态：0=启用，1=禁用")
     @Translate2String(service = DicDetailGrpcServiceImpl.class, dicId = "11")
     private Byte status;
 
-    @ApiModelProperty(value = "默认标志")
+    @Schema(description = "默认标志")
     private Integer defaultFlag;
 
     @Translate2String(service = UserGrpcServiceImpl.class, dicId = "")
-    @ApiModelProperty(value = "创建人")
+    @Schema(description = "创建人")
     private Long createBy;
 
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
-    @ApiModelProperty(value = "创建时间")
+    @Schema(description = "创建时间")
     private Date createTime;
 
     @Translate2String(service = UserGrpcServiceImpl.class, dicId = "")
-    @ApiModelProperty(value = "修改人")
+    @Schema(description = "修改人")
     private Long updateBy;
 
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
-    @ApiModelProperty(value = "修改时间")
+    @Schema(description = "修改时间")
     private Date updateTime;
 
 }

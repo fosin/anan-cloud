@@ -1,6 +1,6 @@
 package top.fosin.anan.auth.modules.oauth2client;
 
-import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import top.fosin.anan.auth.modules.oauth2client.dto.Oauth2RegisteredClientCreateDTO;
@@ -21,7 +21,7 @@ import top.fosin.anan.data.controller.*;
  */
 @RestController
 @RequestMapping(value = PathPrefixConstant.OAUTH2_CLIENT, params = PathPrefixConstant.DEFAULT_VERSION_PARAM)
-@Api(value = PathPrefixConstant.OAUTH2_CLIENT, tags = "Spring OAuth2.1客户端授权管理")
+@Tag(name = "Spring OAuth2.1客户端授权管理", description = PathPrefixConstant.OAUTH2_CLIENT)
 public class Oauth2RegisteredClientController
         implements ICreateController<Oauth2RegisteredClientCreateDTO, String>,
         IFindOneByIdController<Oauth2RegisteredClientVO, String>,

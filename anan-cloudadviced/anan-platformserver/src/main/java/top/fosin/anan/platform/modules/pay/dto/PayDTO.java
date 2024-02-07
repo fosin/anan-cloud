@@ -1,7 +1,8 @@
 package top.fosin.anan.platform.modules.pay.dto;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -21,41 +22,41 @@ import java.util.Date;
 @Data
 @ToString
 @EqualsAndHashCode(callSuper = true)
-@ApiModel(value = "支付表响应DTO", description = "支付的响应DTO")
+@Schema(description = "支付的响应DTO")
 public class PayDTO extends Id<Long> {
     private static final long serialVersionUID = 822309690652216835L;
-    @ApiModelProperty(value = "付款机构", example = "Long")
+    @Schema(description = "付款机构", example = "Long")
     private Long organizId;
 
-    @ApiModelProperty(value = "付款用户", example = "Long")
+    @Schema(description = "付款用户", example = "Long")
     private Long userId;
 
-    @ApiModelProperty(value = "订单序号", example = "Long")
+    @Schema(description = "订单序号", example = "Long")
     private Long orderId;
 
-    @ApiModelProperty(value = "发票序号", example = "Long")
+    @Schema(description = "发票序号", example = "Long")
     private Long invoiceId;
 
-    @ApiModelProperty(value = "交易类型：0=正交易 1：负交易", example = "Integer")
+    @Schema(description = "交易类型：0=正交易 1：负交易", example = "Integer")
     private Integer payType;
 
-    @ApiModelProperty(value = "应收金额", example = "Double")
+    @Schema(description = "应收金额", example = "Double")
     private Double totalMoney;
 
-    @ApiModelProperty(value = "支付金额", example = "Double")
+    @Schema(description = "支付金额", example = "Double")
     private Double payMoney;
 
-    @ApiModelProperty(value = "优惠金额", example = "Double")
+    @Schema(description = "优惠金额", example = "Double")
     private Double discountMonery;
 
-    @ApiModelProperty(value = "待收金额", example = "Double")
+    @Schema(description = "待收金额", example = "Double")
     private Double uncollectMoney;
 
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
-    @ApiModelProperty(value = "付款时间", example = DateTimeUtil.DATETIME_PATTERN)
+    @Schema(description = "付款时间", example = DateTimeUtil.DATETIME_PATTERN)
     private Date payTime;
 
-    @ApiModelProperty(value = "付款标志：0=未付款，1=分期，2=付全款", example = "Integer")
+    @Schema(description = "付款标志：0=未付款，1=分期，2=付全款", example = "Integer")
     private Integer payFlag;
 
 }

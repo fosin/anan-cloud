@@ -1,6 +1,6 @@
 package top.fosin.anan.platform.modules.user;
 
-import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import top.fosin.anan.cloudresource.constant.PathPrefixConstant;
@@ -20,7 +20,7 @@ import top.fosin.anan.platform.modules.user.vo.UserPermissionVO;
  */
 @RestController
 @RequestMapping(value = PathPrefixConstant.USER_PERMISSION, params = PathPrefixConstant.DEFAULT_VERSION_PARAM)
-@Api(value = PathPrefixConstant.USER_PERMISSION, tags = "用户权限管理")
+@Tag(name = "用户权限管理", description = PathPrefixConstant.USER_PERMISSION)
 public class UserPermissionController
         implements IUpdateBatchController<UserPermissionUpdateDTO, Long>,
         IListByEntityController<UserPermissionQuery, UserPermissionVO, Long> {

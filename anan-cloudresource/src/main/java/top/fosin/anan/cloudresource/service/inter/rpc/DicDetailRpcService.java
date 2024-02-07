@@ -3,7 +3,7 @@ package top.fosin.anan.cloudresource.service.inter.rpc;
 
 import top.fosin.anan.cloudresource.entity.res.DictionaryDetailRespDTO;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 import java.util.List;
 
 /**

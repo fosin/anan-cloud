@@ -1,6 +1,6 @@
 package top.fosin.anan.platform.modules.role;
 
-import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import top.fosin.anan.cloudresource.constant.PathPrefixConstant;
@@ -19,7 +19,7 @@ import top.fosin.anan.platform.modules.role.vo.RolePermissionVO;
  */
 @RestController
 @RequestMapping(value = PathPrefixConstant.ROLE_PERMISSION, params = PathPrefixConstant.DEFAULT_VERSION_PARAM)
-@Api(value = PathPrefixConstant.ROLE_PERMISSION, tags = "角色权限管理")
+@Tag(name = "角色权限管理", description = PathPrefixConstant.ROLE_PERMISSION)
 public class RolePermissionController implements
         IUpdateBatchController<RolePermissionUpdateDTO, Long>,
         IRetrieveBatchController<RolePermissionVO, Long> {

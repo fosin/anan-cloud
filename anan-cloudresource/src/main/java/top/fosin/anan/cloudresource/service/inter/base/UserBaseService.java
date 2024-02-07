@@ -4,8 +4,8 @@ package top.fosin.anan.cloudresource.service.inter.base;
 import org.springframework.validation.annotation.Validated;
 import top.fosin.anan.cloudresource.entity.res.UserDTO;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import java.util.List;
 
 /**

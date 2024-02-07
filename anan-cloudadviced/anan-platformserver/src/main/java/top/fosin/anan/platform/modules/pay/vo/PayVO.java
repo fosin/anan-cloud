@@ -1,8 +1,9 @@
 package top.fosin.anan.platform.modules.pay.vo;
 
                                                                                                                                                                                                             
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import java.io.Serializable;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -20,41 +21,41 @@ import top.fosin.anan.data.entity.Id;
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-@ApiModel(value = "系统支付表单体VO", description = "系统支付表(anan_pay)单体VO")
+@Schema(description = "系统支付表(anan_pay)单体VO")
 public class PayVO extends Id<Long> {
     private static final long serialVersionUID = 522121604496522742L;
-    @ApiModelProperty(value = "付款机构")
+    @Schema(description = "付款机构")
     private Long organizId;
 
-    @ApiModelProperty(value = "付款用户")
+    @Schema(description = "付款用户")
     private Long userId;
 
-    @ApiModelProperty(value = "订单ID")
+    @Schema(description = "订单ID")
     private Long orderId;
 
-    @ApiModelProperty(value = "发票ID")
+    @Schema(description = "发票ID")
     private Long invoiceId;
 
-    @ApiModelProperty(value = "交易类型：0=正交易 1：负交易")
+    @Schema(description = "交易类型：0=正交易 1：负交易")
     private Integer payType;
 
-    @ApiModelProperty(value = "应收金额")
+    @Schema(description = "应收金额")
     private Double totalMoney;
 
-    @ApiModelProperty(value = "支付金额")
+    @Schema(description = "支付金额")
     private Double payMoney;
 
-    @ApiModelProperty(value = "优惠金额")
+    @Schema(description = "优惠金额")
     private Double discountMonery;
 
-    @ApiModelProperty(value = "待收金额")
+    @Schema(description = "待收金额")
     private Double uncollectMoney;
 
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
-    @ApiModelProperty(value = "付款日期")
+    @Schema(description = "付款日期")
     private Date payTime;
 
-    @ApiModelProperty(value = "付款标志：0=未付款，1=分期，2=付全款")
+    @Schema(description = "付款标志：0=未付款，1=分期，2=付全款")
     private Integer payFlag;
 
 }

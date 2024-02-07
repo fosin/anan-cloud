@@ -1,16 +1,17 @@
 package top.fosin.anan.platform.modules.pay.po;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.DynamicUpdate;
 import top.fosin.anan.jpa.po.IdPO;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import jakarta.persistence.Basic;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import java.util.Date;
 
 /**
@@ -25,57 +26,57 @@ import java.util.Date;
 @Entity
 @DynamicUpdate
 @Table(name = "anan_pay")
-@ApiModel(value = "支付表实体类", description = "支付的实体类")
+@Schema(description = "支付的实体类")
 public class Pay extends IdPO<Long> {
     private static final long serialVersionUID = 197340387949290400L;
 
     @Basic
-    @ApiModelProperty(value = "付款用户", required = true)
+    @Schema(description = "付款用户")
     @Column(name = "user_id", nullable = false)
     private Long userId;
 
     @Basic
-    @ApiModelProperty(value = "订单序号", required = true)
+    @Schema(description = "订单序号")
     @Column(name = "order_id", nullable = false)
     private Long orderId;
 
     @Basic
-    @ApiModelProperty(value = "发票序号", required = true)
+    @Schema(description = "发票序号")
     @Column(name = "invoice_id", nullable = false)
     private Long invoiceId;
 
     @Basic
-    @ApiModelProperty(value = "交易类型：0=正交易 1：负交易", required = true)
+    @Schema(description = "交易类型：0=正交易 1：负交易")
     @Column(name = "pay_type", nullable = false)
     private Integer payType;
 
     @Basic
-    @ApiModelProperty(value = "应收金额", required = true)
+    @Schema(description = "应收金额")
     @Column(name = "total_money", nullable = false, precision = 12, scale = 2)
     private Double totalMoney;
 
     @Basic
-    @ApiModelProperty(value = "支付金额", required = true)
+    @Schema(description = "支付金额")
     @Column(name = "pay_money", nullable = false, precision = 12, scale = 2)
     private Double payMoney;
 
     @Basic
-    @ApiModelProperty(value = "优惠金额", required = true)
+    @Schema(description = "优惠金额")
     @Column(name = "discount_monery", nullable = false, precision = 12, scale = 2)
     private Double discountMonery;
 
     @Basic
-    @ApiModelProperty(value = "待收金额", required = true)
+    @Schema(description = "待收金额")
     @Column(name = "uncollect_money", nullable = false, precision = 12, scale = 2)
     private Double uncollectMoney;
 
     @Basic
-    @ApiModelProperty(value = "付款时间", required = true)
+    @Schema(description = "付款时间")
     @Column(name = "pay_time", nullable = false)
     private Date payTime;
 
     @Basic
-    @ApiModelProperty(value = "付款标志：0=未付款，1=分期，2=付全款", required = true)
+    @Schema(description = "付款标志：0=未付款，1=分期，2=付全款")
     @Column(name = "pay_flag", nullable = false)
     private Integer payFlag;
 

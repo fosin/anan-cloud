@@ -1,13 +1,14 @@
 package top.fosin.anan.platform.modules.permission.po;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import top.fosin.anan.jpa.po.IdCreatePO;
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.MappedSuperclass;
+import jakarta.persistence.Basic;
+import jakarta.persistence.Column;
+import jakarta.persistence.MappedSuperclass;
 import java.io.Serializable;
 
 /**
@@ -26,7 +27,7 @@ public class PermissionId<ID extends Serializable>
     private static final long serialVersionUID = 117455991817648863L;
 
     @Basic
-    @ApiModelProperty(value = "权限序号", required = true)
+    @Schema(description = "权限序号")
     @Column(name = "permission_id", nullable = false)
     private Long permissionId;
 }

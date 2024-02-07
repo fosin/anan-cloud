@@ -1,6 +1,6 @@
 package top.fosin.anan.platform.modules.version;
 
-import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import top.fosin.anan.cloudresource.constant.PathPrefixConstant;
@@ -19,7 +19,7 @@ import top.fosin.anan.platform.modules.version.vo.VersionPermissionVO;
  */
 @RestController
 @RequestMapping(value = PathPrefixConstant.VERSION_PERMISSION, params = PathPrefixConstant.DEFAULT_VERSION_PARAM)
-@Api(value = PathPrefixConstant.VERSION_PERMISSION, tags = "版本权限管理")
+@Tag(name = "版本权限管理", description = PathPrefixConstant.VERSION_PERMISSION)
 public class VersionPermissionController implements
         IUpdateBatchController<VersionPermissionUpdateDTO, Long>,
         IRetrieveBatchController<VersionPermissionVO, Long> {

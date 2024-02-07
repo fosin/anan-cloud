@@ -1,8 +1,9 @@
 package top.fosin.anan.platform.modules.pay.vo;
 
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -21,17 +22,17 @@ import java.util.Date;
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-@ApiModel(value = "系统支付发票表集合VO", description = "系统支付发票表(anan_pay_invoice)集合VO")
+@Schema(description = "系统支付发票表(anan_pay_invoice)集合VO")
 public class PayInvoiceListVO extends Id<Long> {
     private static final long serialVersionUID = -18431778110409251L;
-    @ApiModelProperty(value = "支付ID")
+    @Schema(description = "支付ID")
     private Long payId;
 
-    @ApiModelProperty(value = "发票号码")
+    @Schema(description = "发票号码")
     private String invoceNo;
 
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
-    @ApiModelProperty(value = "出票时间")
+    @Schema(description = "出票时间")
     private Date invoceTime;
 
 }

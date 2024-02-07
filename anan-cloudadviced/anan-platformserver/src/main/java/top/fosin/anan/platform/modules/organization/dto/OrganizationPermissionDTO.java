@@ -1,8 +1,9 @@
 package top.fosin.anan.platform.modules.organization.dto;
 
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -20,20 +21,20 @@ import java.util.Date;
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-@ApiModel(value = "系统机构权限表DTO", description = "系统机构权限表(anan_organization_permission)DTO")
+@Schema(description = "系统机构权限表(anan_organization_permission)DTO")
 public class OrganizationPermissionDTO extends Id<Long> {
     private static final long serialVersionUID = 199375059620997767L;
-    @ApiModelProperty(value = "机构ID", required = true, example = "Long")
+    @Schema(description = "机构ID", example = "Long")
     private Long organizId;
 
-    @ApiModelProperty(value = "权限ID", required = true, example = "Long")
+    @Schema(description = "权限ID", example = "Long")
     private Long permissionId;
 
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
-    @ApiModelProperty(value = "创建时间", required = true, example = "Date")
+    @Schema(description = "创建时间", example = "Date")
     private Date createTime;
 
-    @ApiModelProperty(value = "创建人", required = true, example = "Long")
+    @Schema(description = "创建人", example = "Long")
     private Long createBy;
 
 }

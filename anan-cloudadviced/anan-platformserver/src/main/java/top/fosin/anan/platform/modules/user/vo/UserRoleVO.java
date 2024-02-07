@@ -1,8 +1,9 @@
 package top.fosin.anan.platform.modules.user.vo;
 
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -17,16 +18,16 @@ import top.fosin.anan.data.entity.Id;
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-@ApiModel(value = "系统用户角色表单体VO", description = "系统用户角色表(anan_user_role)单体VO")
+@Schema(description = "系统用户角色表(anan_user_role)单体VO")
 public class UserRoleVO extends Id<Long> {
     private static final long serialVersionUID = -89148019053982944L;
-    @ApiModelProperty(value = "机构ID")
+    @Schema(description = "机构ID")
     private Long organizId;
 
-    @ApiModelProperty(value = "用户ID")
+    @Schema(description = "用户ID")
     private Long userId;
 
-    @ApiModelProperty(value = "角色ID")
+    @Schema(description = "角色ID")
     private Long roleId;
 
 }
