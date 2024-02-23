@@ -1,13 +1,13 @@
 package top.fosin.anan.platform.modules.pay.dto;
 
 
-
 import io.swagger.v3.oas.annotations.media.Schema;
-
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import top.fosin.anan.data.entity.Id;
+
+import java.math.BigDecimal;
 
 /**
  * 系统支付明细表(anan_pay_detail)DTO
@@ -28,6 +28,6 @@ public class PayDetailDTO extends Id<Long> {
     private Integer payway;
 
     @Schema(description = "付款金额", example = "Double")
-    private Double money;
+    private BigDecimal money;
 
 }

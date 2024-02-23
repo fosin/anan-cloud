@@ -34,3 +34,14 @@ alter table anan_dictionary_detail
         unique (dictionary_id, name);
 
 delete from flyway_schema_history where version ='4.0.0' and description='Oauth2 Authorization Server';
+
+# V5.0.0__Upgrade.sql回滚SQL
+alter table oauth2_authorization drop column user_code_value;
+alter table oauth2_authorization drop column user_code_issued_at;
+alter table oauth2_authorization drop column user_code_expires_at;
+alter table oauth2_authorization drop column user_code_metadata;
+alter table oauth2_authorization drop column device_code_value;
+alter table oauth2_authorization drop column device_code_issued_at;
+alter table oauth2_authorization drop column device_code_expires_at;
+alter table oauth2_authorization drop column device_code_metadata;
+alter table oauth2_registered_client drop column post_logout_redirect_uris;

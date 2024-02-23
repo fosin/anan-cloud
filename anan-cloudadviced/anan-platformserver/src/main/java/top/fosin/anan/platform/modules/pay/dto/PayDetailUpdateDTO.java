@@ -2,19 +2,15 @@ package top.fosin.anan.platform.modules.pay.dto;
 
 
 import io.swagger.v3.oas.annotations.media.Schema;
-
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import org.springframework.format.annotation.DateTimeFormat;
-import top.fosin.anan.core.util.DateTimeUtil;
 import top.fosin.anan.data.entity.Id;
-
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.PositiveOrZero;
-import java.util.Date;
 import top.fosin.anan.data.valid.group.Update;
+
+import java.math.BigDecimal;
 /**
  * 系统支付明细表(anan_pay_detail)更新DTO
  *
@@ -40,6 +36,6 @@ public class PayDetailUpdateDTO extends Id<Long> {
 
     @NotNull(message = "付款金额" + "{jakarta.validation.constraints.NotNull.message}", groups = Update.class)
     @Schema(description = "付款金额")
-    private Double money;
+    private BigDecimal money;
 
 }

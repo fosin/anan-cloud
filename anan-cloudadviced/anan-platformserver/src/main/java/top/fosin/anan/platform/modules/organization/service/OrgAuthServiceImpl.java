@@ -19,6 +19,7 @@ import top.fosin.anan.platform.modules.pay.service.inter.PayOrderService;
 import top.fosin.anan.platform.modules.version.dto.VersionDTO;
 import top.fosin.anan.platform.modules.version.service.inter.VersionService;
 
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -108,7 +109,7 @@ public class OrgAuthServiceImpl implements OrgAuthService {
         payOrderCreateDTO.setVersionId(versionId);
         payOrderCreateDTO.setOrganizId(organizationDTO.getId());
 //        payOrderCreateDTO.setUserId(user.getId());
-        if (respDto.getPrice() == 0) {
+        if (respDto.getPrice().equals(BigDecimal.ZERO)) {
             payOrderCreateDTO.setStatus((byte) 1);
             payOrderCreateDTO.setPayTime(now);
         } else {

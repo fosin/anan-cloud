@@ -18,7 +18,7 @@ services:
   #    ports:
   #      - "3306:3306"
   nacos:
-    image: nacos/nacos-server:v2.1.2
+    image: nacos/nacos-server:v2.3.0
     container_name: nacos
     hostname: nacos
     restart: always
@@ -34,6 +34,10 @@ services:
       - MYSQL_SERVICE_USER=nacos
       - MYSQL_SERVICE_PASSWORD=local
       - MYSQL_SERVICE_DB_PARAM=characterEncoding=utf8&connectTimeout=10000&socketTimeout=30000&autoReconnect=true&useUnicode=true&serverTimezone=Asia/Shanghai
+      - NACOS_AUTH_ENABLE=true
+      - NACOS_AUTH_TOKEN=RjFIamNtVlA0U2hjWDhkWVgycHVhd0JGQnpJUW9WbGYxUw==
+      - NACOS_AUTH_IDENTITY_KEY=serverIdentity
+      - NACOS_AUTH_IDENTITY_VALUE=security
       - JVM_XMS=512M
       - JVM_XMX=512M
       - JVM_XMN=170M

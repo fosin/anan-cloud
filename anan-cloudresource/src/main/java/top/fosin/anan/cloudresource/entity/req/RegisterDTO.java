@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 /**
  * @author fosin
@@ -25,6 +26,6 @@ public class RegisterDTO implements Serializable {
     private Long versionId;
 
     @Schema(description = "版本价格")
-    private Double versionPrice;
+    private BigDecimal versionPrice;
 
 }

@@ -2,16 +2,16 @@ package top.fosin.anan.platform.modules.pay.po;
 
 
 import io.swagger.v3.oas.annotations.media.Schema;
-
+import jakarta.persistence.Basic;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.DynamicUpdate;
 import top.fosin.anan.jpa.po.IdPO;
 
-import jakarta.persistence.Basic;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import java.math.BigDecimal;
 
 /**
  * 支付明细表(AnanPayDetail)实体类
@@ -42,6 +42,6 @@ public class PayDetail extends IdPO<Long> {
     @Basic
     @Schema(description = "付款金额")
     @Column(name = "money", nullable = false, precision = 12, scale = 2)
-    private Double money;
+    private BigDecimal money;
 
 }

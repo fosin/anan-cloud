@@ -1,9 +1,7 @@
 package top.fosin.anan.platform.modules.version.vo;
 
 
-
 import io.swagger.v3.oas.annotations.media.Schema;
-
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -11,6 +9,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import top.fosin.anan.core.util.DateTimeUtil;
 import top.fosin.anan.data.entity.Id;
 
+import java.math.BigDecimal;
 import java.util.Date;
 /**
  * 系统版本表(anan_version)单体VO
@@ -31,7 +30,7 @@ public class VersionVO extends Id<Long> {
     private Byte type;
 
     @Schema(description = "版本价格")
-    private Double price;
+    private BigDecimal price;
 
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
     @Schema(description = "活动开始日期")

@@ -5,7 +5,7 @@ import com.nimbusds.openid.connect.sdk.UserInfoErrorResponse;
 import net.minidev.json.JSONObject;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -82,7 +82,7 @@ public class CustomReactiveOAuth2UserService implements ReactiveOAuth2UserServic
                     authenticationMethod);
             // @formatter:off
             Mono<Map<String, Object>> userAttributes = requestHeadersSpec.retrieve()
-                    .onStatus(HttpStatus::isError, (response) ->
+                    .onStatus(HttpStatusCode::isError, (response) ->
                             parse(response)
                                     .map((userInfoErrorResponse) -> {
                                         String description = userInfoErrorResponse.getErrorObject().getDescription();

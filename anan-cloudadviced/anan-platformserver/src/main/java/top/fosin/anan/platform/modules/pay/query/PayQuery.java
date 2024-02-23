@@ -2,21 +2,16 @@ package top.fosin.anan.platform.modules.pay.query;
 
 
 import io.swagger.v3.oas.annotations.media.Schema;
-
-import org.hibernate.annotations.DynamicUpdate;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
-import java.io.Serializable;
 import lombok.Data;
-import lombok.ToString;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
 import top.fosin.anan.core.util.DateTimeUtil;
 import top.fosin.anan.data.entity.req.LogiSortQuery;
-import top.fosin.anan.data.module.SortRule;
 import top.fosin.anan.data.module.LogiQueryRule;
+import top.fosin.anan.data.module.SortRule;
+
+import java.math.BigDecimal;
 import java.util.Date;
 
         /**
@@ -48,16 +43,16 @@ public class PayQuery extends LogiSortQuery<LogiQueryRule,SortRule,Long> {
     private Integer payType;
 
     @Schema(description = "应收金额", example = "Double")
-    private Double totalMoney;
+    private BigDecimal totalMoney;
 
     @Schema(description = "支付金额", example = "Double")
-    private Double payMoney;
+    private BigDecimal payMoney;
 
     @Schema(description = "优惠金额", example = "Double")
-    private Double discountMonery;
+    private BigDecimal discountMonery;
 
     @Schema(description = "待收金额", example = "Double")
-    private Double uncollectMoney;
+    private BigDecimal uncollectMoney;
 
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
     @Schema(description = "付款日期", example = "Date")

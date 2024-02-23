@@ -1,17 +1,16 @@
 package top.fosin.anan.platform.modules.pay.vo;
 
-                                                                                                                                                                                                            
 
 import io.swagger.v3.oas.annotations.media.Schema;
-
-import java.io.Serializable;
 import lombok.Data;
-import org.springframework.format.annotation.DateTimeFormat;
-import top.fosin.anan.core.util.DateTimeUtil;
-import java.util.Date;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.springframework.format.annotation.DateTimeFormat;
+import top.fosin.anan.core.util.DateTimeUtil;
 import top.fosin.anan.data.entity.Id;
+
+import java.math.BigDecimal;
+import java.util.Date;
 /**
  * 系统支付表(anan_pay)单体VO
  *
@@ -40,16 +39,16 @@ public class PayVO extends Id<Long> {
     private Integer payType;
 
     @Schema(description = "应收金额")
-    private Double totalMoney;
+    private BigDecimal totalMoney;
 
     @Schema(description = "支付金额")
-    private Double payMoney;
+    private BigDecimal payMoney;
 
     @Schema(description = "优惠金额")
-    private Double discountMonery;
+    private BigDecimal discountMonery;
 
     @Schema(description = "待收金额")
-    private Double uncollectMoney;
+    private BigDecimal uncollectMoney;
 
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
     @Schema(description = "付款日期")

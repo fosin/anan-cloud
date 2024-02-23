@@ -18,7 +18,6 @@ import top.fosin.anan.security.servlet.annotation.EnableAnanWebSecurity;
 @EnableZuulProxy //启用RateLimit
 @EnableHystrixDashboard
 @EnableAnanRedis
-//@EnableAnanSwagger2
 @EnableAnanWebSecurity
 @EnableFeignClients
 public class ZuulGatewayApplication {

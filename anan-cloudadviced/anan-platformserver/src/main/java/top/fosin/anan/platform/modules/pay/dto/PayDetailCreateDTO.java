@@ -2,14 +2,14 @@ package top.fosin.anan.platform.modules.pay.dto;
 
 
 import io.swagger.v3.oas.annotations.media.Schema;
-
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import top.fosin.anan.data.valid.group.Create;
 
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.PositiveOrZero;
+import java.math.BigDecimal;
 
 /**
  * 系统支付明细表(anan_pay_detail)创建DTO
@@ -36,6 +36,6 @@ public class PayDetailCreateDTO {
 
     @NotNull(message = "付款金额" + "{jakarta.validation.constraints.NotNull.message}", groups = Create.class)
     @Schema(description = "付款金额")
-    private Double money;
+    private BigDecimal money;
 
 }

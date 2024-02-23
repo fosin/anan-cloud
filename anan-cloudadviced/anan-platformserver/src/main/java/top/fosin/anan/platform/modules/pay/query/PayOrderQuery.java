@@ -2,24 +2,16 @@ package top.fosin.anan.platform.modules.pay.query;
 
 
 import io.swagger.v3.oas.annotations.media.Schema;
-
-import org.hibernate.annotations.DynamicUpdate;
-
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
-import java.io.Serializable;
-
 import lombok.Data;
-import lombok.ToString;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
 import top.fosin.anan.core.util.DateTimeUtil;
 import top.fosin.anan.data.entity.req.LogiSortQuery;
-import top.fosin.anan.data.module.SortRule;
 import top.fosin.anan.data.module.LogiQueryRule;
+import top.fosin.anan.data.module.SortRule;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -45,7 +37,7 @@ public class PayOrderQuery extends LogiSortQuery<LogiQueryRule, SortRule, Long> 
     private Long versionId;
 
     @Schema(description = "版本金额", example = "Double")
-    private Double money;
+    private BigDecimal money;
 
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
     @Schema(description = "订单日期", example = "Date")

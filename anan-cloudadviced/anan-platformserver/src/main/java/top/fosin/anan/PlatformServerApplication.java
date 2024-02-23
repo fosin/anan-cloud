@@ -16,7 +16,6 @@ import top.fosin.anan.security.servlet.annotation.EnableAnanWebSecurity;
 @SpringBootApplication
 @EnableAnanRedis
 @EnableAnanWebSecurity
-//@EnableAnanSwagger2
 @EnableJpaAuditing
 @EnableFeignClients
 @EnableTransactionManagement

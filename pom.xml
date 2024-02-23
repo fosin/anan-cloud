@@ -31,11 +31,11 @@
         <anan-spring-boot-jasypt.version>3.0.5</anan-spring-boot-jasypt.version>
         <anan-druid-boot.version>1.1.23</anan-druid-boot.version>
         <sonar.host.url>http://192.168.137.8:9001/</sonar.host.url>
-        <anan-grpc-boot.version>2.15.0.RELEASE</anan-grpc-boot.version>
+        <anan-grpc-boot.version>3.0.0.RELEASE</anan-grpc-boot.version>
         <grpc.version>1.58.0</grpc.version>
-        <protobuf.version>3.19.1</protobuf.version>
+        <protobuf.version>3.24.0</protobuf.version>
         <protobuf-plugin.version>0.6.1</protobuf-plugin.version>
-        <os.detected.classifier.version>2.0.7.Final</os.detected.classifier.version>
+        <springdoc.version>2.2.0</springdoc.version>
         <java.version>17</java.version>
     </properties>
     <profiles>
@@ -217,6 +217,18 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
+            <exclusions>
+                <!--grpc框架3.0.0依赖springboot3.2，需要升级到1.12.2才不会报错-->
+                <exclusion>
+                        <groupId>io.micrometer</groupId>
+                        <artifactId>micrometer-core</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-core</artifactId>
+            <version>1.12.2</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -297,6 +309,16 @@
                 <version>${grpc.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+                <version>${springdoc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-starter-webflux-ui</artifactId>
+                <version>${springdoc.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

@@ -1,13 +1,13 @@
 package top.fosin.anan.platform.modules.pay.vo;
 
 
-
 import io.swagger.v3.oas.annotations.media.Schema;
-
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import top.fosin.anan.data.entity.Id;
+
+import java.math.BigDecimal;
 
 /**
  * 系统支付明细表(anan_pay_detail)集合VO
@@ -28,6 +28,6 @@ public class PayDetailPageVO extends Id<Long> {
     private Integer payway;
 
     @Schema(description = "付款金额")
-    private Double money;
+    private BigDecimal money;
 
 }

@@ -2,16 +2,16 @@ package top.fosin.anan.platform.modules.version.po;
 
 
 import io.swagger.v3.oas.annotations.media.Schema;
-
+import jakarta.persistence.Basic;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.DynamicUpdate;
 import top.fosin.anan.jpa.po.IdCreateUpdatePO;
 
-import jakarta.persistence.Basic;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -43,7 +43,7 @@ public class Version extends IdCreateUpdatePO<Long> {
     @Basic
     @Schema(description = "版本价格")
     @Column(name = "price", nullable = false, precision = 8, scale = 2)
-    private Double price;
+    private BigDecimal price;
 
     @Basic
     @Schema(description = "开始时间")

@@ -2,7 +2,6 @@ package top.fosin.anan.cloudgateway.config;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.boot.autoconfigure.web.reactive.WebFluxProperties;
 import org.springframework.boot.context.properties.PropertyMapper;
@@ -19,16 +18,11 @@ import org.springframework.http.ResponseCookie;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.session.WebSessionIdResolver;
-import springfox.documentation.spi.DocumentationType;
-import springfox.documentation.swagger.web.SwaggerResource;
 import top.fosin.anan.cloudgateway.service.CustomOidcReactiveOAuth2UserService;
 import top.fosin.anan.cloudgateway.service.CustomReactiveOAuth2UserService;
 import top.fosin.anan.security.resource.AnanSecurityProperties;
-import top.fosin.anan.swagger.config.AnanSwaggerResourcesProvider;
-import top.fosin.anan.swagger.config.SwaggerProperties;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author fosin
@@ -70,22 +64,22 @@ public class GatewayAutoConfiguration {
         return new RestTemplate();
     }
 
-    @Bean
-    @Primary
-    @ConditionalOnMissingBean
-    public AnanSwaggerResourcesProvider ananSwaggerResourcesProvider(SwaggerProperties swaggerProperties) {
-        List<RouteDefinition> routes = ananGatewayProperties().getRoutes();
-        String localPath = tranformPath(getRoutePath(routes, applicationName), "");
-        List<SwaggerResource> swaggerResources = routes.stream().map(route -> {
-            SwaggerResource swaggerResource = new SwaggerResource();
-            swaggerResource.setName(route.getId());
-            String location = tranformPath(getRoutePath(route).replace(localPath, ""), "/v3/api-docs");
-            swaggerResource.setLocation(location);
-            swaggerResource.setSwaggerVersion(DocumentationType.OAS_30.getVersion());
-            return swaggerResource;
-        }).collect(Collectors.toList());
-        return new AnanSwaggerResourcesProvider(swaggerResources, swaggerProperties);
-    }
+//    @Bean
+//    @Primary
+//    @ConditionalOnMissingBean
+//    public AnanSwaggerResourcesProvider ananSwaggerResourcesProvider(SwaggerProperties swaggerProperties) {
+//        List<RouteDefinition> routes = ananGatewayProperties().getRoutes();
+//        String localPath = tranformPath(getRoutePath(routes, applicationName), "");
+//        List<SwaggerResource> swaggerResources = routes.stream().map(route -> {
+//            SwaggerResource swaggerResource = new SwaggerResource();
+//            swaggerResource.setName(route.getId());
+//            String location = tranformPath(getRoutePath(route).replace(localPath, ""), "/v3/api-docs");
+//            swaggerResource.setLocation(location);
+//            swaggerResource.setSwaggerVersion(DocumentationType.OAS_30.getVersion());
+//            return swaggerResource;
+//        }).collect(Collectors.toList());
+//        return new AnanSwaggerResourcesProvider(swaggerResources, swaggerProperties);
+//    }
 
     private String tranformPath(String s, String r) {
         return s.replace("/**", r)
@@ -147,10 +141,10 @@ public class GatewayAutoConfiguration {
         if (properties.getSameSite() != null) {
             return properties.getSameSite().attributeValue();
         }
-        WebFluxProperties.Cookie cookie = this.webFluxProperties.getSession().getCookie();
-        if (cookie.getSameSite() != null) {
-            return cookie.getSameSite().attribute();
-        }
+//        WebFluxProperties.Cookie cookie = this.webFluxProperties.getSession().getCookie();
+//        if (cookie.getSameSite() != null) {
+//            return cookie.getSameSite().attribute();
+//        }
         return null;
     }
 }

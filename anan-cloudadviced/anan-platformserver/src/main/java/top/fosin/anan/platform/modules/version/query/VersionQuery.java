@@ -2,21 +2,16 @@ package top.fosin.anan.platform.modules.version.query;
 
 
 import io.swagger.v3.oas.annotations.media.Schema;
-
-import org.hibernate.annotations.DynamicUpdate;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
-import java.io.Serializable;
 import lombok.Data;
-import lombok.ToString;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
 import top.fosin.anan.core.util.DateTimeUtil;
 import top.fosin.anan.data.entity.req.LogiSortQuery;
-import top.fosin.anan.data.module.SortRule;
 import top.fosin.anan.data.module.LogiQueryRule;
+import top.fosin.anan.data.module.SortRule;
+
+import java.math.BigDecimal;
 import java.util.Date;
 
         /**
@@ -39,7 +34,7 @@ public class VersionQuery extends LogiSortQuery<LogiQueryRule,SortRule,Long> {
     private Byte type;
 
     @Schema(description = "版本价格", example = "Double")
-    private Double price;
+    private BigDecimal price;
 
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
     @Schema(description = "活动开始日期", example = "Date")

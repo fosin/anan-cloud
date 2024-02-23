@@ -2,7 +2,9 @@ package top.fosin.anan.platform.modules.pay.dto;
 
 
 import io.swagger.v3.oas.annotations.media.Schema;
-
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -11,9 +13,7 @@ import top.fosin.anan.core.util.DateTimeUtil;
 import top.fosin.anan.data.entity.Id;
 import top.fosin.anan.data.valid.group.Update;
 
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.PositiveOrZero;
+import java.math.BigDecimal;
 import java.util.Date;
 /**
  * 系统支付表(anan_pay)更新DTO
@@ -55,19 +55,19 @@ public class PayUpdateDTO extends Id<Long> {
 
     @NotNull(message = "应收金额" + "{jakarta.validation.constraints.NotNull.message}", groups = Update.class)
     @Schema(description = "应收金额")
-    private Double totalMoney;
+    private BigDecimal totalMoney;
 
     @NotNull(message = "支付金额" + "{jakarta.validation.constraints.NotNull.message}", groups = Update.class)
     @Schema(description = "支付金额")
-    private Double payMoney;
+    private BigDecimal payMoney;
 
     @NotNull(message = "优惠金额" + "{jakarta.validation.constraints.NotNull.message}", groups = Update.class)
     @Schema(description = "优惠金额")
-    private Double discountMonery;
+    private BigDecimal discountMonery;
 
     @NotNull(message = "待收金额" + "{jakarta.validation.constraints.NotNull.message}", groups = Update.class)
     @Schema(description = "待收金额")
-    private Double uncollectMoney;
+    private BigDecimal uncollectMoney;
 
     @Schema(description = "付款时间")
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)

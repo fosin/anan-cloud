@@ -23,7 +23,6 @@ import org.springframework.cloud.netflix.zuul.filters.support.FilterConstants;
 import org.springframework.util.StringUtils;
 import top.fosin.anan.core.util.crypt.AesUtil;
 
-import jakarta.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -49,8 +48,9 @@ public class LoginFilter extends ZuulFilter {
 
     @Override
     public boolean shouldFilter() {
-        HttpServletRequest request = RequestContext.getCurrentContext().getRequest();
-        return request.getRequestURI().contains("/oauth/token");
+//        HttpServletRequest request = RequestContext.getCurrentContext().getRequest();
+//        return request.getRequestURI().contains("/oauth/token");
+        return false;
     }
 
     @Override

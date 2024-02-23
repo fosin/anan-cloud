@@ -20,12 +20,12 @@ import org.springframework.http.HttpCookie;
 import org.springframework.http.ResponseCookie;
 import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
-import org.springframework.util.Base64Utils;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.server.ServerWebExchange;
 import org.springframework.web.server.session.WebSessionIdResolver;
 
 import java.time.Duration;
+import java.util.Base64;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
@@ -106,14 +106,14 @@ public class CookieWebSessionIdResolver implements WebSessionIdResolver {
             return Collections.emptyList();
         }
         // 将SESSION信息进行base64解码，默认实现中是没有base64解码的，sessionId传到下游时不一致，会导致session不共享
-        return cookies.stream().map(HttpCookie::getValue).map(v -> new String(Base64Utils.decodeFromString(v))).collect(Collectors.toList());
+        return cookies.stream().map(HttpCookie::getValue).map(v -> new String(Base64.getDecoder().decode(v))).collect(Collectors.toList());
     }
 
     @Override
     public void setSessionId(ServerWebExchange exchange, String id) {
         Assert.notNull(id, "'id' is required");
         // 默认Base64加密，传给前端的是加密后的sessionid
-        ResponseCookie cookie = initSessionCookie(exchange, Base64Utils.encodeToString(id.getBytes()), getCookieMaxAge());
+        ResponseCookie cookie = initSessionCookie(exchange, Base64.getEncoder().encodeToString(id.getBytes()), getCookieMaxAge());
         exchange.getResponse().getCookies().set(this.cookieName, cookie);
     }
 

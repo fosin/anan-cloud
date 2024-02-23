@@ -2,25 +2,14 @@ package top.fosin.anan.platform.modules.pay.query;
 
 
 import io.swagger.v3.oas.annotations.media.Schema;
-
-import org.hibernate.annotations.DynamicUpdate;
-
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
-import java.io.Serializable;
-
 import lombok.Data;
-import lombok.ToString;
 import lombok.EqualsAndHashCode;
-import org.springframework.format.annotation.DateTimeFormat;
-import top.fosin.anan.core.util.DateTimeUtil;
+import lombok.ToString;
 import top.fosin.anan.data.entity.req.LogiSortQuery;
-import top.fosin.anan.data.module.SortRule;
 import top.fosin.anan.data.module.LogiQueryRule;
+import top.fosin.anan.data.module.SortRule;
 
-import java.util.Date;
+import java.math.BigDecimal;
 
 /**
  * 系统支付明细表(anan_pay_detail)通用查询DTO
@@ -42,6 +31,6 @@ public class PayDetailQuery extends LogiSortQuery<LogiQueryRule, SortRule, Long>
     private Integer payway;
 
     @Schema(description = "付款金额", example = "Double")
-    private Double money;
+    private BigDecimal money;
 
 }

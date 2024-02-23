@@ -1,21 +1,13 @@
 package top.fosin.anan.platform.modules.pay.vo;
 
 
-
 import io.swagger.v3.oas.annotations.media.Schema;
-
-
-import java.io.Serializable;
-
 import lombok.Data;
-import org.springframework.format.annotation.DateTimeFormat;
-import top.fosin.anan.core.util.DateTimeUtil;
-
-import java.util.Date;
-
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import top.fosin.anan.data.entity.Id;
+
+import java.math.BigDecimal;
 
 /**
  * 系统支付明细表(anan_pay_detail)单体VO
@@ -36,6 +28,6 @@ public class PayDetailVO extends Id<Long> {
     private Integer payway;
 
     @Schema(description = "付款金额")
-    private Double money;
+    private BigDecimal money;
 
 }

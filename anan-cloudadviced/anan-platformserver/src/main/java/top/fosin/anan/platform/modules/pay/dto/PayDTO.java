@@ -2,7 +2,6 @@ package top.fosin.anan.platform.modules.pay.dto;
 
 
 import io.swagger.v3.oas.annotations.media.Schema;
-
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -10,6 +9,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import top.fosin.anan.core.util.DateTimeUtil;
 import top.fosin.anan.data.entity.Id;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -41,16 +41,16 @@ public class PayDTO extends Id<Long> {
     private Integer payType;
 
     @Schema(description = "应收金额", example = "Double")
-    private Double totalMoney;
+    private BigDecimal totalMoney;
 
     @Schema(description = "支付金额", example = "Double")
-    private Double payMoney;
+    private BigDecimal payMoney;
 
     @Schema(description = "优惠金额", example = "Double")
-    private Double discountMonery;
+    private BigDecimal discountMonery;
 
     @Schema(description = "待收金额", example = "Double")
-    private Double uncollectMoney;
+    private BigDecimal uncollectMoney;
 
     @DateTimeFormat(pattern = DateTimeUtil.DATETIME_PATTERN)
     @Schema(description = "付款时间", example = DateTimeUtil.DATETIME_PATTERN)

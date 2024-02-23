@@ -12,6 +12,8 @@ import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
+
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -53,22 +55,22 @@ public class Pay extends IdPO<Long> {
     @Basic
     @Schema(description = "应收金额")
     @Column(name = "total_money", nullable = false, precision = 12, scale = 2)
-    private Double totalMoney;
+    private BigDecimal totalMoney;
 
     @Basic
     @Schema(description = "支付金额")
     @Column(name = "pay_money", nullable = false, precision = 12, scale = 2)
-    private Double payMoney;
+    private BigDecimal payMoney;
 
     @Basic
     @Schema(description = "优惠金额")
     @Column(name = "discount_monery", nullable = false, precision = 12, scale = 2)
-    private Double discountMonery;
+    private BigDecimal discountMonery;
 
     @Basic
     @Schema(description = "待收金额")
     @Column(name = "uncollect_money", nullable = false, precision = 12, scale = 2)
-    private Double uncollectMoney;
+    private BigDecimal uncollectMoney;
 
     @Basic
     @Schema(description = "付款时间")

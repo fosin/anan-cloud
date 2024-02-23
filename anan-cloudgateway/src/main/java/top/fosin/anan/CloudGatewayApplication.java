@@ -14,7 +14,6 @@ import top.fosin.anan.security.reactive.annotation.EnableAnanWebFluxSecurity;
  * @date 2019/5/5
  */
 @SpringBootApplication
-//@EnableAnanSwagger2
 @EnableAnanWebFluxSecurity
 @EnableRetry
 public class CloudGatewayApplication {

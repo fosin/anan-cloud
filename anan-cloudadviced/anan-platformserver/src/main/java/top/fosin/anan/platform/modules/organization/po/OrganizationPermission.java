@@ -1,12 +1,12 @@
 package top.fosin.anan.platform.modules.organization.po;
 
 
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.DynamicUpdate;
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
 
 /**
  * 系统机构权限表(AnanOrganizationPermission)实体类

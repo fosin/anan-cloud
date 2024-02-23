@@ -1,15 +1,15 @@
 package top.fosin.anan.platform.modules.international.po;
 
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import org.hibernate.annotations.DynamicUpdate;
-import top.fosin.anan.jpa.po.IdCreateUpdatePO;
-
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import org.hibernate.annotations.DynamicUpdate;
+import top.fosin.anan.jpa.po.IdCreateUpdatePO;
 
 /**
  * 国际化语言集(AnanInternational)实体类

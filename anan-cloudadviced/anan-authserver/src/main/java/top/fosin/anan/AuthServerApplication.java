@@ -13,7 +13,6 @@ import top.fosin.anan.security.servlet.annotation.EnableAnanWebSecurity;
  */
 @SpringBootApplication
 @EnableAnanRedis
-//@EnableAnanSwagger2
 @EnableAnanWebSecurity
 @EnableFeignClients
 public class AuthServerApplication {
