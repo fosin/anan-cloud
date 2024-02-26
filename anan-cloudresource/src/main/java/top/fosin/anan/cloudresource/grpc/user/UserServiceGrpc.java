@@ -5,14 +5,14 @@ import static io.grpc.MethodDescriptor.generateFullMethodName;
 /**
  */
 @jakarta.annotation.Generated(
-    value = "by gRPC proto compiler (version 1.51.0)",
+    value = "by gRPC proto compiler (version 1.58.0)",
     comments = "Source: User.proto")
 @io.grpc.stub.annotations.GrpcGenerated
 public final class UserServiceGrpc {
 
   private UserServiceGrpc() {}
 
-  public static final String SERVICE_NAME = "top.fosin.anan.cloudresource.grpc.user.UserService";
+  public static final java.lang.String SERVICE_NAME = "top.fosin.anan.cloudresource.grpc.user.UserService";
 
   // Static method descriptors that strictly reflect the proto.
   private static volatile io.grpc.MethodDescriptor<top.fosin.anan.cloudresource.grpc.user.UserIdReq,
@@ -216,14 +216,14 @@ public final class UserServiceGrpc {
 
   /**
    */
-  public static abstract class UserServiceImplBase implements io.grpc.BindableService {
+  public interface AsyncService {
 
     /**
      * <pre>
      *通过用户序号查询用户数据
      * </pre>
      */
-    public void findOneById(top.fosin.anan.cloudresource.grpc.user.UserIdReq request,
+    default void findOneById(top.fosin.anan.cloudresource.grpc.user.UserIdReq request,
         io.grpc.stub.StreamObserver<top.fosin.anan.cloudresource.grpc.user.UserResp> responseObserver) {
       io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getFindOneByIdMethod(), responseObserver);
     }
@@ -233,7 +233,7 @@ public final class UserServiceGrpc {
      *通过多个用户序号查询用户数据集合
      * </pre>
      */
-    public void listByIds(top.fosin.anan.cloudresource.grpc.user.UserIdsReq request,
+    default void listByIds(top.fosin.anan.cloudresource.grpc.user.UserIdsReq request,
         io.grpc.stub.StreamObserver<top.fosin.anan.cloudresource.grpc.user.UsersResp> responseObserver) {
       io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getListByIdsMethod(), responseObserver);
     }
@@ -243,7 +243,7 @@ public final class UserServiceGrpc {
      *通过用户工号查询用户数据
      * </pre>
      */
-    public void findOneByUsercode(top.fosin.anan.cloudresource.grpc.user.UsercodeReq request,
+    default void findOneByUsercode(top.fosin.anan.cloudresource.grpc.user.UsercodeReq request,
         io.grpc.stub.StreamObserver<top.fosin.anan.cloudresource.grpc.user.UserResp> responseObserver) {
       io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getFindOneByUsercodeMethod(), responseObserver);
     }
@@ -253,7 +253,7 @@ public final class UserServiceGrpc {
      *通过多个用户序号查询用户数据集合
      * </pre>
      */
-    public void listByOrganizId(top.fosin.anan.cloudresource.grpc.user.OrganizReq request,
+    default void listByOrganizId(top.fosin.anan.cloudresource.grpc.user.OrganizReq request,
         io.grpc.stub.StreamObserver<top.fosin.anan.cloudresource.grpc.user.UsersResp> responseObserver) {
       io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getListByOrganizIdMethod(), responseObserver);
     }
@@ -263,55 +263,28 @@ public final class UserServiceGrpc {
      *通过多个用户序号查询用户数据集合
      * </pre>
      */
-    public void listAllChildByTopId(top.fosin.anan.cloudresource.grpc.user.TopOrganizReq request,
+    default void listAllChildByTopId(top.fosin.anan.cloudresource.grpc.user.TopOrganizReq request,
         io.grpc.stub.StreamObserver<top.fosin.anan.cloudresource.grpc.user.UsersResp> responseObserver) {
       io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getListAllChildByTopIdMethod(), responseObserver);
-    }
-
-    @java.lang.Override public final io.grpc.ServerServiceDefinition bindService() {
-      return io.grpc.ServerServiceDefinition.builder(getServiceDescriptor())
-          .addMethod(
-            getFindOneByIdMethod(),
-            io.grpc.stub.ServerCalls.asyncUnaryCall(
-              new MethodHandlers<
-                top.fosin.anan.cloudresource.grpc.user.UserIdReq,
-                top.fosin.anan.cloudresource.grpc.user.UserResp>(
-                  this, METHODID_FIND_ONE_BY_ID)))
-          .addMethod(
-            getListByIdsMethod(),
-            io.grpc.stub.ServerCalls.asyncUnaryCall(
-              new MethodHandlers<
-                top.fosin.anan.cloudresource.grpc.user.UserIdsReq,
-                top.fosin.anan.cloudresource.grpc.user.UsersResp>(
-                  this, METHODID_LIST_BY_IDS)))
-          .addMethod(
-            getFindOneByUsercodeMethod(),
-            io.grpc.stub.ServerCalls.asyncUnaryCall(
-              new MethodHandlers<
-                top.fosin.anan.cloudresource.grpc.user.UsercodeReq,
-                top.fosin.anan.cloudresource.grpc.user.UserResp>(
-                  this, METHODID_FIND_ONE_BY_USERCODE)))
-          .addMethod(
-            getListByOrganizIdMethod(),
-            io.grpc.stub.ServerCalls.asyncUnaryCall(
-              new MethodHandlers<
-                top.fosin.anan.cloudresource.grpc.user.OrganizReq,
-                top.fosin.anan.cloudresource.grpc.user.UsersResp>(
-                  this, METHODID_LIST_BY_ORGANIZ_ID)))
-          .addMethod(
-            getListAllChildByTopIdMethod(),
-            io.grpc.stub.ServerCalls.asyncUnaryCall(
-              new MethodHandlers<
-                top.fosin.anan.cloudresource.grpc.user.TopOrganizReq,
-                top.fosin.anan.cloudresource.grpc.user.UsersResp>(
-                  this, METHODID_LIST_ALL_CHILD_BY_TOP_ID)))
-          .build();
     }
   }
 
   /**
+   * Base class for the server implementation of the service UserService.
    */
-  public static final class UserServiceStub extends io.grpc.stub.AbstractAsyncStub<UserServiceStub> {
+  public static abstract class UserServiceImplBase
+      implements io.grpc.BindableService, AsyncService {
+
+    @java.lang.Override public final io.grpc.ServerServiceDefinition bindService() {
+      return UserServiceGrpc.bindService(this);
+    }
+  }
+
+  /**
+   * A stub to allow clients to do asynchronous rpc calls to service UserService.
+   */
+  public static final class UserServiceStub
+      extends io.grpc.stub.AbstractAsyncStub<UserServiceStub> {
     private UserServiceStub(
         io.grpc.Channel channel, io.grpc.CallOptions callOptions) {
       super(channel, callOptions);
@@ -380,8 +353,10 @@ public final class UserServiceGrpc {
   }
 
   /**
+   * A stub to allow clients to do synchronous rpc calls to service UserService.
    */
-  public static final class UserServiceBlockingStub extends io.grpc.stub.AbstractBlockingStub<UserServiceBlockingStub> {
+  public static final class UserServiceBlockingStub
+      extends io.grpc.stub.AbstractBlockingStub<UserServiceBlockingStub> {
     private UserServiceBlockingStub(
         io.grpc.Channel channel, io.grpc.CallOptions callOptions) {
       super(channel, callOptions);
@@ -445,8 +420,10 @@ public final class UserServiceGrpc {
   }
 
   /**
+   * A stub to allow clients to do ListenableFuture-style rpc calls to service UserService.
    */
-  public static final class UserServiceFutureStub extends io.grpc.stub.AbstractFutureStub<UserServiceFutureStub> {
+  public static final class UserServiceFutureStub
+      extends io.grpc.stub.AbstractFutureStub<UserServiceFutureStub> {
     private UserServiceFutureStub(
         io.grpc.Channel channel, io.grpc.CallOptions callOptions) {
       super(channel, callOptions);
@@ -525,10 +502,10 @@ public final class UserServiceGrpc {
       io.grpc.stub.ServerCalls.ServerStreamingMethod<Req, Resp>,
       io.grpc.stub.ServerCalls.ClientStreamingMethod<Req, Resp>,
       io.grpc.stub.ServerCalls.BidiStreamingMethod<Req, Resp> {
-    private final UserServiceImplBase serviceImpl;
+    private final AsyncService serviceImpl;
     private final int methodId;
 
-    MethodHandlers(UserServiceImplBase serviceImpl, int methodId) {
+    MethodHandlers(AsyncService serviceImpl, int methodId) {
       this.serviceImpl = serviceImpl;
       this.methodId = methodId;
     }
@@ -573,6 +550,46 @@ public final class UserServiceGrpc {
     }
   }
 
+  public static final io.grpc.ServerServiceDefinition bindService(AsyncService service) {
+    return io.grpc.ServerServiceDefinition.builder(getServiceDescriptor())
+        .addMethod(
+          getFindOneByIdMethod(),
+          io.grpc.stub.ServerCalls.asyncUnaryCall(
+            new MethodHandlers<
+              top.fosin.anan.cloudresource.grpc.user.UserIdReq,
+              top.fosin.anan.cloudresource.grpc.user.UserResp>(
+                service, METHODID_FIND_ONE_BY_ID)))
+        .addMethod(
+          getListByIdsMethod(),
+          io.grpc.stub.ServerCalls.asyncUnaryCall(
+            new MethodHandlers<
+              top.fosin.anan.cloudresource.grpc.user.UserIdsReq,
+              top.fosin.anan.cloudresource.grpc.user.UsersResp>(
+                service, METHODID_LIST_BY_IDS)))
+        .addMethod(
+          getFindOneByUsercodeMethod(),
+          io.grpc.stub.ServerCalls.asyncUnaryCall(
+            new MethodHandlers<
+              top.fosin.anan.cloudresource.grpc.user.UsercodeReq,
+              top.fosin.anan.cloudresource.grpc.user.UserResp>(
+                service, METHODID_FIND_ONE_BY_USERCODE)))
+        .addMethod(
+          getListByOrganizIdMethod(),
+          io.grpc.stub.ServerCalls.asyncUnaryCall(
+            new MethodHandlers<
+              top.fosin.anan.cloudresource.grpc.user.OrganizReq,
+              top.fosin.anan.cloudresource.grpc.user.UsersResp>(
+                service, METHODID_LIST_BY_ORGANIZ_ID)))
+        .addMethod(
+          getListAllChildByTopIdMethod(),
+          io.grpc.stub.ServerCalls.asyncUnaryCall(
+            new MethodHandlers<
+              top.fosin.anan.cloudresource.grpc.user.TopOrganizReq,
+              top.fosin.anan.cloudresource.grpc.user.UsersResp>(
+                service, METHODID_LIST_ALL_CHILD_BY_TOP_ID)))
+        .build();
+  }
+
   private static abstract class UserServiceBaseDescriptorSupplier
       implements io.grpc.protobuf.ProtoFileDescriptorSupplier, io.grpc.protobuf.ProtoServiceDescriptorSupplier {
     UserServiceBaseDescriptorSupplier() {}
@@ -596,9 +613,9 @@ public final class UserServiceGrpc {
   private static final class UserServiceMethodDescriptorSupplier
       extends UserServiceBaseDescriptorSupplier
       implements io.grpc.protobuf.ProtoMethodDescriptorSupplier {
-    private final String methodName;
+    private final java.lang.String methodName;
 
-    UserServiceMethodDescriptorSupplier(String methodName) {
+    UserServiceMethodDescriptorSupplier(java.lang.String methodName) {
       this.methodName = methodName;
     }
 

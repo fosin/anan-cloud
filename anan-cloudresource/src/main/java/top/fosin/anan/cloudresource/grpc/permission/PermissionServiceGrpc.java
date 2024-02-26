@@ -5,14 +5,14 @@ import static io.grpc.MethodDescriptor.generateFullMethodName;
 /**
  */
 @jakarta.annotation.Generated(
-    value = "by gRPC proto compiler (version 1.51.0)",
+    value = "by gRPC proto compiler (version 1.58.0)",
     comments = "Source: Permission.proto")
 @io.grpc.stub.annotations.GrpcGenerated
 public final class PermissionServiceGrpc {
 
   private PermissionServiceGrpc() {}
 
-  public static final String SERVICE_NAME = "top.fosin.anan.cloudresource.grpc.permission.PermissionService";
+  public static final java.lang.String SERVICE_NAME = "top.fosin.anan.cloudresource.grpc.permission.PermissionService";
 
   // Static method descriptors that strictly reflect the proto.
   private static volatile io.grpc.MethodDescriptor<top.fosin.anan.cloudresource.grpc.permission.ServiceCodeReq,
@@ -123,14 +123,14 @@ public final class PermissionServiceGrpc {
 
   /**
    */
-  public static abstract class PermissionServiceImplBase implements io.grpc.BindableService {
+  public interface AsyncService {
 
     /**
      * <pre>
      *通过单个服务编码获取权限清单
      * </pre>
      */
-    public void findByServiceCode(top.fosin.anan.cloudresource.grpc.permission.ServiceCodeReq request,
+    default void findByServiceCode(top.fosin.anan.cloudresource.grpc.permission.ServiceCodeReq request,
         io.grpc.stub.StreamObserver<top.fosin.anan.cloudresource.grpc.permission.PermissionsResp> responseObserver) {
       io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getFindByServiceCodeMethod(), responseObserver);
     }
@@ -140,34 +140,28 @@ public final class PermissionServiceGrpc {
      *通过多个服务编码获取权限清单
      * </pre>
      */
-    public void findByServiceCodes(top.fosin.anan.cloudresource.grpc.permission.ServiceCodesReq request,
+    default void findByServiceCodes(top.fosin.anan.cloudresource.grpc.permission.ServiceCodesReq request,
         io.grpc.stub.StreamObserver<top.fosin.anan.cloudresource.grpc.permission.PermissionsResp> responseObserver) {
       io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getFindByServiceCodesMethod(), responseObserver);
-    }
-
-    @java.lang.Override public final io.grpc.ServerServiceDefinition bindService() {
-      return io.grpc.ServerServiceDefinition.builder(getServiceDescriptor())
-          .addMethod(
-            getFindByServiceCodeMethod(),
-            io.grpc.stub.ServerCalls.asyncUnaryCall(
-              new MethodHandlers<
-                top.fosin.anan.cloudresource.grpc.permission.ServiceCodeReq,
-                top.fosin.anan.cloudresource.grpc.permission.PermissionsResp>(
-                  this, METHODID_FIND_BY_SERVICE_CODE)))
-          .addMethod(
-            getFindByServiceCodesMethod(),
-            io.grpc.stub.ServerCalls.asyncUnaryCall(
-              new MethodHandlers<
-                top.fosin.anan.cloudresource.grpc.permission.ServiceCodesReq,
-                top.fosin.anan.cloudresource.grpc.permission.PermissionsResp>(
-                  this, METHODID_FIND_BY_SERVICE_CODES)))
-          .build();
     }
   }
 
   /**
+   * Base class for the server implementation of the service PermissionService.
    */
-  public static final class PermissionServiceStub extends io.grpc.stub.AbstractAsyncStub<PermissionServiceStub> {
+  public static abstract class PermissionServiceImplBase
+      implements io.grpc.BindableService, AsyncService {
+
+    @java.lang.Override public final io.grpc.ServerServiceDefinition bindService() {
+      return PermissionServiceGrpc.bindService(this);
+    }
+  }
+
+  /**
+   * A stub to allow clients to do asynchronous rpc calls to service PermissionService.
+   */
+  public static final class PermissionServiceStub
+      extends io.grpc.stub.AbstractAsyncStub<PermissionServiceStub> {
     private PermissionServiceStub(
         io.grpc.Channel channel, io.grpc.CallOptions callOptions) {
       super(channel, callOptions);
@@ -203,8 +197,10 @@ public final class PermissionServiceGrpc {
   }
 
   /**
+   * A stub to allow clients to do synchronous rpc calls to service PermissionService.
    */
-  public static final class PermissionServiceBlockingStub extends io.grpc.stub.AbstractBlockingStub<PermissionServiceBlockingStub> {
+  public static final class PermissionServiceBlockingStub
+      extends io.grpc.stub.AbstractBlockingStub<PermissionServiceBlockingStub> {
     private PermissionServiceBlockingStub(
         io.grpc.Channel channel, io.grpc.CallOptions callOptions) {
       super(channel, callOptions);
@@ -238,8 +234,10 @@ public final class PermissionServiceGrpc {
   }
 
   /**
+   * A stub to allow clients to do ListenableFuture-style rpc calls to service PermissionService.
    */
-  public static final class PermissionServiceFutureStub extends io.grpc.stub.AbstractFutureStub<PermissionServiceFutureStub> {
+  public static final class PermissionServiceFutureStub
+      extends io.grpc.stub.AbstractFutureStub<PermissionServiceFutureStub> {
     private PermissionServiceFutureStub(
         io.grpc.Channel channel, io.grpc.CallOptions callOptions) {
       super(channel, callOptions);
@@ -282,10 +280,10 @@ public final class PermissionServiceGrpc {
       io.grpc.stub.ServerCalls.ServerStreamingMethod<Req, Resp>,
       io.grpc.stub.ServerCalls.ClientStreamingMethod<Req, Resp>,
       io.grpc.stub.ServerCalls.BidiStreamingMethod<Req, Resp> {
-    private final PermissionServiceImplBase serviceImpl;
+    private final AsyncService serviceImpl;
     private final int methodId;
 
-    MethodHandlers(PermissionServiceImplBase serviceImpl, int methodId) {
+    MethodHandlers(AsyncService serviceImpl, int methodId) {
       this.serviceImpl = serviceImpl;
       this.methodId = methodId;
     }
@@ -318,6 +316,25 @@ public final class PermissionServiceGrpc {
     }
   }
 
+  public static final io.grpc.ServerServiceDefinition bindService(AsyncService service) {
+    return io.grpc.ServerServiceDefinition.builder(getServiceDescriptor())
+        .addMethod(
+          getFindByServiceCodeMethod(),
+          io.grpc.stub.ServerCalls.asyncUnaryCall(
+            new MethodHandlers<
+              top.fosin.anan.cloudresource.grpc.permission.ServiceCodeReq,
+              top.fosin.anan.cloudresource.grpc.permission.PermissionsResp>(
+                service, METHODID_FIND_BY_SERVICE_CODE)))
+        .addMethod(
+          getFindByServiceCodesMethod(),
+          io.grpc.stub.ServerCalls.asyncUnaryCall(
+            new MethodHandlers<
+              top.fosin.anan.cloudresource.grpc.permission.ServiceCodesReq,
+              top.fosin.anan.cloudresource.grpc.permission.PermissionsResp>(
+                service, METHODID_FIND_BY_SERVICE_CODES)))
+        .build();
+  }
+
   private static abstract class PermissionServiceBaseDescriptorSupplier
       implements io.grpc.protobuf.ProtoFileDescriptorSupplier, io.grpc.protobuf.ProtoServiceDescriptorSupplier {
     PermissionServiceBaseDescriptorSupplier() {}
@@ -341,9 +358,9 @@ public final class PermissionServiceGrpc {
   private static final class PermissionServiceMethodDescriptorSupplier
       extends PermissionServiceBaseDescriptorSupplier
       implements io.grpc.protobuf.ProtoMethodDescriptorSupplier {
-    private final String methodName;
+    private final java.lang.String methodName;
 
-    PermissionServiceMethodDescriptorSupplier(String methodName) {
+    PermissionServiceMethodDescriptorSupplier(java.lang.String methodName) {
       this.methodName = methodName;
     }
 

@@ -5,14 +5,14 @@ import static io.grpc.MethodDescriptor.generateFullMethodName;
 /**
  */
 @jakarta.annotation.Generated(
-    value = "by gRPC proto compiler (version 1.51.0)",
+    value = "by gRPC proto compiler (version 1.58.0)",
     comments = "Source: DicDetail.proto")
 @io.grpc.stub.annotations.GrpcGenerated
 public final class DicDetailServiceGrpc {
 
   private DicDetailServiceGrpc() {}
 
-  public static final String SERVICE_NAME = "top.fosin.anan.cloudresource.grpc.dicdetail.DicDetailService";
+  public static final java.lang.String SERVICE_NAME = "top.fosin.anan.cloudresource.grpc.dicdetail.DicDetailService";
 
   // Static method descriptors that strictly reflect the proto.
   private static volatile io.grpc.MethodDescriptor<top.fosin.anan.cloudresource.grpc.dicdetail.DicDetailReq,
@@ -123,14 +123,14 @@ public final class DicDetailServiceGrpc {
 
   /**
    */
-  public static abstract class DicDetailServiceImplBase implements io.grpc.BindableService {
+  public interface AsyncService {
 
     /**
      * <pre>
      *通过字典序号查询字典数据
      * </pre>
      */
-    public void findOneByDicIdAndCode(top.fosin.anan.cloudresource.grpc.dicdetail.DicDetailReq request,
+    default void findOneByDicIdAndCode(top.fosin.anan.cloudresource.grpc.dicdetail.DicDetailReq request,
         io.grpc.stub.StreamObserver<top.fosin.anan.cloudresource.grpc.dicdetail.DicDetailResp> responseObserver) {
       io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getFindOneByDicIdAndCodeMethod(), responseObserver);
     }
@@ -140,34 +140,28 @@ public final class DicDetailServiceGrpc {
      *通过字典序号查询字典明细数据
      * </pre>
      */
-    public void listByDicId(top.fosin.anan.cloudresource.grpc.dicdetail.DicIdReq request,
+    default void listByDicId(top.fosin.anan.cloudresource.grpc.dicdetail.DicIdReq request,
         io.grpc.stub.StreamObserver<top.fosin.anan.cloudresource.grpc.dicdetail.DicDetailsResp> responseObserver) {
       io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getListByDicIdMethod(), responseObserver);
-    }
-
-    @java.lang.Override public final io.grpc.ServerServiceDefinition bindService() {
-      return io.grpc.ServerServiceDefinition.builder(getServiceDescriptor())
-          .addMethod(
-            getFindOneByDicIdAndCodeMethod(),
-            io.grpc.stub.ServerCalls.asyncUnaryCall(
-              new MethodHandlers<
-                top.fosin.anan.cloudresource.grpc.dicdetail.DicDetailReq,
-                top.fosin.anan.cloudresource.grpc.dicdetail.DicDetailResp>(
-                  this, METHODID_FIND_ONE_BY_DIC_ID_AND_CODE)))
-          .addMethod(
-            getListByDicIdMethod(),
-            io.grpc.stub.ServerCalls.asyncUnaryCall(
-              new MethodHandlers<
-                top.fosin.anan.cloudresource.grpc.dicdetail.DicIdReq,
-                top.fosin.anan.cloudresource.grpc.dicdetail.DicDetailsResp>(
-                  this, METHODID_LIST_BY_DIC_ID)))
-          .build();
     }
   }
 
   /**
+   * Base class for the server implementation of the service DicDetailService.
    */
-  public static final class DicDetailServiceStub extends io.grpc.stub.AbstractAsyncStub<DicDetailServiceStub> {
+  public static abstract class DicDetailServiceImplBase
+      implements io.grpc.BindableService, AsyncService {
+
+    @java.lang.Override public final io.grpc.ServerServiceDefinition bindService() {
+      return DicDetailServiceGrpc.bindService(this);
+    }
+  }
+
+  /**
+   * A stub to allow clients to do asynchronous rpc calls to service DicDetailService.
+   */
+  public static final class DicDetailServiceStub
+      extends io.grpc.stub.AbstractAsyncStub<DicDetailServiceStub> {
     private DicDetailServiceStub(
         io.grpc.Channel channel, io.grpc.CallOptions callOptions) {
       super(channel, callOptions);
@@ -203,8 +197,10 @@ public final class DicDetailServiceGrpc {
   }
 
   /**
+   * A stub to allow clients to do synchronous rpc calls to service DicDetailService.
    */
-  public static final class DicDetailServiceBlockingStub extends io.grpc.stub.AbstractBlockingStub<DicDetailServiceBlockingStub> {
+  public static final class DicDetailServiceBlockingStub
+      extends io.grpc.stub.AbstractBlockingStub<DicDetailServiceBlockingStub> {
     private DicDetailServiceBlockingStub(
         io.grpc.Channel channel, io.grpc.CallOptions callOptions) {
       super(channel, callOptions);
@@ -238,8 +234,10 @@ public final class DicDetailServiceGrpc {
   }
 
   /**
+   * A stub to allow clients to do ListenableFuture-style rpc calls to service DicDetailService.
    */
-  public static final class DicDetailServiceFutureStub extends io.grpc.stub.AbstractFutureStub<DicDetailServiceFutureStub> {
+  public static final class DicDetailServiceFutureStub
+      extends io.grpc.stub.AbstractFutureStub<DicDetailServiceFutureStub> {
     private DicDetailServiceFutureStub(
         io.grpc.Channel channel, io.grpc.CallOptions callOptions) {
       super(channel, callOptions);
@@ -282,10 +280,10 @@ public final class DicDetailServiceGrpc {
       io.grpc.stub.ServerCalls.ServerStreamingMethod<Req, Resp>,
       io.grpc.stub.ServerCalls.ClientStreamingMethod<Req, Resp>,
       io.grpc.stub.ServerCalls.BidiStreamingMethod<Req, Resp> {
-    private final DicDetailServiceImplBase serviceImpl;
+    private final AsyncService serviceImpl;
     private final int methodId;
 
-    MethodHandlers(DicDetailServiceImplBase serviceImpl, int methodId) {
+    MethodHandlers(AsyncService serviceImpl, int methodId) {
       this.serviceImpl = serviceImpl;
       this.methodId = methodId;
     }
@@ -318,6 +316,25 @@ public final class DicDetailServiceGrpc {
     }
   }
 
+  public static final io.grpc.ServerServiceDefinition bindService(AsyncService service) {
+    return io.grpc.ServerServiceDefinition.builder(getServiceDescriptor())
+        .addMethod(
+          getFindOneByDicIdAndCodeMethod(),
+          io.grpc.stub.ServerCalls.asyncUnaryCall(
+            new MethodHandlers<
+              top.fosin.anan.cloudresource.grpc.dicdetail.DicDetailReq,
+              top.fosin.anan.cloudresource.grpc.dicdetail.DicDetailResp>(
+                service, METHODID_FIND_ONE_BY_DIC_ID_AND_CODE)))
+        .addMethod(
+          getListByDicIdMethod(),
+          io.grpc.stub.ServerCalls.asyncUnaryCall(
+            new MethodHandlers<
+              top.fosin.anan.cloudresource.grpc.dicdetail.DicIdReq,
+              top.fosin.anan.cloudresource.grpc.dicdetail.DicDetailsResp>(
+                service, METHODID_LIST_BY_DIC_ID)))
+        .build();
+  }
+
   private static abstract class DicDetailServiceBaseDescriptorSupplier
       implements io.grpc.protobuf.ProtoFileDescriptorSupplier, io.grpc.protobuf.ProtoServiceDescriptorSupplier {
     DicDetailServiceBaseDescriptorSupplier() {}
@@ -341,9 +358,9 @@ public final class DicDetailServiceGrpc {
   private static final class DicDetailServiceMethodDescriptorSupplier
       extends DicDetailServiceBaseDescriptorSupplier
       implements io.grpc.protobuf.ProtoMethodDescriptorSupplier {
-    private final String methodName;
+    private final java.lang.String methodName;
 
-    DicDetailServiceMethodDescriptorSupplier(String methodName) {
+    DicDetailServiceMethodDescriptorSupplier(java.lang.String methodName) {
       this.methodName = methodName;
     }
 

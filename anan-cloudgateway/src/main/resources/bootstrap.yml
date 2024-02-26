@@ -70,25 +70,3 @@ eureka:
     service-url:
       defaultZone: @eureka.client.service-url.defaultZone@
     enabled: @eureka.client.enabled@
-springdoc:
-#  api-docs:
-#    enabled: false #开启OpenApi接口
-#    path: /v3/api-docs  # 自定义路径，默认为 "/v3/api-docs"
-#    groups:
-#      enabled: true
-  group-configs:
-    - group: anan-authserver
-      paths-to-match:
-        - /gateway/auth/.*
-    - group: anan-platformserver
-      paths-to-match:
-        - /gateway/platform/.*
-    - group: anan-exam
-      paths-to-match:
-        - /gateway/exam/.*
-    - group: anan-vhr
-      paths-to-match:
-        - /gateway/vhr/.*
-    - group: anan-mpi
-      paths-to-match:
-        - /gateway/mpi/.*

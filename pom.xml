@@ -482,9 +482,9 @@
                     <artifactId>protobuf-maven-plugin</artifactId>
                     <version>${protobuf-plugin.version}</version>
                     <configuration>
-                        <protocArtifact>com.google.protobuf:protoc:${protobuf.version}:exe:${os.detected.classifier.version}</protocArtifact>
+                        <protocArtifact>com.google.protobuf:protoc:${protobuf.version}:exe:${os.detected.classifier}</protocArtifact>
                         <pluginId>grpc-java</pluginId>
-                        <pluginArtifact>io.grpc:protoc-gen-grpc-java:${grpc.version}:exe:${os.detected.classifier.version}</pluginArtifact>
+                        <pluginArtifact>io.grpc:protoc-gen-grpc-java:${grpc.version}:exe:${os.detected.classifier}</pluginArtifact>
                         <!--默认值，proto源文件路径-->
                         <protoSourceRoot>${project.basedir}/src/main/proto</protoSourceRoot>
                         <!--默认值，proto目标java文件路径-->
@@ -492,6 +492,8 @@
                         <!--设置是否在生成java文件之前清空outputDirectory的文件，默认值为true，设置为false时也会覆盖同名文件-->
                         <clearOutputDirectory>false</clearOutputDirectory>
                     </configuration>
+                    <!--
+                    不把编译命令自动添加到编译命令中，执行compile命令时不会执行GRPC Java文件生成命令
                     <executions>
                         <execution>
                             <goals>
@@ -499,7 +501,7 @@
                                 <goal>compile-custom</goal>
                             </goals>
                         </execution>
-                    </executions>
+                    </executions>-->
                 </plugin>
             </plugins>
         </pluginManagement>

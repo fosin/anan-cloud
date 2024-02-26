@@ -1,4 +1,4 @@
-FROM registry.cn-hongkong.aliyuncs.com/fosin/eclipse-temurin:11-hotspot
+FROM registry.cn-hongkong.aliyuncs.com/fosin/eclipse-temurin:17-hotspot
 
 LABEL maintainer=fosin
 LABEL email=28860823@qq.com

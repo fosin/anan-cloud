@@ -11,12 +11,6 @@
     <artifactId>anan-cloudresource</artifactId>
     <version>5.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
-    <properties>
-        <java.version>17</java.version>
-        <grpc.version>1.58.0</grpc.version>
-        <protobuf.version>3.19.1</protobuf.version>
-        <protobuf-plugin.version>0.6.1</protobuf-plugin.version>
-    </properties>
     <dependencies>
         <dependency>
             <groupId>top.fosin.anan</groupId>
@@ -37,9 +31,6 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-openfeign-core</artifactId>
-<!--
-            <version>3.1.6</version>
--->
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

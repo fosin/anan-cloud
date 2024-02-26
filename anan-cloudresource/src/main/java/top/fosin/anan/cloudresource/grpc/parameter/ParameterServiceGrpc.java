@@ -5,14 +5,14 @@ import static io.grpc.MethodDescriptor.generateFullMethodName;
 /**
  */
 @jakarta.annotation.Generated(
-    value = "by gRPC proto compiler (version 1.51.0)",
+    value = "by gRPC proto compiler (version 1.58.0)",
     comments = "Source: Parameter.proto")
 @io.grpc.stub.annotations.GrpcGenerated
 public final class ParameterServiceGrpc {
 
   private ParameterServiceGrpc() {}
 
-  public static final String SERVICE_NAME = "top.fosin.anan.cloudresource.grpc.parameter.ParameterService";
+  public static final java.lang.String SERVICE_NAME = "top.fosin.anan.cloudresource.grpc.parameter.ParameterService";
 
   // Static method descriptors that strictly reflect the proto.
   private static volatile io.grpc.MethodDescriptor<top.fosin.anan.cloudresource.grpc.parameter.ParameterIdReq,
@@ -309,14 +309,14 @@ public final class ParameterServiceGrpc {
 
   /**
    */
-  public static abstract class ParameterServiceImplBase implements io.grpc.BindableService {
+  public interface AsyncService {
 
     /**
      * <pre>
      *应用单个变更参数
      * </pre>
      */
-    public void applyChange(top.fosin.anan.cloudresource.grpc.parameter.ParameterIdReq request,
+    default void applyChange(top.fosin.anan.cloudresource.grpc.parameter.ParameterIdReq request,
         io.grpc.stub.StreamObserver<com.google.protobuf.BoolValue> responseObserver) {
       io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getApplyChangeMethod(), responseObserver);
     }
@@ -326,7 +326,7 @@ public final class ParameterServiceGrpc {
      *应用指定的变更参数
      * </pre>
      */
-    public void applyChanges(top.fosin.anan.cloudresource.grpc.parameter.ParameterIdsReq request,
+    default void applyChanges(top.fosin.anan.cloudresource.grpc.parameter.ParameterIdsReq request,
         io.grpc.stub.StreamObserver<com.google.protobuf.BoolValue> responseObserver) {
       io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getApplyChangesMethod(), responseObserver);
     }
@@ -336,7 +336,7 @@ public final class ParameterServiceGrpc {
      *应用所有变更得参数
      * </pre>
      */
-    public void applyChangeAll(com.google.protobuf.Empty request,
+    default void applyChangeAll(com.google.protobuf.Empty request,
         io.grpc.stub.StreamObserver<com.google.protobuf.BoolValue> responseObserver) {
       io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getApplyChangeAllMethod(), responseObserver);
     }
@@ -346,7 +346,7 @@ public final class ParameterServiceGrpc {
      *取消删除的参数
      * </pre>
      */
-    public void cancelDelete(top.fosin.anan.cloudresource.grpc.parameter.ParameterIdsReq request,
+    default void cancelDelete(top.fosin.anan.cloudresource.grpc.parameter.ParameterIdsReq request,
         io.grpc.stub.StreamObserver<com.google.protobuf.Empty> responseObserver) {
       io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getCancelDeleteMethod(), responseObserver);
     }
@@ -356,7 +356,7 @@ public final class ParameterServiceGrpc {
      *根据3参数获取参数详细信息
      * </pre>
      */
-    public void getParameter(top.fosin.anan.cloudresource.grpc.parameter.ParameterThreeArgsReq request,
+    default void getParameter(top.fosin.anan.cloudresource.grpc.parameter.ParameterThreeArgsReq request,
         io.grpc.stub.StreamObserver<top.fosin.anan.cloudresource.grpc.parameter.ParameterResp> responseObserver) {
       io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getGetParameterMethod(), responseObserver);
     }
@@ -366,7 +366,7 @@ public final class ParameterServiceGrpc {
      *根据3参数获取最新的参数详细信息
      * </pre>
      */
-    public void getNearestParameter(top.fosin.anan.cloudresource.grpc.parameter.ParameterThreeArgsReq request,
+    default void getNearestParameter(top.fosin.anan.cloudresource.grpc.parameter.ParameterThreeArgsReq request,
         io.grpc.stub.StreamObserver<top.fosin.anan.cloudresource.grpc.parameter.ParameterResp> responseObserver) {
       io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getGetNearestParameterMethod(), responseObserver);
     }
@@ -376,7 +376,7 @@ public final class ParameterServiceGrpc {
      *更新参数
      * </pre>
      */
-    public void processUpdate(top.fosin.anan.cloudresource.grpc.parameter.ParameterReq request,
+    default void processUpdate(top.fosin.anan.cloudresource.grpc.parameter.ParameterReq request,
         io.grpc.stub.StreamObserver<com.google.protobuf.Empty> responseObserver) {
       io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getProcessUpdateMethod(), responseObserver);
     }
@@ -386,76 +386,28 @@ public final class ParameterServiceGrpc {
      *获取参数，如果没有就创建
      * </pre>
      */
-    public void getOrCreateParameter(top.fosin.anan.cloudresource.grpc.parameter.getOrCreateReq request,
+    default void getOrCreateParameter(top.fosin.anan.cloudresource.grpc.parameter.getOrCreateReq request,
         io.grpc.stub.StreamObserver<com.google.protobuf.StringValue> responseObserver) {
       io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getGetOrCreateParameterMethod(), responseObserver);
-    }
-
-    @java.lang.Override public final io.grpc.ServerServiceDefinition bindService() {
-      return io.grpc.ServerServiceDefinition.builder(getServiceDescriptor())
-          .addMethod(
-            getApplyChangeMethod(),
-            io.grpc.stub.ServerCalls.asyncUnaryCall(
-              new MethodHandlers<
-                top.fosin.anan.cloudresource.grpc.parameter.ParameterIdReq,
-                com.google.protobuf.BoolValue>(
-                  this, METHODID_APPLY_CHANGE)))
-          .addMethod(
-            getApplyChangesMethod(),
-            io.grpc.stub.ServerCalls.asyncUnaryCall(
-              new MethodHandlers<
-                top.fosin.anan.cloudresource.grpc.parameter.ParameterIdsReq,
-                com.google.protobuf.BoolValue>(
-                  this, METHODID_APPLY_CHANGES)))
-          .addMethod(
-            getApplyChangeAllMethod(),
-            io.grpc.stub.ServerCalls.asyncUnaryCall(
-              new MethodHandlers<
-                com.google.protobuf.Empty,
-                com.google.protobuf.BoolValue>(
-                  this, METHODID_APPLY_CHANGE_ALL)))
-          .addMethod(
-            getCancelDeleteMethod(),
-            io.grpc.stub.ServerCalls.asyncUnaryCall(
-              new MethodHandlers<
-                top.fosin.anan.cloudresource.grpc.parameter.ParameterIdsReq,
-                com.google.protobuf.Empty>(
-                  this, METHODID_CANCEL_DELETE)))
-          .addMethod(
-            getGetParameterMethod(),
-            io.grpc.stub.ServerCalls.asyncUnaryCall(
-              new MethodHandlers<
-                top.fosin.anan.cloudresource.grpc.parameter.ParameterThreeArgsReq,
-                top.fosin.anan.cloudresource.grpc.parameter.ParameterResp>(
-                  this, METHODID_GET_PARAMETER)))
-          .addMethod(
-            getGetNearestParameterMethod(),
-            io.grpc.stub.ServerCalls.asyncUnaryCall(
-              new MethodHandlers<
-                top.fosin.anan.cloudresource.grpc.parameter.ParameterThreeArgsReq,
-                top.fosin.anan.cloudresource.grpc.parameter.ParameterResp>(
-                  this, METHODID_GET_NEAREST_PARAMETER)))
-          .addMethod(
-            getProcessUpdateMethod(),
-            io.grpc.stub.ServerCalls.asyncUnaryCall(
-              new MethodHandlers<
-                top.fosin.anan.cloudresource.grpc.parameter.ParameterReq,
-                com.google.protobuf.Empty>(
-                  this, METHODID_PROCESS_UPDATE)))
-          .addMethod(
-            getGetOrCreateParameterMethod(),
-            io.grpc.stub.ServerCalls.asyncUnaryCall(
-              new MethodHandlers<
-                top.fosin.anan.cloudresource.grpc.parameter.getOrCreateReq,
-                com.google.protobuf.StringValue>(
-                  this, METHODID_GET_OR_CREATE_PARAMETER)))
-          .build();
     }
   }
 
   /**
+   * Base class for the server implementation of the service ParameterService.
    */
-  public static final class ParameterServiceStub extends io.grpc.stub.AbstractAsyncStub<ParameterServiceStub> {
+  public static abstract class ParameterServiceImplBase
+      implements io.grpc.BindableService, AsyncService {
+
+    @java.lang.Override public final io.grpc.ServerServiceDefinition bindService() {
+      return ParameterServiceGrpc.bindService(this);
+    }
+  }
+
+  /**
+   * A stub to allow clients to do asynchronous rpc calls to service ParameterService.
+   */
+  public static final class ParameterServiceStub
+      extends io.grpc.stub.AbstractAsyncStub<ParameterServiceStub> {
     private ParameterServiceStub(
         io.grpc.Channel channel, io.grpc.CallOptions callOptions) {
       super(channel, callOptions);
@@ -557,8 +509,10 @@ public final class ParameterServiceGrpc {
   }
 
   /**
+   * A stub to allow clients to do synchronous rpc calls to service ParameterService.
    */
-  public static final class ParameterServiceBlockingStub extends io.grpc.stub.AbstractBlockingStub<ParameterServiceBlockingStub> {
+  public static final class ParameterServiceBlockingStub
+      extends io.grpc.stub.AbstractBlockingStub<ParameterServiceBlockingStub> {
     private ParameterServiceBlockingStub(
         io.grpc.Channel channel, io.grpc.CallOptions callOptions) {
       super(channel, callOptions);
@@ -652,8 +606,10 @@ public final class ParameterServiceGrpc {
   }
 
   /**
+   * A stub to allow clients to do ListenableFuture-style rpc calls to service ParameterService.
    */
-  public static final class ParameterServiceFutureStub extends io.grpc.stub.AbstractFutureStub<ParameterServiceFutureStub> {
+  public static final class ParameterServiceFutureStub
+      extends io.grpc.stub.AbstractFutureStub<ParameterServiceFutureStub> {
     private ParameterServiceFutureStub(
         io.grpc.Channel channel, io.grpc.CallOptions callOptions) {
       super(channel, callOptions);
@@ -768,10 +724,10 @@ public final class ParameterServiceGrpc {
       io.grpc.stub.ServerCalls.ServerStreamingMethod<Req, Resp>,
       io.grpc.stub.ServerCalls.ClientStreamingMethod<Req, Resp>,
       io.grpc.stub.ServerCalls.BidiStreamingMethod<Req, Resp> {
-    private final ParameterServiceImplBase serviceImpl;
+    private final AsyncService serviceImpl;
     private final int methodId;
 
-    MethodHandlers(ParameterServiceImplBase serviceImpl, int methodId) {
+    MethodHandlers(AsyncService serviceImpl, int methodId) {
       this.serviceImpl = serviceImpl;
       this.methodId = methodId;
     }
@@ -828,6 +784,67 @@ public final class ParameterServiceGrpc {
     }
   }
 
+  public static final io.grpc.ServerServiceDefinition bindService(AsyncService service) {
+    return io.grpc.ServerServiceDefinition.builder(getServiceDescriptor())
+        .addMethod(
+          getApplyChangeMethod(),
+          io.grpc.stub.ServerCalls.asyncUnaryCall(
+            new MethodHandlers<
+              top.fosin.anan.cloudresource.grpc.parameter.ParameterIdReq,
+              com.google.protobuf.BoolValue>(
+                service, METHODID_APPLY_CHANGE)))
+        .addMethod(
+          getApplyChangesMethod(),
+          io.grpc.stub.ServerCalls.asyncUnaryCall(
+            new MethodHandlers<
+              top.fosin.anan.cloudresource.grpc.parameter.ParameterIdsReq,
+              com.google.protobuf.BoolValue>(
+                service, METHODID_APPLY_CHANGES)))
+        .addMethod(
+          getApplyChangeAllMethod(),
+          io.grpc.stub.ServerCalls.asyncUnaryCall(
+            new MethodHandlers<
+              com.google.protobuf.Empty,
+              com.google.protobuf.BoolValue>(
+                service, METHODID_APPLY_CHANGE_ALL)))
+        .addMethod(
+          getCancelDeleteMethod(),
+          io.grpc.stub.ServerCalls.asyncUnaryCall(
+            new MethodHandlers<
+              top.fosin.anan.cloudresource.grpc.parameter.ParameterIdsReq,
+              com.google.protobuf.Empty>(
+                service, METHODID_CANCEL_DELETE)))
+        .addMethod(
+          getGetParameterMethod(),
+          io.grpc.stub.ServerCalls.asyncUnaryCall(
+            new MethodHandlers<
+              top.fosin.anan.cloudresource.grpc.parameter.ParameterThreeArgsReq,
+              top.fosin.anan.cloudresource.grpc.parameter.ParameterResp>(
+                service, METHODID_GET_PARAMETER)))
+        .addMethod(
+          getGetNearestParameterMethod(),
+          io.grpc.stub.ServerCalls.asyncUnaryCall(
+            new MethodHandlers<
+              top.fosin.anan.cloudresource.grpc.parameter.ParameterThreeArgsReq,
+              top.fosin.anan.cloudresource.grpc.parameter.ParameterResp>(
+                service, METHODID_GET_NEAREST_PARAMETER)))
+        .addMethod(
+          getProcessUpdateMethod(),
+          io.grpc.stub.ServerCalls.asyncUnaryCall(
+            new MethodHandlers<
+              top.fosin.anan.cloudresource.grpc.parameter.ParameterReq,
+              com.google.protobuf.Empty>(
+                service, METHODID_PROCESS_UPDATE)))
+        .addMethod(
+          getGetOrCreateParameterMethod(),
+          io.grpc.stub.ServerCalls.asyncUnaryCall(
+            new MethodHandlers<
+              top.fosin.anan.cloudresource.grpc.parameter.getOrCreateReq,
+              com.google.protobuf.StringValue>(
+                service, METHODID_GET_OR_CREATE_PARAMETER)))
+        .build();
+  }
+
   private static abstract class ParameterServiceBaseDescriptorSupplier
       implements io.grpc.protobuf.ProtoFileDescriptorSupplier, io.grpc.protobuf.ProtoServiceDescriptorSupplier {
     ParameterServiceBaseDescriptorSupplier() {}
@@ -851,9 +868,9 @@ public final class ParameterServiceGrpc {
   private static final class ParameterServiceMethodDescriptorSupplier
       extends ParameterServiceBaseDescriptorSupplier
       implements io.grpc.protobuf.ProtoMethodDescriptorSupplier {
-    private final String methodName;
+    private final java.lang.String methodName;
 
-    ParameterServiceMethodDescriptorSupplier(String methodName) {
+    ParameterServiceMethodDescriptorSupplier(java.lang.String methodName) {
       this.methodName = methodName;
     }
 

@@ -5,14 +5,14 @@ import static io.grpc.MethodDescriptor.generateFullMethodName;
 /**
  */
 @jakarta.annotation.Generated(
-    value = "by gRPC proto compiler (version 1.51.0)",
+    value = "by gRPC proto compiler (version 1.58.0)",
     comments = "Source: Oranization.proto")
 @io.grpc.stub.annotations.GrpcGenerated
 public final class OrganizServiceGrpc {
 
   private OrganizServiceGrpc() {}
 
-  public static final String SERVICE_NAME = "top.fosin.anan.cloudresource.grpc.organiz.OrganizService";
+  public static final java.lang.String SERVICE_NAME = "top.fosin.anan.cloudresource.grpc.organiz.OrganizService";
 
   // Static method descriptors that strictly reflect the proto.
   private static volatile io.grpc.MethodDescriptor<top.fosin.anan.cloudresource.grpc.organiz.OrganizIdReq,
@@ -185,14 +185,14 @@ public final class OrganizServiceGrpc {
 
   /**
    */
-  public static abstract class OrganizServiceImplBase implements io.grpc.BindableService {
+  public interface AsyncService {
 
     /**
      * <pre>
      *通过机构序号查询机构数据
      * </pre>
      */
-    public void findOneById(top.fosin.anan.cloudresource.grpc.organiz.OrganizIdReq request,
+    default void findOneById(top.fosin.anan.cloudresource.grpc.organiz.OrganizIdReq request,
         io.grpc.stub.StreamObserver<top.fosin.anan.cloudresource.grpc.organiz.OrganizResp> responseObserver) {
       io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getFindOneByIdMethod(), responseObserver);
     }
@@ -202,7 +202,7 @@ public final class OrganizServiceGrpc {
      *通过多个机构序号查询机构数据集合
      * </pre>
      */
-    public void listByIds(top.fosin.anan.cloudresource.grpc.organiz.OrganizIdsReq request,
+    default void listByIds(top.fosin.anan.cloudresource.grpc.organiz.OrganizIdsReq request,
         io.grpc.stub.StreamObserver<top.fosin.anan.cloudresource.grpc.organiz.OrganizsResp> responseObserver) {
       io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getListByIdsMethod(), responseObserver);
     }
@@ -212,7 +212,7 @@ public final class OrganizServiceGrpc {
      *通过上级机构序号查询其直接子机构数据
      * </pre>
      */
-    public void listChild(top.fosin.anan.cloudresource.grpc.organiz.OrganizPidReq request,
+    default void listChild(top.fosin.anan.cloudresource.grpc.organiz.OrganizPidReq request,
         io.grpc.stub.StreamObserver<top.fosin.anan.cloudresource.grpc.organiz.OrganizsResp> responseObserver) {
       io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getListChildMethod(), responseObserver);
     }
@@ -222,48 +222,28 @@ public final class OrganizServiceGrpc {
      *通过上级机构序号查询其所有子机构数据
      * </pre>
      */
-    public void listAllChild(top.fosin.anan.cloudresource.grpc.organiz.OrganizPidReq request,
+    default void listAllChild(top.fosin.anan.cloudresource.grpc.organiz.OrganizPidReq request,
         io.grpc.stub.StreamObserver<top.fosin.anan.cloudresource.grpc.organiz.OrganizsResp> responseObserver) {
       io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getListAllChildMethod(), responseObserver);
-    }
-
-    @java.lang.Override public final io.grpc.ServerServiceDefinition bindService() {
-      return io.grpc.ServerServiceDefinition.builder(getServiceDescriptor())
-          .addMethod(
-            getFindOneByIdMethod(),
-            io.grpc.stub.ServerCalls.asyncUnaryCall(
-              new MethodHandlers<
-                top.fosin.anan.cloudresource.grpc.organiz.OrganizIdReq,
-                top.fosin.anan.cloudresource.grpc.organiz.OrganizResp>(
-                  this, METHODID_FIND_ONE_BY_ID)))
-          .addMethod(
-            getListByIdsMethod(),
-            io.grpc.stub.ServerCalls.asyncUnaryCall(
-              new MethodHandlers<
-                top.fosin.anan.cloudresource.grpc.organiz.OrganizIdsReq,
-                top.fosin.anan.cloudresource.grpc.organiz.OrganizsResp>(
-                  this, METHODID_LIST_BY_IDS)))
-          .addMethod(
-            getListChildMethod(),
-            io.grpc.stub.ServerCalls.asyncUnaryCall(
-              new MethodHandlers<
-                top.fosin.anan.cloudresource.grpc.organiz.OrganizPidReq,
-                top.fosin.anan.cloudresource.grpc.organiz.OrganizsResp>(
-                  this, METHODID_LIST_CHILD)))
-          .addMethod(
-            getListAllChildMethod(),
-            io.grpc.stub.ServerCalls.asyncUnaryCall(
-              new MethodHandlers<
-                top.fosin.anan.cloudresource.grpc.organiz.OrganizPidReq,
-                top.fosin.anan.cloudresource.grpc.organiz.OrganizsResp>(
-                  this, METHODID_LIST_ALL_CHILD)))
-          .build();
     }
   }
 
   /**
+   * Base class for the server implementation of the service OrganizService.
    */
-  public static final class OrganizServiceStub extends io.grpc.stub.AbstractAsyncStub<OrganizServiceStub> {
+  public static abstract class OrganizServiceImplBase
+      implements io.grpc.BindableService, AsyncService {
+
+    @java.lang.Override public final io.grpc.ServerServiceDefinition bindService() {
+      return OrganizServiceGrpc.bindService(this);
+    }
+  }
+
+  /**
+   * A stub to allow clients to do asynchronous rpc calls to service OrganizService.
+   */
+  public static final class OrganizServiceStub
+      extends io.grpc.stub.AbstractAsyncStub<OrganizServiceStub> {
     private OrganizServiceStub(
         io.grpc.Channel channel, io.grpc.CallOptions callOptions) {
       super(channel, callOptions);
@@ -321,8 +301,10 @@ public final class OrganizServiceGrpc {
   }
 
   /**
+   * A stub to allow clients to do synchronous rpc calls to service OrganizService.
    */
-  public static final class OrganizServiceBlockingStub extends io.grpc.stub.AbstractBlockingStub<OrganizServiceBlockingStub> {
+  public static final class OrganizServiceBlockingStub
+      extends io.grpc.stub.AbstractBlockingStub<OrganizServiceBlockingStub> {
     private OrganizServiceBlockingStub(
         io.grpc.Channel channel, io.grpc.CallOptions callOptions) {
       super(channel, callOptions);
@@ -376,8 +358,10 @@ public final class OrganizServiceGrpc {
   }
 
   /**
+   * A stub to allow clients to do ListenableFuture-style rpc calls to service OrganizService.
    */
-  public static final class OrganizServiceFutureStub extends io.grpc.stub.AbstractFutureStub<OrganizServiceFutureStub> {
+  public static final class OrganizServiceFutureStub
+      extends io.grpc.stub.AbstractFutureStub<OrganizServiceFutureStub> {
     private OrganizServiceFutureStub(
         io.grpc.Channel channel, io.grpc.CallOptions callOptions) {
       super(channel, callOptions);
@@ -444,10 +428,10 @@ public final class OrganizServiceGrpc {
       io.grpc.stub.ServerCalls.ServerStreamingMethod<Req, Resp>,
       io.grpc.stub.ServerCalls.ClientStreamingMethod<Req, Resp>,
       io.grpc.stub.ServerCalls.BidiStreamingMethod<Req, Resp> {
-    private final OrganizServiceImplBase serviceImpl;
+    private final AsyncService serviceImpl;
     private final int methodId;
 
-    MethodHandlers(OrganizServiceImplBase serviceImpl, int methodId) {
+    MethodHandlers(AsyncService serviceImpl, int methodId) {
       this.serviceImpl = serviceImpl;
       this.methodId = methodId;
     }
@@ -488,6 +472,39 @@ public final class OrganizServiceGrpc {
     }
   }
 
+  public static final io.grpc.ServerServiceDefinition bindService(AsyncService service) {
+    return io.grpc.ServerServiceDefinition.builder(getServiceDescriptor())
+        .addMethod(
+          getFindOneByIdMethod(),
+          io.grpc.stub.ServerCalls.asyncUnaryCall(
+            new MethodHandlers<
+              top.fosin.anan.cloudresource.grpc.organiz.OrganizIdReq,
+              top.fosin.anan.cloudresource.grpc.organiz.OrganizResp>(
+                service, METHODID_FIND_ONE_BY_ID)))
+        .addMethod(
+          getListByIdsMethod(),
+          io.grpc.stub.ServerCalls.asyncUnaryCall(
+            new MethodHandlers<
+              top.fosin.anan.cloudresource.grpc.organiz.OrganizIdsReq,
+              top.fosin.anan.cloudresource.grpc.organiz.OrganizsResp>(
+                service, METHODID_LIST_BY_IDS)))
+        .addMethod(
+          getListChildMethod(),
+          io.grpc.stub.ServerCalls.asyncUnaryCall(
+            new MethodHandlers<
+              top.fosin.anan.cloudresource.grpc.organiz.OrganizPidReq,
+              top.fosin.anan.cloudresource.grpc.organiz.OrganizsResp>(
+                service, METHODID_LIST_CHILD)))
+        .addMethod(
+          getListAllChildMethod(),
+          io.grpc.stub.ServerCalls.asyncUnaryCall(
+            new MethodHandlers<
+              top.fosin.anan.cloudresource.grpc.organiz.OrganizPidReq,
+              top.fosin.anan.cloudresource.grpc.organiz.OrganizsResp>(
+                service, METHODID_LIST_ALL_CHILD)))
+        .build();
+  }
+
   private static abstract class OrganizServiceBaseDescriptorSupplier
       implements io.grpc.protobuf.ProtoFileDescriptorSupplier, io.grpc.protobuf.ProtoServiceDescriptorSupplier {
     OrganizServiceBaseDescriptorSupplier() {}
@@ -511,9 +528,9 @@ public final class OrganizServiceGrpc {
   private static final class OrganizServiceMethodDescriptorSupplier
       extends OrganizServiceBaseDescriptorSupplier
       implements io.grpc.protobuf.ProtoMethodDescriptorSupplier {
-    private final String methodName;
+    private final java.lang.String methodName;
 
-    OrganizServiceMethodDescriptorSupplier(String methodName) {
+    OrganizServiceMethodDescriptorSupplier(java.lang.String methodName) {
       this.methodName = methodName;
     }
 

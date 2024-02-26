@@ -150,6 +150,7 @@ services:
     restart: always
     privileged: true
     environment:
+      - JAVA_OPTS=--add-opens java.base/java.lang=ALL-UNNAMED -XX:+UseContainerSupport -XX:MaxRAMPercentage=50 -XX:InitialRAMPercentage=30 -XX:MinRAMPercentage=30 -XX:MetaspaceSize=128m -XX:MaxMetaspaceSize=200m
       - spring.cloud.kubernetes.enabled=false
       - spring.cloud.nacos.config.enabled=true
       - spring.cloud.nacos.discovery.enabled=true
