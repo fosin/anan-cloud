@@ -14,7 +14,6 @@
         <module>anan-sbaserver</module>
         <module>anan-authserver</module>
         <module>anan-platformserver</module>
-        <module>anan-zuulgateway</module>
     </modules>
     <dependencies>
         <dependency>
