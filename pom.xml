@@ -35,7 +35,6 @@
         <grpc.version>1.58.0</grpc.version>
         <protobuf.version>3.24.0</protobuf.version>
         <protobuf-plugin.version>0.6.1</protobuf-plugin.version>
-        <springdoc.version>2.2.0</springdoc.version>
         <java.version>17</java.version>
     </properties>
     <profiles>
@@ -313,12 +312,12 @@
             <dependency>
                 <groupId>org.springdoc</groupId>
                 <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-                <version>${springdoc.version}</version>
+                <version>${anan-springdoc.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springdoc</groupId>
                 <artifactId>springdoc-openapi-starter-webflux-ui</artifactId>
-                <version>${springdoc.version}</version>
+                <version>${anan-springdoc.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -455,6 +454,8 @@
                         <nonFilteredFileExtension>css</nonFilteredFileExtension>
                         <nonFilteredFileExtension>ico</nonFilteredFileExtension>
                         <nonFilteredFileExtension>png</nonFilteredFileExtension>
+                        <nonFilteredFileExtension>gif</nonFilteredFileExtension>
+                        <nonFilteredFileExtension>svg</nonFilteredFileExtension>
                         <nonFilteredFileExtension>jpg</nonFilteredFileExtension>
                         <nonFilteredFileExtension>jepg</nonFilteredFileExtension>
                         <nonFilteredFileExtension>woff</nonFilteredFileExtension>
@@ -462,11 +463,13 @@
                         <nonFilteredFileExtension>ttf</nonFilteredFileExtension>
                         <nonFilteredFileExtension>svg</nonFilteredFileExtension>
                         <nonFilteredFileExtension>eot</nonFilteredFileExtension>
+                        <nonFilteredFileExtension>otf</nonFilteredFileExtension>
                         <nonFilteredFileExtension>map</nonFilteredFileExtension>
                         <nonFilteredFileExtension>less</nonFilteredFileExtension>
                         <nonFilteredFileExtension>json</nonFilteredFileExtension>
                         <nonFilteredFileExtension>scss</nonFilteredFileExtension>
                         <nonFilteredFileExtension>sql</nonFilteredFileExtension>
+                        <nonFilteredFileExtension>csslintrc</nonFilteredFileExtension>
                     </nonFilteredFileExtensions>
                 </configuration>
             </plugin>
